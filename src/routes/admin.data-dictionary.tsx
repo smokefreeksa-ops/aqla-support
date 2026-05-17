@@ -64,7 +64,7 @@ function DataDictionaryPage() {
                 const s = String(v ?? "").replace(/"/g, '""');
                 return /[",\n]/.test(s) ? `"${s}"` : s;
               };
-              const csv = [headers.join(","), ...DATA_DICTIONARY.map((r) => headers.map((h) => esc((r as Record<string, unknown>)[h])).join(","))].join("\n");
+              const csv = [headers.join(","), ...DATA_DICTIONARY.map((r) => headers.map((h) => esc((r as unknown as Record<string, unknown>)[h])).join(","))].join("\n");
               const blob = new Blob([csv], { type: "text/csv" });
               const url = URL.createObjectURL(blob);
               const a = document.createElement("a");

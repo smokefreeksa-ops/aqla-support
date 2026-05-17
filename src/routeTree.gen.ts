@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AssessmentRouteImport } from './routes/assessment'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
 
 const VolunteerRoute = VolunteerRouteImport.update({
   id: '/volunteer',
@@ -40,40 +41,67 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminDataDictionaryRoute = AdminDataDictionaryRouteImport.update({
+  id: '/data-dictionary',
+  path: '/data-dictionary',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/login': typeof LoginRoute
   '/volunteer': typeof VolunteerRoute
+  '/admin/data-dictionary': typeof AdminDataDictionaryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/login': typeof LoginRoute
   '/volunteer': typeof VolunteerRoute
+  '/admin/data-dictionary': typeof AdminDataDictionaryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/login': typeof LoginRoute
   '/volunteer': typeof VolunteerRoute
+  '/admin/data-dictionary': typeof AdminDataDictionaryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/assessment' | '/login' | '/volunteer'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/assessment'
+    | '/login'
+    | '/volunteer'
+    | '/admin/data-dictionary'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/assessment' | '/login' | '/volunteer'
-  id: '__root__' | '/' | '/admin' | '/assessment' | '/login' | '/volunteer'
+  to:
+    | '/'
+    | '/admin'
+    | '/assessment'
+    | '/login'
+    | '/volunteer'
+    | '/admin/data-dictionary'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/assessment'
+    | '/login'
+    | '/volunteer'
+    | '/admin/data-dictionary'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AssessmentRoute: typeof AssessmentRoute
   LoginRoute: typeof LoginRoute
   VolunteerRoute: typeof VolunteerRoute
@@ -116,12 +144,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/data-dictionary': {
+      id: '/admin/data-dictionary'
+      path: '/data-dictionary'
+      fullPath: '/admin/data-dictionary'
+      preLoaderRoute: typeof AdminDataDictionaryRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminDataDictionaryRoute: typeof AdminDataDictionaryRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminDataDictionaryRoute: AdminDataDictionaryRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   AssessmentRoute: AssessmentRoute,
   LoginRoute: LoginRoute,
   VolunteerRoute: VolunteerRoute,
