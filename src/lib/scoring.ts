@@ -77,34 +77,39 @@ const HIGH_RISK = new Set([
   "under_18",
 ]);
 
+const READY_FOR_QUIT = new Set(["quit_now", "quit_prepare", "reduce_first"]);
+
 export function assignCohort(i: CohortInput): CohortResult {
   const urgent = i.riskFlags.some((f) => URGENT.has(f));
   const hasCig = i.products.includes("cigarettes");
   const hasNicProduct = ["vape", "pouches", "smokeless", "shisha"].some((p) =>
     i.products.includes(p as ProductKey),
   );
+  const multiProduct = hasCig && hasNicProduct;
+  // Multi-product use auto-escalates to clinician review
+  if (multiProduct && !i.riskFlags.includes("multi_product")) {
+    i.riskFlags = [...i.riskFlags, "multi_product"];
+  }
   const isMinor = (i.age ?? 99) < 18;
 
-  // Cohort F triggers
-  const wantsMedOrAlt =
-    i.riskFlags.includes("wants_medication") ||
-    i.riskFlags.includes("wants_alternatives") ||
-    i.riskFlags.includes("requests_clinician");
   const veryHighDep = (i.ftnd ?? 0) >= 8 || (i.nicotineYes ?? 0) >= 8;
   const fTrigger =
     urgent ||
     i.riskFlags.includes("pregnancy") ||
     i.riskFlags.includes("mental_health") ||
     veryHighDep ||
-    (isMinor && (i.ftnd ?? 0) >= 3) ||
-    (isMinor && (i.nicotineYes ?? 0) >= 3) ||
+    multiProduct ||
+    i.riskFlags.includes("multi_product") ||
+    (isMinor && ((i.ftnd ?? 0) >= 3 || (i.nicotineYes ?? 0) >= 3)) ||
     i.riskFlags.includes("repeated_failed") ||
-    i.riskFlags.includes("multi_product");
+    i.riskFlags.includes("wants_medication") ||
+    i.riskFlags.includes("requests_clinician");
 
   if (fTrigger) {
     return {
       cohort: "F",
-      reason: "High-priority clinician review based on safety flags or very high dependence.",
+      reason:
+        "High-priority clinician review (safety flags, very-high dependence, multi-product use, or clinician request).",
       doctorReviewNeeded: true,
       urgent,
     };
@@ -119,11 +124,14 @@ export function assignCohort(i: CohortInput): CohortResult {
     };
   }
 
-  if (i.readiness === "score_only") {
+  if (i.readiness === "score_only" || i.readiness === "helping_someone") {
     return {
       cohort: "G",
-      reason: "Participant requested score only.",
-      doctorReviewNeeded: wantsMedOrAlt,
+      reason:
+        i.readiness === "helping_someone"
+          ? "Helping-someone session — score shared for educational support."
+          : "Score-only session — score shared and invitation to return later.",
+      doctorReviewNeeded: false,
       urgent,
     };
   }
@@ -131,7 +139,7 @@ export function assignCohort(i: CohortInput): CohortResult {
   if (i.products.includes("non_user") || i.products.includes("former")) {
     return {
       cohort: "H",
-      reason: "No current use — prevention/education pathway.",
+      reason: "No current nicotine/tobacco use — prevention/education pathway.",
       doctorReviewNeeded: false,
       urgent,
     };
@@ -140,7 +148,7 @@ export function assignCohort(i: CohortInput): CohortResult {
   if (i.readiness === "not_ready_score") {
     return {
       cohort: "D",
-      reason: "Not ready to quit — motivational support pathway.",
+      reason: "Not ready to quit — motivational support pathway, no pressure.",
       doctorReviewNeeded: false,
       urgent,
     };
@@ -149,25 +157,27 @@ export function assignCohort(i: CohortInput): CohortResult {
   if (hasNicProduct && (i.nicotineYes ?? 0) >= 3) {
     return {
       cohort: "C",
-      reason: "Vape/pouch/smokeless user with moderate-to-high nicotine-control concern.",
+      reason:
+        "Vape / nicotine pouch / non-cigarette nicotine user with moderate-to-high nicotine-control concern.",
       doctorReviewNeeded: false,
       urgent,
     };
   }
 
-  if (hasCig && (i.ftnd ?? 0) >= 5) {
-    return {
-      cohort: "B",
-      reason: "Cigarette smoker with moderate/high dependence, ready to quit or prepare.",
-      doctorReviewNeeded: false,
-      urgent,
-    };
-  }
-
-  if (hasCig) {
+  if (hasCig && READY_FOR_QUIT.has(i.readiness)) {
+    if ((i.ftnd ?? 0) >= 5) {
+      return {
+        cohort: "B",
+        reason:
+          "Cigarette smoker with moderate/high dependence, ready to quit or prepare — structured support + follow-up.",
+        doctorReviewNeeded: false,
+        urgent,
+      };
+    }
     return {
       cohort: "A",
-      reason: "Cigarette smoker with low dependence, ready to quit or prepare.",
+      reason:
+        "Cigarette smoker with low dependence, ready to quit or prepare — self-guided support + follow-up.",
       doctorReviewNeeded: false,
       urgent,
     };
@@ -175,7 +185,7 @@ export function assignCohort(i: CohortInput): CohortResult {
 
   return {
     cohort: "D",
-    reason: "Default motivational pathway.",
+    reason: "Motivational support pathway.",
     doctorReviewNeeded: false,
     urgent,
   };
