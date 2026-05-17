@@ -45,6 +45,44 @@ function AssistantStatusBanner() {
   );
 }
 
+function AdminAnalyticsCard() {
+  const statsFn = useServerFn(getPublicImpactStats);
+  const assistFn = useServerFn(getAssistantStatus);
+  const { data: stats } = useQuery({ queryKey: ["admin-impact-stats"], queryFn: () => statsFn(), staleTime: 30_000 });
+  const { data: assist } = useQuery({ queryKey: ["assistant-status", "admin-card"], queryFn: () => assistFn(), staleTime: 60_000 });
+
+  const items: { icon: React.ReactNode; label: string; value: number | string }[] = [
+    { icon: <Eye className="h-4 w-4" />, label: "Total visits", value: stats?.total_visits ?? 0 },
+    { icon: <Sun className="h-4 w-4" />, label: "Visits today", value: stats?.visits_today ?? 0 },
+    { icon: <ClipboardCheck className="h-4 w-4" />, label: "Assessments", value: stats?.total_assessments ?? 0 },
+    { icon: <Users className="h-4 w-4" />, label: "Volunteer applicants", value: stats?.volunteer_applicants ?? 0 },
+    { icon: <Stethoscope className="h-4 w-4" />, label: "Doctor-review cases", value: stats?.doctor_review_count ?? 0 },
+    { icon: <CalendarCheck className="h-4 w-4" />, label: "Follow-up visits", value: stats?.follow_up_visits_logged ?? 0 },
+  ];
+
+  return (
+    <Card className="p-4">
+      <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <BarChart3 className="h-4 w-4 text-primary" />
+        Platform analytics
+        <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+          Chatbot: {assist?.enabled ? "enabled" : "disabled"}
+        </span>
+      </div>
+      <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        {items.map((it, i) => (
+          <div key={i} className="rounded-lg border bg-card p-3">
+            <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+              {it.icon}<span>{it.label}</span>
+            </div>
+            <div className="mt-1 text-xl font-bold text-foreground">{Number(it.value).toLocaleString()}</div>
+          </div>
+        ))}
+      </div>
+    </Card>
+  );
+}
+
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard — Aqla" }] }),
   component: AdminPage,
@@ -96,6 +134,7 @@ function AdminPage() {
 
       <main className="mx-auto max-w-7xl px-4 py-6 space-y-4">
         <AssistantStatusBanner />
+        <AdminAnalyticsCard />
         <Tabs defaultValue="participants">
           <TabsList>
             <TabsTrigger value="participants" className="gap-1.5"><HeartPulse className="h-4 w-4" />Quit Support</TabsTrigger>
