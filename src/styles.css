@@ -92,7 +92,12 @@
   --chart-5: oklch(0.55 0.18 300);
   --gradient-hero: linear-gradient(135deg, oklch(0.58 0.13 175), oklch(0.6 0.13 235));
   --gradient-card: linear-gradient(180deg, oklch(1 0 0), oklch(0.97 0.02 180));
+  --gradient-quit: linear-gradient(135deg, oklch(0.72 0.18 25), oklch(0.78 0.14 355));
+  --gradient-quit-soft: linear-gradient(135deg, oklch(0.97 0.04 25), oklch(0.96 0.04 355));
+  --gradient-volunteer: linear-gradient(135deg, oklch(0.46 0.13 152), oklch(0.62 0.15 145));
+  --gradient-volunteer-soft: linear-gradient(135deg, oklch(0.96 0.05 150), oklch(0.95 0.05 140));
   --shadow-card: 0 4px 20px -8px oklch(0.58 0.13 175 / 0.18);
+  --shadow-elegant: 0 20px 50px -20px oklch(0.22 0.04 220 / 0.18);
   --sidebar: oklch(0.99 0.005 180);
   --sidebar-foreground: oklch(0.22 0.04 220);
   --sidebar-primary: oklch(0.58 0.13 175);
@@ -156,4 +161,9 @@
 
 .hero-gradient { background: var(--gradient-hero); }
 .card-gradient { background: var(--gradient-card); box-shadow: var(--shadow-card); }
+.quit-gradient { background: var(--gradient-quit); }
+.quit-gradient-soft { background: var(--gradient-quit-soft); }
+.volunteer-gradient { background: var(--gradient-volunteer); }
+.volunteer-gradient-soft { background: var(--gradient-volunteer-soft); }
+.shadow-elegant { box-shadow: var(--shadow-elegant); }
 
