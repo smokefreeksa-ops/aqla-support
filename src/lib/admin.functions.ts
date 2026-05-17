@@ -632,6 +632,14 @@ export const exportCsv = createServerFn({ method: "POST" })
         if (r.ever_use == null && v.days_30d != null) r.ever_use = (v.days_30d as number) > 0;
         if (r.current_use_past_30_days == null && v.days_30d != null) r.current_use_past_30_days = (v.days_30d as number) > 0;
         if (v.used_at_institution != null) r.use_at_school_work = v.used_at_institution as boolean;
+        // Vape-specific extras
+        (r as Record<string, unknown>).times_per_day = v.times_per_day ?? null;
+        (r as Record<string, unknown>).time_to_first_use_after_waking = v.time_to_first ?? null;
+        (r as Record<string, unknown>).device_type = v.device_type ?? null;
+        (r as Record<string, unknown>).disposable_or_refillable_or_pod = v.refillable ?? null;
+        (r as Record<string, unknown>).nicotine_concentration = v.nicotine_concentration ?? null;
+        (r as Record<string, unknown>).flavor_type = v.flavors ?? null;
+        (r as Record<string, unknown>).tried_to_stop = yesNo(v.tried_to_stop as boolean | null);
       }
       for (const p of pouchm ?? []) {
         const r = ensure(p.participant_id, "nicotine_pouches", p.created_at as string);
@@ -640,6 +648,13 @@ export const exportCsv = createServerFn({ method: "POST" })
         if (r.ever_use == null && p.days_30d != null) r.ever_use = (p.days_30d as number) > 0;
         if (r.current_use_past_30_days == null && p.days_30d != null) r.current_use_past_30_days = (p.days_30d as number) > 0;
         if (p.used_at_institution != null) r.use_at_school_work = p.used_at_institution as boolean;
+        // Pouch-specific extras
+        (r as Record<string, unknown>).pouches_per_day = p.pouches_per_day ?? null;
+        (r as Record<string, unknown>).time_to_first_use_after_waking = p.time_to_first ?? null;
+        (r as Record<string, unknown>).nicotine_strength = p.nicotine_strength ?? null;
+        (r as Record<string, unknown>).flavor_type = p.flavors ?? null;
+        (r as Record<string, unknown>).tried_to_stop = yesNo(p.tried_to_stop as boolean | null);
+        (r as Record<string, unknown>).wants_clinician_counseling = yesNo(p.wants_counseling as boolean | null);
       }
       for (const s of shisham ?? []) {
         const r = ensure(s.participant_id, "shisha/hookah", s.created_at as string);
@@ -648,9 +663,36 @@ export const exportCsv = createServerFn({ method: "POST" })
         if (r.current_use_past_30_days == null && s.days_30d != null) r.current_use_past_30_days = (s.days_30d as number) > 0;
         r.usual_place_of_use = (s.setting as string | null) ?? r.usual_place_of_use;
         r.quit_interest = (s.quit_interest as string | null) ?? r.quit_interest;
+        // Shisha-specific extras
+        (r as Record<string, unknown>).sessions_per_week = s.sessions_per_week ?? null;
+        (r as Record<string, unknown>).average_session_duration_minutes = s.avg_session_minutes ?? null;
+        (r as Record<string, unknown>).shared_mouthpiece = yesNo(s.shared_mouthpiece as boolean | null);
+        (r as Record<string, unknown>).tobacco_or_nicotine_type = s.tobacco_type ?? null;
+        (r as Record<string, unknown>).used_with_other_products = yesNo(s.also_uses_other as boolean | null);
+      }
+      for (const c of cigm ?? []) {
+        const r = ensure(c.participant_id, "cigarettes", c.created_at as string);
+        if (r.ever_use == null && c.cigarettes_per_day != null) r.ever_use = true;
+        (r as Record<string, unknown>).cigarettes_per_day = c.cigarettes_per_day ?? null;
+        (r as Record<string, unknown>).time_to_first_use_after_waking = c.time_to_first_cig ?? null;
+        (r as Record<string, unknown>).hsi_score = c.hsi_score ?? null;
       }
 
-      cleaned = Array.from(rowMap.values()).map((r) => ({ ...r })) as Record<string, unknown>[];
+      // Final shape: drop internal participant_id, expose submission_date,
+      // and convert booleans to coded strings for research-grade output.
+      cleaned = Array.from(rowMap.values()).map((r) => {
+        const { participant_id: _pid, created_at, ever_use, current_use_past_30_days,
+          family_peer_use, social_media_ad_exposure, use_at_school_work, ...rest } = r as Record<string, unknown>;
+        return {
+          submission_date: created_at ?? null,
+          ...rest,
+          ever_use: yesNo(ever_use as boolean | null),
+          current_use_past_30_days: yesNo(current_use_past_30_days as boolean | null),
+          use_at_school_university_work: yesNo(use_at_school_work as boolean | null),
+          family_member_uses_product: yesNo(family_peer_use as boolean | null),
+          social_media_or_ad_exposure: yesNo(social_media_ad_exposure as boolean | null),
+        };
+      }) as Record<string, unknown>[];
     } else if (data.type === "youth_nicotine") {
       const { data: young } = await supabaseAdmin
         .from("participants").select("id, participant_code, age, city, cohort, research_consent_status")
