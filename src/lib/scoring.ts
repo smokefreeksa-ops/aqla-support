@@ -47,6 +47,23 @@ export function scoreNicotineControl(a: NicotineAnswers) {
   return { yes_count, category };
 }
 
+// HONC-style loss-of-autonomy screening (10 yes/no items).
+// Not a validated HONC scale — labelled "HONC-style" in UI and exports.
+export type HoncAnswers = Record<
+  "q1" | "q2" | "q3" | "q4" | "q5" | "q6" | "q7" | "q8" | "q9" | "q10",
+  boolean
+>;
+export function scoreHonc(a: HoncAnswers) {
+  const positive_count = Object.values(a).filter(Boolean).length;
+  const any_yes = positive_count > 0;
+  let category: string;
+  if (positive_count === 0) category = "none";
+  else if (positive_count <= 2) category = "low";
+  else if (positive_count <= 5) category = "moderate";
+  else category = "high";
+  return { positive_count, any_yes, category };
+}
+
 export interface CohortInput {
   products: ProductKey[];
   ftnd?: number;
