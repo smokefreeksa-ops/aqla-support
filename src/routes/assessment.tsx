@@ -74,6 +74,18 @@ type State = {
     ever_tried: boolean | null;
     attempts_count: string;
     longest_quit_duration: string;
+    exposure_enabled: boolean;
+    family_smoking_exposure: string;
+    close_friend_smoking_or_nicotine_use: string;
+    secondhand_smoke_exposure_home: string;
+    secondhand_smoke_exposure_public_places: string;
+    seen_tobacco_or_nicotine_ads_social_media: string;
+    seen_tobacco_or_nicotine_ads_shops: string;
+    influencer_or_online_promotion_exposure: string;
+    easy_access_to_products: string;
+    main_source_of_products: string;
+    online_purchase_or_delivery_exposure: string;
+    purchase_attempt_underage_if_applicable: string;
   };
 };
 
