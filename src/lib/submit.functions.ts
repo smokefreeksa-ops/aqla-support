@@ -380,6 +380,7 @@ export const submitAssessment = createServerFn({ method: "POST" })
       urgent: cohort.urgent,
       ftnd: ftndResult,
       nicotine: nicResult,
+      honc: honcResult,
     };
   });
 
