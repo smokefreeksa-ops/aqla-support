@@ -179,7 +179,34 @@ export const submitAssessment = createServerFn({ method: "POST" })
 
     const ftndResult = data.ftnd ? scoreFtnd(data.ftnd) : null;
     const nicResult = data.nicotine ? scoreNicotineControl(data.nicotine) : null;
+    const honcResult = data.extras?.honc ? scoreHonc(data.extras.honc) : null;
     const youthFlag = (data.triage.age ?? 99) < 18 && (nicResult?.yes_count ?? 0) > 0;
+
+    // Merge safety flags from the new safety section into the riskFlags array so
+    // cohort assignment sees them (backward compatible — riskFlags still primary).
+    const sf = data.extras?.safetyFlags;
+    if (sf) {
+      const map: Array<[keyof typeof sf, string]> = [
+        ["pregnancy", "pregnancy"],
+        ["severe_chest_pain", "severe_chest_pain"],
+        ["severe_breathlessness", "severe_sob"],
+        ["coughing_blood", "coughing_blood"],
+        ["severe_withdrawal", "severe_withdrawal"],
+        ["mental_health_concern", "mental_health"],
+        ["repeated_failed_attempts", "repeated_failed"],
+        ["multi_product_use", "multi_product"],
+        ["medication_request", "wants_medication"],
+        ["alt_product_request", "wants_alternatives"],
+        ["clinician_request", "requests_clinician"],
+      ];
+      for (const [k, flag] of map) {
+        if (sf[k] && !data.riskFlags.includes(flag)) data.riskFlags.push(flag);
+      }
+    }
+    // HONC high category also escalates to clinician review
+    if (honcResult?.category === "high" && !data.riskFlags.includes("requests_clinician")) {
+      data.riskFlags.push("requests_clinician");
+    }
 
     const cohort = assignCohort({
       products: data.products as never,
