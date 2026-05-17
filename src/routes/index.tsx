@@ -49,6 +49,9 @@ function Inner() {
               <Languages className="h-4 w-4" />
               {lang === "ar" ? "English" : "العربية"}
             </Button>
+            <Link to="/about">
+              <Button variant="ghost" size="sm">{lang === "ar" ? "عن أقلع" : "About"}</Button>
+            </Link>
             <Link to="/login">
               <Button variant="outline" size="sm">{t.adminLogin}</Button>
             </Link>
