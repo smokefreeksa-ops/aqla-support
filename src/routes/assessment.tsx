@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useLang, useLangState, LangContext, type Lang } from "@/lib/i18n";
-import { submitAssessment } from "@/lib/submit.functions";
+import { submitAssessment, saveFollowUpPreference } from "@/lib/submit.functions";
 import { AlertTriangle, ArrowLeft, ArrowRight, ShieldAlert, Languages } from "lucide-react";
 
 export const Route = createFileRoute("/assessment")({
@@ -185,6 +185,7 @@ const STEP_LABELS: (keyof import("@/lib/i18n").Dict)[] = [
   "stepProducts",
   "stepDependence",
   "stepReadiness",
+  "stepRisk",
   "stepResult",
 ];
 
@@ -221,8 +222,8 @@ function Flow() {
   const hasNicProduct = ["vape", "pouches", "smokeless", "shisha", "multiple"].some((p) => s.products.includes(p));
   const showDependenceStep = hasCig || hasNicProduct;
 
-  // Visible steps array (skips dependence if no use products)
-  const stepsVisible: number[] = showDependenceStep ? [0, 1, 2, 3, 4, 5] : [0, 1, 2, 4, 5];
+  // Step indexes: 0 consent, 1 triage, 2 products, 3 dependence, 4 readiness, 5 risk, 6 result.
+  const stepsVisible: number[] = showDependenceStep ? [0, 1, 2, 3, 4, 5, 6] : [0, 1, 2, 4, 5, 6];
   const totalVisible = stepsVisible.length;
   const visibleIndex = Math.max(0, stepsVisible.indexOf(step));
   const progress = ((visibleIndex + 1) / totalVisible) * 100;
@@ -276,9 +277,6 @@ function Flow() {
   async function handleNext() {
     const err = canAdvance();
     if (err) { toast.error(err); return; }
-    if (step === 4) {
-      // After readiness comes risk screen then submit. Use step 4 area to include both.
-    }
     next();
   }
 
@@ -301,11 +299,11 @@ function Flow() {
           nicotine,
           readiness: s.readiness as never,
           riskFlags: s.riskFlags,
-          followUpPreference: s.followUp,
         },
       });
       setResult(r);
-      setStep(5);
+      setStep(6);
+      toast.success(lang === "ar" ? "تم حفظ تقييمك" : "Your assessment was saved");
       if (typeof window !== "undefined") window.scrollTo({ top: 0 });
     } catch (e) {
       toast.error((e as Error).message);
