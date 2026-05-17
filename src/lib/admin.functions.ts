@@ -810,6 +810,10 @@ export const addFollowUpVisit = createServerFn({ method: "POST" })
         craving_0_10: z.number().int().min(0).max(10).optional(),
         confidence_0_10: z.number().int().min(0).max(10).optional(),
         co_reading: z.number().min(0).max(100).optional(),
+        withdrawal_severity_0_10: z.number().int().min(0).max(10).optional(),
+        abstinence_duration_days: z.number().int().min(0).max(3650).optional(),
+        percent_reduction_estimate: z.number().int().min(0).max(100).optional(),
+        satisfaction_with_support_0_10: z.number().int().min(0).max(10).optional(),
         notes: z.string().max(2000).optional(),
       })
       .parse(d),
