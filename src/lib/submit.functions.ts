@@ -258,7 +258,16 @@ export const submitAssessment = createServerFn({ method: "POST" })
     const pid = participant.id;
 
     const inserts: PromiseLike<unknown>[] = [
-      db.from("consent_records").insert({ participant_id: pid, ...data.consent }),
+      db.from("consent_records").insert({
+        participant_id: pid,
+        consent_assessment: data.consent.consent_assessment,
+        consent_contact: data.consent.consent_contact,
+        consent_educational: data.consent.consent_educational,
+        consent_service_eval: data.consent.consent_service_eval,
+        consent_research: data.consent.consent_research,
+        consent_research_publication: data.extras?.consentResearchPublication ?? false,
+        guardian_notice_shown: data.consent.guardian_notice_shown,
+      }),
       db.from("product_use").insert({ participant_id: pid, products: data.products }),
       db.from("readiness_stage").insert({ participant_id: pid, stage: data.readiness }),
       db.from("risk_flags").insert({
