@@ -316,6 +316,27 @@ function canonicalProduct(raw: string | null | undefined): ProductType {
   return "other";
 }
 
+// FTND item-score → human label (standard Fagerström wording)
+const FTND_LABELS = {
+  q1: { 3: "≤5 min", 2: "6–30 min", 1: "31–60 min", 0: ">60 min" } as Record<number, string>,
+  q2: { 1: "yes", 0: "no" } as Record<number, string>,
+  q3: { 1: "first one in the morning", 0: "any other" } as Record<number, string>,
+  q4: { 0: "≤10", 1: "11–20", 2: "21–30", 3: "≥31" } as Record<number, string>,
+  q5: { 1: "yes", 0: "no" } as Record<number, string>,
+  q6: { 1: "yes", 0: "no" } as Record<number, string>,
+};
+const ftndLabel = (q: keyof typeof FTND_LABELS, v: number | null | undefined) =>
+  v == null ? "not_answered" : (FTND_LABELS[q][v] ?? "unknown");
+
+const yesNo = (v: boolean | null | undefined) =>
+  v == null ? "not_answered" : v ? "yes" : "no";
+
+const FOLLOWUP_TIMEPOINTS = ["1w", "4w", "12w", "6m", "12m"] as const;
+const FOLLOWUP_LABEL: Record<string, string> = {
+  "1w": "1_week", "4w": "4_week", "12w": "12_week", "6m": "6_month", "12m": "12_month",
+};
+
+
 export const exportCsv = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) =>
@@ -324,6 +345,7 @@ export const exportCsv = createServerFn({ method: "POST" })
         type: z.enum([
           "full", "anonymized", "cohort", "follow_up_due", "research",
           "baseline", "follow_up_outcomes", "product_use", "youth_nicotine", "city_summary",
+          "dependence_items", "readiness_quit_history", "research_consent_only",
         ]),
         cohort: z.string().optional(),
         researchConsentOnly: z.boolean().optional(),
@@ -374,21 +396,157 @@ export const exportCsv = createServerFn({ method: "POST" })
       }
       cleaned = Object.values(agg).map((a) => ({ ...a, cohorts: JSON.stringify(a.cohorts) }));
     } else if (data.type === "follow_up_outcomes") {
+      // Long format: one row per participant_code per timepoint
+      // (baseline + 1w/4w/12w/6m/12m), so analysts can pivot easily.
       const [{ data: ot }, { data: fv }] = await Promise.all([
         supabaseAdmin.from("outcome_tracking").select("*").in("participant_id", PID_SAFE),
         supabaseAdmin.from("follow_up_visits").select("*").in("participant_id", PID_SAFE),
       ]);
-      const otRows: Record<string, unknown>[] = (ot ?? []).map((r) => ({
-        src: "baseline_outcome",
+      const baselineRows: Record<string, unknown>[] = (ot ?? []).map((r) => ({
         participant_code: codeOf(r.participant_id),
-        ...stripPiiStrict(r as Record<string, unknown>),
+        followup_timepoint: "baseline",
+        followup_completed_date: r.baseline_date ?? null,
+        quit_date_if_any: r.quit_date ?? null,
+        contacted_yes_no: "not_applicable",
+        lost_to_followup_yes_no: yesNo(r.lost_to_follow_up as boolean | null),
+        abstinent_yes_no: yesNo(r.abstinent as boolean | null),
+        reduced_use_yes_no: yesNo(r.reduced_use as boolean | null),
+        relapsed_yes_no: yesNo(r.relapsed as boolean | null),
+        current_product_use: r.current_product_use ?? "not_answered",
+        co_reading_ppm_optional: r.co_reading ?? null,
       }));
-      const fvRows: Record<string, unknown>[] = (fv ?? []).map((r) => ({
-        src: "follow_up_visit",
+      const visitRows: Record<string, unknown>[] = (fv ?? []).map((r) => ({
         participant_code: codeOf(r.participant_id),
-        ...stripPiiStrict(r as Record<string, unknown>),
+        followup_timepoint: FOLLOWUP_LABEL[r.visit_point as string] ?? r.visit_point,
+        followup_completed_date: r.visit_date ?? null,
+        contacted_yes_no: yesNo(r.contacted as boolean | null),
+        lost_to_followup_yes_no: yesNo(r.lost_to_follow_up as boolean | null),
+        quit_attempt_made_yes_no: yesNo(r.quit_attempt_made as boolean | null),
+        abstinent_yes_no: yesNo(r.abstinent as boolean | null),
+        reduced_use_yes_no: yesNo(r.reduced_use as boolean | null),
+        relapsed_yes_no: yesNo(r.relapsed as boolean | null),
+        current_product_use: r.current_product_use ?? "not_answered",
+        current_cigarettes_per_day: r.cigarettes_per_day ?? null,
+        current_pouches_per_day: r.pouches_per_day ?? null,
+        current_vape_frequency: r.vaping_frequency ?? null,
+        craving_severity_0_10: r.craving_0_10 ?? null,
+        confidence_to_quit_0_10: r.confidence_0_10 ?? null,
+        co_reading_ppm_optional: r.co_reading ?? null,
       }));
-      cleaned = [...otRows, ...fvRows];
+      // Sort: by code, then timepoint order
+      const order = ["baseline", ...FOLLOWUP_TIMEPOINTS.map((t) => FOLLOWUP_LABEL[t])];
+      cleaned = [...baselineRows, ...visitRows].sort((a, b) => {
+        const ca = String(a.participant_code ?? ""); const cb = String(b.participant_code ?? "");
+        if (ca !== cb) return ca.localeCompare(cb);
+        return order.indexOf(String(a.followup_timepoint)) - order.indexOf(String(b.followup_timepoint));
+      });
+    } else if (data.type === "dependence_items") {
+      // Item-level FTND (cigarette smokers) + Nicotine-Control / Loss-of-Control
+      // (vape / pouch / shisha / other non-cigarette nicotine users) + HONC-style.
+      const [{ data: cig }, { data: nic }, { data: hon }] = await Promise.all([
+        supabaseAdmin.from("cigarette_dependence_scores").select("*").in("participant_id", PID_SAFE),
+        supabaseAdmin.from("nicotine_control_scores").select("*").in("participant_id", PID_SAFE),
+        supabaseAdmin.from("honc_screening").select("*").in("participant_id", PID_SAFE),
+      ]);
+      const cigMap = new Map((cig ?? []).map((r) => [r.participant_id, r]));
+      const nicMap = new Map((nic ?? []).map((r) => [r.participant_id, r]));
+      const honMap = new Map((hon ?? []).map((r) => [r.participant_id, r]));
+      const allPids = new Set<string>([
+        ...cigMap.keys(), ...nicMap.keys(), ...honMap.keys(),
+      ]);
+      cleaned = Array.from(allPids).map((pid) => {
+        const c = cigMap.get(pid);
+        const n = nicMap.get(pid);
+        const h = honMap.get(pid);
+        const nAns = (n?.answers ?? {}) as Record<string, boolean | null>;
+        return {
+          participant_code: codeOf(pid),
+          // FTND items (raw value = item score in Fagerström scoring)
+          ftnd_item_1_time_to_first_cigarette: ftndLabel("q1", c?.q1_time_to_first ?? null),
+          ftnd_item_1_score: c?.q1_time_to_first ?? "not_applicable",
+          ftnd_item_2_difficulty_refraining: ftndLabel("q2", c?.q2_difficulty_refrain ?? null),
+          ftnd_item_2_score: c?.q2_difficulty_refrain ?? "not_applicable",
+          ftnd_item_3_hardest_cigarette_to_give_up: ftndLabel("q3", c?.q3_hardest_to_give_up ?? null),
+          ftnd_item_3_score: c?.q3_hardest_to_give_up ?? "not_applicable",
+          ftnd_item_4_cigarettes_per_day: ftndLabel("q4", c?.q4_cigs_per_day ?? null),
+          ftnd_item_4_score: c?.q4_cigs_per_day ?? "not_applicable",
+          ftnd_item_5_smoke_more_in_morning: ftndLabel("q5", c?.q5_more_in_morning ?? null),
+          ftnd_item_5_score: c?.q5_more_in_morning ?? "not_applicable",
+          ftnd_item_6_smoke_when_ill: ftndLabel("q6", c?.q6_smoking_when_ill ?? null),
+          ftnd_item_6_score: c?.q6_smoking_when_ill ?? "not_applicable",
+          ftnd_total_score: c?.total_score ?? "not_applicable",
+          ftnd_category: c?.category ?? "not_applicable",
+          // Heaviness of Smoking Index — derived from FTND items q1 + q4
+          hsi_time_to_first_cigarette: ftndLabel("q1", c?.q1_time_to_first ?? null),
+          hsi_cigarettes_per_day: ftndLabel("q4", c?.q4_cigs_per_day ?? null),
+          hsi_score_if_available: c ? (c.q1_time_to_first ?? 0) + (c.q4_cigs_per_day ?? 0) : "not_applicable",
+          // Nicotine Control / Loss-of-Control (10 items)
+          nic_control_item_1_tried_to_stop_could_not: yesNo(nAns.q1 ?? null),
+          nic_control_item_2_strong_cravings: yesNo(nAns.q2 ?? null),
+          nic_control_item_3_withdrawal_mood_symptoms: yesNo(nAns.q3 ?? null),
+          nic_control_item_4_use_soon_after_waking: yesNo(nAns.q4 ?? null),
+          nic_control_item_5_difficult_in_restricted_places: yesNo(nAns.q5 ?? null),
+          nic_control_item_6_need_to_concentrate_or_feel_normal: yesNo(nAns.q6 ?? null),
+          nic_control_item_7_increased_use_over_time: yesNo(nAns.q7 ?? null),
+          nic_control_item_8_continued_despite_health_concern: yesNo(nAns.q8 ?? null),
+          nic_control_item_9_feels_addicted_or_controlled: yesNo(nAns.q9 ?? null),
+          nic_control_item_10_stopping_feels_difficult: yesNo(nAns.q10 ?? null),
+          nicotine_control_score: n?.yes_count ?? "not_applicable",
+          nicotine_control_category: n?.category ?? "not_applicable",
+          // HONC-style loss-of-autonomy screening
+          honc_style_q1_tried_quit_failed: yesNo(h?.q1_tried_quit_failed ?? null),
+          honc_style_q2_strong_cravings: yesNo(h?.q2_strong_cravings ?? null),
+          honc_style_q3_felt_addicted: yesNo(h?.q3_felt_addicted ?? null),
+          honc_style_q4_hard_in_restricted: yesNo(h?.q4_hard_in_restricted ?? null),
+          honc_style_q5_withdrawal: yesNo(h?.q5_withdrawal ?? null),
+          honc_style_q6_needed_to_feel_normal: yesNo(h?.q6_needed_to_feel_normal ?? null),
+          honc_style_q7_increased_use: yesNo(h?.q7_increased_use ?? null),
+          honc_style_q8_felt_controlled: yesNo(h?.q8_felt_controlled ?? null),
+          honc_style_q9_continued_despite_health: yesNo(h?.q9_continued_despite_health ?? null),
+          honc_style_q10_stopping_difficult: yesNo(h?.q10_stopping_difficult ?? null),
+          loss_of_autonomy_any_yes: yesNo(h?.any_yes ?? null),
+          loss_of_autonomy_positive_count: h?.positive_count ?? "not_applicable",
+          honc_category: h?.category ?? "not_applicable",
+        };
+      });
+    } else if (data.type === "readiness_quit_history") {
+      const [{ data: rd }, { data: mot }, { data: qh }] = await Promise.all([
+        supabaseAdmin.from("readiness_stage").select("*").in("participant_id", PID_SAFE),
+        supabaseAdmin.from("motivation_assessment").select("*").in("participant_id", PID_SAFE),
+        supabaseAdmin.from("quit_history").select("*").in("participant_id", PID_SAFE),
+      ]);
+      const rdMap = new Map((rd ?? []).map((r) => [r.participant_id, r]));
+      const motMap = new Map((mot ?? []).map((r) => [r.participant_id, r]));
+      const qhMap = new Map((qh ?? []).map((r) => [r.participant_id, r]));
+      const allPids = new Set<string>([...rdMap.keys(), ...motMap.keys(), ...qhMap.keys()]);
+      cleaned = Array.from(allPids).map((pid) => {
+        const r = rdMap.get(pid); const m = motMap.get(pid); const q = qhMap.get(pid);
+        return {
+          participant_code: codeOf(pid),
+          readiness_stage: r?.stage ?? "not_answered",
+          importance_to_quit_0_10: m?.importance_0_10 ?? "not_answered",
+          confidence_to_quit_0_10: m?.confidence_0_10 ?? "not_answered",
+          main_reason_for_quitting: m?.main_reason ?? "not_answered",
+          main_barriers_multi_select: Array.isArray(m?.barriers) ? (m!.barriers as string[]).join("|") : "not_answered",
+          ever_tried_to_quit: yesNo(q?.ever_tried ?? null),
+          number_of_quit_attempts: q?.attempts_count ?? "not_answered",
+          longest_quit_duration: q?.longest_quit_duration ?? "not_answered",
+          quit_methods_used_before: Array.isArray(q?.methods_used) ? (q!.methods_used as string[]).join("|") : "not_answered",
+          main_reason_for_relapse: q?.main_relapse_reason ?? "not_answered",
+        };
+      });
+    } else if (data.type === "research_consent_only") {
+      // Baseline-shaped export restricted to participants who granted research consent.
+      const { data: parts } = await supabaseAdmin
+        .from("participants")
+        .select("id, participant_code, age, gender, city, affiliation_type, education_level, preferred_language, cohort, cohort_reason, doctor_review_needed, research_consent_status, created_at")
+        .eq("research_consent_status", "given")
+        .in("id", PID_SAFE)
+        .limit(20000);
+      cleaned = (parts ?? []).map((p) => {
+        const { id: _id, ...keep } = p as Record<string, unknown>;
+        return { ...keep, submission_date: keep.created_at };
+      });
     } else if (data.type === "product_use") {
       // Research-grade product-use export:
       // one row per participant per canonical product type.
@@ -461,19 +619,20 @@ export const exportCsv = createServerFn({ method: "POST" })
         r.family_peer_use = (d.family_peer_use as boolean | null) ?? r.family_peer_use;
         r.social_media_ad_exposure = (d.ad_exposure as boolean | null) ?? r.social_media_ad_exposure;
       }
-      for (const c of cigm ?? []) {
-        const r = ensure(c.participant_id, "cigarettes", c.created_at as string);
-        if (r.days_used_past_30_days == null && c.cigarettes_per_day != null) {
-          // proxy: smoker → assume daily use; leave null otherwise
-        }
-        if (r.ever_use == null && c.cigarettes_per_day != null) r.ever_use = true;
-      }
       for (const v of vapem ?? []) {
         const r = ensure(v.participant_id, "vape/e-cigarette", v.created_at as string);
         r.days_used_past_30_days = (v.days_30d as number | null) ?? r.days_used_past_30_days;
         if (r.ever_use == null && v.days_30d != null) r.ever_use = (v.days_30d as number) > 0;
         if (r.current_use_past_30_days == null && v.days_30d != null) r.current_use_past_30_days = (v.days_30d as number) > 0;
         if (v.used_at_institution != null) r.use_at_school_work = v.used_at_institution as boolean;
+        // Vape-specific extras
+        (r as Record<string, unknown>).times_per_day = v.times_per_day ?? null;
+        (r as Record<string, unknown>).time_to_first_use_after_waking = v.time_to_first ?? null;
+        (r as Record<string, unknown>).device_type = v.device_type ?? null;
+        (r as Record<string, unknown>).disposable_or_refillable_or_pod = v.refillable ?? null;
+        (r as Record<string, unknown>).nicotine_concentration = v.nicotine_concentration ?? null;
+        (r as Record<string, unknown>).flavor_type = v.flavors ?? null;
+        (r as Record<string, unknown>).tried_to_stop = yesNo(v.tried_to_stop as boolean | null);
       }
       for (const p of pouchm ?? []) {
         const r = ensure(p.participant_id, "nicotine_pouches", p.created_at as string);
@@ -482,6 +641,13 @@ export const exportCsv = createServerFn({ method: "POST" })
         if (r.ever_use == null && p.days_30d != null) r.ever_use = (p.days_30d as number) > 0;
         if (r.current_use_past_30_days == null && p.days_30d != null) r.current_use_past_30_days = (p.days_30d as number) > 0;
         if (p.used_at_institution != null) r.use_at_school_work = p.used_at_institution as boolean;
+        // Pouch-specific extras
+        (r as Record<string, unknown>).pouches_per_day = p.pouches_per_day ?? null;
+        (r as Record<string, unknown>).time_to_first_use_after_waking = p.time_to_first ?? null;
+        (r as Record<string, unknown>).nicotine_strength = p.nicotine_strength ?? null;
+        (r as Record<string, unknown>).flavor_type = p.flavors ?? null;
+        (r as Record<string, unknown>).tried_to_stop = yesNo(p.tried_to_stop as boolean | null);
+        (r as Record<string, unknown>).wants_clinician_counseling = yesNo(p.wants_counseling as boolean | null);
       }
       for (const s of shisham ?? []) {
         const r = ensure(s.participant_id, "shisha/hookah", s.created_at as string);
@@ -490,9 +656,36 @@ export const exportCsv = createServerFn({ method: "POST" })
         if (r.current_use_past_30_days == null && s.days_30d != null) r.current_use_past_30_days = (s.days_30d as number) > 0;
         r.usual_place_of_use = (s.setting as string | null) ?? r.usual_place_of_use;
         r.quit_interest = (s.quit_interest as string | null) ?? r.quit_interest;
+        // Shisha-specific extras
+        (r as Record<string, unknown>).sessions_per_week = s.sessions_per_week ?? null;
+        (r as Record<string, unknown>).average_session_duration_minutes = s.avg_session_minutes ?? null;
+        (r as Record<string, unknown>).shared_mouthpiece = yesNo(s.shared_mouthpiece as boolean | null);
+        (r as Record<string, unknown>).tobacco_or_nicotine_type = s.tobacco_type ?? null;
+        (r as Record<string, unknown>).used_with_other_products = yesNo(s.also_uses_other as boolean | null);
+      }
+      for (const c of cigm ?? []) {
+        const r = ensure(c.participant_id, "cigarettes", c.created_at as string);
+        if (r.ever_use == null && c.cigarettes_per_day != null) r.ever_use = true;
+        (r as Record<string, unknown>).cigarettes_per_day = c.cigarettes_per_day ?? null;
+        (r as Record<string, unknown>).time_to_first_use_after_waking = c.time_to_first_cig ?? null;
+        (r as Record<string, unknown>).hsi_score = c.hsi_score ?? null;
       }
 
-      cleaned = Array.from(rowMap.values()).map((r) => ({ ...r })) as Record<string, unknown>[];
+      // Final shape: drop internal participant_id, expose submission_date,
+      // and convert booleans to coded strings for research-grade output.
+      cleaned = Array.from(rowMap.values()).map((r) => {
+        const { participant_id: _pid, created_at, ever_use, current_use_past_30_days,
+          family_peer_use, social_media_ad_exposure, use_at_school_work, ...rest } = r as Record<string, unknown>;
+        return {
+          submission_date: created_at ?? null,
+          ...rest,
+          ever_use: yesNo(ever_use as boolean | null),
+          current_use_past_30_days: yesNo(current_use_past_30_days as boolean | null),
+          use_at_school_university_work: yesNo(use_at_school_work as boolean | null),
+          family_member_uses_product: yesNo(family_peer_use as boolean | null),
+          social_media_or_ad_exposure: yesNo(social_media_ad_exposure as boolean | null),
+        };
+      }) as Record<string, unknown>[];
     } else if (data.type === "youth_nicotine") {
       const { data: young } = await supabaseAdmin
         .from("participants").select("id, participant_code, age, city, cohort, research_consent_status")

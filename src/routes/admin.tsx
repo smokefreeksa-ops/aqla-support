@@ -128,7 +128,8 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
   const [researchOnly, setResearchOnly] = useState(false);
   async function doExport(
     type: "full" | "anonymized" | "cohort" | "follow_up_due" | "research"
-      | "baseline" | "follow_up_outcomes" | "product_use" | "youth_nicotine" | "city_summary",
+      | "baseline" | "follow_up_outcomes" | "product_use" | "youth_nicotine" | "city_summary"
+      | "dependence_items" | "readiness_quit_history" | "research_consent_only",
   ) {
     try {
       const r = await exportFn({ data: { type, cohort: cohort || undefined, researchConsentOnly: researchOnly || undefined } });
@@ -228,6 +229,9 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
               <Button size="sm" variant="outline" onClick={() => doExport("product_use")}><Download className="h-4 w-4 mr-1" />Product use</Button>
               <Button size="sm" variant="outline" onClick={() => doExport("youth_nicotine")}><Download className="h-4 w-4 mr-1" />Youth</Button>
               <Button size="sm" variant="outline" onClick={() => doExport("city_summary")}><Download className="h-4 w-4 mr-1" />City summary</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("dependence_items")}><Download className="h-4 w-4 mr-1" />Dependence items</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("readiness_quit_history")}><Download className="h-4 w-4 mr-1" />Readiness &amp; quit history</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("research_consent_only")}><Download className="h-4 w-4 mr-1" />Research consent only</Button>
             </div>
           )}
         </div>
