@@ -35,7 +35,7 @@ export function FloatingWhatsAppButton() {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={ariaLabel}
+      onClick={() => trackEvent("whatsapp_clicked")}
       className={[
         "fixed bottom-5 z-50 flex items-center gap-2 rounded-full px-4 py-3 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 hover:shadow-xl",
         isAr ? "left-5" : "right-5",
