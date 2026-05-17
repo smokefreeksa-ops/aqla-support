@@ -78,10 +78,17 @@ export const listParticipants = createServerFn({ method: "POST" })
       .order("created_at", { ascending: false })
       .limit(500);
 
+    type Enrich = Record<string, {
+      products?: string[]; readiness?: string;
+      ftnd?: { total: number; category: string };
+      nic?: { yes_count: number; category: string };
+      followUp?: string;
+    }>;
+
     if (pidFilter !== null) {
       if (pidFilter.length === 0) {
         await logAudit(context.userId, "list", "participants", undefined, { count: 0 });
-        return { rows: [], roles, enrich: {} as Record<string, unknown> };
+        return { rows: [] as never[], roles, enrich: {} as Enrich };
       }
       q = q.in("id", pidFilter);
     }
