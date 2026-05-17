@@ -16,6 +16,8 @@ export function AqlaAssistant() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [sending, setSending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+  const isPublic = PUBLIC_PATHS.includes(location.pathname);
 
   const statusFn = useServerFn(getAssistantStatus);
   const chatFn = useServerFn(chatWithAssistant);
