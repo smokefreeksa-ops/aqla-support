@@ -336,9 +336,9 @@ export const exportCsv = createServerFn({ method: "POST" })
         supabaseAdmin.from("product_use_details").select("*").in("participant_id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]),
       ]);
       cleaned = [
-        ...(pu ?? []).map((r) => ({ source: "summary", ...r, products: JSON.stringify(r.products) })),
-        ...(pud ?? []).map((r) => ({ source: "detail", ...r })),
-      ].map(stripPii);
+        ...(pu ?? []).map((r) => ({ src: "summary" as const, ...r, products: JSON.stringify(r.products) })),
+        ...(pud ?? []).map((r) => ({ src: "detail" as const, ...r })),
+      ].map((r) => stripPii(r as Record<string, unknown>));
     } else if (data.type === "youth_nicotine") {
       // Participants under 25 with HONC or nicotine-control rows
       const { data: young } = await supabaseAdmin
@@ -351,16 +351,18 @@ export const exportCsv = createServerFn({ method: "POST" })
         supabaseAdmin.from("nicotine_control_scores").select("participant_id, yes_count, category, youth_flag").in("participant_id", youngIds.length ? youngIds : ["00000000-0000-0000-0000-000000000000"]),
       ]);
       const byId = new Map((young ?? []).map((r) => [r.id, r]));
-      cleaned = (honc ?? []).map((h) => ({
-        ...byId.get(h.participant_id),
+      const honcRows: Record<string, unknown>[] = (honc ?? []).map((h) => ({
+        ...(byId.get(h.participant_id) ?? {}),
         honc_positive_count: h.positive_count,
         honc_category: h.category,
-      })).concat((nic ?? []).map((n) => ({
-        ...byId.get(n.participant_id),
+      }));
+      const nicRows: Record<string, unknown>[] = (nic ?? []).map((n) => ({
+        ...(byId.get(n.participant_id) ?? {}),
         nic_yes_count: n.yes_count,
         nic_category: n.category,
         youth_flag: n.youth_flag,
-      })));
+      }));
+      cleaned = [...honcRows, ...nicRows];
     } else if (data.type === "baseline") {
       // Joined baseline snapshot: participant + scores + cohort + readiness
       let q = supabaseAdmin
