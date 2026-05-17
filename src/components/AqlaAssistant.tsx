@@ -60,12 +60,12 @@ export function AqlaAssistant() {
 
   const isRTL = lang === "ar";
   const t = {
-    title: isRTL ? "مساعد أقلع التعليمي" : "Aqla Education Assistant",
+    title: isRTL ? "اسأل دكتور مالك" : "Ask Dr. Malik",
     placeholder: isRTL ? "اكتب سؤالك…" : "Type your question…",
     disclaimer: isRTL
       ? "معلومات تثقيفية فقط — ليست استشارة طبية."
       : "Educational info only — not medical advice.",
-    open: isRTL ? "افتح المساعد" : "Open assistant",
+    open: isRTL ? "اسأل د. مالك" : "Ask Dr. Malik",
     close: isRTL ? "إغلاق" : "Close",
     error: isRTL ? "تعذّر الإرسال. حاول مرة أخرى." : "Couldn't send. Please try again.",
   };
