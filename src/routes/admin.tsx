@@ -211,6 +211,7 @@ function AdminPage() {
       <main className="mx-auto max-w-7xl px-4 py-6 space-y-4">
         <AssistantStatusBanner />
         <AdminAnalyticsCard />
+        <NotificationsCard />
         <Tabs defaultValue="participants">
           <TabsList>
             <TabsTrigger value="participants" className="gap-1.5"><HeartPulse className="h-4 w-4" />Quit Support</TabsTrigger>
