@@ -52,7 +52,7 @@ export const listParticipants = createServerFn({ method: "POST" })
     // Build participant-id restriction from joined tables
     let pidFilter: string[] | null = null;
     const intersect = (ids: string[]) => {
-      pidFilter = pidFilter === null ? ids : pidFilter.filter((x) => ids.includes(x));
+      pidFilter = (pidFilter === null ? ids : pidFilter.filter((x) => ids.includes(x))) as string[];
     };
     if (data.product) {
       const { data: rows } = await supabaseAdmin
