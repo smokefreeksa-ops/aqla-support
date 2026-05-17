@@ -326,10 +326,9 @@ export const exportCsv = createServerFn({ method: "POST" })
         supabaseAdmin.from("outcome_tracking").select("*").in("participant_id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]),
         supabaseAdmin.from("follow_up_visits").select("*").in("participant_id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]),
       ]);
-      cleaned = [
-        ...(ot ?? []).map((r) => ({ source: "baseline_outcome", ...r })),
-        ...(fv ?? []).map((r) => ({ source: "follow_up_visit", ...r })),
-      ].map(stripPii);
+      const otRows: Record<string, unknown>[] = (ot ?? []).map((r) => ({ src: "baseline_outcome", ...r }));
+      const fvRows: Record<string, unknown>[] = (fv ?? []).map((r) => ({ src: "follow_up_visit", ...r }));
+      cleaned = [...otRows, ...fvRows].map((r) => stripPii(r));
     } else if (data.type === "product_use") {
       const [{ data: pu }, { data: pud }] = await Promise.all([
         supabaseAdmin.from("product_use").select("*").in("participant_id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]),
