@@ -2,8 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useLang, useLangState, LangContext } from "@/lib/i18n";
-import { ShieldAlert, HeartPulse, Languages, ArrowRight, Sparkles, Users } from "lucide-react";
+import { ShieldAlert, Languages, ArrowRight, Sparkles, Users } from "lucide-react";
 import { SocialLinks } from "@/components/SocialLinks";
+import { ImpactSection } from "@/components/ImpactSection";
+import { VisitTracker } from "@/components/VisitTracker";
+import aqlaLogo from "@/assets/aqla-logo.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -36,15 +39,17 @@ function Inner() {
     <div dir={dir} className="min-h-screen bg-background">
       <header className="border-b bg-card/70 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-2">
-            <div className="grid h-10 w-10 place-items-center rounded-2xl hero-gradient text-primary-foreground shadow-elegant">
-              <HeartPulse className="h-5 w-5" />
-            </div>
+          <Link to="/" className="flex items-center gap-3">
+            <img
+              src={aqlaLogo}
+              alt="Aqla — أقلع logo"
+              className="h-[38px] w-auto object-contain sm:h-12"
+            />
             <div className="leading-tight">
               <div className="font-semibold tracking-tight">{t.brandShort}</div>
               <div className="text-[11px] text-muted-foreground">Aqla — أقلع</div>
             </div>
-          </div>
+          </Link>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" onClick={() => setLang(lang === "ar" ? "en" : "ar")} className="gap-1.5">
               <Languages className="h-4 w-4" />
