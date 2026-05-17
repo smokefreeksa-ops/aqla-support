@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { z } from "zod";
+import { sendAdminNotification, renderKeyValueHtml } from "./notifications.server";
 
 const INTERESTS = [
   "awareness_campaigns",
