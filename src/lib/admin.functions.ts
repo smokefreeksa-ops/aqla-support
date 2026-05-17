@@ -338,12 +338,24 @@ export const exportCsv = createServerFn({ method: "POST" })
       || data.type === "follow_up_outcomes" || data.type === "product_use"
       || data.type === "youth_nicotine" || data.type === "city_summary";
 
-    // Resolve participant ID set based on cohort + research consent filters
-    let pidQ = supabaseAdmin.from("participants").select("id").limit(20000);
+
+    // Resolve participant set based on cohort + research consent filters.
+    // We always fetch participant_code so it can serve as the pseudonymous
+    // linkage key across every research export.
+    let pidQ = supabaseAdmin
+      .from("participants")
+      .select("id, participant_code")
+      .limit(20000);
     if (data.cohort) pidQ = pidQ.eq("cohort", data.cohort as never);
     if (data.researchConsentOnly) pidQ = pidQ.eq("research_consent_status", "given");
     const { data: pidRows } = await pidQ;
     const pids = (pidRows ?? []).map((r) => r.id);
+    const codeByPid = new Map<string, string>(
+      (pidRows ?? []).map((r) => [r.id, r.participant_code as string]),
+    );
+    const codeOf = (pid: string | null | undefined) =>
+      (pid && codeByPid.get(pid)) || null;
+    const PID_SAFE = pids.length ? pids : ["00000000-0000-0000-0000-000000000000"];
 
     let cleaned: Record<string, unknown>[] = [];
 
@@ -351,7 +363,7 @@ export const exportCsv = createServerFn({ method: "POST" })
       const { data: rows } = await supabaseAdmin
         .from("participants")
         .select("city, cohort, doctor_review_needed, research_consent_status")
-        .in("id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]);
+        .in("id", PID_SAFE);
       const agg: Record<string, { city: string; total: number; doctor_review: number; research_consent: number; cohorts: Record<string, number> }> = {};
       for (const r of rows ?? []) {
         const city = (r.city as string) || "(unknown)";
@@ -365,90 +377,213 @@ export const exportCsv = createServerFn({ method: "POST" })
       cleaned = Object.values(agg).map((a) => ({ ...a, cohorts: JSON.stringify(a.cohorts) }));
     } else if (data.type === "follow_up_outcomes") {
       const [{ data: ot }, { data: fv }] = await Promise.all([
-        supabaseAdmin.from("outcome_tracking").select("*").in("participant_id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]),
-        supabaseAdmin.from("follow_up_visits").select("*").in("participant_id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]),
+        supabaseAdmin.from("outcome_tracking").select("*").in("participant_id", PID_SAFE),
+        supabaseAdmin.from("follow_up_visits").select("*").in("participant_id", PID_SAFE),
       ]);
-      const otRows: Record<string, unknown>[] = (ot ?? []).map((r) => ({ src: "baseline_outcome", ...r }));
-      const fvRows: Record<string, unknown>[] = (fv ?? []).map((r) => ({ src: "follow_up_visit", ...r }));
-      cleaned = [...otRows, ...fvRows].map((r) => stripPii(r));
+      const otRows: Record<string, unknown>[] = (ot ?? []).map((r) => ({
+        src: "baseline_outcome",
+        participant_code: codeOf(r.participant_id),
+        ...stripPiiStrict(r as Record<string, unknown>),
+      }));
+      const fvRows: Record<string, unknown>[] = (fv ?? []).map((r) => ({
+        src: "follow_up_visit",
+        participant_code: codeOf(r.participant_id),
+        ...stripPiiStrict(r as Record<string, unknown>),
+      }));
+      cleaned = [...otRows, ...fvRows];
     } else if (data.type === "product_use") {
-      const [{ data: pu }, { data: pud }] = await Promise.all([
-        supabaseAdmin.from("product_use").select("*").in("participant_id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]),
-        supabaseAdmin.from("product_use_details").select("*").in("participant_id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]),
+      // Research-grade product-use export:
+      // one row per participant per canonical product type.
+      const [{ data: pud }, { data: cigm }, { data: vapem }, { data: pouchm }, { data: shisham }] = await Promise.all([
+        supabaseAdmin.from("product_use_details").select("*").in("participant_id", PID_SAFE),
+        supabaseAdmin.from("cigarette_module").select("*").in("participant_id", PID_SAFE),
+        supabaseAdmin.from("vape_module").select("*").in("participant_id", PID_SAFE),
+        supabaseAdmin.from("pouch_module").select("*").in("participant_id", PID_SAFE),
+        supabaseAdmin.from("shisha_module").select("*").in("participant_id", PID_SAFE),
       ]);
-      cleaned = [
-        ...(pu ?? []).map((r) => ({ src: "summary" as const, ...r, products: JSON.stringify(r.products) })),
-        ...(pud ?? []).map((r) => ({ src: "detail" as const, ...r })),
-      ].map((r) => stripPii(r as Record<string, unknown>));
+
+      type Row = {
+        participant_id: string;
+        participant_code: string | null;
+        product_type: ProductType;
+        ever_use: boolean | null;
+        current_use_past_30_days: boolean | null;
+        days_used_past_30_days: number | null;
+        age_first_use: number | null;
+        age_regular_use: number | null;
+        main_product_yes_no: "yes" | "no" | null;
+        usual_place_of_use: string | null;
+        source_of_product: string | null;
+        use_at_school_work: boolean | null;
+        family_peer_use: boolean | null;
+        social_media_ad_exposure: boolean | null;
+        quit_interest: string | null;
+        created_at: string | null;
+      };
+      const rowMap = new Map<string, Row>(); // key: participant_id|product_type
+      const ensure = (pid: string, pt: ProductType, created_at?: string | null): Row => {
+        const key = `${pid}|${pt}`;
+        let row = rowMap.get(key);
+        if (!row) {
+          row = {
+            participant_id: pid,
+            participant_code: codeOf(pid),
+            product_type: pt,
+            ever_use: null,
+            current_use_past_30_days: null,
+            days_used_past_30_days: null,
+            age_first_use: null,
+            age_regular_use: null,
+            main_product_yes_no: null,
+            usual_place_of_use: null,
+            source_of_product: null,
+            use_at_school_work: null,
+            family_peer_use: null,
+            social_media_ad_exposure: null,
+            quit_interest: null,
+            created_at: created_at ?? null,
+          };
+          rowMap.set(key, row);
+        }
+        if (created_at && !row.created_at) row.created_at = created_at;
+        return row;
+      };
+
+      for (const d of pud ?? []) {
+        const pt = canonicalProduct(d.product as string);
+        const r = ensure(d.participant_id, pt, d.created_at as string);
+        r.ever_use = (d.ever_use as boolean | null) ?? r.ever_use;
+        r.current_use_past_30_days = (d.current_use_30d as boolean | null) ?? r.current_use_past_30_days;
+        r.days_used_past_30_days = (d.days_used_30d as number | null) ?? r.days_used_past_30_days;
+        r.age_first_use = (d.age_first_use as number | null) ?? r.age_first_use;
+        r.age_regular_use = (d.age_regular_use as number | null) ?? r.age_regular_use;
+        if (d.is_main_product != null) r.main_product_yes_no = d.is_main_product ? "yes" : "no";
+        r.usual_place_of_use = (d.usual_place as string | null) ?? r.usual_place_of_use;
+        r.source_of_product = (d.source as string | null) ?? r.source_of_product;
+        r.family_peer_use = (d.family_peer_use as boolean | null) ?? r.family_peer_use;
+        r.social_media_ad_exposure = (d.ad_exposure as boolean | null) ?? r.social_media_ad_exposure;
+      }
+      for (const c of cigm ?? []) {
+        const r = ensure(c.participant_id, "cigarettes", c.created_at as string);
+        if (r.days_used_past_30_days == null && c.cigarettes_per_day != null) {
+          // proxy: smoker → assume daily use; leave null otherwise
+        }
+        if (r.ever_use == null && c.cigarettes_per_day != null) r.ever_use = true;
+      }
+      for (const v of vapem ?? []) {
+        const r = ensure(v.participant_id, "vape/e-cigarette", v.created_at as string);
+        r.days_used_past_30_days = (v.days_30d as number | null) ?? r.days_used_past_30_days;
+        if (r.ever_use == null && v.days_30d != null) r.ever_use = (v.days_30d as number) > 0;
+        if (r.current_use_past_30_days == null && v.days_30d != null) r.current_use_past_30_days = (v.days_30d as number) > 0;
+        if (v.used_at_institution != null) r.use_at_school_work = v.used_at_institution as boolean;
+      }
+      for (const p of pouchm ?? []) {
+        const r = ensure(p.participant_id, "nicotine_pouches", p.created_at as string);
+        r.days_used_past_30_days = (p.days_30d as number | null) ?? r.days_used_past_30_days;
+        r.source_of_product = (p.source as string | null) ?? r.source_of_product;
+        if (r.ever_use == null && p.days_30d != null) r.ever_use = (p.days_30d as number) > 0;
+        if (r.current_use_past_30_days == null && p.days_30d != null) r.current_use_past_30_days = (p.days_30d as number) > 0;
+        if (p.used_at_institution != null) r.use_at_school_work = p.used_at_institution as boolean;
+      }
+      for (const s of shisham ?? []) {
+        const r = ensure(s.participant_id, "shisha/hookah", s.created_at as string);
+        r.days_used_past_30_days = (s.days_30d as number | null) ?? r.days_used_past_30_days;
+        if (r.ever_use == null && s.days_30d != null) r.ever_use = (s.days_30d as number) > 0;
+        if (r.current_use_past_30_days == null && s.days_30d != null) r.current_use_past_30_days = (s.days_30d as number) > 0;
+        r.usual_place_of_use = (s.setting as string | null) ?? r.usual_place_of_use;
+        r.quit_interest = (s.quit_interest as string | null) ?? r.quit_interest;
+      }
+
+      cleaned = Array.from(rowMap.values()).map((r) => ({ ...r })) as Record<string, unknown>[];
     } else if (data.type === "youth_nicotine") {
-      // Participants under 25 with HONC or nicotine-control rows
       const { data: young } = await supabaseAdmin
-        .from("participants").select("id, age, city, cohort, research_consent_status")
+        .from("participants").select("id, participant_code, age, city, cohort, research_consent_status")
         .lt("age", 25)
-        .in("id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]);
+        .in("id", PID_SAFE);
       const youngIds = (young ?? []).map((r) => r.id);
+      const YIDS = youngIds.length ? youngIds : ["00000000-0000-0000-0000-000000000000"];
       const [{ data: honc }, { data: nic }] = await Promise.all([
-        supabaseAdmin.from("honc_screening").select("*").in("participant_id", youngIds.length ? youngIds : ["00000000-0000-0000-0000-000000000000"]),
-        supabaseAdmin.from("nicotine_control_scores").select("participant_id, yes_count, category, youth_flag").in("participant_id", youngIds.length ? youngIds : ["00000000-0000-0000-0000-000000000000"]),
+        supabaseAdmin.from("honc_screening").select("*").in("participant_id", YIDS),
+        supabaseAdmin.from("nicotine_control_scores")
+          .select("participant_id, yes_count, category, youth_flag").in("participant_id", YIDS),
       ]);
       const byId = new Map((young ?? []).map((r) => [r.id, r]));
+      const projectBase = (pid: string) => {
+        const p = byId.get(pid);
+        if (!p) return {};
+        return {
+          participant_code: p.participant_code,
+          age: p.age,
+          city: p.city,
+          cohort: p.cohort,
+          research_consent_status: p.research_consent_status,
+        };
+      };
       const honcRows: Record<string, unknown>[] = (honc ?? []).map((h) => ({
-        ...(byId.get(h.participant_id) ?? {}),
+        ...projectBase(h.participant_id),
         honc_positive_count: h.positive_count,
         honc_category: h.category,
       }));
       const nicRows: Record<string, unknown>[] = (nic ?? []).map((n) => ({
-        ...(byId.get(n.participant_id) ?? {}),
+        ...projectBase(n.participant_id),
         nic_yes_count: n.yes_count,
         nic_category: n.category,
         youth_flag: n.youth_flag,
       }));
       cleaned = [...honcRows, ...nicRows];
     } else if (data.type === "baseline") {
-      // Joined baseline snapshot: participant + scores + cohort + readiness
       let q = supabaseAdmin
         .from("participants")
-        .select("id, participant_code, age, gender, city, affiliation, affiliation_type, education_level, nationality, preferred_language, cohort, cohort_reason, doctor_review_needed, urgent_symptom, research_consent_status, created_at")
+        .select("id, participant_code, age, gender, city, affiliation_type, education_level, nationality, preferred_language, cohort, cohort_reason, doctor_review_needed, urgent_symptom, research_consent_status, created_at")
         .order("created_at", { ascending: false }).limit(10000);
       if (data.cohort) q = q.eq("cohort", data.cohort as never);
       if (data.researchConsentOnly) q = q.eq("research_consent_status", "given");
       const { data: parts } = await q;
       const ids = (parts ?? []).map((r) => r.id);
+      const IDS_SAFE = ids.length ? ids : ["00000000-0000-0000-0000-000000000000"];
       const [{ data: cig }, { data: nic }, { data: rd }, { data: hon }] = await Promise.all([
-        supabaseAdmin.from("cigarette_dependence_scores").select("participant_id, total_score, category").in("participant_id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"]),
-        supabaseAdmin.from("nicotine_control_scores").select("participant_id, yes_count, category").in("participant_id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"]),
-        supabaseAdmin.from("readiness_stage").select("participant_id, stage").in("participant_id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"]),
-        supabaseAdmin.from("honc_screening").select("participant_id, positive_count, category").in("participant_id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"]),
+        supabaseAdmin.from("cigarette_dependence_scores").select("participant_id, total_score, category").in("participant_id", IDS_SAFE),
+        supabaseAdmin.from("nicotine_control_scores").select("participant_id, yes_count, category").in("participant_id", IDS_SAFE),
+        supabaseAdmin.from("readiness_stage").select("participant_id, stage").in("participant_id", IDS_SAFE),
+        supabaseAdmin.from("honc_screening").select("participant_id, positive_count, category").in("participant_id", IDS_SAFE),
       ]);
       const cigMap = new Map((cig ?? []).map((r) => [r.participant_id, r]));
       const nicMap = new Map((nic ?? []).map((r) => [r.participant_id, r]));
       const rdMap = new Map((rd ?? []).map((r) => [r.participant_id, r]));
       const honMap = new Map((hon ?? []).map((r) => [r.participant_id, r]));
-      cleaned = (parts ?? []).map((p) => ({
-        ...stripPii(p as Record<string, unknown>),
-        ftnd_total: cigMap.get(p.id)?.total_score ?? null,
-        ftnd_category: cigMap.get(p.id)?.category ?? null,
-        nic_yes_count: nicMap.get(p.id)?.yes_count ?? null,
-        nic_category: nicMap.get(p.id)?.category ?? null,
-        readiness: rdMap.get(p.id)?.stage ?? null,
-        honc_positive: honMap.get(p.id)?.positive_count ?? null,
-        honc_category: honMap.get(p.id)?.category ?? null,
-      }));
+      cleaned = (parts ?? []).map((p) => {
+        const { id: _id, ...keep } = p as Record<string, unknown>;
+        return {
+          ...keep,
+          ftnd_total: cigMap.get(p.id)?.total_score ?? null,
+          ftnd_category: cigMap.get(p.id)?.category ?? null,
+          nic_yes_count: nicMap.get(p.id)?.yes_count ?? null,
+          nic_category: nicMap.get(p.id)?.category ?? null,
+          readiness: rdMap.get(p.id)?.stage ?? null,
+          honc_positive: honMap.get(p.id)?.positive_count ?? null,
+          honc_category: honMap.get(p.id)?.category ?? null,
+        };
+      });
     } else {
       // full / anonymized / cohort / follow_up_due / research
+      const isAnon = data.type === "anonymized" || data.type === "research";
+      const cols = isAnon
+        ? "participant_code, age, gender, city, affiliation_type, education_level, nationality, preferred_language, cohort, cohort_reason, doctor_review_needed, urgent_symptom, research_consent_status, created_at"
+        : "participant_code, full_name, mobile, email, age, gender, city, affiliation, affiliation_type, education_level, preferred_language, preferred_contact, cohort, cohort_reason, doctor_review_needed, urgent_symptom, contacted, contact_date, follow_up_status, appointment_requested, research_consent_status, created_at";
       let q = supabaseAdmin
         .from("participants")
-        .select(
-          "participant_code, full_name, mobile, email, age, gender, city, affiliation, affiliation_type, education_level, preferred_language, preferred_contact, cohort, cohort_reason, doctor_review_needed, urgent_symptom, contacted, contact_date, follow_up_status, appointment_requested, research_consent_status, created_at",
-        )
+        .select(cols)
         .order("created_at", { ascending: false }).limit(10000);
       if (data.type === "cohort" && data.cohort) q = q.eq("cohort", data.cohort as never);
       if (data.type === "follow_up_due") q = q.eq("contacted", false);
       if (data.researchConsentOnly || data.type === "research") q = q.eq("research_consent_status", "given");
       const { data: rows, error } = await q;
       if (error) throw new Error(error.message);
-      cleaned = (rows ?? []).map((r) => anonymize ? stripPii(r as Record<string, unknown>) : (r as Record<string, unknown>));
+      cleaned = (rows ?? []).map((r) =>
+        isAnon ? stripPiiStrict(r as Record<string, unknown>) : (r as Record<string, unknown>),
+      );
     }
+
 
     const csv = toCsv(cleaned);
 
