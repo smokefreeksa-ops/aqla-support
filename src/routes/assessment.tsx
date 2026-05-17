@@ -65,6 +65,16 @@ type State = {
   readiness: string;
   riskFlags: string[];
   followUp: string;
+  research: {
+    enabled: boolean;
+    consent_publication: boolean;
+    importance_0_10: string;
+    confidence_0_10: string;
+    main_reason: string;
+    ever_tried: boolean | null;
+    attempts_count: string;
+    longest_quit_duration: string;
+  };
 };
 
 const PRODUCT_OPTIONS = [
