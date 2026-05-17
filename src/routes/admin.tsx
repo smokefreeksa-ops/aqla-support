@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import {
   listParticipants, getDashboardStats, getParticipant,
-  updateParticipantReception, addClinicalNote, updateOutcome, exportCsv,
+  updateParticipantReception, addClinicalNote, updateOutcome, exportCsv, addFollowUpVisit,
 } from "@/lib/admin.functions";
 import {
   listVolunteers, getVolunteerStats, getVolunteer, updateVolunteer, addVolunteerNote,
