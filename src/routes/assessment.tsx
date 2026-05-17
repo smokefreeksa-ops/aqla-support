@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useLang, useLangState, LangContext, type Lang } from "@/lib/i18n";
-import { submitAssessment } from "@/lib/submit.functions";
+import { submitAssessment, saveFollowUpPreference } from "@/lib/submit.functions";
 import { AlertTriangle, ArrowLeft, ArrowRight, ShieldAlert, Languages } from "lucide-react";
 
 export const Route = createFileRoute("/assessment")({
@@ -185,6 +185,7 @@ const STEP_LABELS: (keyof import("@/lib/i18n").Dict)[] = [
   "stepProducts",
   "stepDependence",
   "stepReadiness",
+  "stepRisk",
   "stepResult",
 ];
 
@@ -221,8 +222,8 @@ function Flow() {
   const hasNicProduct = ["vape", "pouches", "smokeless", "shisha", "multiple"].some((p) => s.products.includes(p));
   const showDependenceStep = hasCig || hasNicProduct;
 
-  // Visible steps array (skips dependence if no use products)
-  const stepsVisible: number[] = showDependenceStep ? [0, 1, 2, 3, 4, 5] : [0, 1, 2, 4, 5];
+  // Step indexes: 0 consent, 1 triage, 2 products, 3 dependence, 4 readiness, 5 risk, 6 result.
+  const stepsVisible: number[] = showDependenceStep ? [0, 1, 2, 3, 4, 5, 6] : [0, 1, 2, 4, 5, 6];
   const totalVisible = stepsVisible.length;
   const visibleIndex = Math.max(0, stepsVisible.indexOf(step));
   const progress = ((visibleIndex + 1) / totalVisible) * 100;
@@ -276,9 +277,6 @@ function Flow() {
   async function handleNext() {
     const err = canAdvance();
     if (err) { toast.error(err); return; }
-    if (step === 4) {
-      // After readiness comes risk screen then submit. Use step 4 area to include both.
-    }
     next();
   }
 
@@ -301,11 +299,11 @@ function Flow() {
           nicotine,
           readiness: s.readiness as never,
           riskFlags: s.riskFlags,
-          followUpPreference: s.followUp,
         },
       });
       setResult(r);
-      setStep(5);
+      setStep(6);
+      toast.success(lang === "ar" ? "تم حفظ تقييمك" : "Your assessment was saved");
       if (typeof window !== "undefined") window.scrollTo({ top: 0 });
     } catch (e) {
       toast.error((e as Error).message);
@@ -329,7 +327,7 @@ function Flow() {
       </header>
 
       <main className="mx-auto max-w-2xl px-4 py-6">
-        {step < 5 && (
+        {step < 6 && (
           <div className="mb-6">
             <Progress value={progress} className="h-2" />
             <div className="mt-2 flex justify-between text-xs text-muted-foreground">
@@ -527,61 +525,61 @@ function Flow() {
         )}
 
         {step === 4 && (
-          <div className="space-y-4">
-            <Card className="p-5">
-              <h2 className="text-xl font-semibold">{t.readinessTitle}</h2>
-              <RadioGroup className="mt-3" value={s.readiness} onValueChange={(v) => setS((p) => ({ ...p, readiness: v }))}>
-                {READINESS.map((r) => (
-                  <label key={r.v} className="flex items-center gap-2 cursor-pointer rounded-lg border p-3 hover:bg-muted/40">
-                    <RadioGroupItem value={r.v} />
-                    <span className="text-sm">{lang === "ar" ? r.ar : r.en}</span>
-                  </label>
-                ))}
-              </RadioGroup>
-            </Card>
+          <Card className="p-5">
+            <h2 className="text-xl font-semibold">{t.readinessTitle}</h2>
+            <RadioGroup className="mt-3" value={s.readiness} onValueChange={(v) => setS((p) => ({ ...p, readiness: v }))}>
+              {READINESS.map((r) => (
+                <label key={r.v} className="flex items-center gap-2 cursor-pointer rounded-lg border p-3 hover:bg-muted/40">
+                  <RadioGroupItem value={r.v} />
+                  <span className="text-sm">{lang === "ar" ? r.ar : r.en}</span>
+                </label>
+              ))}
+            </RadioGroup>
+          </Card>
+        )}
 
-            <Card className="p-5">
-              <h2 className="text-xl font-semibold">{t.riskTitle}</h2>
-              <p className="mt-1 text-sm text-muted-foreground">{t.riskSubtitle}</p>
-              <div className="mt-3 grid gap-2">
-                {RISK_OPTS.map((r) => (
-                  <label key={r.v} className={`flex items-center gap-2 rounded-lg border p-3 cursor-pointer hover:bg-muted/40 ${r.urgent ? "border-destructive/40" : ""}`}>
-                    <Checkbox checked={s.riskFlags.includes(r.v)} onCheckedChange={() => toggleRisk(r.v)} />
-                    <span className="text-sm">{lang === "ar" ? r.ar : r.en}</span>
-                  </label>
-                ))}
+        {step === 5 && (
+          <Card className="p-5">
+            <h2 className="text-xl font-semibold">{t.riskTitle}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{t.riskSubtitle}</p>
+            <div className="mt-3 grid gap-2">
+              {RISK_OPTS.map((r) => (
+                <label key={r.v} className={`flex items-center gap-2 rounded-lg border p-3 cursor-pointer hover:bg-muted/40 ${r.urgent ? "border-destructive/40" : ""}`}>
+                  <Checkbox checked={s.riskFlags.includes(r.v)} onCheckedChange={() => toggleRisk(r.v)} />
+                  <span className="text-sm">{lang === "ar" ? r.ar : r.en}</span>
+                </label>
+              ))}
+            </div>
+            {s.riskFlags.some((f) => ["severe_chest_pain", "severe_sob", "coughing_blood"].includes(f)) && (
+              <div className="mt-3 rounded-lg border border-destructive bg-destructive/10 p-3 text-sm text-destructive flex gap-2">
+                <ShieldAlert className="h-5 w-5 shrink-0" /> {t.urgentMsg}
               </div>
-              {s.riskFlags.some((f) => ["severe_chest_pain", "severe_sob", "coughing_blood"].includes(f)) && (
-                <div className="mt-3 rounded-lg border border-destructive bg-destructive/10 p-3 text-sm text-destructive flex gap-2">
-                  <ShieldAlert className="h-5 w-5 shrink-0" /> {t.urgentMsg}
-                </div>
-              )}
-            </Card>
-
-            <Card className="p-5">
-              <h2 className="text-xl font-semibold">{lang === "ar" ? "كيف تفضل أن ندعمك؟" : "How would you like us to support you?"}</h2>
-              <RadioGroup className="mt-3" value={s.followUp} onValueChange={(v) => setS((p) => ({ ...p, followUp: v }))}>
-                {FOLLOWUP_OPTS.map((r) => (
-                  <label key={r.v} className="flex items-center gap-2 cursor-pointer rounded-lg border p-3 hover:bg-muted/40">
-                    <RadioGroupItem value={r.v} />
-                    <span className="text-sm">{lang === "ar" ? r.ar : r.en}</span>
-                  </label>
-                ))}
-              </RadioGroup>
-            </Card>
-          </div>
+            )}
+          </Card>
         )}
 
-        {step === 5 && result && (
-          <ResultView result={result} onHome={() => nav({ to: "/" })} />
+        {step === 6 && result && (
+          <ResultView
+            result={result}
+            products={s.products}
+            readiness={s.readiness}
+            readinessLabel={READINESS.find((r) => r.v === s.readiness)?.[lang] ?? s.readiness}
+            productLabels={s.products.map((k) => {
+              const p = PRODUCT_OPTIONS.find((o) => o.key === k);
+              return p ? (lang === "ar" ? p.ar : p.en) : k;
+            })}
+            followOptions={FOLLOWUP_OPTS.map((o) => ({ v: o.v, label: lang === "ar" ? o.ar : o.en }))}
+            initialFollow={s.followUp}
+            onHome={() => nav({ to: "/" })}
+          />
         )}
 
-        {step < 5 && (
+        {step < 6 && (
           <div className="mt-6 flex items-center justify-between">
             <Button variant="ghost" onClick={prev} disabled={step === 0} className="gap-1">
               <ArrowLeft className="h-4 w-4 rtl:rotate-180" /> {t.back}
             </Button>
-            {step === 4 ? (
+            {step === 5 ? (
               <Button onClick={handleSubmit} disabled={submitting} className="gap-1">
                 {submitting ? t.saving : t.submit}
               </Button>
@@ -634,20 +632,59 @@ function LiveCigScore({ ftnd }: { ftnd: State["ftnd"] }) {
   );
 }
 
-function ResultView({ result, onHome }: { result: Result; onHome: () => void }) {
+function ResultView({
+  result, onHome, products, productLabels, readiness, readinessLabel,
+  followOptions, initialFollow,
+}: {
+  result: Result;
+  onHome: () => void;
+  products: string[];
+  productLabels: string[];
+  readiness: string;
+  readinessLabel: string;
+  followOptions: { v: string; label: string }[];
+  initialFollow: string;
+}) {
   const { t, lang, dir } = useLang();
   const ftnd = result.ftnd;
   const nic = result.nicotine;
+  const saveFollow = useServerFn(saveFollowUpPreference);
+  const [follow, setFollow] = useState(initialFollow);
+  const [savedFollow, setSavedFollow] = useState<string | null>(null);
+  const [savingFollow, setSavingFollow] = useState(false);
+
+  async function commitFollow(value: string) {
+    setFollow(value);
+    setSavingFollow(true);
+    try {
+      await saveFollow({
+        data: {
+          participantId: result.participantId,
+          participantCode: result.participantCode,
+          preference: value as never,
+        },
+      });
+      setSavedFollow(value);
+      toast.success(lang === "ar" ? "تم حفظ تفضيل المتابعة" : "Follow-up preference saved");
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setSavingFollow(false);
+    }
+  }
 
   function downloadSummary() {
     const lines = [
       `Aqla Assessment Summary`,
       `Participant ID: ${result.participantCode}`,
+      `Products: ${productLabels.join(", ")}`,
+      `Readiness: ${readinessLabel}`,
       `Cohort: ${result.cohort}`,
       `Cohort reason: ${result.cohortReason}`,
       `Doctor review needed: ${result.doctorReviewNeeded ? "Yes" : "No"}`,
       ftnd ? `FTND score: ${ftnd.total}/10 — ${ftnd.category}` : "",
       nic ? `Nicotine control: ${nic.yes_count}/10 — ${nic.category}` : "",
+      savedFollow ? `Follow-up preference: ${savedFollow}` : "",
     ].filter(Boolean).join("\n");
     const blob = new Blob([lines], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
@@ -668,6 +705,20 @@ function ResultView({ result, onHome }: { result: Result; onHome: () => void }) 
         <div className="mt-1 font-mono text-lg">{result.participantCode}</div>
         <h2 className="mt-4 text-2xl font-bold">{t.resultTitle}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{result.cohortReason}</p>
+        <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm text-primary font-medium">
+          {lang === "ar" ? "المسار" : "Cohort"} {result.cohort}
+        </div>
+      </Card>
+
+      <Card className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+        <div>
+          <div className="text-xs text-muted-foreground">{lang === "ar" ? "المنتجات" : "Products"}</div>
+          <div className="mt-0.5">{productLabels.join(" • ") || "—"}</div>
+        </div>
+        <div>
+          <div className="text-xs text-muted-foreground">{lang === "ar" ? "الجاهزية" : "Readiness"}</div>
+          <div className="mt-0.5">{readinessLabel}</div>
+        </div>
       </Card>
 
       {ftnd && (
@@ -700,10 +751,41 @@ function ResultView({ result, onHome }: { result: Result; onHome: () => void }) 
         </Card>
       )}
 
+      <Card className="p-5">
+        <h3 className="text-lg font-semibold">
+          {lang === "ar" ? "كيف تفضل أن ندعمك؟" : "How would you like us to support you?"}
+        </h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {lang === "ar"
+            ? "اختر تفضيل المتابعة وسيتم حفظه فوراً."
+            : "Pick your follow-up preference — it will be saved immediately."}
+        </p>
+        <RadioGroup
+          className="mt-3"
+          value={follow}
+          onValueChange={(v) => { if (!savingFollow) commitFollow(v); }}
+        >
+          {followOptions.map((r) => (
+            <label key={r.v} className="flex items-center gap-2 cursor-pointer rounded-lg border p-3 hover:bg-muted/40">
+              <RadioGroupItem value={r.v} />
+              <span className="text-sm">{r.label}</span>
+            </label>
+          ))}
+        </RadioGroup>
+        {savedFollow && (
+          <p className="mt-2 text-xs text-success font-medium">
+            {lang === "ar" ? "تم الحفظ ✓" : "Saved ✓"}
+          </p>
+        )}
+      </Card>
+
       <div className="grid gap-2 sm:grid-cols-2">
         <Button variant="outline" onClick={downloadSummary}>{t.downloadPdf}</Button>
         <Button onClick={onHome}>{t.backHome}</Button>
       </div>
+
+      {/* Silence unused warnings — props passed through */}
+      <span className="hidden">{products.join(",")}|{readiness}</span>
     </div>
   );
 }

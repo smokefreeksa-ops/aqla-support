@@ -37,12 +37,38 @@ export const listParticipants = createServerFn({ method: "POST" })
         cohort: z.string().optional(),
         doctorReview: z.boolean().optional(),
         followUp: z.string().optional(),
+        product: z.string().optional(),
+        readiness: z.string().optional(),
+        depCategory: z.string().optional(),
+        city: z.string().optional(),
+        affiliation: z.string().optional(),
       })
       .parse(d ?? {}),
   )
   .handler(async ({ context, data }) => {
     const roles = await getRoles(context.userId);
     if (roles.length === 0) throw new Error("Forbidden: no role assigned");
+
+    // Build participant-id restriction from joined tables
+    const idSets: string[][] = [];
+    if (data.product) {
+      const { data: rows } = await supabaseAdmin
+        .from("product_use").select("participant_id").contains("products", [data.product]);
+      idSets.push((rows ?? []).map((r) => r.participant_id));
+    }
+    if (data.readiness) {
+      const { data: rows } = await supabaseAdmin
+        .from("readiness_stage").select("participant_id").eq("stage", data.readiness as never);
+      idSets.push((rows ?? []).map((r) => r.participant_id));
+    }
+    if (data.depCategory) {
+      const { data: rows } = await supabaseAdmin
+        .from("cigarette_dependence_scores").select("participant_id").eq("category", data.depCategory);
+      idSets.push((rows ?? []).map((r) => r.participant_id));
+    }
+    const pidFilter: string[] | null = idSets.length === 0
+      ? null
+      : idSets.reduce((acc, cur) => acc.filter((x) => cur.includes(x)), idSets[0]);
 
     let q = supabaseAdmin
       .from("participants")
@@ -52,6 +78,13 @@ export const listParticipants = createServerFn({ method: "POST" })
       .order("created_at", { ascending: false })
       .limit(500);
 
+    if (pidFilter !== null) {
+      if (pidFilter.length === 0) {
+        await logAudit(context.userId, "list", "participants", undefined, { count: 0 });
+        return { rows: [], roles };
+      }
+      q = q.in("id", pidFilter);
+    }
     if (data.search) {
       const s = data.search.trim();
       q = q.or(
@@ -60,6 +93,8 @@ export const listParticipants = createServerFn({ method: "POST" })
     }
     if (data.cohort) q = q.eq("cohort", data.cohort as never);
     if (typeof data.doctorReview === "boolean") q = q.eq("doctor_review_needed", data.doctorReview);
+    if (data.city) q = q.ilike("city", `%${data.city}%`);
+    if (data.affiliation) q = q.ilike("affiliation", `%${data.affiliation}%`);
 
     const { data: rows, error } = await q;
     if (error) throw new Error(error.message);
