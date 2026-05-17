@@ -42,10 +42,10 @@ export type NicotineAnswers = Record<
 export function scoreNicotineControl(a: NicotineAnswers) {
   const yes_count = Object.values(a).filter(Boolean).length;
   let category: string;
-  if (yes_count === 0) category = "Low current concern";
-  else if (yes_count <= 2) category = "Early loss-of-control concern";
-  else if (yes_count <= 5) category = "Moderate nicotine-control concern";
-  else category = "High nicotine-control concern — clinician review recommended";
+  if (yes_count === 0) category = "low";
+  else if (yes_count <= 2) category = "early";
+  else if (yes_count <= 5) category = "moderate";
+  else category = "high";
   return { yes_count, category };
 }
 
