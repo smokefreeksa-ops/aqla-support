@@ -10,8 +10,6 @@ import {
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
-import { FloatingWhatsAppButton } from "@/components/FloatingWhatsAppButton";
-import { AqlaAssistant } from "@/components/AqlaAssistant";
 
 function NotFoundComponent() {
   return (
@@ -75,14 +73,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Aqla — أقلع" },
+      { name: "description", content: "A free physician-led digital pathway for smoking and nicotine cessation support, dependence assessment, volunteer training, and community awareness." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Aqla — أقلع" },
+      { property: "og:description", content: "A free physician-led digital pathway for smoking and nicotine cessation support, dependence assessment, volunteer training, and community awareness." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Aqla — أقلع" },
+      { name: "twitter:description", content: "A free physician-led digital pathway for smoking and nicotine cessation support, dependence assessment, volunteer training, and community awareness." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/wTHuJ10feueI7NPDEBXQcZYwzBx1/social-images/social-1779039803939-aqla.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/wTHuJ10feueI7NPDEBXQcZYwzBx1/social-images/social-1779039803939-aqla.webp" },
     ],
     links: [
       {
@@ -118,8 +120,6 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <Outlet />
       <Toaster richColors position="top-center" />
-      <FloatingWhatsAppButton />
-      <AqlaAssistant />
     </QueryClientProvider>
   );
 }
