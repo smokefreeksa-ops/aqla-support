@@ -6,6 +6,7 @@ import { ShieldAlert, Languages, ArrowRight, Sparkles, Users } from "lucide-reac
 import { SocialLinks } from "@/components/SocialLinks";
 import { ImpactSection } from "@/components/ImpactSection";
 import { VisitTracker } from "@/components/VisitTracker";
+import { trackEvent } from "@/lib/track-event";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
 export const Route = createFileRoute("/")({
@@ -93,7 +94,7 @@ function Inner() {
                   <h3 className="text-xl font-semibold">{t.quitTrackTitle}</h3>
                 </div>
                 <p className="mt-4 text-sm leading-6 text-foreground/75">{t.quitTrackDesc}</p>
-                <Link to="/assessment" className="mt-6 block">
+                <Link to="/assessment" className="mt-6 block" onClick={() => trackEvent("quit_track_clicked")}>
                   <Button className="w-full quit-gradient border-0 text-white hover:opacity-95">
                     {t.quitTrackBtn}
                     <ArrowRight className="h-4 w-4 rtl:rotate-180" />
@@ -112,7 +113,7 @@ function Inner() {
                   <h3 className="text-xl font-semibold">{t.volunteerTrackTitle}</h3>
                 </div>
                 <p className="mt-4 text-sm leading-6 text-foreground/75">{t.volunteerTrackDesc}</p>
-                <Link to="/volunteer" className="mt-6 block">
+                <Link to="/volunteer" className="mt-6 block" onClick={() => trackEvent("volunteer_track_clicked")}>
                   <Button className="w-full volunteer-gradient border-0 text-white hover:opacity-95">
                     {t.volunteerTrackBtn}
                     <ArrowRight className="h-4 w-4 rtl:rotate-180" />
