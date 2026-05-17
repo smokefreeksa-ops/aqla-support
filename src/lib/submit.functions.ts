@@ -50,7 +50,6 @@ const Submission = z.object({
     "discuss_alternatives","score_only","helping_someone"
   ]),
   riskFlags: z.array(z.string()),
-  followUpPreference: z.string(),
 });
 
 export type SubmissionInput = z.infer<typeof Submission>;
@@ -121,10 +120,6 @@ export const submitAssessment = createServerFn({ method: "POST" })
         cohort: cohort.cohort,
         reason: cohort.reason,
         doctor_review_needed: cohort.doctorReviewNeeded,
-      }),
-      db.from("follow_up_preferences").insert({
-        participant_id: pid,
-        preference: data.followUpPreference,
       }),
       db.from("outcome_tracking").insert({ participant_id: pid }),
     ];
