@@ -17,7 +17,31 @@ import {
 import {
   listVolunteers, getVolunteerStats, getVolunteer, updateVolunteer, addVolunteerNote,
 } from "@/lib/volunteer.functions";
-import { LogOut, Download, ShieldAlert, RefreshCw, Users, HeartPulse } from "lucide-react";
+import { LogOut, Download, ShieldAlert, RefreshCw, Users, HeartPulse, AlertTriangle } from "lucide-react";
+import { getAssistantStatus } from "@/lib/assistant.functions";
+import { useQuery } from "@tanstack/react-query";
+
+function AssistantStatusBanner() {
+  const statusFn = useServerFn(getAssistantStatus);
+  const { data } = useQuery({
+    queryKey: ["assistant-status", "admin"],
+    queryFn: () => statusFn(),
+    staleTime: 30_000,
+  });
+  if (!data || data.enabled) return null;
+  return (
+    <div className="flex items-start gap-3 rounded-md border border-amber-300 bg-amber-50 p-3 text-amber-900">
+      <AlertTriangle className="h-5 w-5 mt-0.5 shrink-0" />
+      <div className="text-sm">
+        <div className="font-semibold">Aqla Education Assistant is disabled</div>
+        <p className="mt-0.5">
+          The <code className="rounded bg-amber-100 px-1">OPENAI_API_KEY</code> secret is missing.
+          Add it in your project's backend secrets to enable the public chatbot. The chatbot is currently hidden from visitors.
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard — Aqla" }] }),
@@ -65,7 +89,8 @@ function AdminPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-4 py-6">
+      <main className="mx-auto max-w-7xl px-4 py-6 space-y-4">
+        <AssistantStatusBanner />
         <Tabs defaultValue="participants">
           <TabsList>
             <TabsTrigger value="participants" className="gap-1.5"><HeartPulse className="h-4 w-4" />Quit Support</TabsTrigger>
