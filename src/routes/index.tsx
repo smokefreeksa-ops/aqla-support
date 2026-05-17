@@ -6,6 +6,7 @@ import { ShieldAlert, Languages, ArrowRight, Sparkles, Users } from "lucide-reac
 import { SocialLinks } from "@/components/SocialLinks";
 import { ImpactSection } from "@/components/ImpactSection";
 import { VisitTracker } from "@/components/VisitTracker";
+import { trackEvent } from "@/lib/track-event";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
 export const Route = createFileRoute("/")({
