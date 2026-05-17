@@ -269,9 +269,51 @@ function toCsv(rows: Record<string, unknown>[]): string {
   return [headers.join(","), ...rows.map((r) => headers.map((h) => escape(r[h])).join(","))].join("\n");
 }
 
+// Light strip: removes direct identifiers only. Used for "anonymized" basic export.
 function stripPii<T extends Record<string, unknown>>(r: T): Record<string, unknown> {
-  const { full_name: _n, mobile: _m, email: _e, receptionist_notes: _r, notes: _no, ...rest } = r as Record<string, unknown>;
+  const {
+    full_name: _n, mobile: _m, email: _e,
+    receptionist_notes: _r, notes: _no,
+    ...rest
+  } = r as Record<string, unknown>;
   return rest;
+}
+
+// Strict strip for research-grade exports:
+// drops direct identifiers, free-text notes, exact affiliation, DOB,
+// and internal UUIDs. participant_code remains the only linkage key.
+function stripPiiStrict<T extends Record<string, unknown>>(r: T): Record<string, unknown> {
+  const {
+    full_name: _n, mobile: _m, email: _e,
+    receptionist_notes: _rn, notes: _no, note: _no2,
+    school_university_workplace: _suw,
+    affiliation: _aff,
+    date_of_birth: _dob,
+    contact_date: _cd,
+    id: _id, participant_id: _pid,
+    created_by: _cb,
+    ...rest
+  } = r as Record<string, unknown>;
+  return rest;
+}
+
+// Canonical product types for research exports
+const PRODUCT_TYPES = [
+  "cigarettes", "vape/e-cigarette", "shisha/hookah",
+  "nicotine_pouches", "smokeless_tobacco", "heated_tobacco", "other",
+] as const;
+type ProductType = typeof PRODUCT_TYPES[number];
+
+function canonicalProduct(raw: string | null | undefined): ProductType {
+  const s = (raw ?? "").toLowerCase().trim();
+  if (!s) return "other";
+  if (/(cigarette|cig\b|smok(e|ing)\s*cig)/.test(s) && !/e-?cig|vape|electronic/.test(s)) return "cigarettes";
+  if (/vape|e-?cig|electronic|ecig|pod|mod/.test(s)) return "vape/e-cigarette";
+  if (/shisha|hookah|narghile|waterpipe|argile/.test(s)) return "shisha/hookah";
+  if (/pouch|snus|zyn/.test(s)) return "nicotine_pouches";
+  if (/smokeless|chew|dip|snuff|sweika|shamma/.test(s)) return "smokeless_tobacco";
+  if (/heat(ed)?|iqos|hnb|glo|ploom/.test(s)) return "heated_tobacco";
+  return "other";
 }
 
 export const exportCsv = createServerFn({ method: "POST" })
