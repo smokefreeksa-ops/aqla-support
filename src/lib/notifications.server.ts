@@ -92,16 +92,18 @@ export async function sendAdminNotification(
           html,
         }),
       });
+      const respText = await res.text().catch(() => "");
+      const providerResponse = `HTTP ${res.status} ${res.statusText}${respText ? ` — ${respText}` : ""}`.slice(0, 2000);
       if (!res.ok) {
-        const errText = await res.text().catch(() => `${res.status}`);
         await supabaseAdmin.from("notification_log").insert({
           event_type: type,
           recipient_email: recipient,
           subject,
           sent_status: "failed",
-          error_message: errText.slice(0, 1000),
+          error_message: respText.slice(0, 1000) || `HTTP ${res.status}`,
+          provider_response: providerResponse,
           ...refs,
-        });
+        } as never);
         return;
       }
       await supabaseAdmin.from("notification_log").insert({
@@ -110,17 +112,18 @@ export async function sendAdminNotification(
         subject,
         sent_status: "sent",
         sent_at: new Date().toISOString(),
+        provider_response: providerResponse,
         ...refs,
-      });
+      } as never);
     } catch (err) {
       await supabaseAdmin.from("notification_log").insert({
         event_type: type,
         recipient_email: recipient,
         subject,
         sent_status: "failed",
-        error_message: (err as Error)?.message?.slice(0, 1000) ?? "unknown",
+        error_message: (err as Error)?.message?.slice(0, 1000) ?? "Email function not triggered",
         ...refs,
-      });
+      } as never);
     }
   } catch {
     // Absolute last resort: never let notifications break a submission.
