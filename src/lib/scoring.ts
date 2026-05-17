@@ -111,15 +111,22 @@ export function assignCohort(i: CohortInput): CohortResult {
   }
   const isMinor = (i.age ?? 99) < 18;
 
-  // Nicotine-control high concern is handled within Cohort C (doctor review flag),
-  // so it should not auto-escalate to Cohort F for non-cigarette nicotine users.
   const veryHighDep = (i.ftnd ?? 0) >= 8;
+  const highDep = (i.ftnd ?? 0) >= 6; // FTND high band (6-7) or higher
+  const highNicConcern = hasNicProduct && (i.nicotineYes ?? 0) >= 6;
+  const otherRiskFlags = i.riskFlags.filter(
+    (f) => f !== "multi_product" && f !== "very_high_dependence",
+  );
+  const highDepPlusRisk = highDep && otherRiskFlags.length > 0;
+
   const fTrigger =
     urgent ||
     i.riskFlags.includes("pregnancy") ||
     i.riskFlags.includes("mental_health") ||
     veryHighDep ||
     multiProduct ||
+    highNicConcern ||
+    highDepPlusRisk ||
     i.riskFlags.includes("multi_product") ||
     (isMinor && ((i.ftnd ?? 0) >= 3 || (i.nicotineYes ?? 0) >= 3)) ||
     i.riskFlags.includes("repeated_failed") ||
@@ -127,10 +134,20 @@ export function assignCohort(i: CohortInput): CohortResult {
     i.riskFlags.includes("requests_clinician");
 
   if (fTrigger) {
+    const reasons: string[] = [];
+    if (urgent) reasons.push("Urgent safety symptoms");
+    if (i.riskFlags.includes("pregnancy")) reasons.push("Pregnancy");
+    if (i.riskFlags.includes("mental_health")) reasons.push("Mental-health concern");
+    if (veryHighDep) reasons.push("Very-high cigarette dependence");
+    else if (highDepPlusRisk) reasons.push("High cigarette dependence with additional risk flags");
+    if (multiProduct || i.riskFlags.includes("multi_product")) reasons.push("Multiple product use");
+    if (highNicConcern) reasons.push("High nicotine-control concern");
+    if (i.riskFlags.includes("repeated_failed")) reasons.push("Repeated failed quit attempts");
+    if (i.riskFlags.includes("wants_medication")) reasons.push("Medication request");
+    if (i.riskFlags.includes("requests_clinician")) reasons.push("Clinician review requested");
     return {
       cohort: "F",
-      reason:
-        "High-priority clinician review (safety flags, very-high dependence, multi-product use, or clinician request).",
+      reason: `High-priority clinician review (${reasons.join("; ") || "safety flags"}).`,
       doctorReviewNeeded: true,
       urgent,
     };
