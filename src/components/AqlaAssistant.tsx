@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { useLocation } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 import { getAssistantStatus, chatWithAssistant } from "@/lib/assistant.functions";
+
+const PUBLIC_PATHS = ["/", "/about", "/assessment", "/volunteer"];
 
 type Msg = { role: "user" | "assistant"; content: string };
 
