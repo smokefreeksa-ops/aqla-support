@@ -77,6 +77,32 @@ export const submitVolunteer = createServerFn({ method: "POST" })
       reason: "initial submission",
     } as never);
 
+    void sendAdminNotification(
+      "full_volunteer_application",
+      `Aqla volunteer application submitted — ${created.application_code}`,
+      `<h2 style="font-family:-apple-system,Segoe UI,Arial,sans-serif">Aqla volunteer application</h2>${renderKeyValueHtml({
+        volunteer_code: created.application_code,
+        submitted_at: new Date().toISOString(),
+        full_name: app.full_name,
+        mobile: app.mobile,
+        email: app.email,
+        age: app.age,
+        city: app.city,
+        affiliation: app.affiliation,
+        academic_level: app.academic_level,
+        preferred_language: app.preferred_language,
+        preferred_contact: app.preferred_contact,
+        interests,
+        prior_awareness_work: app.prior_awareness_work,
+        smoking_status: app.smoking_status,
+        availability: app.availability,
+        motivation: app.motivation,
+        screening,
+        volunteer_status: "new_applicant",
+      })}`,
+      { volunteer_code: created.application_code },
+    );
+
     return { id: created.id, code: created.application_code };
   });
 
