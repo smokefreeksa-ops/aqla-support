@@ -92,7 +92,9 @@ export function assignCohort(i: CohortInput): CohortResult {
   }
   const isMinor = (i.age ?? 99) < 18;
 
-  const veryHighDep = (i.ftnd ?? 0) >= 8 || (i.nicotineYes ?? 0) >= 8;
+  // Nicotine-control high concern is handled within Cohort C (doctor review flag),
+  // so it should not auto-escalate to Cohort F for non-cigarette nicotine users.
+  const veryHighDep = (i.ftnd ?? 0) >= 8;
   const fTrigger =
     urgent ||
     i.riskFlags.includes("pregnancy") ||
