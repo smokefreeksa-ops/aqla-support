@@ -626,6 +626,12 @@ function DetailDrawer({ id, onClose, isPhysician }: { id: string; onClose: () =>
                 </label>
               </div>
             </Card>
+
+            <FollowUpVisitsCard
+              participantId={id}
+              visits={data.followups ?? []}
+              onChange={async () => { const fresh = await get({ data: { id } }); setData(fresh); }}
+            />
           </>
         )}
       </div>
