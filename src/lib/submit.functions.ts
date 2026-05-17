@@ -1,7 +1,124 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { z } from "zod";
-import { assignCohort, scoreFtnd, scoreNicotineControl } from "./scoring";
+import { assignCohort, scoreFtnd, scoreNicotineControl, scoreHonc } from "./scoring";
+
+// Optional research-grade extension payload — each section is independent and skippable.
+const ExtrasSchema = z
+  .object({
+    motivation: z
+      .object({
+        importance_0_10: z.number().int().min(0).max(10).nullable().optional(),
+        confidence_0_10: z.number().int().min(0).max(10).nullable().optional(),
+        main_reason: z.string().max(200).nullable().optional(),
+        barriers: z.array(z.string().max(60)).max(20).optional(),
+      })
+      .optional(),
+    quitHistory: z
+      .object({
+        ever_tried: z.boolean().nullable().optional(),
+        attempts_count: z.number().int().min(0).max(99).nullable().optional(),
+        longest_quit_duration: z.string().max(60).nullable().optional(),
+        methods_used: z.array(z.string().max(60)).max(20).optional(),
+        main_relapse_reason: z.string().max(120).nullable().optional(),
+      })
+      .optional(),
+    safetyFlags: z
+      .object({
+        pregnancy: z.boolean().nullable().optional(),
+        severe_chest_pain: z.boolean().nullable().optional(),
+        severe_breathlessness: z.boolean().nullable().optional(),
+        coughing_blood: z.boolean().nullable().optional(),
+        severe_withdrawal: z.boolean().nullable().optional(),
+        mental_health_concern: z.boolean().nullable().optional(),
+        repeated_failed_attempts: z.boolean().nullable().optional(),
+        multi_product_use: z.boolean().nullable().optional(),
+        medication_request: z.boolean().nullable().optional(),
+        alt_product_request: z.boolean().nullable().optional(),
+        clinician_request: z.boolean().nullable().optional(),
+      })
+      .optional(),
+    honc: z
+      .object({
+        q1: z.boolean(), q2: z.boolean(), q3: z.boolean(), q4: z.boolean(), q5: z.boolean(),
+        q6: z.boolean(), q7: z.boolean(), q8: z.boolean(), q9: z.boolean(), q10: z.boolean(),
+      })
+      .optional(),
+    productDetails: z
+      .array(
+        z.object({
+          product: z.string().max(40),
+          ever_use: z.boolean().nullable().optional(),
+          current_use_30d: z.boolean().nullable().optional(),
+          days_used_30d: z.number().int().min(0).max(30).nullable().optional(),
+          age_first_use: z.number().int().min(5).max(110).nullable().optional(),
+          age_regular_use: z.number().int().min(5).max(110).nullable().optional(),
+          usual_place: z.string().max(80).nullable().optional(),
+          source: z.string().max(80).nullable().optional(),
+          family_peer_use: z.boolean().nullable().optional(),
+          ad_exposure: z.boolean().nullable().optional(),
+          is_main_product: z.boolean().optional(),
+        }),
+      )
+      .max(10)
+      .optional(),
+    cigaretteModule: z
+      .object({
+        cigarettes_per_day: z.number().int().min(0).max(200).nullable().optional(),
+        time_to_first_cig: z.string().max(40).nullable().optional(),
+        hsi_score: z.number().int().min(0).max(6).nullable().optional(),
+      })
+      .optional(),
+    vapeModule: z
+      .object({
+        days_30d: z.number().int().min(0).max(30).nullable().optional(),
+        times_per_day: z.number().int().min(0).max(200).nullable().optional(),
+        time_to_first: z.string().max(40).nullable().optional(),
+        nicotine_concentration: z.string().max(40).nullable().optional(),
+        device_type: z.string().max(40).nullable().optional(),
+        flavors: z.string().max(120).nullable().optional(),
+        refillable: z.string().max(40).nullable().optional(),
+        used_at_institution: z.boolean().nullable().optional(),
+        tried_to_stop: z.boolean().nullable().optional(),
+      })
+      .optional(),
+    pouchModule: z
+      .object({
+        days_30d: z.number().int().min(0).max(30).nullable().optional(),
+        pouches_per_day: z.number().int().min(0).max(100).nullable().optional(),
+        nicotine_strength: z.string().max(40).nullable().optional(),
+        time_to_first: z.string().max(40).nullable().optional(),
+        flavors: z.string().max(120).nullable().optional(),
+        source: z.string().max(80).nullable().optional(),
+        used_at_institution: z.boolean().nullable().optional(),
+        tried_to_stop: z.boolean().nullable().optional(),
+        wants_counseling: z.boolean().nullable().optional(),
+      })
+      .optional(),
+    shishaModule: z
+      .object({
+        days_30d: z.number().int().min(0).max(30).nullable().optional(),
+        sessions_per_week: z.number().int().min(0).max(50).nullable().optional(),
+        avg_session_minutes: z.number().int().min(0).max(600).nullable().optional(),
+        shared_mouthpiece: z.boolean().nullable().optional(),
+        setting: z.string().max(40).nullable().optional(),
+        tobacco_type: z.string().max(40).nullable().optional(),
+        also_uses_other: z.boolean().nullable().optional(),
+        quit_interest: z.string().max(40).nullable().optional(),
+      })
+      .optional(),
+    extendedDemographics: z
+      .object({
+        school_university_workplace: z.string().max(200).nullable().optional(),
+        affiliation_type: z.string().max(40).nullable().optional(),
+        education_level: z.string().max(80).nullable().optional(),
+        nationality: z.string().max(80).nullable().optional(),
+        pregnancy: z.boolean().nullable().optional(),
+      })
+      .optional(),
+    consentResearchPublication: z.boolean().optional(),
+  })
+  .optional();
 
 const Submission = z.object({
   triage: z.object({
