@@ -258,12 +258,31 @@ export const updateOutcome = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+function toCsv(rows: Record<string, unknown>[]): string {
+  if (rows.length === 0) return "";
+  const headers = Array.from(rows.reduce<Set<string>>((s, r) => { Object.keys(r).forEach((k) => s.add(k)); return s; }, new Set()));
+  const escape = (v: unknown) => {
+    if (v == null) return "";
+    const s = (typeof v === "object" ? JSON.stringify(v) : String(v)).replace(/"/g, '""');
+    return /[",\n]/.test(s) ? `"${s}"` : s;
+  };
+  return [headers.join(","), ...rows.map((r) => headers.map((h) => escape(r[h])).join(","))].join("\n");
+}
+
+function stripPii<T extends Record<string, unknown>>(r: T): Record<string, unknown> {
+  const { full_name: _n, mobile: _m, email: _e, receptionist_notes: _r, notes: _no, ...rest } = r as Record<string, unknown>;
+  return rest;
+}
+
 export const exportCsv = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) =>
     z
       .object({
-        type: z.enum(["full", "anonymized", "cohort", "follow_up_due", "research", "baseline", "follow_up_outcomes", "product_use", "youth_nicotine", "city_summary"]),
+        type: z.enum([
+          "full", "anonymized", "cohort", "follow_up_due", "research",
+          "baseline", "follow_up_outcomes", "product_use", "youth_nicotine", "city_summary",
+        ]),
         cohort: z.string().optional(),
         researchConsentOnly: z.boolean().optional(),
       })
@@ -273,49 +292,169 @@ export const exportCsv = createServerFn({ method: "POST" })
     const roles = await getRoles(context.userId);
     if (!roles.includes("physician")) throw new Error("Forbidden: physician role required");
 
-    let q = supabaseAdmin
-      .from("participants")
-      .select(
-        "participant_code, full_name, mobile, email, age, gender, city, affiliation, preferred_language, preferred_contact, cohort, cohort_reason, doctor_review_needed, urgent_symptom, contacted, contact_date, follow_up_status, appointment_requested, created_at",
-      )
-      .order("created_at", { ascending: false })
-      .limit(10000);
+    const anonymize = data.type === "anonymized" || data.type === "research" || data.type === "baseline"
+      || data.type === "follow_up_outcomes" || data.type === "product_use"
+      || data.type === "youth_nicotine" || data.type === "city_summary";
 
-    if (data.type === "cohort" && data.cohort) q = q.eq("cohort", data.cohort as never);
-    if (data.type === "follow_up_due") q = q.eq("contacted", false);
+    // Resolve participant ID set based on cohort + research consent filters
+    let pidQ = supabaseAdmin.from("participants").select("id").limit(20000);
+    if (data.cohort) pidQ = pidQ.eq("cohort", data.cohort as never);
+    if (data.researchConsentOnly) pidQ = pidQ.eq("research_consent_status", "given");
+    const { data: pidRows } = await pidQ;
+    const pids = (pidRows ?? []).map((r) => r.id);
 
-    const { data: rows, error } = await q;
-    if (error) throw new Error(error.message);
+    let cleaned: Record<string, unknown>[] = [];
 
-    const anonymize = data.type === "anonymized" || data.type === "research";
-    const cleaned = (rows ?? []).map((r) => {
-      if (anonymize) {
-        const { full_name: _n, mobile: _m, email: _e, ...rest } = r as Record<string, unknown>;
-        return rest;
+    if (data.type === "city_summary") {
+      const { data: rows } = await supabaseAdmin
+        .from("participants")
+        .select("city, cohort, doctor_review_needed, research_consent_status")
+        .in("id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]);
+      const agg: Record<string, { city: string; total: number; doctor_review: number; research_consent: number; cohorts: Record<string, number> }> = {};
+      for (const r of rows ?? []) {
+        const city = (r.city as string) || "(unknown)";
+        const a = agg[city] ?? (agg[city] = { city, total: 0, doctor_review: 0, research_consent: 0, cohorts: {} });
+        a.total++;
+        if (r.doctor_review_needed) a.doctor_review++;
+        if (r.research_consent_status === "given") a.research_consent++;
+        const c = (r.cohort as string) || "?";
+        a.cohorts[c] = (a.cohorts[c] ?? 0) + 1;
       }
-      return r;
-    });
+      cleaned = Object.values(agg).map((a) => ({ ...a, cohorts: JSON.stringify(a.cohorts) }));
+    } else if (data.type === "follow_up_outcomes") {
+      const [{ data: ot }, { data: fv }] = await Promise.all([
+        supabaseAdmin.from("outcome_tracking").select("*").in("participant_id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]),
+        supabaseAdmin.from("follow_up_visits").select("*").in("participant_id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]),
+      ]);
+      cleaned = [
+        ...(ot ?? []).map((r) => ({ source: "baseline_outcome", ...r })),
+        ...(fv ?? []).map((r) => ({ source: "follow_up_visit", ...r })),
+      ].map(stripPii);
+    } else if (data.type === "product_use") {
+      const [{ data: pu }, { data: pud }] = await Promise.all([
+        supabaseAdmin.from("product_use").select("*").in("participant_id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]),
+        supabaseAdmin.from("product_use_details").select("*").in("participant_id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]),
+      ]);
+      cleaned = [
+        ...(pu ?? []).map((r) => ({ source: "summary", ...r, products: JSON.stringify(r.products) })),
+        ...(pud ?? []).map((r) => ({ source: "detail", ...r })),
+      ].map(stripPii);
+    } else if (data.type === "youth_nicotine") {
+      // Participants under 25 with HONC or nicotine-control rows
+      const { data: young } = await supabaseAdmin
+        .from("participants").select("id, age, city, cohort, research_consent_status")
+        .lt("age", 25)
+        .in("id", pids.length ? pids : ["00000000-0000-0000-0000-000000000000"]);
+      const youngIds = (young ?? []).map((r) => r.id);
+      const [{ data: honc }, { data: nic }] = await Promise.all([
+        supabaseAdmin.from("honc_screening").select("*").in("participant_id", youngIds.length ? youngIds : ["00000000-0000-0000-0000-000000000000"]),
+        supabaseAdmin.from("nicotine_control_scores").select("participant_id, yes_count, category, youth_flag").in("participant_id", youngIds.length ? youngIds : ["00000000-0000-0000-0000-000000000000"]),
+      ]);
+      const byId = new Map((young ?? []).map((r) => [r.id, r]));
+      cleaned = (honc ?? []).map((h) => ({
+        ...byId.get(h.participant_id),
+        honc_positive_count: h.positive_count,
+        honc_category: h.category,
+      })).concat((nic ?? []).map((n) => ({
+        ...byId.get(n.participant_id),
+        nic_yes_count: n.yes_count,
+        nic_category: n.category,
+        youth_flag: n.youth_flag,
+      })));
+    } else if (data.type === "baseline") {
+      // Joined baseline snapshot: participant + scores + cohort + readiness
+      let q = supabaseAdmin
+        .from("participants")
+        .select("id, participant_code, age, gender, city, affiliation, affiliation_type, education_level, nationality, preferred_language, cohort, cohort_reason, doctor_review_needed, urgent_symptom, research_consent_status, created_at")
+        .order("created_at", { ascending: false }).limit(10000);
+      if (data.cohort) q = q.eq("cohort", data.cohort as never);
+      if (data.researchConsentOnly) q = q.eq("research_consent_status", "given");
+      const { data: parts } = await q;
+      const ids = (parts ?? []).map((r) => r.id);
+      const [{ data: cig }, { data: nic }, { data: rd }, { data: hon }] = await Promise.all([
+        supabaseAdmin.from("cigarette_dependence_scores").select("participant_id, total_score, category").in("participant_id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"]),
+        supabaseAdmin.from("nicotine_control_scores").select("participant_id, yes_count, category").in("participant_id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"]),
+        supabaseAdmin.from("readiness_stage").select("participant_id, stage").in("participant_id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"]),
+        supabaseAdmin.from("honc_screening").select("participant_id, positive_count, category").in("participant_id", ids.length ? ids : ["00000000-0000-0000-0000-000000000000"]),
+      ]);
+      const cigMap = new Map((cig ?? []).map((r) => [r.participant_id, r]));
+      const nicMap = new Map((nic ?? []).map((r) => [r.participant_id, r]));
+      const rdMap = new Map((rd ?? []).map((r) => [r.participant_id, r]));
+      const honMap = new Map((hon ?? []).map((r) => [r.participant_id, r]));
+      cleaned = (parts ?? []).map((p) => ({
+        ...stripPii(p as Record<string, unknown>),
+        ftnd_total: cigMap.get(p.id)?.total_score ?? null,
+        ftnd_category: cigMap.get(p.id)?.category ?? null,
+        nic_yes_count: nicMap.get(p.id)?.yes_count ?? null,
+        nic_category: nicMap.get(p.id)?.category ?? null,
+        readiness: rdMap.get(p.id)?.stage ?? null,
+        honc_positive: honMap.get(p.id)?.positive_count ?? null,
+        honc_category: honMap.get(p.id)?.category ?? null,
+      }));
+    } else {
+      // full / anonymized / cohort / follow_up_due / research
+      let q = supabaseAdmin
+        .from("participants")
+        .select(
+          "participant_code, full_name, mobile, email, age, gender, city, affiliation, affiliation_type, education_level, preferred_language, preferred_contact, cohort, cohort_reason, doctor_review_needed, urgent_symptom, contacted, contact_date, follow_up_status, appointment_requested, research_consent_status, created_at",
+        )
+        .order("created_at", { ascending: false }).limit(10000);
+      if (data.type === "cohort" && data.cohort) q = q.eq("cohort", data.cohort as never);
+      if (data.type === "follow_up_due") q = q.eq("contacted", false);
+      if (data.researchConsentOnly || data.type === "research") q = q.eq("research_consent_status", "given");
+      const { data: rows, error } = await q;
+      if (error) throw new Error(error.message);
+      cleaned = (rows ?? []).map((r) => anonymize ? stripPii(r as Record<string, unknown>) : (r as Record<string, unknown>));
+    }
 
-    const headers = cleaned.length ? Object.keys(cleaned[0] as object) : [];
-    const escape = (v: unknown) => {
-      if (v == null) return "";
-      const s = String(v).replace(/"/g, '""');
-      return /[",\n]/.test(s) ? `"${s}"` : s;
-    };
-    const csv = [
-      headers.join(","),
-      ...cleaned.map((row) => headers.map((h) => escape((row as Record<string, unknown>)[h])).join(",")),
-    ].join("\n");
+    const csv = toCsv(cleaned);
 
     await supabaseAdmin.from("export_logs").insert({
       user_id: context.userId,
       export_type: data.type,
       row_count: cleaned.length,
-      filters: { cohort: data.cohort ?? null } as never,
+      filters: { cohort: data.cohort ?? null, researchConsentOnly: data.researchConsentOnly ?? false } as never,
     });
     await logAudit(context.userId, "export", "participants", undefined, { type: data.type, count: cleaned.length });
 
     return { csv, filename: `aqla_${data.type}_${new Date().toISOString().slice(0, 10)}.csv` };
+  });
+
+export const addFollowUpVisit = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        participant_id: z.string().uuid(),
+        visit_point: z.enum(["1w", "4w", "12w", "6m", "12m"]),
+        visit_date: z.string().optional(),
+        contacted: z.boolean().optional(),
+        lost_to_follow_up: z.boolean().optional(),
+        quit_attempt_made: z.boolean().optional(),
+        abstinent: z.boolean().optional(),
+        reduced_use: z.boolean().optional(),
+        relapsed: z.boolean().optional(),
+        current_product_use: z.string().max(120).optional(),
+        cigarettes_per_day: z.number().int().min(0).max(200).optional(),
+        pouches_per_day: z.number().int().min(0).max(100).optional(),
+        vaping_frequency: z.string().max(60).optional(),
+        craving_0_10: z.number().int().min(0).max(10).optional(),
+        confidence_0_10: z.number().int().min(0).max(10).optional(),
+        co_reading: z.number().min(0).max(100).optional(),
+        notes: z.string().max(2000).optional(),
+      })
+      .parse(d),
+  )
+  .handler(async ({ context, data }) => {
+    const roles = await getRoles(context.userId);
+    if (!roles.includes("physician")) throw new Error("Forbidden: physician role required");
+    const { error } = await supabaseAdmin.from("follow_up_visits").insert({
+      ...data,
+      created_by: context.userId,
+    });
+    if (error) throw new Error(error.message);
+    await logAudit(context.userId, "create", "follow_up_visits", data.participant_id, { visit_point: data.visit_point });
+    return { ok: true };
   });
 
 export const getDashboardStats = createServerFn({ method: "GET" })
