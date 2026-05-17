@@ -10,6 +10,8 @@ import {
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
+import { FloatingWhatsAppButton } from "@/components/FloatingWhatsAppButton";
+import { AqlaAssistant } from "@/components/AqlaAssistant";
 
 function NotFoundComponent() {
   return (
@@ -120,6 +122,8 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <Outlet />
       <Toaster richColors position="top-center" />
+      <FloatingWhatsAppButton />
+      <AqlaAssistant />
     </QueryClientProvider>
   );
 }

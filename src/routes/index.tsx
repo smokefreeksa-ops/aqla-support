@@ -63,10 +63,15 @@ function Inner() {
       <main className="mx-auto max-w-5xl px-4 py-12 sm:py-16">
         <section className="text-center">
           <span className="inline-block rounded-full bg-primary-soft px-3 py-1 text-xs font-medium text-primary">
-            {lang === "ar" ? "خدمة مجانية بإشراف طبيب" : "Free physician-led service"}
+            {lang === "ar" ? "خدمة مجانية تحت إشراف طبيب وأخصائيين" : "Free physician- and specialist-supervised service"}
           </span>
           <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">{t.appName}</h1>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground sm:text-lg">{t.tagline}</p>
+          <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground/80">
+            {lang === "ar"
+              ? "تماشيًا مع مستهدفات رؤية السعودية 2030 في تعزيز جودة الحياة والصحة العامة، ودعمًا للجهود الوطنية للحد من التدخين واستخدام منتجات التبغ والنيكوتين."
+              : "Aligned with Saudi Vision 2030 goals to improve quality of life and public health, and supportive of national efforts to reduce tobacco and nicotine use."}
+          </p>
         </section>
 
         {/* Track selection */}
