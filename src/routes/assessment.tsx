@@ -327,7 +327,7 @@ function Flow() {
       </header>
 
       <main className="mx-auto max-w-2xl px-4 py-6">
-        {step < 5 && (
+        {step < 6 && (
           <div className="mb-6">
             <Progress value={progress} className="h-2" />
             <div className="mt-2 flex justify-between text-xs text-muted-foreground">
@@ -525,61 +525,61 @@ function Flow() {
         )}
 
         {step === 4 && (
-          <div className="space-y-4">
-            <Card className="p-5">
-              <h2 className="text-xl font-semibold">{t.readinessTitle}</h2>
-              <RadioGroup className="mt-3" value={s.readiness} onValueChange={(v) => setS((p) => ({ ...p, readiness: v }))}>
-                {READINESS.map((r) => (
-                  <label key={r.v} className="flex items-center gap-2 cursor-pointer rounded-lg border p-3 hover:bg-muted/40">
-                    <RadioGroupItem value={r.v} />
-                    <span className="text-sm">{lang === "ar" ? r.ar : r.en}</span>
-                  </label>
-                ))}
-              </RadioGroup>
-            </Card>
+          <Card className="p-5">
+            <h2 className="text-xl font-semibold">{t.readinessTitle}</h2>
+            <RadioGroup className="mt-3" value={s.readiness} onValueChange={(v) => setS((p) => ({ ...p, readiness: v }))}>
+              {READINESS.map((r) => (
+                <label key={r.v} className="flex items-center gap-2 cursor-pointer rounded-lg border p-3 hover:bg-muted/40">
+                  <RadioGroupItem value={r.v} />
+                  <span className="text-sm">{lang === "ar" ? r.ar : r.en}</span>
+                </label>
+              ))}
+            </RadioGroup>
+          </Card>
+        )}
 
-            <Card className="p-5">
-              <h2 className="text-xl font-semibold">{t.riskTitle}</h2>
-              <p className="mt-1 text-sm text-muted-foreground">{t.riskSubtitle}</p>
-              <div className="mt-3 grid gap-2">
-                {RISK_OPTS.map((r) => (
-                  <label key={r.v} className={`flex items-center gap-2 rounded-lg border p-3 cursor-pointer hover:bg-muted/40 ${r.urgent ? "border-destructive/40" : ""}`}>
-                    <Checkbox checked={s.riskFlags.includes(r.v)} onCheckedChange={() => toggleRisk(r.v)} />
-                    <span className="text-sm">{lang === "ar" ? r.ar : r.en}</span>
-                  </label>
-                ))}
+        {step === 5 && (
+          <Card className="p-5">
+            <h2 className="text-xl font-semibold">{t.riskTitle}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{t.riskSubtitle}</p>
+            <div className="mt-3 grid gap-2">
+              {RISK_OPTS.map((r) => (
+                <label key={r.v} className={`flex items-center gap-2 rounded-lg border p-3 cursor-pointer hover:bg-muted/40 ${r.urgent ? "border-destructive/40" : ""}`}>
+                  <Checkbox checked={s.riskFlags.includes(r.v)} onCheckedChange={() => toggleRisk(r.v)} />
+                  <span className="text-sm">{lang === "ar" ? r.ar : r.en}</span>
+                </label>
+              ))}
+            </div>
+            {s.riskFlags.some((f) => ["severe_chest_pain", "severe_sob", "coughing_blood"].includes(f)) && (
+              <div className="mt-3 rounded-lg border border-destructive bg-destructive/10 p-3 text-sm text-destructive flex gap-2">
+                <ShieldAlert className="h-5 w-5 shrink-0" /> {t.urgentMsg}
               </div>
-              {s.riskFlags.some((f) => ["severe_chest_pain", "severe_sob", "coughing_blood"].includes(f)) && (
-                <div className="mt-3 rounded-lg border border-destructive bg-destructive/10 p-3 text-sm text-destructive flex gap-2">
-                  <ShieldAlert className="h-5 w-5 shrink-0" /> {t.urgentMsg}
-                </div>
-              )}
-            </Card>
-
-            <Card className="p-5">
-              <h2 className="text-xl font-semibold">{lang === "ar" ? "كيف تفضل أن ندعمك؟" : "How would you like us to support you?"}</h2>
-              <RadioGroup className="mt-3" value={s.followUp} onValueChange={(v) => setS((p) => ({ ...p, followUp: v }))}>
-                {FOLLOWUP_OPTS.map((r) => (
-                  <label key={r.v} className="flex items-center gap-2 cursor-pointer rounded-lg border p-3 hover:bg-muted/40">
-                    <RadioGroupItem value={r.v} />
-                    <span className="text-sm">{lang === "ar" ? r.ar : r.en}</span>
-                  </label>
-                ))}
-              </RadioGroup>
-            </Card>
-          </div>
+            )}
+          </Card>
         )}
 
-        {step === 5 && result && (
-          <ResultView result={result} onHome={() => nav({ to: "/" })} />
+        {step === 6 && result && (
+          <ResultView
+            result={result}
+            products={s.products}
+            readiness={s.readiness}
+            readinessLabel={READINESS.find((r) => r.v === s.readiness)?.[lang] ?? s.readiness}
+            productLabels={s.products.map((k) => {
+              const p = PRODUCT_OPTIONS.find((o) => o.key === k);
+              return p ? (lang === "ar" ? p.ar : p.en) : k;
+            })}
+            followOptions={FOLLOWUP_OPTS.map((o) => ({ v: o.v, label: lang === "ar" ? o.ar : o.en }))}
+            initialFollow={s.followUp}
+            onHome={() => nav({ to: "/" })}
+          />
         )}
 
-        {step < 5 && (
+        {step < 6 && (
           <div className="mt-6 flex items-center justify-between">
             <Button variant="ghost" onClick={prev} disabled={step === 0} className="gap-1">
               <ArrowLeft className="h-4 w-4 rtl:rotate-180" /> {t.back}
             </Button>
-            {step === 4 ? (
+            {step === 5 ? (
               <Button onClick={handleSubmit} disabled={submitting} className="gap-1">
                 {submitting ? t.saving : t.submit}
               </Button>
