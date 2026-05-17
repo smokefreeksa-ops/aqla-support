@@ -346,6 +346,7 @@ export const exportCsv = createServerFn({ method: "POST" })
           "full", "anonymized", "cohort", "follow_up_due", "research",
           "baseline", "follow_up_outcomes", "product_use", "youth_nicotine", "city_summary",
           "dependence_items", "readiness_quit_history", "research_consent_only",
+          "community_exposure",
         ]),
         cohort: z.string().optional(),
         researchConsentOnly: z.boolean().optional(),
