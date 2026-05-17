@@ -818,7 +818,7 @@ export const exportCsv = createServerFn({ method: "POST" })
     // Lookup who ran the export
     const { data: userInfo } = await supabaseAdmin.auth.admin.getUserById(context.userId);
     const generatedBy = userInfo?.user?.email ?? context.userId;
-    void sendAdminNotification(
+    await sendAdminNotification(
       "csv_export_alert",
       `Aqla export generated — ${data.type}`,
       `<h2 style="font-family:-apple-system,Segoe UI,Arial,sans-serif">Aqla CSV export</h2>${renderKeyValueHtml({
@@ -882,7 +882,7 @@ export const addFollowUpVisit = createServerFn({ method: "POST" })
     const { data: userInfo } = await supabaseAdmin.auth.admin.getUserById(context.userId);
     const staffEmail = userInfo?.user?.email ?? context.userId;
     const pcode = (pInfo?.participant_code as string | undefined) ?? data.participant_id;
-    void sendAdminNotification(
+    await sendAdminNotification(
       "follow_up_visit",
       `Aqla follow-up visit logged — ${pcode}`,
       `<h2 style="font-family:-apple-system,Segoe UI,Arial,sans-serif">Aqla follow-up visit</h2>${renderKeyValueHtml({
@@ -936,4 +936,44 @@ export const getDashboardStats = createServerFn({ method: "GET" })
       }, {}),
     };
     return { stats, roles };
+  });
+
+// ---- Notification log: admin-only test + recent log viewer ----
+
+async function requireAdmin(userId: string) {
+  const roles = await getRoles(userId);
+  if (roles.length === 0) throw new Error("Forbidden: admin role required");
+}
+
+export const sendTestEmail = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await requireAdmin(context.userId);
+    await sendAdminNotification(
+      "staff_login",
+      "Aqla notification test",
+      `<p style="font-family:-apple-system,Segoe UI,Arial,sans-serif">This is a safe test email from Aqla. No real participant data included.</p>`,
+      { staff_email: "smokefreeksa@gmail.com" },
+    );
+    const { data } = await supabaseAdmin
+      .from("notification_log")
+      .select("sent_status, error_message, provider_response")
+      .eq("subject", "Aqla notification test")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    return { ok: data?.sent_status === "sent", result: data };
+  });
+
+export const listRecentNotifications = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await requireAdmin(context.userId);
+    const { data, error } = await supabaseAdmin
+      .from("notification_log")
+      .select("id, event_type, recipient_email, sent_status, provider_response, error_message, created_at, subject")
+      .order("created_at", { ascending: false })
+      .limit(20);
+    if (error) throw new Error(error.message);
+    return { rows: data ?? [] };
   });

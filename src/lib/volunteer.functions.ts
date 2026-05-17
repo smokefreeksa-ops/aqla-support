@@ -77,7 +77,7 @@ export const submitVolunteer = createServerFn({ method: "POST" })
       reason: "initial submission",
     } as never);
 
-    void sendAdminNotification(
+    await sendAdminNotification(
       "full_volunteer_application",
       `Aqla volunteer application submitted — ${created.application_code}`,
       `<h2 style="font-family:-apple-system,Segoe UI,Arial,sans-serif">Aqla volunteer application</h2>${renderKeyValueHtml({
