@@ -162,3 +162,36 @@ export const submitAssessment = createServerFn({ method: "POST" })
       nicotine: nicResult,
     };
   });
+
+// Public — called from the result page after the participant sees their cohort.
+// Verified by the just-issued participant_code so we don't allow blind writes.
+export const saveFollowUpPreference = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) =>
+    z.object({
+      participantId: z.string().uuid(),
+      participantCode: z.string().min(4).max(40),
+      preference: z.enum([
+        "whatsapp_messages","phone_call","physician_review","email_only","no_contact",
+      ]),
+    }).parse(d),
+  )
+  .handler(async ({ data }) => {
+    const db = supabaseAdmin;
+    const { data: p, error: pErr } = await db
+      .from("participants")
+      .select("id, participant_code")
+      .eq("id", data.participantId)
+      .maybeSingle();
+    if (pErr) throw new Error(pErr.message);
+    if (!p || p.participant_code !== data.participantCode) {
+      throw new Error("Invalid participant credentials");
+    }
+    // Replace any previous preference for this participant
+    await db.from("follow_up_preferences").delete().eq("participant_id", data.participantId);
+    const { error } = await db.from("follow_up_preferences").insert({
+      participant_id: data.participantId,
+      preference: data.preference,
+    });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
