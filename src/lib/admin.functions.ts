@@ -78,12 +78,13 @@ export const listParticipants = createServerFn({ method: "POST" })
       .order("created_at", { ascending: false })
       .limit(500);
 
-    if (pidFilter !== null) {
-      if (pidFilter.length === 0) {
+    const pf: string[] | null = pidFilter;
+    if (pf !== null) {
+      if (pf.length === 0) {
         await logAudit(context.userId, "list", "participants", undefined, { count: 0 });
         return { rows: [], roles };
       }
-      q = q.in("id", pidFilter);
+      q = q.in("id", pf);
     }
     if (data.search) {
       const s = data.search.trim();
