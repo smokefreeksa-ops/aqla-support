@@ -112,6 +112,28 @@ function Inner() {
           </div>
         </section>
 
+        {/* Why Aqla? */}
+        <section className="mt-12">
+          <Card className="rounded-3xl border-0 p-6 sm:p-8 shadow-elegant card-gradient">
+            <h2 className="text-2xl font-semibold tracking-tight text-primary">
+              {lang === "ar" ? "لماذا أقلع؟" : "Why Aqla?"}
+            </h2>
+            <p className="mt-3 text-[15px] leading-8 text-foreground/80">
+              {lang === "ar"
+                ? "أقلع مبادرة مجتمعية مجانية صُممت لتقديم مسار واضح وسهل الوصول للراغبين في فهم مستوى اعتمادهم على التدخين أو النيكوتين، واختيار الخطوة المناسبة لهم. تجمع المنصة بين التقييم الرقمي، التوجيه حسب مستوى الاحتياج، والمتابعة المنظمة، مع مسار تدريبي للمتطوعين لدعم التوعية والمساندة المجتمعية."
+                : "Aqla is a free community initiative designed to give people a clear, accessible pathway to understand their smoking or nicotine dependence and choose the right next step. The platform combines digital assessment, support routing, structured follow-up, and a volunteer training pathway to strengthen community awareness and support."}
+            </p>
+            <div className="mt-4">
+              <Link to="/about">
+                <Button variant="outline" size="sm" className="gap-1.5">
+                  {lang === "ar" ? "اعرف المزيد عن أقلع" : "Learn more about Aqla"}
+                  <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                </Button>
+              </Link>
+            </div>
+          </Card>
+        </section>
+
         <div className="mt-10 grid gap-3 sm:grid-cols-2">
           <Card className="rounded-2xl border-l-4 border-l-secondary p-4 card-gradient">
             <p className="text-sm text-muted-foreground">{t.disclaimer}</p>
