@@ -113,7 +113,7 @@ export function assignCohort(i: CohortInput): CohortResult {
 
   const veryHighDep = (i.ftnd ?? 0) >= 8;
   const highDep = (i.ftnd ?? 0) >= 6; // FTND high band (6-7) or higher
-  const highNicConcern = hasNicProduct && (i.nicotineYes ?? 0) >= 6;
+  
   const otherRiskFlags = i.riskFlags.filter(
     (f) => f !== "multi_product" && f !== "very_high_dependence",
   );
