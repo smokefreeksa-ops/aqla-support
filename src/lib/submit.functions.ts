@@ -167,6 +167,7 @@ const Submission = z.object({
     "discuss_alternatives","score_only","helping_someone"
   ]),
   riskFlags: z.array(z.string()),
+  extras: ExtrasSchema,
 });
 
 export type SubmissionInput = z.infer<typeof Submission>;
