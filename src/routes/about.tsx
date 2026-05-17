@@ -2,10 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useLangState, LangContext, useLang } from "@/lib/i18n";
-import { Languages, HeartPulse, ShieldAlert, ArrowLeft } from "lucide-react";
+import { Languages, ShieldAlert, ArrowLeft } from "lucide-react";
 import aqlaLogo from "@/assets/aqla-logo.png";
 import founderPhoto from "@/assets/founder.png";
 import { SocialLinks } from "@/components/SocialLinks";
+import { VisitTracker } from "@/components/VisitTracker";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -42,12 +43,15 @@ function Inner() {
 
   return (
     <div dir={dir} className="min-h-screen bg-background">
+      <VisitTracker path="/about" />
       <header className="border-b bg-card/70 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="grid h-10 w-10 place-items-center rounded-2xl hero-gradient text-primary-foreground shadow-elegant">
-              <HeartPulse className="h-5 w-5" />
-            </div>
+          <Link to="/" className="flex items-center gap-3">
+            <img
+              src={aqlaLogo}
+              alt="Aqla — أقلع logo"
+              className="h-[38px] w-auto object-contain sm:h-12"
+            />
             <div className="leading-tight">
               <div className="font-semibold tracking-tight">{isAr ? "أقلع" : "Aqla"}</div>
               <div className="text-[11px] text-muted-foreground">Aqla — أقلع</div>

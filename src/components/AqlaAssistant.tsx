@@ -4,6 +4,7 @@ import { useLocation } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 import { getAssistantStatus, chatWithAssistant } from "@/lib/assistant.functions";
+import aqlaLogo from "@/assets/aqla-logo.png";
 
 const PUBLIC_PATHS = ["/", "/about", "/assessment", "/volunteer"];
 
@@ -115,7 +116,7 @@ export function AqlaAssistant() {
         >
           <div className="flex items-center justify-between gap-2 border-b bg-primary px-3 py-2 text-primary-foreground">
             <div className="flex items-center gap-2">
-              <MessageCircle className="h-4 w-4" />
+              <img src={aqlaLogo} alt="Aqla — أقلع logo" className="h-6 w-6 rounded-full bg-white object-contain p-0.5" />
               <span className="text-sm font-semibold">{t.title}</span>
             </div>
             <button

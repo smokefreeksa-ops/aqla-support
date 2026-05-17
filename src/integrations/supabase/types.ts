@@ -735,6 +735,30 @@ export type Database = {
           },
         ]
       }
+      page_views: {
+        Row: {
+          anonymous_session_hash: string | null
+          created_at: string
+          id: string
+          page_path: string
+          visit_date: string
+        }
+        Insert: {
+          anonymous_session_hash?: string | null
+          created_at?: string
+          id?: string
+          page_path: string
+          visit_date?: string
+        }
+        Update: {
+          anonymous_session_hash?: string | null
+          created_at?: string
+          id?: string
+          page_path?: string
+          visit_date?: string
+        }
+        Relationships: []
+      }
       participants: {
         Row: {
           affiliation: string | null
@@ -1476,6 +1500,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_public_impact_stats: { Args: never; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

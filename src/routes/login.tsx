@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import aqlaLogo from "@/assets/aqla-logo.png";
 
 export const Route = createFileRoute("/login")({
   head: () => ({ meta: [{ title: "Staff Login — Aqla" }] }),
@@ -51,8 +52,11 @@ function LoginPage() {
   return (
     <div className="min-h-screen grid place-items-center bg-background px-4">
       <Card className="w-full max-w-sm p-6">
-        <Link to="/" className="text-xs text-muted-foreground">← Aqla</Link>
-        <h1 className="mt-2 text-xl font-semibold">{mode === "signin" ? "Staff Login" : "Create staff account"}</h1>
+        <Link to="/" className="flex items-center gap-2 text-xs text-muted-foreground">
+          <img src={aqlaLogo} alt="Aqla — أقلع logo" className="h-10 w-auto object-contain" />
+          <span>← Aqla — أقلع</span>
+        </Link>
+        <h1 className="mt-3 text-xl font-semibold">{mode === "signin" ? "Staff Login" : "Create staff account"}</h1>
         <form onSubmit={handle} className="mt-4 space-y-3">
           <div className="space-y-1.5">
             <Label>Email</Label>
