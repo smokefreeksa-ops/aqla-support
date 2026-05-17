@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { z } from "zod";
 import { assignCohort, scoreFtnd, scoreNicotineControl, scoreHonc } from "./scoring";
+import { sendAdminNotification, renderKeyValueHtml } from "./notifications.server";
 
 // Optional research-grade extension payload — each section is independent and skippable.
 const ExtrasSchema = z
