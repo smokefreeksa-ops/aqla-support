@@ -619,13 +619,6 @@ export const exportCsv = createServerFn({ method: "POST" })
         r.family_peer_use = (d.family_peer_use as boolean | null) ?? r.family_peer_use;
         r.social_media_ad_exposure = (d.ad_exposure as boolean | null) ?? r.social_media_ad_exposure;
       }
-      for (const c of cigm ?? []) {
-        const r = ensure(c.participant_id, "cigarettes", c.created_at as string);
-        if (r.days_used_past_30_days == null && c.cigarettes_per_day != null) {
-          // proxy: smoker → assume daily use; leave null otherwise
-        }
-        if (r.ever_use == null && c.cigarettes_per_day != null) r.ever_use = true;
-      }
       for (const v of vapem ?? []) {
         const r = ensure(v.participant_id, "vape/e-cigarette", v.created_at as string);
         r.days_used_past_30_days = (v.days_30d as number | null) ?? r.days_used_past_30_days;
