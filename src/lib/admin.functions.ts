@@ -108,12 +108,7 @@ export const listParticipants = createServerFn({ method: "POST" })
 
     // Enrich with product/readiness/dependence/follow-up for display
     const ids = (rows ?? []).map((r) => r.id);
-    const enrich: Record<string, {
-      products?: string[]; readiness?: string;
-      ftnd?: { total: number; category: string };
-      nic?: { yes_count: number; category: string };
-      followUp?: string;
-    }> = {};
+    const enrich: Enrich = {};
     if (ids.length > 0) {
       const [pu, rd, cig, nic, fp] = await Promise.all([
         supabaseAdmin.from("product_use").select("participant_id, products").in("participant_id", ids),
