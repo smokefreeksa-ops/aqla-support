@@ -23,12 +23,14 @@ export interface FtndAnswers {
 
 export function scoreFtnd(a: FtndAnswers) {
   const total = a.q1 + a.q2 + a.q3 + a.q4 + a.q5 + a.q6;
+  // Snake-case bands per research-grade spec:
+  // 0-2 very_low | 3-4 low | 5 moderate | 6-7 high | 8-10 very_high
   let category: string;
-  if (total <= 2) category = "Very low cigarette dependence";
-  else if (total <= 4) category = "Low cigarette dependence";
-  else if (total === 5) category = "Moderate cigarette dependence";
-  else if (total <= 7) category = "High cigarette dependence";
-  else category = "Very high cigarette dependence";
+  if (total <= 2) category = "very_low";
+  else if (total <= 4) category = "low";
+  else if (total === 5) category = "moderate";
+  else if (total <= 7) category = "high";
+  else category = "very_high";
   return { total, category };
 }
 
