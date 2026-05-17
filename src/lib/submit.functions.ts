@@ -309,6 +309,66 @@ export const submitAssessment = createServerFn({ method: "POST" })
         }),
       );
     }
+    const extras = data.extras;
+    if (extras) {
+      if (extras.motivation) {
+        inserts.push(db.from("motivation_assessment").insert({
+          participant_id: pid,
+          importance_0_10: extras.motivation.importance_0_10 ?? null,
+          confidence_0_10: extras.motivation.confidence_0_10 ?? null,
+          main_reason: extras.motivation.main_reason ?? null,
+          barriers: extras.motivation.barriers ?? [],
+        }));
+      }
+      if (extras.quitHistory) {
+        inserts.push(db.from("quit_history").insert({
+          participant_id: pid,
+          ever_tried: extras.quitHistory.ever_tried ?? null,
+          attempts_count: extras.quitHistory.attempts_count ?? null,
+          longest_quit_duration: extras.quitHistory.longest_quit_duration ?? null,
+          methods_used: extras.quitHistory.methods_used ?? [],
+          main_relapse_reason: extras.quitHistory.main_relapse_reason ?? null,
+        }));
+      }
+      if (extras.safetyFlags) {
+        inserts.push(db.from("safety_flags").insert({ participant_id: pid, ...extras.safetyFlags }));
+      }
+      if (honcResult && extras.honc) {
+        inserts.push(db.from("honc_screening").insert({
+          participant_id: pid,
+          q1_tried_quit_failed: extras.honc.q1,
+          q2_strong_cravings: extras.honc.q2,
+          q3_felt_addicted: extras.honc.q3,
+          q4_hard_in_restricted: extras.honc.q4,
+          q5_withdrawal: extras.honc.q5,
+          q6_needed_to_feel_normal: extras.honc.q6,
+          q7_increased_use: extras.honc.q7,
+          q8_felt_controlled: extras.honc.q8,
+          q9_continued_despite_health: extras.honc.q9,
+          q10_stopping_difficult: extras.honc.q10,
+          positive_count: honcResult.positive_count,
+          any_yes: honcResult.any_yes,
+          category: honcResult.category,
+        }));
+      }
+      if (extras.productDetails && extras.productDetails.length > 0) {
+        inserts.push(db.from("product_use_details").insert(
+          extras.productDetails.map((d) => ({ participant_id: pid, ...d })),
+        ));
+      }
+      if (extras.cigaretteModule) {
+        inserts.push(db.from("cigarette_module").insert({ participant_id: pid, ...extras.cigaretteModule }));
+      }
+      if (extras.vapeModule) {
+        inserts.push(db.from("vape_module").insert({ participant_id: pid, ...extras.vapeModule }));
+      }
+      if (extras.pouchModule) {
+        inserts.push(db.from("pouch_module").insert({ participant_id: pid, ...extras.pouchModule }));
+      }
+      if (extras.shishaModule) {
+        inserts.push(db.from("shisha_module").insert({ participant_id: pid, ...extras.shishaModule }));
+      }
+    }
     await Promise.all(inserts);
 
     return {
