@@ -45,8 +45,8 @@ export function AqlaAssistant() {
           role: "assistant",
           content:
             lang === "ar"
-              ? "مرحباً 👋 أنا مساعد أقلع التعليمي. كيف أستطيع مساعدتك في معلومات الإقلاع عن التدخين والنيكوتين؟"
-              : "Hi 👋 I'm the Aqla Education Assistant. How can I help with information about quitting smoking or nicotine?",
+              ? "مرحبًا، أنا مساعد أقلع التثقيفي المبني على توجيهات د. مالك. أستطيع مساعدتك بالمعلومات العامة، الإرشاد المبني على الأدلة، وطريقة استخدام المنصة. لا أقدم تشخيصًا أو علاجًا، ولا أغني عن مراجعة المختص. في حال وجود أعراض طارئة، اطلب الرعاية الطبية العاجلة."
+              : "Hello, I am Aqla’s AI education assistant based on Dr. Malik’s guidance. I can help with general education, evidence-based guidance, and using the platform. I do not provide diagnosis or treatment, and I am not a substitute for clinician review. For urgent symptoms, seek urgent medical care.",
         },
       ]);
     }
