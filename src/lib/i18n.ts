@@ -7,7 +7,7 @@ export const dict = {
     appName: "Aqla — Smoking & Nicotine Cessation Support",
     brandShort: "Aqla",
     tagline:
-      "A free physician-led program offering a quitting support pathway and a volunteer training pathway.",
+      "A free physician- and specialist-supervised digital pathway to help users understand their smoking or nicotine dependence, choose the right support step, and join a volunteer training pathway for community awareness and support.",
     chooseTrackHeader: "Choose the path that fits you",
     quitTrackTitle: "I Want Help to Quit",
     quitTrackDesc:
