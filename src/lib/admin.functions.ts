@@ -873,6 +873,41 @@ export const addFollowUpVisit = createServerFn({ method: "POST" })
     });
     if (error) throw new Error(error.message);
     await logAudit(context.userId, "create", "follow_up_visits", data.participant_id, { visit_point: data.visit_point });
+
+    const { data: pInfo } = await supabaseAdmin
+      .from("participants")
+      .select("participant_code")
+      .eq("id", data.participant_id)
+      .maybeSingle();
+    const { data: userInfo } = await supabaseAdmin.auth.admin.getUserById(context.userId);
+    const staffEmail = userInfo?.user?.email ?? context.userId;
+    const pcode = (pInfo?.participant_code as string | undefined) ?? data.participant_id;
+    void sendAdminNotification(
+      "follow_up_visit",
+      `Aqla follow-up visit logged — ${pcode}`,
+      `<h2 style="font-family:-apple-system,Segoe UI,Arial,sans-serif">Aqla follow-up visit</h2>${renderKeyValueHtml({
+        participant_code: pcode,
+        followup_timepoint: data.visit_point,
+        followup_completed_at: data.visit_date ?? new Date().toISOString(),
+        contacted_yes_no: data.contacted,
+        quit_attempt_made_yes_no: data.quit_attempt_made,
+        abstinent_yes_no: data.abstinent,
+        reduced_use_yes_no: data.reduced_use,
+        relapsed_yes_no: data.relapsed,
+        current_product_use: data.current_product_use,
+        cigarettes_per_day: data.cigarettes_per_day,
+        vaping_frequency: data.vaping_frequency,
+        pouches_per_day: data.pouches_per_day,
+        craving_0_10: data.craving_0_10,
+        withdrawal_severity_0_10: data.withdrawal_severity_0_10,
+        confidence_0_10: data.confidence_0_10,
+        satisfaction_with_support_0_10: data.satisfaction_with_support_0_10,
+        co_reading: data.co_reading,
+        logged_by_staff: staffEmail,
+      })}`,
+      { participant_code: pcode, staff_email: staffEmail },
+    );
+
     return { ok: true };
   });
 
