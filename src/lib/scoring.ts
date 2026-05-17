@@ -155,11 +155,13 @@ export function assignCohort(i: CohortInput): CohortResult {
   }
 
   if (hasNicProduct && (i.nicotineYes ?? 0) >= 3) {
+    const highConcern = (i.nicotineYes ?? 0) >= 6;
     return {
       cohort: "C",
-      reason:
-        "Vape / nicotine pouch / non-cigarette nicotine user with moderate-to-high nicotine-control concern.",
-      doctorReviewNeeded: false,
+      reason: highConcern
+        ? "High nicotine-control concern (vape / nicotine pouch / non-cigarette nicotine use) — clinician review recommended."
+        : "Vape / nicotine pouch / non-cigarette nicotine user with moderate nicotine-control concern.",
+      doctorReviewNeeded: highConcern,
       urgent,
     };
   }
