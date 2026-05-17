@@ -316,6 +316,27 @@ function canonicalProduct(raw: string | null | undefined): ProductType {
   return "other";
 }
 
+// FTND item-score → human label (standard Fagerström wording)
+const FTND_LABELS = {
+  q1: { 3: "≤5 min", 2: "6–30 min", 1: "31–60 min", 0: ">60 min" } as Record<number, string>,
+  q2: { 1: "yes", 0: "no" } as Record<number, string>,
+  q3: { 1: "first one in the morning", 0: "any other" } as Record<number, string>,
+  q4: { 0: "≤10", 1: "11–20", 2: "21–30", 3: "≥31" } as Record<number, string>,
+  q5: { 1: "yes", 0: "no" } as Record<number, string>,
+  q6: { 1: "yes", 0: "no" } as Record<number, string>,
+};
+const ftndLabel = (q: keyof typeof FTND_LABELS, v: number | null | undefined) =>
+  v == null ? "not_answered" : (FTND_LABELS[q][v] ?? "unknown");
+
+const yesNo = (v: boolean | null | undefined) =>
+  v == null ? "not_answered" : v ? "yes" : "no";
+
+const FOLLOWUP_TIMEPOINTS = ["1w", "4w", "12w", "6m", "12m"] as const;
+const FOLLOWUP_LABEL: Record<string, string> = {
+  "1w": "1_week", "4w": "4_week", "12w": "12_week", "6m": "6_month", "12m": "12_month",
+};
+
+
 export const exportCsv = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) =>
