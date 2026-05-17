@@ -146,5 +146,14 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Noto Sans Arabic", sans-serif;
+  }
+
+  [dir="rtl"] body {
+    font-family: "Noto Sans Arabic", ui-sans-serif, system-ui, sans-serif;
   }
 }
+
+.hero-gradient { background: var(--gradient-hero); }
+.card-gradient { background: var(--gradient-card); box-shadow: var(--shadow-card); }
+
