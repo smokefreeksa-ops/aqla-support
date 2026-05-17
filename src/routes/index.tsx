@@ -145,6 +145,8 @@ function Inner() {
           </Card>
         </section>
 
+        <ImpactSection isAr={lang === "ar"} />
+        <VisitTracker path="/" />
         <div className="mt-10 grid gap-3 sm:grid-cols-2">
           <Card className="rounded-2xl border-l-4 border-l-secondary p-4 card-gradient">
             <p className="text-sm text-muted-foreground">{t.disclaimer}</p>
