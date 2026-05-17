@@ -107,7 +107,7 @@ export const submitAssessment = createServerFn({ method: "POST" })
 
     const pid = participant.id;
 
-    const inserts: Promise<unknown>[] = [
+    const inserts: PromiseLike<unknown>[] = [
       db.from("consent_records").insert({ participant_id: pid, ...data.consent }),
       db.from("product_use").insert({ participant_id: pid, products: data.products }),
       db.from("readiness_stage").insert({ participant_id: pid, stage: data.readiness }),
