@@ -56,7 +56,7 @@ export function AqlaAssistant() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, sending]);
 
-  if (!status?.enabled) return null;
+  if (!isPublic || !status?.enabled) return null;
 
   const isRTL = lang === "ar";
   const t = {
