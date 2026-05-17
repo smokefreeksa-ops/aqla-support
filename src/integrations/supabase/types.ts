@@ -603,6 +603,7 @@ export type Database = {
           export_type: string | null
           id: string
           participant_code: string | null
+          provider_response: string | null
           recipient_email: string
           sent_at: string | null
           sent_status: string
@@ -617,6 +618,7 @@ export type Database = {
           export_type?: string | null
           id?: string
           participant_code?: string | null
+          provider_response?: string | null
           recipient_email: string
           sent_at?: string | null
           sent_status: string
@@ -631,6 +633,7 @@ export type Database = {
           export_type?: string | null
           id?: string
           participant_code?: string | null
+          provider_response?: string | null
           recipient_email?: string
           sent_at?: string | null
           sent_status?: string
