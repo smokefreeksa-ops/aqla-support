@@ -815,6 +815,23 @@ export const exportCsv = createServerFn({ method: "POST" })
     });
     await logAudit(context.userId, "export", "participants", undefined, { type: data.type, count: cleaned.length });
 
+    // Lookup who ran the export
+    const { data: userInfo } = await supabaseAdmin.auth.admin.getUserById(context.userId);
+    const generatedBy = userInfo?.user?.email ?? context.userId;
+    void sendAdminNotification(
+      "csv_export_alert",
+      `Aqla export generated — ${data.type}`,
+      `<h2 style="font-family:-apple-system,Segoe UI,Arial,sans-serif">Aqla CSV export</h2>${renderKeyValueHtml({
+        export_type: data.type,
+        generated_by: generatedBy,
+        generated_at: new Date().toISOString(),
+        research_consent_only: data.researchConsentOnly ? "yes" : "no",
+        cohort_filter: data.cohort ?? null,
+        estimated_row_count: cleaned.length,
+      })}<p style="font-family:-apple-system,Segoe UI,Arial,sans-serif;font-size:12px;color:#666">CSV file not attached. Download from the admin dashboard.</p>`,
+      { export_type: data.type, staff_email: generatedBy },
+    );
+
     return { csv, filename: `aqla_${data.type}_${new Date().toISOString().slice(0, 10)}.csv` };
   });
 
