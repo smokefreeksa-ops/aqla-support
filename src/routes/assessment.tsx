@@ -247,6 +247,18 @@ function Flow() {
       ever_tried: null,
       attempts_count: "",
       longest_quit_duration: "",
+      exposure_enabled: false,
+      family_smoking_exposure: "",
+      close_friend_smoking_or_nicotine_use: "",
+      secondhand_smoke_exposure_home: "",
+      secondhand_smoke_exposure_public_places: "",
+      seen_tobacco_or_nicotine_ads_social_media: "",
+      seen_tobacco_or_nicotine_ads_shops: "",
+      influencer_or_online_promotion_exposure: "",
+      easy_access_to_products: "",
+      main_source_of_products: "",
+      online_purchase_or_delivery_exposure: "",
+      purchase_attempt_underage_if_applicable: "",
     },
   });
 
