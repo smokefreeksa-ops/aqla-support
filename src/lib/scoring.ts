@@ -92,7 +92,9 @@ export function assignCohort(i: CohortInput): CohortResult {
   }
   const isMinor = (i.age ?? 99) < 18;
 
-  const veryHighDep = (i.ftnd ?? 0) >= 8 || (i.nicotineYes ?? 0) >= 8;
+  // Nicotine-control high concern is handled within Cohort C (doctor review flag),
+  // so it should not auto-escalate to Cohort F for non-cigarette nicotine users.
+  const veryHighDep = (i.ftnd ?? 0) >= 8;
   const fTrigger =
     urgent ||
     i.riskFlags.includes("pregnancy") ||
@@ -155,11 +157,13 @@ export function assignCohort(i: CohortInput): CohortResult {
   }
 
   if (hasNicProduct && (i.nicotineYes ?? 0) >= 3) {
+    const highConcern = (i.nicotineYes ?? 0) >= 6;
     return {
       cohort: "C",
-      reason:
-        "Vape / nicotine pouch / non-cigarette nicotine user with moderate-to-high nicotine-control concern.",
-      doctorReviewNeeded: false,
+      reason: highConcern
+        ? "High nicotine-control concern (vape / nicotine pouch / non-cigarette nicotine use) — clinician review recommended."
+        : "Vape / nicotine pouch / non-cigarette nicotine user with moderate nicotine-control concern.",
+      doctorReviewNeeded: highConcern,
       urgent,
     };
   }
