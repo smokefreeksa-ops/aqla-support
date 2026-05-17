@@ -12,6 +12,19 @@ export interface DataDictionaryEntry {
   researchPurpose: string;
   inAnonymizedExport: boolean;
   section: string;
+  // Extended research-grade metadata (optional for backward compatibility)
+  table_name?: string;
+  export_file?: string;
+  question_text_ar?: string;
+  question_text_en?: string;
+  response_options?: string;
+  branching_rule?: string;
+  source_framework?: string;
+  included_in_full_export?: boolean;
+  included_in_anonymized_export?: boolean;
+  included_in_research_export?: boolean;
+  identifiable_or_sensitive?: boolean;
+  missing_value_codes?: string;
 }
 
 export const DATA_DICTIONARY: DataDictionaryEntry[] = [
