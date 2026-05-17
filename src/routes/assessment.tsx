@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { useLang, useLangState, LangContext, type Lang } from "@/lib/i18n";
 import { submitAssessment, saveFollowUpPreference } from "@/lib/submit.functions";
 import { AlertTriangle, ArrowLeft, ArrowRight, ShieldAlert, Languages } from "lucide-react";
+import { VisitTracker } from "@/components/VisitTracker";
 
 export const Route = createFileRoute("/assessment")({
   head: () => ({
@@ -392,6 +393,7 @@ function Flow() {
 
   return (
     <div dir={dir} className="min-h-screen bg-background">
+      <VisitTracker path="/assessment" />
       <header className="border-b bg-card">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
           <Link to="/" className="text-sm font-medium text-muted-foreground hover:text-foreground">

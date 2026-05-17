@@ -14,6 +14,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useLang, useLangState, LangContext, type Lang } from "@/lib/i18n";
+import { VisitTracker } from "@/components/VisitTracker";
 import { submitVolunteer } from "@/lib/volunteer.functions";
 import { ArrowLeft, ArrowRight, Languages, Users, ShieldCheck, CheckCircle2 } from "lucide-react";
 
@@ -160,6 +161,7 @@ function Flow() {
 
   return (
     <div dir={dir} className="min-h-screen bg-background">
+      <VisitTracker path="/volunteer" />
       <header className="border-b bg-card/70 backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
           <Link to="/" className="flex items-center gap-2">
