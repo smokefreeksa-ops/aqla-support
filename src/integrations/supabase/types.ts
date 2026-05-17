@@ -295,6 +295,33 @@ export type Database = {
           },
         ]
       }
+      engagement_events: {
+        Row: {
+          anonymous_session_id: string
+          created_at: string
+          event_label: string | null
+          event_type: string
+          id: string
+          page_path: string | null
+        }
+        Insert: {
+          anonymous_session_id: string
+          created_at?: string
+          event_label?: string | null
+          event_type: string
+          id?: string
+          page_path?: string | null
+        }
+        Update: {
+          anonymous_session_id?: string
+          created_at?: string
+          event_label?: string | null
+          event_type?: string
+          id?: string
+          page_path?: string | null
+        }
+        Relationships: []
+      }
       export_logs: {
         Row: {
           created_at: string
@@ -737,6 +764,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      page_analytics: {
+        Row: {
+          anonymous_session_id: string
+          created_at: string
+          duration_seconds: number | null
+          entry_time: string
+          exit_time: string | null
+          id: string
+          language: string | null
+          page_path: string
+          page_title: string | null
+          referrer_type: string | null
+        }
+        Insert: {
+          anonymous_session_id: string
+          created_at?: string
+          duration_seconds?: number | null
+          entry_time?: string
+          exit_time?: string | null
+          id?: string
+          language?: string | null
+          page_path: string
+          page_title?: string | null
+          referrer_type?: string | null
+        }
+        Update: {
+          anonymous_session_id?: string
+          created_at?: string
+          duration_seconds?: number | null
+          entry_time?: string
+          exit_time?: string | null
+          id?: string
+          language?: string | null
+          page_path?: string
+          page_title?: string | null
+          referrer_type?: string | null
+        }
+        Relationships: []
       }
       page_views: {
         Row: {
@@ -1503,6 +1569,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_admin_analytics_dashboard: { Args: never; Returns: Json }
       get_public_impact_stats: { Args: never; Returns: Json }
       has_role: {
         Args: {
