@@ -580,7 +580,7 @@ export const exportCsv = createServerFn({ method: "POST" })
       const { data: rows, error } = await q;
       if (error) throw new Error(error.message);
       cleaned = (rows ?? []).map((r) =>
-        isAnon ? stripPiiStrict(r as Record<string, unknown>) : (r as Record<string, unknown>),
+        isAnon ? stripPiiStrict(r as unknown as Record<string, unknown>) : (r as unknown as Record<string, unknown>),
       );
     }
 
