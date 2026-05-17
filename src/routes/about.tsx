@@ -217,7 +217,8 @@ function Inner() {
       </main>
 
       <footer className="mx-auto max-w-6xl px-4 py-8 text-center text-xs text-muted-foreground">
-        © {isAr ? "أقلع" : "Aqla"} — {new Date().getFullYear()}
+        <SocialLinks />
+        <p className="mt-3">© {isAr ? "أقلع" : "Aqla"} — {new Date().getFullYear()}</p>
       </footer>
     </div>
   );

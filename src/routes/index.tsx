@@ -149,7 +149,8 @@ function Inner() {
       </main>
 
       <footer className="mx-auto max-w-6xl px-4 py-8 text-center text-xs text-muted-foreground">
-        © {t.brandShort} — {new Date().getFullYear()}
+        <SocialLinks />
+        <p className="mt-3">© {t.brandShort} — {new Date().getFullYear()}</p>
       </footer>
     </div>
   );
