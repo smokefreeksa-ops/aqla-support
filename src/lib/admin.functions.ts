@@ -818,7 +818,7 @@ export const exportCsv = createServerFn({ method: "POST" })
     // Lookup who ran the export
     const { data: userInfo } = await supabaseAdmin.auth.admin.getUserById(context.userId);
     const generatedBy = userInfo?.user?.email ?? context.userId;
-    void sendAdminNotification(
+    await sendAdminNotification(
       "csv_export_alert",
       `Aqla export generated — ${data.type}`,
       `<h2 style="font-family:-apple-system,Segoe UI,Arial,sans-serif">Aqla CSV export</h2>${renderKeyValueHtml({
@@ -882,7 +882,7 @@ export const addFollowUpVisit = createServerFn({ method: "POST" })
     const { data: userInfo } = await supabaseAdmin.auth.admin.getUserById(context.userId);
     const staffEmail = userInfo?.user?.email ?? context.userId;
     const pcode = (pInfo?.participant_code as string | undefined) ?? data.participant_id;
-    void sendAdminNotification(
+    await sendAdminNotification(
       "follow_up_visit",
       `Aqla follow-up visit logged — ${pcode}`,
       `<h2 style="font-family:-apple-system,Segoe UI,Arial,sans-serif">Aqla follow-up visit</h2>${renderKeyValueHtml({

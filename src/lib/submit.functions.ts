@@ -422,7 +422,7 @@ export const submitAssessment = createServerFn({ method: "POST" })
       consent: data.consent,
       research_publication_consent: data.extras?.consentResearchPublication ?? false,
     };
-    void sendAdminNotification(
+    await sendAdminNotification(
       "full_quit_support_submission",
       `Aqla full assessment submitted — ${participant.participant_code}`,
       `<h2 style="font-family:-apple-system,Segoe UI,Arial,sans-serif">Aqla full assessment</h2>${renderKeyValueHtml(emailBody)}`,
