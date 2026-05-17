@@ -46,6 +46,81 @@ function AssistantStatusBanner() {
   );
 }
 
+function NotificationsCard() {
+  const testFn = useServerFn(sendTestEmail);
+  const listFn = useServerFn(listRecentNotifications);
+  const { data, refetch, isFetching } = useQuery({
+    queryKey: ["notification-log"],
+    queryFn: () => listFn(),
+    staleTime: 15_000,
+  });
+  const [busy, setBusy] = useState(false);
+
+  async function handleTest() {
+    setBusy(true);
+    try {
+      const res = await testFn();
+      if (res.ok) toast.success("Test email sent");
+      else toast.error(`Test failed: ${res.result?.error_message ?? "see log"}`);
+      refetch();
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const rows = data?.rows ?? [];
+  return (
+    <Card className="p-4">
+      <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <Mail className="h-4 w-4 text-primary" />
+        Email notifications
+        <span className="ml-auto flex items-center gap-2">
+          <Button size="sm" variant="outline" onClick={() => refetch()} disabled={isFetching}>
+            <RefreshCw className={`h-3.5 w-3.5 ${isFetching ? "animate-spin" : ""}`} />
+          </Button>
+          <Button size="sm" onClick={handleTest} disabled={busy}>
+            <Send className="h-3.5 w-3.5 mr-1" />
+            {busy ? "Sending…" : "Send test email"}
+          </Button>
+        </span>
+      </div>
+      <div className="mt-3 overflow-x-auto">
+        <table className="w-full text-xs">
+          <thead className="text-left text-muted-foreground">
+            <tr>
+              <th className="py-1.5 pr-3">When</th>
+              <th className="py-1.5 pr-3">Event</th>
+              <th className="py-1.5 pr-3">Recipient</th>
+              <th className="py-1.5 pr-3">Status</th>
+              <th className="py-1.5 pr-3">Provider response</th>
+              <th className="py-1.5 pr-3">Error</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.length === 0 && (
+              <tr><td colSpan={6} className="py-3 text-muted-foreground">No notifications yet.</td></tr>
+            )}
+            {rows.map((r) => (
+              <tr key={r.id} className="border-t">
+                <td className="py-1.5 pr-3 whitespace-nowrap">{new Date(r.created_at).toLocaleString()}</td>
+                <td className="py-1.5 pr-3">{r.event_type}</td>
+                <td className="py-1.5 pr-3">{r.recipient_email ?? "—"}</td>
+                <td className="py-1.5 pr-3">
+                  <Badge variant={r.sent_status === "sent" ? "default" : "destructive"}>{r.sent_status}</Badge>
+                </td>
+                <td className="py-1.5 pr-3 max-w-[280px] truncate" title={r.provider_response ?? ""}>{r.provider_response ?? "—"}</td>
+                <td className="py-1.5 pr-3 max-w-[240px] truncate text-destructive" title={r.error_message ?? ""}>{r.error_message ?? "—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </Card>
+  );
+}
+
 function AdminAnalyticsCard() {
   const statsFn = useServerFn(getPublicImpactStats);
   const assistFn = useServerFn(getAssistantStatus);
