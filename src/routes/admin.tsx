@@ -125,9 +125,13 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
   }
   useEffect(() => { refresh(); /* eslint-disable-next-line */ }, []);
 
-  async function doExport(type: "full" | "anonymized" | "cohort" | "follow_up_due" | "research") {
+  const [researchOnly, setResearchOnly] = useState(false);
+  async function doExport(
+    type: "full" | "anonymized" | "cohort" | "follow_up_due" | "research"
+      | "baseline" | "follow_up_outcomes" | "product_use" | "youth_nicotine" | "city_summary",
+  ) {
     try {
-      const r = await exportFn({ data: { type, cohort: cohort || undefined } });
+      const r = await exportFn({ data: { type, cohort: cohort || undefined, researchConsentOnly: researchOnly || undefined } });
       const blob = new Blob([r.csv], { type: "text/csv" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob); a.download = r.filename; a.click();
