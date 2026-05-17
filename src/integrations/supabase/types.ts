@@ -197,6 +197,57 @@ export type Database = {
           },
         ]
       }
+      community_exposure: {
+        Row: {
+          close_friend_smoking_or_nicotine_use: string | null
+          created_at: string
+          easy_access_to_products: string | null
+          family_smoking_exposure: string | null
+          id: string
+          influencer_or_online_promotion_exposure: string | null
+          main_source_of_products: string | null
+          online_purchase_or_delivery_exposure: string | null
+          participant_id: string
+          purchase_attempt_underage_if_applicable: string | null
+          secondhand_smoke_exposure_home: string | null
+          secondhand_smoke_exposure_public_places: string | null
+          seen_tobacco_or_nicotine_ads_shops: string | null
+          seen_tobacco_or_nicotine_ads_social_media: string | null
+        }
+        Insert: {
+          close_friend_smoking_or_nicotine_use?: string | null
+          created_at?: string
+          easy_access_to_products?: string | null
+          family_smoking_exposure?: string | null
+          id?: string
+          influencer_or_online_promotion_exposure?: string | null
+          main_source_of_products?: string | null
+          online_purchase_or_delivery_exposure?: string | null
+          participant_id: string
+          purchase_attempt_underage_if_applicable?: string | null
+          secondhand_smoke_exposure_home?: string | null
+          secondhand_smoke_exposure_public_places?: string | null
+          seen_tobacco_or_nicotine_ads_shops?: string | null
+          seen_tobacco_or_nicotine_ads_social_media?: string | null
+        }
+        Update: {
+          close_friend_smoking_or_nicotine_use?: string | null
+          created_at?: string
+          easy_access_to_products?: string | null
+          family_smoking_exposure?: string | null
+          id?: string
+          influencer_or_online_promotion_exposure?: string | null
+          main_source_of_products?: string | null
+          online_purchase_or_delivery_exposure?: string | null
+          participant_id?: string
+          purchase_attempt_underage_if_applicable?: string | null
+          secondhand_smoke_exposure_home?: string | null
+          secondhand_smoke_exposure_public_places?: string | null
+          seen_tobacco_or_nicotine_ads_shops?: string | null
+          seen_tobacco_or_nicotine_ads_social_media?: string | null
+        }
+        Relationships: []
+      }
       consent_records: {
         Row: {
           consent_assessment: boolean
@@ -340,6 +391,7 @@ export type Database = {
       }
       follow_up_visits: {
         Row: {
+          abstinence_duration_days: number | null
           abstinent: boolean | null
           cigarettes_per_day: number | null
           co_reading: number | null
@@ -353,15 +405,19 @@ export type Database = {
           lost_to_follow_up: boolean | null
           notes: string | null
           participant_id: string
+          percent_reduction_estimate: number | null
           pouches_per_day: number | null
           quit_attempt_made: boolean | null
           reduced_use: boolean | null
           relapsed: boolean | null
+          satisfaction_with_support_0_10: number | null
           vaping_frequency: string | null
           visit_date: string
           visit_point: string
+          withdrawal_severity_0_10: number | null
         }
         Insert: {
+          abstinence_duration_days?: number | null
           abstinent?: boolean | null
           cigarettes_per_day?: number | null
           co_reading?: number | null
@@ -375,15 +431,19 @@ export type Database = {
           lost_to_follow_up?: boolean | null
           notes?: string | null
           participant_id: string
+          percent_reduction_estimate?: number | null
           pouches_per_day?: number | null
           quit_attempt_made?: boolean | null
           reduced_use?: boolean | null
           relapsed?: boolean | null
+          satisfaction_with_support_0_10?: number | null
           vaping_frequency?: string | null
           visit_date?: string
           visit_point: string
+          withdrawal_severity_0_10?: number | null
         }
         Update: {
+          abstinence_duration_days?: number | null
           abstinent?: boolean | null
           cigarettes_per_day?: number | null
           co_reading?: number | null
@@ -397,13 +457,16 @@ export type Database = {
           lost_to_follow_up?: boolean | null
           notes?: string | null
           participant_id?: string
+          percent_reduction_estimate?: number | null
           pouches_per_day?: number | null
           quit_attempt_made?: boolean | null
           reduced_use?: boolean | null
           relapsed?: boolean | null
+          satisfaction_with_support_0_10?: number | null
           vaping_frequency?: string | null
           visit_date?: string
           visit_point?: string
+          withdrawal_severity_0_10?: number | null
         }
         Relationships: []
       }

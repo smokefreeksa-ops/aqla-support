@@ -346,6 +346,7 @@ export const exportCsv = createServerFn({ method: "POST" })
           "full", "anonymized", "cohort", "follow_up_due", "research",
           "baseline", "follow_up_outcomes", "product_use", "youth_nicotine", "city_summary",
           "dependence_items", "readiness_quit_history", "research_consent_only",
+          "community_exposure",
         ]),
         cohort: z.string().optional(),
         researchConsentOnly: z.boolean().optional(),
@@ -432,6 +433,10 @@ export const exportCsv = createServerFn({ method: "POST" })
         craving_severity_0_10: r.craving_0_10 ?? null,
         confidence_to_quit_0_10: r.confidence_0_10 ?? null,
         co_reading_ppm_optional: r.co_reading ?? null,
+        withdrawal_severity_0_10: r.withdrawal_severity_0_10 ?? null,
+        abstinence_duration_days: r.abstinence_duration_days ?? null,
+        percent_reduction_estimate: r.percent_reduction_estimate ?? null,
+        satisfaction_with_support_0_10: r.satisfaction_with_support_0_10 ?? null,
       }));
       // Sort: by code, then timepoint order
       const order = ["baseline", ...FOLLOWUP_TIMEPOINTS.map((t) => FOLLOWUP_LABEL[t])];
@@ -755,6 +760,25 @@ export const exportCsv = createServerFn({ method: "POST" })
           honc_category: honMap.get(p.id)?.category ?? null,
         };
       });
+    } else if (data.type === "community_exposure") {
+      const { data: ce } = await supabaseAdmin
+        .from("community_exposure").select("*").in("participant_id", PID_SAFE);
+      const NA = (v: unknown) => (v == null || v === "" ? "not_answered" : v);
+      cleaned = (ce ?? []).map((r) => ({
+        participant_code: codeOf(r.participant_id),
+        submission_date: r.created_at,
+        family_smoking_exposure: NA(r.family_smoking_exposure),
+        close_friend_smoking_or_nicotine_use: NA(r.close_friend_smoking_or_nicotine_use),
+        secondhand_smoke_exposure_home: NA(r.secondhand_smoke_exposure_home),
+        secondhand_smoke_exposure_public_places: NA(r.secondhand_smoke_exposure_public_places),
+        seen_tobacco_or_nicotine_ads_social_media: NA(r.seen_tobacco_or_nicotine_ads_social_media),
+        seen_tobacco_or_nicotine_ads_shops: NA(r.seen_tobacco_or_nicotine_ads_shops),
+        influencer_or_online_promotion_exposure: NA(r.influencer_or_online_promotion_exposure),
+        easy_access_to_products: NA(r.easy_access_to_products),
+        main_source_of_products: NA(r.main_source_of_products),
+        online_purchase_or_delivery_exposure: NA(r.online_purchase_or_delivery_exposure),
+        purchase_attempt_underage_if_applicable: NA(r.purchase_attempt_underage_if_applicable),
+      }));
     } else {
       // full / anonymized / cohort / follow_up_due / research
       const isAnon = data.type === "anonymized" || data.type === "research";
@@ -810,6 +834,10 @@ export const addFollowUpVisit = createServerFn({ method: "POST" })
         craving_0_10: z.number().int().min(0).max(10).optional(),
         confidence_0_10: z.number().int().min(0).max(10).optional(),
         co_reading: z.number().min(0).max(100).optional(),
+        withdrawal_severity_0_10: z.number().int().min(0).max(10).optional(),
+        abstinence_duration_days: z.number().int().min(0).max(3650).optional(),
+        percent_reduction_estimate: z.number().int().min(0).max(100).optional(),
+        satisfaction_with_support_0_10: z.number().int().min(0).max(10).optional(),
         notes: z.string().max(2000).optional(),
       })
       .parse(d),

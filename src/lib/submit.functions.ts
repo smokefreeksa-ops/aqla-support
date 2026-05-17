@@ -117,6 +117,21 @@ const ExtrasSchema = z
       })
       .optional(),
     consentResearchPublication: z.boolean().optional(),
+    communityExposure: z
+      .object({
+        family_smoking_exposure: z.string().max(40).nullable().optional(),
+        close_friend_smoking_or_nicotine_use: z.string().max(40).nullable().optional(),
+        secondhand_smoke_exposure_home: z.string().max(40).nullable().optional(),
+        secondhand_smoke_exposure_public_places: z.string().max(40).nullable().optional(),
+        seen_tobacco_or_nicotine_ads_social_media: z.string().max(40).nullable().optional(),
+        seen_tobacco_or_nicotine_ads_shops: z.string().max(40).nullable().optional(),
+        influencer_or_online_promotion_exposure: z.string().max(40).nullable().optional(),
+        easy_access_to_products: z.string().max(40).nullable().optional(),
+        main_source_of_products: z.string().max(80).nullable().optional(),
+        online_purchase_or_delivery_exposure: z.string().max(40).nullable().optional(),
+        purchase_attempt_underage_if_applicable: z.string().max(40).nullable().optional(),
+      })
+      .optional(),
   })
   .optional();
 
@@ -367,6 +382,9 @@ export const submitAssessment = createServerFn({ method: "POST" })
       }
       if (extras.shishaModule) {
         inserts.push(db.from("shisha_module").insert({ participant_id: pid, ...extras.shishaModule }));
+      }
+      if (extras.communityExposure) {
+        inserts.push(db.from("community_exposure").insert({ participant_id: pid, ...extras.communityExposure }));
       }
     }
     await Promise.all(inserts);
