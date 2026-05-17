@@ -383,6 +383,9 @@ export const submitAssessment = createServerFn({ method: "POST" })
       if (extras.shishaModule) {
         inserts.push(db.from("shisha_module").insert({ participant_id: pid, ...extras.shishaModule }));
       }
+      if (extras.communityExposure) {
+        inserts.push(db.from("community_exposure").insert({ participant_id: pid, ...extras.communityExposure }));
+      }
     }
     await Promise.all(inserts);
 
