@@ -84,24 +84,43 @@ function AdminPage() {
 }
 
 /* ---------------- Participants (smoker) ---------------- */
+const PRODUCTS = ["cigarettes","vape","shisha","pouches","smokeless","multiple","former","non_user"];
+const READINESS_VALUES = ["quit_now","quit_prepare","reduce_first","not_ready_score","discuss_alternatives","score_only","helping_someone"];
+const DEP_CATS = [
+  "Very low cigarette dependence","Low cigarette dependence","Moderate cigarette dependence",
+  "High cigarette dependence","Very high cigarette dependence",
+];
+
 function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) => void; isPhysician: boolean }) {
   const list = useServerFn(listParticipants);
   const stats = useServerFn(getDashboardStats);
   const exportFn = useServerFn(exportCsv);
   const [rows, setRows] = useState<Row[]>([]);
+  const [enrich, setEnrich] = useState<Awaited<ReturnType<typeof listParticipants>>["enrich"]>({});
   const [statsData, setStatsData] = useState<Awaited<ReturnType<typeof getDashboardStats>>["stats"] | null>(null);
   const [search, setSearch] = useState("");
   const [cohort, setCohort] = useState<string>("");
+  const [product, setProduct] = useState<string>("");
+  const [readiness, setReadiness] = useState<string>("");
+  const [depCategory, setDepCategory] = useState<string>("");
+  const [city, setCity] = useState("");
+  const [affiliation, setAffiliation] = useState("");
   const [drOnly, setDrOnly] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   async function refresh() {
     try {
       const [l, st] = await Promise.all([
-        list({ data: { search: search || undefined, cohort: cohort || undefined, doctorReview: drOnly || undefined } }),
+        list({ data: {
+          search: search || undefined, cohort: cohort || undefined,
+          doctorReview: drOnly || undefined,
+          product: product || undefined, readiness: readiness || undefined,
+          depCategory: depCategory || undefined,
+          city: city || undefined, affiliation: affiliation || undefined,
+        } }),
         stats({}),
       ]);
-      setRows(l.rows); onRoles(l.roles); setStatsData(st.stats);
+      setRows(l.rows); setEnrich(l.enrich); onRoles(l.roles); setStatsData(st.stats);
     } catch (e) { toast.error((e as Error).message); }
   }
   useEffect(() => { refresh(); /* eslint-disable-next-line */ }, []);
@@ -147,6 +166,44 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
               </SelectContent>
             </Select>
           </div>
+          <div className="w-40">
+            <label className="text-xs text-muted-foreground">Product</label>
+            <Select value={product || "all"} onValueChange={(v) => setProduct(v === "all" ? "" : v)}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                {PRODUCTS.map((p) => <SelectItem key={p} value={p}>{p.replace(/_/g, " ")}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="w-44">
+            <label className="text-xs text-muted-foreground">Readiness</label>
+            <Select value={readiness || "all"} onValueChange={(v) => setReadiness(v === "all" ? "" : v)}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                {READINESS_VALUES.map((r) => <SelectItem key={r} value={r}>{r.replace(/_/g, " ")}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="w-56">
+            <label className="text-xs text-muted-foreground">Dependence category</label>
+            <Select value={depCategory || "all"} onValueChange={(v) => setDepCategory(v === "all" ? "" : v)}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                {DEP_CATS.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="w-36">
+            <label className="text-xs text-muted-foreground">City</label>
+            <Input value={city} onChange={(e) => setCity(e.target.value)} placeholder="City…" />
+          </div>
+          <div className="w-48">
+            <label className="text-xs text-muted-foreground">School / University / Workplace</label>
+            <Input value={affiliation} onChange={(e) => setAffiliation(e.target.value)} placeholder="Affiliation…" />
+          </div>
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" checked={drOnly} onChange={(e) => setDrOnly(e.target.checked)} />
             Doctor review only
@@ -169,25 +226,38 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
           <thead className="bg-muted/40 text-left">
             <tr>
               <th className="p-2">ID</th><th className="p-2">Name</th><th className="p-2">Mobile</th>
-              <th className="p-2">Age</th><th className="p-2">City</th><th className="p-2">Cohort</th>
-              <th className="p-2">Dr</th><th className="p-2">Contacted</th><th className="p-2"></th>
+              <th className="p-2">City</th><th className="p-2">Product</th>
+              <th className="p-2">Score</th><th className="p-2">Readiness</th>
+              <th className="p-2">Cohort</th><th className="p-2">Dr</th>
+              <th className="p-2">Follow-up</th><th className="p-2">Status</th><th className="p-2"></th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((r) => (
-              <tr key={r.id} className="border-t hover:bg-muted/30">
-                <td className="p-2 font-mono text-xs">{r.participant_code}</td>
-                <td className="p-2">{r.full_name}</td>
-                <td className="p-2">{r.mobile}</td>
-                <td className="p-2">{r.age ?? "—"}</td>
-                <td className="p-2">{r.city ?? "—"}</td>
-                <td className="p-2"><Badge>{r.cohort}</Badge></td>
-                <td className="p-2">{r.doctor_review_needed ? <Badge variant="destructive">Yes</Badge> : "—"}</td>
-                <td className="p-2">{r.contacted ? "✓" : "—"}</td>
-                <td className="p-2"><Button size="sm" variant="outline" onClick={() => setSelectedId(r.id)}>Open</Button></td>
-              </tr>
-            ))}
-            {rows.length === 0 && <tr><td colSpan={9} className="p-8 text-center text-muted-foreground">No participants yet.</td></tr>}
+            {rows.map((r) => {
+              const e = enrich[r.id] ?? {};
+              const scoreLabel = e.ftnd
+                ? `${e.ftnd.total}/10 cig`
+                : e.nic
+                  ? `${e.nic.yes_count}/10 nic`
+                  : "—";
+              return (
+                <tr key={r.id} className="border-t hover:bg-muted/30">
+                  <td className="p-2 font-mono text-xs">{r.participant_code}</td>
+                  <td className="p-2">{r.full_name}</td>
+                  <td className="p-2">{r.mobile}</td>
+                  <td className="p-2">{r.city ?? "—"}</td>
+                  <td className="p-2 text-xs">{(e.products ?? []).map((p) => p.replace(/_/g, " ")).join(", ") || "—"}</td>
+                  <td className="p-2 font-medium">{scoreLabel}</td>
+                  <td className="p-2 text-xs">{e.readiness ? e.readiness.replace(/_/g, " ") : "—"}</td>
+                  <td className="p-2"><Badge>{r.cohort}</Badge></td>
+                  <td className="p-2">{r.doctor_review_needed ? <Badge variant="destructive">Yes</Badge> : "—"}</td>
+                  <td className="p-2 text-xs">{e.followUp ? e.followUp.replace(/_/g, " ") : "—"}</td>
+                  <td className="p-2 text-xs">{r.contacted ? "contacted" : (r.follow_up_status ?? "new")}</td>
+                  <td className="p-2"><Button size="sm" variant="outline" onClick={() => setSelectedId(r.id)}>Open</Button></td>
+                </tr>
+              );
+            })}
+            {rows.length === 0 && <tr><td colSpan={12} className="p-8 text-center text-muted-foreground">No participants yet.</td></tr>}
           </tbody>
         </table>
       </Card>
