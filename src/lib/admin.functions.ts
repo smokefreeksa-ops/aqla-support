@@ -263,8 +263,9 @@ export const exportCsv = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) =>
     z
       .object({
-        type: z.enum(["full", "anonymized", "cohort", "follow_up_due", "research"]),
+        type: z.enum(["full", "anonymized", "cohort", "follow_up_due", "research", "baseline", "follow_up_outcomes", "product_use", "youth_nicotine", "city_summary"]),
         cohort: z.string().optional(),
+        researchConsentOnly: z.boolean().optional(),
       })
       .parse(d),
   )
