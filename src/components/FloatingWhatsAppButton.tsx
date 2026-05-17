@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "@tanstack/react-router";
+import { trackEvent } from "@/lib/track-event";
 
 export function FloatingWhatsAppButton() {
   const location = useLocation();
