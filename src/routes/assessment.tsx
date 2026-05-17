@@ -65,6 +65,16 @@ type State = {
   readiness: string;
   riskFlags: string[];
   followUp: string;
+  research: {
+    enabled: boolean;
+    consent_publication: boolean;
+    importance_0_10: string;
+    confidence_0_10: string;
+    main_reason: string;
+    ever_tried: boolean | null;
+    attempts_count: string;
+    longest_quit_duration: string;
+  };
 };
 
 const PRODUCT_OPTIONS = [
@@ -216,6 +226,16 @@ function Flow() {
     readiness: "",
     riskFlags: [],
     followUp: "whatsapp_messages",
+    research: {
+      enabled: false,
+      consent_publication: false,
+      importance_0_10: "",
+      confidence_0_10: "",
+      main_reason: "",
+      ever_tried: null,
+      attempts_count: "",
+      longest_quit_duration: "",
+    },
   });
 
   const hasCig = s.products.includes("cigarettes");
@@ -286,6 +306,22 @@ function Flow() {
       const ftnd = hasCig ? s.ftnd : null;
       const nicotine = hasNicProduct ? s.nicotine : null;
       const ageNum = s.triage.age ? Number(s.triage.age) : null;
+      const re = s.research;
+      const extras = re.enabled
+        ? {
+            consentResearchPublication: re.consent_publication,
+            motivation: {
+              importance_0_10: re.importance_0_10 ? Number(re.importance_0_10) : null,
+              confidence_0_10: re.confidence_0_10 ? Number(re.confidence_0_10) : null,
+              main_reason: re.main_reason || null,
+            },
+            quitHistory: {
+              ever_tried: re.ever_tried,
+              attempts_count: re.attempts_count ? Number(re.attempts_count) : null,
+              longest_quit_duration: re.longest_quit_duration || null,
+            },
+          }
+        : undefined;
       const r = await submit({
         data: {
           triage: {
@@ -299,6 +335,7 @@ function Flow() {
           nicotine,
           readiness: s.readiness as never,
           riskFlags: s.riskFlags,
+          extras,
         },
       });
       setResult(r);
@@ -553,6 +590,77 @@ function Flow() {
             {s.riskFlags.some((f) => ["severe_chest_pain", "severe_sob", "coughing_blood"].includes(f)) && (
               <div className="mt-3 rounded-lg border border-destructive bg-destructive/10 p-3 text-sm text-destructive flex gap-2">
                 <ShieldAlert className="h-5 w-5 shrink-0" /> {t.urgentMsg}
+              </div>
+            )}
+          </Card>
+        )}
+
+        {step === 5 && (
+          <Card className="mt-4 p-5">
+            <label className="flex items-start gap-3 cursor-pointer">
+              <Checkbox
+                checked={s.research.enabled}
+                onCheckedChange={(v) => setS((p) => ({ ...p, research: { ...p.research, enabled: !!v } }))}
+              />
+              <div>
+                <div className="font-semibold">
+                  {lang === "ar" ? "إضافة بحثية اختيارية (دقيقة واحدة)" : "Optional research extension (1 minute)"}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  {lang === "ar"
+                    ? "ساعدنا في فهم التدخين في مدينتنا. لن يؤثر هذا على رعايتك."
+                    : "Help us understand nicotine use in our city. This will not affect your care."}
+                </div>
+              </div>
+            </label>
+            {s.research.enabled && (
+              <div className="mt-4 space-y-3">
+                <label className="flex items-start gap-3 rounded-lg border p-3 cursor-pointer">
+                  <Checkbox
+                    checked={s.research.consent_publication}
+                    onCheckedChange={(v) => setS((p) => ({ ...p, research: { ...p.research, consent_publication: !!v } }))}
+                  />
+                  <span className="text-sm">
+                    {lang === "ar"
+                      ? "أوافق على استخدام بياناتي المجهولة في النشر العلمي عند الموافقة الأخلاقية."
+                      : "I agree my anonymized data may be used for research publication, subject to ethics approval."}
+                  </span>
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <Field label={lang === "ar" ? "أهمية الإقلاع (0–10)" : "Importance of quitting (0–10)"}>
+                    <Input type="number" min={0} max={10}
+                      value={s.research.importance_0_10}
+                      onChange={(e) => setS((p) => ({ ...p, research: { ...p.research, importance_0_10: e.target.value } }))} />
+                  </Field>
+                  <Field label={lang === "ar" ? "ثقتك بقدرتك (0–10)" : "Confidence you can quit (0–10)"}>
+                    <Input type="number" min={0} max={10}
+                      value={s.research.confidence_0_10}
+                      onChange={(e) => setS((p) => ({ ...p, research: { ...p.research, confidence_0_10: e.target.value } }))} />
+                  </Field>
+                </div>
+                <Field label={lang === "ar" ? "السبب الرئيسي للإقلاع" : "Main reason to quit"}>
+                  <Input value={s.research.main_reason}
+                    onChange={(e) => setS((p) => ({ ...p, research: { ...p.research, main_reason: e.target.value } }))} />
+                </Field>
+                <YesNo
+                  label={lang === "ar" ? "هل سبق وحاولت الإقلاع؟" : "Have you ever tried to quit?"}
+                  value={s.research.ever_tried ?? false}
+                  onChange={(v) => setS((p) => ({ ...p, research: { ...p.research, ever_tried: v } }))}
+                />
+                {s.research.ever_tried && (
+                  <div className="grid grid-cols-2 gap-3">
+                    <Field label={lang === "ar" ? "عدد المحاولات" : "Number of attempts"}>
+                      <Input type="number" min={0} max={99}
+                        value={s.research.attempts_count}
+                        onChange={(e) => setS((p) => ({ ...p, research: { ...p.research, attempts_count: e.target.value } }))} />
+                    </Field>
+                    <Field label={lang === "ar" ? "أطول فترة إقلاع" : "Longest quit duration"}>
+                      <Input placeholder={lang === "ar" ? "مثلاً: 3 أشهر" : "e.g. 3 months"}
+                        value={s.research.longest_quit_duration}
+                        onChange={(e) => setS((p) => ({ ...p, research: { ...p.research, longest_quit_duration: e.target.value } }))} />
+                    </Field>
+                  </div>
+                )}
               </div>
             )}
           </Card>

@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import {
   listParticipants, getDashboardStats, getParticipant,
-  updateParticipantReception, addClinicalNote, updateOutcome, exportCsv,
+  updateParticipantReception, addClinicalNote, updateOutcome, exportCsv, addFollowUpVisit,
 } from "@/lib/admin.functions";
 import {
   listVolunteers, getVolunteerStats, getVolunteer, updateVolunteer, addVolunteerNote,
@@ -125,9 +125,13 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
   }
   useEffect(() => { refresh(); /* eslint-disable-next-line */ }, []);
 
-  async function doExport(type: "full" | "anonymized" | "cohort" | "follow_up_due" | "research") {
+  const [researchOnly, setResearchOnly] = useState(false);
+  async function doExport(
+    type: "full" | "anonymized" | "cohort" | "follow_up_due" | "research"
+      | "baseline" | "follow_up_outcomes" | "product_use" | "youth_nicotine" | "city_summary",
+  ) {
     try {
-      const r = await exportFn({ data: { type, cohort: cohort || undefined } });
+      const r = await exportFn({ data: { type, cohort: cohort || undefined, researchConsentOnly: researchOnly || undefined } });
       const blob = new Blob([r.csv], { type: "text/csv" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob); a.download = r.filename; a.click();
@@ -210,15 +214,29 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
           </label>
           <Button onClick={refresh} variant="outline" size="sm"><RefreshCw className="h-4 w-4 mr-1" /> Apply</Button>
           {isPhysician && (
-            <div className="ml-auto flex flex-wrap gap-1">
+            <div className="ml-auto flex flex-wrap items-center gap-1">
+              <label className="flex items-center gap-1 text-xs mr-2">
+                <input type="checkbox" checked={researchOnly} onChange={(e) => setResearchOnly(e.target.checked)} />
+                Research consent only
+              </label>
               <Button size="sm" variant="outline" onClick={() => doExport("full")}><Download className="h-4 w-4 mr-1" />Full</Button>
               <Button size="sm" variant="outline" onClick={() => doExport("anonymized")}><Download className="h-4 w-4 mr-1" />Anonymized</Button>
               <Button size="sm" variant="outline" onClick={() => doExport("cohort")} disabled={!cohort}><Download className="h-4 w-4 mr-1" />Cohort</Button>
               <Button size="sm" variant="outline" onClick={() => doExport("follow_up_due")}><Download className="h-4 w-4 mr-1" />Follow-up due</Button>
-              <Button size="sm" variant="outline" onClick={() => doExport("research")}><Download className="h-4 w-4 mr-1" />Research</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("baseline")}><Download className="h-4 w-4 mr-1" />Baseline</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("follow_up_outcomes")}><Download className="h-4 w-4 mr-1" />Outcomes</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("product_use")}><Download className="h-4 w-4 mr-1" />Product use</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("youth_nicotine")}><Download className="h-4 w-4 mr-1" />Youth</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("city_summary")}><Download className="h-4 w-4 mr-1" />City summary</Button>
             </div>
           )}
         </div>
+        {isPhysician && (
+          <p className="mt-2 text-xs text-muted-foreground">
+            <ShieldAlert className="inline h-3 w-3 mr-1" />
+            Anonymized / research / baseline / outcomes / youth / city exports strip name, mobile, email, and free-text notes. Tick "Research consent only" to limit rows to participants who consented to research publication.
+          </p>
+        )}
       </Card>
 
       <Card className="overflow-x-auto">
@@ -608,6 +626,12 @@ function DetailDrawer({ id, onClose, isPhysician }: { id: string; onClose: () =>
                 </label>
               </div>
             </Card>
+
+            <FollowUpVisitsCard
+              participantId={id}
+              visits={data.followups ?? []}
+              onChange={async () => { const fresh = await get({ data: { id } }); setData(fresh); }}
+            />
           </>
         )}
       </div>
@@ -621,5 +645,108 @@ function Info({ label, children }: { label: string; children: React.ReactNode })
       <div className="text-xs text-muted-foreground">{label}</div>
       <div>{children}</div>
     </div>
+  );
+}
+
+const VISIT_POINTS = ["1w", "4w", "12w", "6m", "12m"] as const;
+type VisitPoint = (typeof VISIT_POINTS)[number];
+
+function FollowUpVisitsCard({
+  participantId, visits, onChange,
+}: {
+  participantId: string;
+  visits: Array<Record<string, unknown>>;
+  onChange: () => void | Promise<void>;
+}) {
+  const add = useServerFn(addFollowUpVisit);
+  const [visitPoint, setVisitPoint] = useState<VisitPoint>("1w");
+  const [contacted, setContacted] = useState(true);
+  const [abstinent, setAbstinent] = useState(false);
+  const [reduced, setReduced] = useState(false);
+  const [relapsed, setRelapsed] = useState(false);
+  const [lost, setLost] = useState(false);
+  const [craving, setCraving] = useState("");
+  const [confidence, setConfidence] = useState("");
+  const [cpd, setCpd] = useState("");
+  const [notes, setNotes] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  async function save() {
+    setSaving(true);
+    try {
+      await add({
+        data: {
+          participant_id: participantId,
+          visit_point: visitPoint,
+          contacted, abstinent, reduced_use: reduced, relapsed, lost_to_follow_up: lost,
+          craving_0_10: craving ? Number(craving) : undefined,
+          confidence_0_10: confidence ? Number(confidence) : undefined,
+          cigarettes_per_day: cpd ? Number(cpd) : undefined,
+          notes: notes || undefined,
+        },
+      });
+      setNotes(""); setCraving(""); setConfidence(""); setCpd("");
+      toast.success("Follow-up visit logged");
+      await onChange();
+    } catch (e) { toast.error((e as Error).message); }
+    finally { setSaving(false); }
+  }
+
+  return (
+    <Card className="mt-4 p-3 space-y-3">
+      <h3 className="font-semibold">Follow-up visits</h3>
+      <div className="space-y-1 max-h-40 overflow-y-auto">
+        {visits.length === 0 && <p className="text-xs text-muted-foreground">No follow-up visits yet.</p>}
+        {visits.map((v) => (
+          <div key={v.id as string} className="rounded border p-2 text-xs">
+            <div className="flex justify-between">
+              <Badge variant="outline">{v.visit_point as string}</Badge>
+              <span className="text-muted-foreground">{new Date(v.created_at as string).toLocaleDateString()}</span>
+            </div>
+            <div className="mt-1 flex flex-wrap gap-1">
+              {v.abstinent ? <Badge>abstinent</Badge> : null}
+              {v.reduced_use ? <Badge variant="secondary">reduced</Badge> : null}
+              {v.relapsed ? <Badge variant="destructive">relapsed</Badge> : null}
+              {v.lost_to_follow_up ? <Badge variant="outline">lost</Badge> : null}
+            </div>
+            {v.notes ? <div className="mt-1">{v.notes as string}</div> : null}
+          </div>
+        ))}
+      </div>
+      <div className="border-t pt-3 space-y-2">
+        <div className="grid grid-cols-2 gap-2">
+          <label className="space-y-1 text-xs">
+            <span className="text-muted-foreground">Visit point</span>
+            <Select value={visitPoint} onValueChange={(v) => setVisitPoint(v as VisitPoint)}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {VISIT_POINTS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </label>
+          <label className="space-y-1 text-xs">
+            <span className="text-muted-foreground">Cigarettes / day</span>
+            <Input type="number" min={0} max={200} value={cpd} onChange={(e) => setCpd(e.target.value)} />
+          </label>
+          <label className="space-y-1 text-xs">
+            <span className="text-muted-foreground">Craving (0–10)</span>
+            <Input type="number" min={0} max={10} value={craving} onChange={(e) => setCraving(e.target.value)} />
+          </label>
+          <label className="space-y-1 text-xs">
+            <span className="text-muted-foreground">Confidence (0–10)</span>
+            <Input type="number" min={0} max={10} value={confidence} onChange={(e) => setConfidence(e.target.value)} />
+          </label>
+        </div>
+        <div className="flex flex-wrap gap-3 text-xs">
+          <label className="flex items-center gap-1"><input type="checkbox" checked={contacted} onChange={(e) => setContacted(e.target.checked)} /> Contacted</label>
+          <label className="flex items-center gap-1"><input type="checkbox" checked={abstinent} onChange={(e) => setAbstinent(e.target.checked)} /> Abstinent</label>
+          <label className="flex items-center gap-1"><input type="checkbox" checked={reduced} onChange={(e) => setReduced(e.target.checked)} /> Reduced</label>
+          <label className="flex items-center gap-1"><input type="checkbox" checked={relapsed} onChange={(e) => setRelapsed(e.target.checked)} /> Relapsed</label>
+          <label className="flex items-center gap-1"><input type="checkbox" checked={lost} onChange={(e) => setLost(e.target.checked)} /> Lost to follow-up</label>
+        </div>
+        <Textarea rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Visit notes…" />
+        <Button size="sm" onClick={save} disabled={saving}>Log visit</Button>
+      </div>
+    </Card>
   );
 }
