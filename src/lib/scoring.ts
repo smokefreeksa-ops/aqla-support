@@ -141,7 +141,7 @@ export function assignCohort(i: CohortInput): CohortResult {
     if (veryHighDep) reasons.push("Very-high cigarette dependence");
     else if (highDepPlusRisk) reasons.push("High cigarette dependence with additional risk flags");
     if (multiProduct || i.riskFlags.includes("multi_product")) reasons.push("Multiple product use");
-    if (highNicConcern) reasons.push("High nicotine-control concern");
+    
     if (i.riskFlags.includes("repeated_failed")) reasons.push("Repeated failed quit attempts");
     if (i.riskFlags.includes("wants_medication")) reasons.push("Medication request");
     if (i.riskFlags.includes("requests_clinician")) reasons.push("Clinician review requested");
