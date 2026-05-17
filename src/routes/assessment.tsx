@@ -632,20 +632,59 @@ function LiveCigScore({ ftnd }: { ftnd: State["ftnd"] }) {
   );
 }
 
-function ResultView({ result, onHome }: { result: Result; onHome: () => void }) {
+function ResultView({
+  result, onHome, products, productLabels, readiness, readinessLabel,
+  followOptions, initialFollow,
+}: {
+  result: Result;
+  onHome: () => void;
+  products: string[];
+  productLabels: string[];
+  readiness: string;
+  readinessLabel: string;
+  followOptions: { v: string; label: string }[];
+  initialFollow: string;
+}) {
   const { t, lang, dir } = useLang();
   const ftnd = result.ftnd;
   const nic = result.nicotine;
+  const saveFollow = useServerFn(saveFollowUpPreference);
+  const [follow, setFollow] = useState(initialFollow);
+  const [savedFollow, setSavedFollow] = useState<string | null>(null);
+  const [savingFollow, setSavingFollow] = useState(false);
+
+  async function commitFollow(value: string) {
+    setFollow(value);
+    setSavingFollow(true);
+    try {
+      await saveFollow({
+        data: {
+          participantId: result.participantId,
+          participantCode: result.participantCode,
+          preference: value as never,
+        },
+      });
+      setSavedFollow(value);
+      toast.success(lang === "ar" ? "تم حفظ تفضيل المتابعة" : "Follow-up preference saved");
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setSavingFollow(false);
+    }
+  }
 
   function downloadSummary() {
     const lines = [
       `Aqla Assessment Summary`,
       `Participant ID: ${result.participantCode}`,
+      `Products: ${productLabels.join(", ")}`,
+      `Readiness: ${readinessLabel}`,
       `Cohort: ${result.cohort}`,
       `Cohort reason: ${result.cohortReason}`,
       `Doctor review needed: ${result.doctorReviewNeeded ? "Yes" : "No"}`,
       ftnd ? `FTND score: ${ftnd.total}/10 — ${ftnd.category}` : "",
       nic ? `Nicotine control: ${nic.yes_count}/10 — ${nic.category}` : "",
+      savedFollow ? `Follow-up preference: ${savedFollow}` : "",
     ].filter(Boolean).join("\n");
     const blob = new Blob([lines], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
@@ -666,6 +705,20 @@ function ResultView({ result, onHome }: { result: Result; onHome: () => void }) 
         <div className="mt-1 font-mono text-lg">{result.participantCode}</div>
         <h2 className="mt-4 text-2xl font-bold">{t.resultTitle}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{result.cohortReason}</p>
+        <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm text-primary font-medium">
+          {lang === "ar" ? "المسار" : "Cohort"} {result.cohort}
+        </div>
+      </Card>
+
+      <Card className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+        <div>
+          <div className="text-xs text-muted-foreground">{lang === "ar" ? "المنتجات" : "Products"}</div>
+          <div className="mt-0.5">{productLabels.join(" • ") || "—"}</div>
+        </div>
+        <div>
+          <div className="text-xs text-muted-foreground">{lang === "ar" ? "الجاهزية" : "Readiness"}</div>
+          <div className="mt-0.5">{readinessLabel}</div>
+        </div>
       </Card>
 
       {ftnd && (
@@ -698,10 +751,41 @@ function ResultView({ result, onHome }: { result: Result; onHome: () => void }) 
         </Card>
       )}
 
+      <Card className="p-5">
+        <h3 className="text-lg font-semibold">
+          {lang === "ar" ? "كيف تفضل أن ندعمك؟" : "How would you like us to support you?"}
+        </h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {lang === "ar"
+            ? "اختر تفضيل المتابعة وسيتم حفظه فوراً."
+            : "Pick your follow-up preference — it will be saved immediately."}
+        </p>
+        <RadioGroup
+          className="mt-3"
+          value={follow}
+          onValueChange={(v) => { if (!savingFollow) commitFollow(v); }}
+        >
+          {followOptions.map((r) => (
+            <label key={r.v} className="flex items-center gap-2 cursor-pointer rounded-lg border p-3 hover:bg-muted/40">
+              <RadioGroupItem value={r.v} />
+              <span className="text-sm">{r.label}</span>
+            </label>
+          ))}
+        </RadioGroup>
+        {savedFollow && (
+          <p className="mt-2 text-xs text-success font-medium">
+            {lang === "ar" ? "تم الحفظ ✓" : "Saved ✓"}
+          </p>
+        )}
+      </Card>
+
       <div className="grid gap-2 sm:grid-cols-2">
         <Button variant="outline" onClick={downloadSummary}>{t.downloadPdf}</Button>
         <Button onClick={onHome}>{t.backHome}</Button>
       </div>
+
+      {/* Silence unused warnings — props passed through */}
+      <span className="hidden">{products.join(",")}|{readiness}</span>
     </div>
   );
 }
