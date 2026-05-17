@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { z } from "zod";
 import { assignCohort, scoreFtnd, scoreNicotineControl, scoreHonc } from "./scoring";
+import { sendAdminNotification, renderKeyValueHtml } from "./notifications.server";
 
 // Optional research-grade extension payload — each section is independent and skippable.
 const ExtrasSchema = z
@@ -388,6 +389,45 @@ export const submitAssessment = createServerFn({ method: "POST" })
       }
     }
     await Promise.all(inserts);
+
+    // Internal admin email — full clinical copy. Never blocks submission.
+    const emailBody: Record<string, unknown> = {
+      participant_code: participant.participant_code,
+      submitted_at: new Date().toISOString(),
+      full_name: data.triage.full_name,
+      mobile: data.triage.mobile,
+      email: data.triage.email || null,
+      age: data.triage.age,
+      city: data.triage.city,
+      preferred_language: data.triage.preferred_language,
+      preferred_contact_method: data.triage.preferred_contact,
+      products: data.products,
+      ftnd_answers: data.ftnd,
+      ftnd_total: ftndResult?.total ?? null,
+      ftnd_category: ftndResult?.category ?? null,
+      nicotine_answers: data.nicotine,
+      nicotine_yes_count: nicResult?.yes_count ?? null,
+      nicotine_category: nicResult?.category ?? null,
+      readiness_stage: data.readiness,
+      importance_to_quit: data.extras?.motivation?.importance_0_10 ?? null,
+      confidence_to_quit: data.extras?.motivation?.confidence_0_10 ?? null,
+      main_barriers: data.extras?.motivation?.barriers ?? null,
+      quit_history: data.extras?.quitHistory ?? null,
+      community_exposure: data.extras?.communityExposure ?? null,
+      safety_flags: data.extras?.safetyFlags ?? null,
+      risk_flags: data.riskFlags,
+      assigned_cohort: cohort.cohort,
+      doctor_review_needed: cohort.doctorReviewNeeded,
+      doctor_review_reason: cohort.reason,
+      consent: data.consent,
+      research_publication_consent: data.extras?.consentResearchPublication ?? false,
+    };
+    void sendAdminNotification(
+      "full_quit_support_submission",
+      `Aqla full assessment submitted — ${participant.participant_code}`,
+      `<h2 style="font-family:-apple-system,Segoe UI,Arial,sans-serif">Aqla full assessment</h2>${renderKeyValueHtml(emailBody)}`,
+      { participant_code: participant.participant_code },
+    );
 
     return {
       participantId: pid,
