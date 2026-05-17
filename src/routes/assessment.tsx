@@ -18,7 +18,7 @@ import { AlertTriangle, ArrowLeft, ArrowRight, ShieldAlert, Languages } from "lu
 export const Route = createFileRoute("/assessment")({
   head: () => ({
     meta: [
-      { title: "Nicotine Assessment — La-tatten" },
+      { title: "Nicotine Assessment — Aqla" },
       { name: "description", content: "Complete a brief, confidential nicotine dependence assessment." },
     ],
   }),
@@ -319,7 +319,7 @@ function Flow() {
       <header className="border-b bg-card">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
           <Link to="/" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-            ← La-tatten
+            ← Aqla
           </Link>
           <Button variant="ghost" size="sm" onClick={() => setLang(lang === "ar" ? "en" : "ar")} className="gap-1.5">
             <Languages className="h-4 w-4" />
@@ -641,7 +641,7 @@ function ResultView({ result, onHome }: { result: Result; onHome: () => void }) 
 
   function downloadSummary() {
     const lines = [
-      `La-tatten Assessment Summary`,
+      `Aqla Assessment Summary`,
       `Participant ID: ${result.participantCode}`,
       `Cohort: ${result.cohort}`,
       `Cohort reason: ${result.cohortReason}`,
@@ -652,7 +652,7 @@ function ResultView({ result, onHome }: { result: Result; onHome: () => void }) 
     const blob = new Blob([lines], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url; a.download = `latatten_${result.participantCode}.txt`; a.click();
+    a.href = url; a.download = `aqla_${result.participantCode}.txt`; a.click();
     URL.revokeObjectURL(url);
   }
 

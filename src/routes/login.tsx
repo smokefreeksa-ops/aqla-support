@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/login")({
-  head: () => ({ meta: [{ title: "Staff Login — La-tatten" }] }),
+  head: () => ({ meta: [{ title: "Staff Login — Aqla" }] }),
   component: LoginPage,
 });
 
@@ -51,7 +51,7 @@ function LoginPage() {
   return (
     <div className="min-h-screen grid place-items-center bg-background px-4">
       <Card className="w-full max-w-sm p-6">
-        <Link to="/" className="text-xs text-muted-foreground">← La-tatten</Link>
+        <Link to="/" className="text-xs text-muted-foreground">← Aqla</Link>
         <h1 className="mt-2 text-xl font-semibold">{mode === "signin" ? "Staff Login" : "Create staff account"}</h1>
         <form onSubmit={handle} className="mt-4 space-y-3">
           <div className="space-y-1.5">
