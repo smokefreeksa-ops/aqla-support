@@ -10,6 +10,7 @@ import {
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
+import { FloatingWhatsAppButton } from "@/components/FloatingWhatsAppButton";
 
 function NotFoundComponent() {
   return (
