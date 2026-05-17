@@ -334,9 +334,7 @@ export const exportCsv = createServerFn({ method: "POST" })
     const roles = await getRoles(context.userId);
     if (!roles.includes("physician")) throw new Error("Forbidden: physician role required");
 
-    const anonymize = data.type === "anonymized" || data.type === "research" || data.type === "baseline"
-      || data.type === "follow_up_outcomes" || data.type === "product_use"
-      || data.type === "youth_nicotine" || data.type === "city_summary";
+    // Per-branch logic decides PII handling; no global flag needed.
 
 
     // Resolve participant set based on cohort + research consent filters.
