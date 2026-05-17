@@ -214,15 +214,29 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
           </label>
           <Button onClick={refresh} variant="outline" size="sm"><RefreshCw className="h-4 w-4 mr-1" /> Apply</Button>
           {isPhysician && (
-            <div className="ml-auto flex flex-wrap gap-1">
+            <div className="ml-auto flex flex-wrap items-center gap-1">
+              <label className="flex items-center gap-1 text-xs mr-2">
+                <input type="checkbox" checked={researchOnly} onChange={(e) => setResearchOnly(e.target.checked)} />
+                Research consent only
+              </label>
               <Button size="sm" variant="outline" onClick={() => doExport("full")}><Download className="h-4 w-4 mr-1" />Full</Button>
               <Button size="sm" variant="outline" onClick={() => doExport("anonymized")}><Download className="h-4 w-4 mr-1" />Anonymized</Button>
               <Button size="sm" variant="outline" onClick={() => doExport("cohort")} disabled={!cohort}><Download className="h-4 w-4 mr-1" />Cohort</Button>
               <Button size="sm" variant="outline" onClick={() => doExport("follow_up_due")}><Download className="h-4 w-4 mr-1" />Follow-up due</Button>
-              <Button size="sm" variant="outline" onClick={() => doExport("research")}><Download className="h-4 w-4 mr-1" />Research</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("baseline")}><Download className="h-4 w-4 mr-1" />Baseline</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("follow_up_outcomes")}><Download className="h-4 w-4 mr-1" />Outcomes</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("product_use")}><Download className="h-4 w-4 mr-1" />Product use</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("youth_nicotine")}><Download className="h-4 w-4 mr-1" />Youth</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("city_summary")}><Download className="h-4 w-4 mr-1" />City summary</Button>
             </div>
           )}
         </div>
+        {isPhysician && (
+          <p className="mt-2 text-xs text-muted-foreground">
+            <ShieldAlert className="inline h-3 w-3 mr-1" />
+            Anonymized / research / baseline / outcomes / youth / city exports strip name, mobile, email, and free-text notes. Tick "Research consent only" to limit rows to participants who consented to research publication.
+          </p>
+        )}
       </Card>
 
       <Card className="overflow-x-auto">
