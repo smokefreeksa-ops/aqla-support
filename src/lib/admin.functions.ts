@@ -432,6 +432,10 @@ export const exportCsv = createServerFn({ method: "POST" })
         craving_severity_0_10: r.craving_0_10 ?? null,
         confidence_to_quit_0_10: r.confidence_0_10 ?? null,
         co_reading_ppm_optional: r.co_reading ?? null,
+        withdrawal_severity_0_10: r.withdrawal_severity_0_10 ?? null,
+        abstinence_duration_days: r.abstinence_duration_days ?? null,
+        percent_reduction_estimate: r.percent_reduction_estimate ?? null,
+        satisfaction_with_support_0_10: r.satisfaction_with_support_0_10 ?? null,
       }));
       // Sort: by code, then timepoint order
       const order = ["baseline", ...FOLLOWUP_TIMEPOINTS.map((t) => FOLLOWUP_LABEL[t])];
