@@ -344,6 +344,23 @@ function Flow() {
               attempts_count: re.attempts_count ? Number(re.attempts_count) : null,
               longest_quit_duration: re.longest_quit_duration || null,
             },
+            ...(re.exposure_enabled
+              ? {
+                  communityExposure: {
+                    family_smoking_exposure: re.family_smoking_exposure || "not_answered",
+                    close_friend_smoking_or_nicotine_use: re.close_friend_smoking_or_nicotine_use || "not_answered",
+                    secondhand_smoke_exposure_home: re.secondhand_smoke_exposure_home || "not_answered",
+                    secondhand_smoke_exposure_public_places: re.secondhand_smoke_exposure_public_places || "not_answered",
+                    seen_tobacco_or_nicotine_ads_social_media: re.seen_tobacco_or_nicotine_ads_social_media || "not_answered",
+                    seen_tobacco_or_nicotine_ads_shops: re.seen_tobacco_or_nicotine_ads_shops || "not_answered",
+                    influencer_or_online_promotion_exposure: re.influencer_or_online_promotion_exposure || "not_answered",
+                    easy_access_to_products: re.easy_access_to_products || "not_answered",
+                    main_source_of_products: re.main_source_of_products || "not_answered",
+                    online_purchase_or_delivery_exposure: re.online_purchase_or_delivery_exposure || "not_answered",
+                    purchase_attempt_underage_if_applicable: re.purchase_attempt_underage_if_applicable || "skipped_by_branching",
+                  },
+                }
+              : {}),
           }
         : undefined;
       const r = await submit({
