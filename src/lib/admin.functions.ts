@@ -78,10 +78,17 @@ export const listParticipants = createServerFn({ method: "POST" })
       .order("created_at", { ascending: false })
       .limit(500);
 
+    type Enrich = Record<string, {
+      products?: string[]; readiness?: string;
+      ftnd?: { total: number; category: string };
+      nic?: { yes_count: number; category: string };
+      followUp?: string;
+    }>;
+
     if (pidFilter !== null) {
       if (pidFilter.length === 0) {
         await logAudit(context.userId, "list", "participants", undefined, { count: 0 });
-        return { rows: [], roles };
+        return { rows: [] as never[], roles, enrich: {} as Enrich };
       }
       q = q.in("id", pidFilter);
     }
@@ -98,8 +105,28 @@ export const listParticipants = createServerFn({ method: "POST" })
 
     const { data: rows, error } = await q;
     if (error) throw new Error(error.message);
+
+    // Enrich with product/readiness/dependence/follow-up for display
+    const ids = (rows ?? []).map((r) => r.id);
+    const enrich: Enrich = {};
+    if (ids.length > 0) {
+      const [pu, rd, cig, nic, fp] = await Promise.all([
+        supabaseAdmin.from("product_use").select("participant_id, products").in("participant_id", ids),
+        supabaseAdmin.from("readiness_stage").select("participant_id, stage").in("participant_id", ids),
+        supabaseAdmin.from("cigarette_dependence_scores").select("participant_id, total_score, category").in("participant_id", ids),
+        supabaseAdmin.from("nicotine_control_scores").select("participant_id, yes_count, category").in("participant_id", ids),
+        supabaseAdmin.from("follow_up_preferences").select("participant_id, preference").in("participant_id", ids),
+      ]);
+      for (const id of ids) enrich[id] = {};
+      (pu.data ?? []).forEach((r) => { enrich[r.participant_id].products = r.products as string[]; });
+      (rd.data ?? []).forEach((r) => { enrich[r.participant_id].readiness = r.stage as string; });
+      (cig.data ?? []).forEach((r) => { enrich[r.participant_id].ftnd = { total: r.total_score, category: r.category }; });
+      (nic.data ?? []).forEach((r) => { enrich[r.participant_id].nic = { yes_count: r.yes_count, category: r.category }; });
+      (fp.data ?? []).forEach((r) => { enrich[r.participant_id].followUp = r.preference; });
+    }
+
     await logAudit(context.userId, "list", "participants", undefined, { count: rows?.length });
-    return { rows: rows ?? [], roles };
+    return { rows: rows ?? [], roles, enrich };
   });
 
 export const getParticipant = createServerFn({ method: "POST" })
