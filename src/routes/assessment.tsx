@@ -306,6 +306,22 @@ function Flow() {
       const ftnd = hasCig ? s.ftnd : null;
       const nicotine = hasNicProduct ? s.nicotine : null;
       const ageNum = s.triage.age ? Number(s.triage.age) : null;
+      const re = s.research;
+      const extras = re.enabled
+        ? {
+            consentResearchPublication: re.consent_publication,
+            motivation: {
+              importance_0_10: re.importance_0_10 ? Number(re.importance_0_10) : null,
+              confidence_0_10: re.confidence_0_10 ? Number(re.confidence_0_10) : null,
+              main_reason: re.main_reason || null,
+            },
+            quitHistory: {
+              ever_tried: re.ever_tried,
+              attempts_count: re.attempts_count ? Number(re.attempts_count) : null,
+              longest_quit_duration: re.longest_quit_duration || null,
+            },
+          }
+        : undefined;
       const r = await submit({
         data: {
           triage: {
@@ -319,6 +335,7 @@ function Flow() {
           nicotine,
           readiness: s.readiness as never,
           riskFlags: s.riskFlags,
+          extras,
         },
       });
       setResult(r);
