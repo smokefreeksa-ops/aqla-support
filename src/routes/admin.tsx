@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import {
   listParticipants, getDashboardStats, getParticipant,
   updateParticipantReception, addClinicalNote, updateOutcome, exportCsv, addFollowUpVisit,
+  sendTestEmail, listRecentNotifications,
 } from "@/lib/admin.functions";
 import {
   listVolunteers, getVolunteerStats, getVolunteer, updateVolunteer, addVolunteerNote,
