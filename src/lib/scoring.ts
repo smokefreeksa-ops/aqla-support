@@ -125,7 +125,7 @@ export function assignCohort(i: CohortInput): CohortResult {
     i.riskFlags.includes("mental_health") ||
     veryHighDep ||
     multiProduct ||
-    highNicConcern ||
+    
     highDepPlusRisk ||
     i.riskFlags.includes("multi_product") ||
     (isMinor && ((i.ftnd ?? 0) >= 3 || (i.nicotineYes ?? 0) >= 3)) ||
