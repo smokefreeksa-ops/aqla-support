@@ -5,6 +5,7 @@ import { useLangState, LangContext, useLang } from "@/lib/i18n";
 import { Languages, HeartPulse, ShieldAlert, ArrowLeft } from "lucide-react";
 import aqlaLogo from "@/assets/aqla-logo.png";
 import founderPhoto from "@/assets/founder.png";
+import { SocialLinks } from "@/components/SocialLinks";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -216,7 +217,8 @@ function Inner() {
       </main>
 
       <footer className="mx-auto max-w-6xl px-4 py-8 text-center text-xs text-muted-foreground">
-        © {isAr ? "أقلع" : "Aqla"} — {new Date().getFullYear()}
+        <SocialLinks />
+        <p className="mt-3">© {isAr ? "أقلع" : "Aqla"} — {new Date().getFullYear()}</p>
       </footer>
     </div>
   );

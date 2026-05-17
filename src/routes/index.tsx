@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useLang, useLangState, LangContext } from "@/lib/i18n";
 import { ShieldAlert, HeartPulse, Languages, ArrowRight, Sparkles, Users } from "lucide-react";
+import { SocialLinks } from "@/components/SocialLinks";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -148,7 +149,8 @@ function Inner() {
       </main>
 
       <footer className="mx-auto max-w-6xl px-4 py-8 text-center text-xs text-muted-foreground">
-        © {t.brandShort} — {new Date().getFullYear()}
+        <SocialLinks />
+        <p className="mt-3">© {t.brandShort} — {new Date().getFullYear()}</p>
       </footer>
     </div>
   );
