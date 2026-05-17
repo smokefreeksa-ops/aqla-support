@@ -5,6 +5,7 @@ import { useLangState, LangContext, useLang } from "@/lib/i18n";
 import { Languages, HeartPulse, ShieldAlert, ArrowLeft } from "lucide-react";
 import aqlaLogo from "@/assets/aqla-logo.png";
 import founderPhoto from "@/assets/founder.png";
+import { SocialLinks } from "@/components/SocialLinks";
 
 export const Route = createFileRoute("/about")({
   head: () => ({

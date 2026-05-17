@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useLang, useLangState, LangContext } from "@/lib/i18n";
 import { ShieldAlert, HeartPulse, Languages, ArrowRight, Sparkles, Users } from "lucide-react";
+import { SocialLinks } from "@/components/SocialLinks";
 
 export const Route = createFileRoute("/")({
   head: () => ({
