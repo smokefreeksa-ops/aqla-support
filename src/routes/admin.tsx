@@ -128,7 +128,8 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
   const [researchOnly, setResearchOnly] = useState(false);
   async function doExport(
     type: "full" | "anonymized" | "cohort" | "follow_up_due" | "research"
-      | "baseline" | "follow_up_outcomes" | "product_use" | "youth_nicotine" | "city_summary",
+      | "baseline" | "follow_up_outcomes" | "product_use" | "youth_nicotine" | "city_summary"
+      | "dependence_items" | "readiness_quit_history" | "research_consent_only",
   ) {
     try {
       const r = await exportFn({ data: { type, cohort: cohort || undefined, researchConsentOnly: researchOnly || undefined } });
