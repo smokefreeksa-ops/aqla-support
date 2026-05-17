@@ -26,6 +26,7 @@ export function AqlaAssistant() {
     queryKey: ["assistant-status"],
     queryFn: () => statusFn(),
     staleTime: 60_000,
+    enabled: isPublic,
   });
 
   useEffect(() => {
