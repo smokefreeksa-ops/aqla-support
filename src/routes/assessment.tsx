@@ -702,6 +702,65 @@ function Flow() {
                     </Field>
                   </div>
                 )}
+
+                <div className="mt-4 rounded-lg border p-3">
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <Checkbox
+                      checked={s.research.exposure_enabled}
+                      onCheckedChange={(v) => setS((p) => ({ ...p, research: { ...p.research, exposure_enabled: !!v } }))}
+                    />
+                    <div>
+                      <div className="font-semibold text-sm">
+                        {lang === "ar"
+                          ? "اختياري: ساعدنا في فهم استخدام النيكوتين في مجتمعنا"
+                          : "Optional: Help us understand nicotine use in our community"}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {lang === "ar"
+                          ? "هذا القسم تطوّعي ولا يؤثر على حصولك على الدعم."
+                          : "This section is voluntary and does not affect your access to support."}
+                      </div>
+                    </div>
+                  </label>
+                  {s.research.exposure_enabled && (
+                    <div className="mt-3 space-y-2">
+                      {([
+                        ["family_smoking_exposure", "هل يدخّن أحد في عائلتك؟", "Does anyone in your family smoke or use nicotine?"],
+                        ["close_friend_smoking_or_nicotine_use", "هل يستخدم صديق مقرّب التبغ/النيكوتين؟", "Does a close friend use tobacco or nicotine?"],
+                        ["secondhand_smoke_exposure_home", "هل تتعرّض للتدخين السلبي في المنزل؟", "Exposed to secondhand smoke at home?"],
+                        ["secondhand_smoke_exposure_public_places", "هل تتعرّض للتدخين السلبي في الأماكن العامة؟", "Exposed to secondhand smoke in public places?"],
+                        ["seen_tobacco_or_nicotine_ads_social_media", "هل رأيت إعلانات تبغ/نيكوتين على وسائل التواصل؟", "Seen tobacco/nicotine ads on social media?"],
+                        ["seen_tobacco_or_nicotine_ads_shops", "هل رأيت إعلانات تبغ/نيكوتين في المحلات؟", "Seen tobacco/nicotine ads in shops?"],
+                        ["influencer_or_online_promotion_exposure", "هل رأيت ترويجاً من مؤثّرين أو عبر الإنترنت؟", "Seen influencer or online promotion?"],
+                        ["easy_access_to_products", "هل الوصول إلى هذه المنتجات سهل؟", "Are these products easy to access?"],
+                        ["online_purchase_or_delivery_exposure", "هل رأيت أو استخدمت الشراء/التوصيل عبر الإنترنت؟", "Seen or used online purchase/delivery?"],
+                        ["purchase_attempt_underage_if_applicable", "إن كان ينطبق: هل حاولت الشراء وأنت قاصر؟", "If applicable: have you tried to buy while underage?"],
+                      ] as const).map(([key, ar, en]) => (
+                        <div key={key} className="grid grid-cols-[1fr_auto] gap-2 items-center">
+                          <span className="text-xs">{lang === "ar" ? ar : en}</span>
+                          <select
+                            className="h-9 rounded-md border bg-background px-2 text-xs"
+                            value={(s.research as unknown as Record<string, string>)[key]}
+                            onChange={(e) => setS((p) => ({ ...p, research: { ...p.research, [key]: e.target.value } as typeof p.research }))}
+                          >
+                            <option value="">{lang === "ar" ? "—" : "—"}</option>
+                            <option value="yes">{lang === "ar" ? "نعم" : "Yes"}</option>
+                            <option value="no">{lang === "ar" ? "لا" : "No"}</option>
+                            <option value="not_sure">{lang === "ar" ? "لست متأكداً" : "Not sure"}</option>
+                            <option value="prefer_not_to_answer">{lang === "ar" ? "أفضّل عدم الإجابة" : "Prefer not to answer"}</option>
+                          </select>
+                        </div>
+                      ))}
+                      <Field label={lang === "ar" ? "المصدر الرئيسي للمنتجات (اختياري)" : "Main source of products (optional)"}>
+                        <Input
+                          value={s.research.main_source_of_products}
+                          onChange={(e) => setS((p) => ({ ...p, research: { ...p.research, main_source_of_products: e.target.value } }))}
+                          placeholder={lang === "ar" ? "مثلاً: بقّالة، صديق، إنترنت" : "e.g. shop, friend, online"}
+                        />
+                      </Field>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </Card>
