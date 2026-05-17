@@ -567,12 +567,12 @@ export const exportCsv = createServerFn({ method: "POST" })
     } else {
       // full / anonymized / cohort / follow_up_due / research
       const isAnon = data.type === "anonymized" || data.type === "research";
-      const cols = isAnon
+      const cols: string = isAnon
         ? "participant_code, age, gender, city, affiliation_type, education_level, nationality, preferred_language, cohort, cohort_reason, doctor_review_needed, urgent_symptom, research_consent_status, created_at"
         : "participant_code, full_name, mobile, email, age, gender, city, affiliation, affiliation_type, education_level, preferred_language, preferred_contact, cohort, cohort_reason, doctor_review_needed, urgent_symptom, contacted, contact_date, follow_up_status, appointment_requested, research_consent_status, created_at";
       let q = supabaseAdmin
         .from("participants")
-        .select(cols)
+        .select(cols as never)
         .order("created_at", { ascending: false }).limit(10000);
       if (data.type === "cohort" && data.cohort) q = q.eq("cohort", data.cohort as never);
       if (data.type === "follow_up_due") q = q.eq("contacted", false);
