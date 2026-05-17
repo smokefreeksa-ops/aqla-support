@@ -94,6 +94,33 @@ export type Database = {
           },
         ]
       }
+      cigarette_module: {
+        Row: {
+          cigarettes_per_day: number | null
+          created_at: string
+          hsi_score: number | null
+          id: string
+          participant_id: string
+          time_to_first_cig: string | null
+        }
+        Insert: {
+          cigarettes_per_day?: number | null
+          created_at?: string
+          hsi_score?: number | null
+          id?: string
+          participant_id: string
+          time_to_first_cig?: string | null
+        }
+        Update: {
+          cigarettes_per_day?: number | null
+          created_at?: string
+          hsi_score?: number | null
+          id?: string
+          participant_id?: string
+          time_to_first_cig?: string | null
+        }
+        Relationships: []
+      }
       clinical_notes: {
         Row: {
           created_at: string
@@ -176,6 +203,7 @@ export type Database = {
           consent_contact: boolean
           consent_educational: boolean
           consent_research: boolean
+          consent_research_publication: boolean
           consent_service_eval: boolean
           created_at: string
           guardian_notice_shown: boolean
@@ -187,6 +215,7 @@ export type Database = {
           consent_contact: boolean
           consent_educational: boolean
           consent_research?: boolean
+          consent_research_publication?: boolean
           consent_service_eval: boolean
           created_at?: string
           guardian_notice_shown?: boolean
@@ -198,6 +227,7 @@ export type Database = {
           consent_contact?: boolean
           consent_educational?: boolean
           consent_research?: boolean
+          consent_research_publication?: boolean
           consent_service_eval?: boolean
           created_at?: string
           guardian_notice_shown?: boolean
@@ -308,6 +338,162 @@ export type Database = {
           },
         ]
       }
+      follow_up_visits: {
+        Row: {
+          abstinent: boolean | null
+          cigarettes_per_day: number | null
+          co_reading: number | null
+          confidence_0_10: number | null
+          contacted: boolean | null
+          craving_0_10: number | null
+          created_at: string
+          created_by: string | null
+          current_product_use: string | null
+          id: string
+          lost_to_follow_up: boolean | null
+          notes: string | null
+          participant_id: string
+          pouches_per_day: number | null
+          quit_attempt_made: boolean | null
+          reduced_use: boolean | null
+          relapsed: boolean | null
+          vaping_frequency: string | null
+          visit_date: string
+          visit_point: string
+        }
+        Insert: {
+          abstinent?: boolean | null
+          cigarettes_per_day?: number | null
+          co_reading?: number | null
+          confidence_0_10?: number | null
+          contacted?: boolean | null
+          craving_0_10?: number | null
+          created_at?: string
+          created_by?: string | null
+          current_product_use?: string | null
+          id?: string
+          lost_to_follow_up?: boolean | null
+          notes?: string | null
+          participant_id: string
+          pouches_per_day?: number | null
+          quit_attempt_made?: boolean | null
+          reduced_use?: boolean | null
+          relapsed?: boolean | null
+          vaping_frequency?: string | null
+          visit_date?: string
+          visit_point: string
+        }
+        Update: {
+          abstinent?: boolean | null
+          cigarettes_per_day?: number | null
+          co_reading?: number | null
+          confidence_0_10?: number | null
+          contacted?: boolean | null
+          craving_0_10?: number | null
+          created_at?: string
+          created_by?: string | null
+          current_product_use?: string | null
+          id?: string
+          lost_to_follow_up?: boolean | null
+          notes?: string | null
+          participant_id?: string
+          pouches_per_day?: number | null
+          quit_attempt_made?: boolean | null
+          reduced_use?: boolean | null
+          relapsed?: boolean | null
+          vaping_frequency?: string | null
+          visit_date?: string
+          visit_point?: string
+        }
+        Relationships: []
+      }
+      honc_screening: {
+        Row: {
+          any_yes: boolean
+          category: string
+          created_at: string
+          id: string
+          participant_id: string
+          positive_count: number
+          q1_tried_quit_failed: boolean | null
+          q10_stopping_difficult: boolean | null
+          q2_strong_cravings: boolean | null
+          q3_felt_addicted: boolean | null
+          q4_hard_in_restricted: boolean | null
+          q5_withdrawal: boolean | null
+          q6_needed_to_feel_normal: boolean | null
+          q7_increased_use: boolean | null
+          q8_felt_controlled: boolean | null
+          q9_continued_despite_health: boolean | null
+        }
+        Insert: {
+          any_yes?: boolean
+          category?: string
+          created_at?: string
+          id?: string
+          participant_id: string
+          positive_count?: number
+          q1_tried_quit_failed?: boolean | null
+          q10_stopping_difficult?: boolean | null
+          q2_strong_cravings?: boolean | null
+          q3_felt_addicted?: boolean | null
+          q4_hard_in_restricted?: boolean | null
+          q5_withdrawal?: boolean | null
+          q6_needed_to_feel_normal?: boolean | null
+          q7_increased_use?: boolean | null
+          q8_felt_controlled?: boolean | null
+          q9_continued_despite_health?: boolean | null
+        }
+        Update: {
+          any_yes?: boolean
+          category?: string
+          created_at?: string
+          id?: string
+          participant_id?: string
+          positive_count?: number
+          q1_tried_quit_failed?: boolean | null
+          q10_stopping_difficult?: boolean | null
+          q2_strong_cravings?: boolean | null
+          q3_felt_addicted?: boolean | null
+          q4_hard_in_restricted?: boolean | null
+          q5_withdrawal?: boolean | null
+          q6_needed_to_feel_normal?: boolean | null
+          q7_increased_use?: boolean | null
+          q8_felt_controlled?: boolean | null
+          q9_continued_despite_health?: boolean | null
+        }
+        Relationships: []
+      }
+      motivation_assessment: {
+        Row: {
+          barriers: string[] | null
+          confidence_0_10: number | null
+          created_at: string
+          id: string
+          importance_0_10: number | null
+          main_reason: string | null
+          participant_id: string
+        }
+        Insert: {
+          barriers?: string[] | null
+          confidence_0_10?: number | null
+          created_at?: string
+          id?: string
+          importance_0_10?: number | null
+          main_reason?: string | null
+          participant_id: string
+        }
+        Update: {
+          barriers?: string[] | null
+          confidence_0_10?: number | null
+          created_at?: string
+          id?: string
+          importance_0_10?: number | null
+          main_reason?: string | null
+          participant_id?: string
+        }
+        Relationships: []
+      }
       nicotine_control_scores: {
         Row: {
           answers: Json
@@ -414,6 +600,7 @@ export type Database = {
       participants: {
         Row: {
           affiliation: string | null
+          affiliation_type: string | null
           age: number | null
           appointment_requested: boolean
           city: string | null
@@ -424,6 +611,7 @@ export type Database = {
           created_at: string
           date_of_birth: string | null
           doctor_review_needed: boolean
+          education_level: string | null
           email: string | null
           follow_up_status: string | null
           full_name: string
@@ -433,18 +621,23 @@ export type Database = {
           is_minor: boolean | null
           main_reason: string | null
           mobile: string
+          nationality: string | null
           participant_code: string
           preferred_contact: Database["public"]["Enums"]["contact_method"]
           preferred_language: Database["public"]["Enums"]["preferred_language"]
+          pregnancy: boolean | null
           previous_quit_attempts: string | null
           previously_tried_quit: boolean | null
           receptionist_notes: string | null
+          research_consent_status: string
+          school_university_workplace: string | null
           self_completing: boolean
           updated_at: string
           urgent_symptom: boolean
         }
         Insert: {
           affiliation?: string | null
+          affiliation_type?: string | null
           age?: number | null
           appointment_requested?: boolean
           city?: string | null
@@ -455,6 +648,7 @@ export type Database = {
           created_at?: string
           date_of_birth?: string | null
           doctor_review_needed?: boolean
+          education_level?: string | null
           email?: string | null
           follow_up_status?: string | null
           full_name: string
@@ -464,18 +658,23 @@ export type Database = {
           is_minor?: boolean | null
           main_reason?: string | null
           mobile: string
+          nationality?: string | null
           participant_code?: string
           preferred_contact?: Database["public"]["Enums"]["contact_method"]
           preferred_language?: Database["public"]["Enums"]["preferred_language"]
+          pregnancy?: boolean | null
           previous_quit_attempts?: string | null
           previously_tried_quit?: boolean | null
           receptionist_notes?: string | null
+          research_consent_status?: string
+          school_university_workplace?: string | null
           self_completing?: boolean
           updated_at?: string
           urgent_symptom?: boolean
         }
         Update: {
           affiliation?: string | null
+          affiliation_type?: string | null
           age?: number | null
           appointment_requested?: boolean
           city?: string | null
@@ -486,6 +685,7 @@ export type Database = {
           created_at?: string
           date_of_birth?: string | null
           doctor_review_needed?: boolean
+          education_level?: string | null
           email?: string | null
           follow_up_status?: string | null
           full_name?: string
@@ -495,15 +695,64 @@ export type Database = {
           is_minor?: boolean | null
           main_reason?: string | null
           mobile?: string
+          nationality?: string | null
           participant_code?: string
           preferred_contact?: Database["public"]["Enums"]["contact_method"]
           preferred_language?: Database["public"]["Enums"]["preferred_language"]
+          pregnancy?: boolean | null
           previous_quit_attempts?: string | null
           previously_tried_quit?: boolean | null
           receptionist_notes?: string | null
+          research_consent_status?: string
+          school_university_workplace?: string | null
           self_completing?: boolean
           updated_at?: string
           urgent_symptom?: boolean
+        }
+        Relationships: []
+      }
+      pouch_module: {
+        Row: {
+          created_at: string
+          days_30d: number | null
+          flavors: string | null
+          id: string
+          nicotine_strength: string | null
+          participant_id: string
+          pouches_per_day: number | null
+          source: string | null
+          time_to_first: string | null
+          tried_to_stop: boolean | null
+          used_at_institution: boolean | null
+          wants_counseling: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          days_30d?: number | null
+          flavors?: string | null
+          id?: string
+          nicotine_strength?: string | null
+          participant_id: string
+          pouches_per_day?: number | null
+          source?: string | null
+          time_to_first?: string | null
+          tried_to_stop?: boolean | null
+          used_at_institution?: boolean | null
+          wants_counseling?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          days_30d?: number | null
+          flavors?: string | null
+          id?: string
+          nicotine_strength?: string | null
+          participant_id?: string
+          pouches_per_day?: number | null
+          source?: string | null
+          time_to_first?: string | null
+          tried_to_stop?: boolean | null
+          used_at_institution?: boolean | null
+          wants_counseling?: boolean | null
         }
         Relationships: []
       }
@@ -535,6 +784,90 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      product_use_details: {
+        Row: {
+          ad_exposure: boolean | null
+          age_first_use: number | null
+          age_regular_use: number | null
+          created_at: string
+          current_use_30d: boolean | null
+          days_used_30d: number | null
+          ever_use: boolean | null
+          family_peer_use: boolean | null
+          id: string
+          is_main_product: boolean | null
+          participant_id: string
+          product: string
+          source: string | null
+          usual_place: string | null
+        }
+        Insert: {
+          ad_exposure?: boolean | null
+          age_first_use?: number | null
+          age_regular_use?: number | null
+          created_at?: string
+          current_use_30d?: boolean | null
+          days_used_30d?: number | null
+          ever_use?: boolean | null
+          family_peer_use?: boolean | null
+          id?: string
+          is_main_product?: boolean | null
+          participant_id: string
+          product: string
+          source?: string | null
+          usual_place?: string | null
+        }
+        Update: {
+          ad_exposure?: boolean | null
+          age_first_use?: number | null
+          age_regular_use?: number | null
+          created_at?: string
+          current_use_30d?: boolean | null
+          days_used_30d?: number | null
+          ever_use?: boolean | null
+          family_peer_use?: boolean | null
+          id?: string
+          is_main_product?: boolean | null
+          participant_id?: string
+          product?: string
+          source?: string | null
+          usual_place?: string | null
+        }
+        Relationships: []
+      }
+      quit_history: {
+        Row: {
+          attempts_count: number | null
+          created_at: string
+          ever_tried: boolean | null
+          id: string
+          longest_quit_duration: string | null
+          main_relapse_reason: string | null
+          methods_used: string[] | null
+          participant_id: string
+        }
+        Insert: {
+          attempts_count?: number | null
+          created_at?: string
+          ever_tried?: boolean | null
+          id?: string
+          longest_quit_duration?: string | null
+          main_relapse_reason?: string | null
+          methods_used?: string[] | null
+          participant_id: string
+        }
+        Update: {
+          attempts_count?: number | null
+          created_at?: string
+          ever_tried?: boolean | null
+          id?: string
+          longest_quit_duration?: string | null
+          main_relapse_reason?: string | null
+          methods_used?: string[] | null
+          participant_id?: string
+        }
+        Relationships: []
       }
       readiness_stage: {
         Row: {
@@ -597,6 +930,99 @@ export type Database = {
           },
         ]
       }
+      safety_flags: {
+        Row: {
+          alt_product_request: boolean | null
+          clinician_request: boolean | null
+          coughing_blood: boolean | null
+          created_at: string
+          id: string
+          medication_request: boolean | null
+          mental_health_concern: boolean | null
+          multi_product_use: boolean | null
+          participant_id: string
+          pregnancy: boolean | null
+          repeated_failed_attempts: boolean | null
+          severe_breathlessness: boolean | null
+          severe_chest_pain: boolean | null
+          severe_withdrawal: boolean | null
+        }
+        Insert: {
+          alt_product_request?: boolean | null
+          clinician_request?: boolean | null
+          coughing_blood?: boolean | null
+          created_at?: string
+          id?: string
+          medication_request?: boolean | null
+          mental_health_concern?: boolean | null
+          multi_product_use?: boolean | null
+          participant_id: string
+          pregnancy?: boolean | null
+          repeated_failed_attempts?: boolean | null
+          severe_breathlessness?: boolean | null
+          severe_chest_pain?: boolean | null
+          severe_withdrawal?: boolean | null
+        }
+        Update: {
+          alt_product_request?: boolean | null
+          clinician_request?: boolean | null
+          coughing_blood?: boolean | null
+          created_at?: string
+          id?: string
+          medication_request?: boolean | null
+          mental_health_concern?: boolean | null
+          multi_product_use?: boolean | null
+          participant_id?: string
+          pregnancy?: boolean | null
+          repeated_failed_attempts?: boolean | null
+          severe_breathlessness?: boolean | null
+          severe_chest_pain?: boolean | null
+          severe_withdrawal?: boolean | null
+        }
+        Relationships: []
+      }
+      shisha_module: {
+        Row: {
+          also_uses_other: boolean | null
+          avg_session_minutes: number | null
+          created_at: string
+          days_30d: number | null
+          id: string
+          participant_id: string
+          quit_interest: string | null
+          sessions_per_week: number | null
+          setting: string | null
+          shared_mouthpiece: boolean | null
+          tobacco_type: string | null
+        }
+        Insert: {
+          also_uses_other?: boolean | null
+          avg_session_minutes?: number | null
+          created_at?: string
+          days_30d?: number | null
+          id?: string
+          participant_id: string
+          quit_interest?: string | null
+          sessions_per_week?: number | null
+          setting?: string | null
+          shared_mouthpiece?: boolean | null
+          tobacco_type?: string | null
+        }
+        Update: {
+          also_uses_other?: boolean | null
+          avg_session_minutes?: number | null
+          created_at?: string
+          days_30d?: number | null
+          id?: string
+          participant_id?: string
+          quit_interest?: string | null
+          sessions_per_week?: number | null
+          setting?: string | null
+          shared_mouthpiece?: boolean | null
+          tobacco_type?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -615,6 +1041,51 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      vape_module: {
+        Row: {
+          created_at: string
+          days_30d: number | null
+          device_type: string | null
+          flavors: string | null
+          id: string
+          nicotine_concentration: string | null
+          participant_id: string
+          refillable: string | null
+          time_to_first: string | null
+          times_per_day: number | null
+          tried_to_stop: boolean | null
+          used_at_institution: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          days_30d?: number | null
+          device_type?: string | null
+          flavors?: string | null
+          id?: string
+          nicotine_concentration?: string | null
+          participant_id: string
+          refillable?: string | null
+          time_to_first?: string | null
+          times_per_day?: number | null
+          tried_to_stop?: boolean | null
+          used_at_institution?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          days_30d?: number | null
+          device_type?: string | null
+          flavors?: string | null
+          id?: string
+          nicotine_concentration?: string | null
+          participant_id?: string
+          refillable?: string | null
+          time_to_first?: string | null
+          times_per_day?: number | null
+          tried_to_stop?: boolean | null
+          used_at_institution?: boolean | null
         }
         Relationships: []
       }
