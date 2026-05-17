@@ -618,6 +618,250 @@ export type Database = {
         }
         Relationships: []
       }
+      volunteer_applications: {
+        Row: {
+          academic_level: string | null
+          affiliation: string | null
+          age: number | null
+          application_code: string
+          availability: string | null
+          city: string | null
+          contact_date: string | null
+          contacted: boolean
+          created_at: string
+          email: string | null
+          full_name: string
+          gender: string | null
+          id: string
+          mobile: string
+          motivation: string | null
+          preferred_contact: Database["public"]["Enums"]["contact_method"]
+          preferred_language: Database["public"]["Enums"]["preferred_language"]
+          prior_awareness_work: boolean | null
+          smoking_status: Database["public"]["Enums"]["smoking_status"] | null
+          status: Database["public"]["Enums"]["volunteer_status"]
+          updated_at: string
+        }
+        Insert: {
+          academic_level?: string | null
+          affiliation?: string | null
+          age?: number | null
+          application_code?: string
+          availability?: string | null
+          city?: string | null
+          contact_date?: string | null
+          contacted?: boolean
+          created_at?: string
+          email?: string | null
+          full_name: string
+          gender?: string | null
+          id?: string
+          mobile: string
+          motivation?: string | null
+          preferred_contact?: Database["public"]["Enums"]["contact_method"]
+          preferred_language?: Database["public"]["Enums"]["preferred_language"]
+          prior_awareness_work?: boolean | null
+          smoking_status?: Database["public"]["Enums"]["smoking_status"] | null
+          status?: Database["public"]["Enums"]["volunteer_status"]
+          updated_at?: string
+        }
+        Update: {
+          academic_level?: string | null
+          affiliation?: string | null
+          age?: number | null
+          application_code?: string
+          availability?: string | null
+          city?: string | null
+          contact_date?: string | null
+          contacted?: boolean
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          gender?: string | null
+          id?: string
+          mobile?: string
+          motivation?: string | null
+          preferred_contact?: Database["public"]["Enums"]["contact_method"]
+          preferred_language?: Database["public"]["Enums"]["preferred_language"]
+          prior_awareness_work?: boolean | null
+          smoking_status?: Database["public"]["Enums"]["smoking_status"] | null
+          status?: Database["public"]["Enums"]["volunteer_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      volunteer_interests: {
+        Row: {
+          application_id: string
+          created_at: string
+          id: string
+          interest: Database["public"]["Enums"]["volunteer_interest"]
+        }
+        Insert: {
+          application_id: string
+          created_at?: string
+          id?: string
+          interest: Database["public"]["Enums"]["volunteer_interest"]
+        }
+        Update: {
+          application_id?: string
+          created_at?: string
+          id?: string
+          interest?: Database["public"]["Enums"]["volunteer_interest"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "volunteer_interests_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "volunteer_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      volunteer_notes: {
+        Row: {
+          application_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          note: string
+        }
+        Insert: {
+          application_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          note: string
+        }
+        Update: {
+          application_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          note?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "volunteer_notes_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "volunteer_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      volunteer_screening: {
+        Row: {
+          agree_clinical_referral: boolean
+          agree_complete_training: boolean
+          agree_professional_boundaries: boolean
+          application_id: string
+          created_at: string
+          id: string
+          understand_no_medical_advice: boolean
+        }
+        Insert: {
+          agree_clinical_referral: boolean
+          agree_complete_training: boolean
+          agree_professional_boundaries: boolean
+          application_id: string
+          created_at?: string
+          id?: string
+          understand_no_medical_advice: boolean
+        }
+        Update: {
+          agree_clinical_referral?: boolean
+          agree_complete_training?: boolean
+          agree_professional_boundaries?: boolean
+          application_id?: string
+          created_at?: string
+          id?: string
+          understand_no_medical_advice?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "volunteer_screening_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: true
+            referencedRelation: "volunteer_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      volunteer_status_history: {
+        Row: {
+          application_id: string
+          changed_by: string | null
+          created_at: string
+          id: string
+          reason: string | null
+          status: Database["public"]["Enums"]["volunteer_status"]
+        }
+        Insert: {
+          application_id: string
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          reason?: string | null
+          status: Database["public"]["Enums"]["volunteer_status"]
+        }
+        Update: {
+          application_id?: string
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          reason?: string | null
+          status?: Database["public"]["Enums"]["volunteer_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "volunteer_status_history_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "volunteer_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      volunteer_training_records: {
+        Row: {
+          application_id: string
+          assigned_at: string
+          completed_at: string | null
+          created_by: string | null
+          id: string
+          notes: string | null
+          training_name: string
+        }
+        Insert: {
+          application_id: string
+          assigned_at?: string
+          completed_at?: string | null
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          training_name: string
+        }
+        Update: {
+          application_id?: string
+          assigned_at?: string
+          completed_at?: string | null
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          training_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "volunteer_training_records_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "volunteer_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -645,6 +889,22 @@ export type Database = {
         | "discuss_alternatives"
         | "score_only"
         | "helping_someone"
+      smoking_status: "smoker" | "former_smoker" | "non_smoker"
+      volunteer_interest:
+        | "awareness_campaigns"
+        | "smoker_support"
+        | "data_entry"
+        | "follow_up_coordination"
+        | "content_creation"
+        | "events"
+      volunteer_status:
+        | "new_applicant"
+        | "awaiting_review"
+        | "accepted_for_training"
+        | "in_training"
+        | "active_volunteer"
+        | "needs_follow_up"
+        | "not_accepted"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -784,6 +1044,24 @@ export const Constants = {
         "discuss_alternatives",
         "score_only",
         "helping_someone",
+      ],
+      smoking_status: ["smoker", "former_smoker", "non_smoker"],
+      volunteer_interest: [
+        "awareness_campaigns",
+        "smoker_support",
+        "data_entry",
+        "follow_up_coordination",
+        "content_creation",
+        "events",
+      ],
+      volunteer_status: [
+        "new_applicant",
+        "awaiting_review",
+        "accepted_for_training",
+        "in_training",
+        "active_volunteer",
+        "needs_follow_up",
+        "not_accepted",
       ],
     },
   },
