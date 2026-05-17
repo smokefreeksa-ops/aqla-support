@@ -226,6 +226,16 @@ function Flow() {
     readiness: "",
     riskFlags: [],
     followUp: "whatsapp_messages",
+    research: {
+      enabled: false,
+      consent_publication: false,
+      importance_0_10: "",
+      confidence_0_10: "",
+      main_reason: "",
+      ever_tried: null,
+      attempts_count: "",
+      longest_quit_duration: "",
+    },
   });
 
   const hasCig = s.products.includes("cigarettes");
