@@ -595,6 +595,81 @@ export type Database = {
           },
         ]
       }
+      notification_log: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          event_type: string
+          export_type: string | null
+          id: string
+          participant_code: string | null
+          recipient_email: string
+          sent_at: string | null
+          sent_status: string
+          staff_email: string | null
+          subject: string | null
+          volunteer_code: string | null
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          event_type: string
+          export_type?: string | null
+          id?: string
+          participant_code?: string | null
+          recipient_email: string
+          sent_at?: string | null
+          sent_status: string
+          staff_email?: string | null
+          subject?: string | null
+          volunteer_code?: string | null
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          event_type?: string
+          export_type?: string | null
+          id?: string
+          participant_code?: string | null
+          recipient_email?: string
+          sent_at?: string | null
+          sent_status?: string
+          staff_email?: string | null
+          subject?: string | null
+          volunteer_code?: string | null
+        }
+        Relationships: []
+      }
+      notification_settings: {
+        Row: {
+          created_at: string
+          enabled: boolean
+          id: string
+          notification_type: string
+          recipient_email: string
+          send_full_data: boolean
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          notification_type: string
+          recipient_email?: string
+          send_full_data?: boolean
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          notification_type?: string
+          recipient_email?: string
+          send_full_data?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       outcome_tracking: {
         Row: {
           abstinent: boolean | null
