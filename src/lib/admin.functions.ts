@@ -415,6 +415,10 @@ export const exportCsv = createServerFn({ method: "POST" })
         relapsed_yes_no: yesNo(r.relapsed as boolean | null),
         current_product_use: r.current_product_use ?? "not_answered",
         co_reading_ppm_optional: r.co_reading ?? null,
+        withdrawal_severity_0_10: "not_applicable",
+        abstinence_duration_days: "not_applicable",
+        percent_reduction_estimate: "not_applicable",
+        satisfaction_with_support_0_10: "not_applicable",
       }));
       const visitRows: Record<string, unknown>[] = (fv ?? []).map((r) => ({
         participant_code: codeOf(r.participant_id),
