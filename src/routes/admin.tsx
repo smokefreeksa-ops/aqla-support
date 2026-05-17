@@ -228,6 +228,9 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
               <Button size="sm" variant="outline" onClick={() => doExport("product_use")}><Download className="h-4 w-4 mr-1" />Product use</Button>
               <Button size="sm" variant="outline" onClick={() => doExport("youth_nicotine")}><Download className="h-4 w-4 mr-1" />Youth</Button>
               <Button size="sm" variant="outline" onClick={() => doExport("city_summary")}><Download className="h-4 w-4 mr-1" />City summary</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("dependence_items")}><Download className="h-4 w-4 mr-1" />Dependence items</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("readiness_quit_history")}><Download className="h-4 w-4 mr-1" />Readiness &amp; quit history</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("research_consent_only")}><Download className="h-4 w-4 mr-1" />Research consent only</Button>
             </div>
           )}
         </div>
