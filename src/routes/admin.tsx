@@ -7,33 +7,35 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import {
   listParticipants, getDashboardStats, getParticipant,
   updateParticipantReception, addClinicalNote, updateOutcome, exportCsv,
 } from "@/lib/admin.functions";
-import { LogOut, Download, ShieldAlert, RefreshCw } from "lucide-react";
+import {
+  listVolunteers, getVolunteerStats, getVolunteer, updateVolunteer, addVolunteerNote,
+} from "@/lib/volunteer.functions";
+import { LogOut, Download, ShieldAlert, RefreshCw, Users, HeartPulse } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
-  head: () => ({ meta: [{ title: "Admin Dashboard — La-tatten" }] }),
+  head: () => ({ meta: [{ title: "Admin Dashboard — Aqla" }] }),
   component: AdminPage,
 });
 
 type Row = Awaited<ReturnType<typeof listParticipants>>["rows"][number];
+type VRow = Awaited<ReturnType<typeof listVolunteers>>["rows"][number];
+
+const VOL_STATUSES = [
+  "new_applicant","awaiting_review","accepted_for_training","in_training",
+  "active_volunteer","needs_follow_up","not_accepted",
+] as const;
 
 function AdminPage() {
   const nav = useNavigate();
-  const list = useServerFn(listParticipants);
-  const stats = useServerFn(getDashboardStats);
-  const exportFn = useServerFn(exportCsv);
   const [ready, setReady] = useState(false);
-  const [rows, setRows] = useState<Row[]>([]);
   const [roles, setRoles] = useState<string[]>([]);
-  const [statsData, setStatsData] = useState<Awaited<ReturnType<typeof getDashboardStats>>["stats"] | null>(null);
-  const [search, setSearch] = useState("");
-  const [cohort, setCohort] = useState<string>("");
-  const [drOnly, setDrOnly] = useState(false);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -46,16 +48,63 @@ function AdminPage() {
     return () => sub.subscription.unsubscribe();
   }, [nav]);
 
+  if (!ready) return null;
+  const isPhysician = roles.includes("physician");
+
+  return (
+    <div className="min-h-screen bg-background">
+      <header className="border-b bg-card">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+          <div className="flex items-center gap-3">
+            <Link to="/" className="font-semibold">Aqla</Link>
+            <Badge variant="outline">{roles.join(", ") || "no role"}</Badge>
+          </div>
+          <Button variant="ghost" size="sm" onClick={async () => { await supabase.auth.signOut(); nav({ to: "/login" }); }}>
+            <LogOut className="h-4 w-4 mr-1" /> Sign out
+          </Button>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-7xl px-4 py-6">
+        <Tabs defaultValue="participants">
+          <TabsList>
+            <TabsTrigger value="participants" className="gap-1.5"><HeartPulse className="h-4 w-4" />Quit Support</TabsTrigger>
+            <TabsTrigger value="volunteers" className="gap-1.5"><Users className="h-4 w-4" />Volunteers</TabsTrigger>
+          </TabsList>
+          <TabsContent value="participants">
+            <ParticipantsPanel onRoles={setRoles} isPhysician={isPhysician} />
+          </TabsContent>
+          <TabsContent value="volunteers">
+            <VolunteersPanel />
+          </TabsContent>
+        </Tabs>
+      </main>
+    </div>
+  );
+}
+
+/* ---------------- Participants (smoker) ---------------- */
+function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) => void; isPhysician: boolean }) {
+  const list = useServerFn(listParticipants);
+  const stats = useServerFn(getDashboardStats);
+  const exportFn = useServerFn(exportCsv);
+  const [rows, setRows] = useState<Row[]>([]);
+  const [statsData, setStatsData] = useState<Awaited<ReturnType<typeof getDashboardStats>>["stats"] | null>(null);
+  const [search, setSearch] = useState("");
+  const [cohort, setCohort] = useState<string>("");
+  const [drOnly, setDrOnly] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
   async function refresh() {
     try {
       const [l, st] = await Promise.all([
         list({ data: { search: search || undefined, cohort: cohort || undefined, doctorReview: drOnly || undefined } }),
         stats({}),
       ]);
-      setRows(l.rows); setRoles(l.roles); setStatsData(st.stats);
+      setRows(l.rows); onRoles(l.roles); setStatsData(st.stats);
     } catch (e) { toast.error((e as Error).message); }
   }
-  useEffect(() => { if (ready) refresh(); /* eslint-disable-next-line */ }, [ready]);
+  useEffect(() => { refresh(); /* eslint-disable-next-line */ }, []);
 
   async function doExport(type: "full" | "anonymized" | "cohort" | "follow_up_due" | "research") {
     try {
@@ -66,116 +115,311 @@ function AdminPage() {
     } catch (e) { toast.error((e as Error).message); }
   }
 
-  if (!ready) return null;
-  const isPhysician = roles.includes("physician");
-
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-card">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-3">
-            <Link to="/" className="font-semibold">La-tatten</Link>
-            <Badge variant="outline">{roles.join(", ") || "no role"}</Badge>
-          </div>
-          <Button variant="ghost" size="sm" onClick={async () => { await supabase.auth.signOut(); nav({ to: "/login" }); }}>
-            <LogOut className="h-4 w-4 mr-1" /> Sign out
-          </Button>
+    <div className="space-y-6 mt-4">
+      {statsData && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+          <Stat label="Total" value={statsData.total} />
+          <Stat label="Today" value={statsData.today} />
+          <Stat label="Need Doctor" value={statsData.doctorReview} tone="warning" />
+          <Stat label="Pending Contact" value={statsData.pending} />
+          <Stat label="Contacted" value={statsData.contacted} />
+          <Stat label="Appointments" value={statsData.appointments} />
+          {Object.entries(statsData.byCohort).map(([k, v]) => (
+            <Stat key={k} label={`Cohort ${k}`} value={v} tone="primary" />
+          ))}
         </div>
-      </header>
+      )}
 
-      <main className="mx-auto max-w-7xl px-4 py-6 space-y-6">
-        {roles.length === 0 && (
-          <Card className="p-4 border-warning bg-warning/10 text-sm">
-            <ShieldAlert className="inline h-4 w-4 mr-1" />
-            Your account has no role assigned. A physician must add your role in the user_roles table.
-          </Card>
-        )}
-
-        {statsData && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-            <Stat label="Total" value={statsData.total} />
-            <Stat label="Today" value={statsData.today} />
-            <Stat label="Need Doctor" value={statsData.doctorReview} tone="warning" />
-            <Stat label="Pending Contact" value={statsData.pending} />
-            <Stat label="Contacted" value={statsData.contacted} />
-            <Stat label="Appointments" value={statsData.appointments} />
-            {Object.entries(statsData.byCohort).map(([k, v]) => (
-              <Stat key={k} label={`Cohort ${k}`} value={v} tone="primary" />
-            ))}
+      <Card className="p-4">
+        <div className="flex flex-wrap items-end gap-2">
+          <div className="grow min-w-48">
+            <label className="text-xs text-muted-foreground">Search (name / phone / ID / city)</label>
+            <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…" />
           </div>
-        )}
-
-        <Card className="p-4">
-          <div className="flex flex-wrap items-end gap-2">
-            <div className="grow min-w-48">
-              <label className="text-xs text-muted-foreground">Search (name / phone / ID / city)</label>
-              <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…" />
-            </div>
-            <div className="w-32">
-              <label className="text-xs text-muted-foreground">Cohort</label>
-              <Select value={cohort || "all"} onValueChange={(v) => setCohort(v === "all" ? "" : v)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  {["A","B","C","D","E","F","G","H"].map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" checked={drOnly} onChange={(e) => setDrOnly(e.target.checked)} />
-              Doctor review only
-            </label>
-            <Button onClick={refresh} variant="outline" size="sm"><RefreshCw className="h-4 w-4 mr-1" /> Apply</Button>
-            {isPhysician && (
-              <div className="ml-auto flex flex-wrap gap-1">
-                <Button size="sm" variant="outline" onClick={() => doExport("full")}><Download className="h-4 w-4 mr-1" />Full</Button>
-                <Button size="sm" variant="outline" onClick={() => doExport("anonymized")}><Download className="h-4 w-4 mr-1" />Anonymized</Button>
-                <Button size="sm" variant="outline" onClick={() => doExport("cohort")} disabled={!cohort}><Download className="h-4 w-4 mr-1" />Cohort</Button>
-                <Button size="sm" variant="outline" onClick={() => doExport("follow_up_due")}><Download className="h-4 w-4 mr-1" />Follow-up due</Button>
-                <Button size="sm" variant="outline" onClick={() => doExport("research")}><Download className="h-4 w-4 mr-1" />Research</Button>
-              </div>
-            )}
+          <div className="w-32">
+            <label className="text-xs text-muted-foreground">Cohort</label>
+            <Select value={cohort || "all"} onValueChange={(v) => setCohort(v === "all" ? "" : v)}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                {["A","B","C","D","E","F","G","H"].map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+              </SelectContent>
+            </Select>
           </div>
-        </Card>
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" checked={drOnly} onChange={(e) => setDrOnly(e.target.checked)} />
+            Doctor review only
+          </label>
+          <Button onClick={refresh} variant="outline" size="sm"><RefreshCw className="h-4 w-4 mr-1" /> Apply</Button>
+          {isPhysician && (
+            <div className="ml-auto flex flex-wrap gap-1">
+              <Button size="sm" variant="outline" onClick={() => doExport("full")}><Download className="h-4 w-4 mr-1" />Full</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("anonymized")}><Download className="h-4 w-4 mr-1" />Anonymized</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("cohort")} disabled={!cohort}><Download className="h-4 w-4 mr-1" />Cohort</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("follow_up_due")}><Download className="h-4 w-4 mr-1" />Follow-up due</Button>
+              <Button size="sm" variant="outline" onClick={() => doExport("research")}><Download className="h-4 w-4 mr-1" />Research</Button>
+            </div>
+          )}
+        </div>
+      </Card>
 
-        <Card className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/40 text-left">
-              <tr>
-                <th className="p-2">ID</th><th className="p-2">Name</th><th className="p-2">Mobile</th>
-                <th className="p-2">Age</th><th className="p-2">City</th><th className="p-2">Cohort</th>
-                <th className="p-2">Dr</th><th className="p-2">Contacted</th><th className="p-2"></th>
+      <Card className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-muted/40 text-left">
+            <tr>
+              <th className="p-2">ID</th><th className="p-2">Name</th><th className="p-2">Mobile</th>
+              <th className="p-2">Age</th><th className="p-2">City</th><th className="p-2">Cohort</th>
+              <th className="p-2">Dr</th><th className="p-2">Contacted</th><th className="p-2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.id} className="border-t hover:bg-muted/30">
+                <td className="p-2 font-mono text-xs">{r.participant_code}</td>
+                <td className="p-2">{r.full_name}</td>
+                <td className="p-2">{r.mobile}</td>
+                <td className="p-2">{r.age ?? "—"}</td>
+                <td className="p-2">{r.city ?? "—"}</td>
+                <td className="p-2"><Badge>{r.cohort}</Badge></td>
+                <td className="p-2">{r.doctor_review_needed ? <Badge variant="destructive">Yes</Badge> : "—"}</td>
+                <td className="p-2">{r.contacted ? "✓" : "—"}</td>
+                <td className="p-2"><Button size="sm" variant="outline" onClick={() => setSelectedId(r.id)}>Open</Button></td>
               </tr>
-            </thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.id} className="border-t hover:bg-muted/30">
-                  <td className="p-2 font-mono text-xs">{r.participant_code}</td>
-                  <td className="p-2">{r.full_name}</td>
-                  <td className="p-2">{r.mobile}</td>
-                  <td className="p-2">{r.age ?? "—"}</td>
-                  <td className="p-2">{r.city ?? "—"}</td>
-                  <td className="p-2"><Badge>{r.cohort}</Badge></td>
-                  <td className="p-2">{r.doctor_review_needed ? <Badge variant="destructive">Yes</Badge> : "—"}</td>
-                  <td className="p-2">{r.contacted ? "✓" : "—"}</td>
-                  <td className="p-2"><Button size="sm" variant="outline" onClick={() => setSelectedId(r.id)}>Open</Button></td>
-                </tr>
-              ))}
-              {rows.length === 0 && <tr><td colSpan={9} className="p-8 text-center text-muted-foreground">No participants yet.</td></tr>}
-            </tbody>
-          </table>
-        </Card>
-      </main>
+            ))}
+            {rows.length === 0 && <tr><td colSpan={9} className="p-8 text-center text-muted-foreground">No participants yet.</td></tr>}
+          </tbody>
+        </table>
+      </Card>
 
       {selectedId && <DetailDrawer id={selectedId} onClose={() => { setSelectedId(null); refresh(); }} isPhysician={isPhysician} />}
     </div>
   );
 }
 
+/* ---------------- Volunteers ---------------- */
+function VolunteersPanel() {
+  const list = useServerFn(listVolunteers);
+  const stats = useServerFn(getVolunteerStats);
+  const [rows, setRows] = useState<VRow[]>([]);
+  const [interests, setInterests] = useState<Record<string, string[]>>({});
+  const [statsData, setStatsData] = useState<Awaited<ReturnType<typeof getVolunteerStats>>["stats"] | null>(null);
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState<string>("");
+  const [city, setCity] = useState("");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  async function refresh() {
+    try {
+      const [l, st] = await Promise.all([
+        list({ data: { search: search || undefined, status: status || undefined, city: city || undefined } }),
+        stats({}),
+      ]);
+      setRows(l.rows); setInterests(l.interests); setStatsData(st.stats);
+    } catch (e) { toast.error((e as Error).message); }
+  }
+  useEffect(() => { refresh(); /* eslint-disable-next-line */ }, []);
+
+  return (
+    <div className="space-y-6 mt-4">
+      {statsData && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+          <Stat label="Total Applicants" value={statsData.total} />
+          <Stat label="Today" value={statsData.today} />
+          <Stat label="Pending Contact" value={statsData.pending} />
+          <Stat label="Contacted" value={statsData.contacted} />
+          {Object.entries(statsData.byStatus).map(([k, v]) => (
+            <Stat key={k} label={k.replace(/_/g, " ")} value={v} tone="primary" />
+          ))}
+        </div>
+      )}
+
+      <Card className="p-4">
+        <div className="flex flex-wrap items-end gap-2">
+          <div className="grow min-w-48">
+            <label className="text-xs text-muted-foreground">Search (name / phone / code / city / affiliation)</label>
+            <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…" />
+          </div>
+          <div className="w-48">
+            <label className="text-xs text-muted-foreground">Status</label>
+            <Select value={status || "all"} onValueChange={(v) => setStatus(v === "all" ? "" : v)}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                {VOL_STATUSES.map((s) => <SelectItem key={s} value={s}>{s.replace(/_/g, " ")}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="w-40">
+            <label className="text-xs text-muted-foreground">City</label>
+            <Input value={city} onChange={(e) => setCity(e.target.value)} placeholder="City…" />
+          </div>
+          <Button onClick={refresh} variant="outline" size="sm"><RefreshCw className="h-4 w-4 mr-1" /> Apply</Button>
+        </div>
+      </Card>
+
+      {statsData && (Object.keys(statsData.byCity).length || Object.keys(statsData.byInterest).length) ? (
+        <div className="grid gap-3 md:grid-cols-3">
+          <BreakdownCard title="By City" data={statsData.byCity} />
+          <BreakdownCard title="By Affiliation" data={statsData.byAffiliation} />
+          <BreakdownCard title="By Interest" data={statsData.byInterest} />
+        </div>
+      ) : null}
+
+      <Card className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-muted/40 text-left">
+            <tr>
+              <th className="p-2">Code</th><th className="p-2">Name</th><th className="p-2">Mobile</th>
+              <th className="p-2">City</th><th className="p-2">Affiliation</th>
+              <th className="p-2">Interests</th><th className="p-2">Status</th>
+              <th className="p-2">Contacted</th><th className="p-2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.id} className="border-t hover:bg-muted/30">
+                <td className="p-2 font-mono text-xs">{r.application_code}</td>
+                <td className="p-2">{r.full_name}</td>
+                <td className="p-2">{r.mobile}</td>
+                <td className="p-2">{r.city ?? "—"}</td>
+                <td className="p-2">{r.affiliation ?? "—"}</td>
+                <td className="p-2 text-xs">{(interests[r.id] ?? []).join(", ") || "—"}</td>
+                <td className="p-2"><Badge variant="outline">{(r.status as string).replace(/_/g, " ")}</Badge></td>
+                <td className="p-2">{r.contacted ? "✓" : "—"}</td>
+                <td className="p-2"><Button size="sm" variant="outline" onClick={() => setSelectedId(r.id)}>Open</Button></td>
+              </tr>
+            ))}
+            {rows.length === 0 && <tr><td colSpan={9} className="p-8 text-center text-muted-foreground">No volunteer applications yet.</td></tr>}
+          </tbody>
+        </table>
+      </Card>
+
+      {selectedId && <VolunteerDrawer id={selectedId} onClose={() => { setSelectedId(null); refresh(); }} />}
+    </div>
+  );
+}
+
+function BreakdownCard({ title, data }: { title: string; data: Record<string, number> }) {
+  const items = Object.entries(data).filter(([k]) => k !== "?").sort((a, b) => b[1] - a[1]).slice(0, 8);
+  return (
+    <Card className="p-3">
+      <h3 className="text-sm font-semibold mb-2">{title}</h3>
+      {items.length === 0 ? (
+        <p className="text-xs text-muted-foreground">No data.</p>
+      ) : (
+        <ul className="space-y-1 text-sm">
+          {items.map(([k, v]) => (
+            <li key={k} className="flex justify-between"><span className="truncate">{k.replace(/_/g, " ")}</span><span className="font-semibold">{v}</span></li>
+          ))}
+        </ul>
+      )}
+    </Card>
+  );
+}
+
+function VolunteerDrawer({ id, onClose }: { id: string; onClose: () => void }) {
+  const get = useServerFn(getVolunteer);
+  const upd = useServerFn(updateVolunteer);
+  const addNote = useServerFn(addVolunteerNote);
+  const [data, setData] = useState<Awaited<ReturnType<typeof getVolunteer>> | null>(null);
+  const [note, setNote] = useState("");
+
+  useEffect(() => { get({ data: { id } }).then(setData).catch((e) => toast.error((e as Error).message)); }, [id, get]);
+  if (!data?.application) return null;
+  const a = data.application;
+
+  async function reload() { setData(await get({ data: { id } })); }
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/40" onClick={onClose}>
+      <div className="absolute right-0 top-0 h-full w-full max-w-2xl overflow-y-auto bg-background p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="text-xs font-mono text-muted-foreground">{a.application_code}</div>
+            <h2 className="text-xl font-semibold">{a.full_name}</h2>
+          </div>
+          <Button size="sm" variant="ghost" onClick={onClose}>Close</Button>
+        </div>
+
+        <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+          <Info label="Mobile">{a.mobile}</Info>
+          <Info label="Email">{a.email ?? "—"}</Info>
+          <Info label="Age">{a.age ?? "—"}</Info>
+          <Info label="City">{a.city ?? "—"}</Info>
+          <Info label="Affiliation">{a.affiliation ?? "—"}</Info>
+          <Info label="Academic level">{a.academic_level ?? "—"}</Info>
+          <Info label="Smoking status">{a.smoking_status ?? "—"}</Info>
+          <Info label="Preferred contact">{a.preferred_contact}</Info>
+          <Info label="Interests">{(data.interests as string[]).map((i) => i.replace(/_/g, " ")).join(", ") || "—"}</Info>
+          <Info label="Availability">{a.availability ?? "—"}</Info>
+        </div>
+
+        {a.motivation && (
+          <Card className="mt-3 p-3 text-sm">
+            <div className="text-xs text-muted-foreground mb-1">Motivation</div>
+            {a.motivation}
+          </Card>
+        )}
+
+        <Card className="mt-4 p-3 space-y-2">
+          <h3 className="font-semibold">Status</h3>
+          <div className="flex flex-wrap gap-2 items-end">
+            <Select value={a.status as string} onValueChange={async (v) => { await upd({ data: { id, status: v as never } }); toast.success("Status updated"); await reload(); }}>
+              <SelectTrigger className="w-56"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {VOL_STATUSES.map((s) => <SelectItem key={s} value={s}>{s.replace(/_/g, " ")}</SelectItem>)}
+              </SelectContent>
+            </Select>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" defaultChecked={a.contacted}
+                onChange={async (e) => { await upd({ data: { id, contacted: e.target.checked, contact_date: new Date().toISOString() } }); toast.success("Saved"); }}
+              /> Contacted
+            </label>
+          </div>
+        </Card>
+
+        <Card className="mt-4 p-3 space-y-2">
+          <h3 className="font-semibold">Notes</h3>
+          <div className="space-y-2 max-h-40 overflow-y-auto">
+            {data.notes.map((n) => (
+              <div key={n.id} className="rounded border p-2 text-sm">
+                <div className="text-xs text-muted-foreground">{new Date(n.created_at).toLocaleString()}</div>
+                {n.note}
+              </div>
+            ))}
+            {data.notes.length === 0 && <p className="text-xs text-muted-foreground">No notes yet.</p>}
+          </div>
+          <Textarea rows={3} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Add a note…" />
+          <Button size="sm" onClick={async () => {
+            if (!note.trim()) return;
+            await addNote({ data: { application_id: id, note } });
+            setNote(""); await reload(); toast.success("Note added");
+          }}>Add note</Button>
+        </Card>
+
+        <Card className="mt-4 p-3 space-y-2">
+          <h3 className="font-semibold">Status history</h3>
+          <ul className="space-y-1 text-sm">
+            {data.history.map((h) => (
+              <li key={h.id} className="flex justify-between border-b py-1 last:border-0">
+                <span>{(h.status as string).replace(/_/g, " ")}</span>
+                <span className="text-xs text-muted-foreground">{new Date(h.created_at).toLocaleString()}</span>
+              </li>
+            ))}
+            {data.history.length === 0 && <p className="text-xs text-muted-foreground">No history.</p>}
+          </ul>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- Shared ---------------- */
 function Stat({ label, value, tone }: { label: string; value: number; tone?: "warning" | "primary" }) {
   return (
     <Card className="p-3">
-      <div className="text-xs text-muted-foreground">{label}</div>
+      <div className="text-xs text-muted-foreground capitalize">{label}</div>
       <div className={`text-2xl font-bold ${tone === "warning" ? "text-warning" : tone === "primary" ? "text-primary" : ""}`}>{value}</div>
     </Card>
   );
@@ -190,7 +434,6 @@ function DetailDrawer({ id, onClose, isPhysician }: { id: string; onClose: () =>
   const [note, setNote] = useState("");
 
   useEffect(() => { get({ data: { id } }).then(setData).catch((e) => toast.error((e as Error).message)); }, [id, get]);
-
   if (!data) return null;
   const p = data.participant!;
 

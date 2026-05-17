@@ -1,4 +1,4 @@
-// Clinical scoring + cohort logic for La-tatten
+// Clinical scoring + cohort logic for Aqla
 // Cigarette dependence: standard FTND 6-domain scoring (0-10)
 // Nicotine control: HONC-style yes/no count (0-10)
 

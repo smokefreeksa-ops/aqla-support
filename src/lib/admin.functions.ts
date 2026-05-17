@@ -252,7 +252,7 @@ export const exportCsv = createServerFn({ method: "POST" })
     });
     await logAudit(context.userId, "export", "participants", undefined, { type: data.type, count: cleaned.length });
 
-    return { csv, filename: `latatten_${data.type}_${new Date().toISOString().slice(0, 10)}.csv` };
+    return { csv, filename: `aqla_${data.type}_${new Date().toISOString().slice(0, 10)}.csv` };
   });
 
 export const getDashboardStats = createServerFn({ method: "GET" })
