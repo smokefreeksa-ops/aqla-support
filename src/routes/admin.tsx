@@ -17,9 +17,11 @@ import {
 import {
   listVolunteers, getVolunteerStats, getVolunteer, updateVolunteer, addVolunteerNote,
 } from "@/lib/volunteer.functions";
-import { LogOut, Download, ShieldAlert, RefreshCw, Users, HeartPulse, AlertTriangle } from "lucide-react";
+import { LogOut, ShieldAlert, RefreshCw, Users, HeartPulse, AlertTriangle, BarChart3, Eye, Sun, ClipboardCheck, Stethoscope, CalendarCheck, Download } from "lucide-react";
 import { getAssistantStatus } from "@/lib/assistant.functions";
+import { getPublicImpactStats } from "@/lib/impact.functions";
 import { useQuery } from "@tanstack/react-query";
+import aqlaLogo from "@/assets/aqla-logo.png";
 
 function AssistantStatusBanner() {
   const statusFn = useServerFn(getAssistantStatus);
@@ -80,7 +82,10 @@ function AdminPage() {
       <header className="border-b bg-card">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <Link to="/" className="font-semibold">Aqla</Link>
+            <Link to="/" className="flex items-center gap-2">
+              <img src={aqlaLogo} alt="Aqla — أقلع logo" className="h-[38px] w-auto object-contain sm:h-11" />
+              <span className="font-semibold">Aqla — أقلع</span>
+            </Link>
             <Badge variant="outline">{roles.join(", ") || "no role"}</Badge>
           </div>
           <Button variant="ghost" size="sm" onClick={async () => { await supabase.auth.signOut(); nav({ to: "/login" }); }}>
