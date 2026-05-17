@@ -23,12 +23,14 @@ export interface FtndAnswers {
 
 export function scoreFtnd(a: FtndAnswers) {
   const total = a.q1 + a.q2 + a.q3 + a.q4 + a.q5 + a.q6;
+  // Snake-case bands per research-grade spec:
+  // 0-2 very_low | 3-4 low | 5 moderate | 6-7 high | 8-10 very_high
   let category: string;
-  if (total <= 2) category = "Very low cigarette dependence";
-  else if (total <= 4) category = "Low cigarette dependence";
-  else if (total === 5) category = "Moderate cigarette dependence";
-  else if (total <= 7) category = "High cigarette dependence";
-  else category = "Very high cigarette dependence";
+  if (total <= 2) category = "very_low";
+  else if (total <= 4) category = "low";
+  else if (total === 5) category = "moderate";
+  else if (total <= 7) category = "high";
+  else category = "very_high";
   return { total, category };
 }
 
@@ -40,10 +42,10 @@ export type NicotineAnswers = Record<
 export function scoreNicotineControl(a: NicotineAnswers) {
   const yes_count = Object.values(a).filter(Boolean).length;
   let category: string;
-  if (yes_count === 0) category = "Low current concern";
-  else if (yes_count <= 2) category = "Early loss-of-control concern";
-  else if (yes_count <= 5) category = "Moderate nicotine-control concern";
-  else category = "High nicotine-control concern — clinician review recommended";
+  if (yes_count === 0) category = "low";
+  else if (yes_count <= 2) category = "early";
+  else if (yes_count <= 5) category = "moderate";
+  else category = "high";
   return { yes_count, category };
 }
 
@@ -109,15 +111,22 @@ export function assignCohort(i: CohortInput): CohortResult {
   }
   const isMinor = (i.age ?? 99) < 18;
 
-  // Nicotine-control high concern is handled within Cohort C (doctor review flag),
-  // so it should not auto-escalate to Cohort F for non-cigarette nicotine users.
   const veryHighDep = (i.ftnd ?? 0) >= 8;
+  const highDep = (i.ftnd ?? 0) >= 6; // FTND high band (6-7) or higher
+  const highNicConcern = hasNicProduct && (i.nicotineYes ?? 0) >= 6;
+  const otherRiskFlags = i.riskFlags.filter(
+    (f) => f !== "multi_product" && f !== "very_high_dependence",
+  );
+  const highDepPlusRisk = highDep && otherRiskFlags.length > 0;
+
   const fTrigger =
     urgent ||
     i.riskFlags.includes("pregnancy") ||
     i.riskFlags.includes("mental_health") ||
     veryHighDep ||
     multiProduct ||
+    highNicConcern ||
+    highDepPlusRisk ||
     i.riskFlags.includes("multi_product") ||
     (isMinor && ((i.ftnd ?? 0) >= 3 || (i.nicotineYes ?? 0) >= 3)) ||
     i.riskFlags.includes("repeated_failed") ||
@@ -125,10 +134,20 @@ export function assignCohort(i: CohortInput): CohortResult {
     i.riskFlags.includes("requests_clinician");
 
   if (fTrigger) {
+    const reasons: string[] = [];
+    if (urgent) reasons.push("Urgent safety symptoms");
+    if (i.riskFlags.includes("pregnancy")) reasons.push("Pregnancy");
+    if (i.riskFlags.includes("mental_health")) reasons.push("Mental-health concern");
+    if (veryHighDep) reasons.push("Very-high cigarette dependence");
+    else if (highDepPlusRisk) reasons.push("High cigarette dependence with additional risk flags");
+    if (multiProduct || i.riskFlags.includes("multi_product")) reasons.push("Multiple product use");
+    if (highNicConcern) reasons.push("High nicotine-control concern");
+    if (i.riskFlags.includes("repeated_failed")) reasons.push("Repeated failed quit attempts");
+    if (i.riskFlags.includes("wants_medication")) reasons.push("Medication request");
+    if (i.riskFlags.includes("requests_clinician")) reasons.push("Clinician review requested");
     return {
       cohort: "F",
-      reason:
-        "High-priority clinician review (safety flags, very-high dependence, multi-product use, or clinician request).",
+      reason: `High-priority clinician review (${reasons.join("; ") || "safety flags"}).`,
       doctorReviewNeeded: true,
       urgent,
     };
