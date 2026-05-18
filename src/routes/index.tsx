@@ -59,6 +59,9 @@ function Inner() {
             <Link to="/tools">
               <Button variant="ghost" size="sm">{lang === "ar" ? "أدوات أقلع" : "Tools"}</Button>
             </Link>
+            <Link to="/city-challenge">
+              <Button variant="ghost" size="sm">{lang === "ar" ? "تحدي المدن" : "City Challenge"}</Button>
+            </Link>
             <Link to="/about">
               <Button variant="ghost" size="sm">{lang === "ar" ? "عن أقلع" : "About"}</Button>
             </Link>
