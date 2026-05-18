@@ -56,17 +56,11 @@ function Inner() {
               <Languages className="h-4 w-4" />
               {lang === "ar" ? "English" : "العربية"}
             </Button>
-            <Link to="/tools">
-              <Button variant="ghost" size="sm">{lang === "ar" ? "أدوات أقلع" : "Tools"}</Button>
-            </Link>
             <Link to="/challenges">
-              <Button variant="ghost" size="sm">{lang === "ar" ? "التحديات" : "Challenges"}</Button>
+              <Button variant="ghost" size="sm">{lang === "ar" ? "تحديات أقلع" : "Challenges"}</Button>
             </Link>
-            <Link to="/city-challenge">
-              <Button variant="ghost" size="sm">{lang === "ar" ? "تحدي المدن" : "City Challenge"}</Button>
-            </Link>
-            <Link to="/poster-studio">
-              <Button variant="ghost" size="sm">{lang === "ar" ? "صمم منشورك" : "Create Poster"}</Button>
+            <Link to="/guidelines">
+              <Button variant="ghost" size="sm">{lang === "ar" ? "المكتبة" : "Library"}</Button>
             </Link>
             <Link to="/about">
               <Button variant="ghost" size="sm">{lang === "ar" ? "عن أقلع" : "About"}</Button>
