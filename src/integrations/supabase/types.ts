@@ -358,6 +358,54 @@ export type Database = {
           },
         ]
       }
+      educational_modules: {
+        Row: {
+          content_ar: string | null
+          content_en: string | null
+          created_at: string
+          description_ar: string | null
+          description_en: string | null
+          id: string
+          is_active: boolean
+          slug: string
+          sort_order: number
+          source_links: Json
+          title_ar: string
+          title_en: string
+          updated_at: string
+        }
+        Insert: {
+          content_ar?: string | null
+          content_en?: string | null
+          created_at?: string
+          description_ar?: string | null
+          description_en?: string | null
+          id?: string
+          is_active?: boolean
+          slug: string
+          sort_order?: number
+          source_links?: Json
+          title_ar: string
+          title_en: string
+          updated_at?: string
+        }
+        Update: {
+          content_ar?: string | null
+          content_en?: string | null
+          created_at?: string
+          description_ar?: string | null
+          description_en?: string | null
+          id?: string
+          is_active?: boolean
+          slug?: string
+          sort_order?: number
+          source_links?: Json
+          title_ar?: string
+          title_en?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       engagement_events: {
         Row: {
           anonymous_session_id: string
@@ -616,6 +664,68 @@ export type Database = {
           q9_continued_despite_health?: boolean | null
         }
         Relationships: []
+      }
+      leaderboard_entries: {
+        Row: {
+          badge: string | null
+          city: string | null
+          consent_public_display: boolean
+          consent_social_tag: boolean
+          created_at: string
+          display_name: string | null
+          duration_seconds: number | null
+          id: string
+          is_approved: boolean
+          is_hidden: boolean
+          is_under_18: boolean
+          module_slug: string | null
+          quiz_attempt_id: string | null
+          score: number
+          social_handle: string | null
+        }
+        Insert: {
+          badge?: string | null
+          city?: string | null
+          consent_public_display?: boolean
+          consent_social_tag?: boolean
+          created_at?: string
+          display_name?: string | null
+          duration_seconds?: number | null
+          id?: string
+          is_approved?: boolean
+          is_hidden?: boolean
+          is_under_18?: boolean
+          module_slug?: string | null
+          quiz_attempt_id?: string | null
+          score: number
+          social_handle?: string | null
+        }
+        Update: {
+          badge?: string | null
+          city?: string | null
+          consent_public_display?: boolean
+          consent_social_tag?: boolean
+          created_at?: string
+          display_name?: string | null
+          duration_seconds?: number | null
+          id?: string
+          is_approved?: boolean
+          is_hidden?: boolean
+          is_under_18?: boolean
+          module_slug?: string | null
+          quiz_attempt_id?: string | null
+          score?: number
+          social_handle?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leaderboard_entries_quiz_attempt_id_fkey"
+            columns: ["quiz_attempt_id"]
+            isOneToOne: false
+            referencedRelation: "quiz_attempts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       motivation_assessment: {
         Row: {
@@ -1163,6 +1273,106 @@ export type Database = {
         }
         Relationships: []
       }
+      quiz_attempts: {
+        Row: {
+          anonymous_session_id: string | null
+          city: string | null
+          correct_answers: number
+          created_at: string
+          duration_seconds: number | null
+          id: string
+          module_id: string | null
+          module_slug: string | null
+          score: number
+          total_questions: number
+        }
+        Insert: {
+          anonymous_session_id?: string | null
+          city?: string | null
+          correct_answers: number
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          module_id?: string | null
+          module_slug?: string | null
+          score: number
+          total_questions: number
+        }
+        Update: {
+          anonymous_session_id?: string | null
+          city?: string | null
+          correct_answers?: number
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          module_id?: string | null
+          module_slug?: string | null
+          score?: number
+          total_questions?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_attempts_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "educational_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quiz_questions: {
+        Row: {
+          correct_option_index: number
+          created_at: string
+          difficulty: string
+          explanation_ar: string | null
+          explanation_en: string | null
+          id: string
+          is_active: boolean
+          module_id: string
+          options_ar: Json
+          options_en: Json
+          question_ar: string
+          question_en: string
+        }
+        Insert: {
+          correct_option_index: number
+          created_at?: string
+          difficulty?: string
+          explanation_ar?: string | null
+          explanation_en?: string | null
+          id?: string
+          is_active?: boolean
+          module_id: string
+          options_ar: Json
+          options_en: Json
+          question_ar: string
+          question_en: string
+        }
+        Update: {
+          correct_option_index?: number
+          created_at?: string
+          difficulty?: string
+          explanation_ar?: string | null
+          explanation_en?: string | null
+          id?: string
+          is_active?: boolean
+          module_id?: string
+          options_ar?: Json
+          options_en?: Json
+          question_ar?: string
+          question_en?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_questions_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "educational_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       readiness_stage: {
         Row: {
           created_at: string
@@ -1632,10 +1842,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_list_leaderboard: { Args: { p_status?: string }; Returns: Json }
       get_admin_analytics_dashboard: { Args: never; Returns: Json }
       get_admin_challenge_analytics: { Args: never; Returns: Json }
+      get_admin_learn_analytics: { Args: never; Returns: Json }
       get_challenge_public_stats: { Args: never; Returns: Json }
       get_city_challenge_stats: { Args: never; Returns: Json }
+      get_learn_public_stats: { Args: never; Returns: Json }
+      get_learn_top_leaderboard: {
+        Args: { p_city?: string; p_window?: string }
+        Returns: Json
+      }
       get_public_impact_stats: { Args: never; Returns: Json }
       has_role: {
         Args: {
