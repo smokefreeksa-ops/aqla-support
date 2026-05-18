@@ -313,7 +313,7 @@ function FeatureGrid({ isAr, tab }: { isAr: boolean; tab: TabKey }) {
           </div>
           <p className="mt-3 flex-1 text-sm text-muted-foreground leading-6">{isAr ? f.bodyAr : f.bodyEn}</p>
           <div className="mt-4">
-            <Link to={f.href} onClick={() => { if (f.event) trackEvent(f.event); trackEvent("challenge_card_clicked", { feature: f.titleEn }); }}>
+            <Link to={f.href} onClick={() => { if (f.event) trackEvent(f.event); trackEvent("challenge_card_clicked", f.titleEn); }}>
               <Button size="sm" className="quit-gradient border-0 text-white">
                 {isAr ? f.ctaAr : f.ctaEn}<ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </Button>
