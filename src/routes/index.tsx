@@ -59,6 +59,9 @@ function Inner() {
             <Link to="/tools">
               <Button variant="ghost" size="sm">{lang === "ar" ? "أدوات أقلع" : "Tools"}</Button>
             </Link>
+            <Link to="/challenges">
+              <Button variant="ghost" size="sm">{lang === "ar" ? "التحديات" : "Challenges"}</Button>
+            </Link>
             <Link to="/city-challenge">
               <Button variant="ghost" size="sm">{lang === "ar" ? "تحدي المدن" : "City Challenge"}</Button>
             </Link>
@@ -193,6 +196,46 @@ function Inner() {
             <Link to="/tools">
               <Button className="quit-gradient border-0 text-white">
                 {lang === "ar" ? "استكشف الأدوات" : "Explore Tools"}
+                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+              </Button>
+            </Link>
+          </div>
+        </section>
+
+        {/* Featured Challenges */}
+        <section className="mt-12">
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold tracking-tight text-primary sm:text-3xl">
+              {lang === "ar" ? "تحديات أقلع" : "Aqla Challenges"}
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
+              {lang === "ar"
+                ? "شارك في تحديات بسيطة وآمنة، مع مؤشرات مجمعة دون عرض أي بيانات شخصية."
+                : "Join safe, simple challenges with aggregate, privacy-safe community indicators."}
+            </p>
+          </div>
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            {[
+              { ar: "خريطة تعهدات أقلع", en: "Aqla Pledge Map", icon: HeartHandshake },
+              { ar: "تحدي مدن أقلع",      en: "Aqla City Challenge", icon: Users },
+              { ar: "تحدي أقلع 28 يوم",   en: "Aqla 28-Day Challenge", icon: Sparkles },
+            ].map((it, i) => (
+              <Link key={i} to="/challenges" className="block">
+                <Card className="group h-full rounded-2xl border-0 p-5 shadow-elegant card-gradient transition-transform hover:-translate-y-0.5">
+                  <div className="flex items-center gap-3">
+                    <div className="grid h-10 w-10 place-items-center rounded-xl quit-gradient text-white shadow-md">
+                      <it.icon className="h-5 w-5" />
+                    </div>
+                    <span className="text-sm font-semibold">{lang === "ar" ? it.ar : it.en}</span>
+                  </div>
+                </Card>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-5 text-center">
+            <Link to="/challenges">
+              <Button className="quit-gradient border-0 text-white">
+                {lang === "ar" ? "استكشف التحديات" : "Explore Challenges"}
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </Button>
             </Link>

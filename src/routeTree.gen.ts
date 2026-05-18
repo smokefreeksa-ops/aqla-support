@@ -13,6 +13,7 @@ import { Route as VolunteerRouteImport } from './routes/volunteer'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as CityChallengeRouteImport } from './routes/city-challenge'
+import { Route as ChallengesRouteImport } from './routes/challenges'
 import { Route as AssessmentRouteImport } from './routes/assessment'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
@@ -37,6 +38,11 @@ const LoginRoute = LoginRouteImport.update({
 const CityChallengeRoute = CityChallengeRouteImport.update({
   id: '/city-challenge',
   path: '/city-challenge',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChallengesRoute = ChallengesRouteImport.update({
+  id: '/challenges',
+  path: '/challenges',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AssessmentRoute = AssessmentRouteImport.update({
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
+  '/challenges': typeof ChallengesRoute
   '/city-challenge': typeof CityChallengeRoute
   '/login': typeof LoginRoute
   '/tools': typeof ToolsRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
+  '/challenges': typeof ChallengesRoute
   '/city-challenge': typeof CityChallengeRoute
   '/login': typeof LoginRoute
   '/tools': typeof ToolsRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
+  '/challenges': typeof ChallengesRoute
   '/city-challenge': typeof CityChallengeRoute
   '/login': typeof LoginRoute
   '/tools': typeof ToolsRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/assessment'
+    | '/challenges'
     | '/city-challenge'
     | '/login'
     | '/tools'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/assessment'
+    | '/challenges'
     | '/city-challenge'
     | '/login'
     | '/tools'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/assessment'
+    | '/challenges'
     | '/city-challenge'
     | '/login'
     | '/tools'
@@ -140,6 +152,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRouteWithChildren
   AssessmentRoute: typeof AssessmentRoute
+  ChallengesRoute: typeof ChallengesRoute
   CityChallengeRoute: typeof CityChallengeRoute
   LoginRoute: typeof LoginRoute
   ToolsRoute: typeof ToolsRoute
@@ -174,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/city-challenge'
       fullPath: '/city-challenge'
       preLoaderRoute: typeof CityChallengeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/challenges': {
+      id: '/challenges'
+      path: '/challenges'
+      fullPath: '/challenges'
+      preLoaderRoute: typeof ChallengesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/assessment': {
@@ -229,6 +249,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AdminRoute: AdminRouteWithChildren,
   AssessmentRoute: AssessmentRoute,
+  ChallengesRoute: ChallengesRoute,
   CityChallengeRoute: CityChallengeRoute,
   LoginRoute: LoginRoute,
   ToolsRoute: ToolsRoute,

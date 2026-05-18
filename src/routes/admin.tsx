@@ -18,9 +18,10 @@ import {
 import {
   listVolunteers, getVolunteerStats, getVolunteer, updateVolunteer, addVolunteerNote,
 } from "@/lib/volunteer.functions";
-import { LogOut, ShieldAlert, RefreshCw, Users, HeartPulse, AlertTriangle, BarChart3, Eye, Sun, ClipboardCheck, Stethoscope, CalendarCheck, Download, Mail, Send } from "lucide-react";
+import { LogOut, ShieldAlert, RefreshCw, Users, HeartPulse, AlertTriangle, BarChart3, Eye, Sun, ClipboardCheck, Stethoscope, CalendarCheck, Download, Mail, Send, Trophy } from "lucide-react";
 import { getAssistantStatus } from "@/lib/assistant.functions";
 import { getPublicImpactStats } from "@/lib/impact.functions";
+import { getAdminChallengeAnalytics } from "@/lib/challenges.functions";
 import { useQuery } from "@tanstack/react-query";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
@@ -159,6 +160,51 @@ function AdminAnalyticsCard() {
   );
 }
 
+function ChallengesAdminPanel() {
+  const fn = useServerFn(getAdminChallengeAnalytics);
+  const { data } = useQuery({ queryKey: ["admin-challenge-analytics"], queryFn: () => fn(), staleTime: 30_000 });
+  const a = data?.analytics;
+  if (!a) return <Card className="p-4 text-sm text-muted-foreground">Loading challenge analytics…</Card>;
+  const renderMap = (obj: Record<string, number> | undefined) =>
+    Object.entries(obj ?? {}).sort((x, y) => y[1] - x[1]).map(([k, v]) => (
+      <div key={k} className="flex justify-between border-b py-1 text-sm"><span>{k}</span><span className="font-semibold">{v}</span></div>
+    ));
+  return (
+    <div className="grid gap-4 lg:grid-cols-2">
+      <Card className="p-4">
+        <div className="text-sm font-semibold">By challenge</div>
+        <div className="mt-2">{renderMap(a.by_challenge)}</div>
+      </Card>
+      <Card className="p-4">
+        <div className="text-sm font-semibold">Share clicks</div>
+        <div className="mt-2">{renderMap(a.share_clicks)}</div>
+      </Card>
+      <Card className="p-4">
+        <div className="text-sm font-semibold">Top triggers</div>
+        <div className="mt-2">{renderMap(a.top_triggers)}</div>
+      </Card>
+      <Card className="p-4">
+        <div className="text-sm font-semibold">City leaderboard</div>
+        <div className="mt-2">
+          {(a.city_leaderboard ?? []).map((c) => (
+            <div key={c.city} className="flex justify-between border-b py-1 text-sm"><span>{c.city}</span><span className="font-semibold">{c.events}</span></div>
+          ))}
+        </div>
+      </Card>
+      <Card className="p-4 lg:col-span-2">
+        <div className="text-sm font-semibold">Conversions & savings</div>
+        <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <div className="rounded-lg border p-3"><div className="text-[11px] text-muted-foreground">Most used</div><div className="text-base font-semibold">{a.most_used_challenge ?? "—"}</div></div>
+          <div className="rounded-lg border p-3"><div className="text-[11px] text-muted-foreground">→ Assessment</div><div className="text-base font-semibold">{a.conversion_to_assessment}</div></div>
+          <div className="rounded-lg border p-3"><div className="text-[11px] text-muted-foreground">→ Volunteer</div><div className="text-base font-semibold">{a.conversion_to_volunteer}</div></div>
+          <div className="rounded-lg border p-3"><div className="text-[11px] text-muted-foreground">Est. yearly savings (SAR)</div><div className="text-base font-semibold">{Number(a.estimated_savings_total ?? 0).toLocaleString()}</div></div>
+        </div>
+        <div className="mt-3 text-xs text-muted-foreground">Engagement (last 30d): {(a.engagement_by_day ?? []).reduce((s, d) => s + d.events, 0)} events</div>
+      </Card>
+    </div>
+  );
+}
+
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin Dashboard — Aqla" }] }),
   component: AdminPage,
@@ -216,12 +262,16 @@ function AdminPage() {
           <TabsList>
             <TabsTrigger value="participants" className="gap-1.5"><HeartPulse className="h-4 w-4" />Quit Support</TabsTrigger>
             <TabsTrigger value="volunteers" className="gap-1.5"><Users className="h-4 w-4" />Volunteers</TabsTrigger>
+            <TabsTrigger value="challenges" className="gap-1.5"><Trophy className="h-4 w-4" />Challenges</TabsTrigger>
           </TabsList>
           <TabsContent value="participants">
             <ParticipantsPanel onRoles={setRoles} isPhysician={isPhysician} />
           </TabsContent>
           <TabsContent value="volunteers">
             <VolunteersPanel />
+          </TabsContent>
+          <TabsContent value="challenges">
+            <ChallengesAdminPanel />
           </TabsContent>
         </Tabs>
       </main>
