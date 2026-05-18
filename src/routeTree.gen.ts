@@ -14,7 +14,6 @@ import { Route as TrainingRouteImport } from './routes/training'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as PosterStudioRouteImport } from './routes/poster-studio'
-import { Route as PosterStudioRouteImport } from './routes/poster-studio'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as CityChallengeRouteImport } from './routes/city-challenge'
@@ -44,6 +43,11 @@ const ToolsRoute = ToolsRouteImport.update({
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
   path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PosterStudioRoute = PosterStudioRouteImport.update({
+  id: '/poster-studio',
+  path: '/poster-studio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PosterStudioRoute = PosterStudioRouteImport.update({
