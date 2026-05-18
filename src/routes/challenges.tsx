@@ -1,15 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { zodValidator, fallback } from "@tanstack/zod-adapter";
-import { z } from "zod";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useLang, useLangState, LangContext } from "@/lib/i18n";
 import {
-  Languages, ArrowRight, ShieldAlert, Sparkles, Users, Calculator, Gauge,
-  HeartHandshake, MapPin, Award, Share2, BookOpen, GraduationCap, Trophy,
-  Wind, Compass, Target, Coins, MessageCircleHeart, Megaphone, ShieldCheck,
+  Languages, ArrowRight, ShieldAlert, Sparkles, Calculator,
+  MapPin, Award, Share2, BookOpen, GraduationCap, Trophy,
+  Target, Coins, MessageCircleHeart, Megaphone, ShieldCheck,
 } from "lucide-react";
 import { trackEvent } from "@/lib/track-event";
 import { VisitTracker } from "@/components/VisitTracker";
@@ -22,12 +20,12 @@ import { getChallengePublicStats } from "@/lib/challenges.functions";
 const TABS = ["all", "tools", "challenges", "cities", "points", "learn", "posters", "volunteers"] as const;
 type TabKey = (typeof TABS)[number];
 
-const searchSchema = z.object({
-  tab: fallback(z.enum(TABS), "all").default("all"),
-});
-
 export const Route = createFileRoute("/challenges")({
-  validateSearch: zodValidator(searchSchema),
+  validateSearch: (search: Record<string, unknown>): { tab: TabKey } => {
+    const raw = typeof search.tab === "string" ? search.tab : "all";
+    const tab = (TABS as readonly string[]).includes(raw) ? (raw as TabKey) : "all";
+    return { tab };
+  },
   head: () => ({
     meta: [
       { title: "Aqla Challenge Hub — مركز تحديات أقلع" },
