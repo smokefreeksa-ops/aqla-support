@@ -154,6 +154,33 @@ function Inner() {
                   {lang === "ar" ? "اعرف المزيد عن أقلع" : "Learn more about Aqla"}
                   <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                 </Button>
+              </Link>
+            </div>
+          </Card>
+        </section>
+
+        {/* Aqla Movement teaser */}
+        <section className="mt-12">
+          <Card className="rounded-3xl border-0 p-6 sm:p-8 shadow-elegant card-gradient text-center">
+            <h2 className="text-2xl font-semibold tracking-tight text-primary sm:text-3xl">
+              {lang === "ar" ? "انضم إلى حركة أقلع" : "Join the Aqla Movement"}
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
+              {lang === "ar"
+                ? "وقّع الميثاق، اجمع أختامك، شارك الوعي، وساعد مدينتك على قيادة التغيير."
+                : "Sign the charter, collect your stamps, share awareness, and help your city lead change."}
+            </p>
+            <div className="mt-5">
+              <Link to="/movement">
+                <Button className="quit-gradient border-0 text-white">
+                  {lang === "ar" ? "استكشف حركة أقلع" : "Explore the Aqla Movement"}
+                  <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                </Button>
+              </Link>
+            </div>
+          </Card>
+        </section>
+
         {/* Unified Aqla Challenge Hub teaser */}
         <section className="mt-12">
           <div className="text-center">
