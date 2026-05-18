@@ -50,11 +50,6 @@ const PosterStudioRoute = PosterStudioRouteImport.update({
   path: '/poster-studio',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PosterStudioRoute = PosterStudioRouteImport.update({
-  id: '/poster-studio',
-  path: '/poster-studio',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
