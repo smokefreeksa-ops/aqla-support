@@ -164,10 +164,19 @@ function Inner() {
     if (customUnsafe || customTooLong) return;
     setDownloading(true);
     try {
+      // Ensure all images (logo) inside the preview are fully loaded before snapshot
+      const imgs = Array.from(previewRef.current.querySelectorAll("img"));
+      await Promise.all(imgs.map((img) => img.complete && img.naturalWidth > 0
+        ? Promise.resolve()
+        : new Promise<void>((resolve) => {
+            img.addEventListener("load", () => resolve(), { once: true });
+            img.addEventListener("error", () => resolve(), { once: true });
+          })));
       const canvas = await html2canvas(previewRef.current, {
         backgroundColor: null,
         scale: Math.max(2, Math.min(3, selectedSize.w / previewRef.current.offsetWidth)),
         useCORS: true,
+        allowTaint: false,
       });
       const url = canvas.toDataURL("image/png");
       const a = document.createElement("a");
