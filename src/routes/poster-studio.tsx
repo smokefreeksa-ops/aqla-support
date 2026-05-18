@@ -164,10 +164,19 @@ function Inner() {
     if (customUnsafe || customTooLong) return;
     setDownloading(true);
     try {
+      // Ensure all images (logo) inside the preview are fully loaded before snapshot
+      const imgs = Array.from(previewRef.current.querySelectorAll("img"));
+      await Promise.all(imgs.map((img) => img.complete && img.naturalWidth > 0
+        ? Promise.resolve()
+        : new Promise<void>((resolve) => {
+            img.addEventListener("load", () => resolve(), { once: true });
+            img.addEventListener("error", () => resolve(), { once: true });
+          })));
       const canvas = await html2canvas(previewRef.current, {
         backgroundColor: null,
         scale: Math.max(2, Math.min(3, selectedSize.w / previewRef.current.offsetWidth)),
         useCORS: true,
+        allowTaint: false,
       });
       const url = canvas.toDataURL("image/png");
       const a = document.createElement("a");
@@ -515,9 +524,25 @@ const PosterPreview = forwardRef<HTMLDivElement, PreviewProps>(function PosterPr
 
       {/* Top: logo + title */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, position: "relative" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <img src={aqlaLogo} alt="Aqla" style={{ height: "min(48px, 8vw)", width: "auto", filter: template.fg === "#ffffff" ? "brightness(0) invert(1)" : "none" }} />
-          <div style={{ lineHeight: 1.1 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{
+            background: "#ffffff",
+            borderRadius: 10,
+            padding: "6px 8px",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+          }}>
+            <img
+              src={aqlaLogo}
+              alt="Aqla — أقلع"
+              crossOrigin="anonymous"
+              onError={(e) => { console.warn("Aqla logo failed to load"); (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+              style={{ height: "min(44px, 7.5vw)", width: "auto", display: "block", objectFit: "contain" }}
+            />
+          </div>
+          <div style={{ lineHeight: 1.15 }}>
             <div style={{ fontWeight: 700, fontSize: "clamp(14px, 3.6vw, 22px)" }}>Aqla — أقلع</div>
             <div style={{ fontSize: "clamp(9px, 2vw, 12px)", opacity: 0.85 }}>Tobacco & Nicotine Awareness</div>
           </div>
