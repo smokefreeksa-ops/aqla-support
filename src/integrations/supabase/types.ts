@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      aqla_passport_events: {
+        Row: {
+          anonymous_session_id: string
+          created_at: string
+          id: string
+          source_event_type: string | null
+          stamp_key: string
+        }
+        Insert: {
+          anonymous_session_id: string
+          created_at?: string
+          id?: string
+          source_event_type?: string | null
+          stamp_key: string
+        }
+        Update: {
+          anonymous_session_id?: string
+          created_at?: string
+          id?: string
+          source_event_type?: string | null
+          stamp_key?: string
+        }
+        Relationships: []
+      }
       audit_log: {
         Row: {
           action: string
@@ -77,6 +101,33 @@ export type Database = {
           region?: string | null
           value_label?: string | null
           value_numeric?: number | null
+        }
+        Relationships: []
+      }
+      charter_signatures: {
+        Row: {
+          anonymous_session_id: string | null
+          city: string | null
+          consent_public_display: boolean
+          created_at: string
+          display_name: string | null
+          id: string
+        }
+        Insert: {
+          anonymous_session_id?: string | null
+          city?: string | null
+          consent_public_display?: boolean
+          created_at?: string
+          display_name?: string | null
+          id?: string
+        }
+        Update: {
+          anonymous_session_id?: string | null
+          city?: string | null
+          consent_public_display?: boolean
+          created_at?: string
+          display_name?: string | null
+          id?: string
         }
         Relationships: []
       }
@@ -873,6 +924,30 @@ export type Database = {
           importance_0_10?: number | null
           main_reason?: string | null
           participant_id?: string
+        }
+        Relationships: []
+      }
+      movement_events: {
+        Row: {
+          anonymous_session_id: string | null
+          city: string | null
+          created_at: string
+          event_type: string
+          id: string
+        }
+        Insert: {
+          anonymous_session_id?: string | null
+          city?: string | null
+          created_at?: string
+          event_type: string
+          id?: string
+        }
+        Update: {
+          anonymous_session_id?: string | null
+          city?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
         }
         Relationships: []
       }
@@ -2503,11 +2578,17 @@ export type Database = {
       get_admin_learn_analytics: { Args: never; Returns: Json }
       get_admin_poster_analytics: { Args: never; Returns: Json }
       get_admin_training_analytics: { Args: never; Returns: Json }
+      get_aqla_index: { Args: never; Returns: Json }
       get_challenge_public_stats: { Args: never; Returns: Json }
       get_city_challenge_stats: { Args: never; Returns: Json }
       get_learn_public_stats: { Args: never; Returns: Json }
       get_learn_top_leaderboard: {
         Args: { p_city?: string; p_window?: string }
+        Returns: Json
+      }
+      get_movement_public_stats: { Args: never; Returns: Json }
+      get_passport_summary_for_session: {
+        Args: { p_session: string }
         Returns: Json
       }
       get_poster_studio_public_stats: { Args: never; Returns: Json }
