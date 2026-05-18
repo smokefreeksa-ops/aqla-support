@@ -88,7 +88,7 @@ function Inner() {
       if (next.has(slug)) next.delete(slug);
       else {
         next.add(slug);
-        trackEvent("product_added_to_request", { product: slug });
+        trackEvent("product_added_to_request");
       }
       return next;
     });
@@ -134,7 +134,7 @@ function Inner() {
             selected={selected}
             toggleSelect={toggleSelect}
             onLearnMore={(slug) => {
-              trackEvent("product_learn_more_clicked", { product: slug });
+              trackEvent("product_learn_more_clicked");
               setLearnMoreSlug(slug);
             }}
             onContinue={startRequest}
