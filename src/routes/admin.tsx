@@ -305,6 +305,7 @@ function AdminPage() {
             <TabsTrigger value="participants" className="gap-1.5"><HeartPulse className="h-4 w-4" />Quit Support</TabsTrigger>
             <TabsTrigger value="volunteers" className="gap-1.5"><Users className="h-4 w-4" />Volunteers</TabsTrigger>
             <TabsTrigger value="challenges" className="gap-1.5"><Trophy className="h-4 w-4" />Challenges</TabsTrigger>
+            <TabsTrigger value="posters" className="gap-1.5"><ImageIcon className="h-4 w-4" />Poster Studio</TabsTrigger>
           </TabsList>
           <TabsContent value="participants">
             <ParticipantsPanel onRoles={setRoles} isPhysician={isPhysician} />
@@ -314,6 +315,9 @@ function AdminPage() {
           </TabsContent>
           <TabsContent value="challenges">
             <ChallengesAdminPanel />
+          </TabsContent>
+          <TabsContent value="posters">
+            <PosterStudioAdminPanel />
           </TabsContent>
         </Tabs>
       </main>
