@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VolunteerRouteImport } from './routes/volunteer'
+import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AssessmentRouteImport } from './routes/assessment'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -20,6 +21,11 @@ import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dic
 const VolunteerRoute = VolunteerRouteImport.update({
   id: '/volunteer',
   path: '/volunteer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsRoute = ToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/login': typeof LoginRoute
+  '/tools': typeof ToolsRoute
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/login': typeof LoginRoute
+  '/tools': typeof ToolsRoute
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/login': typeof LoginRoute
+  '/tools': typeof ToolsRoute
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/assessment'
     | '/login'
+    | '/tools'
     | '/volunteer'
     | '/admin/data-dictionary'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/assessment'
     | '/login'
+    | '/tools'
     | '/volunteer'
     | '/admin/data-dictionary'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/assessment'
     | '/login'
+    | '/tools'
     | '/volunteer'
     | '/admin/data-dictionary'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   AssessmentRoute: typeof AssessmentRoute
   LoginRoute: typeof LoginRoute
+  ToolsRoute: typeof ToolsRoute
   VolunteerRoute: typeof VolunteerRoute
 }
 
@@ -127,6 +140,13 @@ declare module '@tanstack/react-router' {
       path: '/volunteer'
       fullPath: '/volunteer'
       preLoaderRoute: typeof VolunteerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools': {
+      id: '/tools'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof ToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -190,6 +210,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   AssessmentRoute: AssessmentRoute,
   LoginRoute: LoginRoute,
+  ToolsRoute: ToolsRoute,
   VolunteerRoute: VolunteerRoute,
 }
 export const routeTree = rootRouteImport

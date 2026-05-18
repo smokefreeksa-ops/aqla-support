@@ -2,10 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useLang, useLangState, LangContext } from "@/lib/i18n";
-import { ShieldAlert, Languages, ArrowRight, Sparkles, Users } from "lucide-react";
+import { ShieldAlert, Languages, ArrowRight, Sparkles, Users, Calculator, Gauge, HeartHandshake } from "lucide-react";
 import { SocialLinks } from "@/components/SocialLinks";
 import { ImpactSection } from "@/components/ImpactSection";
-import { InteractiveTools } from "@/components/InteractiveTools";
 import { VisitTracker } from "@/components/VisitTracker";
 import { trackEvent } from "@/lib/track-event";
 import aqlaLogo from "@/assets/aqla-logo.png";
@@ -57,6 +56,9 @@ function Inner() {
               <Languages className="h-4 w-4" />
               {lang === "ar" ? "English" : "العربية"}
             </Button>
+            <Link to="/tools">
+              <Button variant="ghost" size="sm">{lang === "ar" ? "أدوات أقلع" : "Tools"}</Button>
+            </Link>
             <Link to="/about">
               <Button variant="ghost" size="sm">{lang === "ar" ? "عن أقلع" : "About"}</Button>
             </Link>
@@ -154,7 +156,45 @@ function Inner() {
           </Card>
         </section>
 
-        <InteractiveTools isAr={lang === "ar"} />
+        {/* Featured interactive tools teaser */}
+        <section className="mt-12">
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold tracking-tight text-primary sm:text-3xl">
+              {lang === "ar" ? "جرّب أدوات أقلع التفاعلية" : "Try Aqla Interactive Tools"}
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
+              {lang === "ar"
+                ? "أدوات بسيطة وممتعة تساعدك على فهم التدخين والنيكوتين بطريقة عملية، وتشجعك على بدء الخطوة الأولى أو مساعدة غيرك."
+                : "Simple, engaging tools to help you understand smoking and nicotine, take your first step, or help someone else begin."}
+            </p>
+          </div>
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            {[
+              { icon: Calculator,    ar: "حاسبة تكلفة التدخين",         en: "Smoking Cost Calculator" },
+              { icon: Gauge,         ar: "اعرف مستوى اعتمادك خلال دقيقة", en: "1-Minute Dependence Check" },
+              { icon: HeartHandshake,ar: "وعد الإقلاع",                 en: "Quit Pledge" },
+            ].map((it, i) => (
+              <Link key={i} to="/tools" className="block">
+                <Card className="group h-full rounded-2xl border-0 p-5 shadow-elegant card-gradient transition-transform hover:-translate-y-0.5">
+                  <div className="flex items-center gap-3">
+                    <div className="grid h-10 w-10 place-items-center rounded-xl quit-gradient text-white shadow-md">
+                      <it.icon className="h-5 w-5" />
+                    </div>
+                    <span className="text-sm font-semibold">{lang === "ar" ? it.ar : it.en}</span>
+                  </div>
+                </Card>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-5 text-center">
+            <Link to="/tools">
+              <Button className="quit-gradient border-0 text-white">
+                {lang === "ar" ? "استكشف الأدوات" : "Explore Tools"}
+                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+              </Button>
+            </Link>
+          </div>
+        </section>
         <ImpactSection isAr={lang === "ar"} />
         <VisitTracker path="/" />
         <div className="mt-10 grid gap-3 sm:grid-cols-2">
