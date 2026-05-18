@@ -1694,6 +1694,303 @@ export type Database = {
         }
         Relationships: []
       }
+      training_case_scenarios: {
+        Row: {
+          correct_option_index: number
+          created_at: string
+          explanation_ar: string
+          explanation_en: string
+          id: string
+          is_required: boolean
+          module_id: string
+          options_ar: Json
+          options_en: Json
+          safety_flag: string | null
+          scenario_text_ar: string
+          scenario_text_en: string
+          scenario_title_ar: string
+          scenario_title_en: string
+          volunteer_script_ar: string | null
+          volunteer_script_en: string | null
+        }
+        Insert: {
+          correct_option_index: number
+          created_at?: string
+          explanation_ar: string
+          explanation_en: string
+          id?: string
+          is_required?: boolean
+          module_id: string
+          options_ar: Json
+          options_en: Json
+          safety_flag?: string | null
+          scenario_text_ar: string
+          scenario_text_en: string
+          scenario_title_ar: string
+          scenario_title_en: string
+          volunteer_script_ar?: string | null
+          volunteer_script_en?: string | null
+        }
+        Update: {
+          correct_option_index?: number
+          created_at?: string
+          explanation_ar?: string
+          explanation_en?: string
+          id?: string
+          is_required?: boolean
+          module_id?: string
+          options_ar?: Json
+          options_en?: Json
+          safety_flag?: string | null
+          scenario_text_ar?: string
+          scenario_text_en?: string
+          scenario_title_ar?: string
+          scenario_title_en?: string
+          volunteer_script_ar?: string | null
+          volunteer_script_en?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_case_scenarios_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "training_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      training_certificates: {
+        Row: {
+          certificate_code: string
+          certificate_url: string | null
+          created_at: string
+          full_name: string
+          id: string
+          is_valid: boolean
+          issued_at: string
+          overall_score: number
+          training_user_id: string
+          verification_hash: string | null
+        }
+        Insert: {
+          certificate_code: string
+          certificate_url?: string | null
+          created_at?: string
+          full_name: string
+          id?: string
+          is_valid?: boolean
+          issued_at?: string
+          overall_score: number
+          training_user_id: string
+          verification_hash?: string | null
+        }
+        Update: {
+          certificate_code?: string
+          certificate_url?: string | null
+          created_at?: string
+          full_name?: string
+          id?: string
+          is_valid?: boolean
+          issued_at?: string
+          overall_score?: number
+          training_user_id?: string
+          verification_hash?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_certificates_training_user_id_fkey"
+            columns: ["training_user_id"]
+            isOneToOne: false
+            referencedRelation: "training_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      training_modules: {
+        Row: {
+          content_ar: string
+          content_en: string
+          created_at: string
+          id: string
+          is_active: boolean
+          learning_objectives_ar: Json | null
+          learning_objectives_en: Json | null
+          module_number: number
+          slug: string
+          title_ar: string
+          title_en: string
+        }
+        Insert: {
+          content_ar: string
+          content_en: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          learning_objectives_ar?: Json | null
+          learning_objectives_en?: Json | null
+          module_number: number
+          slug: string
+          title_ar: string
+          title_en: string
+        }
+        Update: {
+          content_ar?: string
+          content_en?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          learning_objectives_ar?: Json | null
+          learning_objectives_en?: Json | null
+          module_number?: number
+          slug?: string
+          title_ar?: string
+          title_en?: string
+        }
+        Relationships: []
+      }
+      training_progress: {
+        Row: {
+          attempts: number
+          completed: boolean
+          completed_at: string | null
+          created_at: string
+          id: string
+          module_id: string
+          score: number | null
+          training_user_id: string
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          module_id: string
+          score?: number | null
+          training_user_id: string
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          module_id?: string
+          score?: number | null
+          training_user_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_progress_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "training_modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "training_progress_training_user_id_fkey"
+            columns: ["training_user_id"]
+            isOneToOne: false
+            referencedRelation: "training_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      training_questions: {
+        Row: {
+          correct_option_index: number
+          created_at: string
+          difficulty: string
+          explanation_ar: string
+          explanation_en: string
+          id: string
+          is_active: boolean
+          module_id: string
+          options_ar: Json
+          options_en: Json
+          question_ar: string
+          question_en: string
+        }
+        Insert: {
+          correct_option_index: number
+          created_at?: string
+          difficulty?: string
+          explanation_ar: string
+          explanation_en: string
+          id?: string
+          is_active?: boolean
+          module_id: string
+          options_ar: Json
+          options_en: Json
+          question_ar: string
+          question_en: string
+        }
+        Update: {
+          correct_option_index?: number
+          created_at?: string
+          difficulty?: string
+          explanation_ar?: string
+          explanation_en?: string
+          id?: string
+          is_active?: boolean
+          module_id?: string
+          options_ar?: Json
+          options_en?: Json
+          question_ar?: string
+          question_en?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_questions_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "training_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      training_users: {
+        Row: {
+          age_group: string | null
+          city: string | null
+          consent_training_terms: boolean
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          mobile: string | null
+          preferred_language: string | null
+          role: string | null
+        }
+        Insert: {
+          age_group?: string | null
+          city?: string | null
+          consent_training_terms?: boolean
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          mobile?: string | null
+          preferred_language?: string | null
+          role?: string | null
+        }
+        Update: {
+          age_group?: string | null
+          city?: string | null
+          consent_training_terms?: boolean
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          mobile?: string | null
+          preferred_language?: string | null
+          role?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -2013,6 +2310,7 @@ export type Database = {
       get_admin_analytics_dashboard: { Args: never; Returns: Json }
       get_admin_challenge_analytics: { Args: never; Returns: Json }
       get_admin_learn_analytics: { Args: never; Returns: Json }
+      get_admin_training_analytics: { Args: never; Returns: Json }
       get_challenge_public_stats: { Args: never; Returns: Json }
       get_city_challenge_stats: { Args: never; Returns: Json }
       get_learn_public_stats: { Args: never; Returns: Json }
@@ -2029,6 +2327,7 @@ export type Database = {
         Returns: boolean
       }
       is_admin_user: { Args: { _user_id: string }; Returns: boolean }
+      verify_training_certificate: { Args: { p_code: string }; Returns: Json }
     }
     Enums: {
       app_role: "receptionist" | "physician"
