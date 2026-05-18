@@ -121,6 +121,33 @@ export type Database = {
         }
         Relationships: []
       }
+      city_challenge_events: {
+        Row: {
+          anonymous_session_id: string | null
+          city: string | null
+          created_at: string
+          event_type: string
+          id: string
+          region: string | null
+        }
+        Insert: {
+          anonymous_session_id?: string | null
+          city?: string | null
+          created_at?: string
+          event_type: string
+          id?: string
+          region?: string | null
+        }
+        Update: {
+          anonymous_session_id?: string | null
+          city?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
+          region?: string | null
+        }
+        Relationships: []
+      }
       clinical_notes: {
         Row: {
           created_at: string
@@ -1570,6 +1597,7 @@ export type Database = {
     }
     Functions: {
       get_admin_analytics_dashboard: { Args: never; Returns: Json }
+      get_city_challenge_stats: { Args: never; Returns: Json }
       get_public_impact_stats: { Args: never; Returns: Json }
       has_role: {
         Args: {
