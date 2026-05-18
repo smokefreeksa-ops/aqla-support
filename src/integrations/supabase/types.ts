@@ -608,6 +608,125 @@ export type Database = {
         }
         Relationships: []
       }
+      guideline_document_logs: {
+        Row: {
+          action: string
+          changed_by: string | null
+          created_at: string
+          guideline_document_id: string | null
+          id: string
+          note: string | null
+        }
+        Insert: {
+          action: string
+          changed_by?: string | null
+          created_at?: string
+          guideline_document_id?: string | null
+          id?: string
+          note?: string | null
+        }
+        Update: {
+          action?: string
+          changed_by?: string | null
+          created_at?: string
+          guideline_document_id?: string | null
+          id?: string
+          note?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guideline_document_logs_guideline_document_id_fkey"
+            columns: ["guideline_document_id"]
+            isOneToOne: false
+            referencedRelation: "guideline_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guideline_documents: {
+        Row: {
+          category: string | null
+          country_or_region: string | null
+          created_at: string
+          document_type: string | null
+          doi: string | null
+          external_url: string | null
+          file_url: string | null
+          id: string
+          is_active: boolean
+          is_chatbot_allowed: boolean
+          is_public: boolean
+          last_reviewed_at: string | null
+          notes_private: string | null
+          organization: string | null
+          review_status: string
+          summary_ar: string | null
+          summary_en: string | null
+          title_ar: string | null
+          title_en: string
+          topic_tags: Json | null
+          updated_at: string
+          uploaded_at: string
+          uploaded_by: string | null
+          version: string | null
+          year: number | null
+        }
+        Insert: {
+          category?: string | null
+          country_or_region?: string | null
+          created_at?: string
+          document_type?: string | null
+          doi?: string | null
+          external_url?: string | null
+          file_url?: string | null
+          id?: string
+          is_active?: boolean
+          is_chatbot_allowed?: boolean
+          is_public?: boolean
+          last_reviewed_at?: string | null
+          notes_private?: string | null
+          organization?: string | null
+          review_status?: string
+          summary_ar?: string | null
+          summary_en?: string | null
+          title_ar?: string | null
+          title_en: string
+          topic_tags?: Json | null
+          updated_at?: string
+          uploaded_at?: string
+          uploaded_by?: string | null
+          version?: string | null
+          year?: number | null
+        }
+        Update: {
+          category?: string | null
+          country_or_region?: string | null
+          created_at?: string
+          document_type?: string | null
+          doi?: string | null
+          external_url?: string | null
+          file_url?: string | null
+          id?: string
+          is_active?: boolean
+          is_chatbot_allowed?: boolean
+          is_public?: boolean
+          last_reviewed_at?: string | null
+          notes_private?: string | null
+          organization?: string | null
+          review_status?: string
+          summary_ar?: string | null
+          summary_en?: string | null
+          title_ar?: string | null
+          title_en?: string
+          topic_tags?: Json | null
+          updated_at?: string
+          uploaded_at?: string
+          uploaded_by?: string | null
+          version?: string | null
+          year?: number | null
+        }
+        Relationships: []
+      }
       honc_screening: {
         Row: {
           any_yes: boolean
