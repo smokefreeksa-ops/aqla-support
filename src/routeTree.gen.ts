@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VolunteerRouteImport } from './routes/volunteer'
+import { Route as TrainingRouteImport } from './routes/training'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as LoginRouteImport } from './routes/login'
@@ -25,6 +26,11 @@ import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dic
 const VolunteerRoute = VolunteerRouteImport.update({
   id: '/volunteer',
   path: '/volunteer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrainingRoute = TrainingRouteImport.update({
+  id: '/training',
+  path: '/training',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ToolsRoute = ToolsRouteImport.update({
@@ -94,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/shop': typeof ShopRoute
   '/tools': typeof ToolsRoute
+  '/training': typeof TrainingRoute
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
 }
@@ -108,6 +115,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/shop': typeof ShopRoute
   '/tools': typeof ToolsRoute
+  '/training': typeof TrainingRoute
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
 }
@@ -123,6 +131,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/shop': typeof ShopRoute
   '/tools': typeof ToolsRoute
+  '/training': typeof TrainingRoute
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
 }
@@ -139,6 +148,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/shop'
     | '/tools'
+    | '/training'
     | '/volunteer'
     | '/admin/data-dictionary'
   fileRoutesByTo: FileRoutesByTo
@@ -153,6 +163,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/shop'
     | '/tools'
+    | '/training'
     | '/volunteer'
     | '/admin/data-dictionary'
   id:
@@ -167,6 +178,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/shop'
     | '/tools'
+    | '/training'
     | '/volunteer'
     | '/admin/data-dictionary'
   fileRoutesById: FileRoutesById
@@ -182,6 +194,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   ShopRoute: typeof ShopRoute
   ToolsRoute: typeof ToolsRoute
+  TrainingRoute: typeof TrainingRoute
   VolunteerRoute: typeof VolunteerRoute
 }
 
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       path: '/volunteer'
       fullPath: '/volunteer'
       preLoaderRoute: typeof VolunteerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/training': {
+      id: '/training'
+      path: '/training'
+      fullPath: '/training'
+      preLoaderRoute: typeof TrainingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tools': {
@@ -295,8 +315,19 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   ShopRoute: ShopRoute,
   ToolsRoute: ToolsRoute,
+  TrainingRoute: TrainingRoute,
   VolunteerRoute: VolunteerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
