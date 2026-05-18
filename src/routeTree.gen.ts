@@ -14,6 +14,7 @@ import { Route as TrainingRouteImport } from './routes/training'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as PosterStudioRouteImport } from './routes/poster-studio'
+import { Route as MovementRouteImport } from './routes/movement'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as CityChallengeRouteImport } from './routes/city-challenge'
@@ -48,6 +49,11 @@ const ShopRoute = ShopRouteImport.update({
 const PosterStudioRoute = PosterStudioRouteImport.update({
   id: '/poster-studio',
   path: '/poster-studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MovementRoute = MovementRouteImport.update({
+  id: '/movement',
+  path: '/movement',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/city-challenge': typeof CityChallengeRoute
   '/learn': typeof LearnRoute
   '/login': typeof LoginRoute
+  '/movement': typeof MovementRoute
   '/poster-studio': typeof PosterStudioRoute
   '/shop': typeof ShopRoute
   '/tools': typeof ToolsRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByTo {
   '/city-challenge': typeof CityChallengeRoute
   '/learn': typeof LearnRoute
   '/login': typeof LoginRoute
+  '/movement': typeof MovementRoute
   '/poster-studio': typeof PosterStudioRoute
   '/shop': typeof ShopRoute
   '/tools': typeof ToolsRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/city-challenge': typeof CityChallengeRoute
   '/learn': typeof LearnRoute
   '/login': typeof LoginRoute
+  '/movement': typeof MovementRoute
   '/poster-studio': typeof PosterStudioRoute
   '/shop': typeof ShopRoute
   '/tools': typeof ToolsRoute
@@ -164,6 +173,7 @@ export interface FileRouteTypes {
     | '/city-challenge'
     | '/learn'
     | '/login'
+    | '/movement'
     | '/poster-studio'
     | '/shop'
     | '/tools'
@@ -181,6 +191,7 @@ export interface FileRouteTypes {
     | '/city-challenge'
     | '/learn'
     | '/login'
+    | '/movement'
     | '/poster-studio'
     | '/shop'
     | '/tools'
@@ -198,6 +209,7 @@ export interface FileRouteTypes {
     | '/city-challenge'
     | '/learn'
     | '/login'
+    | '/movement'
     | '/poster-studio'
     | '/shop'
     | '/tools'
@@ -216,6 +228,7 @@ export interface RootRouteChildren {
   CityChallengeRoute: typeof CityChallengeRoute
   LearnRoute: typeof LearnRoute
   LoginRoute: typeof LoginRoute
+  MovementRoute: typeof MovementRoute
   PosterStudioRoute: typeof PosterStudioRoute
   ShopRoute: typeof ShopRoute
   ToolsRoute: typeof ToolsRoute
@@ -259,6 +272,13 @@ declare module '@tanstack/react-router' {
       path: '/poster-studio'
       fullPath: '/poster-studio'
       preLoaderRoute: typeof PosterStudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/movement': {
+      id: '/movement'
+      path: '/movement'
+      fullPath: '/movement'
+      preLoaderRoute: typeof MovementRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -353,6 +373,7 @@ const rootRouteChildren: RootRouteChildren = {
   CityChallengeRoute: CityChallengeRoute,
   LearnRoute: LearnRoute,
   LoginRoute: LoginRoute,
+  MovementRoute: MovementRoute,
   PosterStudioRoute: PosterStudioRoute,
   ShopRoute: ShopRoute,
   ToolsRoute: ToolsRoute,
