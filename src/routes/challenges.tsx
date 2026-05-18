@@ -55,8 +55,8 @@ function HubPage() {
   useEffect(() => { trackEvent("challenge_hub_viewed"); }, []);
 
   const setTab = (next: TabKey) => {
-    trackEvent("challenge_tab_selected", { tab: next });
-    navigate({ search: (p) => ({ ...p, tab: next }) });
+    trackEvent("challenge_tab_selected", next);
+    navigate({ search: { tab: next } });
   };
 
   const statsFn = useServerFn(getChallengePublicStats);
