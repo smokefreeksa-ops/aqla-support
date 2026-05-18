@@ -22,6 +22,7 @@ import { LogOut, ShieldAlert, RefreshCw, Users, HeartPulse, AlertTriangle, BarCh
 import { getAssistantStatus } from "@/lib/assistant.functions";
 import { getPublicImpactStats } from "@/lib/impact.functions";
 import { getAdminChallengeAnalytics } from "@/lib/challenges.functions";
+import { getAdminPosterAnalytics } from "@/lib/poster.functions";
 import { useQuery } from "@tanstack/react-query";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
