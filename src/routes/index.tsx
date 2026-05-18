@@ -5,6 +5,7 @@ import { useLang, useLangState, LangContext } from "@/lib/i18n";
 import { ShieldAlert, Languages, ArrowRight, Sparkles, Users } from "lucide-react";
 import { SocialLinks } from "@/components/SocialLinks";
 import { ImpactSection } from "@/components/ImpactSection";
+import { InteractiveTools } from "@/components/InteractiveTools";
 import { VisitTracker } from "@/components/VisitTracker";
 import { trackEvent } from "@/lib/track-event";
 import aqlaLogo from "@/assets/aqla-logo.png";
