@@ -21,6 +21,7 @@ import { Route as AssessmentRouteImport } from './routes/assessment'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
 
 const VolunteerRoute = VolunteerRouteImport.update({
@@ -83,6 +84,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CertificateCodeRoute = CertificateCodeRouteImport.update({
+  id: '/certificate/$code',
+  path: '/certificate/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminDataDictionaryRoute = AdminDataDictionaryRouteImport.update({
   id: '/data-dictionary',
   path: '/data-dictionary',
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/training': typeof TrainingRoute
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
+  '/certificate/$code': typeof CertificateCodeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -118,6 +125,7 @@ export interface FileRoutesByTo {
   '/training': typeof TrainingRoute
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
+  '/certificate/$code': typeof CertificateCodeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/training': typeof TrainingRoute
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
+  '/certificate/$code': typeof CertificateCodeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/training'
     | '/volunteer'
     | '/admin/data-dictionary'
+    | '/certificate/$code'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/training'
     | '/volunteer'
     | '/admin/data-dictionary'
+    | '/certificate/$code'
   id:
     | '__root__'
     | '/'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '/training'
     | '/volunteer'
     | '/admin/data-dictionary'
+    | '/certificate/$code'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -196,6 +208,7 @@ export interface RootRouteChildren {
   ToolsRoute: typeof ToolsRoute
   TrainingRoute: typeof TrainingRoute
   VolunteerRoute: typeof VolunteerRoute
+  CertificateCodeRoute: typeof CertificateCodeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -284,6 +297,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/certificate/$code': {
+      id: '/certificate/$code'
+      path: '/certificate/$code'
+      fullPath: '/certificate/$code'
+      preLoaderRoute: typeof CertificateCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/data-dictionary': {
       id: '/admin/data-dictionary'
       path: '/data-dictionary'
@@ -317,6 +337,7 @@ const rootRouteChildren: RootRouteChildren = {
   ToolsRoute: ToolsRoute,
   TrainingRoute: TrainingRoute,
   VolunteerRoute: VolunteerRoute,
+  CertificateCodeRoute: CertificateCodeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
