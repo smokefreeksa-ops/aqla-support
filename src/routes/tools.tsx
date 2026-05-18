@@ -613,8 +613,10 @@ function PledgeCard({ isAr }: { isAr: boolean }) {
   ];
   const [reason, setReason] = useState<string | null>(null);
   const [other, setOther] = useState("");
+  const [city, setCity] = useState("");
   const [created, setCreated] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const recordCity = useServerFn(recordCityChallengeEvent);
   const chosen = reasons.find((r) => r.v === reason);
   const reasonLabel = reason === "other" ? other.trim() : (chosen ? (isAr ? chosen.ar : chosen.en) : "");
   const shareText = t(
