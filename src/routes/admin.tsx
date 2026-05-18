@@ -18,7 +18,7 @@ import {
 import {
   listVolunteers, getVolunteerStats, getVolunteer, updateVolunteer, addVolunteerNote,
 } from "@/lib/volunteer.functions";
-import { LogOut, ShieldAlert, RefreshCw, Users, HeartPulse, AlertTriangle, BarChart3, Eye, Sun, ClipboardCheck, Stethoscope, CalendarCheck, Download, Mail, Send, Trophy } from "lucide-react";
+import { LogOut, ShieldAlert, RefreshCw, Users, HeartPulse, AlertTriangle, BarChart3, Eye, Sun, ClipboardCheck, Stethoscope, CalendarCheck, Download, Mail, Send, Trophy, Image as ImageIcon } from "lucide-react";
 import { getAssistantStatus } from "@/lib/assistant.functions";
 import { getPublicImpactStats } from "@/lib/impact.functions";
 import { getAdminChallengeAnalytics } from "@/lib/challenges.functions";
