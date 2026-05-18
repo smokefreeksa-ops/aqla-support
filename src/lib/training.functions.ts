@@ -284,8 +284,8 @@ export const verifyCertificate = createServerFn({ method: "GET" })
 // --------- Admin analytics ---------
 export const getAdminTrainingAnalytics = createServerFn({ method: "GET" }).handler(async () => {
   const { data, error } = await supabaseAdmin.rpc("get_admin_training_analytics" as never);
-  if (error) return { ok: false as const, error: error.message, analytics: null };
-  return { ok: true as const, error: null, analytics: data as unknown };
+  if (error) return { ok: false as const, error: error.message, analytics: null as Record<string, unknown> | null };
+  return { ok: true as const, error: null as string | null, analytics: (data ?? null) as Record<string, unknown> | null };
 });
 
 // --------- Admin list trainees & export ---------
