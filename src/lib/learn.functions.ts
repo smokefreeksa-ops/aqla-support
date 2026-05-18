@@ -170,8 +170,8 @@ export const adminListLeaderboard = createServerFn({ method: "GET" })
     const { data: res, error } = await supabaseAdmin.rpc("admin_list_leaderboard" as never, {
       p_status: data.status,
     } as never);
-    if (error) return { rows: [] as unknown[], error: error.message };
-    return { rows: (res as unknown[]) ?? [], error: null as string | null };
+    if (error) return { rows: [] as Record<string, unknown>[], error: error.message };
+    return { rows: ((res as Record<string, unknown>[]) ?? []), error: null as string | null };
   });
 
 const ModerateInput = z.object({
