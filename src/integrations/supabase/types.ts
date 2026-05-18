@@ -1282,6 +1282,78 @@ export type Database = {
         }
         Relationships: []
       }
+      poster_creations: {
+        Row: {
+          anonymous_session_id: string | null
+          city: string | null
+          created_at: string
+          custom_message: string | null
+          display_name: string | null
+          export_size: string | null
+          id: string
+          language: string | null
+          message_key: string | null
+          poster_type: string
+          template_name: string
+        }
+        Insert: {
+          anonymous_session_id?: string | null
+          city?: string | null
+          created_at?: string
+          custom_message?: string | null
+          display_name?: string | null
+          export_size?: string | null
+          id?: string
+          language?: string | null
+          message_key?: string | null
+          poster_type: string
+          template_name: string
+        }
+        Update: {
+          anonymous_session_id?: string | null
+          city?: string | null
+          created_at?: string
+          custom_message?: string | null
+          display_name?: string | null
+          export_size?: string | null
+          id?: string
+          language?: string | null
+          message_key?: string | null
+          poster_type?: string
+          template_name?: string
+        }
+        Relationships: []
+      }
+      poster_events: {
+        Row: {
+          anonymous_session_id: string | null
+          city: string | null
+          created_at: string
+          event_type: string
+          id: string
+          poster_type: string | null
+          template_name: string | null
+        }
+        Insert: {
+          anonymous_session_id?: string | null
+          city?: string | null
+          created_at?: string
+          event_type: string
+          id?: string
+          poster_type?: string | null
+          template_name?: string | null
+        }
+        Update: {
+          anonymous_session_id?: string | null
+          city?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
+          poster_type?: string | null
+          template_name?: string | null
+        }
+        Relationships: []
+      }
       pouch_module: {
         Row: {
           created_at: string
@@ -2310,6 +2382,7 @@ export type Database = {
       get_admin_analytics_dashboard: { Args: never; Returns: Json }
       get_admin_challenge_analytics: { Args: never; Returns: Json }
       get_admin_learn_analytics: { Args: never; Returns: Json }
+      get_admin_poster_analytics: { Args: never; Returns: Json }
       get_admin_training_analytics: { Args: never; Returns: Json }
       get_challenge_public_stats: { Args: never; Returns: Json }
       get_city_challenge_stats: { Args: never; Returns: Json }
@@ -2318,6 +2391,7 @@ export type Database = {
         Args: { p_city?: string; p_window?: string }
         Returns: Json
       }
+      get_poster_studio_public_stats: { Args: never; Returns: Json }
       get_public_impact_stats: { Args: never; Returns: Json }
       has_role: {
         Args: {
