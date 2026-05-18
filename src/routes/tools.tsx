@@ -643,7 +643,28 @@ function PledgeCard({ isAr }: { isAr: boolean }) {
           {reason === "other" && (
             <Input value={other} onChange={(e) => setOther(e.target.value)} placeholder={t("اكتب سببك", "Write your reason")} />
           )}
-          <Button onClick={() => { setCreated(true); trackEvent("quit_pledge_created"); }}
+          <div>
+            <Label className="text-xs">
+              {t("اختر مدينتك لإضافة تعهدك إلى تحدي المدن (اختياري)",
+                 "Choose your city to add your pledge to the City Challenge (optional)")}
+            </Label>
+            <Input value={city} onChange={(e) => setCity(e.target.value)}
+                   placeholder={t("مدينتك", "Your city")} maxLength={60} />
+            <p className="mt-1 text-[10px] text-muted-foreground">
+              {t("لا نطلب اسمك أو رقمك. تُستخدم المدينة لأغراض إحصائية فقط.",
+                 "We don't ask for your name or phone. City is used for aggregate stats only.")}
+            </p>
+          </div>
+          <Button onClick={() => {
+                    setCreated(true);
+                    trackEvent("quit_pledge_created");
+                    const trimmed = city.trim();
+                    void recordCity({ data: {
+                      event_type: "quit_pledge_created",
+                      city: trimmed ? trimmed : null,
+                      anonymous_session_id: getAnonSessionId(),
+                    }});
+                  }}
                   disabled={!reason || (reason === "other" && !other.trim())}
                   className="w-full quit-gradient border-0 text-white hover:opacity-95">
             {t("أنشئ بطاقتي", "Create my pledge")}
