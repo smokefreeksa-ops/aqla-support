@@ -198,6 +198,33 @@ function Inner() {
             </Link>
           </div>
         </section>
+
+        {/* City Challenge teaser */}
+        <section className="mt-12">
+          <Card className="overflow-hidden rounded-3xl border-0 p-0 shadow-elegant">
+            <div className="quit-gradient p-6 text-white sm:p-8">
+              <span className="inline-block rounded-full bg-white/15 px-3 py-1 text-[11px] font-medium">
+                {lang === "ar" ? "خريطة تفاعلية" : "Interactive map"}
+              </span>
+              <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">
+                {lang === "ar" ? "تحدي مدن أقلع" : "Aqla City Challenge"}
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-7 opacity-95">
+                {lang === "ar"
+                  ? "شارك مدينتك في رحلة التغيير. خريطة تفاعلية تعرض التفاعل المجتمعي مع أقلع بشكل إجمالي ودون عرض أي بيانات شخصية."
+                  : "Help your city lead the change. An interactive map showing community engagement with Aqla using aggregate, privacy-safe indicators only."}
+              </p>
+              <div className="mt-5">
+                <Link to="/city-challenge">
+                  <Button variant="secondary" className="gap-1.5">
+                    {lang === "ar" ? "شاهد خريطة التحدي" : "View the challenge map"}
+                    <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </Card>
+        </section>
         <ImpactSection isAr={lang === "ar"} />
         <VisitTracker path="/" />
         <div className="mt-10 grid gap-3 sm:grid-cols-2">
