@@ -2,13 +2,46 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
+export type CityRow = {
+  city: string;
+  completed_assessments_count: number;
+  quit_pledges_count: number;
+  volunteer_applications_count: number;
+  follow_up_visits_count: number;
+  research_consent_count: number;
+  weekly_pledges_count: number;
+  city_engagement_score: number;
+  display_engagement: string;
+};
+export type LeaderEntry = { city: string; count: number } | null;
+export type CityChallengeStats = {
+  generated_at: string;
+  weekly_window_start: string;
+  cities: CityRow[];
+  totals: {
+    completed_assessments: number;
+    quit_pledges: number;
+    volunteer_applications: number;
+    follow_up_visits: number;
+    research_consent: number;
+    weekly_pledges: number;
+  } | null;
+  leaderboard: {
+    top_completed: LeaderEntry;
+    top_volunteers: LeaderEntry;
+    top_pledges: LeaderEntry;
+    rising_weekly: LeaderEntry;
+    top_followups: LeaderEntry;
+  };
+};
+
 export const getCityChallengeStats = createServerFn({ method: "GET" }).handler(async () => {
   const { data, error } = await supabaseAdmin.rpc("get_city_challenge_stats" as never);
   if (error) {
     console.error("get_city_challenge_stats error:", error);
-    return { stats: null, error: error.message };
+    return { stats: null as CityChallengeStats | null, error: error.message as string | null };
   }
-  return { stats: data as unknown, error: null };
+  return { stats: data as unknown as CityChallengeStats, error: null as string | null };
 });
 
 const CityEventInput = z.object({
