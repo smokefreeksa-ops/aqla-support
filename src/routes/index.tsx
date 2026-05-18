@@ -56,17 +56,11 @@ function Inner() {
               <Languages className="h-4 w-4" />
               {lang === "ar" ? "English" : "العربية"}
             </Button>
-            <Link to="/tools">
-              <Button variant="ghost" size="sm">{lang === "ar" ? "أدوات أقلع" : "Tools"}</Button>
-            </Link>
             <Link to="/challenges">
-              <Button variant="ghost" size="sm">{lang === "ar" ? "التحديات" : "Challenges"}</Button>
+              <Button variant="ghost" size="sm">{lang === "ar" ? "تحديات أقلع" : "Challenges"}</Button>
             </Link>
-            <Link to="/city-challenge">
-              <Button variant="ghost" size="sm">{lang === "ar" ? "تحدي المدن" : "City Challenge"}</Button>
-            </Link>
-            <Link to="/poster-studio">
-              <Button variant="ghost" size="sm">{lang === "ar" ? "صمم منشورك" : "Create Poster"}</Button>
+            <Link to="/guidelines">
+              <Button variant="ghost" size="sm">{lang === "ar" ? "المكتبة" : "Library"}</Button>
             </Link>
             <Link to="/about">
               <Button variant="ghost" size="sm">{lang === "ar" ? "عن أقلع" : "About"}</Button>
@@ -160,70 +154,26 @@ function Inner() {
                   {lang === "ar" ? "اعرف المزيد عن أقلع" : "Learn more about Aqla"}
                   <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                 </Button>
-              </Link>
-            </div>
-          </Card>
-        </section>
-
-        {/* Featured interactive tools teaser */}
+        {/* Unified Aqla Challenge Hub teaser */}
         <section className="mt-12">
           <div className="text-center">
             <h2 className="text-2xl font-semibold tracking-tight text-primary sm:text-3xl">
-              {lang === "ar" ? "جرّب أدوات أقلع التفاعلية" : "Try Aqla Interactive Tools"}
+              {lang === "ar" ? "شارك في تحديات أقلع" : "Join Aqla Challenges"}
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
               {lang === "ar"
-                ? "أدوات بسيطة وممتعة تساعدك على فهم التدخين والنيكوتين بطريقة عملية، وتشجعك على بدء الخطوة الأولى أو مساعدة غيرك."
-                : "Simple, engaging tools to help you understand smoking and nicotine, take your first step, or help someone else begin."}
+                ? "كل أدوات وتحديات أقلع في مكان واحد: اختبر معرفتك، احسب تكلفة التدخين، صمم منشورك، ادعُ أصدقاءك، اجمع النقاط، وساعد مدينتك على قيادة التغيير."
+                : "All Aqla tools and challenges in one place: test your knowledge, calculate smoking cost, create your poster, invite friends, collect points, and help your city lead the change."}
             </p>
           </div>
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { icon: Calculator,    ar: "حاسبة تكلفة التدخين",         en: "Smoking Cost Calculator" },
-              { icon: Gauge,         ar: "اعرف مستوى اعتمادك خلال دقيقة", en: "1-Minute Dependence Check" },
-              { icon: HeartHandshake,ar: "وعد الإقلاع",                 en: "Quit Pledge" },
+              { ar: "تحدي المعرفة", en: "Knowledge Challenge", icon: Sparkles, tab: "challenges" },
+              { ar: "تحدي مدن أقلع", en: "Aqla City Challenge", icon: Users, tab: "cities" },
+              { ar: "نقاط وأوسمة أقلع", en: "Aqla Points & Medals", icon: HeartHandshake, tab: "points" },
+              { ar: "استوديو أقلع للتوعية", en: "Aqla Poster Studio", icon: Calculator, tab: "posters" },
             ].map((it, i) => (
-              <Link key={i} to="/tools" className="block">
-                <Card className="group h-full rounded-2xl border-0 p-5 shadow-elegant card-gradient transition-transform hover:-translate-y-0.5">
-                  <div className="flex items-center gap-3">
-                    <div className="grid h-10 w-10 place-items-center rounded-xl quit-gradient text-white shadow-md">
-                      <it.icon className="h-5 w-5" />
-                    </div>
-                    <span className="text-sm font-semibold">{lang === "ar" ? it.ar : it.en}</span>
-                  </div>
-                </Card>
-              </Link>
-            ))}
-          </div>
-          <div className="mt-5 text-center">
-            <Link to="/tools">
-              <Button className="quit-gradient border-0 text-white">
-                {lang === "ar" ? "استكشف الأدوات" : "Explore Tools"}
-                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-              </Button>
-            </Link>
-          </div>
-        </section>
-
-        {/* Featured Challenges */}
-        <section className="mt-12">
-          <div className="text-center">
-            <h2 className="text-2xl font-semibold tracking-tight text-primary sm:text-3xl">
-              {lang === "ar" ? "تحديات أقلع" : "Aqla Challenges"}
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-              {lang === "ar"
-                ? "شارك في تحديات بسيطة وآمنة، مع مؤشرات مجمعة دون عرض أي بيانات شخصية."
-                : "Join safe, simple challenges with aggregate, privacy-safe community indicators."}
-            </p>
-          </div>
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            {[
-              { ar: "خريطة تعهدات أقلع", en: "Aqla Pledge Map", icon: HeartHandshake },
-              { ar: "تحدي مدن أقلع",      en: "Aqla City Challenge", icon: Users },
-              { ar: "تحدي أقلع 28 يوم",   en: "Aqla 28-Day Challenge", icon: Sparkles },
-            ].map((it, i) => (
-              <Link key={i} to="/challenges" className="block">
+              <Link key={i} to="/challenges" search={{ tab: it.tab }} className="block">
                 <Card className="group h-full rounded-2xl border-0 p-5 shadow-elegant card-gradient transition-transform hover:-translate-y-0.5">
                   <div className="flex items-center gap-3">
                     <div className="grid h-10 w-10 place-items-center rounded-xl quit-gradient text-white shadow-md">
@@ -238,66 +188,13 @@ function Inner() {
           <div className="mt-5 text-center">
             <Link to="/challenges">
               <Button className="quit-gradient border-0 text-white">
-                {lang === "ar" ? "استكشف التحديات" : "Explore Challenges"}
+                {lang === "ar" ? "استكشف مركز التحديات" : "Explore Challenge Hub"}
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </Button>
             </Link>
           </div>
         </section>
 
-        {/* Poster Studio teaser */}
-        <section className="mt-12">
-          <Card className="overflow-hidden rounded-3xl border-0 p-0 shadow-elegant">
-            <div className="volunteer-gradient p-6 text-white sm:p-8">
-              <span className="inline-block rounded-full bg-white/15 px-3 py-1 text-[11px] font-medium">
-                {lang === "ar" ? "تصميم تفاعلي" : "Design studio"}
-              </span>
-              <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">
-                {lang === "ar" ? "صمم منشورك التوعوي" : "Create Your Awareness Poster"}
-              </h2>
-              <p className="mt-2 max-w-2xl text-sm leading-7 opacity-95">
-                {lang === "ar"
-                  ? "اكتب اسمك، اختر رسالتك، وشارك بطاقة توعوية تحمل شعار أقلع لنشر الوعي حول التدخين والنيكوتين."
-                  : "Add your name, choose your message, and share an Aqla awareness card to spread tobacco and nicotine awareness."}
-              </p>
-              <div className="mt-5">
-                <Link to="/poster-studio">
-                  <Button variant="secondary" className="gap-1.5">
-                    {lang === "ar" ? "ابدأ التصميم" : "Start designing"}
-                    <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </Card>
-        </section>
-
-        {/* City Challenge teaser */}
-        <section className="mt-12">
-          <Card className="overflow-hidden rounded-3xl border-0 p-0 shadow-elegant">
-            <div className="quit-gradient p-6 text-white sm:p-8">
-              <span className="inline-block rounded-full bg-white/15 px-3 py-1 text-[11px] font-medium">
-                {lang === "ar" ? "خريطة تفاعلية" : "Interactive map"}
-              </span>
-              <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">
-                {lang === "ar" ? "تحدي مدن أقلع" : "Aqla City Challenge"}
-              </h2>
-              <p className="mt-2 max-w-2xl text-sm leading-7 opacity-95">
-                {lang === "ar"
-                  ? "شارك مدينتك في رحلة التغيير. خريطة تفاعلية تعرض التفاعل المجتمعي مع أقلع بشكل إجمالي ودون عرض أي بيانات شخصية."
-                  : "Help your city lead the change. An interactive map showing community engagement with Aqla using aggregate, privacy-safe indicators only."}
-              </p>
-              <div className="mt-5">
-                <Link to="/city-challenge">
-                  <Button variant="secondary" className="gap-1.5">
-                    {lang === "ar" ? "شاهد خريطة التحدي" : "View the challenge map"}
-                    <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </Card>
-        </section>
         <ImpactSection isAr={lang === "ar"} />
         <VisitTracker path="/" />
         <div className="mt-10 grid gap-3 sm:grid-cols-2">
