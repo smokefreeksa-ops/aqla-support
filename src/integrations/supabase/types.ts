@@ -44,6 +44,42 @@ export type Database = {
         }
         Relationships: []
       }
+      challenge_events: {
+        Row: {
+          anonymous_session_id: string | null
+          challenge_type: string
+          city: string | null
+          created_at: string
+          event_type: string
+          id: string
+          region: string | null
+          value_label: string | null
+          value_numeric: number | null
+        }
+        Insert: {
+          anonymous_session_id?: string | null
+          challenge_type: string
+          city?: string | null
+          created_at?: string
+          event_type: string
+          id?: string
+          region?: string | null
+          value_label?: string | null
+          value_numeric?: number | null
+        }
+        Update: {
+          anonymous_session_id?: string | null
+          challenge_type?: string
+          city?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
+          region?: string | null
+          value_label?: string | null
+          value_numeric?: number | null
+        }
+        Relationships: []
+      }
       cigarette_dependence_scores: {
         Row: {
           category: string
@@ -1597,6 +1633,8 @@ export type Database = {
     }
     Functions: {
       get_admin_analytics_dashboard: { Args: never; Returns: Json }
+      get_admin_challenge_analytics: { Args: never; Returns: Json }
+      get_challenge_public_stats: { Args: never; Returns: Json }
       get_city_challenge_stats: { Args: never; Returns: Json }
       get_public_impact_stats: { Args: never; Returns: Json }
       has_role: {
