@@ -18,7 +18,7 @@ export function FloatingWhatsAppButton() {
   }, []);
 
   const pathname = location.pathname;
-  const isPublic = ["/", "/about", "/assessment", "/volunteer", "/tools", "/city-challenge", "/challenges", "/learn"].includes(pathname);
+  const isPublic = ["/", "/about", "/assessment", "/volunteer", "/tools", "/city-challenge", "/challenges", "/learn", "/poster-studio"].includes(pathname);
   if (!isPublic) return null;
 
   const isAr = lang === "ar";
