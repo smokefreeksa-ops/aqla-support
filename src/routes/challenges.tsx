@@ -21,7 +21,7 @@ import {
   type CityChallengeStats,
 } from "@/lib/city-challenge.functions";
 import {
-  Languages, MapPin, Trophy, Sparkles, Calculator, CalendarDays,
+  Languages, MapPin, Trophy, Calculator, CalendarDays,
   Target, HeartHandshake, Footprints, ArrowRight, MessageCircle,
   Twitter, Copy, Check, ShieldAlert,
 } from "lucide-react";
