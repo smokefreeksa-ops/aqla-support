@@ -666,6 +666,3 @@ function FirstStepCard({ isAr }: { isAr: boolean }) {
     </Card>
   );
 }
-
-// silence unused Sparkles import warning
-void Sparkles;
