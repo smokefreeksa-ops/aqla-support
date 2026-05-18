@@ -245,6 +245,33 @@ function Inner() {
           </div>
         </section>
 
+        {/* Poster Studio teaser */}
+        <section className="mt-12">
+          <Card className="overflow-hidden rounded-3xl border-0 p-0 shadow-elegant">
+            <div className="volunteer-gradient p-6 text-white sm:p-8">
+              <span className="inline-block rounded-full bg-white/15 px-3 py-1 text-[11px] font-medium">
+                {lang === "ar" ? "تصميم تفاعلي" : "Design studio"}
+              </span>
+              <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">
+                {lang === "ar" ? "صمم منشورك التوعوي" : "Create Your Awareness Poster"}
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-7 opacity-95">
+                {lang === "ar"
+                  ? "اكتب اسمك، اختر رسالتك، وشارك بطاقة توعوية تحمل شعار أقلع لنشر الوعي حول التدخين والنيكوتين."
+                  : "Add your name, choose your message, and share an Aqla awareness card to spread tobacco and nicotine awareness."}
+              </p>
+              <div className="mt-5">
+                <Link to="/poster-studio">
+                  <Button variant="secondary" className="gap-1.5">
+                    {lang === "ar" ? "ابدأ التصميم" : "Start designing"}
+                    <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </Card>
+        </section>
+
         {/* City Challenge teaser */}
         <section className="mt-12">
           <Card className="overflow-hidden rounded-3xl border-0 p-0 shadow-elegant">
