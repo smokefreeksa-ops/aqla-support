@@ -154,6 +154,7 @@ function Inner() {
           </Card>
         </section>
 
+        <InteractiveTools isAr={lang === "ar"} />
         <ImpactSection isAr={lang === "ar"} />
         <VisitTracker path="/" />
         <div className="mt-10 grid gap-3 sm:grid-cols-2">
