@@ -234,8 +234,8 @@ type AdminRequestRow = {
   city: string | null;
   district: string | null;
   delivery_address: string | null;
-  selected_products: unknown;
-  quantity_requested: unknown;
+  selected_products: string[];
+  quantity_requested: Record<string, number> | null;
   notes: string | null;
   age_group: string | null;
   pregnant_or_breastfeeding: string | null;
