@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VolunteerRouteImport } from './routes/volunteer'
 import { Route as ToolsRouteImport } from './routes/tools'
+import { Route as ShopRouteImport } from './routes/shop'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as CityChallengeRouteImport } from './routes/city-challenge'
@@ -29,6 +30,11 @@ const VolunteerRoute = VolunteerRouteImport.update({
 const ToolsRoute = ToolsRouteImport.update({
   id: '/tools',
   path: '/tools',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/city-challenge': typeof CityChallengeRoute
   '/learn': typeof LearnRoute
   '/login': typeof LoginRoute
+  '/shop': typeof ShopRoute
   '/tools': typeof ToolsRoute
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/city-challenge': typeof CityChallengeRoute
   '/learn': typeof LearnRoute
   '/login': typeof LoginRoute
+  '/shop': typeof ShopRoute
   '/tools': typeof ToolsRoute
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/city-challenge': typeof CityChallengeRoute
   '/learn': typeof LearnRoute
   '/login': typeof LoginRoute
+  '/shop': typeof ShopRoute
   '/tools': typeof ToolsRoute
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/city-challenge'
     | '/learn'
     | '/login'
+    | '/shop'
     | '/tools'
     | '/volunteer'
     | '/admin/data-dictionary'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/city-challenge'
     | '/learn'
     | '/login'
+    | '/shop'
     | '/tools'
     | '/volunteer'
     | '/admin/data-dictionary'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/city-challenge'
     | '/learn'
     | '/login'
+    | '/shop'
     | '/tools'
     | '/volunteer'
     | '/admin/data-dictionary'
@@ -168,6 +180,7 @@ export interface RootRouteChildren {
   CityChallengeRoute: typeof CityChallengeRoute
   LearnRoute: typeof LearnRoute
   LoginRoute: typeof LoginRoute
+  ShopRoute: typeof ShopRoute
   ToolsRoute: typeof ToolsRoute
   VolunteerRoute: typeof VolunteerRoute
 }
@@ -186,6 +199,13 @@ declare module '@tanstack/react-router' {
       path: '/tools'
       fullPath: '/tools'
       preLoaderRoute: typeof ToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -273,9 +293,20 @@ const rootRouteChildren: RootRouteChildren = {
   CityChallengeRoute: CityChallengeRoute,
   LearnRoute: LearnRoute,
   LoginRoute: LoginRoute,
+  ShopRoute: ShopRoute,
   ToolsRoute: ToolsRoute,
   VolunteerRoute: VolunteerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
