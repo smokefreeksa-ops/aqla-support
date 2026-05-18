@@ -873,6 +873,173 @@ export type Database = {
         }
         Relationships: []
       }
+      nrt_product_catalog: {
+        Row: {
+          available_options: Json | null
+          category: string
+          created_at: string
+          description_ar: string | null
+          description_en: string | null
+          display_order: number
+          id: string
+          is_active: boolean
+          name_ar: string
+          name_en: string
+          product_slug: string
+        }
+        Insert: {
+          available_options?: Json | null
+          category: string
+          created_at?: string
+          description_ar?: string | null
+          description_en?: string | null
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          name_ar: string
+          name_en: string
+          product_slug: string
+        }
+        Update: {
+          available_options?: Json | null
+          category?: string
+          created_at?: string
+          description_ar?: string | null
+          description_en?: string | null
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          name_ar?: string
+          name_en?: string
+          product_slug?: string
+        }
+        Relationships: []
+      }
+      nrt_request_status_history: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          id: string
+          new_status: string
+          note: string | null
+          old_status: string | null
+          request_id: string
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          new_status: string
+          note?: string | null
+          old_status?: string | null
+          request_id: string
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          new_status?: string
+          note?: string | null
+          old_status?: string | null
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nrt_request_status_history_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "nrt_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      nrt_requests: {
+        Row: {
+          acknowledgement_not_prescription: boolean
+          age_group: string | null
+          chest_pain_or_heart_condition: string | null
+          city: string | null
+          completed_aqla_assessment: string | null
+          consent_to_contact: boolean
+          created_at: string
+          delivery_address: string | null
+          district: string | null
+          email: string | null
+          full_name: string
+          id: string
+          internal_notes: string | null
+          mobile_number: string
+          notes: string | null
+          order_status: string
+          preferred_contact_method: string | null
+          preferred_language: string | null
+          pregnant_or_breastfeeding: string | null
+          quantity_requested: Json | null
+          request_code: string
+          requires_clinician_review: boolean
+          selected_products: Json
+          severe_breathing_problem: string | null
+          taking_regular_medications: string | null
+          updated_at: string
+        }
+        Insert: {
+          acknowledgement_not_prescription?: boolean
+          age_group?: string | null
+          chest_pain_or_heart_condition?: string | null
+          city?: string | null
+          completed_aqla_assessment?: string | null
+          consent_to_contact?: boolean
+          created_at?: string
+          delivery_address?: string | null
+          district?: string | null
+          email?: string | null
+          full_name: string
+          id?: string
+          internal_notes?: string | null
+          mobile_number: string
+          notes?: string | null
+          order_status?: string
+          preferred_contact_method?: string | null
+          preferred_language?: string | null
+          pregnant_or_breastfeeding?: string | null
+          quantity_requested?: Json | null
+          request_code: string
+          requires_clinician_review?: boolean
+          selected_products: Json
+          severe_breathing_problem?: string | null
+          taking_regular_medications?: string | null
+          updated_at?: string
+        }
+        Update: {
+          acknowledgement_not_prescription?: boolean
+          age_group?: string | null
+          chest_pain_or_heart_condition?: string | null
+          city?: string | null
+          completed_aqla_assessment?: string | null
+          consent_to_contact?: boolean
+          created_at?: string
+          delivery_address?: string | null
+          district?: string | null
+          email?: string | null
+          full_name?: string
+          id?: string
+          internal_notes?: string | null
+          mobile_number?: string
+          notes?: string | null
+          order_status?: string
+          preferred_contact_method?: string | null
+          preferred_language?: string | null
+          pregnant_or_breastfeeding?: string | null
+          quantity_requested?: Json | null
+          request_code?: string
+          requires_clinician_review?: boolean
+          selected_products?: Json
+          severe_breathing_problem?: string | null
+          taking_regular_medications?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       outcome_tracking: {
         Row: {
           abstinent: boolean | null
