@@ -6,7 +6,7 @@ import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 import { getAssistantStatus, chatWithAssistant } from "@/lib/assistant.functions";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
-const PUBLIC_PATHS = ["/", "/about", "/assessment", "/volunteer", "/tools", "/city-challenge", "/challenges", "/learn", "/shop", "/poster-studio"];
+const PUBLIC_PATHS = ["/", "/about", "/assessment", "/volunteer", "/tools", "/city-challenge", "/challenges", "/learn", "/shop", "/poster-studio", "/movement"];
 
 type Msg = { role: "user" | "assistant"; content: string };
 
