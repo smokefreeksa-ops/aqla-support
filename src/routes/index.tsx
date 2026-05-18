@@ -69,13 +69,20 @@ function Inner() {
       <main className="mx-auto max-w-5xl px-4 py-12 sm:py-16">
         <section className="text-center">
           <span className="inline-block rounded-full bg-primary-soft px-3 py-1 text-xs font-medium text-primary">
-            {lang === "ar" ? "خدمة مجانية تحت إشراف طبيب وأخصائيين" : "Free physician- and specialist-supervised service"}
+            {lang === "ar"
+              ? <><span>منصة مجانية للجميع، وستبقى مجانية</span><br /><span>بإشراف سعادة الدكتور مالك عبدالملك الذبياني وفريق من الأخصائيين المدربين</span></>
+              : "Free physician- and specialist-supervised service"}
           </span>
           <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">{t.appName}</h1>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground sm:text-lg">{t.tagline}</p>
-          <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground/80">
+          <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-7 text-muted-foreground/80">
             {lang === "ar"
-              ? "تماشيًا مع مستهدفات رؤية السعودية 2030 في تعزيز جودة الحياة والصحة العامة، ودعمًا للجهود الوطنية للحد من التدخين واستخدام منتجات التبغ والنيكوتين."
+              ? "في أقلع، نؤمن أن الإقلاع لا يبدأ وحده. نوفر مسارًا مجانيًا لمن يريد فهم اعتماده على التدخين أو النيكوتين، ومسارًا آخر لمن يريد أن يساند غيره في رحلة الإقلاع."
+              : "Aqla offers a free pathway for those who want to understand their nicotine or smoking dependence, and another pathway for those who want to support others in their quit journey."}
+          </p>
+          <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground/70">
+            {lang === "ar"
+              ? "نسعى من خلال أقلع للمساهمة في تعزيز جودة الحياة والصحة العامة، بما يتماشى مع مستهدفات رؤية المملكة 2030 بقيادة صاحب السمو الملكي الأمير محمد بن سلمان بن عبدالعزيز."
               : "Aligned with Saudi Vision 2030 goals to improve quality of life and public health, and supportive of national efforts to reduce tobacco and nicotine use."}
           </p>
         </section>
