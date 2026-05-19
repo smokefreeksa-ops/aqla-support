@@ -106,11 +106,14 @@ function Inner() {
   const [exportSize, setExportSize] = useState<ExportSize>("ig_square");
   const [downloading, setDownloading] = useState(false);
   const [recorded, setRecorded] = useState(false);
+  const [sharePath, setSharePath] = useState<string | null>(null);
+  const [generatingShare, setGeneratingShare] = useState(false);
 
   const previewRef = useRef<HTMLDivElement>(null);
 
   const createFn = useServerFn(recordPosterCreation);
   const eventFn = useServerFn(recordPosterEvent);
+  const shareFn = useServerFn(createShareCard);
 
   useEffect(() => { trackEvent("poster_studio_viewed"); }, []);
 
