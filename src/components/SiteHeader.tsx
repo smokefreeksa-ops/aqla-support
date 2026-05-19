@@ -12,7 +12,7 @@ const NAV: NavItem[] = [
   { ar: "ابدأ الآن", en: "Start Now", to: "/assessment" },
   { ar: "مسار الإقلاع", en: "Quit Pathway", to: "/quit-pathway" },
   { ar: "مسار المساعدة", en: "Help Someone", to: "/help-pathway" },
-  { ar: "التحديات والأوسمة", en: "Challenges & Medals", to: "/challenge-pathway" },
+  { ar: "التحديات والأنشطة", en: "Challenges & Activities", to: "/challenge-pathway" },
   { ar: "التعلم والتدريب", en: "Learn & Train", to: "/learn" },
   { ar: "طلب الدعم", en: "Request Support", to: "/tools" },
   { ar: "أثر أقلع", en: "Impact", to: "/movement" },
