@@ -42,7 +42,7 @@ function sanitizePayload(input: unknown): Record<string, unknown> {
 const ALLOWED_TYPES = new Set([
   "pledge", "quick-check", "breath", "cost", "trigger",
   "readiness", "knowledge", "medal", "poster", "city",
-  "passport", "certificate",
+  "passport", "certificate", "support-invite",
 ]);
 
 const createInputSchema = z.object({

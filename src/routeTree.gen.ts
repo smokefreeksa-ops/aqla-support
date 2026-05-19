@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as VolunteerRouteImport } from './routes/volunteer'
 import { Route as TrainingRouteImport } from './routes/training'
 import { Route as ToolsRouteImport } from './routes/tools'
+import { Route as SupportInviteRouteImport } from './routes/support-invite'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as PosterStudioRouteImport } from './routes/poster-studio'
 import { Route as MovementRouteImport } from './routes/movement'
@@ -40,6 +41,11 @@ const TrainingRoute = TrainingRouteImport.update({
 const ToolsRoute = ToolsRouteImport.update({
   id: '/tools',
   path: '/tools',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupportInviteRoute = SupportInviteRouteImport.update({
+  id: '/support-invite',
+  path: '/support-invite',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShopRoute = ShopRouteImport.update({
@@ -125,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/movement': typeof MovementRoute
   '/poster-studio': typeof PosterStudioRoute
   '/shop': typeof ShopRoute
+  '/support-invite': typeof SupportInviteRoute
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
   '/volunteer': typeof VolunteerRoute
@@ -144,6 +151,7 @@ export interface FileRoutesByTo {
   '/movement': typeof MovementRoute
   '/poster-studio': typeof PosterStudioRoute
   '/shop': typeof ShopRoute
+  '/support-invite': typeof SupportInviteRoute
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
   '/volunteer': typeof VolunteerRoute
@@ -164,6 +172,7 @@ export interface FileRoutesById {
   '/movement': typeof MovementRoute
   '/poster-studio': typeof PosterStudioRoute
   '/shop': typeof ShopRoute
+  '/support-invite': typeof SupportInviteRoute
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
   '/volunteer': typeof VolunteerRoute
@@ -185,6 +194,7 @@ export interface FileRouteTypes {
     | '/movement'
     | '/poster-studio'
     | '/shop'
+    | '/support-invite'
     | '/tools'
     | '/training'
     | '/volunteer'
@@ -204,6 +214,7 @@ export interface FileRouteTypes {
     | '/movement'
     | '/poster-studio'
     | '/shop'
+    | '/support-invite'
     | '/tools'
     | '/training'
     | '/volunteer'
@@ -223,6 +234,7 @@ export interface FileRouteTypes {
     | '/movement'
     | '/poster-studio'
     | '/shop'
+    | '/support-invite'
     | '/tools'
     | '/training'
     | '/volunteer'
@@ -243,6 +255,7 @@ export interface RootRouteChildren {
   MovementRoute: typeof MovementRoute
   PosterStudioRoute: typeof PosterStudioRoute
   ShopRoute: typeof ShopRoute
+  SupportInviteRoute: typeof SupportInviteRoute
   ToolsRoute: typeof ToolsRoute
   TrainingRoute: typeof TrainingRoute
   VolunteerRoute: typeof VolunteerRoute
@@ -271,6 +284,13 @@ declare module '@tanstack/react-router' {
       path: '/tools'
       fullPath: '/tools'
       preLoaderRoute: typeof ToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/support-invite': {
+      id: '/support-invite'
+      path: '/support-invite'
+      fullPath: '/support-invite'
+      preLoaderRoute: typeof SupportInviteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shop': {
@@ -396,6 +416,7 @@ const rootRouteChildren: RootRouteChildren = {
   MovementRoute: MovementRoute,
   PosterStudioRoute: PosterStudioRoute,
   ShopRoute: ShopRoute,
+  SupportInviteRoute: SupportInviteRoute,
   ToolsRoute: ToolsRoute,
   TrainingRoute: TrainingRoute,
   VolunteerRoute: VolunteerRoute,
