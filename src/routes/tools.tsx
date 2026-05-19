@@ -289,7 +289,16 @@ function CostCalculator({ isAr }: { isAr: boolean }) {
             {t("قد يكون التدخين مكلفًا أكثر مما تتوقع. معرفة الرقم قد تكون أول خطوة للتغيير.",
                "Smoking may cost more than you think. Seeing the number can be the first step toward change.")}
           </p>
-          <ShareRow text={shareText} isAr={isAr} />
+          <ShareResult
+            shareType="cost"
+            isAr={isAr}
+            messageAr={messageAr}
+            messageEn={messageEn}
+            targetPath="/tools"
+            titleAr="حاسبة تكلفة التدخين"
+            titleEn="Smoking Cost Calculator"
+            payload={{ yearly_cost_sar: Math.round(out.yearly) }}
+          />
           <StartAssessment isAr={isAr} from="cost_calculator" />
         </div>
       )}
