@@ -11,18 +11,18 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VolunteerRouteImport } from './routes/volunteer'
 import { Route as TrainingRouteImport } from './routes/training'
-import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as SupportInviteRouteImport } from './routes/support-invite'
 import { Route as ShopRouteImport } from './routes/shop'
+import { Route as RequestSupportRouteImport } from './routes/request-support'
 import { Route as QuitPathwayRouteImport } from './routes/quit-pathway'
 import { Route as PosterStudioRouteImport } from './routes/poster-studio'
-import { Route as MovementRouteImport } from './routes/movement'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as LearnRouteImport } from './routes/learn'
+import { Route as LearnTrainRouteImport } from './routes/learn-train'
+import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as HelpPathwayRouteImport } from './routes/help-pathway'
 import { Route as CityChallengeRouteImport } from './routes/city-challenge'
 import { Route as ChallengesRouteImport } from './routes/challenges'
 import { Route as ChallengePathwayRouteImport } from './routes/challenge-pathway'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AssessmentRouteImport } from './routes/assessment'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
@@ -41,11 +41,6 @@ const TrainingRoute = TrainingRouteImport.update({
   path: '/training',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ToolsRoute = ToolsRouteImport.update({
-  id: '/tools',
-  path: '/tools',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SupportInviteRoute = SupportInviteRouteImport.update({
   id: '/support-invite',
   path: '/support-invite',
@@ -54,6 +49,11 @@ const SupportInviteRoute = SupportInviteRouteImport.update({
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
   path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RequestSupportRoute = RequestSupportRouteImport.update({
+  id: '/request-support',
+  path: '/request-support',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuitPathwayRoute = QuitPathwayRouteImport.update({
@@ -66,19 +66,14 @@ const PosterStudioRoute = PosterStudioRouteImport.update({
   path: '/poster-studio',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MovementRoute = MovementRouteImport.update({
-  id: '/movement',
-  path: '/movement',
+const LearnTrainRoute = LearnTrainRouteImport.update({
+  id: '/learn-train',
+  path: '/learn-train',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LearnRoute = LearnRouteImport.update({
-  id: '/learn',
-  path: '/learn',
+const ImpactRoute = ImpactRouteImport.update({
+  id: '/impact',
+  path: '/impact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpPathwayRoute = HelpPathwayRouteImport.update({
@@ -99,6 +94,11 @@ const ChallengesRoute = ChallengesRouteImport.update({
 const ChallengePathwayRoute = ChallengePathwayRouteImport.update({
   id: '/challenge-pathway',
   path: '/challenge-pathway',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AssessmentRoute = AssessmentRouteImport.update({
@@ -142,18 +142,18 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
+  '/auth': typeof AuthRoute
   '/challenge-pathway': typeof ChallengePathwayRoute
   '/challenges': typeof ChallengesRoute
   '/city-challenge': typeof CityChallengeRoute
   '/help-pathway': typeof HelpPathwayRoute
-  '/learn': typeof LearnRoute
-  '/login': typeof LoginRoute
-  '/movement': typeof MovementRoute
+  '/impact': typeof ImpactRoute
+  '/learn-train': typeof LearnTrainRoute
   '/poster-studio': typeof PosterStudioRoute
   '/quit-pathway': typeof QuitPathwayRoute
+  '/request-support': typeof RequestSupportRoute
   '/shop': typeof ShopRoute
   '/support-invite': typeof SupportInviteRoute
-  '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
@@ -165,18 +165,18 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
+  '/auth': typeof AuthRoute
   '/challenge-pathway': typeof ChallengePathwayRoute
   '/challenges': typeof ChallengesRoute
   '/city-challenge': typeof CityChallengeRoute
   '/help-pathway': typeof HelpPathwayRoute
-  '/learn': typeof LearnRoute
-  '/login': typeof LoginRoute
-  '/movement': typeof MovementRoute
+  '/impact': typeof ImpactRoute
+  '/learn-train': typeof LearnTrainRoute
   '/poster-studio': typeof PosterStudioRoute
   '/quit-pathway': typeof QuitPathwayRoute
+  '/request-support': typeof RequestSupportRoute
   '/shop': typeof ShopRoute
   '/support-invite': typeof SupportInviteRoute
-  '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
@@ -189,18 +189,18 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
+  '/auth': typeof AuthRoute
   '/challenge-pathway': typeof ChallengePathwayRoute
   '/challenges': typeof ChallengesRoute
   '/city-challenge': typeof CityChallengeRoute
   '/help-pathway': typeof HelpPathwayRoute
-  '/learn': typeof LearnRoute
-  '/login': typeof LoginRoute
-  '/movement': typeof MovementRoute
+  '/impact': typeof ImpactRoute
+  '/learn-train': typeof LearnTrainRoute
   '/poster-studio': typeof PosterStudioRoute
   '/quit-pathway': typeof QuitPathwayRoute
+  '/request-support': typeof RequestSupportRoute
   '/shop': typeof ShopRoute
   '/support-invite': typeof SupportInviteRoute
-  '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
@@ -214,18 +214,18 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/assessment'
+    | '/auth'
     | '/challenge-pathway'
     | '/challenges'
     | '/city-challenge'
     | '/help-pathway'
-    | '/learn'
-    | '/login'
-    | '/movement'
+    | '/impact'
+    | '/learn-train'
     | '/poster-studio'
     | '/quit-pathway'
+    | '/request-support'
     | '/shop'
     | '/support-invite'
-    | '/tools'
     | '/training'
     | '/volunteer'
     | '/admin/data-dictionary'
@@ -237,18 +237,18 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/assessment'
+    | '/auth'
     | '/challenge-pathway'
     | '/challenges'
     | '/city-challenge'
     | '/help-pathway'
-    | '/learn'
-    | '/login'
-    | '/movement'
+    | '/impact'
+    | '/learn-train'
     | '/poster-studio'
     | '/quit-pathway'
+    | '/request-support'
     | '/shop'
     | '/support-invite'
-    | '/tools'
     | '/training'
     | '/volunteer'
     | '/admin/data-dictionary'
@@ -260,18 +260,18 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/assessment'
+    | '/auth'
     | '/challenge-pathway'
     | '/challenges'
     | '/city-challenge'
     | '/help-pathway'
-    | '/learn'
-    | '/login'
-    | '/movement'
+    | '/impact'
+    | '/learn-train'
     | '/poster-studio'
     | '/quit-pathway'
+    | '/request-support'
     | '/shop'
     | '/support-invite'
-    | '/tools'
     | '/training'
     | '/volunteer'
     | '/admin/data-dictionary'
@@ -284,18 +284,18 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRouteWithChildren
   AssessmentRoute: typeof AssessmentRoute
+  AuthRoute: typeof AuthRoute
   ChallengePathwayRoute: typeof ChallengePathwayRoute
   ChallengesRoute: typeof ChallengesRoute
   CityChallengeRoute: typeof CityChallengeRoute
   HelpPathwayRoute: typeof HelpPathwayRoute
-  LearnRoute: typeof LearnRoute
-  LoginRoute: typeof LoginRoute
-  MovementRoute: typeof MovementRoute
+  ImpactRoute: typeof ImpactRoute
+  LearnTrainRoute: typeof LearnTrainRoute
   PosterStudioRoute: typeof PosterStudioRoute
   QuitPathwayRoute: typeof QuitPathwayRoute
+  RequestSupportRoute: typeof RequestSupportRoute
   ShopRoute: typeof ShopRoute
   SupportInviteRoute: typeof SupportInviteRoute
-  ToolsRoute: typeof ToolsRoute
   TrainingRoute: typeof TrainingRoute
   VolunteerRoute: typeof VolunteerRoute
   CertificateCodeRoute: typeof CertificateCodeRoute
@@ -318,13 +318,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrainingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tools': {
-      id: '/tools'
-      path: '/tools'
-      fullPath: '/tools'
-      preLoaderRoute: typeof ToolsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/support-invite': {
       id: '/support-invite'
       path: '/support-invite'
@@ -337,6 +330,13 @@ declare module '@tanstack/react-router' {
       path: '/shop'
       fullPath: '/shop'
       preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/request-support': {
+      id: '/request-support'
+      path: '/request-support'
+      fullPath: '/request-support'
+      preLoaderRoute: typeof RequestSupportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quit-pathway': {
@@ -353,25 +353,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PosterStudioRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/movement': {
-      id: '/movement'
-      path: '/movement'
-      fullPath: '/movement'
-      preLoaderRoute: typeof MovementRouteImport
+    '/learn-train': {
+      id: '/learn-train'
+      path: '/learn-train'
+      fullPath: '/learn-train'
+      preLoaderRoute: typeof LearnTrainRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/learn': {
-      id: '/learn'
-      path: '/learn'
-      fullPath: '/learn'
-      preLoaderRoute: typeof LearnRouteImport
+    '/impact': {
+      id: '/impact'
+      path: '/impact'
+      fullPath: '/impact'
+      preLoaderRoute: typeof ImpactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/help-pathway': {
@@ -400,6 +393,13 @@ declare module '@tanstack/react-router' {
       path: '/challenge-pathway'
       fullPath: '/challenge-pathway'
       preLoaderRoute: typeof ChallengePathwayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/assessment': {
@@ -469,18 +469,18 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AdminRoute: AdminRouteWithChildren,
   AssessmentRoute: AssessmentRoute,
+  AuthRoute: AuthRoute,
   ChallengePathwayRoute: ChallengePathwayRoute,
   ChallengesRoute: ChallengesRoute,
   CityChallengeRoute: CityChallengeRoute,
   HelpPathwayRoute: HelpPathwayRoute,
-  LearnRoute: LearnRoute,
-  LoginRoute: LoginRoute,
-  MovementRoute: MovementRoute,
+  ImpactRoute: ImpactRoute,
+  LearnTrainRoute: LearnTrainRoute,
   PosterStudioRoute: PosterStudioRoute,
   QuitPathwayRoute: QuitPathwayRoute,
+  RequestSupportRoute: RequestSupportRoute,
   ShopRoute: ShopRoute,
   SupportInviteRoute: SupportInviteRoute,
-  ToolsRoute: ToolsRoute,
   TrainingRoute: TrainingRoute,
   VolunteerRoute: VolunteerRoute,
   CertificateCodeRoute: CertificateCodeRoute,
