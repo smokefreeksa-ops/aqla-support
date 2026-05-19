@@ -668,10 +668,10 @@ function PledgeCard({ isAr }: { isAr: boolean }) {
   const recordCity = useServerFn(recordCityChallengeEvent);
   const chosen = reasons.find((r) => r.v === reason);
   const reasonLabel = reason === "other" ? other.trim() : (chosen ? (isAr ? chosen.ar : chosen.en) : "");
-  const shareText = t(
-    `بدأت خطوتي الأولى مع أقلع. سببي: ${reasonLabel}.`,
-    `I started my first step with Aqla. My reason: ${reasonLabel}.`
-  );
+  const messageAr =
+    `مستقبلي يستاهل أبدأ من اليوم.\n\nاخترت أول خطوة مع أقلع${reasonLabel ? ` لأجل ${reasonLabel}` : ""}، ويمكن خطوة بسيطة اليوم تصنع فرق كبير بكرة.\n\nاكتب سببك أنت أيضًا وصمّم بطاقتك:`;
+  const messageEn =
+    `My future is worth starting for today.\n\nI chose my first step with Aqla${reasonLabel ? ` for ${reasonLabel}` : ""}, and one small step today may create a bigger change tomorrow.\n\nWrite your reason and create your card:`;
 
   return (
     <Card className="rounded-3xl border-0 p-6 shadow-elegant card-gradient">
