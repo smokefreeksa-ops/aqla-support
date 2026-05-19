@@ -3,10 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { getPublicImpactStats, type ImpactStats } from "@/lib/impact.functions";
-import {
-  ClipboardCheck, Compass, Stethoscope, Users, MapPin, CalendarCheck, BookOpen,
-  Eye, Sun, UserCheck, PlayCircle, PercentSquare,
-} from "lucide-react";
+import { ClipboardCheck, Compass, Stethoscope, Users, MapPin, Eye } from "lucide-react";
 
 const EMPTY: ImpactStats = {
   total_visits: 0, unique_visitors: 0, visits_today: 0,
