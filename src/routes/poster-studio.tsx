@@ -8,6 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Languages, Download, Share2, Copy, RotateCcw, Sparkles, ArrowLeft, Award, HeartHandshake } from "lucide-react";
 import { useLangState, LangContext, useLang } from "@/lib/i18n";
 import { recordPosterCreation, recordPosterEvent, isUnsafeMessage } from "@/lib/poster.functions";
+import { createShareCard } from "@/lib/share.functions";
+import { ShareButtons } from "@/components/ShareButtons";
 import { getAnonSessionId } from "@/lib/analytics";
 import { trackEvent } from "@/lib/track-event";
 import { toast } from "sonner";
