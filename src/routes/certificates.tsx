@@ -4,8 +4,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { LangContext, useLang, useLangState } from "@/lib/i18n";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 import { Award, ExternalLink } from "lucide-react";
 
 export const Route = createFileRoute("/certificates")({
@@ -26,24 +25,6 @@ function Inner() {
   const { lang, dir } = useLang();
   const isAr = lang === "ar";
   const [code, setCode] = useState("");
-  const [list, setList] = useState<Array<{ id: string; code: string; recipient_name: string | null; issued_at: string }>>([]);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await supabase
-          .from("certificates")
-          .select("id, code, recipient_name, issued_at")
-          .order("issued_at", { ascending: false })
-          .limit(20);
-        if (data) setList(data as never);
-      } catch {
-        /* ignore — public read may be denied; lookup-by-code still works */
-      }
-      setLoaded(true);
-    })();
-  }, []);
 
   return (
     <div dir={dir} className="min-h-screen bg-background">
@@ -102,22 +83,6 @@ function Inner() {
             </Link>
           </div>
         </Card>
-
-        {loaded && list.length > 0 && (
-          <Card className={`mt-6 rounded-2xl p-5 ${isAr ? "text-right" : ""}`}>
-            <h2 className="text-lg font-semibold">{isAr ? "أحدث الشهادات الصادرة" : "Recently issued"}</h2>
-            <ul className="mt-3 divide-y divide-border/60">
-              {list.map((c) => (
-                <li key={c.id} className="flex items-center justify-between gap-3 py-2">
-                  <span className="truncate text-sm">{c.recipient_name || (isAr ? "متطوع" : "Volunteer")}</span>
-                  <Link to="/certificate/$code" params={{ code: c.code }} className="text-xs text-primary underline">
-                    {c.code}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </Card>
-        )}
       </main>
       <SiteFooter />
     </div>
