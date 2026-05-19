@@ -13,6 +13,7 @@ import { useLang, useLangState, LangContext } from "@/lib/i18n";
 import { trackEvent } from "@/lib/track-event";
 import { VisitTracker } from "@/components/VisitTracker";
 import { SocialLinks } from "@/components/SocialLinks";
+import { ShareResult } from "@/components/ShareResult";
 import {
   Calculator, Gauge, Wind, Clock, MapPin, HeartHandshake, Sparkles,
   ArrowRight, Languages, Download, Copy, MessageCircle, Twitter,
