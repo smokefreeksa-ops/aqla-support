@@ -739,7 +739,17 @@ function PledgeCard({ isAr }: { isAr: boolean }) {
               <Download className="h-4 w-4" />{t("احفظ البطاقة", "Save card")}
             </Button>
           </div>
-          <ShareRow text={shareText} isAr={isAr} />
+          <ShareResult
+            shareType="pledge"
+            isAr={isAr}
+            messageAr={messageAr}
+            messageEn={messageEn}
+            targetPath="/tools"
+            titleAr="وعد الإقلاع"
+            titleEn="Quit Pledge"
+            payload={{ reason: reasonLabel, city: city.trim() || null }}
+            snapshotRef={cardRef}
+          />
           <StartAssessment isAr={isAr} from="pledge" />
         </div>
       )}
