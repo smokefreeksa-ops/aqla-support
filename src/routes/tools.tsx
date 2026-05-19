@@ -13,6 +13,7 @@ import { useLang, useLangState, LangContext } from "@/lib/i18n";
 import { trackEvent } from "@/lib/track-event";
 import { VisitTracker } from "@/components/VisitTracker";
 import { SocialLinks } from "@/components/SocialLinks";
+import { ShareResult } from "@/components/ShareResult";
 import {
   Calculator, Gauge, Wind, Clock, MapPin, HeartHandshake, Sparkles,
   ArrowRight, Languages, Download, Copy, MessageCircle, Twitter,
@@ -239,10 +240,15 @@ function CostCalculator({ isAr }: { isAr: boolean }) {
   const fmt = (n: number) =>
     new Intl.NumberFormat(isAr ? "ar-SA" : "en-US", { maximumFractionDigits: 0 }).format(Math.round(n));
   const sar = t("ر.س", "SAR");
-  const shareText = out ? t(
-    `اكتشفت أن التدخين قد يكلفني حوالي ${fmt(out.yearly)} ريال سنويًا. بدأت أفكر في التغيير مع أقلع.`,
-    `I found out smoking may cost me around ${fmt(out.yearly)} SAR per year. I'm thinking about change with Aqla.`
-  ) : "";
+  const yearlyFmt = out
+    ? new Intl.NumberFormat(isAr ? "ar-SA" : "en-US", { maximumFractionDigits: 0 }).format(Math.round(out.yearly))
+    : "";
+  const messageAr = out
+    ? `اكتشفت أن التدخين قد يكلّفني حوالي ${yearlyFmt} ريال في السنة.\nتخيل لو هذا المبلغ راح لشيء يفيد صحتك أو مستقبلك.\n\nجرّب الحاسبة وشوف رقمك:`
+    : "";
+  const messageEn = out
+    ? `I found out smoking may cost me about ${yearlyFmt} SAR per year.\nImagine if that money went toward your health or future.\n\nTry the calculator and see your number:`
+    : "";
 
   return (
     <Card className="rounded-3xl border-0 p-6 shadow-elegant card-gradient">
@@ -283,7 +289,16 @@ function CostCalculator({ isAr }: { isAr: boolean }) {
             {t("قد يكون التدخين مكلفًا أكثر مما تتوقع. معرفة الرقم قد تكون أول خطوة للتغيير.",
                "Smoking may cost more than you think. Seeing the number can be the first step toward change.")}
           </p>
-          <ShareRow text={shareText} isAr={isAr} />
+          <ShareResult
+            shareType="cost"
+            isAr={isAr}
+            messageAr={messageAr}
+            messageEn={messageEn}
+            targetPath="/tools"
+            titleAr="حاسبة تكلفة التدخين"
+            titleEn="Smoking Cost Calculator"
+            payload={{ yearly_cost_sar: Math.round(out.yearly) }}
+          />
           <StartAssessment isAr={isAr} from="cost_calculator" />
         </div>
       )}
@@ -319,10 +334,10 @@ function DependenceCheck({ isAr }: { isAr: boolean }) {
     score <= 3 ? { ar: "اهتمام متوسط", en: "Moderate concern", cls: "text-amber-600" } :
                  { ar: "اهتمام مرتفع", en: "High concern", cls: "text-rose-600" };
   const levelLabel = isAr ? level.ar : level.en;
-  const shareText = t(
-    `نتيجتي في الفحص السريع: ${levelLabel}. بدأت أفهم علاقتي بالنيكوتين مع أقلع.`,
-    `My quick nicotine check result: ${levelLabel}. I'm starting to understand my relationship with nicotine with Aqla.`
-  );
+  const messageAr =
+    "اكتشفت اليوم أن علاقتي بالنيكوتين أقوى مما توقعت.\nأول خطوة للتغيير هي الفهم.\n\nجرّب فحص أقلع السريع واعرف درجتك خلال دقيقة:";
+  const messageEn =
+    "Today I realized my relationship with nicotine may be stronger than I thought.\nThe first step toward change is understanding.\n\nTry Aqla's quick check and see yours in a minute:";
 
   return (
     <Card className="rounded-3xl border-0 p-6 shadow-elegant card-gradient">
@@ -358,7 +373,16 @@ function DependenceCheck({ isAr }: { isAr: boolean }) {
             {t("هذه نتيجة توعوية سريعة وليست تشخيصًا. للحصول على مسار أدق، أكمل تقييم أقلع الكامل.",
                "This is a quick educational check, not a diagnosis. For a more accurate pathway, complete the full Aqla assessment.")}
           </p>
-          <ShareRow text={shareText} isAr={isAr} />
+          <ShareResult
+            shareType="quick-check"
+            isAr={isAr}
+            messageAr={messageAr}
+            messageEn={messageEn}
+            targetPath="/tools"
+            titleAr="فحص النيكوتين السريع"
+            titleEn="Quick Nicotine Check"
+            payload={{ level: isAr ? level.ar : level.en }}
+          />
           <StartAssessment isAr={isAr} from="dependence_check" label={t("أكمل التقييم الكامل", "Complete full assessment")} />
         </div>
       )}
@@ -406,9 +430,11 @@ function BreathChallenge({ isAr }: { isAr: boolean }) {
     s <= 45 ? { ar: "تحكم جيد اليوم — تذكر أن هذا ليس اختبارًا طبيًا.", en: "Good control today — remember this is not a medical test.", cls: "text-teal-700" } :
               { ar: "تحكم عالٍ اليوم — لا تعتمد على هذا كمقياس لصحة الرئة.", en: "Strong control today — do not use this as a measure of lung health.", cls: "text-teal-800" };
 
-  const shareText = final !== null
-    ? t(`جربت تحدي الوعي بالتنفس في أقلع ووصلت إلى ${final} ثانية. هذا تحدٍ توعوي وليس اختبارًا طبيًا.`,
-        `I tried Aqla's Breath Awareness Challenge and reached ${final} seconds. This is an awareness challenge, not a medical test.`)
+  const messageAr = final !== null
+    ? `جربت تحدي الوعي بالتنفس في أقلع ووصلت إلى ${final} ثوانٍ.\nمو اختبارًا طبيًا، لكنه تذكير بسيط أن ننتبه لتنفسنا وصحتنا.\n\nجرّبه أنت الآن:`
+    : "";
+  const messageEn = final !== null
+    ? `I tried Aqla's Breath Awareness Challenge and reached ${final} seconds.\nIt's not a medical test, just a gentle reminder to notice our breathing and health.\n\nTry it yourself:`
     : "";
 
   return (
@@ -450,7 +476,16 @@ function BreathChallenge({ isAr }: { isAr: boolean }) {
                 {t("هذه أداة توعية فقط، وليست تقييمًا لوظائف الرئة.",
                    "This is an awareness tool only and does not assess lung function.")}
               </p>
-              <ShareRow text={shareText} isAr={isAr} />
+              <ShareResult
+                shareType="breath"
+                isAr={isAr}
+                messageAr={messageAr}
+                messageEn={messageEn}
+                targetPath="/tools"
+                titleAr="تحدي الوعي بالتنفس"
+                titleEn="Breath Awareness Challenge"
+                payload={{ seconds: final }}
+              />
               <StartAssessment isAr={isAr} from="breath_challenge" />
             </div>
           )}
@@ -557,9 +592,11 @@ function TriggerMap({ isAr }: { isAr: boolean }) {
     t("استخدم تقييم أقلع", "Use the Aqla assessment"),
     t("تواصل مع الفريق عبر واتساب", "Contact the team via WhatsApp"),
   ];
-  const shareText = top.length
-    ? t(`اكتشفت أكثر محفزاتي مع أقلع: ${top.join("، ")}. الوعي بالمحفزات خطوة مهمة للتغيير.`,
-        `I discovered my top triggers with Aqla: ${top.join(", ")}. Knowing your triggers is an important step toward change.`)
+  const messageAr = top.length
+    ? `اكتشفت أكثر محفزاتي مع أقلع: ${top.join("، ")}.\nالوعي بالمحفزات أول خطوة للتغيير.\n\nاكتشف محفزاتك أنت أيضًا:`
+    : "";
+  const messageEn = top.length
+    ? `I discovered my top triggers with Aqla: ${top.join(", ")}.\nKnowing your triggers is the first step toward change.\n\nDiscover yours:`
     : "";
 
   return (
@@ -593,7 +630,16 @@ function TriggerMap({ isAr }: { isAr: boolean }) {
             {t("ملاحظة: لا توصي هذه الأداة بأي أدوية أو بدائل نيكوتين.",
                "Note: this tool does not recommend medication or nicotine alternatives.")}
           </p>
-          <ShareRow text={shareText} isAr={isAr} />
+          <ShareResult
+            shareType="trigger"
+            isAr={isAr}
+            messageAr={messageAr}
+            messageEn={messageEn}
+            targetPath="/tools"
+            titleAr="خريطة المحفزات"
+            titleEn="Trigger Map"
+            payload={{ top_triggers: top }}
+          />
           <StartAssessment isAr={isAr} from="trigger_map" />
         </div>
       )}
@@ -622,10 +668,10 @@ function PledgeCard({ isAr }: { isAr: boolean }) {
   const recordCity = useServerFn(recordCityChallengeEvent);
   const chosen = reasons.find((r) => r.v === reason);
   const reasonLabel = reason === "other" ? other.trim() : (chosen ? (isAr ? chosen.ar : chosen.en) : "");
-  const shareText = t(
-    `بدأت خطوتي الأولى مع أقلع. سببي: ${reasonLabel}.`,
-    `I started my first step with Aqla. My reason: ${reasonLabel}.`
-  );
+  const messageAr =
+    `مستقبلي يستاهل أبدأ من اليوم.\n\nاخترت أول خطوة مع أقلع${reasonLabel ? ` لأجل ${reasonLabel}` : ""}، ويمكن خطوة بسيطة اليوم تصنع فرق كبير بكرة.\n\nاكتب سببك أنت أيضًا وصمّم بطاقتك:`;
+  const messageEn =
+    `My future is worth starting for today.\n\nI chose my first step with Aqla${reasonLabel ? ` for ${reasonLabel}` : ""}, and one small step today may create a bigger change tomorrow.\n\nWrite your reason and create your card:`;
 
   return (
     <Card className="rounded-3xl border-0 p-6 shadow-elegant card-gradient">
@@ -693,7 +739,17 @@ function PledgeCard({ isAr }: { isAr: boolean }) {
               <Download className="h-4 w-4" />{t("احفظ البطاقة", "Save card")}
             </Button>
           </div>
-          <ShareRow text={shareText} isAr={isAr} />
+          <ShareResult
+            shareType="pledge"
+            isAr={isAr}
+            messageAr={messageAr}
+            messageEn={messageEn}
+            targetPath="/tools"
+            titleAr="وعد الإقلاع"
+            titleEn="Quit Pledge"
+            payload={{ reason: reasonLabel, city: city.trim() || null }}
+            snapshotRef={cardRef}
+          />
           <StartAssessment isAr={isAr} from="pledge" />
         </div>
       )}
@@ -717,10 +773,10 @@ function ReadinessMeter({ isAr }: { isAr: boolean }) {
     : { ar: "يبدو أنك قريب من بداية حقيقية. لنضع لك مسارًا أوضح من خلال تقييم أقلع.",
         en: "You may be close to a real start. Complete the Aqla assessment to get a clearer pathway.",
         cls: "text-teal-700" };
-  const shareText = t(
-    `درجة استعدادي اليوم: ${val}/10. بدأت أفكر في خطوتي القادمة مع أقلع.`,
-    `My readiness today: ${val}/10. I'm thinking about my next step with Aqla.`
-  );
+  const messageAr =
+    `درجة استعدادي اليوم على مقياس أقلع: ${val}/10.\nمو مهم وين أنا الحين، المهم إني بدأت أفكر بخطوتي القادمة.\n\nشوف درجتك أنت:`;
+  const messageEn =
+    `My readiness today on the Aqla scale: ${val}/10.\nWhere I am right now matters less than the fact I'm thinking about my next step.\n\nSee your readiness:`;
   return (
     <Card className="rounded-3xl border-0 p-6 shadow-elegant card-gradient">
       <ToolHeader icon={<Sparkles className="h-5 w-5" />} title={t("مقياس الاستعداد للإقلاع", "Quit Readiness Meter")} />
@@ -741,7 +797,16 @@ function ReadinessMeter({ isAr }: { isAr: boolean }) {
       {done && (
         <div className="mt-4 rounded-2xl bg-primary-soft p-4 text-sm">
           <p className={`font-semibold ${band.cls}`}>{isAr ? band.ar : band.en}</p>
-          <ShareRow text={shareText} isAr={isAr} />
+          <ShareResult
+            shareType="readiness"
+            isAr={isAr}
+            messageAr={messageAr}
+            messageEn={messageEn}
+            targetPath="/tools"
+            titleAr="مقياس الاستعداد"
+            titleEn="Readiness Meter"
+            payload={{ readiness: val }}
+          />
           <StartAssessment isAr={isAr} from="readiness_meter" />
         </div>
       )}
