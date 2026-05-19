@@ -2,11 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useLang, useLangState, LangContext } from "@/lib/i18n";
-import { ShieldAlert, Languages, ArrowRight, Sparkles, Users, Calculator, Gauge, HeartHandshake } from "lucide-react";
+import { ShieldAlert, Languages, ArrowRight, Sparkles, Users, Calculator, HeartHandshake, ShieldCheck, Lock, BookOpenCheck } from "lucide-react";
 import { SocialLinks } from "@/components/SocialLinks";
 import { ImpactSection } from "@/components/ImpactSection";
 import { VisitTracker } from "@/components/VisitTracker";
 import { trackEvent } from "@/lib/track-event";
+import { AgentConstellation } from "@/components/AgentConstellation";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
 export const Route = createFileRoute("/")({
