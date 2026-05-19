@@ -373,7 +373,16 @@ function DependenceCheck({ isAr }: { isAr: boolean }) {
             {t("هذه نتيجة توعوية سريعة وليست تشخيصًا. للحصول على مسار أدق، أكمل تقييم أقلع الكامل.",
                "This is a quick educational check, not a diagnosis. For a more accurate pathway, complete the full Aqla assessment.")}
           </p>
-          <ShareRow text={shareText} isAr={isAr} />
+          <ShareResult
+            shareType="quick-check"
+            isAr={isAr}
+            messageAr={messageAr}
+            messageEn={messageEn}
+            targetPath="/tools"
+            titleAr="فحص النيكوتين السريع"
+            titleEn="Quick Nicotine Check"
+            payload={{ level: isAr ? level.ar : level.en }}
+          />
           <StartAssessment isAr={isAr} from="dependence_check" label={t("أكمل التقييم الكامل", "Complete full assessment")} />
         </div>
       )}
