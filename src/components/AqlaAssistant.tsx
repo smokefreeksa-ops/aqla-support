@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useLocation } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { MessageCircle, X, Send, Loader2 } from "lucide-react";
+import { MessageCircle, X, Send, Loader2, RotateCcw } from "lucide-react";
 import { getAssistantStatus, chatWithAssistant } from "@/lib/assistant.functions";
+import { useDraggableWidget } from "@/hooks/use-draggable-widget";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
 const PUBLIC_PATHS = ["/", "/about", "/assessment", "/volunteer", "/request-support", "/city-challenge", "/challenges", "/learn-train", "/shop", "/poster-studio", "/impact"];
@@ -19,6 +20,7 @@ export function AqlaAssistant() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const isPublic = PUBLIC_PATHS.includes(location.pathname);
+  const movedRef = useRef(false);
 
   const statusFn = useServerFn(getAssistantStatus);
   const chatFn = useServerFn(chatWithAssistant);
@@ -28,6 +30,13 @@ export function AqlaAssistant() {
     queryFn: () => statusFn(),
     staleTime: 60_000,
     enabled: isPublic,
+  });
+
+  const launcher = useDraggableWidget({
+    storageKey: "aqla_chat_position",
+    defaultSide: "left",
+    defaultBottom: 24,
+    defaultSideOffset: 24,
   });
 
   useEffect(() => {
@@ -68,6 +77,7 @@ export function AqlaAssistant() {
       : "Educational info only — not medical advice.",
     open: isRTL ? "اسأل د. مالك" : "Ask Dr. Malik",
     close: isRTL ? "إغلاق" : "Close",
+    reset: isRTL ? "إعادة موضع الأزرار" : "Reset position",
     error: isRTL ? "تعذّر الإرسال. حاول مرة أخرى." : "Couldn't send. Please try again.",
   };
 
@@ -89,44 +99,81 @@ export function AqlaAssistant() {
     }
   }
 
-  const sideClass = isRTL ? "left-4" : "right-4";
-  // Offset so we don't collide with the WhatsApp button (which sits on the opposite side anyway,
-  // but on RTL both can end up on the left). Stack vertically when needed.
-  const bottom = isRTL ? "bottom-24" : "bottom-24";
+  function resetPositions() {
+    try {
+      localStorage.removeItem("aqla_chat_position");
+      localStorage.removeItem("aqla_whatsapp_position");
+    } catch {
+      /* ignore */
+    }
+    launcher.reset();
+    // Force WhatsApp button to re-read by reloading — simplest reliable signal.
+    window.dispatchEvent(new Event("aqla:reset-widgets"));
+  }
 
   return (
     <>
       {!open && (
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-label={t.open}
-          dir={isRTL ? "rtl" : "ltr"}
-          className={`fixed ${bottom} ${sideClass} z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-elegant transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/40`}
+        <div
+          ref={launcher.ref}
+          style={{ ...launcher.style, zIndex: 40 }}
+          onPointerDown={(e) => {
+            movedRef.current = false;
+            const sx = e.clientX, sy = e.clientY;
+            const mv = (ev: PointerEvent) => {
+              if (Math.hypot(ev.clientX - sx, ev.clientY - sy) > 4) movedRef.current = true;
+            };
+            window.addEventListener("pointermove", mv);
+            window.addEventListener("pointerup", () => window.removeEventListener("pointermove", mv), { once: true });
+            launcher.onPointerDown(e);
+          }}
         >
-          <MessageCircle className="h-6 w-6" />
-        </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (movedRef.current || launcher.dragging) return;
+              setOpen(true);
+            }}
+            aria-label={t.open}
+            title={t.open}
+            dir={isRTL ? "rtl" : "ltr"}
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-shadow hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary/40 motion-reduce:transition-none"
+          >
+            <MessageCircle className="h-5 w-5 pointer-events-none" />
+          </button>
+        </div>
       )}
 
       {open && (
         <div
           dir={isRTL ? "rtl" : "ltr"}
-          className={`fixed ${bottom} ${sideClass} z-50 flex w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-elegant`}
-          style={{ height: "min(28rem, calc(100vh - 8rem))" }}
+          className="fixed bottom-[calc(24px+env(safe-area-inset-bottom,0px))] left-4 sm:left-6 flex w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-elegant"
+          style={{ height: "min(28rem, calc(100vh - 8rem))", zIndex: 50 }}
         >
           <div className="flex items-center justify-between gap-2 border-b bg-primary px-3 py-2 text-primary-foreground">
             <div className="flex items-center gap-2">
               <img src={aqlaLogo} alt="Aqla — أقلع logo" className="h-6 w-6 rounded-full bg-white object-contain p-0.5" />
               <span className="text-sm font-semibold">{t.title}</span>
             </div>
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              aria-label={t.close}
-              className="rounded p-1 hover:bg-white/10"
-            >
-              <X className="h-4 w-4" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={resetPositions}
+                aria-label={t.reset}
+                title={t.reset}
+                className="rounded p-1 hover:bg-white/10"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                aria-label={t.close}
+                className="rounded p-1 hover:bg-white/10"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
           </div>
 
           <div ref={scrollRef} className="flex-1 space-y-2 overflow-y-auto bg-background p-3">
