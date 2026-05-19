@@ -592,9 +592,11 @@ function TriggerMap({ isAr }: { isAr: boolean }) {
     t("استخدم تقييم أقلع", "Use the Aqla assessment"),
     t("تواصل مع الفريق عبر واتساب", "Contact the team via WhatsApp"),
   ];
-  const shareText = top.length
-    ? t(`اكتشفت أكثر محفزاتي مع أقلع: ${top.join("، ")}. الوعي بالمحفزات خطوة مهمة للتغيير.`,
-        `I discovered my top triggers with Aqla: ${top.join(", ")}. Knowing your triggers is an important step toward change.`)
+  const messageAr = top.length
+    ? `اكتشفت أكثر محفزاتي مع أقلع: ${top.join("، ")}.\nالوعي بالمحفزات أول خطوة للتغيير.\n\nاكتشف محفزاتك أنت أيضًا:`
+    : "";
+  const messageEn = top.length
+    ? `I discovered my top triggers with Aqla: ${top.join(", ")}.\nKnowing your triggers is the first step toward change.\n\nDiscover yours:`
     : "";
 
   return (
