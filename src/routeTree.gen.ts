@@ -9,19 +9,39 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WhenToSeekHelpRouteImport } from './routes/when-to-seek-help'
 import { Route as VolunteerRouteImport } from './routes/volunteer'
 import { Route as TrainingRouteImport } from './routes/training'
+import { Route as ToolsRouteImport } from './routes/tools'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SupportInviteRouteImport } from './routes/support-invite'
+import { Route as StartRouteImport } from './routes/start'
 import { Route as ShopRouteImport } from './routes/shop'
+import { Route as SharingPolicyRouteImport } from './routes/sharing-policy'
+import { Route as SafetyGuidanceRouteImport } from './routes/safety-guidance'
 import { Route as RequestSupportRouteImport } from './routes/request-support'
+import { Route as RelapseSupportRouteImport } from './routes/relapse-support'
+import { Route as QuitPlanRouteImport } from './routes/quit-plan'
 import { Route as QuitPathwayRouteImport } from './routes/quit-pathway'
+import { Route as ProfessionalLibraryRouteImport } from './routes/professional-library'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PosterStudioRouteImport } from './routes/poster-studio'
+import { Route as MovementRouteImport } from './routes/movement'
+import { Route as MedicalDisclaimerRouteImport } from './routes/medical-disclaimer'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as LearnTrainRouteImport } from './routes/learn-train'
+import { Route as LearnRouteImport } from './routes/learn'
 import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as HelpPathwayRouteImport } from './routes/help-pathway'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as EnRouteImport } from './routes/en'
+import { Route as CravingCoachRouteImport } from './routes/craving-coach'
+import { Route as CookiesRouteImport } from './routes/cookies'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CityChallengeRouteImport } from './routes/city-challenge'
 import { Route as ChallengesRouteImport } from './routes/challenges'
 import { Route as ChallengePathwayRouteImport } from './routes/challenge-pathway'
+import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AssessmentRouteImport } from './routes/assessment'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -31,6 +51,11 @@ import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
 import { Route as ShareTypeIdRouteImport } from './routes/share.$type.$id'
 
+const WhenToSeekHelpRoute = WhenToSeekHelpRouteImport.update({
+  id: '/when-to-seek-help',
+  path: '/when-to-seek-help',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VolunteerRoute = VolunteerRouteImport.update({
   id: '/volunteer',
   path: '/volunteer',
@@ -41,9 +66,24 @@ const TrainingRoute = TrainingRouteImport.update({
   path: '/training',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToolsRoute = ToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SupportInviteRoute = SupportInviteRouteImport.update({
   id: '/support-invite',
   path: '/support-invite',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StartRoute = StartRouteImport.update({
+  id: '/start',
+  path: '/start',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShopRoute = ShopRouteImport.update({
@@ -51,9 +91,29 @@ const ShopRoute = ShopRouteImport.update({
   path: '/shop',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SharingPolicyRoute = SharingPolicyRouteImport.update({
+  id: '/sharing-policy',
+  path: '/sharing-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SafetyGuidanceRoute = SafetyGuidanceRouteImport.update({
+  id: '/safety-guidance',
+  path: '/safety-guidance',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RequestSupportRoute = RequestSupportRouteImport.update({
   id: '/request-support',
   path: '/request-support',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RelapseSupportRoute = RelapseSupportRouteImport.update({
+  id: '/relapse-support',
+  path: '/relapse-support',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuitPlanRoute = QuitPlanRouteImport.update({
+  id: '/quit-plan',
+  path: '/quit-plan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuitPathwayRoute = QuitPathwayRouteImport.update({
@@ -61,14 +121,44 @@ const QuitPathwayRoute = QuitPathwayRouteImport.update({
   path: '/quit-pathway',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfessionalLibraryRoute = ProfessionalLibraryRouteImport.update({
+  id: '/professional-library',
+  path: '/professional-library',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PosterStudioRoute = PosterStudioRouteImport.update({
   id: '/poster-studio',
   path: '/poster-studio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MovementRoute = MovementRouteImport.update({
+  id: '/movement',
+  path: '/movement',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MedicalDisclaimerRoute = MedicalDisclaimerRouteImport.update({
+  id: '/medical-disclaimer',
+  path: '/medical-disclaimer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LearnTrainRoute = LearnTrainRouteImport.update({
   id: '/learn-train',
   path: '/learn-train',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImpactRoute = ImpactRouteImport.update({
@@ -79,6 +169,31 @@ const ImpactRoute = ImpactRouteImport.update({
 const HelpPathwayRoute = HelpPathwayRouteImport.update({
   id: '/help-pathway',
   path: '/help-pathway',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnRoute = EnRouteImport.update({
+  id: '/en',
+  path: '/en',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CravingCoachRoute = CravingCoachRouteImport.update({
+  id: '/craving-coach',
+  path: '/craving-coach',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CookiesRoute = CookiesRouteImport.update({
+  id: '/cookies',
+  path: '/cookies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CityChallengeRoute = CityChallengeRouteImport.update({
@@ -94,6 +209,11 @@ const ChallengesRoute = ChallengesRouteImport.update({
 const ChallengePathwayRoute = ChallengePathwayRouteImport.update({
   id: '/challenge-pathway',
   path: '/challenge-pathway',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CertificatesRoute = CertificatesRouteImport.update({
+  id: '/certificates',
+  path: '/certificates',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -143,19 +263,39 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
+  '/certificates': typeof CertificatesRoute
   '/challenge-pathway': typeof ChallengePathwayRoute
   '/challenges': typeof ChallengesRoute
   '/city-challenge': typeof CityChallengeRoute
+  '/contact': typeof ContactRoute
+  '/cookies': typeof CookiesRoute
+  '/craving-coach': typeof CravingCoachRoute
+  '/en': typeof EnRoute
+  '/faq': typeof FaqRoute
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
+  '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
+  '/login': typeof LoginRoute
+  '/medical-disclaimer': typeof MedicalDisclaimerRoute
+  '/movement': typeof MovementRoute
   '/poster-studio': typeof PosterStudioRoute
+  '/privacy': typeof PrivacyRoute
+  '/professional-library': typeof ProfessionalLibraryRoute
   '/quit-pathway': typeof QuitPathwayRoute
+  '/quit-plan': typeof QuitPlanRoute
+  '/relapse-support': typeof RelapseSupportRoute
   '/request-support': typeof RequestSupportRoute
+  '/safety-guidance': typeof SafetyGuidanceRoute
+  '/sharing-policy': typeof SharingPolicyRoute
   '/shop': typeof ShopRoute
+  '/start': typeof StartRoute
   '/support-invite': typeof SupportInviteRoute
+  '/terms': typeof TermsRoute
+  '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
   '/volunteer': typeof VolunteerRoute
+  '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
@@ -166,19 +306,39 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
+  '/certificates': typeof CertificatesRoute
   '/challenge-pathway': typeof ChallengePathwayRoute
   '/challenges': typeof ChallengesRoute
   '/city-challenge': typeof CityChallengeRoute
+  '/contact': typeof ContactRoute
+  '/cookies': typeof CookiesRoute
+  '/craving-coach': typeof CravingCoachRoute
+  '/en': typeof EnRoute
+  '/faq': typeof FaqRoute
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
+  '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
+  '/login': typeof LoginRoute
+  '/medical-disclaimer': typeof MedicalDisclaimerRoute
+  '/movement': typeof MovementRoute
   '/poster-studio': typeof PosterStudioRoute
+  '/privacy': typeof PrivacyRoute
+  '/professional-library': typeof ProfessionalLibraryRoute
   '/quit-pathway': typeof QuitPathwayRoute
+  '/quit-plan': typeof QuitPlanRoute
+  '/relapse-support': typeof RelapseSupportRoute
   '/request-support': typeof RequestSupportRoute
+  '/safety-guidance': typeof SafetyGuidanceRoute
+  '/sharing-policy': typeof SharingPolicyRoute
   '/shop': typeof ShopRoute
+  '/start': typeof StartRoute
   '/support-invite': typeof SupportInviteRoute
+  '/terms': typeof TermsRoute
+  '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
   '/volunteer': typeof VolunteerRoute
+  '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
@@ -190,19 +350,39 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
+  '/certificates': typeof CertificatesRoute
   '/challenge-pathway': typeof ChallengePathwayRoute
   '/challenges': typeof ChallengesRoute
   '/city-challenge': typeof CityChallengeRoute
+  '/contact': typeof ContactRoute
+  '/cookies': typeof CookiesRoute
+  '/craving-coach': typeof CravingCoachRoute
+  '/en': typeof EnRoute
+  '/faq': typeof FaqRoute
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
+  '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
+  '/login': typeof LoginRoute
+  '/medical-disclaimer': typeof MedicalDisclaimerRoute
+  '/movement': typeof MovementRoute
   '/poster-studio': typeof PosterStudioRoute
+  '/privacy': typeof PrivacyRoute
+  '/professional-library': typeof ProfessionalLibraryRoute
   '/quit-pathway': typeof QuitPathwayRoute
+  '/quit-plan': typeof QuitPlanRoute
+  '/relapse-support': typeof RelapseSupportRoute
   '/request-support': typeof RequestSupportRoute
+  '/safety-guidance': typeof SafetyGuidanceRoute
+  '/sharing-policy': typeof SharingPolicyRoute
   '/shop': typeof ShopRoute
+  '/start': typeof StartRoute
   '/support-invite': typeof SupportInviteRoute
+  '/terms': typeof TermsRoute
+  '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
   '/volunteer': typeof VolunteerRoute
+  '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
@@ -215,19 +395,39 @@ export interface FileRouteTypes {
     | '/admin'
     | '/assessment'
     | '/auth'
+    | '/certificates'
     | '/challenge-pathway'
     | '/challenges'
     | '/city-challenge'
+    | '/contact'
+    | '/cookies'
+    | '/craving-coach'
+    | '/en'
+    | '/faq'
     | '/help-pathway'
     | '/impact'
+    | '/learn'
     | '/learn-train'
+    | '/login'
+    | '/medical-disclaimer'
+    | '/movement'
     | '/poster-studio'
+    | '/privacy'
+    | '/professional-library'
     | '/quit-pathway'
+    | '/quit-plan'
+    | '/relapse-support'
     | '/request-support'
+    | '/safety-guidance'
+    | '/sharing-policy'
     | '/shop'
+    | '/start'
     | '/support-invite'
+    | '/terms'
+    | '/tools'
     | '/training'
     | '/volunteer'
+    | '/when-to-seek-help'
     | '/admin/data-dictionary'
     | '/certificate/$code'
     | '/share/$type/$id'
@@ -238,19 +438,39 @@ export interface FileRouteTypes {
     | '/admin'
     | '/assessment'
     | '/auth'
+    | '/certificates'
     | '/challenge-pathway'
     | '/challenges'
     | '/city-challenge'
+    | '/contact'
+    | '/cookies'
+    | '/craving-coach'
+    | '/en'
+    | '/faq'
     | '/help-pathway'
     | '/impact'
+    | '/learn'
     | '/learn-train'
+    | '/login'
+    | '/medical-disclaimer'
+    | '/movement'
     | '/poster-studio'
+    | '/privacy'
+    | '/professional-library'
     | '/quit-pathway'
+    | '/quit-plan'
+    | '/relapse-support'
     | '/request-support'
+    | '/safety-guidance'
+    | '/sharing-policy'
     | '/shop'
+    | '/start'
     | '/support-invite'
+    | '/terms'
+    | '/tools'
     | '/training'
     | '/volunteer'
+    | '/when-to-seek-help'
     | '/admin/data-dictionary'
     | '/certificate/$code'
     | '/share/$type/$id'
@@ -261,19 +481,39 @@ export interface FileRouteTypes {
     | '/admin'
     | '/assessment'
     | '/auth'
+    | '/certificates'
     | '/challenge-pathway'
     | '/challenges'
     | '/city-challenge'
+    | '/contact'
+    | '/cookies'
+    | '/craving-coach'
+    | '/en'
+    | '/faq'
     | '/help-pathway'
     | '/impact'
+    | '/learn'
     | '/learn-train'
+    | '/login'
+    | '/medical-disclaimer'
+    | '/movement'
     | '/poster-studio'
+    | '/privacy'
+    | '/professional-library'
     | '/quit-pathway'
+    | '/quit-plan'
+    | '/relapse-support'
     | '/request-support'
+    | '/safety-guidance'
+    | '/sharing-policy'
     | '/shop'
+    | '/start'
     | '/support-invite'
+    | '/terms'
+    | '/tools'
     | '/training'
     | '/volunteer'
+    | '/when-to-seek-help'
     | '/admin/data-dictionary'
     | '/certificate/$code'
     | '/share/$type/$id'
@@ -285,25 +525,52 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   AssessmentRoute: typeof AssessmentRoute
   AuthRoute: typeof AuthRoute
+  CertificatesRoute: typeof CertificatesRoute
   ChallengePathwayRoute: typeof ChallengePathwayRoute
   ChallengesRoute: typeof ChallengesRoute
   CityChallengeRoute: typeof CityChallengeRoute
+  ContactRoute: typeof ContactRoute
+  CookiesRoute: typeof CookiesRoute
+  CravingCoachRoute: typeof CravingCoachRoute
+  EnRoute: typeof EnRoute
+  FaqRoute: typeof FaqRoute
   HelpPathwayRoute: typeof HelpPathwayRoute
   ImpactRoute: typeof ImpactRoute
+  LearnRoute: typeof LearnRoute
   LearnTrainRoute: typeof LearnTrainRoute
+  LoginRoute: typeof LoginRoute
+  MedicalDisclaimerRoute: typeof MedicalDisclaimerRoute
+  MovementRoute: typeof MovementRoute
   PosterStudioRoute: typeof PosterStudioRoute
+  PrivacyRoute: typeof PrivacyRoute
+  ProfessionalLibraryRoute: typeof ProfessionalLibraryRoute
   QuitPathwayRoute: typeof QuitPathwayRoute
+  QuitPlanRoute: typeof QuitPlanRoute
+  RelapseSupportRoute: typeof RelapseSupportRoute
   RequestSupportRoute: typeof RequestSupportRoute
+  SafetyGuidanceRoute: typeof SafetyGuidanceRoute
+  SharingPolicyRoute: typeof SharingPolicyRoute
   ShopRoute: typeof ShopRoute
+  StartRoute: typeof StartRoute
   SupportInviteRoute: typeof SupportInviteRoute
+  TermsRoute: typeof TermsRoute
+  ToolsRoute: typeof ToolsRoute
   TrainingRoute: typeof TrainingRoute
   VolunteerRoute: typeof VolunteerRoute
+  WhenToSeekHelpRoute: typeof WhenToSeekHelpRoute
   CertificateCodeRoute: typeof CertificateCodeRoute
   ShareTypeIdRoute: typeof ShareTypeIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/when-to-seek-help': {
+      id: '/when-to-seek-help'
+      path: '/when-to-seek-help'
+      fullPath: '/when-to-seek-help'
+      preLoaderRoute: typeof WhenToSeekHelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/volunteer': {
       id: '/volunteer'
       path: '/volunteer'
@@ -318,11 +585,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrainingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tools': {
+      id: '/tools'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof ToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/support-invite': {
       id: '/support-invite'
       path: '/support-invite'
       fullPath: '/support-invite'
       preLoaderRoute: typeof SupportInviteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/start': {
+      id: '/start'
+      path: '/start'
+      fullPath: '/start'
+      preLoaderRoute: typeof StartRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shop': {
@@ -332,11 +620,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShopRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sharing-policy': {
+      id: '/sharing-policy'
+      path: '/sharing-policy'
+      fullPath: '/sharing-policy'
+      preLoaderRoute: typeof SharingPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/safety-guidance': {
+      id: '/safety-guidance'
+      path: '/safety-guidance'
+      fullPath: '/safety-guidance'
+      preLoaderRoute: typeof SafetyGuidanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/request-support': {
       id: '/request-support'
       path: '/request-support'
       fullPath: '/request-support'
       preLoaderRoute: typeof RequestSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/relapse-support': {
+      id: '/relapse-support'
+      path: '/relapse-support'
+      fullPath: '/relapse-support'
+      preLoaderRoute: typeof RelapseSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quit-plan': {
+      id: '/quit-plan'
+      path: '/quit-plan'
+      fullPath: '/quit-plan'
+      preLoaderRoute: typeof QuitPlanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quit-pathway': {
@@ -346,6 +662,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuitPathwayRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/professional-library': {
+      id: '/professional-library'
+      path: '/professional-library'
+      fullPath: '/professional-library'
+      preLoaderRoute: typeof ProfessionalLibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/poster-studio': {
       id: '/poster-studio'
       path: '/poster-studio'
@@ -353,11 +683,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PosterStudioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/movement': {
+      id: '/movement'
+      path: '/movement'
+      fullPath: '/movement'
+      preLoaderRoute: typeof MovementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/medical-disclaimer': {
+      id: '/medical-disclaimer'
+      path: '/medical-disclaimer'
+      fullPath: '/medical-disclaimer'
+      preLoaderRoute: typeof MedicalDisclaimerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/learn-train': {
       id: '/learn-train'
       path: '/learn-train'
       fullPath: '/learn-train'
       preLoaderRoute: typeof LearnTrainRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/impact': {
@@ -372,6 +730,41 @@ declare module '@tanstack/react-router' {
       path: '/help-pathway'
       fullPath: '/help-pathway'
       preLoaderRoute: typeof HelpPathwayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en': {
+      id: '/en'
+      path: '/en'
+      fullPath: '/en'
+      preLoaderRoute: typeof EnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/craving-coach': {
+      id: '/craving-coach'
+      path: '/craving-coach'
+      fullPath: '/craving-coach'
+      preLoaderRoute: typeof CravingCoachRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cookies': {
+      id: '/cookies'
+      path: '/cookies'
+      fullPath: '/cookies'
+      preLoaderRoute: typeof CookiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/city-challenge': {
@@ -393,6 +786,13 @@ declare module '@tanstack/react-router' {
       path: '/challenge-pathway'
       fullPath: '/challenge-pathway'
       preLoaderRoute: typeof ChallengePathwayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/certificates': {
+      id: '/certificates'
+      path: '/certificates'
+      fullPath: '/certificates'
+      preLoaderRoute: typeof CertificatesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -470,19 +870,39 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   AssessmentRoute: AssessmentRoute,
   AuthRoute: AuthRoute,
+  CertificatesRoute: CertificatesRoute,
   ChallengePathwayRoute: ChallengePathwayRoute,
   ChallengesRoute: ChallengesRoute,
   CityChallengeRoute: CityChallengeRoute,
+  ContactRoute: ContactRoute,
+  CookiesRoute: CookiesRoute,
+  CravingCoachRoute: CravingCoachRoute,
+  EnRoute: EnRoute,
+  FaqRoute: FaqRoute,
   HelpPathwayRoute: HelpPathwayRoute,
   ImpactRoute: ImpactRoute,
+  LearnRoute: LearnRoute,
   LearnTrainRoute: LearnTrainRoute,
+  LoginRoute: LoginRoute,
+  MedicalDisclaimerRoute: MedicalDisclaimerRoute,
+  MovementRoute: MovementRoute,
   PosterStudioRoute: PosterStudioRoute,
+  PrivacyRoute: PrivacyRoute,
+  ProfessionalLibraryRoute: ProfessionalLibraryRoute,
   QuitPathwayRoute: QuitPathwayRoute,
+  QuitPlanRoute: QuitPlanRoute,
+  RelapseSupportRoute: RelapseSupportRoute,
   RequestSupportRoute: RequestSupportRoute,
+  SafetyGuidanceRoute: SafetyGuidanceRoute,
+  SharingPolicyRoute: SharingPolicyRoute,
   ShopRoute: ShopRoute,
+  StartRoute: StartRoute,
   SupportInviteRoute: SupportInviteRoute,
+  TermsRoute: TermsRoute,
+  ToolsRoute: ToolsRoute,
   TrainingRoute: TrainingRoute,
   VolunteerRoute: VolunteerRoute,
+  WhenToSeekHelpRoute: WhenToSeekHelpRoute,
   CertificateCodeRoute: CertificateCodeRoute,
   ShareTypeIdRoute: ShareTypeIdRoute,
 }
