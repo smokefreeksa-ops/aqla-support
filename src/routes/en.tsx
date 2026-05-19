@@ -6,7 +6,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 export const Route = createFileRoute("/en")({
   beforeLoad: () => {
     if (typeof window !== "undefined") {
-      try { window.localStorage.setItem("aqla.lang", "en"); } catch { /* ignore */ }
+      try { window.localStorage.setItem("lang", "en"); } catch { /* ignore */ }
     }
     throw redirect({ to: "/", replace: true });
   },
