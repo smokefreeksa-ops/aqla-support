@@ -38,6 +38,110 @@ export type Database = {
         }
         Relationships: []
       }
+      assessment_responses: {
+        Row: {
+          anonymous_session_id: string | null
+          created_at: string
+          id: string
+          item_responses: Json
+          participant_id: string | null
+          product_type: string
+          result_band: string | null
+          tool_key: string
+          total_score: number | null
+        }
+        Insert: {
+          anonymous_session_id?: string | null
+          created_at?: string
+          id?: string
+          item_responses?: Json
+          participant_id?: string | null
+          product_type: string
+          result_band?: string | null
+          tool_key: string
+          total_score?: number | null
+        }
+        Update: {
+          anonymous_session_id?: string | null
+          created_at?: string
+          id?: string
+          item_responses?: Json
+          participant_id?: string | null
+          product_type?: string
+          result_band?: string | null
+          tool_key?: string
+          total_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_responses_tool_key_fkey"
+            columns: ["tool_key"]
+            isOneToOne: false
+            referencedRelation: "assessment_tools"
+            referencedColumns: ["tool_key"]
+          },
+        ]
+      }
+      assessment_tools: {
+        Row: {
+          active: boolean
+          citation: string | null
+          created_at: string
+          id: string
+          is_translated: boolean
+          is_validated: boolean
+          language: string
+          product_type: string
+          result_bands_json: Json
+          safety_note: string | null
+          scoring_json: Json
+          tool_key: string
+          tool_name_ar: string
+          tool_name_en: string
+          translation_note: string | null
+          updated_at: string
+          version: string | null
+        }
+        Insert: {
+          active?: boolean
+          citation?: string | null
+          created_at?: string
+          id?: string
+          is_translated?: boolean
+          is_validated?: boolean
+          language?: string
+          product_type: string
+          result_bands_json?: Json
+          safety_note?: string | null
+          scoring_json?: Json
+          tool_key: string
+          tool_name_ar: string
+          tool_name_en: string
+          translation_note?: string | null
+          updated_at?: string
+          version?: string | null
+        }
+        Update: {
+          active?: boolean
+          citation?: string | null
+          created_at?: string
+          id?: string
+          is_translated?: boolean
+          is_validated?: boolean
+          language?: string
+          product_type?: string
+          result_bands_json?: Json
+          safety_note?: string | null
+          scoring_json?: Json
+          tool_key?: string
+          tool_name_ar?: string
+          tool_name_en?: string
+          translation_note?: string | null
+          updated_at?: string
+          version?: string | null
+        }
+        Relationships: []
+      }
       audit_log: {
         Row: {
           action: string
