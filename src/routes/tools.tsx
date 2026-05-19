@@ -240,10 +240,13 @@ function CostCalculator({ isAr }: { isAr: boolean }) {
   const fmt = (n: number) =>
     new Intl.NumberFormat(isAr ? "ar-SA" : "en-US", { maximumFractionDigits: 0 }).format(Math.round(n));
   const sar = t("ر.س", "SAR");
-  const shareText = out ? t(
-    `اكتشفت أن التدخين قد يكلفني حوالي ${fmt(out.yearly)} ريال سنويًا. بدأت أفكر في التغيير مع أقلع.`,
-    `I found out smoking may cost me around ${fmt(out.yearly)} SAR per year. I'm thinking about change with Aqla.`
-  ) : "";
+  const yearlyFmt = out ? fmtSafe(out.yearly, isAr) : "";
+  const messageAr = out
+    ? `اكتشفت أن التدخين قد يكلّفني حوالي ${yearlyFmt} ريال في السنة.\nتخيل لو هذا المبلغ راح لشيء يفيد صحتك أو مستقبلك.\n\nجرّب الحاسبة وشوف رقمك:`
+    : "";
+  const messageEn = out
+    ? `I found out smoking may cost me about ${yearlyFmt} SAR per year.\nImagine if that money went toward your health or future.\n\nTry the calculator and see your number:`
+    : "";
 
   return (
     <Card className="rounded-3xl border-0 p-6 shadow-elegant card-gradient">
