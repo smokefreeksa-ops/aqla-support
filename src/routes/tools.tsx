@@ -430,9 +430,11 @@ function BreathChallenge({ isAr }: { isAr: boolean }) {
     s <= 45 ? { ar: "تحكم جيد اليوم — تذكر أن هذا ليس اختبارًا طبيًا.", en: "Good control today — remember this is not a medical test.", cls: "text-teal-700" } :
               { ar: "تحكم عالٍ اليوم — لا تعتمد على هذا كمقياس لصحة الرئة.", en: "Strong control today — do not use this as a measure of lung health.", cls: "text-teal-800" };
 
-  const shareText = final !== null
-    ? t(`جربت تحدي الوعي بالتنفس في أقلع ووصلت إلى ${final} ثانية. هذا تحدٍ توعوي وليس اختبارًا طبيًا.`,
-        `I tried Aqla's Breath Awareness Challenge and reached ${final} seconds. This is an awareness challenge, not a medical test.`)
+  const messageAr = final !== null
+    ? `جربت تحدي الوعي بالتنفس في أقلع ووصلت إلى ${final} ثوانٍ.\nمو اختبارًا طبيًا، لكنه تذكير بسيط أن ننتبه لتنفسنا وصحتنا.\n\nجرّبه أنت الآن:`
+    : "";
+  const messageEn = final !== null
+    ? `I tried Aqla's Breath Awareness Challenge and reached ${final} seconds.\nIt's not a medical test, just a gentle reminder to notice our breathing and health.\n\nTry it yourself:`
     : "";
 
   return (
