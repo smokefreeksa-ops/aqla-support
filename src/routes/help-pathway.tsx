@@ -74,7 +74,7 @@ function Inner() {
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-2">
             <Link to="/support-invite"><Button size="sm" className="bg-[oklch(0.55_0.13_75)] text-white hover:opacity-95">{isAr ? "أنشئ رسالة دعم" : "Create support card"}</Button></Link>
-            <Link to="/learn"><Button size="sm" variant="outline">{isAr ? "تعلّم كيف تساعد" : "Learn how to help"}</Button></Link>
+            <Link to="/learn-train"><Button size="sm" variant="outline">{isAr ? "تعلّم كيف تساعد" : "Learn how to help"}</Button></Link>
           </div>
         </Card>
 

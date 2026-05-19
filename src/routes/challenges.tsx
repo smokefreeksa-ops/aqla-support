@@ -149,13 +149,13 @@ function HubPage() {
             <LeaderboardCard
               title={isAr ? "أفضل ٧ نتائج في تحدي المعرفة" : "Top 7 Knowledge Scores"}
               note={isAr ? "تظهر فقط الأسماء التي وافقت على العرض العلني." : "Only consented entries are shown."}
-              href="/learn"
+              href="/learn-train"
               icon={<Trophy className="h-5 w-5" />}
             />
             <LeaderboardCard
               title={isAr ? "أفضل ٧ أوسمة توعوية" : "Top 7 Awareness Medals"}
               note={isAr ? "تتطلب الموافقة على العرض، ومراجعة الإدارة لمعرّفات وسائل التواصل." : "Requires display consent and admin approval for social handles."}
-              href="/learn"
+              href="/learn-train"
               icon={<Award className="h-5 w-5" />}
             />
             <LeaderboardCard
@@ -247,7 +247,7 @@ function Header({ lang, setLang, isAr, t }: { lang: "ar" | "en"; setLang: (l: "a
           </Button>
           <Link to="/challenges"><Button variant="ghost" size="sm">{isAr ? "تحديات أقلع" : "Challenges"}</Button></Link>
           <Link to="/about"><Button variant="ghost" size="sm">{isAr ? "عن أقلع" : "About"}</Button></Link>
-          <Link to="/login"><Button variant="outline" size="sm">{t.adminLogin}</Button></Link>
+          <Link to="/auth"><Button variant="outline" size="sm">{t.adminLogin}</Button></Link>
         </div>
       </div>
     </header>
@@ -287,17 +287,17 @@ type Feat = {
 };
 
 const FEATURES: Feat[] = [
-  { key: "tools", icon: Calculator, titleAr: "أدوات أقلع التفاعلية", titleEn: "Aqla Interactive Tools", bodyAr: "حاسبة تكلفة التدخين، فحص الاعتماد بدقيقة، تحدي التنفس، خريطة المحفزات، مقياس الاستعداد، ووعد الإقلاع.", bodyEn: "Smoking cost calculator, 1-minute dependence check, breath awareness, trigger map, readiness meter, and quit pledge.", href: "/tools", ctaAr: "جرّب الأدوات", ctaEn: "Try Tools", event: "challenge_card_clicked" },
+  { key: "tools", icon: Calculator, titleAr: "أدوات أقلع التفاعلية", titleEn: "Aqla Interactive Tools", bodyAr: "حاسبة تكلفة التدخين، فحص الاعتماد بدقيقة، تحدي التنفس، خريطة المحفزات، مقياس الاستعداد، ووعد الإقلاع.", bodyEn: "Smoking cost calculator, 1-minute dependence check, breath awareness, trigger map, readiness meter, and quit pledge.", href: "/request-support", ctaAr: "جرّب الأدوات", ctaEn: "Try Tools", event: "challenge_card_clicked" },
   { key: "cities", icon: MapPin, titleAr: "تحدي مدن أقلع", titleEn: "Aqla City Challenge", bodyAr: "أي مدينة تقود التغيير؟ خريطة تعهدات وأكثر المدن تفاعلًا.", bodyEn: "Which city is leading the change? Pledge map and most-engaged cities.", href: "/city-challenge", ctaAr: "شاهد خريطة التحدي", ctaEn: "View City Map", event: "city_challenge_opened" },
   { key: "points", icon: Award, titleAr: "نقاط وأوسمة أقلع", titleEn: "Aqla Points & Medals", bodyAr: "اجمع النقاط من التوعية ومشاركة الروابط وإكمال التحديات ودعم الآخرين.", bodyEn: "Collect points by spreading awareness, sharing links, completing challenges, and supporting others.", href: "/challenges?tab=points", ctaAr: "ابدأ جمع النقاط", ctaEn: "Start Collecting Points", event: "points_page_opened" },
   { key: "points", icon: Share2, titleAr: "ادعُ أصدقاءك", titleEn: "Invite Friends", bodyAr: "شارك رابطك الخاص، وكل مشاركة توعوية أو تقييم مكتمل عبر رابطك يضيف إلى أثر أقلع المجتمعي.", bodyEn: "Share your invite link. Awareness actions and completed assessments through your link add to Aqla's community impact.", href: "/challenges?tab=points", ctaAr: "أنشئ رابط الدعوة", ctaEn: "Create Invite Link", event: "invite_link_created" },
-  { key: "challenges", icon: Trophy, titleAr: "تحدي المعرفة", titleEn: "Knowledge Challenge", bodyAr: "اختبر معرفتك حول التدخين والنيكوتين، واجمع النقاط، وادخل لوحة الشرف إذا رغبت.", bodyEn: "Test your knowledge about smoking and nicotine, collect points, and join the leaderboard if you choose.", href: "/learn", ctaAr: "ابدأ التحدي المعرفي", ctaEn: "Start Knowledge Challenge", event: "knowledge_challenge_started" },
-  { key: "challenges", icon: Target, titleAr: "تحدي أقلع 28 يوم", titleEn: "Aqla 28-Day Challenge", bodyAr: "ابدأ بخطوة صغيرة، تابع تقدمك، واجمع شارات الإنجاز.", bodyEn: "Start with one small step, track progress, and collect achievement badges.", href: "/tools", ctaAr: "ابدأ التحدي", ctaEn: "Start Challenge" },
+  { key: "challenges", icon: Trophy, titleAr: "تحدي المعرفة", titleEn: "Knowledge Challenge", bodyAr: "اختبر معرفتك حول التدخين والنيكوتين، واجمع النقاط، وادخل لوحة الشرف إذا رغبت.", bodyEn: "Test your knowledge about smoking and nicotine, collect points, and join the leaderboard if you choose.", href: "/learn-train", ctaAr: "ابدأ التحدي المعرفي", ctaEn: "Start Knowledge Challenge", event: "knowledge_challenge_started" },
+  { key: "challenges", icon: Target, titleAr: "تحدي أقلع 28 يوم", titleEn: "Aqla 28-Day Challenge", bodyAr: "ابدأ بخطوة صغيرة، تابع تقدمك، واجمع شارات الإنجاز.", bodyEn: "Start with one small step, track progress, and collect achievement badges.", href: "/request-support", ctaAr: "ابدأ التحدي", ctaEn: "Start Challenge" },
   { key: "posters", icon: Megaphone, titleAr: "استوديو أقلع للتوعية", titleEn: "Aqla Poster Studio", bodyAr: "صمم منشورًا توعويًا باسمك أو اسم مستعار، وشاركه لنشر الوعي.", bodyEn: "Create a personalized awareness poster with your name or nickname and share it.", href: "/poster-studio", ctaAr: "صمم منشورك", ctaEn: "Create Poster", event: "poster_studio_opened" },
-  { key: "challenges", icon: MessageCircleHeart, titleAr: "ساعد شخصًا تحبه", titleEn: "Help Someone Quit", bodyAr: "اختر الموقف، واحصل على رسالة دعم جاهزة للمشاركة دون ضغط أو لوم.", bodyEn: "Choose the situation and get a supportive message to share without pressure or blame.", href: "/tools", ctaAr: "أنشئ رسالة دعم", ctaEn: "Create Support Message", event: "help_someone_opened" },
+  { key: "challenges", icon: MessageCircleHeart, titleAr: "ساعد شخصًا تحبه", titleEn: "Help Someone Quit", bodyAr: "اختر الموقف، واحصل على رسالة دعم جاهزة للمشاركة دون ضغط أو لوم.", bodyEn: "Choose the situation and get a supportive message to share without pressure or blame.", href: "/request-support", ctaAr: "أنشئ رسالة دعم", ctaEn: "Create Support Message", event: "help_someone_opened" },
   { key: "challenges", icon: MessageCircleHeart, titleAr: "أرسل رسالة لشخص يهمك", titleEn: "Send a Message to Someone You Care About", bodyAr: "اكتب اسم الشخص، أضف رسالتك، وصمّم بطاقة دعم بشعار أقلع يمكن إرسالها عبر واتساب أو الرسائل.", bodyEn: "Add the person's name, write your message, and create an Aqla-branded support card to send by WhatsApp or SMS.", href: "/support-invite", ctaAr: "ابدأ الرسالة", ctaEn: "Start message", event: "support_invite_opened" },
   { key: "volunteers", icon: GraduationCap, titleAr: "أثر المتطوعين", titleEn: "Volunteer Impact", bodyAr: "للمتطوعين: اجمع النقاط من التدريب، نشر الوعي، مشاركة الروابط، ودعم الآخرين.", bodyEn: "For volunteers: collect points through training, awareness sharing, referral links, and support actions.", href: "/training", ctaAr: "ابدأ مسار المتطوعين", ctaEn: "Start Volunteer Pathway", event: "volunteer_pathway_clicked_from_challenges" },
-  { key: "learn", icon: BookOpen, titleAr: "تعلم أقلع", titleEn: "Aqla Learn", bodyAr: "وحدات تثقيفية، اختبارات، وشارات لفهم التدخين والنيكوتين.", bodyEn: "Educational modules, quizzes, and badges to understand smoking and nicotine.", href: "/learn", ctaAr: "ابدأ التعلم", ctaEn: "Start Learning" },
+  { key: "learn", icon: BookOpen, titleAr: "تعلم أقلع", titleEn: "Aqla Learn", bodyAr: "وحدات تثقيفية، اختبارات، وشارات لفهم التدخين والنيكوتين.", bodyEn: "Educational modules, quizzes, and badges to understand smoking and nicotine.", href: "/learn-train", ctaAr: "ابدأ التعلم", ctaEn: "Start Learning" },
 ];
 
 function FeatureGrid({ isAr, tab }: { isAr: boolean; tab: TabKey }) {

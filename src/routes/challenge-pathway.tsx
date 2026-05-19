@@ -16,14 +16,14 @@ export const Route = createFileRoute("/challenge-pathway")({
   component: ChallengePathwayPage,
 });
 
-const OPTIONS: Array<{ id: string; ar: string; en: string; to: "/challenges" | "/learn" | "/poster-studio" | "/tools" }> = [
+const OPTIONS: Array<{ id: string; ar: string; en: string; to: "/challenges" | "/learn-train" | "/poster-studio" | "/request-support" }> = [
   { id: "quick", ar: "تحدي سريع", en: "Quick challenge", to: "/challenges" },
   { id: "knowledge", ar: "تحدي المعرفة", en: "Knowledge challenge", to: "/challenges" },
   { id: "cities", ar: "تحدي المدن", en: "City challenge", to: "/city-challenge" as never },
   { id: "poster", ar: "أصمم بطاقة توعوية", en: "Design a poster", to: "/poster-studio" },
   { id: "points", ar: "أجمع نقاط وأوسمة", en: "Collect points & medals", to: "/challenges" },
   { id: "28day", ar: "أبدأ تحدي 28 يوم", en: "Start 28-day challenge", to: "/challenges" },
-  { id: "train", ar: "أتدرب وأحصل على شهادة", en: "Train & earn certificate", to: "/learn" },
+  { id: "train", ar: "أتدرب وأحصل على شهادة", en: "Train & earn certificate", to: "/learn-train" },
 ];
 
 function ChallengePathwayPage() {

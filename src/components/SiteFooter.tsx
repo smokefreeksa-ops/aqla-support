@@ -10,7 +10,7 @@ const COLUMNS: Col[] = [
     title: { ar: "أقلع", en: "Aqla" },
     links: [
       { ar: "عن أقلع", en: "About", to: "/about" },
-      { ar: "أثر أقلع", en: "Impact", to: "/movement" },
+      { ar: "أثر أقلع", en: "Impact", to: "/impact" },
     ],
   },
   {
@@ -18,7 +18,7 @@ const COLUMNS: Col[] = [
     links: [
       { ar: "ابدأ الآن", en: "Start Now", to: "/assessment" },
       { ar: "التقييم السريع", en: "Quick Check", to: "/assessment" },
-      { ar: "خطة أقلع", en: "Aqla Plan", to: "/tools" },
+      { ar: "خطة أقلع", en: "Aqla Plan", to: "/request-support" },
     ],
   },
   {
@@ -27,13 +27,13 @@ const COLUMNS: Col[] = [
       { ar: "مسار الإقلاع", en: "Quit Pathway", to: "/quit-pathway" },
       { ar: "مسار المساعدة", en: "Help Pathway", to: "/help-pathway" },
       { ar: "التحديات والأوسمة", en: "Challenges & Medals", to: "/challenge-pathway" },
-      { ar: "التعلم والتدريب", en: "Learn & Train", to: "/learn" },
+      { ar: "التعلم والتدريب", en: "Learn & Train", to: "/learn-train" },
     ],
   },
   {
     title: { ar: "الدعم", en: "Support" },
     links: [
-      { ar: "طلب الدعم", en: "Request Support", to: "/tools" },
+      { ar: "طلب الدعم", en: "Request Support", to: "/request-support" },
       { ar: "أرسل رسالة لشخص يهمك", en: "Send a Message", to: "/support-invite" },
       { ar: "تواصل عبر واتساب", en: "WhatsApp", href: "https://wa.me/966555096412" },
     ],

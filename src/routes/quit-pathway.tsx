@@ -155,7 +155,7 @@ function Inner() {
                 {isAr ? "ابدأ التقييم الآن" : "Start assessment"}
               </Button>
             </Link>
-            <Link to="/tools">
+            <Link to="/request-support">
               <Button size="sm" variant="outline">
                 {isAr ? "أدوات الدعم" : "Support tools"}
               </Button>

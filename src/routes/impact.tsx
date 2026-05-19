@@ -33,7 +33,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/movement")({
+export const Route = createFileRoute("/impact")({
   head: () => ({
     meta: [
       { title: "Aqla Movement — حركة أقلع" },

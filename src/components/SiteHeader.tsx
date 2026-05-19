@@ -13,9 +13,9 @@ const NAV: NavItem[] = [
   { ar: "مسار الإقلاع", en: "Quit Pathway", to: "/quit-pathway" },
   { ar: "مسار المساعدة", en: "Help Someone", to: "/help-pathway" },
   { ar: "التحديات والأنشطة", en: "Challenges & Activities", to: "/challenge-pathway" },
-  { ar: "التعلم والتدريب", en: "Learn & Train", to: "/learn" },
-  { ar: "طلب الدعم", en: "Request Support", to: "/tools" },
-  { ar: "أثر أقلع", en: "Impact", to: "/movement" },
+  { ar: "التعلم والتدريب", en: "Learn & Train", to: "/learn-train" },
+  { ar: "طلب الدعم", en: "Request Support", to: "/request-support" },
+  { ar: "أثر أقلع", en: "Impact", to: "/impact" },
   { ar: "عن أقلع", en: "About", to: "/about" },
 ];
 
@@ -58,7 +58,7 @@ export function SiteHeader() {
             <Languages className="h-3.5 w-3.5" />
             {lang === "ar" ? "EN" : "ع"}
           </Button>
-          <Link to="/login" className="hidden sm:inline-flex">
+          <Link to="/auth" className="hidden sm:inline-flex">
             <Button variant="outline" size="sm" className="text-xs">
               {lang === "ar" ? "دخول الموظفين" : "Staff"}
             </Button>
@@ -94,7 +94,7 @@ export function SiteHeader() {
                 {lang === "ar" ? item.ar : item.en}
               </Link>
             ))}
-            <Link to="/login" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm text-foreground/85 hover:bg-primary/5 sm:hidden">
+            <Link to="/auth" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm text-foreground/85 hover:bg-primary/5 sm:hidden">
               {lang === "ar" ? "دخول الموظفين" : "Staff Login"}
             </Link>
           </nav>

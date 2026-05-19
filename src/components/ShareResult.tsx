@@ -57,7 +57,7 @@ async function snapshotDataUrl(el: HTMLElement | null): Promise<string | null> {
 
 export function ShareResult({
   shareType, isAr, messageAr, messageEn,
-  targetPath = "/tools", titleAr, titleEn, ctaAr, ctaEn,
+  targetPath = "/request-support", titleAr, titleEn, ctaAr, ctaEn,
   payload, snapshotRef, fixedShareUrl,
 }: Props) {
   const createFn = useServerFn(createShareCard);

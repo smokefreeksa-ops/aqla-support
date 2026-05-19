@@ -20,7 +20,7 @@ function DataDictionaryPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) nav({ to: "/login" });
+      if (!data.session) nav({ to: "/auth" });
       else setReady(true);
     });
   }, [nav]);

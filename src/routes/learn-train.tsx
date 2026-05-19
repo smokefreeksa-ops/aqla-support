@@ -22,7 +22,7 @@ import { getAnonSessionId } from "@/lib/analytics";
 import { trackEvent } from "@/lib/track-event";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
-export const Route = createFileRoute("/learn")({
+export const Route = createFileRoute("/learn-train")({
   head: () => ({
     meta: [
       { title: "Learn with Aqla — Interactive Knowledge Challenges" },

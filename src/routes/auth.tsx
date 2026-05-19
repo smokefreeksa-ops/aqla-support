@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [{ title: "Staff Login — Aqla" }] }),
   component: LoginPage,
 });

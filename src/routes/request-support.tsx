@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
-export const Route = createFileRoute("/tools")({
+export const Route = createFileRoute("/request-support")({
   head: () => ({
     meta: [
       { title: "Aqla Tools — أدوات أقلع التفاعلية" },
@@ -132,7 +132,7 @@ function Inner() {
           </p>
         </Card>
 
-        <VisitTracker path="/tools" />
+        <VisitTracker path="/request-support" />
       </main>
 
       <footer className="mx-auto max-w-6xl px-4 py-8 text-center text-xs text-muted-foreground">
@@ -294,7 +294,7 @@ function CostCalculator({ isAr }: { isAr: boolean }) {
             isAr={isAr}
             messageAr={messageAr}
             messageEn={messageEn}
-            targetPath="/tools"
+            targetPath="/request-support"
             titleAr="حاسبة تكلفة التدخين"
             titleEn="Smoking Cost Calculator"
             payload={{ yearly_cost_sar: Math.round(out.yearly) }}
@@ -378,7 +378,7 @@ function DependenceCheck({ isAr }: { isAr: boolean }) {
             isAr={isAr}
             messageAr={messageAr}
             messageEn={messageEn}
-            targetPath="/tools"
+            targetPath="/request-support"
             titleAr="فحص النيكوتين السريع"
             titleEn="Quick Nicotine Check"
             payload={{ level: isAr ? level.ar : level.en }}
@@ -481,7 +481,7 @@ function BreathChallenge({ isAr }: { isAr: boolean }) {
                 isAr={isAr}
                 messageAr={messageAr}
                 messageEn={messageEn}
-                targetPath="/tools"
+                targetPath="/request-support"
                 titleAr="تحدي الوعي بالتنفس"
                 titleEn="Breath Awareness Challenge"
                 payload={{ seconds: final }}
@@ -635,7 +635,7 @@ function TriggerMap({ isAr }: { isAr: boolean }) {
             isAr={isAr}
             messageAr={messageAr}
             messageEn={messageEn}
-            targetPath="/tools"
+            targetPath="/request-support"
             titleAr="خريطة المحفزات"
             titleEn="Trigger Map"
             payload={{ top_triggers: top }}
@@ -744,7 +744,7 @@ function PledgeCard({ isAr }: { isAr: boolean }) {
             isAr={isAr}
             messageAr={messageAr}
             messageEn={messageEn}
-            targetPath="/tools"
+            targetPath="/request-support"
             titleAr="وعد الإقلاع"
             titleEn="Quit Pledge"
             payload={{ reason: reasonLabel, city: city.trim() || null }}
@@ -802,7 +802,7 @@ function ReadinessMeter({ isAr }: { isAr: boolean }) {
             isAr={isAr}
             messageAr={messageAr}
             messageEn={messageEn}
-            targetPath="/tools"
+            targetPath="/request-support"
             titleAr="مقياس الاستعداد"
             titleEn="Readiness Meter"
             payload={{ readiness: val }}
