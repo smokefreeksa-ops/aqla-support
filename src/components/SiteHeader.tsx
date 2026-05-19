@@ -12,7 +12,7 @@ const NAV: NavItem[] = [
   { ar: "ابدأ الآن", en: "Start Now", to: "/assessment" },
   { ar: "مسار الإقلاع", en: "Quit Pathway", to: "/quit-pathway" },
   { ar: "مسار المساعدة", en: "Help Someone", to: "/help-pathway" },
-  { ar: "التحديات والأوسمة", en: "Challenges & Medals", to: "/challenge-pathway" },
+  { ar: "التحديات والأنشطة", en: "Challenges & Activities", to: "/challenge-pathway" },
   { ar: "التعلم والتدريب", en: "Learn & Train", to: "/learn" },
   { ar: "طلب الدعم", en: "Request Support", to: "/tools" },
   { ar: "أثر أقلع", en: "Impact", to: "/movement" },
@@ -94,9 +94,6 @@ export function SiteHeader() {
                 {lang === "ar" ? item.ar : item.en}
               </Link>
             ))}
-            <Link to="/guidelines" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm text-foreground/85 hover:bg-primary/5">
-              {lang === "ar" ? "المكتبة المهنية" : "Library"}
-            </Link>
             <Link to="/login" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm text-foreground/85 hover:bg-primary/5 sm:hidden">
               {lang === "ar" ? "دخول الموظفين" : "Staff Login"}
             </Link>

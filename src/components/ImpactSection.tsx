@@ -3,10 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { getPublicImpactStats, type ImpactStats } from "@/lib/impact.functions";
-import {
-  ClipboardCheck, Compass, Stethoscope, Users, MapPin, CalendarCheck, BookOpen,
-  Eye, Sun, UserCheck, PlayCircle, PercentSquare,
-} from "lucide-react";
+import { ClipboardCheck, Compass, Stethoscope, Users, MapPin, Eye } from "lucide-react";
 
 const EMPTY: ImpactStats = {
   total_visits: 0, unique_visitors: 0, visits_today: 0,
@@ -46,46 +43,40 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
   const s: ImpactStats = data ?? EMPTY;
 
   const items: { icon: React.ReactNode; label: string; value: number; suffix?: string }[] = [
-    { icon: <Eye className="h-5 w-5" />, label: isAr ? "زيارات الموقع" : "Website visits", value: s.total_visits },
-    { icon: <UserCheck className="h-5 w-5" />, label: isAr ? "الزوار الفريدون" : "Unique visitors", value: s.unique_visitors },
-    { icon: <Sun className="h-5 w-5" />, label: isAr ? "زيارات اليوم" : "Visits today", value: s.visits_today },
-    { icon: <PlayCircle className="h-5 w-5" />, label: isAr ? "من بدأوا التقييم" : "Assessments started", value: s.assessments_started },
-    { icon: <ClipboardCheck className="h-5 w-5" />, label: isAr ? "التقييمات المكتملة" : "Assessments completed", value: s.assessments_completed },
-    { icon: <PercentSquare className="h-5 w-5" />, label: isAr ? "معدل إكمال التقييم" : "Completion rate", value: Math.round(s.assessment_completion_rate), suffix: "%" },
-    { icon: <Compass className="h-5 w-5" />, label: isAr ? "من تم توجيههم لمسارات الدعم" : "Routed to support pathways", value: s.support_pathway_count },
-    { icon: <Stethoscope className="h-5 w-5" />, label: isAr ? "الحالات التي تحتاج مراجعة مختص" : "Doctor-review cases identified", value: s.doctor_review_count },
-    { icon: <Users className="h-5 w-5" />, label: isAr ? "طلبات الانضمام كمتطوعين" : "Volunteer applications", value: s.volunteer_applicants },
-    { icon: <MapPin className="h-5 w-5" />, label: isAr ? "المدن المشاركة" : "Cities represented", value: s.cities_represented },
-    { icon: <CalendarCheck className="h-5 w-5" />, label: isAr ? "زيارات المتابعة المسجلة" : "Follow-up visits logged", value: s.follow_up_visits_logged },
-    { icon: <BookOpen className="h-5 w-5" />, label: isAr ? "سجلات وافقت على الاستخدام البحثي" : "Research-consented records", value: s.research_consent_count },
+    { icon: <Eye className="h-4 w-4" />, label: isAr ? "زيارات الموقع" : "Website visits", value: s.total_visits },
+    { icon: <ClipboardCheck className="h-4 w-4" />, label: isAr ? "التقييمات المكتملة" : "Assessments completed", value: s.assessments_completed },
+    { icon: <Stethoscope className="h-4 w-4" />, label: isAr ? "الحالات التي تحتاج مراجعة مختص" : "Doctor-review cases", value: s.doctor_review_count },
+    { icon: <Users className="h-4 w-4" />, label: isAr ? "طلبات المتطوعين" : "Volunteer applications", value: s.volunteer_applicants },
+    { icon: <MapPin className="h-4 w-4" />, label: isAr ? "المدن المشاركة" : "Cities represented", value: s.cities_represented },
+    { icon: <Compass className="h-4 w-4" />, label: isAr ? "المشاركات الاجتماعية" : "Social shares", value: s.whatsapp_clicks },
   ];
 
   return (
-    <section className="mt-14">
+    <section>
       <div className="text-center">
-        <h2 className="text-2xl font-semibold tracking-tight text-primary sm:text-3xl">
+        <h2 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
           {isAr ? "أثر أقلع حتى الآن" : "Aqla Impact So Far"}
         </h2>
-        <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground">
+        <p className="mx-auto mt-2 max-w-xl text-[13px] text-muted-foreground">
           {isAr
-            ? "مؤشرات محدثة تعكس الوصول، التفاعل، ومسارات الدعم والتطوع في المنصة دون عرض أي بيانات شخصية."
-            : "Live privacy-safe indicators showing platform reach, engagement, support routing, and volunteer activity without displaying personal data."}
+            ? "مؤشرات مجمعة دون عرض أي بيانات شخصية."
+            : "Aggregate indicators — no personal data shown."}
         </p>
       </div>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((it, i) => (
           <Card
             key={i}
-            className="rounded-3xl border-0 bg-white p-5 shadow-elegant ring-1 ring-primary/10 transition-transform hover:-translate-y-0.5"
+            className="rounded-2xl border border-border/50 bg-card/60 p-4 shadow-none"
           >
             <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-2xl bg-primary-soft text-primary">
+              <div className="grid h-8 w-8 place-items-center rounded-lg bg-muted text-muted-foreground">
                 {it.icon}
               </div>
               <div className="min-w-0">
-                <div className="text-xs text-muted-foreground">{it.label}</div>
-                <div className="mt-0.5 text-2xl font-bold text-foreground">
+                <div className="text-[11px] text-muted-foreground">{it.label}</div>
+                <div className="mt-0.5 text-lg font-semibold text-foreground">
                   <CountUp value={it.value} suffix={it.suffix} />
                 </div>
               </div>
@@ -94,15 +85,10 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
         ))}
       </div>
 
-      <p className="mt-4 text-center text-xs text-muted-foreground">
+      <p className="mt-4 text-center text-[11px] text-muted-foreground/80">
         {isAr
-          ? "يتم تحديث هذه الأرقام تلقائيًا من بيانات المنصة المجمعة فقط."
-          : "These numbers are updated automatically using aggregate platform data only."}
-      </p>
-      <p className="mt-1 text-center text-[11px] text-muted-foreground/80">
-        {isAr
-          ? "جميع المؤشرات معروضة بشكل إجمالي ودون عرض أي بيانات شخصية."
-          : "All indicators are aggregate and privacy-safe."}
+          ? "تعرض هذه الأرقام بشكل إجمالي فقط، وقد تتغير مع تحديث نظام التحليلات."
+          : "Figures are aggregate only and may shift as the analytics system updates."}
       </p>
     </section>
   );
