@@ -3,14 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useLang, useLangState, LangContext } from "@/lib/i18n";
 import {
-  ShieldCheck,
-  Lock,
-  BookOpenCheck,
   HeartHandshake,
   Sparkles,
   Trophy,
   ArrowRight,
-  ShieldAlert,
 } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -62,38 +58,40 @@ function Inner() {
           <div className="relative mx-auto max-w-6xl px-4 pt-14 pb-12 sm:pt-20 sm:pb-16">
             <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
               <div className="text-center lg:text-start">
-                <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-card/80 px-3 py-1.5 text-[11px] font-medium text-primary shadow-sm backdrop-blur">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                  {isAr ? "منصة سعودية مجانية للتوعية والدعم" : "A free Saudi awareness & support platform"}
-                </span>
-                <h1 className="mt-5 text-3xl font-bold leading-[1.18] tracking-tight text-foreground sm:text-[44px] lg:text-5xl">
-                  {isAr ? "اختر المسار الأقرب لك اليوم" : "Choose the pathway closest to you today"}
-                </h1>
-                <p className="mx-auto lg:mx-0 mt-5 max-w-xl text-[15px] leading-7 text-foreground/70 sm:text-base">
-                  {isAr
-                    ? "سواء كنت تريد الإقلاع عن التدخين أو النيكوتين، أو مساعدة شخص يهمك، أو المشاركة في التحديات وجمع الأوسمة — يبدأ أقلع معك بخطوة واضحة تناسب حالتك."
-                    : "Whether you want to quit smoking or nicotine, support someone you care about, or join challenges and earn medals — Aqla starts with one clear step that fits your situation."}
-                </p>
-                <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row sm:justify-start lg:items-start">
-                  <Link to="/assessment" onClick={() => trackEvent("hero_start_now_clicked")}>
-                    <Button size="lg" className="h-12 gap-2 bg-primary px-7 text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20">
-                      {isAr ? "ابدأ الآن" : "Start Now"}
-                      <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-                    </Button>
-                  </Link>
-                  <a href="#pathways" onClick={() => trackEvent("hero_explore_pathways_clicked")}>
-                    <Button size="lg" variant="outline" className="h-12 border-primary/25 bg-card/70 px-6 backdrop-blur hover:bg-card">
-                      {isAr ? "استكشف المسارات" : "Explore pathways"}
-                    </Button>
-                  </a>
+                <div className="flex flex-col items-center gap-1 lg:items-start">
+                  <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-[52px] lg:text-6xl">Aqla</h1>
+                  <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-[52px] lg:text-6xl">أقلع</h1>
                 </div>
 
-                <ul className="mt-8 grid grid-cols-1 gap-2 text-[12px] text-foreground/65 sm:grid-cols-2">
-                  <li className="inline-flex items-center gap-2"><ShieldCheck className="h-3.5 w-3.5 shrink-0 text-primary" />{isAr ? "مجاني للجميع، وسيبقى مجانيًا" : "Free for everyone — always"}</li>
-                  <li className="inline-flex items-center gap-2"><Lock className="h-3.5 w-3.5 shrink-0 text-primary" />{isAr ? "لا نعرض بياناتك الصحية في المشاركات" : "No private health data in public shares"}</li>
-                  <li className="inline-flex items-center gap-2"><BookOpenCheck className="h-3.5 w-3.5 shrink-0 text-primary" />{isAr ? "لا نقدم وصفات أو جرعات دوائية" : "We never prescribe doses or medications"}</li>
-                  <li className="inline-flex items-center gap-2"><ShieldAlert className="h-3.5 w-3.5 shrink-0 text-primary" />{isAr ? "نوجهك للمراجعة عند الحاجة" : "We refer you for clinical review when needed"}</li>
-                </ul>
+                <p className="mx-auto lg:mx-0 mt-5 max-w-xl text-[15px] leading-7 text-foreground/80 sm:text-base">
+                  {isAr
+                    ? "بإشراف سعادة الدكتور مالك عبدالملك الذبياني وفريق من الأخصائيين المدربين."
+                    : "Supervised by Dr. Malik Abdulmalik AlThubayani and a team of trained specialists."}
+                </p>
+
+                <p className="mx-auto lg:mx-0 mt-3 max-w-xl text-[12.5px] leading-6 text-foreground/55 sm:text-[13px]">
+                  {isAr
+                    ? "في أقلع، نضع صحة الإنسان وجودة الحياة في قلب رسالتنا، ونسعى لجعل أول خطوة للإقلاع أسهل، وأقرب، وأكثر إنسانية — بما يتماشى مع مستهدفات رؤية المملكة 2030 بقيادة صاحب السمو الملكي الأمير محمد بن سلمان بن عبدالعزيز آل سعود."
+                    : "At Aqla, we place human health and quality of life at the heart of our mission, striving to make the first step toward cessation easier, closer, and more humane — in alignment with the targets of the Kingdom's Vision 2030 under the leadership of His Royal Highness Crown Prince Mohammed bin Salman bin Abdulaziz Al Saud."}
+                </p>
+
+                <div className="mt-8 grid gap-2.5">
+                  {[
+                    { to: "/quit-pathway", ar: "أبغى أترك التدخين أو النيكوتين", en: "I want to quit smoking or nicotine", icon: Sparkles, tone: "bg-primary/10 text-primary" },
+                    { to: "/help-pathway", ar: "أبغى أساعد شخص يهمني", en: "I want to help someone I care about", icon: HeartHandshake, tone: "bg-[oklch(0.95_0.06_85)] text-[oklch(0.45_0.12_75)]" },
+                    { to: "/challenge-pathway", ar: "أبغى أشارك في التحديات", en: "I want to join challenges", icon: Trophy, tone: "bg-secondary/10 text-secondary" },
+                  ].map((p) => (
+                    <Link key={p.en} to={p.to as "/quit-pathway" | "/help-pathway" | "/challenge-pathway"} onClick={() => trackEvent(`hero_pathway_${p.to.replace("/", "")}_clicked`)}>
+                      <Button size="lg" variant="outline" className="h-12 w-full justify-start gap-3 rounded-2xl border-border/60 bg-card/80 px-5 text-start text-sm font-medium backdrop-blur hover:bg-card hover:border-primary/30">
+                        <div className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${p.tone}`}>
+                          <p.icon className="h-4 w-4" />
+                        </div>
+                        <span className="flex-1">{isAr ? p.ar : p.en}</span>
+                        <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground rtl:rotate-180" />
+                      </Button>
+                    </Link>
+                  ))}
+                </div>
               </div>
 
               {/* Visual */}
@@ -101,15 +99,11 @@ function Inner() {
                 <div aria-hidden className="absolute -top-6 end-6 h-32 w-32 rounded-full bg-primary/15 blur-2xl" />
                 <div aria-hidden className="absolute -bottom-8 start-2 h-36 w-36 rounded-full bg-secondary/15 blur-2xl" />
                 <div className="relative rounded-[28px] border border-border/60 bg-card/90 p-6 shadow-xl shadow-primary/5 backdrop-blur">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <img src={aqlaLogo} alt="Aqla" className="h-10 w-10 rounded-xl bg-white object-contain p-1" />
-                      <div>
-                        <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{isAr ? "أقلع" : "Aqla"}</div>
-                        <div className="text-sm font-semibold">{isAr ? "خطوتك الأولى" : "Your first step"}</div>
-                      </div>
+                  <div className="flex items-center gap-3">
+                    <img src={aqlaLogo} alt="Aqla" className="h-10 w-10 rounded-xl bg-white object-contain p-1" />
+                    <div>
+                      <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{isAr ? "أقلع" : "Aqla"}</div>
                     </div>
-                    <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-medium text-primary">{isAr ? "بإشراف طبي" : "Physician-led"}</span>
                   </div>
                   <div className="mt-5 grid gap-2.5">
                     {[
@@ -126,11 +120,6 @@ function Inner() {
                       </div>
                     ))}
                   </div>
-                  <p className="mt-5 text-[11px] leading-5 text-muted-foreground">
-                    {isAr
-                      ? "بإشراف د. مالك الذبياني وفريق من الأخصائيين المدربين."
-                      : "Supervised by Dr. Malik AlThubayani and a trained specialist team."}
-                  </p>
                 </div>
               </div>
             </div>
