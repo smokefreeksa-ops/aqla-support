@@ -773,10 +773,10 @@ function ReadinessMeter({ isAr }: { isAr: boolean }) {
     : { ar: "يبدو أنك قريب من بداية حقيقية. لنضع لك مسارًا أوضح من خلال تقييم أقلع.",
         en: "You may be close to a real start. Complete the Aqla assessment to get a clearer pathway.",
         cls: "text-teal-700" };
-  const shareText = t(
-    `درجة استعدادي اليوم: ${val}/10. بدأت أفكر في خطوتي القادمة مع أقلع.`,
-    `My readiness today: ${val}/10. I'm thinking about my next step with Aqla.`
-  );
+  const messageAr =
+    `درجة استعدادي اليوم على مقياس أقلع: ${val}/10.\nمو مهم وين أنا الحين، المهم إني بدأت أفكر بخطوتي القادمة.\n\nشوف درجتك أنت:`;
+  const messageEn =
+    `My readiness today on the Aqla scale: ${val}/10.\nWhere I am right now matters less than the fact I'm thinking about my next step.\n\nSee your readiness:`;
   return (
     <Card className="rounded-3xl border-0 p-6 shadow-elegant card-gradient">
       <ToolHeader icon={<Sparkles className="h-5 w-5" />} title={t("مقياس الاستعداد للإقلاع", "Quit Readiness Meter")} />
