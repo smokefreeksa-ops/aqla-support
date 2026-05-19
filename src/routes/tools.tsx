@@ -476,7 +476,16 @@ function BreathChallenge({ isAr }: { isAr: boolean }) {
                 {t("هذه أداة توعية فقط، وليست تقييمًا لوظائف الرئة.",
                    "This is an awareness tool only and does not assess lung function.")}
               </p>
-              <ShareRow text={shareText} isAr={isAr} />
+              <ShareResult
+                shareType="breath"
+                isAr={isAr}
+                messageAr={messageAr}
+                messageEn={messageEn}
+                targetPath="/tools"
+                titleAr="تحدي الوعي بالتنفس"
+                titleEn="Breath Awareness Challenge"
+                payload={{ seconds: final }}
+              />
               <StartAssessment isAr={isAr} from="breath_challenge" />
             </div>
           )}
