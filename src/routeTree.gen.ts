@@ -25,6 +25,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
+import { Route as ShareTypeIdRouteImport } from './routes/share.$type.$id'
 
 const VolunteerRoute = VolunteerRouteImport.update({
   id: '/volunteer',
@@ -106,6 +107,11 @@ const AdminDataDictionaryRoute = AdminDataDictionaryRouteImport.update({
   path: '/data-dictionary',
   getParentRoute: () => AdminRoute,
 } as any)
+const ShareTypeIdRoute = ShareTypeIdRouteImport.update({
+  id: '/share/$type/$id',
+  path: '/share/$type/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/certificate/$code': typeof CertificateCodeRoute
+  '/share/$type/$id': typeof ShareTypeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/certificate/$code': typeof CertificateCodeRoute
+  '/share/$type/$id': typeof ShareTypeIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -161,6 +169,7 @@ export interface FileRoutesById {
   '/volunteer': typeof VolunteerRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/certificate/$code': typeof CertificateCodeRoute
+  '/share/$type/$id': typeof ShareTypeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -181,6 +190,7 @@ export interface FileRouteTypes {
     | '/volunteer'
     | '/admin/data-dictionary'
     | '/certificate/$code'
+    | '/share/$type/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -199,6 +209,7 @@ export interface FileRouteTypes {
     | '/volunteer'
     | '/admin/data-dictionary'
     | '/certificate/$code'
+    | '/share/$type/$id'
   id:
     | '__root__'
     | '/'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/volunteer'
     | '/admin/data-dictionary'
     | '/certificate/$code'
+    | '/share/$type/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -235,6 +247,7 @@ export interface RootRouteChildren {
   TrainingRoute: typeof TrainingRoute
   VolunteerRoute: typeof VolunteerRoute
   CertificateCodeRoute: typeof CertificateCodeRoute
+  ShareTypeIdRoute: typeof ShareTypeIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -351,6 +364,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDataDictionaryRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/share/$type/$id': {
+      id: '/share/$type/$id'
+      path: '/share/$type/$id'
+      fullPath: '/share/$type/$id'
+      preLoaderRoute: typeof ShareTypeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -380,7 +400,18 @@ const rootRouteChildren: RootRouteChildren = {
   TrainingRoute: TrainingRoute,
   VolunteerRoute: VolunteerRoute,
   CertificateCodeRoute: CertificateCodeRoute,
+  ShareTypeIdRoute: ShareTypeIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
