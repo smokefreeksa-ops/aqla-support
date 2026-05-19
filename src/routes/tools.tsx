@@ -240,7 +240,9 @@ function CostCalculator({ isAr }: { isAr: boolean }) {
   const fmt = (n: number) =>
     new Intl.NumberFormat(isAr ? "ar-SA" : "en-US", { maximumFractionDigits: 0 }).format(Math.round(n));
   const sar = t("ر.س", "SAR");
-  const yearlyFmt = out ? fmtSafe(out.yearly, isAr) : "";
+  const yearlyFmt = out
+    ? new Intl.NumberFormat(isAr ? "ar-SA" : "en-US", { maximumFractionDigits: 0 }).format(Math.round(out.yearly))
+    : "";
   const messageAr = out
     ? `اكتشفت أن التدخين قد يكلّفني حوالي ${yearlyFmt} ريال في السنة.\nتخيل لو هذا المبلغ راح لشيء يفيد صحتك أو مستقبلك.\n\nجرّب الحاسبة وشوف رقمك:`
     : "";
