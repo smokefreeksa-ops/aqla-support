@@ -1918,6 +1918,54 @@ export type Database = {
         }
         Relationships: []
       }
+      share_cards: {
+        Row: {
+          anonymous_session_id: string | null
+          created_at: string
+          cta_ar: string | null
+          cta_en: string | null
+          id: string
+          image_url: string | null
+          message_ar: string | null
+          message_en: string | null
+          safe_public_payload: Json | null
+          share_type: string
+          target_url: string
+          title_ar: string | null
+          title_en: string | null
+        }
+        Insert: {
+          anonymous_session_id?: string | null
+          created_at?: string
+          cta_ar?: string | null
+          cta_en?: string | null
+          id?: string
+          image_url?: string | null
+          message_ar?: string | null
+          message_en?: string | null
+          safe_public_payload?: Json | null
+          share_type: string
+          target_url: string
+          title_ar?: string | null
+          title_en?: string | null
+        }
+        Update: {
+          anonymous_session_id?: string | null
+          created_at?: string
+          cta_ar?: string | null
+          cta_en?: string | null
+          id?: string
+          image_url?: string | null
+          message_ar?: string | null
+          message_en?: string | null
+          safe_public_payload?: Json | null
+          share_type?: string
+          target_url?: string
+          title_ar?: string | null
+          title_en?: string | null
+        }
+        Relationships: []
+      }
       shisha_module: {
         Row: {
           also_uses_other: boolean | null

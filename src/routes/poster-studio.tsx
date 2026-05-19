@@ -8,6 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Languages, Download, Share2, Copy, RotateCcw, Sparkles, ArrowLeft, Award, HeartHandshake } from "lucide-react";
 import { useLangState, LangContext, useLang } from "@/lib/i18n";
 import { recordPosterCreation, recordPosterEvent, isUnsafeMessage } from "@/lib/poster.functions";
+import { createShareCard } from "@/lib/share.functions";
+import { ShareButtons } from "@/components/ShareButtons";
 import { getAnonSessionId } from "@/lib/analytics";
 import { trackEvent } from "@/lib/track-event";
 import { toast } from "sonner";
@@ -104,11 +106,14 @@ function Inner() {
   const [exportSize, setExportSize] = useState<ExportSize>("ig_square");
   const [downloading, setDownloading] = useState(false);
   const [recorded, setRecorded] = useState(false);
+  const [sharePath, setSharePath] = useState<string | null>(null);
+  const [generatingShare, setGeneratingShare] = useState(false);
 
   const previewRef = useRef<HTMLDivElement>(null);
 
   const createFn = useServerFn(recordPosterCreation);
   const eventFn = useServerFn(recordPosterEvent);
+  const shareFn = useServerFn(createShareCard);
 
   useEffect(() => { trackEvent("poster_studio_viewed"); }, []);
 
@@ -221,11 +226,60 @@ function Inner() {
     } catch { /* ignore */ }
   };
 
+  const createShareLink = async () => {
+    if (!previewRef.current || generatingShare) return;
+    if (customUnsafe || customTooLong) return;
+    setGeneratingShare(true);
+    try {
+      const imgs = Array.from(previewRef.current.querySelectorAll("img"));
+      await Promise.all(imgs.map((img) => img.complete && img.naturalWidth > 0
+        ? Promise.resolve()
+        : new Promise<void>((resolve) => {
+            img.addEventListener("load", () => resolve(), { once: true });
+            img.addEventListener("error", () => resolve(), { once: true });
+          })));
+      const canvas = await html2canvas(previewRef.current, {
+        backgroundColor: "#ffffff",
+        scale: 2,
+        useCORS: true,
+        allowTaint: false,
+      });
+      const dataUrl = canvas.toDataURL("image/png");
+      const res = await shareFn({ data: {
+        share_type: "poster",
+        anonymous_session_id: getAnonSessionId(),
+        title_ar: "بطاقة توعوية من أقلع",
+        title_en: "An Aqla awareness poster",
+        message_ar: finalMessage || "مستقبلي يستاهل أبدأ من اليوم.",
+        message_en: "Share awareness with Aqla.",
+        cta_ar: "صمم بطاقتك",
+        cta_en: "Create yours",
+        target_path: "/poster-studio",
+        safe_public_payload: {
+          template,
+          poster_type: posterType,
+          city: city.trim() || null,
+          language: lang,
+        },
+        image_data_url: dataUrl,
+      }});
+      setSharePath(res.share_path);
+      void recordOnce();
+      toast.success(isAr ? "تم إنشاء رابط المشاركة" : "Share link ready");
+    } catch (e) {
+      console.error(e);
+      toast.error(isAr ? "تعذّر إنشاء رابط المشاركة" : "Couldn't create share link");
+    } finally {
+      setGeneratingShare(false);
+    }
+  };
+
   const reset = () => {
     setStep(1);
     setRecorded(false);
     setUseCustom(false);
     setCustomMessage("");
+    setSharePath(null);
   };
 
   return (
@@ -436,6 +490,33 @@ function Inner() {
                     </Button>
                   </Link>
                 </div>
+
+                <div className="border-t pt-3 space-y-2">
+                  <div className="text-sm font-medium">
+                    {isAr ? "رابط مشاركة عام (يعمل على LinkedIn و X)" : "Public share link (works on LinkedIn & X)"}
+                  </div>
+                  {!sharePath ? (
+                    <Button
+                      onClick={createShareLink}
+                      disabled={generatingShare || customUnsafe}
+                      variant="default"
+                      className="w-full gap-1.5 bg-emerald-700 hover:bg-emerald-800"
+                    >
+                      <Share2 className="h-4 w-4" />
+                      {generatingShare
+                        ? (isAr ? "جاري الإنشاء…" : "Creating…")
+                        : (isAr ? "أنشئ رابط مشاركة" : "Create share link")}
+                    </Button>
+                  ) : (
+                    <ShareButtons
+                      shareUrl={`https://aqla-support.lovable.app${sharePath}`}
+                      textAr={`${finalMessage}\n\nصممت بطاقتي مع أقلع — جرّب أنت أيضًا.`}
+                      textEn="I created my Aqla awareness card. Try yours too."
+                      lang={isAr ? "ar" : "en"}
+                    />
+                  )}
+                </div>
+
                 <p className="text-[11px] text-muted-foreground">
                   {isAr
                     ? "منشور توعوي ولا يمثل نصيحة طبية شخصية."

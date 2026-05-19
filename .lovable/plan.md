@@ -1,77 +1,70 @@
-# Aqla Research-Grade Upgrade Plan
+# Aqla Share System Overhaul
 
-This is a large, multi-area change. Below is the scoped plan. I will preserve all existing data and dashboard functionality — only additive schema changes and refined logic.
+Goal: every public-facing card has the Aqla logo, share links produce rich previews on LinkedIn/X/WhatsApp/copy, and OG metadata works.
 
-## 1. Database migration (additive only)
+## 1. Database & storage (one migration)
 
-**New columns on `participants`:**
-- `school_university_workplace` text, `affiliation_type` text (school/university/workplace/community)
-- `education_level` text, `nationality` text (nullable)
-- `pregnancy` boolean, `research_consent_status` text default 'not_given'
+- Create `public.share_cards` table (columns per spec: id, share_type, anonymous_session_id, title_ar/en, message_ar/en, cta_ar/en, image_url, target_url, safe_public_payload jsonb, created_at).
+- RLS: public can `SELECT` all rows (rows by design contain only safe public payload — enforced at insert via server fn); public can `INSERT` via server-fn-only path with sanitization; admin can `UPDATE`/`DELETE`.
+- Create public storage bucket `share-images` (public read). No public writes — uploads only via server function using service-role client.
 
-**New tables:**
-- `product_use_details` — per-product rows: `product`, `ever_use`, `current_use_30d`, `days_used_30d`, `age_first_use`, `age_regular_use`, `usual_place`, `source`, `family_peer_use`, `ad_exposure`, `is_main_product`
-- `cigarette_module` — cigarettes_per_day, time_to_first_cig, HSI score
-- `vape_module` — days_30d, times_per_day, time_to_first, nic_concentration, device_type, flavors, refillable, used_at_institution, tried_to_stop
-- `pouch_module` — days_30d, pouches_per_day, strength, time_to_first, flavors, source, used_at_institution, tried_to_stop, wants_counseling
-- `shisha_module` — days_30d, sessions_per_week, avg_duration, shared_mouthpiece, setting, tobacco_type, also_uses_other, quit_interest
-- `honc_screening` — 10 yes/no fields, positive_count, any_yes, category
-- `motivation_assessment` — importance_0_10, confidence_0_10, main_reason, barriers (array)
-- `quit_history` — ever_tried, attempts_count, longest_quit, methods_used (array), relapse_reason
-- `safety_flags` — pregnancy, severe_chest_pain, severe_breath, coughing_blood, severe_withdrawal, mental_health, repeated_failed, multi_product, medication_request, alt_product_request, clinician_request
-- `follow_up_visits` — visit_point (1w/4w/12w/6m/12m), contacted, lost, attempted, abstinent, reduced, relapsed, current_product, cpd, vaping_freq, pouches_day, craving_0_10, confidence_0_10, co_reading, notes
+## 2. Server functions (`src/lib/share.functions.ts`)
 
-All tables: RLS enabled, public INSERT (consent flow), admin/physician SELECT, physician UPDATE where needed. Indexed by `participant_id`.
+- `createShareCard({ share_type, title_*, message_*, cta_*, target_path, safe_public_payload, image_data_url? })`:
+  - Sanitizes payload (strips any forbidden keys: phone, email, participant_code, doctor_review, cohort, clinical_*, raw_answers, health_*).
+  - If `image_data_url` provided, decode base64 → upload to `share-images/{share_type}/{uuid}.png` via `supabaseAdmin` → public URL.
+  - Inserts row; returns `{ id, share_url, image_url }`.
+- `getShareCard({ id })`: returns sanitized public payload + image_url + target_url for the share page loader.
 
-**New consent column:** `consent_research_publication` boolean on `consent_records`.
+## 3. Public share route
 
-## 2. Assessment form (`src/routes/assessment.tsx`) — adaptive branching
+- Single dynamic route `src/routes/share.$type.$id.tsx` (file: `share.$type.$id.tsx` → `/share/:type/:id`) handles all 12 share types via a `type` discriminator. Loader calls `getShareCard`. `head()` returns og:title, og:description, og:image (absolute via `getRequestOrigin`), og:url, og:type=website, twitter:card=summary_large_image, twitter:title/description/image.
+- Page UI: Aqla logo (use `src/assets/aqla-logo.png` in white badge), generated card image (if present) else fallback Aqla card, message, CTA button linking to `target_url`, social share row (LinkedIn / X / WhatsApp / Copy), footer line in AR + EN.
 
-Steps in order:
-1. Consent (4 checkboxes, research-publication separate & optional)
-2. Identity & contact
-3. Demographics (with affiliation_type select)
-4. Product use grid (ever/30d per product)
-5. Per-product modules (only shown if current_use_30d=true): cigarette → FTND, vape → Nicotine Control Check, pouch, shisha
-6. HONC-style screening (auto-shown if age<25 or any youth product use)
-7. Readiness + motivation (importance, confidence, barriers)
-8. Quit history
-9. Safety flags (with urgent-care warning banner if severe symptoms ticked)
-10. Follow-up preference
-11. Submit
+## 4. Reusable share UI
 
-Each module is conditionally rendered. Optional research-extension block at the end.
+- `src/components/ShareButtons.tsx`: takes `{ shareUrl, textAr, textEn, lang }`. Buttons:
+  - LinkedIn: `https://www.linkedin.com/sharing/share-offsite/?url=${encoded}`
+  - X: `https://twitter.com/intent/tweet?text=${encoded(text + " " + url + " @SmokeOffKSA #أقلع #Aqla")}`
+  - WhatsApp: `https://wa.me/?text=${encoded(text + "\n" + url)}`
+  - Copy: writes text+url to clipboard, toast.
+- `src/components/AqlaLogoBadge.tsx`: shared white-rounded-badge logo (fixes blank-placeholder rule everywhere).
 
-## 3. Scoring (`src/lib/scoring.ts`)
+## 5. Wire into existing flows (display-only changes — no scoring/cohort logic touched)
 
-- Keep FTND logic untouched.
-- Add `scoreHonc(answers)` → positive_count, category (none/low/moderate/high).
-- Cohort assignment expanded to consider HONC result, safety flags, clinician_request → routes to doctor review or Cohort F as appropriate. Keep current Nicotine Control behavior (≥6 → doctor_review_needed, Cohort C).
-- No automatic medication / NRT / alt-product recommendations — those route to clinician review.
+For each existing card/result surface, after the result is computed, call `createShareCard` once and show the new `ShareButtons` row using the returned `/share/{type}/{id}` URL. Replace any existing ad-hoc share buttons. Surfaces:
 
-## 4. Submission (`src/lib/submit.functions.ts`)
+- Pledge (challenges tab) → `pledge`
+- Quick-check results (challenges tools) → `quick-check`
+- Breath/Cost/Trigger/Readiness challenges → respective types
+- Knowledge quiz result (learn) → `knowledge`
+- Medal earned → `medal`
+- Poster Studio export → `poster` (use the html2canvas dataURL)
+- City challenge card → `city`
+- Aqla Passport stamp → `passport`
+- Training certificate → `certificate`
 
-Extend Zod schema with all new optional sections. Insert rows into new tables only when their section was completed. Wrap in `Promise.all`. Return same shape + new flags.
+For surfaces that already render their own card via html2canvas (Poster Studio, certificate), pass the captured dataURL to `createShareCard` so it becomes the og:image. For others, the share page renders a styled fallback card with the Aqla logo, message, and CTA — still passes OG checks.
 
-## 5. Admin
+## 6. Privacy sanitizer
 
-**Dashboard (`src/routes/admin.tsx`):** no breaking changes; existing filters preserved. Add column for HONC category and main_product where space allows.
+Server-side allowlist for `safe_public_payload` keys per share_type. Reject keys: `phone`, `email`, `participant_code`, `cohort`, `doctor_review*`, `clinical_*`, `raw_*`, `answers`, `score_raw`. For quick-checks, only allow generic wording strings, never numeric raw scores.
 
-**Data Dictionary page** (`src/routes/admin.data-dictionary.tsx`): static table generated from a single source-of-truth array in `src/lib/data-dictionary.ts`. Columns: variable, question, options, coding, required, source/framework, triage purpose, research purpose, in_anonymized_export.
+## 7. Final checks
 
-**Exports (`exportCsv` server fn):** add types `baseline`, `follow_up_outcomes`, `product_use`, `youth_nicotine`, `city_summary`. Anonymized variants strip name/mobile/email/notes. Filterable by `research_consent_status`. Add warning banner in admin export UI.
+- type-check passes
+- `/share/pledge/{id}` renders with Aqla logo and OG tags (verified via `view-source` / curl head)
+- All share buttons open correct intents
+- Fallback (no image_url) still shows Aqla logo card
+- No private fields in any DB row by construction
 
-## 6. Out of scope (intentionally not done in this pass)
+## Out of scope (untouched)
 
-- Save-progress / draft persistence (would require auth or anon session table — call out for follow-up).
-- Admin-toggle for nationality/SES visibility (added as nullable columns; UI toggle deferred).
-- Validated PROMIS-E / Penn State exact wording (kept as "Nicotine Control Check" label per your instruction).
+assessment scoring, cohort assignment, RLS on participant/clinical tables, dashboard roles, research exports, chatbot, training certificate issuance logic, shop/NRT logic, analytics events.
 
 ## Technical notes
 
-- Migration is additive; no destructive ALTERs; existing rows remain valid (all new cols nullable / defaulted).
-- All new tables follow existing RLS pattern: `public INSERT`, `is_admin_user` SELECT.
-- New server fns added to `submit.functions.ts`; no new packages needed.
-- TypeScript types regenerate after migration approval before code edits.
-
-Please approve the migration in the next step and I'll execute the schema change, then ship the code in the same turn.
+- Route file naming uses TanStack flat convention: `share.$type.$id.tsx`.
+- `og:image` URL is the Supabase public storage URL (already absolute, CDN-cached, no auth) — satisfies LinkedIn requirements.
+- Anonymous inserts: server fn uses `supabaseAdmin` (no auth required for public sharing), so RLS on `share_cards` can be restrictive (`SELECT` public, `INSERT/UPDATE/DELETE` admin-only).
+- Logo embedding in generated PNGs already fixed in previous turn (html2canvas + crossOrigin + image-load wait); ShareButtons + share-page fallback ensures logo also appears when no PNG was generated.
