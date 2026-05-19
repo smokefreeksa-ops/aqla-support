@@ -73,26 +73,125 @@ function Inner() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 py-12 sm:py-16">
-        <section className="text-center">
-          <span className="inline-block rounded-full bg-primary-soft px-3 py-1 text-xs font-medium text-primary">
-            {lang === "ar"
-              ? <><span>منصة مجانية للجميع، وستبقى مجانية</span><br /><span>بإشراف سعادة الدكتور مالك عبدالملك الذبياني وفريق من الأخصائيين المدربين</span></>
-              : "Free physician- and specialist-supervised service"}
-          </span>
-          <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">{t.appName}</h1>
-          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground sm:text-lg">{t.tagline}</p>
-          <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-7 text-muted-foreground/80">
-            {lang === "ar"
-              ? "في أقلع، نؤمن أن الإقلاع لا يبدأ وحده. نوفر مسارًا مجانيًا لمن يريد فهم اعتماده على التدخين أو النيكوتين، ومسارًا آخر لمن يريد أن يساند غيره في رحلة الإقلاع."
-              : "Aqla offers a free pathway for those who want to understand their nicotine or smoking dependence, and another pathway for those who want to support others in their quit journey."}
-          </p>
-          <p className="mx-auto mt-2 max-w-2xl text-sm text-muted-foreground/70">
-            {lang === "ar"
-              ? "نسعى من خلال أقلع للمساهمة في تعزيز جودة الحياة والصحة العامة، بما يتماشى مع مستهدفات رؤية المملكة 2030 بقيادة صاحب السمو الملكي الأمير محمد بن سلمان بن عبدالعزيز."
-              : "Aligned with Saudi Vision 2030 goals to improve quality of life and public health, and supportive of national efforts to reduce tobacco and nicotine use."}
-          </p>
+      <main className="relative">
+        {/* Premium hero */}
+        <section className="relative overflow-hidden hero-gradient">
+          <div aria-hidden className="pointer-events-none absolute inset-0 geo-pattern opacity-50" />
+          <div className="relative mx-auto max-w-6xl px-4 pt-12 pb-10 sm:pt-20 sm:pb-16">
+            <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr]">
+              <div className="text-center lg:text-start animate-rise-in">
+                <span className="inline-flex items-center gap-2 rounded-full bg-card/80 backdrop-blur px-3 py-1.5 text-[11px] font-medium text-primary shadow-card gold-ring">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  {lang === "ar" ? "منصة مجانية للجميع — وستبقى مجانية" : "Free for everyone — always"}
+                </span>
+                <h1 className="mt-5 text-3xl font-bold leading-[1.15] tracking-tight sm:text-5xl">
+                  {lang === "ar" ? (
+                    <>
+                      <span className="block">أقلع ليس موقعًا تقرأه فقط.</span>
+                      <span className="block bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                        أقلع مرافق ذكي يساعدك تبدأ.
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="block">Aqla is not just a website you read.</span>
+                      <span className="block bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                        A smart companion that helps you start.
+                      </span>
+                    </>
+                  )}
+                </h1>
+                <p className="mx-auto lg:mx-0 mt-5 max-w-xl text-[15px] leading-7 text-foreground/75 sm:text-base">
+                  {lang === "ar"
+                    ? "اختر مساعدك الذكي، جاوب على أسئلة قصيرة، واحصل على خطة، رسالة، وسام، أو مسار دعم يناسبك."
+                    : "Choose your smart assistant, answer a few short questions, and get a plan, message, medal, or support pathway that fits you."}
+                </p>
+                <div className="mt-7 flex flex-col items-center gap-3 sm:flex-row sm:justify-start sm:gap-3 lg:items-start">
+                  <Link to="/assessment" onClick={() => trackEvent("hero_start_now_clicked")}>
+                    <Button size="lg" className="h-12 px-7 emerald-gradient border-0 text-white shadow-glow hover:opacity-95">
+                      {lang === "ar" ? "ابدأ الآن" : "Start Now"}
+                      <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                    </Button>
+                  </Link>
+                  <a href="#aqla-agents" onClick={() => trackEvent("hero_pick_agent_clicked")}>
+                    <Button size="lg" variant="outline" className="h-12 px-6 bg-card/70 backdrop-blur border-primary/25 hover:bg-card">
+                      {lang === "ar" ? "اختر مساعدك الذكي" : "Pick your AI assistant"}
+                    </Button>
+                  </a>
+                </div>
+                {/* Trust strip */}
+                <ul className="mt-7 grid grid-cols-1 gap-2 text-[12px] text-foreground/65 sm:grid-cols-3">
+                  <li className="inline-flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 text-primary" />{lang === "ar" ? "بإشراف طبي ومتخصصين" : "Physician & specialist supervised"}</li>
+                  <li className="inline-flex items-center gap-1.5"><Lock className="h-3.5 w-3.5 text-primary" />{lang === "ar" ? "لا نعرض بياناتك الصحية في المشاركات" : "No private health data in shares"}</li>
+                  <li className="inline-flex items-center gap-1.5"><BookOpenCheck className="h-3.5 w-3.5 text-primary" />{lang === "ar" ? "محتوى مبني على مصادر موثوقة" : "Evidence-informed content"}</li>
+                </ul>
+              </div>
+
+              {/* Floating hero card cluster */}
+              <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+                <div className="absolute -top-6 -end-4 h-32 w-32 rounded-full emerald-gradient-soft blur-2xl opacity-80" aria-hidden />
+                <div className="absolute -bottom-8 -start-6 h-36 w-36 rounded-full gold-gradient opacity-30 blur-2xl" aria-hidden />
+                <div className="relative grid gap-3">
+                  <div className="relative rounded-3xl emerald-gradient p-6 text-white shadow-glow animate-float-slow">
+                    <div className="flex items-center gap-3">
+                      <img src={aqlaLogo} alt="Aqla" className="h-12 w-12 rounded-xl bg-white/10 p-1.5 object-contain" />
+                      <div>
+                        <div className="text-[11px] uppercase tracking-wider opacity-80">{lang === "ar" ? "مساعد ذكي" : "AI agent"}</div>
+                        <div className="text-lg font-semibold">{lang === "ar" ? "ملاح أقلع" : "Aqla Navigator"}</div>
+                      </div>
+                    </div>
+                    <p className="mt-3 text-sm opacity-90 leading-6">
+                      {lang === "ar" ? "خلينا نبدأ بخطوة بسيطة — أنا معك خطوة بخطوة." : "Let's start with one simple step — I'm with you."}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="rounded-2xl bg-card p-4 shadow-card border border-border/60 animate-float-soft" style={{ animationDelay: "0.7s" }}>
+                      <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary/10 text-primary animate-breathe">
+                        <Sparkles className="h-4 w-4" />
+                      </div>
+                      <div className="mt-2 text-sm font-semibold">{lang === "ar" ? "مدرب اللحظة" : "Moment Coach"}</div>
+                      <div className="text-[11px] text-muted-foreground">{lang === "ar" ? "تنفس معي ٦٠ ثانية" : "Breathe with me 60s"}</div>
+                    </div>
+                    <div className="rounded-2xl bg-[oklch(0.97_0.03_85)] p-4 gold-ring animate-float-soft" style={{ animationDelay: "1.4s" }}>
+                      <div className="grid h-9 w-9 place-items-center rounded-xl gold-gradient text-white shadow-gold">
+                        <HeartHandshake className="h-4 w-4" />
+                      </div>
+                      <div className="mt-2 text-sm font-semibold">{lang === "ar" ? "ساعد شخصًا تحبه" : "Support a loved one"}</div>
+                      <div className="text-[11px] text-foreground/65">{lang === "ar" ? "صمّم رسالة دفء" : "Design a warm card"}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
+
+        <div className="mx-auto max-w-6xl px-4 pt-2">
+          <p className="mx-auto max-w-3xl text-center text-[12px] leading-6 text-muted-foreground/80">
+            {lang === "ar"
+              ? "بإشراف سعادة الدكتور مالك عبدالملك الذبياني وفريق من الأخصائيين المدربين — هذه المنصة للتوعية والدعم، ولا تغني عن مراجعة المختص عند الحاجة."
+              : "Supervised by Dr. Malik AlThubayani and a trained specialist team — this platform is for awareness and support, and does not replace consultation with a specialist when needed."}
+          </p>
+        </div>
+
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:py-16">
+        {/* Agent constellation */}
+        <section id="aqla-agents" className="scroll-mt-24">
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              {lang === "ar" ? "اختر مساعدك الذكي" : "Choose your AI assistant"}
+            </h2>
+            <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
+              {lang === "ar"
+                ? "تسعة مساعدين بمسارات مختلفة — اختر الأقرب لحالتك اليوم."
+                : "Nine assistants for different pathways — pick the one closest to where you are today."}
+            </p>
+          </div>
+          <div className="mt-7">
+            <AgentConstellation lang={lang} />
+          </div>
+        </section>
+
 
         {/* Track selection */}
         <section className="mt-12">
