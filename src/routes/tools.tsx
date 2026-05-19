@@ -334,10 +334,10 @@ function DependenceCheck({ isAr }: { isAr: boolean }) {
     score <= 3 ? { ar: "اهتمام متوسط", en: "Moderate concern", cls: "text-amber-600" } :
                  { ar: "اهتمام مرتفع", en: "High concern", cls: "text-rose-600" };
   const levelLabel = isAr ? level.ar : level.en;
-  const shareText = t(
-    `نتيجتي في الفحص السريع: ${levelLabel}. بدأت أفهم علاقتي بالنيكوتين مع أقلع.`,
-    `My quick nicotine check result: ${levelLabel}. I'm starting to understand my relationship with nicotine with Aqla.`
-  );
+  const messageAr =
+    "اكتشفت اليوم أن علاقتي بالنيكوتين أقوى مما توقعت.\nأول خطوة للتغيير هي الفهم.\n\nجرّب فحص أقلع السريع واعرف درجتك خلال دقيقة:";
+  const messageEn =
+    "Today I realized my relationship with nicotine may be stronger than I thought.\nThe first step toward change is understanding.\n\nTry Aqla's quick check and see yours in a minute:";
 
   return (
     <Card className="rounded-3xl border-0 p-6 shadow-elegant card-gradient">
