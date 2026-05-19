@@ -1,70 +1,71 @@
-# Aqla Share System Overhaul
 
-Goal: every public-facing card has the Aqla logo, share links produce rich previews on LinkedIn/X/WhatsApp/copy, and OG metadata works.
+# Aqla V2 — Three-Pathway Rebuild
 
-## 1. Database & storage (one migration)
+This is a large rebuild. To avoid leaving the app in a broken state, I'll ship it in **6 phases**, each one independently deployable and type-checked. I will NOT touch: assessment scoring, cohort logic, RLS, dashboard roles, research exports, follow-up logic, or chatbot safety rules.
 
-- Create `public.share_cards` table (columns per spec: id, share_type, anonymous_session_id, title_ar/en, message_ar/en, cta_ar/en, image_url, target_url, safe_public_payload jsonb, created_at).
-- RLS: public can `SELECT` all rows (rows by design contain only safe public payload — enforced at insert via server fn); public can `INSERT` via server-fn-only path with sanitization; admin can `UPDATE`/`DELETE`.
-- Create public storage bucket `share-images` (public read). No public writes — uploads only via server function using service-role client.
+## Phase 0 — Stabilize (do first, same turn)
 
-## 2. Server functions (`src/lib/share.functions.ts`)
+- Confirm current build is green (resolve any lingering JSX/parser issues from prior turns).
+- Verify the in-progress Share + Support-Invite flows still build and render.
+- No new features in this phase.
 
-- `createShareCard({ share_type, title_*, message_*, cta_*, target_path, safe_public_payload, image_data_url? })`:
-  - Sanitizes payload (strips any forbidden keys: phone, email, participant_code, doctor_review, cohort, clinical_*, raw_answers, health_*).
-  - If `image_data_url` provided, decode base64 → upload to `share-images/{share_type}/{uuid}.png` via `supabaseAdmin` → public URL.
-  - Inserts row; returns `{ id, share_url, image_url }`.
-- `getShareCard({ id })`: returns sanitized public payload + image_url + target_url for the share page loader.
+## Phase 1 — Shell: Header, Footer, Homepage
 
-## 3. Public share route
+- New sticky header with full Arabic/English nav (14 items + lang toggle, hamburger on mobile, sticky "ابدأ الآن" CTA on mobile).
+- New 6-column professional footer (Aqla / Start / Pathways / Support / Privacy / Social) with WhatsApp `+966555096412`, IG, X, TikTok, and YouTube shown as "قناة اليوتيوب" only.
+- New homepage:
+  - Elegant hero (RTL-correct, text right / visual left, badge + headline + subtitle + 2 CTAs + 4 trust chips).
+  - **Three large pathway cards only** (no agent grid on homepage).
+  - Compact trust strip.
+  - KPI/Impact section moved near the bottom, with the "started=0 but completed>0" bug fixed (show "غير متاح حاليًا" or coerce started ≥ completed).
+- Remove "أقلع ليس موقعًا تقرأه فقط" and the repeated "مساعد ذكي" wording.
+- Preserve existing routes; only the homepage layout changes.
 
-- Single dynamic route `src/routes/share.$type.$id.tsx` (file: `share.$type.$id.tsx` → `/share/:type/:id`) handles all 12 share types via a `type` discriminator. Loader calls `getShareCard`. `head()` returns og:title, og:description, og:image (absolute via `getRequestOrigin`), og:url, og:type=website, twitter:card=summary_large_image, twitter:title/description/image.
-- Page UI: Aqla logo (use `src/assets/aqla-logo.png` in white badge), generated card image (if present) else fallback Aqla card, message, CTA button linking to `target_url`, social share row (LinkedIn / X / WhatsApp / Copy), footer line in AR + EN.
+## Phase 2 — Pathway routes + specialized chatbots
 
-## 4. Reusable share UI
+Three new routes, each hosting **one** specialized chatbot:
 
-- `src/components/ShareButtons.tsx`: takes `{ shareUrl, textAr, textEn, lang }`. Buttons:
-  - LinkedIn: `https://www.linkedin.com/sharing/share-offsite/?url=${encoded}`
-  - X: `https://twitter.com/intent/tweet?text=${encoded(text + " " + url + " @SmokeOffKSA #أقلع #Aqla")}`
-  - WhatsApp: `https://wa.me/?text=${encoded(text + "\n" + url)}`
-  - Copy: writes text+url to clipboard, toast.
-- `src/components/AqlaLogoBadge.tsx`: shared white-rounded-badge logo (fixes blank-placeholder rule everywhere).
+- `/quit-pathway` — مسار الإقلاع. Product-coded starter (cigarettes / vape / pouches / shisha / multi / unsure), one-question-at-a-time flow, links into existing assessment + plan + crash-coach + support-request + share-card generation.
+- `/help-pathway` — مسار المساعدة. Relationship → tone → recipient name → custom message → generates WhatsApp/SMS + Aqla-branded support card via the existing `support-invite` infra. Phone never stored or shown publicly.
+- `/challenge-pathway` — مسار التحديات والأوسمة. Quick challenge / knowledge / cities / poster / points / 28-day / training entries — wires into existing `/challenges`, `/poster-studio`, points and medals.
 
-## 5. Wire into existing flows (display-only changes — no scoring/cohort logic touched)
+Chatbot is a shared `PathwayChat` component (single source of truth) with pathway-specific scripts, exam-mode lock, "change my answer" support, and safety guards (no doses, no diagnosis, emergency message).
 
-For each existing card/result surface, after the result is computed, call `createShareCard` once and show the new `ShareButtons` row using the returned `/share/{type}/{id}` URL. Replace any existing ad-hoc share buttons. Surfaces:
+## Phase 3 — Volunteer training + certificate
 
-- Pledge (challenges tab) → `pledge`
-- Quick-check results (challenges tools) → `quick-check`
-- Breath/Cost/Trigger/Readiness challenges → respective types
-- Knowledge quiz result (learn) → `knowledge`
-- Medal earned → `medal`
-- Poster Studio export → `poster` (use the html2canvas dataURL)
-- City challenge card → `city`
-- Aqla Passport stamp → `passport`
-- Training certificate → `certificate`
+- New `/train` route with 7 modules (titles per spec) — content stored in `training_modules` + `training_questions`.
+- Learning mode: instant feedback + explanations + points.
+- Exam mode: locked, no hints, progress "سؤال X من Y", review screen, submit, then explanations.
+- Pass = all modules done + scenarios + ≥80% on final. Retake on fail.
+- Certificate generation:
+  - Title: "شهادة إتمام تدريب متطوعي أقلع لدعم الإقلاع عن التدخين والنيكوتين".
+  - Includes Aqla logo, name, score, date, certificate ID, QR, supervision line, full disclaimer.
+  - Actions: Download PDF + PNG, share to X/LinkedIn/WhatsApp, copy verify link, email to user.
+- Public verification: `/certificate/{code}` (reuses existing route, extended for training certs).
 
-For surfaces that already render their own card via html2canvas (Poster Studio, certificate), pass the captured dataURL to `createShareCard` so it becomes the og:image. For others, the share page renders a styled fallback card with the Aqla logo, message, and CTA — still passes OG checks.
+## Phase 4 — Database & server functions
 
-## 6. Privacy sanitizer
+Single migration to add (with RLS):
+- `training_modules`, `training_questions`, `training_attempts`, `training_certificates`, `certificate_verifications`
+- `agent_sessions`, `agent_events`, `agent_outputs`
+- `point_transactions`, `medal_awards`
+- Extend existing `share_cards` only if needed.
 
-Server-side allowlist for `safe_public_payload` keys per share_type. Reject keys: `phone`, `email`, `participant_code`, `cohort`, `doctor_review*`, `clinical_*`, `raw_*`, `answers`, `score_raw`. For quick-checks, only allow generic wording strings, never numeric raw scores.
+Server functions (`createServerFn`, behind existing auth middleware where appropriate):
+- `startTrainingAttempt`, `submitTrainingAnswer`, `finalizeExam`, `issueCertificate`, `verifyCertificate`, `emailCertificate`, `logAgentEvent`.
 
-## 7. Final checks
+Email via existing provider secret if present; otherwise log failure and surface the "تم الإصدار، لكن تعذر الإرسال" message.
 
-- type-check passes
-- `/share/pledge/{id}` renders with Aqla logo and OG tags (verified via `view-source` / curl head)
-- All share buttons open correct intents
-- Fallback (no image_url) still shows Aqla logo card
-- No private fields in any DB row by construction
+## Phase 5 — Share routes + safety polish
 
-## Out of scope (untouched)
+- `/share/certificate/{id}`, `/share/support-invite/{id}`, `/share/challenge/{id}`, `/share/medal/{id}`, `/share/quit-plan/{id}` — all rendering Aqla logo + URL + QR, with OG image + Twitter card, `@SmokeOffKSA`, hashtags.
+- Final safety pass: scrub any remaining medication-dose language, remove La-tatten visible branding, ensure no endorsement claims, add `/disclaimer` page with the medical disclaimer text.
+- Type-check + smoke-test all new flows.
 
-assessment scoring, cohort assignment, RLS on participant/clinical tables, dashboard roles, research exports, chatbot, training certificate issuance logic, shop/NRT logic, analytics events.
+## What I'd like to confirm before starting
 
-## Technical notes
+1. **Phase 0 first** — should I begin by verifying the current build is green and the existing Share + Support-Invite flows still work, before touching the homepage? (Strongly recommended.)
+2. **Chatbot intelligence** — for the pathway chatbots, should I use **Lovable AI Gateway** (google/gemini-2.5-flash for cost, gpt-5-mini for harder turns) for the free-form conversation, with a scripted backbone for the deterministic steps (assessment routing, plan generation, exam mode)? This is the recommended default.
+3. **Email** — do you already have an email provider configured (Lovable Emails / Brevo / Mailgun)? If not, I'll wire Lovable Emails in Phase 4.
 
-- Route file naming uses TanStack flat convention: `share.$type.$id.tsx`.
-- `og:image` URL is the Supabase public storage URL (already absolute, CDN-cached, no auth) — satisfies LinkedIn requirements.
-- Anonymous inserts: server fn uses `supabaseAdmin` (no auth required for public sharing), so RLS on `share_cards` can be restrictive (`SELECT` public, `INSERT/UPDATE/DELETE` admin-only).
-- Logo embedding in generated PNGs already fixed in previous turn (html2canvas + crossOrigin + image-load wait); ShareButtons + share-page fallback ensures logo also appears when no PNG was generated.
+Once you confirm, I'll start with **Phase 0 + Phase 1** in the next turn — that gives you a visibly upgraded, professional homepage with the three pathways landing on placeholder chat routes, then we layer Phases 2–5 on top without ever breaking the live site.
