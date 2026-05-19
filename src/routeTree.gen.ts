@@ -31,6 +31,7 @@ import { Route as MedicalDisclaimerRouteImport } from './routes/medical-disclaim
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LearnTrainRouteImport } from './routes/learn-train'
 import { Route as LearnRouteImport } from './routes/learn'
+import { Route as InviteFriendsRouteImport } from './routes/invite-friends'
 import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as HelpPathwayRouteImport } from './routes/help-pathway'
 import { Route as FaqRouteImport } from './routes/faq'
@@ -49,6 +50,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
+import { Route as ShareInviteCodeRouteImport } from './routes/share.invite.$code'
 import { Route as ShareTypeIdRouteImport } from './routes/share.$type.$id'
 
 const WhenToSeekHelpRoute = WhenToSeekHelpRouteImport.update({
@@ -161,6 +163,11 @@ const LearnRoute = LearnRouteImport.update({
   path: '/learn',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InviteFriendsRoute = InviteFriendsRouteImport.update({
+  id: '/invite-friends',
+  path: '/invite-friends',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ImpactRoute = ImpactRouteImport.update({
   id: '/impact',
   path: '/impact',
@@ -251,6 +258,11 @@ const AdminDataDictionaryRoute = AdminDataDictionaryRouteImport.update({
   path: '/data-dictionary',
   getParentRoute: () => AdminRoute,
 } as any)
+const ShareInviteCodeRoute = ShareInviteCodeRouteImport.update({
+  id: '/share/invite/$code',
+  path: '/share/invite/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShareTypeIdRoute = ShareTypeIdRouteImport.update({
   id: '/share/$type/$id',
   path: '/share/$type/$id',
@@ -274,6 +286,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
+  '/invite-friends': typeof InviteFriendsRoute
   '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
   '/login': typeof LoginRoute
@@ -299,6 +312,7 @@ export interface FileRoutesByFullPath {
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
+  '/share/invite/$code': typeof ShareInviteCodeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -317,6 +331,7 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
+  '/invite-friends': typeof InviteFriendsRoute
   '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
   '/login': typeof LoginRoute
@@ -342,6 +357,7 @@ export interface FileRoutesByTo {
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
+  '/share/invite/$code': typeof ShareInviteCodeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -361,6 +377,7 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
+  '/invite-friends': typeof InviteFriendsRoute
   '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
   '/login': typeof LoginRoute
@@ -386,6 +403,7 @@ export interface FileRoutesById {
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
+  '/share/invite/$code': typeof ShareInviteCodeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -406,6 +424,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/help-pathway'
     | '/impact'
+    | '/invite-friends'
     | '/learn'
     | '/learn-train'
     | '/login'
@@ -431,6 +450,7 @@ export interface FileRouteTypes {
     | '/admin/data-dictionary'
     | '/certificate/$code'
     | '/share/$type/$id'
+    | '/share/invite/$code'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -449,6 +469,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/help-pathway'
     | '/impact'
+    | '/invite-friends'
     | '/learn'
     | '/learn-train'
     | '/login'
@@ -474,6 +495,7 @@ export interface FileRouteTypes {
     | '/admin/data-dictionary'
     | '/certificate/$code'
     | '/share/$type/$id'
+    | '/share/invite/$code'
   id:
     | '__root__'
     | '/'
@@ -492,6 +514,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/help-pathway'
     | '/impact'
+    | '/invite-friends'
     | '/learn'
     | '/learn-train'
     | '/login'
@@ -517,6 +540,7 @@ export interface FileRouteTypes {
     | '/admin/data-dictionary'
     | '/certificate/$code'
     | '/share/$type/$id'
+    | '/share/invite/$code'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -536,6 +560,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   HelpPathwayRoute: typeof HelpPathwayRoute
   ImpactRoute: typeof ImpactRoute
+  InviteFriendsRoute: typeof InviteFriendsRoute
   LearnRoute: typeof LearnRoute
   LearnTrainRoute: typeof LearnTrainRoute
   LoginRoute: typeof LoginRoute
@@ -560,6 +585,7 @@ export interface RootRouteChildren {
   WhenToSeekHelpRoute: typeof WhenToSeekHelpRoute
   CertificateCodeRoute: typeof CertificateCodeRoute
   ShareTypeIdRoute: typeof ShareTypeIdRoute
+  ShareInviteCodeRoute: typeof ShareInviteCodeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -718,6 +744,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearnRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/invite-friends': {
+      id: '/invite-friends'
+      path: '/invite-friends'
+      fullPath: '/invite-friends'
+      preLoaderRoute: typeof InviteFriendsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/impact': {
       id: '/impact'
       path: '/impact'
@@ -844,6 +877,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDataDictionaryRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/share/invite/$code': {
+      id: '/share/invite/$code'
+      path: '/share/invite/$code'
+      fullPath: '/share/invite/$code'
+      preLoaderRoute: typeof ShareInviteCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/share/$type/$id': {
       id: '/share/$type/$id'
       path: '/share/$type/$id'
@@ -881,6 +921,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   HelpPathwayRoute: HelpPathwayRoute,
   ImpactRoute: ImpactRoute,
+  InviteFriendsRoute: InviteFriendsRoute,
   LearnRoute: LearnRoute,
   LearnTrainRoute: LearnTrainRoute,
   LoginRoute: LoginRoute,
@@ -905,6 +946,7 @@ const rootRouteChildren: RootRouteChildren = {
   WhenToSeekHelpRoute: WhenToSeekHelpRoute,
   CertificateCodeRoute: CertificateCodeRoute,
   ShareTypeIdRoute: ShareTypeIdRoute,
+  ShareInviteCodeRoute: ShareInviteCodeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

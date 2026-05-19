@@ -3,20 +3,23 @@ import { useState } from "react";
 import { Languages, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/lib/i18n";
+import { appRoutes } from "@/lib/app-routes";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
 type NavItem = { ar: string; en: string; to: string };
 
 const NAV: NavItem[] = [
-  { ar: "الرئيسية", en: "Home", to: "/" },
-  { ar: "ابدأ الآن", en: "Start Now", to: "/assessment" },
-  { ar: "مسار الإقلاع", en: "Quit Pathway", to: "/quit-pathway" },
-  { ar: "مسار المساعدة", en: "Help Someone", to: "/help-pathway" },
-  { ar: "التحديات والأنشطة", en: "Challenges & Activities", to: "/challenge-pathway" },
-  { ar: "التعلم والتدريب", en: "Learn & Train", to: "/learn-train" },
-  { ar: "طلب الدعم", en: "Request Support", to: "/request-support" },
-  { ar: "أثر أقلع", en: "Impact", to: "/impact" },
-  { ar: "عن أقلع", en: "About", to: "/about" },
+  { ar: "الرئيسية", en: "Home", to: appRoutes.home },
+  { ar: "ابدأ الآن", en: "Start Now", to: appRoutes.start },
+  { ar: "مسار الإقلاع", en: "Quit Pathway", to: appRoutes.quitPathway },
+  { ar: "مسار المساعدة", en: "Help Someone", to: appRoutes.helpPathway },
+  { ar: "التحديات والأنشطة", en: "Challenges & Activities", to: appRoutes.challengePathway },
+  { ar: "التعلم والتدريب", en: "Learn & Train", to: appRoutes.learnTrain },
+  { ar: "الشهادات", en: "Certificates", to: appRoutes.certificates },
+  { ar: "طلب الدعم", en: "Request Support", to: appRoutes.requestSupport },
+  { ar: "أثر أقلع", en: "Impact", to: appRoutes.impact },
+  { ar: "عن أقلع", en: "About", to: appRoutes.about },
+  { ar: "الأسئلة الشائعة", en: "FAQ", to: appRoutes.faq },
 ];
 
 export function SiteHeader() {
@@ -26,7 +29,7 @@ export function SiteHeader() {
   return (
     <header dir={dir} className="sticky top-0 z-40 border-b border-border/60 bg-card/85 backdrop-blur supports-[backdrop-filter]:bg-card/70">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5">
-        <Link to="/" className="flex shrink-0 items-center gap-2.5">
+        <Link to={appRoutes.home} className="flex shrink-0 items-center gap-2.5">
           <img src={aqlaLogo} alt="Aqla — أقلع" className="h-9 w-auto object-contain sm:h-10" />
           <div className="hidden leading-tight sm:block">
             <div className="text-sm font-semibold tracking-tight">{lang === "ar" ? "أقلع" : "Aqla"}</div>
@@ -40,7 +43,7 @@ export function SiteHeader() {
               key={item.to + item.en}
               to={item.to}
               activeProps={{ className: "text-primary font-semibold" }}
-              activeOptions={{ exact: item.to === "/" }}
+              activeOptions={{ exact: item.to === appRoutes.home }}
               className="rounded-md px-2.5 py-1.5 text-[13px] font-medium text-foreground/75 hover:text-primary hover:bg-primary/5"
             >
               {lang === "ar" ? item.ar : item.en}
@@ -54,16 +57,17 @@ export function SiteHeader() {
             size="sm"
             onClick={() => setLang(lang === "ar" ? "en" : "ar")}
             className="gap-1.5 text-xs"
+            aria-label={lang === "ar" ? "Switch to English" : "التحويل إلى العربية"}
           >
             <Languages className="h-3.5 w-3.5" />
             {lang === "ar" ? "EN" : "ع"}
           </Button>
-          <Link to="/auth" className="hidden sm:inline-flex">
+          <Link to={appRoutes.staffLogin} className="hidden sm:inline-flex">
             <Button variant="outline" size="sm" className="text-xs">
               {lang === "ar" ? "دخول الموظفين" : "Staff"}
             </Button>
           </Link>
-          <Link to="/assessment" className="hidden md:inline-flex">
+          <Link to={appRoutes.start} className="hidden md:inline-flex">
             <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs">
               {lang === "ar" ? "ابدأ الآن" : "Start Now"}
             </Button>
@@ -72,7 +76,7 @@ export function SiteHeader() {
             type="button"
             onClick={() => setOpen((v) => !v)}
             className="grid h-9 w-9 place-items-center rounded-md border border-border/60 xl:hidden"
-            aria-label="Menu"
+            aria-label={open ? "Close menu" : "Open menu"}
           >
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -88,13 +92,13 @@ export function SiteHeader() {
                 to={item.to}
                 onClick={() => setOpen(false)}
                 activeProps={{ className: "text-primary font-semibold bg-primary/5" }}
-                activeOptions={{ exact: item.to === "/" }}
+                activeOptions={{ exact: item.to === appRoutes.home }}
                 className="rounded-md px-3 py-2 text-sm text-foreground/85 hover:bg-primary/5"
               >
                 {lang === "ar" ? item.ar : item.en}
               </Link>
             ))}
-            <Link to="/auth" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm text-foreground/85 hover:bg-primary/5 sm:hidden">
+            <Link to={appRoutes.staffLogin} onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm text-foreground/85 hover:bg-primary/5 sm:hidden">
               {lang === "ar" ? "دخول الموظفين" : "Staff Login"}
             </Link>
           </nav>
