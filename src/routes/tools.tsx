@@ -797,7 +797,16 @@ function ReadinessMeter({ isAr }: { isAr: boolean }) {
       {done && (
         <div className="mt-4 rounded-2xl bg-primary-soft p-4 text-sm">
           <p className={`font-semibold ${band.cls}`}>{isAr ? band.ar : band.en}</p>
-          <ShareRow text={shareText} isAr={isAr} />
+          <ShareResult
+            shareType="readiness"
+            isAr={isAr}
+            messageAr={messageAr}
+            messageEn={messageEn}
+            targetPath="/tools"
+            titleAr="مقياس الاستعداد"
+            titleEn="Readiness Meter"
+            payload={{ readiness: val }}
+          />
           <StartAssessment isAr={isAr} from="readiness_meter" />
         </div>
       )}
