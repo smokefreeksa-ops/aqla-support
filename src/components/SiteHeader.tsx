@@ -94,9 +94,6 @@ export function SiteHeader() {
                 {lang === "ar" ? item.ar : item.en}
               </Link>
             ))}
-            <Link to="/certificate/preview" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm text-foreground/85 hover:bg-primary/5">
-              {lang === "ar" ? "الشهادات" : "Certificates"}
-            </Link>
             <Link to="/guidelines" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm text-foreground/85 hover:bg-primary/5">
               {lang === "ar" ? "المكتبة المهنية" : "Library"}
             </Link>
