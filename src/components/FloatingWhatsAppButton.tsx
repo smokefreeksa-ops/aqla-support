@@ -8,12 +8,18 @@ export function FloatingWhatsAppButton() {
   const [lang, setLang] = useState<"en" | "ar">("ar");
   const movedRef = useRef(false);
 
-  const { ref, style, onPointerDown, dragging } = useDraggableWidget({
+  const { ref, style, onPointerDown, dragging, reset } = useDraggableWidget({
     storageKey: "aqla_whatsapp_position",
     defaultSide: "left",
     defaultBottom: 96, // sits above the chat button
     defaultSideOffset: 24,
   });
+
+  useEffect(() => {
+    const handler = () => reset();
+    window.addEventListener("aqla:reset-widgets", handler);
+    return () => window.removeEventListener("aqla:reset-widgets", handler);
+  }, [reset]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
