@@ -630,7 +630,16 @@ function TriggerMap({ isAr }: { isAr: boolean }) {
             {t("ملاحظة: لا توصي هذه الأداة بأي أدوية أو بدائل نيكوتين.",
                "Note: this tool does not recommend medication or nicotine alternatives.")}
           </p>
-          <ShareRow text={shareText} isAr={isAr} />
+          <ShareResult
+            shareType="trigger"
+            isAr={isAr}
+            messageAr={messageAr}
+            messageEn={messageEn}
+            targetPath="/tools"
+            titleAr="خريطة المحفزات"
+            titleEn="Trigger Map"
+            payload={{ top_triggers: top }}
+          />
           <StartAssessment isAr={isAr} from="trigger_map" />
         </div>
       )}
