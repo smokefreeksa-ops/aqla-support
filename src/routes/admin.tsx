@@ -267,11 +267,11 @@ function AdminPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) nav({ to: "/login" });
+      if (!data.session) nav({ to: "/auth" });
       else setReady(true);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_e, sess) => {
-      if (!sess) nav({ to: "/login" });
+      if (!sess) nav({ to: "/auth" });
     });
     return () => sub.subscription.unsubscribe();
   }, [nav]);
@@ -290,7 +290,7 @@ function AdminPage() {
             </Link>
             <Badge variant="outline">{roles.join(", ") || "no role"}</Badge>
           </div>
-          <Button variant="ghost" size="sm" onClick={async () => { await supabase.auth.signOut(); nav({ to: "/login" }); }}>
+          <Button variant="ghost" size="sm" onClick={async () => { await supabase.auth.signOut(); nav({ to: "/auth" }); }}>
             <LogOut className="h-4 w-4 mr-1" /> Sign out
           </Button>
         </div>

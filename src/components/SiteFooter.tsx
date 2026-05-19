@@ -1,58 +1,72 @@
 import { Link } from "@tanstack/react-router";
 import { Instagram, MessageCircle } from "lucide-react";
 import { useLang } from "@/lib/i18n";
+import { appRoutes } from "@/lib/app-routes";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
-type Col = { title: { ar: string; en: string }; links: Array<{ ar: string; en: string; to?: string; href?: string }> };
+type FooterLink = { ar: string; en: string; to?: string; href?: string; hash?: string };
+type Col = { title: { ar: string; en: string }; links: FooterLink[] };
 
 const COLUMNS: Col[] = [
   {
     title: { ar: "أقلع", en: "Aqla" },
     links: [
-      { ar: "عن أقلع", en: "About", to: "/about" },
-      { ar: "أثر أقلع", en: "Impact", to: "/movement" },
+      { ar: "عن أقلع", en: "About", to: appRoutes.about },
+      { ar: "لماذا أقلع؟", en: "Why Aqla?", to: appRoutes.about, hash: "why" },
+      { ar: "أثر أقلع", en: "Impact", to: appRoutes.impact },
+      { ar: "الأسئلة الشائعة", en: "FAQ", to: appRoutes.faq },
+      { ar: "تواصل معنا", en: "Contact", to: appRoutes.contact },
     ],
   },
   {
     title: { ar: "ابدأ", en: "Start" },
     links: [
-      { ar: "ابدأ الآن", en: "Start Now", to: "/assessment" },
-      { ar: "التقييم السريع", en: "Quick Check", to: "/assessment" },
-      { ar: "خطة أقلع", en: "Aqla Plan", to: "/tools" },
+      { ar: "ابدأ الآن", en: "Start Now", to: appRoutes.start },
+      { ar: "التقييم السريع", en: "Quick Check", to: appRoutes.quitPathway },
+      { ar: "خطة أقلع", en: "Aqla Plan", to: appRoutes.quitPlan },
+      { ar: "مدرب اللحظة", en: "Craving Coach", to: appRoutes.cravingCoach },
+      { ar: "مدرب الرجوع", en: "Relapse Support", to: appRoutes.relapseSupport },
     ],
   },
   {
     title: { ar: "المسارات", en: "Pathways" },
     links: [
-      { ar: "مسار الإقلاع", en: "Quit Pathway", to: "/quit-pathway" },
-      { ar: "مسار المساعدة", en: "Help Pathway", to: "/help-pathway" },
-      { ar: "التحديات والأوسمة", en: "Challenges & Medals", to: "/challenge-pathway" },
-      { ar: "التعلم والتدريب", en: "Learn & Train", to: "/learn" },
+      { ar: "مسار الإقلاع", en: "Quit Pathway", to: appRoutes.quitPathway },
+      { ar: "مسار المساعدة", en: "Help Pathway", to: appRoutes.helpPathway },
+      { ar: "التحديات والأنشطة", en: "Challenges & Activities", to: appRoutes.challengePathway },
+      { ar: "التعلم والتدريب", en: "Learn & Train", to: appRoutes.learnTrain },
+      { ar: "الشهادات", en: "Certificates", to: appRoutes.certificates },
     ],
   },
   {
     title: { ar: "الدعم", en: "Support" },
     links: [
-      { ar: "طلب الدعم", en: "Request Support", to: "/tools" },
-      { ar: "أرسل رسالة لشخص يهمك", en: "Send a Message", to: "/support-invite" },
-      { ar: "تواصل عبر واتساب", en: "WhatsApp", href: "https://wa.me/966555096412" },
+      { ar: "طلب الدعم", en: "Request Support", to: appRoutes.requestSupport },
+      { ar: "أرسل رسالة لشخص يهمك", en: "Send a Message", to: appRoutes.supportInvite },
+      { ar: "ادعُ أصدقاءك", en: "Invite Friends", to: appRoutes.inviteFriends },
+      { ar: "تواصل عبر واتساب", en: "WhatsApp", href: appRoutes.whatsapp },
+      { ar: "إرشادات السلامة", en: "Safety Guidance", to: appRoutes.safetyGuidance },
+      { ar: "متى أحتاج مراجعة مختص؟", en: "When to Seek Help", to: appRoutes.whenToSeekHelp },
     ],
   },
   {
     title: { ar: "الخصوصية والقانون", en: "Privacy & Legal" },
     links: [
-      { ar: "سياسة الخصوصية", en: "Privacy Policy", to: "/about" },
-      { ar: "إخلاء المسؤولية الطبية", en: "Medical Disclaimer", to: "/about" },
+      { ar: "سياسة الخصوصية", en: "Privacy Policy", to: appRoutes.privacy },
+      { ar: "شروط الاستخدام", en: "Terms of Use", to: appRoutes.terms },
+      { ar: "إخلاء المسؤولية الطبية", en: "Medical Disclaimer", to: appRoutes.medicalDisclaimer },
+      { ar: "سياسة المشاركة", en: "Sharing Policy", to: appRoutes.sharingPolicy },
+      { ar: "سياسة ملفات الارتباط", en: "Cookie Policy", to: appRoutes.cookies },
     ],
   },
   {
     title: { ar: "حسابات أقلع", en: "Aqla Social" },
     links: [
-      { ar: "Instagram", en: "Instagram", href: "https://www.instagram.com/smokeOffKSA" },
-      { ar: "X", en: "X", href: "https://x.com/SmokeOffKSA" },
-      { ar: "TikTok", en: "TikTok", href: "https://www.tiktok.com/@SmokeOffKSA" },
-      { ar: "قناة اليوتيوب", en: "قناة اليوتيوب", href: "https://www.youtube.com/@La-tatten" },
-      { ar: "WhatsApp", en: "WhatsApp", href: "https://wa.me/966555096412" },
+      { ar: "Instagram", en: "Instagram", href: appRoutes.instagram },
+      { ar: "X", en: "X", href: appRoutes.x },
+      { ar: "TikTok", en: "TikTok", href: appRoutes.tiktok },
+      { ar: "قناة اليوتيوب", en: "قناة اليوتيوب", href: appRoutes.youtube },
+      { ar: "WhatsApp", en: "WhatsApp", href: appRoutes.whatsapp },
     ],
   },
 ];
@@ -74,7 +88,11 @@ export function SiteFooter() {
                   return (
                     <li key={label}>
                       {l.to ? (
-                        <Link to={l.to} className="text-[13px] text-foreground/70 hover:text-primary">
+                        <Link
+                          to={l.to}
+                          hash={l.hash}
+                          className="text-[13px] text-foreground/70 hover:text-primary"
+                        >
                           {label}
                         </Link>
                       ) : (
@@ -83,6 +101,7 @@ export function SiteFooter() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-[13px] text-foreground/70 hover:text-primary"
+                          aria-label={label}
                         >
                           {label}
                         </a>
@@ -104,11 +123,11 @@ export function SiteFooter() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <a href="https://wa.me/966555096412" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
+            <a href={appRoutes.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
                className="grid h-9 w-9 place-items-center rounded-full bg-primary/10 text-primary hover:bg-primary/20">
               <MessageCircle className="h-4 w-4" />
             </a>
-            <a href="https://www.instagram.com/smokeOffKSA" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
+            <a href={appRoutes.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"
                className="grid h-9 w-9 place-items-center rounded-full bg-primary/10 text-primary hover:bg-primary/20">
               <Instagram className="h-4 w-4" />
             </a>

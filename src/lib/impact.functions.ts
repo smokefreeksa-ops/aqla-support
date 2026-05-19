@@ -42,7 +42,7 @@ export const getPublicImpactStats = createServerFn({ method: "GET" }).handler(as
 });
 
 const PUBLIC_PATHS = new Set(["/", "/about", "/assessment", "/volunteer"]);
-const BLOCKED_PATHS = new Set(["/admin", "/login"]);
+const BLOCKED_PATHS = new Set(["/admin", "/auth"]);
 
 function isPublicPath(p: string): boolean {
   if (BLOCKED_PATHS.has(p)) return false;

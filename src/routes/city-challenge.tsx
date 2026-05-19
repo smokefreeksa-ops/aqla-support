@@ -85,7 +85,7 @@ function Inner() {
             <Button variant="ghost" size="sm" onClick={() => setLang(isAr ? "en" : "ar")} className="gap-1.5">
               <Languages className="h-4 w-4" />{isAr ? "English" : "العربية"}
             </Button>
-            <Link to="/tools"><Button variant="ghost" size="sm">{t("الأدوات", "Tools")}</Button></Link>
+            <Link to="/request-support"><Button variant="ghost" size="sm">{t("الأدوات", "Tools")}</Button></Link>
             <Link to="/assessment"><Button size="sm" className="quit-gradient border-0 text-white">{t("ابدأ التقييم", "Start assessment")}</Button></Link>
           </div>
         </div>
@@ -131,7 +131,7 @@ function Inner() {
                      "Which city can create the most quit pledges?")}
                 </div>
               </div>
-              <Link to="/tools" onClick={() => trackEvent("city_challenge_pledge_cta_clicked")}>
+              <Link to="/request-support" onClick={() => trackEvent("city_challenge_pledge_cta_clicked")}>
                 <Button variant="secondary" className="gap-1.5">
                   {t("أنشئ تعهدك", "Create your pledge")}<ArrowRight className="h-4 w-4 rtl:rotate-180" />
                 </Button>
