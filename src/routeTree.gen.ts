@@ -14,6 +14,7 @@ import { Route as TrainingRouteImport } from './routes/training'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as SupportInviteRouteImport } from './routes/support-invite'
 import { Route as ShopRouteImport } from './routes/shop'
+import { Route as QuitPathwayRouteImport } from './routes/quit-pathway'
 import { Route as PosterStudioRouteImport } from './routes/poster-studio'
 import { Route as MovementRouteImport } from './routes/movement'
 import { Route as LoginRouteImport } from './routes/login'
@@ -51,6 +52,11 @@ const SupportInviteRoute = SupportInviteRouteImport.update({
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
   path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuitPathwayRoute = QuitPathwayRouteImport.update({
+  id: '/quit-pathway',
+  path: '/quit-pathway',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PosterStudioRoute = PosterStudioRouteImport.update({
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/movement': typeof MovementRoute
   '/poster-studio': typeof PosterStudioRoute
+  '/quit-pathway': typeof QuitPathwayRoute
   '/shop': typeof ShopRoute
   '/support-invite': typeof SupportInviteRoute
   '/tools': typeof ToolsRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/movement': typeof MovementRoute
   '/poster-studio': typeof PosterStudioRoute
+  '/quit-pathway': typeof QuitPathwayRoute
   '/shop': typeof ShopRoute
   '/support-invite': typeof SupportInviteRoute
   '/tools': typeof ToolsRoute
@@ -171,6 +179,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/movement': typeof MovementRoute
   '/poster-studio': typeof PosterStudioRoute
+  '/quit-pathway': typeof QuitPathwayRoute
   '/shop': typeof ShopRoute
   '/support-invite': typeof SupportInviteRoute
   '/tools': typeof ToolsRoute
@@ -193,6 +202,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/movement'
     | '/poster-studio'
+    | '/quit-pathway'
     | '/shop'
     | '/support-invite'
     | '/tools'
@@ -213,6 +223,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/movement'
     | '/poster-studio'
+    | '/quit-pathway'
     | '/shop'
     | '/support-invite'
     | '/tools'
@@ -233,6 +244,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/movement'
     | '/poster-studio'
+    | '/quit-pathway'
     | '/shop'
     | '/support-invite'
     | '/tools'
@@ -254,6 +266,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   MovementRoute: typeof MovementRoute
   PosterStudioRoute: typeof PosterStudioRoute
+  QuitPathwayRoute: typeof QuitPathwayRoute
   ShopRoute: typeof ShopRoute
   SupportInviteRoute: typeof SupportInviteRoute
   ToolsRoute: typeof ToolsRoute
@@ -298,6 +311,13 @@ declare module '@tanstack/react-router' {
       path: '/shop'
       fullPath: '/shop'
       preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quit-pathway': {
+      id: '/quit-pathway'
+      path: '/quit-pathway'
+      fullPath: '/quit-pathway'
+      preLoaderRoute: typeof QuitPathwayRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/poster-studio': {
@@ -415,6 +435,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   MovementRoute: MovementRoute,
   PosterStudioRoute: PosterStudioRoute,
+  QuitPathwayRoute: QuitPathwayRoute,
   ShopRoute: ShopRoute,
   SupportInviteRoute: SupportInviteRoute,
   ToolsRoute: ToolsRoute,
