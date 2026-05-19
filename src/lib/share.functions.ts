@@ -113,7 +113,7 @@ export const createShareCard = createServerFn({ method: "POST" })
         cta_en: data.cta_en ?? null,
         image_url,
         target_url,
-        safe_public_payload: safe,
+        safe_public_payload: safe as never,
       })
       .select("id")
       .single();
