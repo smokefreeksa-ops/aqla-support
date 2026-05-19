@@ -226,11 +226,60 @@ function Inner() {
     } catch { /* ignore */ }
   };
 
+  const createShareLink = async () => {
+    if (!previewRef.current || generatingShare) return;
+    if (customUnsafe || customTooLong) return;
+    setGeneratingShare(true);
+    try {
+      const imgs = Array.from(previewRef.current.querySelectorAll("img"));
+      await Promise.all(imgs.map((img) => img.complete && img.naturalWidth > 0
+        ? Promise.resolve()
+        : new Promise<void>((resolve) => {
+            img.addEventListener("load", () => resolve(), { once: true });
+            img.addEventListener("error", () => resolve(), { once: true });
+          })));
+      const canvas = await html2canvas(previewRef.current, {
+        backgroundColor: "#ffffff",
+        scale: 2,
+        useCORS: true,
+        allowTaint: false,
+      });
+      const dataUrl = canvas.toDataURL("image/png");
+      const res = await shareFn({ data: {
+        share_type: "poster",
+        anonymous_session_id: getAnonSessionId(),
+        title_ar: "بطاقة توعوية من أقلع",
+        title_en: "An Aqla awareness poster",
+        message_ar: finalMessage || "مستقبلي يستاهل أبدأ من اليوم.",
+        message_en: "Share awareness with Aqla.",
+        cta_ar: "صمم بطاقتك",
+        cta_en: "Create yours",
+        target_path: "/poster-studio",
+        safe_public_payload: {
+          template,
+          poster_type: posterType,
+          city: city.trim() || null,
+          language: lang,
+        },
+        image_data_url: dataUrl,
+      }});
+      setSharePath(res.share_path);
+      void recordOnce();
+      toast.success(isAr ? "تم إنشاء رابط المشاركة" : "Share link ready");
+    } catch (e) {
+      console.error(e);
+      toast.error(isAr ? "تعذّر إنشاء رابط المشاركة" : "Couldn't create share link");
+    } finally {
+      setGeneratingShare(false);
+    }
+  };
+
   const reset = () => {
     setStep(1);
     setRecorded(false);
     setUseCustom(false);
     setCustomMessage("");
+    setSharePath(null);
   };
 
   return (
