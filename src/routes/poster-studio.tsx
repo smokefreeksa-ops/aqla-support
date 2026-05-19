@@ -490,6 +490,33 @@ function Inner() {
                     </Button>
                   </Link>
                 </div>
+
+                <div className="border-t pt-3 space-y-2">
+                  <div className="text-sm font-medium">
+                    {isAr ? "رابط مشاركة عام (يعمل على LinkedIn و X)" : "Public share link (works on LinkedIn & X)"}
+                  </div>
+                  {!sharePath ? (
+                    <Button
+                      onClick={createShareLink}
+                      disabled={generatingShare || customUnsafe}
+                      variant="default"
+                      className="w-full gap-1.5 bg-emerald-700 hover:bg-emerald-800"
+                    >
+                      <Share2 className="h-4 w-4" />
+                      {generatingShare
+                        ? (isAr ? "جاري الإنشاء…" : "Creating…")
+                        : (isAr ? "أنشئ رابط مشاركة" : "Create share link")}
+                    </Button>
+                  ) : (
+                    <ShareButtons
+                      shareUrl={`https://aqla-support.lovable.app${sharePath}`}
+                      textAr={`${finalMessage}\n\nصممت بطاقتي مع أقلع — جرّب أنت أيضًا.`}
+                      textEn="I created my Aqla awareness card. Try yours too."
+                      lang={isAr ? "ar" : "en"}
+                    />
+                  )}
+                </div>
+
                 <p className="text-[11px] text-muted-foreground">
                   {isAr
                     ? "منشور توعوي ولا يمثل نصيحة طبية شخصية."
