@@ -335,6 +335,7 @@ function Inner() {
             </div>
           </Card>
         </div>
+      </div>
       </main>
 
       <footer className="mx-auto max-w-6xl px-4 py-8 text-center text-xs text-muted-foreground">
