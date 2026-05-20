@@ -5,11 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import { MessageCircle, X, Send, Loader2, RotateCcw } from "lucide-react";
 import { getAssistantStatus, chatWithAssistant } from "@/lib/assistant.functions";
 import { useDraggableWidget } from "@/hooks/use-draggable-widget";
+import { useAqlaButtonHandler, routeToButton, type AqlaButton } from "@/lib/aqla-actions";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
 const PUBLIC_PATHS = ["/", "/about", "/assessment", "/volunteer", "/request-support", "/city-challenge", "/challenges", "/learn-train", "/shop", "/poster-studio", "/impact"];
 
-type Msg = { role: "user" | "assistant"; content: string };
+type Msg = { role: "user" | "assistant"; content: string; buttons?: AqlaButton[] };
 
 export function AqlaAssistant() {
   const [lang, setLang] = useState<"en" | "ar">("en");
@@ -89,10 +90,10 @@ export function AqlaAssistant() {
     return "general";
   }
 
-  async function send() {
-    const text = input.trim();
-    if (!text || sending) return;
-    const next: Msg[] = [...messages, { role: "user", content: text }];
+  async function sendText(text: string) {
+    const trimmed = text.trim();
+    if (!trimmed || sending) return;
+    const next: Msg[] = [...messages, { role: "user", content: trimmed }];
     setMessages(next);
     setInput("");
     setSending(true);
@@ -101,11 +102,17 @@ export function AqlaAssistant() {
         data: {
           lang,
           center_type: centerForPath(location.pathname),
-          messages: next,
+          messages: next.map(({ role, content }) => ({ role, content })),
         },
       });
-      const reply = (res as { reply?: string }).reply || "…";
-      setMessages([...next, { role: "assistant", content: reply }]);
+      const r = res as { reply?: string; suggested_route?: string | null; buttons?: AqlaButton[] };
+      const reply = r.reply || "…";
+      const buttons: AqlaButton[] = Array.isArray(r.buttons) ? r.buttons : [];
+      if (r.suggested_route) {
+        const btn = routeToButton(r.suggested_route, lang);
+        if (btn && !buttons.some((b) => b.action === btn.action)) buttons.push(btn);
+      }
+      setMessages([...next, { role: "assistant", content: reply, buttons }]);
     } catch (e) {
       console.error(e);
       setMessages([...next, { role: "assistant", content: t.error }]);
@@ -113,6 +120,14 @@ export function AqlaAssistant() {
       setSending(false);
     }
   }
+
+  async function send() {
+    await sendText(input);
+  }
+
+  const handleButton = useAqlaButtonHandler({
+    sendMessage: (text: string) => void sendText(text),
+  });
 
   function resetPositions() {
     try {
@@ -193,15 +208,30 @@ export function AqlaAssistant() {
 
           <div ref={scrollRef} className="flex-1 space-y-2 overflow-y-auto bg-background p-3">
             {messages.map((m, i) => (
-              <div
-                key={i}
-                className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3 py-2 text-sm ${
-                  m.role === "user"
-                    ? `${isRTL ? "mr-auto" : "ml-auto"} bg-primary text-primary-foreground`
-                    : `${isRTL ? "ml-auto" : "mr-auto"} bg-muted text-foreground`
-                }`}
-              >
-                {m.content}
+              <div key={i} className="space-y-1">
+                <div
+                  className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3 py-2 text-sm ${
+                    m.role === "user"
+                      ? `${isRTL ? "mr-auto" : "ml-auto"} bg-primary text-primary-foreground`
+                      : `${isRTL ? "ml-auto" : "mr-auto"} bg-muted text-foreground`
+                  }`}
+                >
+                  {m.content}
+                </div>
+                {m.role === "assistant" && m.buttons && m.buttons.length > 0 && (
+                  <div className={`flex flex-wrap gap-2 ${isRTL ? "ml-auto justify-end" : "mr-auto justify-start"} max-w-[85%]`}>
+                    {m.buttons.map((b, j) => (
+                      <button
+                        key={j}
+                        type="button"
+                        onClick={() => handleButton(b)}
+                        className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary hover:bg-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                      >
+                        {b.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
             {sending && (
