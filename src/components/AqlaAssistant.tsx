@@ -8,7 +8,9 @@ import { useDraggableWidget } from "@/hooks/use-draggable-widget";
 import { useAqlaButtonHandler, routeToButton, type AqlaButton } from "@/lib/aqla-actions";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
-const PUBLIC_PATHS = ["/", "/about", "/assessment", "/volunteer", "/request-support", "/city-challenge", "/challenges", "/learn-train", "/shop", "/poster-studio", "/impact"];
+// Floating assistant intentionally excluded from the four center routes —
+// those pages embed <AqlaCenterChat /> directly so there is no duplicate bot.
+const PUBLIC_PATHS = ["/", "/about", "/assessment", "/volunteer", "/request-support", "/city-challenge", "/challenges", "/shop", "/poster-studio", "/impact"];
 
 type Msg = { role: "user" | "assistant"; content: string; buttons?: AqlaButton[] };
 
