@@ -230,3 +230,146 @@ export function assignCohort(i: CohortInput): CohortResult {
     urgent,
   };
 }
+
+// ============================================================
+// STEP 5 — additional validated instruments for /quit-pathway
+// All scoring is deterministic and server-only.
+// Bands are stored in DB but never exposed in shareable text.
+// ============================================================
+
+// ---------- Penn State Electronic Cigarette Dependence Index (PSECDI, 10 items) ----------
+// Items 1–4 use the official Penn State item-score tables.
+// Items 5–10 are yes/no (1 / 0). Total range 0–20.
+// Bands (per PSECDI): 0–3 not, 4–8 low, 9–12 medium, 13+ high.
+export interface PennStateEcigAnswers {
+  q1: number; // times per day vaped → 0–3
+  q2: number; // minutes after waking → 0–3
+  q3: number; // do you vape now because hard to quit → 0–1
+  q4: number; // do you ever crave → 0–1
+  q5: boolean; // do you NEED to vape
+  q6: boolean; // is it hard to keep from vaping in places not allowed
+  q7: boolean; // when you haven't vaped a while or tried to stop, do you feel more irritable
+  q8: boolean; // ...more anxious
+  q9: boolean; // ...more restless
+  q10: boolean; // ...more hungry
+}
+export const PENN_STATE_ITEM_SCORES = {
+  // Q1 — How many times per day do you usually use your e-cig?
+  q1: {
+    "0": 0, // 0
+    "1-4": 0, // 1–4
+    "5-9": 1, // 5–9
+    "10-14": 2, // 10–14
+    "15+": 3, // 15+
+  },
+  // Q2 — How soon after waking?
+  q2: {
+    ">60": 0,
+    "31-60": 1,
+    "6-30": 2,
+    "<=5": 3,
+  },
+  // Q3 — Do you vape now because it's really hard to quit?
+  q3: { no: 0, yes: 1 },
+  // Q4 — Do you ever crave to use your e-cig?
+  q4: { no: 0, yes: 1 },
+} as const;
+
+export function scorePennStateEcig(a: PennStateEcigAnswers) {
+  const part1 = (a.q1 ?? 0) + (a.q2 ?? 0) + (a.q3 ?? 0) + (a.q4 ?? 0);
+  const part2 =
+    (a.q5 ? 1 : 0) + (a.q6 ? 1 : 0) + (a.q7 ? 1 : 0) + (a.q8 ? 1 : 0) + (a.q9 ? 1 : 0) + (a.q10 ? 1 : 0);
+  const total = part1 + part2;
+  let category: string;
+  if (total <= 3) category = "not_dependent";
+  else if (total <= 8) category = "low";
+  else if (total <= 12) category = "medium";
+  else category = "high";
+  return { total, category };
+}
+
+// ---------- LWDS-11 (Lebanon Waterpipe Dependence Scale, 11 items) ----------
+// Item-level scoring follows the published LWDS-11 (max ~39 across 11 items
+// with mixed 0–3 / 0–1 scales). We accept caller-provided integer item values.
+export type Lwds11Answers = Record<
+  "q1" | "q2" | "q3" | "q4" | "q5" | "q6" | "q7" | "q8" | "q9" | "q10" | "q11",
+  number
+>;
+export function scoreLwds11(a: Lwds11Answers) {
+  const total = Object.values(a).reduce((acc, v) => acc + (v || 0), 0);
+  // Published cut-points: <10 low, 10–15 moderate, >15 high.
+  let category: string;
+  if (total < 10) category = "low";
+  else if (total <= 15) category = "moderate";
+  else category = "high";
+  return { total, category };
+}
+
+// ---------- Oral nicotine / pouch — adapted screen (NOT validated) ----------
+// 6 yes/no items. Score = count of yes. UI MUST label this غير معتمد and
+// stored row MUST set validated:false.
+export type OralNicotineAnswers = Record<
+  "q1" | "q2" | "q3" | "q4" | "q5" | "q6",
+  boolean
+>;
+export function scoreOralNicotineAdapted(a: OralNicotineAnswers) {
+  const yes_count = Object.values(a).filter(Boolean).length;
+  let category: string;
+  if (yes_count <= 1) category = "low";
+  else if (yes_count <= 3) category = "moderate";
+  else category = "high";
+  return { yes_count, category, validated: false };
+}
+
+// ---------- Instrument routing ----------
+export type Instrument =
+  | "ftnd_cigarettes"
+  | "ps_ecdi_vape"
+  | "ps_ndi_all_nicotine"
+  | "lwds11_waterpipe"
+  | "honc_youth";
+
+export function pickInstrument(product: string, opts?: { youthOrLossOfControl?: boolean }): Instrument {
+  if (opts?.youthOrLossOfControl) return "honc_youth";
+  switch (product) {
+    case "cigarettes":
+      return "ftnd_cigarettes";
+    case "vape":
+      return "ps_ecdi_vape";
+    case "shisha":
+      return "lwds11_waterpipe";
+    case "pouches":
+      return "ps_ndi_all_nicotine";
+    case "multiple":
+    case "unsure":
+    default:
+      return "ftnd_cigarettes";
+  }
+}
+
+// ---------- Risk-flag helper for assessments ----------
+// Maps instrument + band → boolean risk_flag for downstream referral logic.
+export function instrumentRiskFlag(instrument: Instrument, band: string): boolean {
+  if (instrument === "ftnd_cigarettes") return band === "high" || band === "very_high";
+  if (instrument === "ps_ecdi_vape") return band === "medium" || band === "high";
+  if (instrument === "lwds11_waterpipe") return band === "high";
+  if (instrument === "ps_ndi_all_nicotine") return band === "high";
+  if (instrument === "honc_youth") return band === "high";
+  return false;
+}
+
+// ---------- Money saved calculator ----------
+// units = packs/day for cigarettes, or cartridges/pouches/sessions per day.
+// price = local currency per unit. Returns rounded daily/weekly/yearly.
+export function moneySaved(units_per_day: number, price_per_unit: number) {
+  const safeUnits = Math.max(0, Number(units_per_day) || 0);
+  const safePrice = Math.max(0, Number(price_per_unit) || 0);
+  const daily = safeUnits * safePrice;
+  return {
+    daily: Math.round(daily * 100) / 100,
+    weekly: Math.round(daily * 7 * 100) / 100,
+    monthly: Math.round(daily * 30 * 100) / 100,
+    yearly: Math.round(daily * 365 * 100) / 100,
+  };
+}
+
