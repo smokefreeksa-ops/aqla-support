@@ -23,6 +23,7 @@ import { Route as RequestSupportRouteImport } from './routes/request-support'
 import { Route as RelapseSupportRouteImport } from './routes/relapse-support'
 import { Route as QuitPlanRouteImport } from './routes/quit-plan'
 import { Route as QuitPathwayRouteImport } from './routes/quit-pathway'
+import { Route as QuitCenterRouteImport } from './routes/quit-center'
 import { Route as ProfessionalLibraryRouteImport } from './routes/professional-library'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PosterStudioRouteImport } from './routes/poster-studio'
@@ -46,6 +47,7 @@ import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AssessmentRouteImport } from './routes/assessment'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
@@ -121,6 +123,11 @@ const QuitPlanRoute = QuitPlanRouteImport.update({
 const QuitPathwayRoute = QuitPathwayRouteImport.update({
   id: '/quit-pathway',
   path: '/quit-pathway',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuitCenterRoute = QuitCenterRouteImport.update({
+  id: '/quit-center',
+  path: '/quit-center',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfessionalLibraryRoute = ProfessionalLibraryRouteImport.update({
@@ -238,6 +245,11 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AcademyRoute = AcademyRouteImport.update({
+  id: '/academy',
+  path: '/academy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -272,6 +284,7 @@ const ShareTypeIdRoute = ShareTypeIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/academy': typeof AcademyRoute
   '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
@@ -295,6 +308,7 @@ export interface FileRoutesByFullPath {
   '/poster-studio': typeof PosterStudioRoute
   '/privacy': typeof PrivacyRoute
   '/professional-library': typeof ProfessionalLibraryRoute
+  '/quit-center': typeof QuitCenterRoute
   '/quit-pathway': typeof QuitPathwayRoute
   '/quit-plan': typeof QuitPlanRoute
   '/relapse-support': typeof RelapseSupportRoute
@@ -317,6 +331,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/academy': typeof AcademyRoute
   '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
@@ -340,6 +355,7 @@ export interface FileRoutesByTo {
   '/poster-studio': typeof PosterStudioRoute
   '/privacy': typeof PrivacyRoute
   '/professional-library': typeof ProfessionalLibraryRoute
+  '/quit-center': typeof QuitCenterRoute
   '/quit-pathway': typeof QuitPathwayRoute
   '/quit-plan': typeof QuitPlanRoute
   '/relapse-support': typeof RelapseSupportRoute
@@ -363,6 +379,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/academy': typeof AcademyRoute
   '/admin': typeof AdminRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
@@ -386,6 +403,7 @@ export interface FileRoutesById {
   '/poster-studio': typeof PosterStudioRoute
   '/privacy': typeof PrivacyRoute
   '/professional-library': typeof ProfessionalLibraryRoute
+  '/quit-center': typeof QuitCenterRoute
   '/quit-pathway': typeof QuitPathwayRoute
   '/quit-plan': typeof QuitPlanRoute
   '/relapse-support': typeof RelapseSupportRoute
@@ -410,6 +428,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/academy'
     | '/admin'
     | '/assessment'
     | '/auth'
@@ -433,6 +452,7 @@ export interface FileRouteTypes {
     | '/poster-studio'
     | '/privacy'
     | '/professional-library'
+    | '/quit-center'
     | '/quit-pathway'
     | '/quit-plan'
     | '/relapse-support'
@@ -455,6 +475,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/academy'
     | '/admin'
     | '/assessment'
     | '/auth'
@@ -478,6 +499,7 @@ export interface FileRouteTypes {
     | '/poster-studio'
     | '/privacy'
     | '/professional-library'
+    | '/quit-center'
     | '/quit-pathway'
     | '/quit-plan'
     | '/relapse-support'
@@ -500,6 +522,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/academy'
     | '/admin'
     | '/assessment'
     | '/auth'
@@ -523,6 +546,7 @@ export interface FileRouteTypes {
     | '/poster-studio'
     | '/privacy'
     | '/professional-library'
+    | '/quit-center'
     | '/quit-pathway'
     | '/quit-plan'
     | '/relapse-support'
@@ -546,6 +570,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AcademyRoute: typeof AcademyRoute
   AdminRoute: typeof AdminRouteWithChildren
   AssessmentRoute: typeof AssessmentRoute
   AuthRoute: typeof AuthRoute
@@ -569,6 +594,7 @@ export interface RootRouteChildren {
   PosterStudioRoute: typeof PosterStudioRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfessionalLibraryRoute: typeof ProfessionalLibraryRoute
+  QuitCenterRoute: typeof QuitCenterRoute
   QuitPathwayRoute: typeof QuitPathwayRoute
   QuitPlanRoute: typeof QuitPlanRoute
   RelapseSupportRoute: typeof RelapseSupportRoute
@@ -686,6 +712,13 @@ declare module '@tanstack/react-router' {
       path: '/quit-pathway'
       fullPath: '/quit-pathway'
       preLoaderRoute: typeof QuitPathwayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quit-center': {
+      id: '/quit-center'
+      path: '/quit-center'
+      fullPath: '/quit-center'
+      preLoaderRoute: typeof QuitCenterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/professional-library': {
@@ -849,6 +882,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/academy': {
+      id: '/academy'
+      path: '/academy'
+      fullPath: '/academy'
+      preLoaderRoute: typeof AcademyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -907,6 +947,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AcademyRoute: AcademyRoute,
   AdminRoute: AdminRouteWithChildren,
   AssessmentRoute: AssessmentRoute,
   AuthRoute: AuthRoute,
@@ -930,6 +971,7 @@ const rootRouteChildren: RootRouteChildren = {
   PosterStudioRoute: PosterStudioRoute,
   PrivacyRoute: PrivacyRoute,
   ProfessionalLibraryRoute: ProfessionalLibraryRoute,
+  QuitCenterRoute: QuitCenterRoute,
   QuitPathwayRoute: QuitPathwayRoute,
   QuitPlanRoute: QuitPlanRoute,
   RelapseSupportRoute: RelapseSupportRoute,
@@ -951,3 +993,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
