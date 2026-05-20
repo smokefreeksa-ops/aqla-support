@@ -105,8 +105,14 @@ export function AqlaAssistant() {
           messages: next,
         },
       });
-      const reply = (res as { reply?: string }).reply || "…";
-      setMessages([...next, { role: "assistant", content: reply }]);
+      const r = res as { reply?: string; suggested_route?: string | null; buttons?: AqlaButton[] };
+      const reply = r.reply || "…";
+      const buttons: AqlaButton[] = Array.isArray(r.buttons) ? r.buttons : [];
+      if (r.suggested_route) {
+        const btn = routeToButton(r.suggested_route, lang);
+        if (btn && !buttons.some((b) => b.action === btn.action)) buttons.push(btn);
+      }
+      setMessages([...next, { role: "assistant", content: reply, buttons }]);
     } catch (e) {
       console.error(e);
       setMessages([...next, { role: "assistant", content: t.error }]);
@@ -114,6 +120,14 @@ export function AqlaAssistant() {
       setSending(false);
     }
   }
+
+  const handleButton = useAqlaButtonHandler({
+    sendMessage: (text: string) => {
+      setInput(text);
+      // defer so state updates before send
+      setTimeout(() => void send(), 0);
+    },
+  });
 
   function resetPositions() {
     try {
