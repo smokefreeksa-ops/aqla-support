@@ -538,6 +538,42 @@ export type Database = {
         }
         Relationships: []
       }
+      center_sessions: {
+        Row: {
+          anonymous_session_id: string
+          center_type: string
+          created_at: string
+          id: string
+          language: string
+          meta: Json
+          updated_at: string
+          user_id: string | null
+          workflow_state: string
+        }
+        Insert: {
+          anonymous_session_id: string
+          center_type: string
+          created_at?: string
+          id?: string
+          language?: string
+          meta?: Json
+          updated_at?: string
+          user_id?: string | null
+          workflow_state?: string
+        }
+        Update: {
+          anonymous_session_id?: string
+          center_type?: string
+          created_at?: string
+          id?: string
+          language?: string
+          meta?: Json
+          updated_at?: string
+          user_id?: string | null
+          workflow_state?: string
+        }
+        Relationships: []
+      }
       challenge_events: {
         Row: {
           anonymous_session_id: string | null
@@ -875,6 +911,53 @@ export type Database = {
             columns: ["participant_id"]
             isOneToOne: false
             referencedRelation: "participants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      craving_events: {
+        Row: {
+          anonymous_session_id: string
+          craving_level: number | null
+          created_at: string
+          id: string
+          resolved: boolean
+          session_id: string | null
+          time_of_day: string | null
+          trigger: string | null
+          user_id: string | null
+          what_helped: string | null
+        }
+        Insert: {
+          anonymous_session_id: string
+          craving_level?: number | null
+          created_at?: string
+          id?: string
+          resolved?: boolean
+          session_id?: string | null
+          time_of_day?: string | null
+          trigger?: string | null
+          user_id?: string | null
+          what_helped?: string | null
+        }
+        Update: {
+          anonymous_session_id?: string
+          craving_level?: number | null
+          created_at?: string
+          id?: string
+          resolved?: boolean
+          session_id?: string | null
+          time_of_day?: string | null
+          trigger?: string | null
+          user_id?: string | null
+          what_helped?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "craving_events_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "center_sessions"
             referencedColumns: ["id"]
           },
         ]
@@ -2143,6 +2226,187 @@ export type Database = {
         }
         Relationships: []
       }
+      quit_assessments: {
+        Row: {
+          anonymous_session_id: string
+          answers: Json
+          band: string | null
+          created_at: string
+          id: string
+          instrument: string
+          risk_flag: boolean
+          score: number | null
+          session_id: string
+          user_id: string | null
+          validated: boolean
+        }
+        Insert: {
+          anonymous_session_id: string
+          answers?: Json
+          band?: string | null
+          created_at?: string
+          id?: string
+          instrument: string
+          risk_flag?: boolean
+          score?: number | null
+          session_id: string
+          user_id?: string | null
+          validated?: boolean
+        }
+        Update: {
+          anonymous_session_id?: string
+          answers?: Json
+          band?: string | null
+          created_at?: string
+          id?: string
+          instrument?: string
+          risk_flag?: boolean
+          score?: number | null
+          session_id?: string
+          user_id?: string | null
+          validated?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quit_assessments_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "center_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quit_center_intakes: {
+        Row: {
+          age_group: string | null
+          anonymous: boolean
+          anonymous_session_id: string
+          city: string | null
+          consent_status: string | null
+          contact_method: string | null
+          contact_value: string | null
+          created_at: string
+          id: string
+          language: string | null
+          nickname: string | null
+          product: string | null
+          red_flags: Json
+          session_id: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          age_group?: string | null
+          anonymous?: boolean
+          anonymous_session_id: string
+          city?: string | null
+          consent_status?: string | null
+          contact_method?: string | null
+          contact_value?: string | null
+          created_at?: string
+          id?: string
+          language?: string | null
+          nickname?: string | null
+          product?: string | null
+          red_flags?: Json
+          session_id: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          age_group?: string | null
+          anonymous?: boolean
+          anonymous_session_id?: string
+          city?: string | null
+          consent_status?: string | null
+          contact_method?: string | null
+          contact_value?: string | null
+          created_at?: string
+          id?: string
+          language?: string | null
+          nickname?: string | null
+          product?: string | null
+          red_flags?: Json
+          session_id?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quit_center_intakes_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "center_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quit_followups: {
+        Row: {
+          anonymous_session_id: string
+          craving_level: number | null
+          created_at: string
+          day_marker: string | null
+          id: string
+          is_relapse: boolean
+          needs_support: boolean | null
+          notes: string | null
+          plan_id: string | null
+          session_id: string
+          trigger: string | null
+          used_today: boolean | null
+          user_id: string | null
+          what_helped: string | null
+        }
+        Insert: {
+          anonymous_session_id: string
+          craving_level?: number | null
+          created_at?: string
+          day_marker?: string | null
+          id?: string
+          is_relapse?: boolean
+          needs_support?: boolean | null
+          notes?: string | null
+          plan_id?: string | null
+          session_id: string
+          trigger?: string | null
+          used_today?: boolean | null
+          user_id?: string | null
+          what_helped?: string | null
+        }
+        Update: {
+          anonymous_session_id?: string
+          craving_level?: number | null
+          created_at?: string
+          day_marker?: string | null
+          id?: string
+          is_relapse?: boolean
+          needs_support?: boolean | null
+          notes?: string | null
+          plan_id?: string | null
+          session_id?: string
+          trigger?: string | null
+          used_today?: boolean | null
+          user_id?: string | null
+          what_helped?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quit_followups_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "quit_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quit_followups_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "center_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quit_history: {
         Row: {
           attempts_count: number | null
@@ -2175,6 +2439,109 @@ export type Database = {
           participant_id?: string
         }
         Relationships: []
+      }
+      quit_plans: {
+        Row: {
+          anonymous_session_id: string
+          created_at: string
+          followup_schedule: Json
+          id: string
+          money_setup: Json
+          plan: Json
+          quit_date: string | null
+          quit_goal: string | null
+          session_id: string
+          support_person: Json
+          triggers: Json
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          anonymous_session_id: string
+          created_at?: string
+          followup_schedule?: Json
+          id?: string
+          money_setup?: Json
+          plan?: Json
+          quit_date?: string | null
+          quit_goal?: string | null
+          session_id: string
+          support_person?: Json
+          triggers?: Json
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          anonymous_session_id?: string
+          created_at?: string
+          followup_schedule?: Json
+          id?: string
+          money_setup?: Json
+          plan?: Json
+          quit_date?: string | null
+          quit_goal?: string | null
+          session_id?: string
+          support_person?: Json
+          triggers?: Json
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quit_plans_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "center_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quit_referrals: {
+        Row: {
+          anonymous_session_id: string
+          created_at: string
+          id: string
+          meta: Json
+          reason: string | null
+          referral_type: string
+          session_id: string
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          anonymous_session_id: string
+          created_at?: string
+          id?: string
+          meta?: Json
+          reason?: string | null
+          referral_type: string
+          session_id: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          anonymous_session_id?: string
+          created_at?: string
+          id?: string
+          meta?: Json
+          reason?: string | null
+          referral_type?: string
+          session_id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quit_referrals_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "center_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       quiz_attempts: {
         Row: {
