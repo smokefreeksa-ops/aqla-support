@@ -14,6 +14,372 @@ export type Database = {
   }
   public: {
     Tables: {
+      academy_attempts: {
+        Row: {
+          anonymous_session_id: string | null
+          created_at: string
+          duration_seconds: number | null
+          id: string
+          language: string | null
+          module_id: string
+          passed: boolean | null
+          raw_answers: Json
+          score: number | null
+          user_id: string | null
+        }
+        Insert: {
+          anonymous_session_id?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          language?: string | null
+          module_id: string
+          passed?: boolean | null
+          raw_answers?: Json
+          score?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          anonymous_session_id?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          language?: string | null
+          module_id?: string
+          passed?: boolean | null
+          raw_answers?: Json
+          score?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_attempts_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "academy_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academy_certificates: {
+        Row: {
+          attempt_id: string | null
+          certificate_code: string
+          full_name: string
+          id: string
+          is_valid: boolean
+          issued_at: string
+          module_slug: string
+          overall_score: number
+          revoke_reason: string | null
+          revoked_at: string | null
+          track_slug: string | null
+          verification_hash: string
+        }
+        Insert: {
+          attempt_id?: string | null
+          certificate_code: string
+          full_name: string
+          id?: string
+          is_valid?: boolean
+          issued_at?: string
+          module_slug: string
+          overall_score: number
+          revoke_reason?: string | null
+          revoked_at?: string | null
+          track_slug?: string | null
+          verification_hash: string
+        }
+        Update: {
+          attempt_id?: string | null
+          certificate_code?: string
+          full_name?: string
+          id?: string
+          is_valid?: boolean
+          issued_at?: string
+          module_slug?: string
+          overall_score?: number
+          revoke_reason?: string | null
+          revoked_at?: string | null
+          track_slug?: string | null
+          verification_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_certificates_attempt_id_fkey"
+            columns: ["attempt_id"]
+            isOneToOne: false
+            referencedRelation: "academy_attempts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academy_lessons: {
+        Row: {
+          body_ar: string | null
+          body_en: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          lesson_type: string
+          module_id: string
+          slug: string
+          sort_order: number
+          title_ar: string
+          title_en: string
+          updated_at: string
+        }
+        Insert: {
+          body_ar?: string | null
+          body_en?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          lesson_type?: string
+          module_id: string
+          slug: string
+          sort_order?: number
+          title_ar: string
+          title_en: string
+          updated_at?: string
+        }
+        Update: {
+          body_ar?: string | null
+          body_en?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          lesson_type?: string
+          module_id?: string
+          slug?: string
+          sort_order?: number
+          title_ar?: string
+          title_en?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_lessons_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "academy_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academy_modules: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          pass_threshold: number
+          requires_assessment: boolean
+          slug: string
+          sort_order: number
+          summary_ar: string | null
+          summary_en: string | null
+          title_ar: string
+          title_en: string
+          track_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          pass_threshold?: number
+          requires_assessment?: boolean
+          slug: string
+          sort_order?: number
+          summary_ar?: string | null
+          summary_en?: string | null
+          title_ar: string
+          title_en: string
+          track_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          pass_threshold?: number
+          requires_assessment?: boolean
+          slug?: string
+          sort_order?: number
+          summary_ar?: string | null
+          summary_en?: string | null
+          title_ar?: string
+          title_en?: string
+          track_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_modules_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "academy_tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academy_sensitive_questions: {
+        Row: {
+          correct_value: Json | null
+          created_at: string
+          id: string
+          is_active: boolean
+          module_id: string
+          prompt_ar: string
+          prompt_en: string
+          question_key: string
+          reverse_scored: boolean
+          scale: string
+          scoring_meta: Json
+          sort_order: number
+          updated_at: string
+          weight: number
+        }
+        Insert: {
+          correct_value?: Json | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          module_id: string
+          prompt_ar: string
+          prompt_en: string
+          question_key: string
+          reverse_scored?: boolean
+          scale?: string
+          scoring_meta?: Json
+          sort_order?: number
+          updated_at?: string
+          weight?: number
+        }
+        Update: {
+          correct_value?: Json | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          module_id?: string
+          prompt_ar?: string
+          prompt_en?: string
+          question_key?: string
+          reverse_scored?: boolean
+          scale?: string
+          scoring_meta?: Json
+          sort_order?: number
+          updated_at?: string
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_sensitive_questions_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "academy_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academy_sensitive_scenarios: {
+        Row: {
+          correct_option_key: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          module_id: string
+          options: Json
+          prompt_ar: string
+          prompt_en: string
+          rationale_ar: string | null
+          rationale_en: string | null
+          scenario_key: string
+          sort_order: number
+          updated_at: string
+          weight: number
+        }
+        Insert: {
+          correct_option_key?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          module_id: string
+          options?: Json
+          prompt_ar: string
+          prompt_en: string
+          rationale_ar?: string | null
+          rationale_en?: string | null
+          scenario_key: string
+          sort_order?: number
+          updated_at?: string
+          weight?: number
+        }
+        Update: {
+          correct_option_key?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          module_id?: string
+          options?: Json
+          prompt_ar?: string
+          prompt_en?: string
+          rationale_ar?: string | null
+          rationale_en?: string | null
+          scenario_key?: string
+          sort_order?: number
+          updated_at?: string
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academy_sensitive_scenarios_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "academy_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academy_tracks: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          slug: string
+          sort_order: number
+          summary_ar: string | null
+          summary_en: string | null
+          title_ar: string
+          title_en: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          slug: string
+          sort_order?: number
+          summary_ar?: string | null
+          summary_en?: string | null
+          title_ar: string
+          title_en: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          slug?: string
+          sort_order?: number
+          summary_ar?: string | null
+          summary_en?: string | null
+          title_ar?: string
+          title_en?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       aqla_passport_events: {
         Row: {
           anonymous_session_id: string
@@ -2753,6 +3119,7 @@ export type Database = {
         Returns: boolean
       }
       is_admin_user: { Args: { _user_id: string }; Returns: boolean }
+      verify_academy_certificate: { Args: { p_code: string }; Returns: Json }
       verify_training_certificate: { Args: { p_code: string }; Returns: Json }
     }
     Enums: {
