@@ -253,9 +253,11 @@ export const chatWithAssistant = createServerFn({ method: "POST" })
         bot_name: "Aqla Assistant",
         language: lang,
         suggested_route: null,
+        buttons: openingButtonsFor(center, lang),
         is_safety_critical: false,
       };
     }
+
 
     const system = buildSystem(center, lang);
 
