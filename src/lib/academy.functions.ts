@@ -81,6 +81,24 @@ const ServeModuleInput = z.object({
 export const serveAcademyModule = createServerFn({ method: "GET" })
   .inputValidator((input: unknown) => ServeModuleInput.parse(input ?? {}))
   .handler(async ({ data }) => {
+    type ModRow = {
+      id: string;
+      slug: string;
+      title_en: string;
+      title_ar: string;
+      summary_en: string | null;
+      summary_ar: string | null;
+      requires_assessment: boolean;
+      pass_threshold: number;
+    };
+    type LessonRow = {
+      id: string;
+      slug: string;
+      title_en: string;
+      title_ar: string;
+      lesson_type: string;
+      sort_order: number;
+    };
     const { data: mod, error } = await supabaseAdmin
       .from("academy_modules" as never)
       .select("id, slug, title_en, title_ar, summary_en, summary_ar, requires_assessment, pass_threshold")
@@ -88,17 +106,21 @@ export const serveAcademyModule = createServerFn({ method: "GET" })
       .eq("is_active", true)
       .maybeSingle();
     if (error || !mod) {
-      return { module: null, lessons: [], error: error?.message ?? "module_not_found" };
+      return {
+        module: null as ModRow | null,
+        lessons: [] as LessonRow[],
+        error: error?.message ?? "module_not_found",
+      };
     }
     const { data: lessons } = await supabaseAdmin
       .from("academy_lessons" as never)
       .select("id, slug, title_en, title_ar, lesson_type, sort_order")
-      .eq("module_id", (mod as { id: string }).id)
+      .eq("module_id", (mod as unknown as ModRow).id)
       .eq("is_active", true)
       .order("sort_order", { ascending: true });
     return {
-      module: mod as unknown,
-      lessons: (lessons ?? []) as unknown[],
+      module: mod as unknown as ModRow,
+      lessons: ((lessons ?? []) as unknown as LessonRow[]),
       error: null as string | null,
     };
   });
