@@ -90,10 +90,10 @@ export function AqlaAssistant() {
     return "general";
   }
 
-  async function send() {
-    const text = input.trim();
-    if (!text || sending) return;
-    const next: Msg[] = [...messages, { role: "user", content: text }];
+  async function sendText(text: string) {
+    const trimmed = text.trim();
+    if (!trimmed || sending) return;
+    const next: Msg[] = [...messages, { role: "user", content: trimmed }];
     setMessages(next);
     setInput("");
     setSending(true);
@@ -102,7 +102,7 @@ export function AqlaAssistant() {
         data: {
           lang,
           center_type: centerForPath(location.pathname),
-          messages: next,
+          messages: next.map(({ role, content }) => ({ role, content })),
         },
       });
       const r = res as { reply?: string; suggested_route?: string | null; buttons?: AqlaButton[] };
@@ -121,12 +121,12 @@ export function AqlaAssistant() {
     }
   }
 
+  async function send() {
+    await sendText(input);
+  }
+
   const handleButton = useAqlaButtonHandler({
-    sendMessage: (text: string) => {
-      setInput(text);
-      // defer so state updates before send
-      setTimeout(() => void send(), 0);
-    },
+    sendMessage: (text: string) => void sendText(text),
   });
 
   function resetPositions() {
