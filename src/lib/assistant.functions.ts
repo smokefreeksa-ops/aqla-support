@@ -35,22 +35,68 @@ const APPROVED_OPENINGS: Record<Center, Partial<Record<Lang, string>>> = {
     en: "Hello, I am Aqla's educational assistant. I do not diagnose, treat, or prescribe medication. How can I help?",
   },
   quit_pathway: {
-    ar: "مرحبًا بك في مسار الإقلاع. أساعدك بمعلومات عامة وتثقيفية فقط، دون تشخيص أو علاج أو وصف دواء.",
-    en: "Welcome to the Quit Pathway. I provide general education only — no diagnosis, treatment, or medication advice.",
+    ar: "أهلًا بك في مركز أقلع الافتراضي لدعم الإقلاع. سأرافقك خطوة بخطوة لفهم استخدامك للتدخين أو النيكوتين، ثم التقييم، وبناء خطة الإقلاع، والمتابعة، وطلب الدعم عند الحاجة. اختر ما يناسبك للبدء:",
+    en: "Welcome to the Aqla Virtual Quit Center. I will guide you step by step — understand your use, take the assessment, build a quit plan, follow up, and request support when needed.",
   },
   help_pathway: {
-    ar: "مرحبًا بك في مسار الدعم. أوجّهك للموارد المناسبة. للحالات الطارئة اطلب الرعاية الطبية فورًا.",
-    en: "Welcome to the Help Pathway. I can guide you to resources. For emergencies, seek urgent medical care.",
+    ar: "أهلًا بك في مسار أقلع لمساعدة شخص يهمك. سأساعدك على تصميم رسالة دعم محترمة وآمنة، دون ضغط أو لوم. اختر كيف نبدأ:",
+    en: "Welcome to the Aqla Help Pathway. I will help you craft a respectful, safe message of support — no pressure, no blame.",
   },
   learn_train: {
-    ar: "مرحبًا بك في التعلّم والتدريب. أساعدك في فهم المحتوى التثقيفي للأكاديمية.",
-    en: "Welcome to Learn & Train. I help you understand Aqla Academy's educational content.",
+    ar: "أهلًا بك في أكاديمية أقلع للتدريب والشهادات. سأرشدك داخل مسار تدريبي تفاعلي لتعلّم دعم الإقلاع عن التدخين والنيكوتين، والتدرّب على سيناريوهات واقعية، ثم دخول اختبار نهائي وإصدار شهادة إتمام قابلة للتحميل والمشاركة والتحقق.",
+    en: "Welcome to the Aqla Academy for Training & Certification. I will guide you through interactive training, realistic scenarios, a final exam, and a verifiable downloadable certificate.",
   },
   challenge_pathway: {
-    ar: "مرحبًا بك في مسار التحديات. أشاركك معلومات عامة عن التحديات والأنشطة.",
-    en: "Welcome to the Challenge Pathway. I share general information about challenges and activities.",
+    ar: "أهلًا بك في مجتمع وتحديات أقلع. سأساعدك على المشاركة في التحديات، الألعاب التوعوية، الهاشتاقات، دعوة الأصدقاء، جمع النقاط والأوسمة، وتصميم بطاقات توعوية. اختر ما يناسبك للبدء:",
+    en: "Welcome to the Aqla Community & Challenges. Join challenges, awareness games, hashtags, invites, points, medals, and design awareness cards.",
   },
 };
+
+// Starter conversational buttons rendered with the opening. Clicking sends
+// the label back into the chat as a user message.
+const OPENING_BUTTONS: Record<Center, Array<{ ar: string; en: string }>> = {
+  general: [],
+  quit_pathway: [
+    { ar: "أبدأ التقييم", en: "Start assessment" },
+    { ar: "أريد خطة للإقلاع", en: "I want a quit plan" },
+    { ar: "أحتاج مساعدة مع الرغبة الشديدة", en: "I need craving help" },
+    { ar: "أريد تقليل الاستخدام أولًا", en: "I want to reduce use first" },
+    { ar: "أريد متابعة تقدمي", en: "Track my progress" },
+    { ar: "أحتاج مراجعة مختص", en: "I need a specialist review" },
+  ],
+  help_pathway: [
+    { ar: "أنشئ رسالة دعم", en: "Create a support message" },
+    { ar: "كيف أبدأ الحديث بدون ضغط", en: "How to start without pressure" },
+    { ar: "أفهم تجربة من أحب", en: "Understand their experience" },
+    { ar: "موارد لمساعدته", en: "Resources to share" },
+  ],
+  learn_train: [
+    { ar: "ابدأ التدريب", en: "Start training" },
+    { ar: "عرض مسارات الأكاديمية", en: "View academy tracks" },
+    { ar: "متابعة تدريبي", en: "Resume my training" },
+    { ar: "ابدأ الاختبار النهائي", en: "Start final exam" },
+    { ar: "عرض شهادتي", en: "View my certificate" },
+    { ar: "التحقق من شهادة", en: "Verify a certificate" },
+  ],
+  challenge_pathway: [
+    { ar: "أبدأ تحديًا سريعًا", en: "Start a quick challenge" },
+    { ar: "أشارك في تحدي المعرفة", en: "Knowledge challenge" },
+    { ar: "أدعو أصدقائي", en: "Invite friends" },
+    { ar: "أصمم بطاقة توعوية", en: "Design an awareness card" },
+    { ar: "أجمع النقاط والأوسمة", en: "Collect points & medals" },
+    { ar: "أشارك في تحدي المدن", en: "Join city challenge" },
+    { ar: "أستخدم هاشتاقات أقلع", en: "Use Aqla hashtags" },
+    { ar: "أتابع أخبار وتحديثات أقلع", en: "Follow Aqla updates" },
+  ],
+};
+
+function openingButtonsFor(center: Center, lang: Lang) {
+  return OPENING_BUTTONS[center].map((b) => ({
+    label: lang === "ar" ? b.ar : (b.en || b.ar),
+    action: `chat:${b.ar}`, // unknown action -> falls back to sendMessage(label)
+  }));
+}
+
 
 // ---------- Route registry (no duplicates) ----------
 const ROUTES = {
