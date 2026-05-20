@@ -40,6 +40,7 @@ import { Route as EnRouteImport } from './routes/en'
 import { Route as CravingCoachRouteImport } from './routes/craving-coach'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CommunityChallengesRouteImport } from './routes/community-challenges'
 import { Route as CityChallengeRouteImport } from './routes/city-challenge'
 import { Route as ChallengesRouteImport } from './routes/challenges'
 import { Route as ChallengePathwayRouteImport } from './routes/challenge-pathway'
@@ -210,6 +211,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CommunityChallengesRoute = CommunityChallengesRouteImport.update({
+  id: '/community-challenges',
+  path: '/community-challenges',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CityChallengeRoute = CityChallengeRouteImport.update({
   id: '/city-challenge',
   path: '/city-challenge',
@@ -292,6 +298,7 @@ export interface FileRoutesByFullPath {
   '/challenge-pathway': typeof ChallengePathwayRoute
   '/challenges': typeof ChallengesRoute
   '/city-challenge': typeof CityChallengeRoute
+  '/community-challenges': typeof CommunityChallengesRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/craving-coach': typeof CravingCoachRoute
@@ -339,6 +346,7 @@ export interface FileRoutesByTo {
   '/challenge-pathway': typeof ChallengePathwayRoute
   '/challenges': typeof ChallengesRoute
   '/city-challenge': typeof CityChallengeRoute
+  '/community-challenges': typeof CommunityChallengesRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/craving-coach': typeof CravingCoachRoute
@@ -387,6 +395,7 @@ export interface FileRoutesById {
   '/challenge-pathway': typeof ChallengePathwayRoute
   '/challenges': typeof ChallengesRoute
   '/city-challenge': typeof CityChallengeRoute
+  '/community-challenges': typeof CommunityChallengesRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/craving-coach': typeof CravingCoachRoute
@@ -436,6 +445,7 @@ export interface FileRouteTypes {
     | '/challenge-pathway'
     | '/challenges'
     | '/city-challenge'
+    | '/community-challenges'
     | '/contact'
     | '/cookies'
     | '/craving-coach'
@@ -483,6 +493,7 @@ export interface FileRouteTypes {
     | '/challenge-pathway'
     | '/challenges'
     | '/city-challenge'
+    | '/community-challenges'
     | '/contact'
     | '/cookies'
     | '/craving-coach'
@@ -530,6 +541,7 @@ export interface FileRouteTypes {
     | '/challenge-pathway'
     | '/challenges'
     | '/city-challenge'
+    | '/community-challenges'
     | '/contact'
     | '/cookies'
     | '/craving-coach'
@@ -578,6 +590,7 @@ export interface RootRouteChildren {
   ChallengePathwayRoute: typeof ChallengePathwayRoute
   ChallengesRoute: typeof ChallengesRoute
   CityChallengeRoute: typeof CityChallengeRoute
+  CommunityChallengesRoute: typeof CommunityChallengesRoute
   ContactRoute: typeof ContactRoute
   CookiesRoute: typeof CookiesRoute
   CravingCoachRoute: typeof CravingCoachRoute
@@ -833,6 +846,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/community-challenges': {
+      id: '/community-challenges'
+      path: '/community-challenges'
+      fullPath: '/community-challenges'
+      preLoaderRoute: typeof CommunityChallengesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/city-challenge': {
       id: '/city-challenge'
       path: '/city-challenge'
@@ -955,6 +975,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChallengePathwayRoute: ChallengePathwayRoute,
   ChallengesRoute: ChallengesRoute,
   CityChallengeRoute: CityChallengeRoute,
+  CommunityChallengesRoute: CommunityChallengesRoute,
   ContactRoute: ContactRoute,
   CookiesRoute: CookiesRoute,
   CravingCoachRoute: CravingCoachRoute,
