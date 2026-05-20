@@ -81,6 +81,14 @@ export function AqlaAssistant() {
     error: isRTL ? "تعذّر الإرسال. حاول مرة أخرى." : "Couldn't send. Please try again.",
   };
 
+  function centerForPath(path: string): "general" | "quit_pathway" | "help_pathway" | "learn_train" | "challenge_pathway" {
+    if (path.startsWith("/quit-pathway")) return "quit_pathway";
+    if (path.startsWith("/help-pathway") || path.startsWith("/request-support")) return "help_pathway";
+    if (path.startsWith("/learn-train") || path.startsWith("/learn") || path.startsWith("/training")) return "learn_train";
+    if (path.startsWith("/challenge") || path.startsWith("/city-challenge")) return "challenge_pathway";
+    return "general";
+  }
+
   async function send() {
     const text = input.trim();
     if (!text || sending) return;
@@ -89,8 +97,15 @@ export function AqlaAssistant() {
     setInput("");
     setSending(true);
     try {
-      const { reply } = await chatFn({ data: { lang, messages: next } });
-      setMessages([...next, { role: "assistant", content: reply || "…" }]);
+      const res = await chatFn({
+        data: {
+          lang,
+          center_type: centerForPath(location.pathname),
+          messages: next,
+        },
+      });
+      const reply = (res as { reply?: string }).reply || "…";
+      setMessages([...next, { role: "assistant", content: reply }]);
     } catch (e) {
       console.error(e);
       setMessages([...next, { role: "assistant", content: t.error }]);
