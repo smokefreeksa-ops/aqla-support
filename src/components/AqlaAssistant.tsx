@@ -5,11 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import { MessageCircle, X, Send, Loader2, RotateCcw } from "lucide-react";
 import { getAssistantStatus, chatWithAssistant } from "@/lib/assistant.functions";
 import { useDraggableWidget } from "@/hooks/use-draggable-widget";
+import { useAqlaButtonHandler, routeToButton, type AqlaButton } from "@/lib/aqla-actions";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
 const PUBLIC_PATHS = ["/", "/about", "/assessment", "/volunteer", "/request-support", "/city-challenge", "/challenges", "/learn-train", "/shop", "/poster-studio", "/impact"];
 
-type Msg = { role: "user" | "assistant"; content: string };
+type Msg = { role: "user" | "assistant"; content: string; buttons?: AqlaButton[] };
 
 export function AqlaAssistant() {
   const [lang, setLang] = useState<"en" | "ar">("en");
