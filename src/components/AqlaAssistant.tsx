@@ -208,15 +208,30 @@ export function AqlaAssistant() {
 
           <div ref={scrollRef} className="flex-1 space-y-2 overflow-y-auto bg-background p-3">
             {messages.map((m, i) => (
-              <div
-                key={i}
-                className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3 py-2 text-sm ${
-                  m.role === "user"
-                    ? `${isRTL ? "mr-auto" : "ml-auto"} bg-primary text-primary-foreground`
-                    : `${isRTL ? "ml-auto" : "mr-auto"} bg-muted text-foreground`
-                }`}
-              >
-                {m.content}
+              <div key={i} className="space-y-1">
+                <div
+                  className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3 py-2 text-sm ${
+                    m.role === "user"
+                      ? `${isRTL ? "mr-auto" : "ml-auto"} bg-primary text-primary-foreground`
+                      : `${isRTL ? "ml-auto" : "mr-auto"} bg-muted text-foreground`
+                  }`}
+                >
+                  {m.content}
+                </div>
+                {m.role === "assistant" && m.buttons && m.buttons.length > 0 && (
+                  <div className={`flex flex-wrap gap-2 ${isRTL ? "ml-auto justify-end" : "mr-auto justify-start"} max-w-[85%]`}>
+                    {m.buttons.map((b, j) => (
+                      <button
+                        key={j}
+                        type="button"
+                        onClick={() => handleButton(b)}
+                        className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary hover:bg-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                      >
+                        {b.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
             {sending && (
