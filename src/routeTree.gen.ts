@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WhenToSeekHelpRouteImport } from './routes/when-to-seek-help'
 import { Route as VolunteerRouteImport } from './routes/volunteer'
+import { Route as UpdatesRouteImport } from './routes/updates'
 import { Route as TrainingRouteImport } from './routes/training'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -27,6 +28,7 @@ import { Route as QuitCenterRouteImport } from './routes/quit-center'
 import { Route as ProfessionalLibraryRouteImport } from './routes/professional-library'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PosterStudioRouteImport } from './routes/poster-studio'
+import { Route as PointsMedalsRouteImport } from './routes/points-medals'
 import { Route as MovementRouteImport } from './routes/movement'
 import { Route as MedicalDisclaimerRouteImport } from './routes/medical-disclaimer'
 import { Route as LoginRouteImport } from './routes/login'
@@ -64,6 +66,11 @@ const WhenToSeekHelpRoute = WhenToSeekHelpRouteImport.update({
 const VolunteerRoute = VolunteerRouteImport.update({
   id: '/volunteer',
   path: '/volunteer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UpdatesRoute = UpdatesRouteImport.update({
+  id: '/updates',
+  path: '/updates',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TrainingRoute = TrainingRouteImport.update({
@@ -144,6 +151,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const PosterStudioRoute = PosterStudioRouteImport.update({
   id: '/poster-studio',
   path: '/poster-studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PointsMedalsRoute = PointsMedalsRouteImport.update({
+  id: '/points-medals',
+  path: '/points-medals',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MovementRoute = MovementRouteImport.update({
@@ -312,6 +324,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/medical-disclaimer': typeof MedicalDisclaimerRoute
   '/movement': typeof MovementRoute
+  '/points-medals': typeof PointsMedalsRoute
   '/poster-studio': typeof PosterStudioRoute
   '/privacy': typeof PrivacyRoute
   '/professional-library': typeof ProfessionalLibraryRoute
@@ -328,6 +341,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
+  '/updates': typeof UpdatesRoute
   '/volunteer': typeof VolunteerRoute
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
@@ -360,6 +374,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/medical-disclaimer': typeof MedicalDisclaimerRoute
   '/movement': typeof MovementRoute
+  '/points-medals': typeof PointsMedalsRoute
   '/poster-studio': typeof PosterStudioRoute
   '/privacy': typeof PrivacyRoute
   '/professional-library': typeof ProfessionalLibraryRoute
@@ -376,6 +391,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
+  '/updates': typeof UpdatesRoute
   '/volunteer': typeof VolunteerRoute
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
@@ -409,6 +425,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/medical-disclaimer': typeof MedicalDisclaimerRoute
   '/movement': typeof MovementRoute
+  '/points-medals': typeof PointsMedalsRoute
   '/poster-studio': typeof PosterStudioRoute
   '/privacy': typeof PrivacyRoute
   '/professional-library': typeof ProfessionalLibraryRoute
@@ -425,6 +442,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
+  '/updates': typeof UpdatesRoute
   '/volunteer': typeof VolunteerRoute
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
@@ -459,6 +477,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/medical-disclaimer'
     | '/movement'
+    | '/points-medals'
     | '/poster-studio'
     | '/privacy'
     | '/professional-library'
@@ -475,6 +494,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tools'
     | '/training'
+    | '/updates'
     | '/volunteer'
     | '/when-to-seek-help'
     | '/admin/data-dictionary'
@@ -507,6 +527,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/medical-disclaimer'
     | '/movement'
+    | '/points-medals'
     | '/poster-studio'
     | '/privacy'
     | '/professional-library'
@@ -523,6 +544,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tools'
     | '/training'
+    | '/updates'
     | '/volunteer'
     | '/when-to-seek-help'
     | '/admin/data-dictionary'
@@ -555,6 +577,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/medical-disclaimer'
     | '/movement'
+    | '/points-medals'
     | '/poster-studio'
     | '/privacy'
     | '/professional-library'
@@ -571,6 +594,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tools'
     | '/training'
+    | '/updates'
     | '/volunteer'
     | '/when-to-seek-help'
     | '/admin/data-dictionary'
@@ -604,6 +628,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   MedicalDisclaimerRoute: typeof MedicalDisclaimerRoute
   MovementRoute: typeof MovementRoute
+  PointsMedalsRoute: typeof PointsMedalsRoute
   PosterStudioRoute: typeof PosterStudioRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfessionalLibraryRoute: typeof ProfessionalLibraryRoute
@@ -620,6 +645,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   ToolsRoute: typeof ToolsRoute
   TrainingRoute: typeof TrainingRoute
+  UpdatesRoute: typeof UpdatesRoute
   VolunteerRoute: typeof VolunteerRoute
   WhenToSeekHelpRoute: typeof WhenToSeekHelpRoute
   CertificateCodeRoute: typeof CertificateCodeRoute
@@ -641,6 +667,13 @@ declare module '@tanstack/react-router' {
       path: '/volunteer'
       fullPath: '/volunteer'
       preLoaderRoute: typeof VolunteerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/updates': {
+      id: '/updates'
+      path: '/updates'
+      fullPath: '/updates'
+      preLoaderRoute: typeof UpdatesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/training': {
@@ -753,6 +786,13 @@ declare module '@tanstack/react-router' {
       path: '/poster-studio'
       fullPath: '/poster-studio'
       preLoaderRoute: typeof PosterStudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/points-medals': {
+      id: '/points-medals'
+      path: '/points-medals'
+      fullPath: '/points-medals'
+      preLoaderRoute: typeof PointsMedalsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/movement': {
@@ -989,6 +1029,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   MedicalDisclaimerRoute: MedicalDisclaimerRoute,
   MovementRoute: MovementRoute,
+  PointsMedalsRoute: PointsMedalsRoute,
   PosterStudioRoute: PosterStudioRoute,
   PrivacyRoute: PrivacyRoute,
   ProfessionalLibraryRoute: ProfessionalLibraryRoute,
@@ -1005,6 +1046,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   ToolsRoute: ToolsRoute,
   TrainingRoute: TrainingRoute,
+  UpdatesRoute: UpdatesRoute,
   VolunteerRoute: VolunteerRoute,
   WhenToSeekHelpRoute: WhenToSeekHelpRoute,
   CertificateCodeRoute: CertificateCodeRoute,

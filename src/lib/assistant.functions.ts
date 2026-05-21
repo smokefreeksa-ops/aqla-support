@@ -22,24 +22,37 @@ type Lang = (typeof PRIMARY_LANGS)[number] | (typeof FALLBACK_LANGS)[number];
 const CenterType = z.enum([
   "general",
   "quit_pathway",
+  "quit_center",
   "help_pathway",
+  "help_center",
   "learn_train",
+  "academy",
   "challenge_pathway",
+  "community_challenges",
 ]);
 type Center = z.infer<typeof CenterType>;
+type CanonicalCenter = "general" | "quit_pathway" | "help_pathway" | "learn_train" | "challenge_pathway";
+
+function normalizeCenter(center: Center): CanonicalCenter {
+  if (center === "quit_center") return "quit_pathway";
+  if (center === "help_center") return "help_pathway";
+  if (center === "academy") return "learn_train";
+  if (center === "community_challenges") return "challenge_pathway";
+  return center;
+}
 
 // ---------- Approved openings (static, never generated) ----------
-const APPROVED_OPENINGS: Record<Center, Partial<Record<Lang, string>>> = {
+const APPROVED_OPENINGS: Record<CanonicalCenter, Partial<Record<Lang, string>>> = {
   general: {
-    ar: "مرحبًا، أنا مساعد أقلع التثقيفي. لا أقدّم تشخيصًا أو علاجًا، ولا أصف أدوية. كيف يمكنني مساعدتك؟",
+    ar: "مرحبًا، أنا مساعد أقلع التثقيفي. لا أقدّم تشخيصًا أو علاجًا، ولا أصف أدوية. اختر أحد مراكز أقلع أو اكتب سؤالك التوعوي.",
     en: "Hello, I am Aqla's educational assistant. I do not diagnose, treat, or prescribe medication. How can I help?",
   },
   quit_pathway: {
-    ar: "أهلًا بك في مركز أقلع الافتراضي لدعم الإقلاع. سأرافقك خطوة بخطوة لفهم استخدامك للتدخين أو النيكوتين، ثم التقييم، وبناء خطة الإقلاع، والمتابعة، وطلب الدعم عند الحاجة. اختر ما يناسبك للبدء:",
+    ar: "أهلًا بك في مركز أقلع الافتراضي لدعم الإقلاع. سأرشدك خطوة بخطوة لفهم استخدامك للتدخين أو النيكوتين، تقييم مستوى الاعتماد، بناء خطة مناسبة، ومتابعتك بطريقة آمنة. لن نعرض بياناتك الصحية في أي مشاركة عامة، ولن نقدم وصفات أو جرعات دوائية.",
     en: "Welcome to the Aqla Virtual Quit Center. I will guide you step by step — understand your use, take the assessment, build a quit plan, follow up, and request support when needed.",
   },
   help_pathway: {
-    ar: "أهلًا بك في مسار أقلع لمساعدة شخص يهمك. سأساعدك على تصميم رسالة دعم محترمة وآمنة، دون ضغط أو لوم. اختر كيف نبدأ:",
+    ar: "أهلًا بك في مسار المساعدة من أقلع. سأساعدك على دعم شخص يهمك بطريقة محترمة وآمنة، دون ضغط أو لوم، من خلال رسالة أو بطاقة دعم قابلة للمشاركة.",
     en: "Welcome to the Aqla Help Pathway. I will help you craft a respectful, safe message of support — no pressure, no blame.",
   },
   learn_train: {
@@ -47,53 +60,54 @@ const APPROVED_OPENINGS: Record<Center, Partial<Record<Lang, string>>> = {
     en: "Welcome to the Aqla Academy for Training & Certification. I will guide you through interactive training, realistic scenarios, a final exam, and a verifiable downloadable certificate.",
   },
   challenge_pathway: {
-    ar: "أهلًا بك في مجتمع وتحديات أقلع. سأساعدك على المشاركة في التحديات، الألعاب التوعوية، الهاشتاقات، دعوة الأصدقاء، جمع النقاط والأوسمة، وتصميم بطاقات توعوية. اختر ما يناسبك للبدء:",
+    ar: "أهلًا بك في مجتمع وتحديات أقلع. هنا يمكنك المشاركة في تحديات توعوية، جمع النقاط والأوسمة، دعوة الأصدقاء، تصميم بطاقات قابلة للمشاركة، واستخدام هاشتاقات أقلع لدعم الأثر المجتمعي دون عرض أي بيانات صحية خاصة.",
     en: "Welcome to the Aqla Community & Challenges. Join challenges, awareness games, hashtags, invites, points, medals, and design awareness cards.",
   },
 };
 
 // Starter conversational buttons rendered with the opening. Clicking sends
 // the label back into the chat as a user message.
-const OPENING_BUTTONS: Record<Center, Array<{ ar: string; en: string }>> = {
+const OPENING_BUTTONS: Record<CanonicalCenter, Array<{ ar: string; en: string; action?: string }>> = {
   general: [],
   quit_pathway: [
-    { ar: "أبدأ التقييم", en: "Start assessment" },
-    { ar: "أريد خطة للإقلاع", en: "I want a quit plan" },
-    { ar: "أحتاج مساعدة مع الرغبة الشديدة", en: "I need craving help" },
+    { ar: "أبدأ التقييم", en: "Start assessment", action: "start_intake" },
+    { ar: "أريد خطة للإقلاع", en: "I want a quit plan", action: "generate_quit_plan" },
+    { ar: "أحتاج مساعدة مع الرغبة الشديدة", en: "I need craving help", action: "craving_rescue" },
     { ar: "أريد تقليل الاستخدام أولًا", en: "I want to reduce use first" },
-    { ar: "أريد متابعة تقدمي", en: "Track my progress" },
-    { ar: "أحتاج مراجعة مختص", en: "I need a specialist review" },
+    { ar: "أريد متابعة تقدمي", en: "Track my progress", action: "log_followup" },
+    { ar: "أحتاج مراجعة مختص", en: "I need a specialist review", action: "create_support_request" },
   ],
   help_pathway: [
-    { ar: "أنشئ رسالة دعم", en: "Create a support message" },
-    { ar: "كيف أبدأ الحديث بدون ضغط", en: "How to start without pressure" },
-    { ar: "أفهم تجربة من أحب", en: "Understand their experience" },
-    { ar: "موارد لمساعدته", en: "Resources to share" },
+    { ar: "أنشئ رسالة دعم", en: "Create a support message", action: "create_support_message" },
+    { ar: "أصمم بطاقة دعم", en: "Design a support card", action: "create_support_card" },
+    { ar: "أتعلم كيف أساعد بدون ضغط", en: "Learn how to help without pressure" },
+    { ar: "أرسل عبر WhatsApp", en: "Send via WhatsApp", action: "send_whatsapp" },
+    { ar: "أحتاج نصيحة قبل الحديث معه", en: "I need advice before talking" },
   ],
   learn_train: [
-    { ar: "ابدأ التدريب", en: "Start training" },
+    { ar: "ابدأ التدريب", en: "Start training", action: "start_training" },
     { ar: "عرض مسارات الأكاديمية", en: "View academy tracks" },
-    { ar: "متابعة تدريبي", en: "Resume my training" },
-    { ar: "ابدأ الاختبار النهائي", en: "Start final exam" },
-    { ar: "عرض شهادتي", en: "View my certificate" },
-    { ar: "التحقق من شهادة", en: "Verify a certificate" },
+    { ar: "متابعة تدريبي", en: "Resume my training", action: "resume_training" },
+    { ar: "ابدأ الاختبار النهائي", en: "Start final exam", action: "start_exam_mode" },
+    { ar: "عرض شهادتي", en: "View my certificate", action: "view_certificate" },
+    { ar: "التحقق من شهادة", en: "Verify a certificate", action: "verify_certificate" },
   ],
   challenge_pathway: [
-    { ar: "أبدأ تحديًا سريعًا", en: "Start a quick challenge" },
-    { ar: "أشارك في تحدي المعرفة", en: "Knowledge challenge" },
-    { ar: "أدعو أصدقائي", en: "Invite friends" },
-    { ar: "أصمم بطاقة توعوية", en: "Design an awareness card" },
-    { ar: "أجمع النقاط والأوسمة", en: "Collect points & medals" },
-    { ar: "أشارك في تحدي المدن", en: "Join city challenge" },
-    { ar: "أستخدم هاشتاقات أقلع", en: "Use Aqla hashtags" },
-    { ar: "أتابع أخبار وتحديثات أقلع", en: "Follow Aqla updates" },
+    { ar: "أبدأ تحديًا سريعًا", en: "Start a quick challenge", action: "start_challenge" },
+    { ar: "أشارك في تحدي المعرفة", en: "Knowledge challenge", action: "knowledge_challenge" },
+    { ar: "أدعو أصدقائي", en: "Invite friends", action: "generate_invite_link" },
+    { ar: "أصمم بطاقة توعوية", en: "Design an awareness card", action: "create_awareness_card" },
+    { ar: "أجمع النقاط والأوسمة", en: "Collect points & medals", action: "view_points" },
+    { ar: "أشارك في تحدي المدن", en: "Join city challenge", action: "city_challenge" },
+    { ar: "أستخدم هاشتاقات أقلع", en: "Use Aqla hashtags", action: "create_hashtag_post" },
+    { ar: "أتابع أخبار وتحديثات أقلع", en: "Follow Aqla updates", action: "view_updates" },
   ],
 };
 
-function openingButtonsFor(center: Center, lang: Lang) {
+function openingButtonsFor(center: CanonicalCenter, lang: Lang) {
   return OPENING_BUTTONS[center].map((b) => ({
-    label: lang === "ar" ? b.ar : (b.en || b.ar),
-    action: `chat:${b.ar}`, // unknown action -> falls back to sendMessage(label)
+    label: lang === "en" ? (b.en || b.ar) : b.ar,
+    action: b.action ?? `chat:${b.ar}`,
   }));
 }
 
@@ -108,7 +122,7 @@ const ROUTES = {
 
 // ---------- Safety override (deterministic, in code) ----------
 const EMERGENCY_PATTERNS =
-  /(chest pain|short(ness)? of breath|coughing blood|suicid|kill myself|أعراض طارئة|ألم (?:ال)?صدر|ضيق (?:ال)?تنفس|نفث (?:ال)?دم|انتحار|أريد أن أموت)/i;
+  /(chest pain|short(ness)? of breath|coughing blood|suicid|kill myself|أعراض طارئة|ألم (?:شديد )?(?:في )?(?:ال)?صدر|ضيق (?:شديد )?(?:في )?(?:ال)?تنفس|نفث (?:ال)?دم|انتحار|أريد أن أموت)/i;
 
 const MEDICATION_PATTERNS =
   /(dose|dosage|mg\b|milligram|prescribe|prescription|nicotine patch dose|varenicline|bupropion|champix|zyban|جرعة|ملغ|ملج|وصف(?:ة)? طبية|بوبروبيون|فارينيكلين|تشامبيكس)/i;
@@ -143,14 +157,14 @@ function safetyOverride(userText: string, lang: Lang): string | null {
 }
 
 // ---------- System prompt (structured JSON contract) ----------
-function buildSystem(center: Center, lang: Lang) {
+function buildSystem(center: CanonicalCenter, lang: Lang) {
   const isFallback = (FALLBACK_LANGS as readonly string[]).includes(lang);
   const replyLang = isFallback ? "Arabic + English (bilingual)" : lang;
   return `You are the Aqla Education Assistant — a physician-supervised, education-only bilingual chatbot for the Aqla (أقلع) smoking and nicotine cessation program. Your bot_name is "Aqla Assistant" and you must never claim to be a different bot or model.
 
 Current center context: ${center}
 Reply language: ${replyLang}
-Arabic is the primary language of Aqla. If unsure, mirror the user's language.
+Arabic is the primary language of Aqla. If Reply language is ar, always answer in Arabic even when the user types English words like hi or hello.
 
 STRICT RULES:
 - You provide GENERAL EDUCATIONAL INFORMATION ONLY.
@@ -226,7 +240,7 @@ export const chatWithAssistant = createServerFn({ method: "POST" })
     }
 
     const lang = data.lang as Lang;
-    const center = data.center_type as Center;
+    const center = normalizeCenter(data.center_type as Center);
     const lastUser = [...data.messages].reverse().find((m) => m.role === "user");
 
     // Deterministic safety override BEFORE any model call
