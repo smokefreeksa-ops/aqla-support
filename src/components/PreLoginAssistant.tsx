@@ -6,8 +6,20 @@ import { useDraggableWidget } from "@/hooks/use-draggable-widget";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
+const BOT_NAME = "سوالف أقلع 😄";
+const TEASER = "ما ودك تسجل الحين؟ ولا يهمك… حتى التسجيل يحتاج \u201cنية إقلاع\u201d شكله 😄";
 const OPENING =
-  "يا هلا والله. تقدر تسألني عن أقلع، طريقة التسجيل، المسارات المتاحة، الخصوصية، أو كيف تبدأ بعد الدخول.";
+  "يا هلا والله 👋\nأنا سوالف أقلع 😄\nإذا ما ودك تسجل الحين، عادي… أقدر أشرح لك المنصة، أختار لك المسار المناسب، أو أقول لك نكتة خفيفة عن النيكوتين بدون جلد.";
+
+const STARTERS = [
+  "قل لي نكتة",
+  "وش فكرة أقلع؟",
+  "ليش أسجل؟",
+  "اختَر لي المسار المناسب",
+  "هل أقلع مجاني؟",
+  "من هو مؤسس أقلع؟",
+  "تواصل عبر واتساب",
+];
 
 export function PreLoginAssistant() {
   const [open, setOpen] = useState(false);
@@ -36,8 +48,8 @@ export function PreLoginAssistant() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, sending]);
 
-  async function send() {
-    const trimmed = input.trim();
+  async function sendText(text: string) {
+    const trimmed = text.trim();
     if (!trimmed || sending) return;
     const next: Msg[] = [...messages, { role: "user", content: trimmed }];
     setMessages(next);
@@ -47,7 +59,7 @@ export function PreLoginAssistant() {
       const res = (await chatFn({
         data: {
           lang: "ar",
-          center_type: "general",
+          center_type: "public_pre_login",
           messages: next.map(({ role, content }) => ({ role, content })),
         },
       })) as { reply?: string };
@@ -67,6 +79,8 @@ export function PreLoginAssistant() {
     }
   }
 
+  const showStarters = messages.length <= 1 && !sending;
+
   return (
     <>
       {!open && (
@@ -84,18 +98,31 @@ export function PreLoginAssistant() {
             launcher.onPointerDown(e);
           }}
         >
-          <button
-            type="button"
-            onClick={() => {
-              if (movedRef.current || launcher.dragging) return;
-              setOpen(true);
-            }}
-            dir="rtl"
-            className="inline-flex items-center gap-2 rounded-full bg-[#c9a84c] px-4 py-2.5 text-sm font-semibold text-[#0b3a25] shadow-lg transition hover:bg-[#d8b85f] focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/50"
-          >
-            <MessageCircle className="h-4 w-4" />
-            <span>عندك سؤال قبل التسجيل؟</span>
-          </button>
+          <div dir="rtl" className="flex flex-col items-end gap-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                if (movedRef.current || launcher.dragging) return;
+                setOpen(true);
+              }}
+              dir="rtl"
+              className="inline-flex items-center gap-2 rounded-full bg-[#c9a84c] px-4 py-2.5 text-sm font-semibold text-[#0b3a25] shadow-lg transition hover:bg-[#d8b85f] focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/50"
+            >
+              <MessageCircle className="h-4 w-4" />
+              <span style={{ unicodeBidi: "plaintext" }}>{BOT_NAME}</span>
+            </button>
+            <p
+              dir="rtl"
+              onClick={() => {
+                if (movedRef.current || launcher.dragging) return;
+                setOpen(true);
+              }}
+              className="max-w-[16rem] cursor-pointer rounded-xl bg-black/40 px-3 py-1.5 text-[11px] leading-relaxed text-[#f4f0e1] backdrop-blur-sm sm:text-xs"
+              style={{ unicodeBidi: "plaintext", textAlign: "right" }}
+            >
+              {TEASER}
+            </p>
+          </div>
         </div>
       )}
 
@@ -104,10 +131,10 @@ export function PreLoginAssistant() {
           dir="rtl"
           lang="ar"
           className="fixed bottom-[calc(24px+env(safe-area-inset-bottom,0px))] left-4 sm:left-6 flex w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#c9a84c]/40 bg-white text-foreground shadow-2xl"
-          style={{ height: "min(28rem, calc(100vh - 8rem))", zIndex: 120 }}
+          style={{ height: "min(30rem, calc(100vh - 6rem))", zIndex: 120 }}
         >
           <div className="flex items-center justify-between gap-2 border-b bg-[#0b3a25] px-3 py-2 text-[#f4f0e1]">
-            <span className="text-sm font-semibold">مساعد أقلع قبل التسجيل</span>
+            <span className="text-sm font-semibold" style={{ unicodeBidi: "plaintext" }}>{BOT_NAME}</span>
             <button
               type="button"
               onClick={() => setOpen(false)}
@@ -138,12 +165,27 @@ export function PreLoginAssistant() {
                 <Loader2 className="h-3 w-3 animate-spin" /> يكتب…
               </div>
             )}
+            {showStarters && (
+              <div dir="rtl" className="flex flex-wrap gap-1.5 pt-1">
+                {STARTERS.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => void sendText(s)}
+                    className="rounded-full border border-[#0b3a25]/20 bg-[#0b3a25]/5 px-3 py-1 text-xs text-[#0b3a25] transition hover:bg-[#0b3a25]/10"
+                    style={{ unicodeBidi: "plaintext" }}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              void send();
+              void sendText(input);
             }}
             className="border-t bg-card p-2"
           >
@@ -154,11 +196,11 @@ export function PreLoginAssistant() {
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
-                    void send();
+                    void sendText(input);
                   }
                 }}
                 rows={1}
-                placeholder="اكتب سؤالك…"
+                placeholder="اكتب رسالتك…"
                 dir="rtl"
                 className="max-h-32 flex-1 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm text-right focus:outline-none focus:ring-2 focus:ring-[#0b3a25]/30"
               />
