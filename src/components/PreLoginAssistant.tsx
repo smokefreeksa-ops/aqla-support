@@ -121,7 +121,18 @@ export function PreLoginAssistant() {
               className="max-w-[16rem] cursor-pointer rounded-xl bg-black/40 px-3 py-1.5 text-[11px] leading-relaxed text-[#f4f0e1] backdrop-blur-sm sm:text-xs"
               style={{ unicodeBidi: "plaintext", textAlign: "right" }}
             >
-              {TEASER}
+              {TEASER_1}
+            </p>
+            <p
+              dir="rtl"
+              onClick={() => {
+                if (movedRef.current || launcher.dragging) return;
+                setOpen(true);
+              }}
+              className="max-w-[16rem] cursor-pointer rounded-xl bg-black/40 px-3 py-1.5 text-[11px] leading-relaxed text-[#f4f0e1] backdrop-blur-sm sm:text-xs"
+              style={{ unicodeBidi: "plaintext", textAlign: "right" }}
+            >
+              {TEASER_2}
             </p>
           </div>
         </div>
