@@ -179,6 +179,7 @@ export function AqlaAssistant() {
       {open && (
         <div
           dir={isRTL ? "rtl" : "ltr"}
+          lang={lang}
           className="fixed bottom-[calc(24px+env(safe-area-inset-bottom,0px))] left-4 sm:left-6 flex w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-elegant"
           style={{ height: "min(28rem, calc(100vh - 8rem))", zIndex: 50 }}
         >
@@ -212,7 +213,8 @@ export function AqlaAssistant() {
             {messages.map((m, i) => (
               <div key={i} className="space-y-1">
                 <div
-                  className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3 py-2 text-sm ${
+                  dir={isRTL ? "rtl" : "ltr"}
+                  className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3 py-2 text-sm ${isRTL ? "text-right" : "text-left"} ${
                     m.role === "user"
                       ? `${isRTL ? "mr-auto" : "ml-auto"} bg-primary text-primary-foreground`
                       : `${isRTL ? "ml-auto" : "mr-auto"} bg-muted text-foreground`
@@ -221,13 +223,13 @@ export function AqlaAssistant() {
                   {m.content}
                 </div>
                 {m.role === "assistant" && m.buttons && m.buttons.length > 0 && (
-                  <div className={`flex flex-wrap gap-2 ${isRTL ? "ml-auto justify-end" : "mr-auto justify-start"} max-w-[85%]`}>
+                  <div className={`flex flex-wrap gap-2 ${isRTL ? "ml-auto flex-row-reverse justify-end" : "mr-auto justify-start"} max-w-[85%]`}>
                     {m.buttons.map((b, j) => (
                       <button
                         key={j}
                         type="button"
                         onClick={() => handleButton(b)}
-                        className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary hover:bg-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                         className={`rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary hover:bg-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/40 ${isRTL ? "text-right" : "text-left"}`}
                       >
                         {b.label}
                       </button>
@@ -263,7 +265,8 @@ export function AqlaAssistant() {
                 }}
                 rows={1}
                 placeholder={t.placeholder}
-                className="max-h-32 flex-1 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                dir={isRTL ? "rtl" : "ltr"}
+                className={`max-h-32 flex-1 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 ${isRTL ? "text-right" : "text-left"}`}
               />
               <button
                 type="submit"
