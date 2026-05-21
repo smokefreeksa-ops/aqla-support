@@ -61,7 +61,7 @@ export function AqlaCenterChat({ centerType }: { centerType: CenterType }) {
         const r = res as { reply?: string; suggested_route?: string | null; buttons?: AqlaButton[] };
         const buttons: AqlaButton[] = Array.isArray(r.buttons) ? r.buttons : [];
         if (r.suggested_route) {
-          const btn = routeToButton(r.suggested_route, lang);
+          const btn = routeToButton(r.suggested_route, lang === "en" ? "en" : "ar");
           if (btn && !buttons.some((b) => b.action === btn.action)) buttons.push(btn);
         }
         setMessages([{ role: "assistant", content: r.reply || "…", buttons }]);
@@ -104,7 +104,7 @@ export function AqlaCenterChat({ centerType }: { centerType: CenterType }) {
       const r = res as { reply?: string; suggested_route?: string | null; buttons?: AqlaButton[] };
       const buttons: AqlaButton[] = Array.isArray(r.buttons) ? r.buttons : [];
       if (r.suggested_route) {
-        const btn = routeToButton(r.suggested_route, lang);
+        const btn = routeToButton(r.suggested_route, lang === "en" ? "en" : "ar");
         if (btn && !buttons.some((b) => b.action === btn.action)) buttons.push(btn);
       }
       setMessages([...next, { role: "assistant", content: r.reply || "…", buttons }]);
