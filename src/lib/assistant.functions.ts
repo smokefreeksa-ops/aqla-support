@@ -74,6 +74,15 @@ const APPROVED_OPENINGS: Record<CanonicalCenter, Partial<Record<Lang, string>>> 
 // the label back into the chat as a user message.
 const OPENING_BUTTONS: Record<CanonicalCenter, Array<{ ar: string; en: string; action?: string }>> = {
   general: [],
+  public_pre_login: [
+    { ar: "قل لي نكتة", en: "Tell me a joke" },
+    { ar: "وش فكرة أقلع؟", en: "What is Aqla?" },
+    { ar: "ليش أسجل؟", en: "Why should I sign up?" },
+    { ar: "اختَر لي المسار المناسب", en: "Pick the right path for me" },
+    { ar: "هل أقلع مجاني؟", en: "Is Aqla free?" },
+    { ar: "من هو مؤسس أقلع؟", en: "Who founded Aqla?" },
+    { ar: "تواصل عبر واتساب", en: "Contact via WhatsApp" },
+  ],
   quit_pathway: [
     { ar: "أبدأ التقييم", en: "Start assessment", action: "start_intake" },
     { ar: "أريد خطة للإقلاع", en: "I want a quit plan", action: "generate_quit_plan" },
