@@ -122,7 +122,7 @@ const ROUTES = {
 
 // ---------- Safety override (deterministic, in code) ----------
 const EMERGENCY_PATTERNS =
-  /(chest pain|short(ness)? of breath|coughing blood|suicid|kill myself|أعراض طارئة|ألم (?:ال)?صدر|ضيق (?:ال)?تنفس|نفث (?:ال)?دم|انتحار|أريد أن أموت)/i;
+  /(chest pain|short(ness)? of breath|coughing blood|suicid|kill myself|أعراض طارئة|ألم (?:شديد )?(?:في )?(?:ال)?صدر|ضيق (?:شديد )?(?:في )?(?:ال)?تنفس|نفث (?:ال)?دم|انتحار|أريد أن أموت)/i;
 
 const MEDICATION_PATTERNS =
   /(dose|dosage|mg\b|milligram|prescribe|prescription|nicotine patch dose|varenicline|bupropion|champix|zyban|جرعة|ملغ|ملج|وصف(?:ة)? طبية|بوبروبيون|فارينيكلين|تشامبيكس)/i;
