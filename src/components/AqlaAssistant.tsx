@@ -10,12 +10,12 @@ import aqlaLogo from "@/assets/aqla-logo.png";
 
 // Floating assistant intentionally excluded from the four center routes —
 // those pages embed <AqlaCenterChat /> directly so there is no duplicate bot.
-const PUBLIC_PATHS = ["/", "/about", "/assessment", "/volunteer", "/request-support", "/city-challenge", "/challenges", "/shop", "/poster-studio", "/impact"];
+const PUBLIC_PATHS = ["/faq"];
 
 type Msg = { role: "user" | "assistant"; content: string; buttons?: AqlaButton[] };
 
 export function AqlaAssistant() {
-  const [lang, setLang] = useState<"en" | "ar">("en");
+  const [lang, setLang] = useState<"en" | "ar">("ar");
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Msg[]>([]);
@@ -73,15 +73,15 @@ export function AqlaAssistant() {
 
   const isRTL = lang === "ar";
   const t = {
-    title: isRTL ? "اسأل دكتور مالك" : "Ask Dr. Malik",
+    title: isRTL ? "مساعد أقلع التثقيفي" : "Aqla FAQ Helper",
     placeholder: isRTL ? "اكتب سؤالك…" : "Type your question…",
     disclaimer: isRTL
       ? "معلومات تثقيفية فقط — ليست استشارة طبية."
       : "Educational info only — not medical advice.",
-    open: isRTL ? "اسأل د. مالك" : "Ask Dr. Malik",
+    open: isRTL ? "مساعد الأسئلة الشائعة" : "FAQ helper",
     close: isRTL ? "إغلاق" : "Close",
     reset: isRTL ? "إعادة موضع الأزرار" : "Reset position",
-    error: isRTL ? "تعذّر الإرسال. حاول مرة أخرى." : "Couldn't send. Please try again.",
+    error: isRTL ? "تعذّر الاتصال بالمساعد حاليًا. يرجى المحاولة لاحقًا أو التواصل عبر واتساب." : "The assistant is currently unavailable. Please try again later or contact us through WhatsApp.",
   };
 
   function centerForPath(path: string): "general" | "quit_pathway" | "help_pathway" | "learn_train" | "challenge_pathway" {
