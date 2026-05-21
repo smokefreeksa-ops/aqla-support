@@ -12,6 +12,7 @@ import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
 import { FloatingWhatsAppButton } from "@/components/FloatingWhatsAppButton";
 import { AqlaAssistant } from "@/components/AqlaAssistant";
+import { AqlaAuthGate } from "@/components/AqlaAuthGate";
 
 function NotFoundComponent() {
   return (
@@ -122,10 +123,12 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <AqlaAuthGate>
+        <Outlet />
+        <FloatingWhatsAppButton />
+        <AqlaAssistant />
+      </AqlaAuthGate>
       <Toaster richColors position="top-center" />
-      <FloatingWhatsAppButton />
-      <AqlaAssistant />
     </QueryClientProvider>
   );
 }
