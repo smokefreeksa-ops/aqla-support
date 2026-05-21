@@ -240,7 +240,7 @@ export const chatWithAssistant = createServerFn({ method: "POST" })
     }
 
     const lang = data.lang as Lang;
-    const center = data.center_type as Center;
+    const center = normalizeCenter(data.center_type as Center);
     const lastUser = [...data.messages].reverse().find((m) => m.role === "user");
 
     // Deterministic safety override BEFORE any model call
