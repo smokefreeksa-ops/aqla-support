@@ -244,7 +244,8 @@ export function useLang() {
 export function useLangState() {
   const [lang, setLangState] = useState<Lang>("ar");
   useEffect(() => {
-    const saved = (typeof window !== "undefined" && (localStorage.getItem("lang") as Lang)) || "ar";
+    const raw = typeof window !== "undefined" ? localStorage.getItem("lang") : null;
+    const saved: Lang = raw === "en" || raw === "ar" ? raw : "ar";
     setLangState(saved);
   }, []);
   useEffect(() => {
