@@ -48,6 +48,10 @@ const APPROVED_OPENINGS: Record<CanonicalCenter, Partial<Record<Lang, string>>> 
     ar: "مرحبًا، أنا مساعد أقلع التثقيفي. لا أقدّم تشخيصًا أو علاجًا، ولا أصف أدوية. اختر أحد مراكز أقلع أو اكتب سؤالك التوعوي.",
     en: "Hello, I am Aqla's educational assistant. I do not diagnose, treat, or prescribe medication. How can I help?",
   },
+  public_pre_login: {
+    ar: "يا هلا والله 👋\nأنا سوالف أقلع 😄\nإذا ما ودك تسجل الحين، عادي… أقدر أشرح لك المنصة، أختار لك المسار المناسب، أو أقول لك نكتة خفيفة عن النيكوتين بدون جلد.",
+    en: "Hi! I'm Sawalif Aqla 😄 — happy to chat before you sign up. I can explain the platform, pick the right path for you, or share a light joke about nicotine (never about you).",
+  },
   quit_pathway: {
     ar: "أهلًا بك في مركز أقلع الافتراضي لدعم الإقلاع. سأرشدك خطوة بخطوة لفهم استخدامك للتدخين أو النيكوتين، تقييم مستوى الاعتماد، بناء خطة مناسبة، ومتابعتك بطريقة آمنة. لن نعرض بياناتك الصحية في أي مشاركة عامة، ولن نقدم وصفات أو جرعات دوائية.",
     en: "Welcome to the Aqla Virtual Quit Center. I will guide you step by step — understand your use, take the assessment, build a quit plan, follow up, and request support when needed.",
