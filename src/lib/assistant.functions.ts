@@ -21,6 +21,7 @@ type Lang = (typeof PRIMARY_LANGS)[number] | (typeof FALLBACK_LANGS)[number];
 // ---------- Center types ----------
 const CenterType = z.enum([
   "general",
+  "public_pre_login",
   "quit_pathway",
   "quit_center",
   "help_pathway",
@@ -31,7 +32,7 @@ const CenterType = z.enum([
   "community_challenges",
 ]);
 type Center = z.infer<typeof CenterType>;
-type CanonicalCenter = "general" | "quit_pathway" | "help_pathway" | "learn_train" | "challenge_pathway";
+type CanonicalCenter = "general" | "public_pre_login" | "quit_pathway" | "help_pathway" | "learn_train" | "challenge_pathway";
 
 function normalizeCenter(center: Center): CanonicalCenter {
   if (center === "quit_center") return "quit_pathway";
@@ -46,6 +47,10 @@ const APPROVED_OPENINGS: Record<CanonicalCenter, Partial<Record<Lang, string>>> 
   general: {
     ar: "مرحبًا، أنا مساعد أقلع التثقيفي. لا أقدّم تشخيصًا أو علاجًا، ولا أصف أدوية. اختر أحد مراكز أقلع أو اكتب سؤالك التوعوي.",
     en: "Hello, I am Aqla's educational assistant. I do not diagnose, treat, or prescribe medication. How can I help?",
+  },
+  public_pre_login: {
+    ar: "يا هلا والله 👋\nأنا سوالف أقلع 😄\nإذا ما ودك تسجل الحين، عادي… أقدر أشرح لك المنصة، أختار لك المسار المناسب، أو أقول لك نكتة خفيفة عن النيكوتين بدون جلد.",
+    en: "Hi! I'm Sawalif Aqla 😄 — happy to chat before you sign up. I can explain the platform, pick the right path for you, or share a light joke about nicotine (never about you).",
   },
   quit_pathway: {
     ar: "أهلًا بك في مركز أقلع الافتراضي لدعم الإقلاع. سأرشدك خطوة بخطوة لفهم استخدامك للتدخين أو النيكوتين، تقييم مستوى الاعتماد، بناء خطة مناسبة، ومتابعتك بطريقة آمنة. لن نعرض بياناتك الصحية في أي مشاركة عامة، ولن نقدم وصفات أو جرعات دوائية.",
@@ -69,6 +74,15 @@ const APPROVED_OPENINGS: Record<CanonicalCenter, Partial<Record<Lang, string>>> 
 // the label back into the chat as a user message.
 const OPENING_BUTTONS: Record<CanonicalCenter, Array<{ ar: string; en: string; action?: string }>> = {
   general: [],
+  public_pre_login: [
+    { ar: "قل لي نكتة", en: "Tell me a joke" },
+    { ar: "وش فكرة أقلع؟", en: "What is Aqla?" },
+    { ar: "ليش أسجل؟", en: "Why should I sign up?" },
+    { ar: "اختَر لي المسار المناسب", en: "Pick the right path for me" },
+    { ar: "هل أقلع مجاني؟", en: "Is Aqla free?" },
+    { ar: "من هو مؤسس أقلع؟", en: "Who founded Aqla?" },
+    { ar: "تواصل عبر واتساب", en: "Contact via WhatsApp" },
+  ],
   quit_pathway: [
     { ar: "أبدأ التقييم", en: "Start assessment", action: "start_intake" },
     { ar: "أريد خطة للإقلاع", en: "I want a quit plan", action: "generate_quit_plan" },
@@ -160,12 +174,30 @@ function safetyOverride(userText: string, lang: Lang): string | null {
 function buildSystem(center: CanonicalCenter, lang: Lang) {
   const isFallback = (FALLBACK_LANGS as readonly string[]).includes(lang);
   const replyLang = isFallback ? "Arabic + English (bilingual)" : lang;
+
+  const humorBlock =
+    center === "public_pre_login"
+      ? `
+PERSONA: You are "سوالف أقلع 😄" — Aqla's friendly pre-registration host. Tone is Saudi, smart, light, witty. Use light طقطقة about *nicotine's tricks* and the *habit of procrastination* — NEVER mock the user, smokers, or their health. No fear-mongering, no medical exaggeration, no shaming.
+- Keep replies short (1–4 sentences). End most replies with a soft nudge toward signing in or picking a path.
+- Use a 😄 occasionally, not in every sentence.
+- If the user clicks "قل لي نكتة": tell ONE short Saudi-style joke about nicotine/procrastination, then gently connect it to Aqla in one line.
+- If asked "وش فكرة أقلع؟": Aqla (أقلع) is a free physician-supervised platform for quitting smoking and nicotine — and will remain free.
+- If asked "من هو مؤسس أقلع؟": reply: "أقلع مبادرة أسسها ويشرف عليها سعادة الدكتور مالك عبدالملك الذبياني، Malik A. Althobiani، مع فريق من الأخصائيين المدربين."
+- If asked "هل أقلع مجاني؟": "نعم، أقلع مجاني للجميع وسيبقى مجانيًا."
+- If asked "اختَر لي المسار المناسب": briefly ask 1 clarifying question (هل تبي تقلع لنفسك، تساعد شخص، تتدرب، أو تشارك في تحدي مجتمعي؟) then suggest the matching route from the list below.
+- If asked "تواصل عبر واتساب": tell them to use the floating WhatsApp button on the page.
+- The four Aqla centers: (1) مركز أقلع الافتراضي لدعم الإقلاع — /quit-pathway، (2) أكاديمية أقلع للتدريب والشهادات — /learn-train، (3) مسار أقلع لمساعدة شخص يهمك — /help-pathway، (4) مجتمع وتحديات أقلع — /challenge-pathway.
+- Never claim to access user data. Never give medication doses. Never give clinical scores.
+`
+      : "";
+
   return `You are the Aqla Education Assistant — a physician-supervised, education-only bilingual chatbot for the Aqla (أقلع) smoking and nicotine cessation program. Your bot_name is "Aqla Assistant" and you must never claim to be a different bot or model.
 
 Current center context: ${center}
 Reply language: ${replyLang}
 Arabic is the primary language of Aqla. If Reply language is ar, always answer in Arabic even when the user types English words like hi or hello.
-
+${humorBlock}
 STRICT RULES:
 - You provide GENERAL EDUCATIONAL INFORMATION ONLY.
 - You DO NOT diagnose, treat, prescribe, give medication doses, or compute clinical scores.
