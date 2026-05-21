@@ -3,7 +3,7 @@ import { useLocation } from "@tanstack/react-router";
 import { trackEvent } from "@/lib/track-event";
 import { useDraggableWidget } from "@/hooks/use-draggable-widget";
 
-export function FloatingWhatsAppButton() {
+export function FloatingWhatsAppButton({ forceVisible = false }: { forceVisible?: boolean } = {}) {
   const location = useLocation();
   const [lang, setLang] = useState<"en" | "ar">("ar");
   const movedRef = useRef(false);
@@ -34,7 +34,7 @@ export function FloatingWhatsAppButton() {
 
   const pathname = location.pathname;
   const isPublic = ["/", "/about", "/assessment", "/volunteer", "/request-support", "/city-challenge", "/challenges", "/learn-train", "/poster-studio", "/impact"].includes(pathname);
-  if (!isPublic) return null;
+  if (!forceVisible && !isPublic) return null;
 
   const isAr = lang === "ar";
   const message = isAr

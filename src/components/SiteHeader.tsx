@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { Languages, Menu, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Languages, Menu, X, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/lib/i18n";
 import { appRoutes } from "@/lib/app-routes";
+import { supabase } from "@/integrations/supabase/client";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
 type NavItem = { ar: string; en: string; to: string };
@@ -25,6 +26,26 @@ const NAV: NavItem[] = [
 export function SiteHeader() {
   const { lang, setLang, dir } = useLang();
   const [open, setOpen] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
+      if (mounted) setSignedIn(!!s);
+    });
+    supabase.auth.getSession().then(({ data }) => {
+      if (mounted) setSignedIn(!!data.session);
+    });
+    return () => {
+      mounted = false;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+
+  async function signOut() {
+    await supabase.auth.signOut();
+    if (typeof window !== "undefined") window.location.href = "/";
+  }
 
   return (
     <header dir={dir} className="sticky top-0 z-40 border-b border-border/60 bg-card/85 backdrop-blur supports-[backdrop-filter]:bg-card/70">
@@ -72,6 +93,18 @@ export function SiteHeader() {
               {lang === "ar" ? "ابدأ الآن" : "Start Now"}
             </Button>
           </Link>
+          {signedIn && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => void signOut()}
+              className="gap-1 text-xs"
+              aria-label={lang === "ar" ? "تسجيل الخروج" : "Sign out"}
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">{lang === "ar" ? "تسجيل الخروج" : "Sign out"}</span>
+            </Button>
+          )}
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
