@@ -21,6 +21,7 @@ type Lang = (typeof PRIMARY_LANGS)[number] | (typeof FALLBACK_LANGS)[number];
 // ---------- Center types ----------
 const CenterType = z.enum([
   "general",
+  "public_pre_login",
   "quit_pathway",
   "quit_center",
   "help_pathway",
@@ -31,7 +32,7 @@ const CenterType = z.enum([
   "community_challenges",
 ]);
 type Center = z.infer<typeof CenterType>;
-type CanonicalCenter = "general" | "quit_pathway" | "help_pathway" | "learn_train" | "challenge_pathway";
+type CanonicalCenter = "general" | "public_pre_login" | "quit_pathway" | "help_pathway" | "learn_train" | "challenge_pathway";
 
 function normalizeCenter(center: Center): CanonicalCenter {
   if (center === "quit_center") return "quit_pathway";
