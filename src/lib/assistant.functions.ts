@@ -106,7 +106,7 @@ const OPENING_BUTTONS: Record<CanonicalCenter, Array<{ ar: string; en: string; a
 
 function openingButtonsFor(center: CanonicalCenter, lang: Lang) {
   return OPENING_BUTTONS[center].map((b) => ({
-    label: lang === "ar" ? b.ar : (b.en || b.ar),
+    label: lang === "en" ? (b.en || b.ar) : b.ar,
     action: b.action ?? `chat:${b.ar}`,
   }));
 }
