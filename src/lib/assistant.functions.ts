@@ -22,24 +22,37 @@ type Lang = (typeof PRIMARY_LANGS)[number] | (typeof FALLBACK_LANGS)[number];
 const CenterType = z.enum([
   "general",
   "quit_pathway",
+  "quit_center",
   "help_pathway",
+  "help_center",
   "learn_train",
+  "academy",
   "challenge_pathway",
+  "community_challenges",
 ]);
 type Center = z.infer<typeof CenterType>;
+type CanonicalCenter = "general" | "quit_pathway" | "help_pathway" | "learn_train" | "challenge_pathway";
+
+function normalizeCenter(center: Center): CanonicalCenter {
+  if (center === "quit_center") return "quit_pathway";
+  if (center === "help_center") return "help_pathway";
+  if (center === "academy") return "learn_train";
+  if (center === "community_challenges") return "challenge_pathway";
+  return center;
+}
 
 // ---------- Approved openings (static, never generated) ----------
-const APPROVED_OPENINGS: Record<Center, Partial<Record<Lang, string>>> = {
+const APPROVED_OPENINGS: Record<CanonicalCenter, Partial<Record<Lang, string>>> = {
   general: {
-    ar: "مرحبًا، أنا مساعد أقلع التثقيفي. لا أقدّم تشخيصًا أو علاجًا، ولا أصف أدوية. كيف يمكنني مساعدتك؟",
+    ar: "مرحبًا، أنا مساعد أقلع التثقيفي. لا أقدّم تشخيصًا أو علاجًا، ولا أصف أدوية. اختر أحد مراكز أقلع أو اكتب سؤالك التوعوي.",
     en: "Hello, I am Aqla's educational assistant. I do not diagnose, treat, or prescribe medication. How can I help?",
   },
   quit_pathway: {
-    ar: "أهلًا بك في مركز أقلع الافتراضي لدعم الإقلاع. سأرافقك خطوة بخطوة لفهم استخدامك للتدخين أو النيكوتين، ثم التقييم، وبناء خطة الإقلاع، والمتابعة، وطلب الدعم عند الحاجة. اختر ما يناسبك للبدء:",
+    ar: "أهلًا بك في مركز أقلع الافتراضي لدعم الإقلاع. سأرشدك خطوة بخطوة لفهم استخدامك للتدخين أو النيكوتين، تقييم مستوى الاعتماد، بناء خطة مناسبة، ومتابعتك بطريقة آمنة. لن نعرض بياناتك الصحية في أي مشاركة عامة، ولن نقدم وصفات أو جرعات دوائية.",
     en: "Welcome to the Aqla Virtual Quit Center. I will guide you step by step — understand your use, take the assessment, build a quit plan, follow up, and request support when needed.",
   },
   help_pathway: {
-    ar: "أهلًا بك في مسار أقلع لمساعدة شخص يهمك. سأساعدك على تصميم رسالة دعم محترمة وآمنة، دون ضغط أو لوم. اختر كيف نبدأ:",
+    ar: "أهلًا بك في مسار المساعدة من أقلع. سأساعدك على دعم شخص يهمك بطريقة محترمة وآمنة، دون ضغط أو لوم، من خلال رسالة أو بطاقة دعم قابلة للمشاركة.",
     en: "Welcome to the Aqla Help Pathway. I will help you craft a respectful, safe message of support — no pressure, no blame.",
   },
   learn_train: {
@@ -47,7 +60,7 @@ const APPROVED_OPENINGS: Record<Center, Partial<Record<Lang, string>>> = {
     en: "Welcome to the Aqla Academy for Training & Certification. I will guide you through interactive training, realistic scenarios, a final exam, and a verifiable downloadable certificate.",
   },
   challenge_pathway: {
-    ar: "أهلًا بك في مجتمع وتحديات أقلع. سأساعدك على المشاركة في التحديات، الألعاب التوعوية، الهاشتاقات، دعوة الأصدقاء، جمع النقاط والأوسمة، وتصميم بطاقات توعوية. اختر ما يناسبك للبدء:",
+    ar: "أهلًا بك في مجتمع وتحديات أقلع. هنا يمكنك المشاركة في تحديات توعوية، جمع النقاط والأوسمة، دعوة الأصدقاء، تصميم بطاقات قابلة للمشاركة، واستخدام هاشتاقات أقلع لدعم الأثر المجتمعي دون عرض أي بيانات صحية خاصة.",
     en: "Welcome to the Aqla Community & Challenges. Join challenges, awareness games, hashtags, invites, points, medals, and design awareness cards.",
   },
 };
