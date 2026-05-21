@@ -13,9 +13,26 @@ export type AqlaButton = { label: string; action: string };
 // action key -> EXISTING live route only. Keep in sync with src/routes/*.
 export const ROUTE_ACTIONS: Record<string, string> = {
   generate_invite_link: "/invite-friends",
+  view_points: "/points-medals",
+  view_updates: "/updates",
   view_certificate: "/certificates",
-  verify_certificate: "/certificates",
+  verify_certificate: "/certificates?mode=verify",
   create_support_request: "/request-support",
+  create_support_message: "/support-invite",
+  create_support_card: "/poster-studio",
+  send_whatsapp: "https://wa.me/966555096412",
+  start_training: "/training",
+  resume_training: "/training",
+  start_exam_mode: "/training",
+  start_intake: "/assessment",
+  generate_quit_plan: "/quit-plan",
+  craving_rescue: "/craving-coach",
+  log_followup: "/relapse-support",
+  start_challenge: "/challenges",
+  knowledge_challenge: "/challenges?tab=challenges",
+  create_awareness_card: "/poster-studio",
+  city_challenge: "/city-challenge",
+  create_hashtag_post: "/poster-studio",
   open_quit_pathway: "/quit-pathway",
   open_help_pathway: "/help-pathway",
   open_learn_train: "/learn-train",
@@ -37,6 +54,8 @@ export function routeToButton(route: string, lang: "ar" | "en"): AqlaButton | nu
   const [action] = entry;
   const labels: Record<string, { ar: string; en: string }> = {
     generate_invite_link: { ar: "دعوة صديق", en: "Invite a friend" },
+    view_points: { ar: "النقاط والأوسمة", en: "Points & medals" },
+    view_updates: { ar: "تحديثات أقلع", en: "Aqla updates" },
     view_certificate: { ar: "عرض الشهادات", en: "View certificates" },
     verify_certificate: { ar: "التحقق من شهادة", en: "Verify certificate" },
     create_support_request: { ar: "طلب دعم", en: "Request support" },
@@ -70,7 +89,11 @@ export function useAqlaButtonHandler(opts: { sendMessage: (text: string) => void
     // (b) known navigation -> real route
     const route = ROUTE_ACTIONS[b.action];
     if (route) {
-      void navigate({ to: route });
+      if (route.startsWith("http") || route.includes("?")) {
+        window.location.href = route;
+      } else {
+        void navigate({ to: route });
+      }
       return;
     }
     // (c) conversational fallback — drive the assistant, never a dead button.
