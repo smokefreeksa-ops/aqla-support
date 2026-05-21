@@ -67,46 +67,47 @@ const APPROVED_OPENINGS: Record<CanonicalCenter, Partial<Record<Lang, string>>> 
 
 // Starter conversational buttons rendered with the opening. Clicking sends
 // the label back into the chat as a user message.
-const OPENING_BUTTONS: Record<Center, Array<{ ar: string; en: string }>> = {
+const OPENING_BUTTONS: Record<CanonicalCenter, Array<{ ar: string; en: string; action?: string }>> = {
   general: [],
   quit_pathway: [
-    { ar: "أبدأ التقييم", en: "Start assessment" },
-    { ar: "أريد خطة للإقلاع", en: "I want a quit plan" },
-    { ar: "أحتاج مساعدة مع الرغبة الشديدة", en: "I need craving help" },
+    { ar: "أبدأ التقييم", en: "Start assessment", action: "start_intake" },
+    { ar: "أريد خطة للإقلاع", en: "I want a quit plan", action: "generate_quit_plan" },
+    { ar: "أحتاج مساعدة مع الرغبة الشديدة", en: "I need craving help", action: "craving_rescue" },
     { ar: "أريد تقليل الاستخدام أولًا", en: "I want to reduce use first" },
-    { ar: "أريد متابعة تقدمي", en: "Track my progress" },
-    { ar: "أحتاج مراجعة مختص", en: "I need a specialist review" },
+    { ar: "أريد متابعة تقدمي", en: "Track my progress", action: "log_followup" },
+    { ar: "أحتاج مراجعة مختص", en: "I need a specialist review", action: "create_support_request" },
   ],
   help_pathway: [
-    { ar: "أنشئ رسالة دعم", en: "Create a support message" },
-    { ar: "كيف أبدأ الحديث بدون ضغط", en: "How to start without pressure" },
-    { ar: "أفهم تجربة من أحب", en: "Understand their experience" },
-    { ar: "موارد لمساعدته", en: "Resources to share" },
+    { ar: "أنشئ رسالة دعم", en: "Create a support message", action: "create_support_message" },
+    { ar: "أصمم بطاقة دعم", en: "Design a support card", action: "create_support_card" },
+    { ar: "أتعلم كيف أساعد بدون ضغط", en: "Learn how to help without pressure" },
+    { ar: "أرسل عبر WhatsApp", en: "Send via WhatsApp", action: "send_whatsapp" },
+    { ar: "أحتاج نصيحة قبل الحديث معه", en: "I need advice before talking" },
   ],
   learn_train: [
-    { ar: "ابدأ التدريب", en: "Start training" },
+    { ar: "ابدأ التدريب", en: "Start training", action: "start_training" },
     { ar: "عرض مسارات الأكاديمية", en: "View academy tracks" },
-    { ar: "متابعة تدريبي", en: "Resume my training" },
-    { ar: "ابدأ الاختبار النهائي", en: "Start final exam" },
-    { ar: "عرض شهادتي", en: "View my certificate" },
-    { ar: "التحقق من شهادة", en: "Verify a certificate" },
+    { ar: "متابعة تدريبي", en: "Resume my training", action: "resume_training" },
+    { ar: "ابدأ الاختبار النهائي", en: "Start final exam", action: "start_exam_mode" },
+    { ar: "عرض شهادتي", en: "View my certificate", action: "view_certificate" },
+    { ar: "التحقق من شهادة", en: "Verify a certificate", action: "verify_certificate" },
   ],
   challenge_pathway: [
-    { ar: "أبدأ تحديًا سريعًا", en: "Start a quick challenge" },
-    { ar: "أشارك في تحدي المعرفة", en: "Knowledge challenge" },
-    { ar: "أدعو أصدقائي", en: "Invite friends" },
-    { ar: "أصمم بطاقة توعوية", en: "Design an awareness card" },
-    { ar: "أجمع النقاط والأوسمة", en: "Collect points & medals" },
-    { ar: "أشارك في تحدي المدن", en: "Join city challenge" },
-    { ar: "أستخدم هاشتاقات أقلع", en: "Use Aqla hashtags" },
-    { ar: "أتابع أخبار وتحديثات أقلع", en: "Follow Aqla updates" },
+    { ar: "أبدأ تحديًا سريعًا", en: "Start a quick challenge", action: "start_challenge" },
+    { ar: "أشارك في تحدي المعرفة", en: "Knowledge challenge", action: "knowledge_challenge" },
+    { ar: "أدعو أصدقائي", en: "Invite friends", action: "generate_invite_link" },
+    { ar: "أصمم بطاقة توعوية", en: "Design an awareness card", action: "create_awareness_card" },
+    { ar: "أجمع النقاط والأوسمة", en: "Collect points & medals", action: "view_points" },
+    { ar: "أشارك في تحدي المدن", en: "Join city challenge", action: "city_challenge" },
+    { ar: "أستخدم هاشتاقات أقلع", en: "Use Aqla hashtags", action: "create_hashtag_post" },
+    { ar: "أتابع أخبار وتحديثات أقلع", en: "Follow Aqla updates", action: "view_updates" },
   ],
 };
 
-function openingButtonsFor(center: Center, lang: Lang) {
+function openingButtonsFor(center: CanonicalCenter, lang: Lang) {
   return OPENING_BUTTONS[center].map((b) => ({
     label: lang === "ar" ? b.ar : (b.en || b.ar),
-    action: `chat:${b.ar}`, // unknown action -> falls back to sendMessage(label)
+    action: b.action ?? `chat:${b.ar}`,
   }));
 }
 
