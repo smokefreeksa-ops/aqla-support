@@ -93,6 +93,18 @@ export function SiteHeader() {
               {lang === "ar" ? "ابدأ الآن" : "Start Now"}
             </Button>
           </Link>
+          {signedIn && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => void signOut()}
+              className="gap-1 text-xs"
+              aria-label={lang === "ar" ? "تسجيل الخروج" : "Sign out"}
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">{lang === "ar" ? "تسجيل الخروج" : "Sign out"}</span>
+            </Button>
+          )}
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
