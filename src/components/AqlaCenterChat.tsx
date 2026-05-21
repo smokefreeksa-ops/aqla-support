@@ -13,6 +13,12 @@ const VALID_LANGS = new Set<Language>(["ar", "en", "ur", "id", "ms", "tr", "fa",
 const RTL_LANGS = new Set<Language>(["ar", "ur", "fa"]);
 const CONNECTION_ERROR_AR = "تعذّر الاتصال بالمركز حاليًا. يرجى المحاولة لاحقًا أو التواصل عبر واتساب.";
 const CONNECTION_ERROR_EN = "The center is currently unavailable. Please try again later or contact us through WhatsApp.";
+const CENTER_NAMES: Record<CenterType, { ar: string; en: string }> = {
+  quit_pathway: { ar: "فريق مركز أقلع لدعم الإقلاع", en: "Aqla Quit Center Team" },
+  learn_train: { ar: "مدرب أكاديمية أقلع", en: "Aqla Academy Instructor" },
+  help_pathway: { ar: "مرشد مسار المساعدة من أقلع", en: "Aqla Help Pathway Guide" },
+  challenge_pathway: { ar: "منسق مجتمع وتحديات أقلع", en: "Aqla Community & Challenges Coordinator" },
+};
 
 function safeLanguage(raw: string | null | undefined): Language {
   return raw && VALID_LANGS.has(raw as Language) ? (raw as Language) : "ar";
@@ -145,6 +151,11 @@ export function AqlaCenterChat({ centerType }: { centerType: CenterType }) {
       lang={lang}
       className={`flex h-[36rem] max-h-[80vh] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-elegant ${isRTL ? "text-right" : "text-left"}`}
     >
+      <div className="border-b border-border bg-card px-4 py-3">
+        <div className="text-sm font-semibold text-foreground">
+          {lang === "en" ? CENTER_NAMES[centerType].en : CENTER_NAMES[centerType].ar}
+        </div>
+      </div>
       <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto bg-background p-4">
         {messages.length === 0 && (
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
