@@ -49,8 +49,8 @@ const APPROVED_OPENINGS: Record<CanonicalCenter, Partial<Record<Lang, string>>> 
     en: "Hello, I am Aqla's educational assistant. I do not diagnose, treat, or prescribe medication. How can I help?",
   },
   public_pre_login: {
-    ar: "يا هلا والله 👋\nأنا دردش مع أقلع 😄\nاسألني عن المنصة، خلني أختار لك المسار المناسب، أو قل لي أقول لك نكتة خفيفة عن النيكوتين. ترا بتستانس والله.",
-    en: "Hi! I'm Aqla Chat 😄 — happy to chat before you sign up. Ask me about the platform, let me pick the right path for you, or tell me to share a light joke about nicotine. You'll enjoy it, trust us.",
+    ar: "يا هلا والله 👋\nأنا دردش مع أقلع 😄\nاسألني عن أقلع، أو خلّني أقول لك نكتة… ترا بتستانس والله.\nوإذا ما ودك تسجل الحين؟ ولا يهمك… حتى التسجيل يحتاج “نية إقلاع” شكله 😄",
+    en: "Hi! I'm Aqla Chat 😄 — happy to chat before you sign up. Ask me about Aqla, or let me tell you a joke… you'll enjoy it, trust us. Not ready to sign up? No worries… even signing up takes a 'quit intention' 😄",
   },
   quit_pathway: {
     ar: "أهلًا بك في مركز أقلع الافتراضي لدعم الإقلاع. سأرشدك خطوة بخطوة لفهم استخدامك للتدخين أو النيكوتين، تقييم مستوى الاعتماد، بناء خطة مناسبة، ومتابعتك بطريقة آمنة. لن نعرض بياناتك الصحية في أي مشاركة عامة، ولن نقدم وصفات أو جرعات دوائية.",
@@ -77,8 +77,8 @@ const OPENING_BUTTONS: Record<CanonicalCenter, Array<{ ar: string; en: string; a
   public_pre_login: [
     { ar: "قل لي نكتة", en: "Tell me a joke" },
     { ar: "وش فكرة أقلع؟", en: "What is Aqla?" },
-    { ar: "ليش أسجل؟", en: "Why should I sign up?" },
     { ar: "اختَر لي المسار المناسب", en: "Pick the right path for me" },
+    { ar: "ليش أسجل؟", en: "Why should I sign up?" },
     { ar: "هل أقلع مجاني؟", en: "Is Aqla free?" },
     { ar: "من هو مؤسس أقلع؟", en: "Who founded Aqla?" },
     { ar: "تواصل عبر واتساب", en: "Contact via WhatsApp" },
