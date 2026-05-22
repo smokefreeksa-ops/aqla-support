@@ -2611,49 +2611,97 @@ export type Database = {
       }
       quit_plans: {
         Row: {
+          admin_notified_at: string | null
           anonymous_session_id: string
+          assessment_tool: string | null
+          city: string | null
           created_at: string
+          email: string | null
+          email_sent_at: string | null
           followup_schedule: Json
           id: string
+          intake_answers: Json
           money_setup: Json
+          nickname: string | null
+          pdf_url: string | null
           plan: Json
+          plan_token: string | null
+          product: string | null
           quit_date: string | null
           quit_goal: string | null
+          readiness: string | null
+          risk_flag: boolean | null
+          score_band: string | null
+          score_total: number | null
           session_id: string
+          status: string
           support_person: Json
           triggers: Json
           updated_at: string
           user_id: string | null
+          validated: boolean | null
         }
         Insert: {
+          admin_notified_at?: string | null
           anonymous_session_id: string
+          assessment_tool?: string | null
+          city?: string | null
           created_at?: string
+          email?: string | null
+          email_sent_at?: string | null
           followup_schedule?: Json
           id?: string
+          intake_answers?: Json
           money_setup?: Json
+          nickname?: string | null
+          pdf_url?: string | null
           plan?: Json
+          plan_token?: string | null
+          product?: string | null
           quit_date?: string | null
           quit_goal?: string | null
+          readiness?: string | null
+          risk_flag?: boolean | null
+          score_band?: string | null
+          score_total?: number | null
           session_id: string
+          status?: string
           support_person?: Json
           triggers?: Json
           updated_at?: string
           user_id?: string | null
+          validated?: boolean | null
         }
         Update: {
+          admin_notified_at?: string | null
           anonymous_session_id?: string
+          assessment_tool?: string | null
+          city?: string | null
           created_at?: string
+          email?: string | null
+          email_sent_at?: string | null
           followup_schedule?: Json
           id?: string
+          intake_answers?: Json
           money_setup?: Json
+          nickname?: string | null
+          pdf_url?: string | null
           plan?: Json
+          plan_token?: string | null
+          product?: string | null
           quit_date?: string | null
           quit_goal?: string | null
+          readiness?: string | null
+          risk_flag?: boolean | null
+          score_band?: string | null
+          score_total?: number | null
           session_id?: string
+          status?: string
           support_person?: Json
           triggers?: Json
           updated_at?: string
           user_id?: string | null
+          validated?: boolean | null
         }
         Relationships: [
           {
