@@ -214,14 +214,36 @@ export const finalizeQuitPlan = createServerFn({ method: "POST" })
     if (apiKey) {
       try {
         const fromAddr = process.env.EMAIL_FROM_ADDRESS || "Aqla <onboarding@resend.dev>";
-        const html = `<div dir="rtl" style="font-family:Tahoma,Arial,sans-serif;font-size:14px;line-height:1.7;color:#222">
-          <h2>خطة أقلع الشخصية الخاصة بك</h2>
+        const topTriggers = plan.triggers.slice(0, 5).map((t) => `<li>${escapeHtml(t)}</li>`).join("");
+        const triggerActions = plan.trigger_plan.slice(0, 5).map((t) => `<li>${escapeHtml(t)}</li>`).join("");
+        const refsList = plan.references.map((r, i) => `<li>${i + 1}. ${escapeHtml(r.full)}</li>`).join("");
+        const html = `<div dir="rtl" style="font-family:Tahoma,Arial,sans-serif;font-size:14px;line-height:1.8;color:#222;max-width:640px;margin:auto">
+          <h2 style="color:#0b6e4f;margin:0 0 4px">${escapeHtml(plan.title)}</h2>
+          <p style="color:#555;margin:0 0 16px">${escapeHtml(plan.subtitle)}</p>
           <p>السلام عليكم ${escapeHtml(intake.nickname)}،</p>
-          <p>تم إنشاء خطتك الشخصية في أقلع. يمكنك مراجعتها وتحميلها PDF من الرابط التالي:</p>
-          <p><a href="${planUrl}" style="background:#0a8a5f;color:#fff;padding:10px 16px;border-radius:6px;text-decoration:none;display:inline-block">عرض خطتي وتحميل PDF</a></p>
+          <p>تم إنشاء خطتك الشخصية في أقلع بناءً على إجاباتك. هذا ملخص سريع، والخطة الكاملة تشمل خطة المحفزات، خطة 24 ساعة و7 أيام و28 يوم، خطة الرغبة الشديدة، وخيارات يمكن مناقشتها مع الصيدلي أو الطبيب.</p>
+          <table style="border-collapse:collapse;width:100%;margin:12px 0">
+            <tr><td style="padding:6px;border:1px solid #eee"><b>المنتج</b></td><td style="padding:6px;border:1px solid #eee">${escapeHtml(plan.use.product_ar)}</td></tr>
+            <tr><td style="padding:6px;border:1px solid #eee"><b>أداة التقييم</b></td><td style="padding:6px;border:1px solid #eee">${escapeHtml(plan.assessment.instrument_label_ar)}</td></tr>
+            <tr><td style="padding:6px;border:1px solid #eee"><b>نطاق النتيجة</b></td><td style="padding:6px;border:1px solid #eee">${escapeHtml(plan.assessment.band_ar)}</td></tr>
+            <tr><td style="padding:6px;border:1px solid #eee"><b>الهدف</b></td><td style="padding:6px;border:1px solid #eee">${escapeHtml(plan.goal.label_ar)}</td></tr>
+            <tr><td style="padding:6px;border:1px solid #eee"><b>تاريخ البداية</b></td><td style="padding:6px;border:1px solid #eee">${escapeHtml(plan.dates.quit_or_reduce_date ?? "—")}</td></tr>
+          </table>
+          <h3 style="color:#0b6e4f;margin-top:18px">أهم محفزاتك</h3>
+          <ul>${topTriggers}</ul>
+          <h3 style="color:#0b6e4f;margin-top:18px">خطة التعامل مع المحفزات</h3>
+          <ul>${triggerActions}</ul>
+          <p style="margin-top:20px">
+            <a href="${planUrl}" style="background:#0b6e4f;color:#fff;padding:12px 18px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:bold">عرض الخطة الكاملة وتحميل PDF</a>
+          </p>
           <p style="color:#666;font-size:12px">إذا لم يعمل الزر، انسخ هذا الرابط: ${planUrl}</p>
+          <div style="background:#fdecea;border-radius:6px;padding:10px;color:#8a1a1a;font-size:12px;margin-top:16px">
+            ${escapeHtml(plan.emergency_disclaimer)}
+          </div>
+          <h3 style="color:#0b6e4f;margin-top:18px">المراجع</h3>
+          <ol style="font-size:12px;color:#444;padding-inline-start:18px">${refsList}</ol>
           <hr style="border:none;border-top:1px solid #eee;margin:20px 0"/>
-          <p style="color:#888;font-size:12px">أقلع لا يقدّم تشخيصًا أو وصفة دوائية. في حالات الطوارئ اتصل بـ 997.</p>
+          <p style="color:#888;font-size:12px">أقلع لا يقدّم تشخيصًا أو وصفة دوائية ولا يحدد جرعات. اختيار الدواء أو الجرعة المناسبة يحتاج مراجعة صيدلي أو طبيب.</p>
         </div>`;
         const res = await fetch("https://api.resend.com/emails", {
           method: "POST",
