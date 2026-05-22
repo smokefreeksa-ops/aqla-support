@@ -114,6 +114,51 @@ export type Database = {
           },
         ]
       }
+      academy_exam_attempts: {
+        Row: {
+          anonymous_session_id: string
+          certificate_id: string | null
+          created_at: string
+          duration_seconds: number | null
+          email: string | null
+          full_name: string | null
+          id: string
+          language: string
+          passed: boolean | null
+          raw_answers: Json
+          score: number | null
+          user_id: string | null
+        }
+        Insert: {
+          anonymous_session_id: string
+          certificate_id?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          language?: string
+          passed?: boolean | null
+          raw_answers?: Json
+          score?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          anonymous_session_id?: string
+          certificate_id?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          language?: string
+          passed?: boolean | null
+          raw_answers?: Json
+          score?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       academy_lessons: {
         Row: {
           body_ar: string | null
@@ -222,6 +267,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      academy_progress: {
+        Row: {
+          anonymous_session_id: string
+          completed: boolean
+          completed_at: string | null
+          created_at: string
+          domain_slug: string
+          id: string
+          lesson_slug: string
+          practice_score: number | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          anonymous_session_id: string
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          domain_slug: string
+          id?: string
+          lesson_slug: string
+          practice_score?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          anonymous_session_id?: string
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          domain_slug?: string
+          id?: string
+          lesson_slug?: string
+          practice_score?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
       }
       academy_sensitive_questions: {
         Row: {
@@ -2439,6 +2523,91 @@ export type Database = {
           participant_id?: string
         }
         Relationships: []
+      }
+      quit_plan_emails: {
+        Row: {
+          created_at: string
+          email: string
+          error_message: string | null
+          id: string
+          quit_plan_id: string
+          recipient_type: string
+          status: string
+          subject: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          error_message?: string | null
+          id?: string
+          quit_plan_id: string
+          recipient_type: string
+          status?: string
+          subject: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          error_message?: string | null
+          id?: string
+          quit_plan_id?: string
+          recipient_type?: string
+          status?: string
+          subject?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quit_plan_emails_quit_plan_id_fkey"
+            columns: ["quit_plan_id"]
+            isOneToOne: false
+            referencedRelation: "quit_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quit_plan_reminders: {
+        Row: {
+          channel: string
+          created_at: string
+          error_message: string | null
+          id: string
+          quit_plan_id: string
+          reminder_type: string
+          scheduled_at: string
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          channel?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          quit_plan_id: string
+          reminder_type: string
+          scheduled_at: string
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          quit_plan_id?: string
+          reminder_type?: string
+          scheduled_at?: string
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quit_plan_reminders_quit_plan_id_fkey"
+            columns: ["quit_plan_id"]
+            isOneToOne: false
+            referencedRelation: "quit_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       quit_plans: {
         Row: {

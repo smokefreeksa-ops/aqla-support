@@ -1,71 +1,72 @@
+# Aqla Core Product Fix — Quit Plan & Academy Certificate Flows
 
-# Aqla V2 — Three-Pathway Rebuild
+This is a large, multi-system build. Before I start editing 20+ files and creating database tables, I need to confirm scope and a few critical decisions so we don't waste cycles.
 
-This is a large rebuild. To avoid leaving the app in a broken state, I'll ship it in **6 phases**, each one independently deployable and type-checked. I will NOT touch: assessment scoring, cohort logic, RLS, dashboard roles, research exports, follow-up logic, or chatbot safety rules.
+## What you're asking for (my understanding)
 
-## Phase 0 — Stabilize (do first, same turn)
+**Two end-to-end product flows must actually work**, not just look good:
 
-- Confirm current build is green (resolve any lingering JSX/parser issues from prior turns).
-- Verify the in-progress Share + Support-Invite flows still build and render.
-- No new features in this phase.
+1. **Quit Plan flow** (`/quit-pathway`) — chatbot-led intake → deterministic scoring (FTND/PSE/HONC/LWDS-11/oral-adapted) → personalized Arabic quit plan → PDF download → email to user → admin notification to `smokefreeksa@gmail.com` → schedulable reminders.
 
-## Phase 1 — Shell: Header, Footer, Homepage
+2. **Academy flow** (`/learn-train`) — chatbot-led training across 16 domains → practice scenarios → progress saved → final exam (code-scored, ≥80% to pass) → certificate (PDF + PNG) with QR verification → download/share/email.
 
-- New sticky header with full Arabic/English nav (14 items + lang toggle, hamburger on mobile, sticky "ابدأ الآن" CTA on mobile).
-- New 6-column professional footer (Aqla / Start / Pathways / Support / Privacy / Social) with WhatsApp `+966555096412`, IG, X, TikTok, and YouTube shown as "قناة اليوتيوب" only.
-- New homepage:
-  - Elegant hero (RTL-correct, text right / visual left, badge + headline + subtitle + 2 CTAs + 4 trust chips).
-  - **Three large pathway cards only** (no agent grid on homepage).
-  - Compact trust strip.
-  - KPI/Impact section moved near the bottom, with the "started=0 but completed>0" bug fixed (show "غير متاح حاليًا" or coerce started ≥ completed).
-- Remove "أقلع ليس موقعًا تقرأه فقط" and the repeated "مساعد ذكي" wording.
-- Preserve existing routes; only the homepage layout changes.
+Plus: fix navigation so quit-plan clicks never bounce to homepage; keep `/learn-train` strictly academy (no help-pathway content); clear medication safety rules (no doses, refer to pharmacist).
 
-## Phase 2 — Pathway routes + specialized chatbots
+## Proposed implementation plan
 
-Three new routes, each hosting **one** specialized chatbot:
+### Phase 1 — Database & infrastructure
+- Migration: `quit_plans`, `quit_plan_reminders`, `quit_plan_emails` tables (per your schema).
+- Verify/extend academy tables (`academy_attempts`, `academy_certificates` already exist).
+- pg_cron job to process `quit_plan_reminders` (calls a public server route).
+- Storage bucket for generated PDFs (or generate on-demand).
 
-- `/quit-pathway` — مسار الإقلاع. Product-coded starter (cigarettes / vape / pouches / shisha / multi / unsure), one-question-at-a-time flow, links into existing assessment + plan + crash-coach + support-request + share-card generation.
-- `/help-pathway` — مسار المساعدة. Relationship → tone → recipient name → custom message → generates WhatsApp/SMS + Aqla-branded support card via the existing `support-invite` infra. Phone never stored or shown publicly.
-- `/challenge-pathway` — مسار التحديات والأوسمة. Quick challenge / knowledge / cities / poster / points / 28-day / training entries — wires into existing `/challenges`, `/poster-studio`, points and medals.
+### Phase 2 — Quit Plan flow
+- New server functions in `src/lib/quit-plan.functions.ts`:
+  - `startQuitPlanIntake`, `saveQuitPlanAnswer`, `finalizeQuitPlan` (runs scoring from `scoring.ts`, builds plan JSON, stores row).
+  - `generateQuitPlanPdf` (server-side PDF using `@react-pdf/renderer` or HTML→PDF).
+  - `emailQuitPlanToUser`, `notifyAdminQuitPlan`, `scheduleReminder`.
+- New chatbot component `QuitPlanChat` (or extend `AqlaCenterChat`) that runs a **deterministic 16-step intake state machine** with AI used only for warm phrasing/explanations between steps — never for scoring or routing.
+- New route `/quit-plan/$planId` to view/download generated plan.
+- Update `/quit-pathway` to host the new flow; remove any redirect-to-home behavior.
 
-Chatbot is a shared `PathwayChat` component (single source of truth) with pathway-specific scripts, exam-mode lock, "change my answer" support, and safety guards (no doses, no diagnosis, emergency message).
+### Phase 3 — Academy flow
+- Content module `src/lib/academy-curriculum.ts` with the 16 domains, lessons, practice questions, scenarios, and exam bank.
+- Server functions: `getAcademyProgress`, `submitLessonAnswer`, `startExam`, `submitExam` (uses `scoreExam()`), `issueCertificate` (only if ≥80%).
+- Certificate generation: PDF + PNG with QR linking to `/verify/$code`, stored in storage bucket.
+- New chatbot component `AcademyChat` that runs deterministic lesson progression + exam mode (no AI hints during exam).
+- Update `/learn-train` to host only this; strip any help-pathway content if present.
 
-## Phase 3 — Volunteer training + certificate
+### Phase 4 — Email & admin notifications
+- Use existing transactional email infra (Lovable Emails).
+- Templates: `quit-plan-user`, `quit-plan-admin`, `certificate-issued`, `reminder`.
+- Clear fallback UI when email isn't configured ("تم إنشاء الخطة، لكن تعذر إرسال البريد…").
 
-- New `/train` route with 7 modules (titles per spec) — content stored in `training_modules` + `training_questions`.
-- Learning mode: instant feedback + explanations + points.
-- Exam mode: locked, no hints, progress "سؤال X من Y", review screen, submit, then explanations.
-- Pass = all modules done + scenarios + ≥80% on final. Retake on fail.
-- Certificate generation:
-  - Title: "شهادة إتمام تدريب متطوعي أقلع لدعم الإقلاع عن التدخين والنيكوتين".
-  - Includes Aqla logo, name, score, date, certificate ID, QR, supervision line, full disclaimer.
-  - Actions: Download PDF + PNG, share to X/LinkedIn/WhatsApp, copy verify link, email to user.
-- Public verification: `/certificate/{code}` (reuses existing route, extended for training certs).
+### Phase 5 — Safety & QA
+- Hard-coded safety guards in chat handler: medication-dose questions → fixed pharmacist-referral reply; emergency keywords (ألم صدر, ضيق تنفس) → urgent-care reply. These bypass the AI.
+- Manual QA walkthrough of both flows end-to-end before declaring done.
 
-## Phase 4 — Database & server functions
+## Decisions I need from you before starting
 
-Single migration to add (with RLS):
-- `training_modules`, `training_questions`, `training_attempts`, `training_certificates`, `certificate_verifications`
-- `agent_sessions`, `agent_events`, `agent_outputs`
-- `point_transactions`, `medal_awards`
-- Extend existing `share_cards` only if needed.
+This is ~2-3 days of focused work. To avoid building the wrong thing, I need answers to these — otherwise I'll have to make assumptions and you may reject the result.
 
-Server functions (`createServerFn`, behind existing auth middleware where appropriate):
-- `startTrainingAttempt`, `submitTrainingAnswer`, `finalizeExam`, `issueCertificate`, `verifyCertificate`, `emailCertificate`, `logAgentEvent`.
+**1. Email infrastructure.** The project has `EMAIL_FROM_ADDRESS` and `EMAIL_PROVIDER_API_KEY` secrets but I need to confirm Lovable Emails is set up with a verified sending domain. Should I:
+   - (a) Use the existing Lovable Emails setup (you confirm the domain is verified), or
+   - (b) Set up email infrastructure from scratch as part of this work, or
+   - (c) Ship without real email and only show "download PDF" + admin-mailto links for now?
 
-Email via existing provider secret if present; otherwise log failure and surface the "تم الإصدار، لكن تعذر الإرسال" message.
+**2. PDF generation strategy.** Server-side PDF in a Cloudflare Worker is constrained (no native libs). Options:
+   - (a) `@react-pdf/renderer` (pure JS, works in Workers, basic styling),
+   - (b) HTML + client-side `html2pdf.js`/`jsPDF` (richer styling, but generated in browser),
+   - (c) External service (Browserless, etc. — needs new API key).
+   I recommend **(a) for quit plans and certificates** — works server-side, emailable, no extra services. Confirm?
 
-## Phase 5 — Share routes + safety polish
+**3. WhatsApp reminders.** You said "do not promise automated WhatsApp unless configured." I'll implement: email reminders (real), WhatsApp = generates a `wa.me` link the user can tap themselves. OK?
 
-- `/share/certificate/{id}`, `/share/support-invite/{id}`, `/share/challenge/{id}`, `/share/medal/{id}`, `/share/quit-plan/{id}` — all rendering Aqla logo + URL + QR, with OG image + Twitter card, `@SmokeOffKSA`, hashtags.
-- Final safety pass: scrub any remaining medication-dose language, remove La-tatten visible branding, ensure no endorsement claims, add `/disclaimer` page with the medical disclaimer text.
-- Type-check + smoke-test all new flows.
+**4. Scope of academy content.** Writing all 16 training domains with lessons + scenarios + exam questions is a lot of Arabic content. Should I:
+   - (a) Write full curriculum content for all 16 domains now (large delivery, ~1 week of writing alone), or
+   - (b) Build the **engine** (progression, scoring, certificate) with 3-4 domains fully written as a working vertical slice, and stub the rest with TODOs so you/an editor can fill in content later?
+   I strongly recommend **(b)** — otherwise this PR is unreviewable and content quality will suffer.
 
-## What I'd like to confirm before starting
+**5. Existing `AqlaCenterChat`.** It currently delegates everything to the AI assistant via `chatWithAssistant`. The quit plan flow needs a **deterministic state machine** (collect name → email → city → product → … → score → plan), with AI used only for natural-sounding transitions. I'll build a new `QuitPlanChat` component rather than retrofitting the generic one. OK?
 
-1. **Phase 0 first** — should I begin by verifying the current build is green and the existing Share + Support-Invite flows still work, before touching the homepage? (Strongly recommended.)
-2. **Chatbot intelligence** — for the pathway chatbots, should I use **Lovable AI Gateway** (google/gemini-2.5-flash for cost, gpt-5-mini for harder turns) for the free-form conversation, with a scripted backbone for the deterministic steps (assessment routing, plan generation, exam mode)? This is the recommended default.
-3. **Email** — do you already have an email provider configured (Lovable Emails / Brevo / Mailgun)? If not, I'll wire Lovable Emails in Phase 4.
-
-Once you confirm, I'll start with **Phase 0 + Phase 1** in the next turn — that gives you a visibly upgraded, professional homepage with the three pathways landing on placeholder chat routes, then we layer Phases 2–5 on top without ever breaking the live site.
+Please answer those 5 questions (even short answers — "a, a, yes, b, yes" works) and I'll start with the database migration and Phase 1 immediately.
