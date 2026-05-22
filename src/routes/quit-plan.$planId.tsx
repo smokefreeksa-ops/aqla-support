@@ -115,43 +115,109 @@ function PlanPage() {
           </div>
         </header>
 
-        <Section title="ملخص التقييم">
+        <div className="rounded-2xl bg-primary/5 p-4">
+          <h2 className="text-lg font-bold">{planJson.title}</h2>
+          <p className="mt-1 text-xs text-muted-foreground">{planJson.subtitle}</p>
+        </div>
+
+        <Section title="A. ملخص خطتك">
+          <Row k="الاسم" v={planJson.identity.nickname} />
+          <Row k="المدينة" v={planJson.identity.city} />
           <Row k="المنتج" v={planJson.use.product_ar} />
           <Row k="الأداة المستخدمة" v={planJson.assessment.instrument_label_ar} />
-          <Row k="النطاق" v={planJson.assessment.band_ar} />
-          {!planJson.assessment.validated && <p className="text-xs text-amber-600">تقييم مكيّف لمنتجات النيكوتين الفموية (غير معتمد).</p>}
+          <Row k="نطاق النتيجة" v={`${planJson.assessment.band_ar} (مجموع ${planJson.assessment.total})`} />
+          {!planJson.assessment.validated && <p className="text-xs text-amber-600">تقييم مكيّف (غير معتمد).</p>}
+          <Row k="الهدف الحالي" v={planJson.goal.label_ar} />
           <Row k="الاستعداد" v={planJson.readiness.label_ar} />
-          <Row k="الهدف" v={planJson.goal.label_ar} />
-          <Row k="تاريخ الإقلاع/التقليل" v={planJson.dates.quit_or_reduce_date ?? "—"} />
+          <Row k="تاريخ البداية" v={planJson.dates.quit_or_reduce_date ?? "—"} />
+          <Cite text={planJson.summary_citation} />
         </Section>
 
-        <Section title="المثيرات وخطة التعامل"><List items={planJson.trigger_plan} /></Section>
-        <Section title="خطة إنقاذ الرغبة"><List items={planJson.craving_rescue} /></Section>
-        <Section title="أول 24 ساعة"><List items={planJson.first_24h} /></Section>
-        <Section title="أول 7 أيام"><List items={planJson.first_7d} /></Section>
-        <Section title="متابعة 28 يوم"><List items={planJson.follow_up_28d} /></Section>
-        <Section title="خطة الرجوع للاستخدام"><List items={planJson.relapse_plan} /></Section>
+        <Section title="B. ماذا تعني نتيجتك؟">
+          <p>{planJson.score_meaning}</p>
+        </Section>
+
+        <Section title="C. هدفك الحالي">
+          <p>{planJson.goal.text}</p>
+        </Section>
+
+        <Section title="D. محفزاتك الأساسية">
+          <List items={planJson.triggers} />
+        </Section>
+
+        <Section title="E. خطة التعامل مع المحفزات">
+          <List items={planJson.trigger_plan} />
+          <Cite text={planJson.trigger_plan_citation} />
+        </Section>
+
+        <Section title="F. خطة أول 24 ساعة"><List items={planJson.first_24h} /></Section>
+        <Section title="G. خطة أول 7 أيام"><List items={planJson.first_7d} /></Section>
+
+        <Section title="H. خطة 28 يوم">
+          <List items={planJson.follow_up_28d} />
+          <Cite text={planJson.follow_up_28d_citation} />
+        </Section>
+
+        <Section title="I. خطة الرغبة الشديدة">
+          <List items={planJson.craving_rescue} />
+          <Cite text={planJson.craving_rescue_citation} />
+        </Section>
+
+        <Section title="J. إذا رجعت للاستخدام">
+          <List items={planJson.relapse_plan} />
+          <Cite text={planJson.relapse_plan_citation} />
+        </Section>
+
         <Section title="شخص الدعم"><List items={planJson.support_person_plan} /></Section>
 
-        <Section title="خيارات يمكن مناقشتها مع الصيدلي أو الطبيب">
+        <Section title="K. خيارات يمكن مناقشتها مع الصيدلي أو الطبيب">
           <p className="text-sm">{planJson.pharmacy_discussion.intro}</p>
-          <p className="text-sm font-medium mt-2">بدائل النيكوتين:</p>
-          <List items={planJson.pharmacy_discussion.nrt_options} />
-          <p className="text-sm font-medium mt-2">أدوية وصفية يمكن سؤال الطبيب أو الصيدلي عنها:</p>
-          <List items={planJson.pharmacy_discussion.prescription_options} />
-          <div className="mt-2 rounded-md bg-amber-50 p-3 text-xs text-amber-900">
+
+          <h3 className="mt-4 text-sm font-semibold">1. بدائل النيكوتين (NRT)</h3>
+          <p className="text-sm">{planJson.pharmacy_discussion.nrt_intro}</p>
+          <div className="mt-2 space-y-3">
+            {planJson.pharmacy_discussion.nrt_details.map((o, i) => (
+              <div key={i} className="rounded-md border border-border bg-background p-3">
+                <p className="font-semibold">• {o.name}</p>
+                <p className="text-xs mt-1"><span className="text-muted-foreground">الفائدة:</span> {o.purpose}</p>
+                <p className="text-xs mt-1"><span className="text-muted-foreground">أعراض محتملة:</span> {o.common_issues}</p>
+                <p className="text-xs mt-1"><span className="text-muted-foreground">ملاحظة سلامة:</span> {o.safety}</p>
+              </div>
+            ))}
+          </div>
+
+          <h3 className="mt-4 text-sm font-semibold">2. أدوية وصفية غير نيكوتينية</h3>
+          <div className="mt-2 space-y-3">
+            {planJson.pharmacy_discussion.prescription_details.map((o, i) => (
+              <div key={i} className="rounded-md border border-border bg-background p-3">
+                <p className="font-semibold">• {o.name}</p>
+                <p className="text-xs mt-1"><span className="text-muted-foreground">الفائدة:</span> {o.purpose}</p>
+                <p className="text-xs mt-1"><span className="text-muted-foreground">أعراض محتملة:</span> {o.common_issues}</p>
+                <p className="text-xs mt-1"><span className="text-muted-foreground">ملاحظة سلامة:</span> {o.safety}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-3 rounded-md bg-amber-50 p-3 text-xs text-amber-900">
             {planJson.pharmacy_discussion.important_notes.map((n, i) => <p key={i}>• {n}</p>)}
           </div>
+          <p className="mt-2 text-sm">{planJson.pharmacy_discussion.closing}</p>
+          <Cite text={planJson.pharmacy_discussion.citations} />
         </Section>
 
-        <Section title="متى تطلب المساعدة المهنية"><List items={planJson.when_to_seek_help} /></Section>
+        <Section title="L. متى أحتاج مراجعة مختص؟">
+          <List items={planJson.when_to_seek_help} />
+          <Cite text={planJson.when_to_seek_help_citation} />
+        </Section>
 
         <div className="rounded-md border border-destructive/30 bg-destructive/5 p-3 text-xs text-destructive">
+          <p className="font-semibold mb-1">M. الحالات الطارئة</p>
           {planJson.emergency_disclaimer}
         </div>
 
-        <Section title="تذكير المتابعة">
-          <div className="flex flex-wrap gap-2">
+        <Section title="N. المتابعة">
+          <List items={planJson.followup_schedule} />
+          <div className="flex flex-wrap gap-2 mt-3">
             {(["24h", "3d", "7d", "14d", "28d"] as const).map((t) => (
               <button key={t} onClick={() => schedule(t)} className="rounded-full border border-input bg-background px-3 py-1.5 text-xs">
                 جدول تذكير {t}
@@ -160,10 +226,22 @@ function PlanPage() {
           </div>
           {reminderMsg && <p className="mt-2 text-xs text-muted-foreground">{reminderMsg}</p>}
         </Section>
+
+        <Section title="P. المراجع">
+          <ol className="list-decimal pr-5 space-y-1 text-xs text-foreground/80">
+            {planJson.references.map((r) => (
+              <li key={r.id}>{r.full}</li>
+            ))}
+          </ol>
+        </Section>
       </main>
       <SiteFooter />
     </div>
   );
+}
+
+function Cite({ text }: { text: string }) {
+  return <p className="mt-2 text-[11px] text-primary/80">{text}</p>;
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
