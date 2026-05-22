@@ -242,8 +242,8 @@ export function QuitPlanChat() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, busy]);
 
-  const steps: Step[] = useMemo(() => {
-    const aQs = assessmentSteps(state.product, state.age);
+  const buildSteps = (st: State): Step[] => {
+    const aQs = assessmentSteps(st.product, st.age);
     const base: Step[] = [
       { key: "nickname", prompt: "وش الاسم أو الكنية اللي تحب أناديك فيها؟", type: "text", validate: (v) => (v.trim().length < 1 ? "اكتب الاسم من فضلك." : null) },
       { key: "email", prompt: "إيش إيميلك؟ (نرسل لك نسخة من الخطة)", type: "email", validate: (v) => (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v) ? null : "صيغة الإيميل غير صحيحة.") },
