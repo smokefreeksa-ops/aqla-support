@@ -3707,7 +3707,7 @@ export type Database = {
       verify_training_certificate: { Args: { p_code: string }; Returns: Json }
     }
     Enums: {
-      app_role: "receptionist" | "physician"
+      app_role: "receptionist" | "physician" | "admin"
       cohort_code: "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H"
       contact_method: "whatsapp" | "phone" | "sms" | "email"
       preferred_language: "ar" | "en"
@@ -3862,7 +3862,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["receptionist", "physician"],
+      app_role: ["receptionist", "physician", "admin"],
       cohort_code: ["A", "B", "C", "D", "E", "F", "G", "H"],
       contact_method: ["whatsapp", "phone", "sms", "email"],
       preferred_language: ["ar", "en"],
