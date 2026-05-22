@@ -65,7 +65,7 @@ export function computeScore(intake: QuitPlanIntake): QuitPlanScore {
   const a = intake.assessment_answers;
   // Youth / loss of control override
   if (intake.product === "youth" || (intake.age && intake.age < 18)) {
-    const r = scoreHonc(a as HoncAnswers);
+    const r = scoreHonc(a as unknown as HoncAnswers);
     return {
       instrument: "honc_youth",
       instrument_label_ar: "تقييم فقدان الاستقلالية (HONC)",
@@ -78,7 +78,7 @@ export function computeScore(intake: QuitPlanIntake): QuitPlanScore {
   }
   switch (intake.product) {
     case "cigarettes": {
-      const r = scoreFtnd(a as FtndAnswers);
+      const r = scoreFtnd(a as unknown as FtndAnswers);
       return {
         instrument: "ftnd_cigarettes",
         instrument_label_ar: "اختبار فاجرستروم (FTND)",
@@ -90,7 +90,7 @@ export function computeScore(intake: QuitPlanIntake): QuitPlanScore {
       };
     }
     case "vape": {
-      const r = scorePennStateEcig(a as PennStateEcigAnswers);
+      const r = scorePennStateEcig(a as unknown as PennStateEcigAnswers);
       return {
         instrument: "ps_ecdi_vape",
         instrument_label_ar: "مؤشر بِن ستيت لاعتماد السجائر الإلكترونية (PSECDI)",
@@ -102,7 +102,7 @@ export function computeScore(intake: QuitPlanIntake): QuitPlanScore {
       };
     }
     case "shisha": {
-      const r = scoreLwds11(a as Lwds11Answers);
+      const r = scoreLwds11(a as unknown as Lwds11Answers);
       return {
         instrument: "lwds11_waterpipe",
         instrument_label_ar: "مقياس لبنان لاعتماد الشيشة (LWDS-11)",
@@ -114,7 +114,7 @@ export function computeScore(intake: QuitPlanIntake): QuitPlanScore {
       };
     }
     case "pouches": {
-      const r = scoreOralNicotineAdapted(a as OralNicotineAnswers);
+      const r = scoreOralNicotineAdapted(a as unknown as OralNicotineAnswers);
       return {
         instrument: "oral_nicotine_adapted",
         instrument_label_ar: "تقييم مكيّف لمنتجات النيكوتين الفموية (غير معتمد)",
@@ -128,7 +128,7 @@ export function computeScore(intake: QuitPlanIntake): QuitPlanScore {
     default: {
       // Fallback: treat as cigarettes-style FTND if answers provided, else zero
       try {
-        const r = scoreFtnd(a as FtndAnswers);
+        const r = scoreFtnd(a as unknown as FtndAnswers);
         return {
           instrument: "ftnd_cigarettes",
           instrument_label_ar: "اختبار فاجرستروم (FTND)",
