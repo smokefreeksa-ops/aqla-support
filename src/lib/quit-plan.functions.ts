@@ -89,7 +89,7 @@ export const saveAnswer = createServerFn({ method: "POST" })
     };
     const { error } = await supabaseAdmin
       .from("quit_plans")
-      .update({ intake_answers: next })
+      .update({ intake_answers: next as never })
       .eq("id", data.planId);
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -154,8 +154,8 @@ export const finalizeQuitPlan = createServerFn({ method: "POST" })
         score_band: score.band,
         risk_flag: score.risk_flag,
         validated: score.validated,
-        intake_answers: intake as unknown as Record<string, unknown>,
-        plan: plan as unknown as Record<string, unknown>,
+        intake_answers: intake as never,
+        plan: plan as never,
         status: "finalized",
       })
       .eq("id", data.planId);
