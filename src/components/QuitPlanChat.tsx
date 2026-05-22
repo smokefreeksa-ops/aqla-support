@@ -471,35 +471,13 @@ export function QuitPlanChat() {
     // Advance step
     const nextIdx = stepIndex + 1;
     setStepIndex(nextIdx);
-    const after = computeNextSteps(next)[nextIdx];
+    const after = buildSteps(next)[nextIdx];
     if (after) {
       setMessages((m) => [...m, { role: "assistant", content: after.prompt }]);
     }
     if (savePromise) await savePromise.catch(() => null);
   }
 
-  function computeNextSteps(s: State): Step[] {
-    // Same as `steps` memo but using `s` to recompute the list (assessment depends on product/age)
-    const aQs = assessmentSteps(s.product, s.age);
-    const base: Step[] = [
-      { key: "nickname", prompt: "" , type: "text" },
-      { key: "email", prompt: "", type: "email" },
-      { key: "city", prompt: "", type: "text" },
-      { key: "product", prompt: "", type: "choice" },
-      { key: "age", prompt: "", type: "number", optional: true },
-      ...aQs,
-      { key: "readiness", prompt: "", type: "choice" },
-      { key: "goal", prompt: "", type: "choice" },
-      { key: "quit_date", prompt: "", type: "skip-or-text" },
-      { key: "triggers", prompt: "", type: "multi" },
-      { key: "support_name", prompt: "", type: "skip-or-text" },
-      { key: "support_relation", prompt: "", type: "skip-or-text", when: (st) => Boolean(st.support_name) },
-      { key: "followup_preference", prompt: "", type: "choice" },
-      { key: "consent", prompt: "", type: "choice" },
-    ].filter((step) => !step.when || step.when(s));
-    // Use the live `steps` prompts
-    return steps.map((real, i) => ({ ...real, prompt: real.prompt })).concat(base.slice(steps.length));
-  }
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
