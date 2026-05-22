@@ -51,7 +51,7 @@ function Inner() {
         </div>
 
         <div className="mt-6">
-          <AqlaCenterChat centerType="quit_pathway" />
+          <QuitPlanChat />
         </div>
       </main>
       <SiteFooter />
