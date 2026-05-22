@@ -309,9 +309,10 @@ export function QuitPlanChat() {
         ],
       },
     ];
-    return base.filter((s) => !s.when || s.when(state));
-  }, [state]);
+    return base.filter((s) => !s.when || s.when(st));
+  };
 
+  const steps: Step[] = useMemo(() => buildSteps(state), [state]);
   const current = steps[stepIndex];
 
   // Initial prompt on first render
