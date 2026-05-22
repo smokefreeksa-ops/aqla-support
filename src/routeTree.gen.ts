@@ -53,6 +53,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as QuitPlanPlanIdRouteImport } from './routes/quit-plan.$planId'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
 import { Route as ShareInviteCodeRouteImport } from './routes/share.invite.$code'
@@ -278,6 +279,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuitPlanPlanIdRoute = QuitPlanPlanIdRouteImport.update({
+  id: '/$planId',
+  path: '/$planId',
+  getParentRoute: () => QuitPlanRoute,
+} as any)
 const CertificateCodeRoute = CertificateCodeRouteImport.update({
   id: '/certificate/$code',
   path: '/certificate/$code',
@@ -330,7 +336,7 @@ export interface FileRoutesByFullPath {
   '/professional-library': typeof ProfessionalLibraryRoute
   '/quit-center': typeof QuitCenterRoute
   '/quit-pathway': typeof QuitPathwayRoute
-  '/quit-plan': typeof QuitPlanRoute
+  '/quit-plan': typeof QuitPlanRouteWithChildren
   '/relapse-support': typeof RelapseSupportRoute
   '/request-support': typeof RequestSupportRoute
   '/safety-guidance': typeof SafetyGuidanceRoute
@@ -346,6 +352,7 @@ export interface FileRoutesByFullPath {
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/certificate/$code': typeof CertificateCodeRoute
+  '/quit-plan/$planId': typeof QuitPlanPlanIdRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
 }
@@ -380,7 +387,7 @@ export interface FileRoutesByTo {
   '/professional-library': typeof ProfessionalLibraryRoute
   '/quit-center': typeof QuitCenterRoute
   '/quit-pathway': typeof QuitPathwayRoute
-  '/quit-plan': typeof QuitPlanRoute
+  '/quit-plan': typeof QuitPlanRouteWithChildren
   '/relapse-support': typeof RelapseSupportRoute
   '/request-support': typeof RequestSupportRoute
   '/safety-guidance': typeof SafetyGuidanceRoute
@@ -396,6 +403,7 @@ export interface FileRoutesByTo {
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/certificate/$code': typeof CertificateCodeRoute
+  '/quit-plan/$planId': typeof QuitPlanPlanIdRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
 }
@@ -431,7 +439,7 @@ export interface FileRoutesById {
   '/professional-library': typeof ProfessionalLibraryRoute
   '/quit-center': typeof QuitCenterRoute
   '/quit-pathway': typeof QuitPathwayRoute
-  '/quit-plan': typeof QuitPlanRoute
+  '/quit-plan': typeof QuitPlanRouteWithChildren
   '/relapse-support': typeof RelapseSupportRoute
   '/request-support': typeof RequestSupportRoute
   '/safety-guidance': typeof SafetyGuidanceRoute
@@ -447,6 +455,7 @@ export interface FileRoutesById {
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/certificate/$code': typeof CertificateCodeRoute
+  '/quit-plan/$planId': typeof QuitPlanPlanIdRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
 }
@@ -499,6 +508,7 @@ export interface FileRouteTypes {
     | '/when-to-seek-help'
     | '/admin/data-dictionary'
     | '/certificate/$code'
+    | '/quit-plan/$planId'
     | '/share/$type/$id'
     | '/share/invite/$code'
   fileRoutesByTo: FileRoutesByTo
@@ -549,6 +559,7 @@ export interface FileRouteTypes {
     | '/when-to-seek-help'
     | '/admin/data-dictionary'
     | '/certificate/$code'
+    | '/quit-plan/$planId'
     | '/share/$type/$id'
     | '/share/invite/$code'
   id:
@@ -599,6 +610,7 @@ export interface FileRouteTypes {
     | '/when-to-seek-help'
     | '/admin/data-dictionary'
     | '/certificate/$code'
+    | '/quit-plan/$planId'
     | '/share/$type/$id'
     | '/share/invite/$code'
   fileRoutesById: FileRoutesById
@@ -634,7 +646,7 @@ export interface RootRouteChildren {
   ProfessionalLibraryRoute: typeof ProfessionalLibraryRoute
   QuitCenterRoute: typeof QuitCenterRoute
   QuitPathwayRoute: typeof QuitPathwayRoute
-  QuitPlanRoute: typeof QuitPlanRoute
+  QuitPlanRoute: typeof QuitPlanRouteWithChildren
   RelapseSupportRoute: typeof RelapseSupportRoute
   RequestSupportRoute: typeof RequestSupportRoute
   SafetyGuidanceRoute: typeof SafetyGuidanceRoute
@@ -963,6 +975,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quit-plan/$planId': {
+      id: '/quit-plan/$planId'
+      path: '/$planId'
+      fullPath: '/quit-plan/$planId'
+      preLoaderRoute: typeof QuitPlanPlanIdRouteImport
+      parentRoute: typeof QuitPlanRoute
+    }
     '/certificate/$code': {
       id: '/certificate/$code'
       path: '/certificate/$code'
@@ -1004,6 +1023,18 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface QuitPlanRouteChildren {
+  QuitPlanPlanIdRoute: typeof QuitPlanPlanIdRoute
+}
+
+const QuitPlanRouteChildren: QuitPlanRouteChildren = {
+  QuitPlanPlanIdRoute: QuitPlanPlanIdRoute,
+}
+
+const QuitPlanRouteWithChildren = QuitPlanRoute._addFileChildren(
+  QuitPlanRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -1035,7 +1066,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfessionalLibraryRoute: ProfessionalLibraryRoute,
   QuitCenterRoute: QuitCenterRoute,
   QuitPathwayRoute: QuitPathwayRoute,
-  QuitPlanRoute: QuitPlanRoute,
+  QuitPlanRoute: QuitPlanRouteWithChildren,
   RelapseSupportRoute: RelapseSupportRoute,
   RequestSupportRoute: RequestSupportRoute,
   SafetyGuidanceRoute: SafetyGuidanceRoute,

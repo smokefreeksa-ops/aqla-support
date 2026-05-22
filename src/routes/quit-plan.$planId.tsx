@@ -1,0 +1,182 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { Download, Mail, MessageCircle, Loader2 } from "lucide-react";
+import { getQuitPlan, scheduleReminder } from "@/lib/quit-plan.functions";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
+import type { QuitPlanJSON } from "@/lib/quit-plan-builder";
+
+export const Route = createFileRoute("/quit-plan/$planId")({
+  head: () => ({ meta: [{ title: "خطة أقلع الشخصية" }] }),
+  component: PlanPage,
+});
+
+function PlanPage() {
+  const { planId } = Route.useParams();
+  const getFn = useServerFn(getQuitPlan);
+  const remindFn = useServerFn(scheduleReminder);
+  const [downloading, setDownloading] = useState(false);
+  const [reminderMsg, setReminderMsg] = useState<string | null>(null);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["quit-plan", planId],
+    queryFn: () => getFn({ data: { planId } }),
+  });
+
+  const plan = data?.plan as { id: string; nickname: string | null; plan: QuitPlanJSON | null; email_sent_at: string | null } | null | undefined;
+  const planJson = (plan?.plan ?? null) as QuitPlanJSON | null;
+  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+
+  async function downloadPdf() {
+    if (!planJson) return;
+    setDownloading(true);
+    try {
+      const [{ pdf }, { QuitPlanPdf }, QR] = await Promise.all([
+        import("@react-pdf/renderer"),
+        import("@/lib/quit-plan-pdf"),
+        import("qrcode"),
+      ]);
+      const qrDataUrl = await QR.toDataURL(shareUrl, { margin: 1, width: 200 });
+      const blob = await pdf(QuitPlanPdf({ plan: planJson, qrDataUrl, shareUrl }) as never).toBlob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `aqla-plan-${plan?.id ?? "plan"}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error(e);
+      alert("تعذر إنشاء PDF حاليًا. حاول مرة ثانية.");
+    } finally {
+      setDownloading(false);
+    }
+  }
+
+  async function schedule(type: "24h" | "3d" | "7d" | "14d" | "28d") {
+    try {
+      const res = await remindFn({ data: { planId, type, channel: "email" } });
+      setReminderMsg(res.message);
+    } catch {
+      setReminderMsg("تعذر حفظ التذكير الآن، حاول لاحقًا.");
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div dir="rtl" className="min-h-screen bg-background">
+        <SiteHeader />
+        <main className="mx-auto max-w-3xl px-4 py-10 text-center text-sm text-muted-foreground">
+          <Loader2 className="mx-auto h-6 w-6 animate-spin" /> جارٍ تحميل الخطة…
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
+
+  if (!plan || !planJson) {
+    return (
+      <div dir="rtl" className="min-h-screen bg-background">
+        <SiteHeader />
+        <main className="mx-auto max-w-3xl px-4 py-10">
+          <p className="text-sm">لم يتم العثور على الخطة.</p>
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
+
+  return (
+    <div dir="rtl" className="min-h-screen bg-background">
+      <SiteHeader />
+      <main className="mx-auto max-w-3xl px-4 py-10 space-y-6">
+        <header className="space-y-2">
+          <h1 className="text-2xl font-bold">خطة أقلع الشخصية — {planJson.identity.nickname}</h1>
+          <p className="text-xs text-muted-foreground">
+            {plan.email_sent_at
+              ? "تم إرسال نسخة إلى بريدك الإلكتروني."
+              : "تم إنشاء الخطة، لكن تعذر إرسال البريد الإلكتروني حاليًا. يمكنك تحميل الخطة PDF أو نسخ الرابط."}
+          </p>
+          <div className="flex flex-wrap gap-2 pt-2">
+            <button onClick={downloadPdf} disabled={downloading} className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground disabled:opacity-50">
+              {downloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+              تحميل PDF
+            </button>
+            <button onClick={() => { navigator.clipboard.writeText(shareUrl); setReminderMsg("تم نسخ الرابط."); }} className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm">
+              نسخ الرابط
+            </button>
+            <a href="https://wa.me/966555096412" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm">
+              <MessageCircle className="h-4 w-4" /> دعم واتساب
+            </a>
+            <a href="mailto:smokefreeksa@gmail.com" className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm">
+              <Mail className="h-4 w-4" /> إيميل الدعم
+            </a>
+          </div>
+        </header>
+
+        <Section title="ملخص التقييم">
+          <Row k="المنتج" v={planJson.use.product_ar} />
+          <Row k="الأداة المستخدمة" v={planJson.assessment.instrument_label_ar} />
+          <Row k="النطاق" v={planJson.assessment.band_ar} />
+          {!planJson.assessment.validated && <p className="text-xs text-amber-600">تقييم مكيّف لمنتجات النيكوتين الفموية (غير معتمد).</p>}
+          <Row k="الاستعداد" v={planJson.readiness.label_ar} />
+          <Row k="الهدف" v={planJson.goal.label_ar} />
+          <Row k="تاريخ الإقلاع/التقليل" v={planJson.dates.quit_or_reduce_date ?? "—"} />
+        </Section>
+
+        <Section title="المثيرات وخطة التعامل"><List items={planJson.trigger_plan} /></Section>
+        <Section title="خطة إنقاذ الرغبة"><List items={planJson.craving_rescue} /></Section>
+        <Section title="أول 24 ساعة"><List items={planJson.first_24h} /></Section>
+        <Section title="أول 7 أيام"><List items={planJson.first_7d} /></Section>
+        <Section title="متابعة 28 يوم"><List items={planJson.follow_up_28d} /></Section>
+        <Section title="خطة الرجوع للاستخدام"><List items={planJson.relapse_plan} /></Section>
+        <Section title="شخص الدعم"><List items={planJson.support_person_plan} /></Section>
+
+        <Section title="خيارات يمكن مناقشتها مع الصيدلي أو الطبيب">
+          <p className="text-sm">{planJson.pharmacy_discussion.intro}</p>
+          <p className="text-sm font-medium mt-2">بدائل النيكوتين:</p>
+          <List items={planJson.pharmacy_discussion.nrt_options} />
+          <p className="text-sm font-medium mt-2">أدوية وصفية يمكن سؤال الطبيب أو الصيدلي عنها:</p>
+          <List items={planJson.pharmacy_discussion.prescription_options} />
+          <div className="mt-2 rounded-md bg-amber-50 p-3 text-xs text-amber-900">
+            {planJson.pharmacy_discussion.important_notes.map((n, i) => <p key={i}>• {n}</p>)}
+          </div>
+        </Section>
+
+        <Section title="متى تطلب المساعدة المهنية"><List items={planJson.when_to_seek_help} /></Section>
+
+        <div className="rounded-md border border-destructive/30 bg-destructive/5 p-3 text-xs text-destructive">
+          {planJson.emergency_disclaimer}
+        </div>
+
+        <Section title="تذكير المتابعة">
+          <div className="flex flex-wrap gap-2">
+            {(["24h", "3d", "7d", "14d", "28d"] as const).map((t) => (
+              <button key={t} onClick={() => schedule(t)} className="rounded-full border border-input bg-background px-3 py-1.5 text-xs">
+                جدول تذكير {t}
+              </button>
+            ))}
+          </div>
+          {reminderMsg && <p className="mt-2 text-xs text-muted-foreground">{reminderMsg}</p>}
+        </Section>
+      </main>
+      <SiteFooter />
+    </div>
+  );
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="rounded-2xl border border-border bg-card p-4">
+      <h2 className="text-sm font-semibold mb-2">{title}</h2>
+      <div className="text-sm leading-7 text-foreground/80 space-y-1">{children}</div>
+    </section>
+  );
+}
+function Row({ k, v }: { k: string; v: string | number }) {
+  return <p><span className="text-muted-foreground">{k}:</span> <span className="font-medium">{v}</span></p>;
+}
+function List({ items }: { items: string[] }) {
+  return <ul className="list-disc pr-5 space-y-1">{items.map((i, idx) => <li key={idx}>{i}</li>)}</ul>;
+}
