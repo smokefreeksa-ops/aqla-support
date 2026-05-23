@@ -7,13 +7,126 @@ import {
   type QuitPlanIntake,
   type QuitPlanJSON,
 } from "./quit-plan-builder";
-import { sendAdminNotification, renderKeyValueHtml } from "./notifications.server";
+
+const ADMIN_EMAIL = "smokefreeksa@gmail.com";
+const SITE_URL = "https://aqla-support.lovable.app";
 
 function randomToken(): string {
-  // 24-byte url-safe token
   const a = new Uint8Array(24);
   crypto.getRandomValues(a);
   return Array.from(a, (b) => b.toString(36).padStart(2, "0")).join("").slice(0, 32);
+}
+
+function escapeHtml(s: unknown): string {
+  return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function emailConfig() {
+  const apiKey = process.env.EMAIL_PROVIDER_API_KEY;
+  const from = process.env.EMAIL_FROM_ADDRESS;
+  if (!apiKey || !from) {
+    return {
+      ok: false as const,
+      error: !apiKey && !from
+        ? "EMAIL_PROVIDER_API_KEY and EMAIL_FROM_ADDRESS not configured"
+        : !apiKey
+          ? "EMAIL_PROVIDER_API_KEY not configured"
+          : "EMAIL_FROM_ADDRESS not configured",
+    };
+  }
+  return { ok: true as const, apiKey, from };
+}
+
+async function sendEmail(to: string, subject: string, html: string): Promise<{ sent: boolean; error: string | null }> {
+  const cfg = emailConfig();
+  if (!cfg.ok) return { sent: false, error: cfg.error };
+
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${cfg.apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ from: cfg.from, to: [to], subject, html }),
+    });
+    const body = await res.text().catch(() => "");
+    if (!res.ok) return { sent: false, error: `HTTP ${res.status}${body ? ` — ${body}` : ""}`.slice(0, 1000) };
+    return { sent: true, error: null };
+  } catch (e) {
+    return { sent: false, error: ((e as Error).message || "Email provider request failed").slice(0, 1000) };
+  }
+}
+
+async function logPlanEmail(input: {
+  quitPlanId: string;
+  recipientType: "user" | "admin";
+  email: string;
+  subject: string;
+  sent: boolean;
+  error: string | null;
+}) {
+  await supabaseAdmin.from("quit_plan_emails").insert({
+    quit_plan_id: input.quitPlanId,
+    recipient_type: input.recipientType,
+    email: input.email,
+    subject: input.subject,
+    status: input.sent ? "sent" : input.error?.includes("not configured") ? "pending_provider_setup" : "failed",
+    error_message: input.error,
+  });
+}
+
+function listHtml(items: string[]): string {
+  return items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+}
+
+function userPlanEmailHtml(plan: QuitPlanJSON, planUrl: string): string {
+  const refsList = plan.references.map((r, i) => `<li>${i + 1}. ${escapeHtml(r.full)}</li>`).join("");
+  return `<div dir="rtl" style="font-family:Tahoma,Arial,sans-serif;font-size:14px;line-height:1.85;color:#1f2933;max-width:720px;margin:auto;background:#fff">
+    <h1 style="color:#0b6e4f;font-size:22px;margin:0 0 6px">${escapeHtml(plan.title)}</h1>
+    <p style="color:#556;margin:0 0 18px">السلام عليكم ${escapeHtml(plan.identity.nickname)}، تم إنشاء خطتك الشخصية في أقلع بناءً على إجاباتك.</p>
+    <table style="border-collapse:collapse;width:100%;margin:12px 0;background:#fafafa">
+      <tr><td style="padding:8px;border:1px solid #e5e7eb"><b>المدينة</b></td><td style="padding:8px;border:1px solid #e5e7eb">${escapeHtml(plan.identity.city)}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #e5e7eb"><b>المنتج</b></td><td style="padding:8px;border:1px solid #e5e7eb">${escapeHtml(plan.use.product_ar)}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #e5e7eb"><b>أداة التقييم</b></td><td style="padding:8px;border:1px solid #e5e7eb">${escapeHtml(plan.assessment.instrument_label_ar)}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #e5e7eb"><b>نطاق النتيجة</b></td><td style="padding:8px;border:1px solid #e5e7eb">${escapeHtml(plan.assessment.band_ar)} — ${escapeHtml(plan.score_meaning)}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #e5e7eb"><b>الهدف</b></td><td style="padding:8px;border:1px solid #e5e7eb">${escapeHtml(plan.goal.label_ar)}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #e5e7eb"><b>تاريخ البداية</b></td><td style="padding:8px;border:1px solid #e5e7eb">${escapeHtml(plan.dates.quit_or_reduce_date ?? "—")}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #e5e7eb"><b>المتابعة القادمة</b></td><td style="padding:8px;border:1px solid #e5e7eb">${escapeHtml(plan.dates.followup_next)}</td></tr>
+    </table>
+    <h2 style="color:#0b6e4f;font-size:16px;margin-top:18px">محفزاتك الأساسية</h2><ul>${listHtml(plan.triggers)}</ul>
+    <h2 style="color:#0b6e4f;font-size:16px;margin-top:18px">خطة التعامل مع المحفزات</h2><ul>${listHtml(plan.trigger_plan)}</ul>
+    <h2 style="color:#0b6e4f;font-size:16px;margin-top:18px">خطة الرغبة الشديدة</h2><ul>${listHtml(plan.craving_rescue)}</ul>
+    <p style="margin:22px 0"><a href="${planUrl}" style="background:#0b6e4f;color:#fff;padding:12px 18px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:bold">عرض الخطة الكاملة وتحميل خطة أقلع PDF</a></p>
+    <p style="color:#667085;font-size:12px">إذا لم يعمل الزر، انسخ الرابط: ${planUrl}</p>
+    <div style="background:#fff7e6;border:1px solid #f0c36a;border-radius:6px;padding:10px;margin-top:14px;font-size:12px;color:#7a4b00">${escapeHtml(plan.pharmacy_discussion.intro)}</div>
+    <div style="background:#fdecea;border-radius:6px;padding:10px;color:#8a1a1a;font-size:12px;margin-top:12px">${escapeHtml(plan.emergency_disclaimer)}</div>
+    <h2 style="color:#0b6e4f;font-size:16px;margin-top:18px">المراجع</h2><ol style="font-size:12px;color:#444;padding-inline-start:18px">${refsList}</ol>
+  </div>`;
+}
+
+function adminPlanEmailHtml(plan: QuitPlanJSON, intake: QuitPlanIntake, planId: string, planUrl: string): string {
+  const rows: Record<string, unknown> = {
+    "name/nickname": intake.nickname,
+    email: intake.email,
+    city: intake.city,
+    "product type": plan.use.product_ar,
+    "assessment tool": plan.assessment.instrument_label_ar,
+    "score band": `${plan.assessment.band_ar} (${plan.assessment.band})`,
+    "validated": plan.assessment.validated,
+    "risk flag": plan.assessment.risk_flag,
+    goal: plan.goal.label_ar,
+    "quit/reduction date": plan.dates.quit_or_reduce_date ?? "—",
+    "follow-up preference": plan.followup_preference_ar,
+    "plan link": planUrl,
+    "created date": plan.meta.generated_at,
+  };
+  const htmlRows = Object.entries(rows)
+    .map(([k, v]) => `<tr><td style="padding:7px 10px;border-bottom:1px solid #e5e7eb;color:#555"><b>${escapeHtml(k)}</b></td><td style="padding:7px 10px;border-bottom:1px solid #e5e7eb">${escapeHtml(v)}</td></tr>`)
+    .join("");
+  return `<div dir="rtl" style="font-family:Tahoma,Arial,sans-serif;font-size:14px;line-height:1.7;color:#1f2933;max-width:720px;margin:auto;background:#fff">
+    <h1 style="color:#0b6e4f;font-size:20px;margin:0 0 12px">تم إنشاء خطة إقلاع جديدة في أقلع</h1>
+    <p>ملخص إداري محدود للخطة رقم ${escapeHtml(planId)}. لا يتضمن تفاصيل صحية خاصة أو الإجابات الخام.</p>
+    <table dir="ltr" style="border-collapse:collapse;width:100%;margin:12px 0;background:#fafafa;text-align:left">${htmlRows}</table>
+    <p><a href="${planUrl}" style="color:#0b6e4f;font-weight:bold">Open plan</a></p>
+  </div>`;
 }
 
 // ---------------- startQuitPlan ----------------
@@ -31,7 +144,6 @@ export const startQuitPlan = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data }) => {
-    // Create a center_session row first (FK requirement)
     const { data: session, error: sErr } = await supabaseAdmin
       .from("center_sessions")
       .insert({
@@ -107,6 +219,10 @@ export const finalizeQuitPlan = createServerFn({ method: "POST" })
           city: z.string().min(1),
           product: z.enum(["cigarettes", "vape", "shisha", "pouches", "youth", "other"]),
           age: z.number().int().optional(),
+          daily_use_pattern: z.string().optional(),
+          time_to_first_use: z.string().optional(),
+          craving_pattern: z.string().optional(),
+          previous_quit_attempts: z.string().optional(),
           readiness: z.enum([
             "quit_now",
             "quit_prepare",
@@ -126,6 +242,7 @@ export const finalizeQuitPlan = createServerFn({ method: "POST" })
             .nullable()
             .optional(),
           followup_preference: z.enum(["email", "whatsapp", "none"]).optional(),
+          reminder_consent: z.boolean().optional(),
           assessment_answers: z.record(z.string(), z.unknown()).default({}),
           emergency_consent: z.boolean().optional(),
         }),
@@ -136,6 +253,7 @@ export const finalizeQuitPlan = createServerFn({ method: "POST" })
     const intake = data.intake as QuitPlanIntake;
     const score = computeScore(intake);
     const plan: QuitPlanJSON = buildQuitPlan(intake, score);
+    const planUrl = `${SITE_URL}/quit-plan/${data.planId}`;
 
     const { error } = await supabaseAdmin
       .from("quit_plans")
@@ -156,158 +274,59 @@ export const finalizeQuitPlan = createServerFn({ method: "POST" })
         validated: score.validated,
         intake_answers: intake as never,
         plan: plan as never,
+        followup_schedule: plan.followup_schedule as never,
         status: "finalized",
       })
       .eq("id", data.planId);
     if (error) throw new Error(error.message);
 
-    // Fetch plan_token for share link
     const { data: row } = await supabaseAdmin
       .from("quit_plans")
       .select("plan_token")
       .eq("id", data.planId)
       .single();
     const token = (row?.plan_token as string | null) ?? null;
-    const site = "https://aqla-support.lovable.app";
-    const planUrl = `${site}/quit-plan/${data.planId}`;
 
-    // Admin notification (non-sensitive summary)
-    let adminNotified = false;
-    try {
-      await sendAdminNotification(
-        "full_quit_support_submission",
-        "تم إنشاء خطة إقلاع جديدة في أقلع",
-        renderKeyValueHtml({
-          nickname: intake.nickname,
-          email: intake.email,
-          city: intake.city,
-          product: intake.product,
-          assessment_tool: score.instrument,
-          score_band: score.band,
-          risk_flag: score.risk_flag,
-          followup_preference: intake.followup_preference ?? "—",
-          plan_generated_at: new Date().toISOString(),
-          plan_url: planUrl,
-        }),
-        { participant_code: data.planId },
-      );
-      adminNotified = true;
-      await supabaseAdmin
-        .from("quit_plans")
-        .update({ admin_notified_at: new Date().toISOString() })
-        .eq("id", data.planId);
-      await supabaseAdmin.from("quit_plan_emails").insert({
-        quit_plan_id: data.planId,
-        recipient_type: "admin",
-        email: "smokefreeksa@gmail.com",
-        subject: "تم إنشاء خطة إقلاع جديدة في أقلع",
-        status: "queued",
-      });
-    } catch (e) {
-      console.error("admin notify failed", e);
+    const userSubject = "خطة أقلع الشخصية الخاصة بك";
+    const userResult = await sendEmail(intake.email, userSubject, userPlanEmailHtml(plan, planUrl));
+    await logPlanEmail({
+      quitPlanId: data.planId,
+      recipientType: "user",
+      email: intake.email,
+      subject: userSubject,
+      sent: userResult.sent,
+      error: userResult.error,
+    });
+    if (userResult.sent) {
+      await supabaseAdmin.from("quit_plans").update({ email_sent_at: new Date().toISOString() }).eq("id", data.planId);
     }
 
-    // User email (best effort — uses same email infra)
-    const apiKey = process.env.EMAIL_PROVIDER_API_KEY;
-    let userEmailSent = false;
-    let userEmailError: string | null = null;
-    if (apiKey) {
-      try {
-        const fromAddr = process.env.EMAIL_FROM_ADDRESS || "Aqla <onboarding@resend.dev>";
-        const topTriggers = plan.triggers.slice(0, 5).map((t) => `<li>${escapeHtml(t)}</li>`).join("");
-        const triggerActions = plan.trigger_plan.slice(0, 5).map((t) => `<li>${escapeHtml(t)}</li>`).join("");
-        const refsList = plan.references.map((r, i) => `<li>${i + 1}. ${escapeHtml(r.full)}</li>`).join("");
-        const html = `<div dir="rtl" style="font-family:Tahoma,Arial,sans-serif;font-size:14px;line-height:1.8;color:#222;max-width:640px;margin:auto">
-          <h2 style="color:#0b6e4f;margin:0 0 4px">${escapeHtml(plan.title)}</h2>
-          <p style="color:#555;margin:0 0 16px">${escapeHtml(plan.subtitle)}</p>
-          <p>السلام عليكم ${escapeHtml(intake.nickname)}،</p>
-          <p>تم إنشاء خطتك الشخصية في أقلع بناءً على إجاباتك. هذا ملخص سريع، والخطة الكاملة تشمل خطة المحفزات، خطة 24 ساعة و7 أيام و28 يوم، خطة الرغبة الشديدة، وخيارات يمكن مناقشتها مع الصيدلي أو الطبيب.</p>
-          <table style="border-collapse:collapse;width:100%;margin:12px 0">
-            <tr><td style="padding:6px;border:1px solid #eee"><b>المنتج</b></td><td style="padding:6px;border:1px solid #eee">${escapeHtml(plan.use.product_ar)}</td></tr>
-            <tr><td style="padding:6px;border:1px solid #eee"><b>أداة التقييم</b></td><td style="padding:6px;border:1px solid #eee">${escapeHtml(plan.assessment.instrument_label_ar)}</td></tr>
-            <tr><td style="padding:6px;border:1px solid #eee"><b>نطاق النتيجة</b></td><td style="padding:6px;border:1px solid #eee">${escapeHtml(plan.assessment.band_ar)}</td></tr>
-            <tr><td style="padding:6px;border:1px solid #eee"><b>الهدف</b></td><td style="padding:6px;border:1px solid #eee">${escapeHtml(plan.goal.label_ar)}</td></tr>
-            <tr><td style="padding:6px;border:1px solid #eee"><b>تاريخ البداية</b></td><td style="padding:6px;border:1px solid #eee">${escapeHtml(plan.dates.quit_or_reduce_date ?? "—")}</td></tr>
-          </table>
-          <h3 style="color:#0b6e4f;margin-top:18px">أهم محفزاتك</h3>
-          <ul>${topTriggers}</ul>
-          <h3 style="color:#0b6e4f;margin-top:18px">خطة التعامل مع المحفزات</h3>
-          <ul>${triggerActions}</ul>
-          <p style="margin-top:20px">
-            <a href="${planUrl}" style="background:#0b6e4f;color:#fff;padding:12px 18px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:bold">عرض الخطة الكاملة وتحميل PDF</a>
-          </p>
-          <p style="color:#666;font-size:12px">إذا لم يعمل الزر، انسخ هذا الرابط: ${planUrl}</p>
-          <div style="background:#fdecea;border-radius:6px;padding:10px;color:#8a1a1a;font-size:12px;margin-top:16px">
-            ${escapeHtml(plan.emergency_disclaimer)}
-          </div>
-          <h3 style="color:#0b6e4f;margin-top:18px">المراجع</h3>
-          <ol style="font-size:12px;color:#444;padding-inline-start:18px">${refsList}</ol>
-          <hr style="border:none;border-top:1px solid #eee;margin:20px 0"/>
-          <p style="color:#888;font-size:12px">أقلع لا يقدّم تشخيصًا أو وصفة دوائية ولا يحدد جرعات. اختيار الدواء أو الجرعة المناسبة يحتاج مراجعة صيدلي أو طبيب.</p>
-        </div>`;
-        const res = await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-          body: JSON.stringify({
-            from: fromAddr,
-            to: [intake.email],
-            subject: "خطة أقلع الشخصية الخاصة بك",
-            html,
-          }),
-        });
-        if (!res.ok) {
-          userEmailError = `HTTP ${res.status}`;
-        } else {
-          userEmailSent = true;
-          await supabaseAdmin
-            .from("quit_plans")
-            .update({ email_sent_at: new Date().toISOString() })
-            .eq("id", data.planId);
-        }
-        await supabaseAdmin.from("quit_plan_emails").insert({
-          quit_plan_id: data.planId,
-          recipient_type: "user",
-          email: intake.email,
-          subject: "خطة أقلع الشخصية الخاصة بك",
-          status: userEmailSent ? "sent" : "failed",
-          error_message: userEmailError,
-        });
-      } catch (e) {
-        userEmailError = (e as Error).message;
-        await supabaseAdmin.from("quit_plan_emails").insert({
-          quit_plan_id: data.planId,
-          recipient_type: "user",
-          email: intake.email,
-          subject: "خطة أقلع الشخصية الخاصة بك",
-          status: "failed",
-          error_message: userEmailError,
-        });
-      }
+    const adminSubject = "تم إنشاء خطة إقلاع جديدة في أقلع";
+    const adminResult = await sendEmail(ADMIN_EMAIL, adminSubject, adminPlanEmailHtml(plan, intake, data.planId, planUrl));
+    await logPlanEmail({
+      quitPlanId: data.planId,
+      recipientType: "admin",
+      email: ADMIN_EMAIL,
+      subject: adminSubject,
+      sent: adminResult.sent,
+      error: adminResult.error,
+    });
+    if (adminResult.sent) {
+      await supabaseAdmin.from("quit_plans").update({ admin_notified_at: new Date().toISOString() }).eq("id", data.planId);
     } else {
-      userEmailError = "EMAIL_PROVIDER_API_KEY not configured";
-      await supabaseAdmin.from("quit_plan_emails").insert({
-        quit_plan_id: data.planId,
-        recipient_type: "user",
-        email: intake.email,
-        subject: "خطة أقلع الشخصية الخاصة بك",
-        status: "pending_provider_setup",
-        error_message: userEmailError,
-      });
+      console.error("quit plan admin email failed", adminResult.error);
     }
 
     return {
       planId: data.planId,
       planToken: token,
       planUrl,
-      userEmailSent,
-      userEmailError,
-      adminNotified,
+      userEmailSent: userResult.sent,
+      userEmailError: userResult.error,
+      adminEmailSent: adminResult.sent,
+      adminEmailError: adminResult.error,
     };
   });
-
-function escapeHtml(s: string): string {
-  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
 
 // ---------------- getQuitPlan ----------------
 export const getQuitPlan = createServerFn({ method: "POST" })
@@ -357,7 +376,7 @@ export const scheduleReminder = createServerFn({ method: "POST" })
       status: "pending",
     });
     if (error) throw new Error(error.message);
-    const dispatcherReady = Boolean(process.env.EMAIL_PROVIDER_API_KEY);
+    const dispatcherReady = Boolean(process.env.EMAIL_PROVIDER_API_KEY && process.env.EMAIL_FROM_ADDRESS);
     return {
       ok: true,
       scheduledFor: d.toISOString(),
