@@ -273,7 +273,7 @@ export interface QuitPlanJSON {
   title: string;
   subtitle: string;
   identity: { nickname: string; email: string; city: string };
-  use: { product: QuitProduct; product_ar: string; age?: number };
+  use: { product: QuitProduct; product_ar: string; age?: number; daily_use_pattern?: string; time_to_first_use?: string; craving_pattern?: string; previous_quit_attempts?: string };
   assessment: QuitPlanScore;
   summary_citation: string;
   score_meaning: string;
@@ -342,7 +342,15 @@ export function buildQuitPlan(intake: QuitPlanIntake, score: QuitPlanScore): Qui
     subtitle:
       "خطة مبنية على إجاباتك، وتجمع بين الدعم السلوكي، إدارة المحفزات، المتابعة، وخيارات يمكن مناقشتها مع الصيدلي أو الطبيب.",
     identity: { nickname: intake.nickname, email: intake.email, city: intake.city },
-    use: { product: intake.product, product_ar: PRODUCT_AR[intake.product], age: intake.age },
+    use: {
+      product: intake.product,
+      product_ar: PRODUCT_AR[intake.product],
+      age: intake.age,
+      daily_use_pattern: intake.daily_use_pattern,
+      time_to_first_use: intake.time_to_first_use,
+      craving_pattern: intake.craving_pattern,
+      previous_quit_attempts: intake.previous_quit_attempts,
+    },
     assessment: score,
     summary_citation: "(WHO 2024; USPSTF 2021)",
     score_meaning,
