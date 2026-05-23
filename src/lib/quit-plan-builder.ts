@@ -512,6 +512,13 @@ export function buildQuitPlan(intake: QuitPlanIntake, score: QuitPlanScore): Qui
       email: "smokefreeksa@gmail.com",
       site: "https://aqla-support.lovable.app",
     },
+    aqla_links: [
+      { label: "تعديل الخطة", href: "https://aqla-support.lovable.app/quit-pathway" },
+      { label: "تحميل PDF", href: "سيظهر زر التحميل في صفحة الخطة" },
+      { label: "إرسال الخطة إلى البريد", href: "يتم إرسال رابط الخطة بعد إنشائها إذا كان الإرسال مفعّلًا" },
+      { label: "تواصل واتساب/اتصال", href: "https://wa.me/966555096412" },
+      { label: "طلب مراجعة مختص", href: "mailto:smokefreeksa@gmail.com" },
+    ],
     references: REFERENCES.map((r) => ({ id: r.id, full: r.full })),
   };
 }
