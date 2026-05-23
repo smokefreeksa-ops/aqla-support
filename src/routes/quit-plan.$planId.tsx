@@ -39,16 +39,16 @@ function PlanPage() {
         import("qrcode"),
       ]);
       const qrDataUrl = await QR.toDataURL(shareUrl, { margin: 1, width: 200 });
-      const blob = await pdf(QuitPlanPdf({ plan: planJson, qrDataUrl, shareUrl }) as never).toBlob();
+      const blob = await pdf(<QuitPlanPdf plan={planJson} qrDataUrl={qrDataUrl} shareUrl={shareUrl} planId={plan?.id ?? planId} />).toBlob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `aqla-plan-${plan?.id ?? "plan"}.pdf`;
+      a.download = `aqla-quit-plan-${plan?.id ?? planId}.pdf`;
       a.click();
       URL.revokeObjectURL(url);
     } catch (e) {
       console.error(e);
-      alert("تعذر إنشاء PDF حاليًا. حاول مرة ثانية.");
+      alert("تم إنشاء الخطة، لكن تعذر إنشاء ملف PDF حاليًا. يرجى المحاولة مرة أخرى.");
     } finally {
       setDownloading(false);
     }
@@ -101,7 +101,7 @@ function PlanPage() {
           <div className="flex flex-wrap gap-2 pt-2">
             <button onClick={downloadPdf} disabled={downloading} className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground disabled:opacity-50">
               {downloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-              تحميل PDF
+              تحميل خطة أقلع PDF
             </button>
             <button onClick={() => { navigator.clipboard.writeText(shareUrl); setReminderMsg("تم نسخ الرابط."); }} className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm">
               نسخ الرابط
@@ -123,6 +123,7 @@ function PlanPage() {
         <Section title="A. ملخص خطتك">
           <Row k="الاسم" v={planJson.identity.nickname} />
           <Row k="المدينة" v={planJson.identity.city} />
+          <Row k="تاريخ إنشاء الخطة" v={new Date(planJson.meta.generated_at).toLocaleString("ar-SA")} />
           <Row k="المنتج" v={planJson.use.product_ar} />
           <Row k="الأداة المستخدمة" v={planJson.assessment.instrument_label_ar} />
           <Row k="نطاق النتيجة" v={`${planJson.assessment.band_ar} (مجموع ${planJson.assessment.total})`} />
@@ -130,6 +131,7 @@ function PlanPage() {
           <Row k="الهدف الحالي" v={planJson.goal.label_ar} />
           <Row k="الاستعداد" v={planJson.readiness.label_ar} />
           <Row k="تاريخ البداية" v={planJson.dates.quit_or_reduce_date ?? "—"} />
+          <Row k="طريقة المتابعة" v={planJson.followup_preference_ar} />
           <Cite text={planJson.summary_citation} />
         </Section>
 
