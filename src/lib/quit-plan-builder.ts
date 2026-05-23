@@ -330,7 +330,9 @@ export function buildQuitPlan(intake: QuitPlanIntake, score: QuitPlanScore): Qui
       ? "هدفك الآن هو الإقلاع الكامل. سنبني الخطة حول تاريخ بداية واضح، إدارة المحفزات، خطة رغبة شديدة، ومتابعة منتظمة. (WHO 2024; USPSTF 2021)"
       : intake.goal === "reduce_first"
         ? "هدفك الآن هو التقليل أولًا كخطوة نحو الإقلاع. سنركّز على تقليل عدد المرات، تحديد أوقات الاستخدام، وبناء بدائل عملية لكل محفز. (WHO 2024; NCI PDQ)"
-        : "هدفك الآن هو فهم وضعك. حتى لو لم تكن جاهزًا للإقلاع الكامل اليوم، يمكن البدء بخطوة واضحة مثل فهم المحفزات أو تحديد موعد قريب. (WHO 2024; NCI PDQ)";
+        : intake.goal === "not_ready_now"
+          ? "هدفك الآن ليس الإقلاع الكامل فورًا. الخطة ستركّز على تقليل الضرر، فهم المحفزات، وتجهيز خطوة صغيرة دون ضغط أو لوم. (WHO 2024; NCI PDQ)"
+          : "هدفك الآن هو فهم وضعك. حتى لو لم تكن جاهزًا للإقلاع الكامل اليوم، يمكن البدء بخطوة واضحة مثل فهم المحفزات أو تحديد موعد قريب. (WHO 2024; NCI PDQ)";
 
   const score_meaning = `نطاق نتيجتك: ${score.band_ar} على ${score.instrument_label_ar}. هذه النتيجة ليست تشخيصًا، لكنها مؤشر يساعدنا على اختيار مستوى الدعم المناسب وبناء خطة عملية تناسب نمط استخدامك. (WHO 2024)`;
 
@@ -347,6 +349,7 @@ export function buildQuitPlan(intake: QuitPlanIntake, score: QuitPlanScore): Qui
     readiness: { code: intake.readiness, label_ar: READINESS_AR[intake.readiness] },
     goal: { code: intake.goal, label_ar: GOAL_AR[intake.goal], text: goalText },
     dates: { quit_or_reduce_date: quitDate, followup_next: addDays(now, 7) },
+    followup_preference_ar: FOLLOWUP_AR[intake.followup_preference ?? "email"],
     triggers,
     trigger_plan,
     trigger_plan_citation: "(CDC 2024; NCI PDQ)",
