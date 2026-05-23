@@ -17,7 +17,7 @@ import {
 } from "./scoring";
 
 export type QuitProduct = "cigarettes" | "vape" | "shisha" | "pouches" | "youth" | "other";
-export type QuitGoal = "quit_full" | "reduce_first" | "understand";
+export type QuitGoal = "quit_full" | "reduce_first" | "understand" | "not_ready_now";
 export type ReadinessStage =
   | "quit_now"
   | "quit_prepare"
@@ -162,6 +162,7 @@ const GOAL_AR: Record<QuitGoal, string> = {
   quit_full: "الإقلاع تمامًا",
   reduce_first: "التقليل أولًا",
   understand: "فهم الوضع",
+  not_ready_now: "غير جاهز الآن",
 };
 
 const READINESS_AR: Record<ReadinessStage, string> = {
@@ -179,6 +180,12 @@ const PRODUCT_AR: Record<QuitProduct, string> = {
   pouches: "أكياس / منتجات نيكوتين فموية",
   youth: "تقييم الشباب وفقدان الاستقلالية",
   other: "أخرى",
+};
+
+const FOLLOWUP_AR: Record<NonNullable<QuitPlanIntake["followup_preference"]>, string> = {
+  email: "إيميل",
+  whatsapp: "واتساب",
+  none: "بدون متابعة",
 };
 
 // ---- Evidence-based trigger-specific actions (Arabic) ----
