@@ -395,6 +395,10 @@ export function QuitPlanChat() {
       case "city": next.city = value; break;
       case "product": next.product = value as QuitProduct; break;
       case "age": next.age = value && value !== "تخطّي" ? Number(value) : undefined; break;
+      case "daily_use_pattern": next.daily_use_pattern = value; break;
+      case "time_to_first_use": next.time_to_first_use = value; break;
+      case "craving_pattern": next.craving_pattern = value; break;
+      case "previous_quit_attempts": next.previous_quit_attempts = value; break;
       case "readiness": next.readiness = value as ReadinessStage; break;
       case "goal": next.goal = value as QuitGoal; break;
       case "quit_date":
@@ -411,6 +415,9 @@ export function QuitPlanChat() {
         break;
       case "followup_preference":
         next.followup_preference = value as State["followup_preference"];
+        break;
+      case "reminder_consent":
+        next.reminder_consent = value === "yes";
         break;
       case "consent":
         if (value !== "yes") {
@@ -456,12 +463,17 @@ export function QuitPlanChat() {
               city: next.city,
               product: next.product,
               age: next.age,
+              daily_use_pattern: next.daily_use_pattern,
+              time_to_first_use: next.time_to_first_use,
+              craving_pattern: next.craving_pattern,
+              previous_quit_attempts: next.previous_quit_attempts,
               readiness: next.readiness,
               goal: next.goal,
               quit_date: next.quit_date ?? null,
               triggers: next.triggers,
               support_person: next.support_name ? { name: next.support_name, relation: next.support_relation } : null,
               followup_preference: next.followup_preference,
+              reminder_consent: next.reminder_consent,
               assessment_answers,
             },
           },
