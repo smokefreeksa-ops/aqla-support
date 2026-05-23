@@ -31,12 +31,17 @@ export interface QuitPlanIntake {
   city: string;
   product: QuitProduct;
   age?: number;
+  daily_use_pattern?: string;
+  time_to_first_use?: string;
+  craving_pattern?: string;
+  previous_quit_attempts?: string;
   readiness: ReadinessStage;
   goal: QuitGoal;
   quit_date?: string | null;
   triggers: string[];
   support_person?: { name?: string; relation?: string; phone?: string } | null;
   followup_preference?: "email" | "whatsapp" | "none";
+  reminder_consent?: boolean;
   assessment_answers: Record<string, unknown>;
   emergency_consent?: boolean;
 }
@@ -250,6 +255,7 @@ export const REFERENCES: { id: string; citation: string; full: string }[] = [
 
 export interface PharmacyOptionDetail {
   name: string;
+  what_is: string;
   purpose: string;
   common_issues: string;
   safety: string;
@@ -267,6 +273,7 @@ export interface QuitPlanJSON {
   readiness: { code: ReadinessStage; label_ar: string };
   goal: { code: QuitGoal; label_ar: string; text: string };
   dates: { quit_or_reduce_date: string | null; followup_next: string };
+  followup_preference_ar: string;
   triggers: string[];
   trigger_plan: string[];
   trigger_plan_citation: string;
@@ -295,6 +302,7 @@ export interface QuitPlanJSON {
   emergency_disclaimer: string;
   followup_schedule: string[];
   contact: { whatsapp: string; email: string; site: string };
+  aqla_links: { label: string; href: string }[];
   references: { id: string; full: string }[];
 }
 
