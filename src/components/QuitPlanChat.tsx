@@ -23,6 +23,10 @@ interface State {
   email: string;
   city: string;
   age?: number;
+  daily_use_pattern?: string;
+  time_to_first_use?: string;
+  craving_pattern?: string;
+  previous_quit_attempts?: string;
   product: QuitProduct;
   readiness: ReadinessStage;
   goal: QuitGoal;
@@ -31,6 +35,7 @@ interface State {
   support_name?: string;
   support_relation?: string;
   followup_preference?: "email" | "whatsapp" | "none";
+  reminder_consent?: boolean;
   assessment_answers: Record<string, unknown>;
   emergency_consent?: boolean;
 }
@@ -262,6 +267,10 @@ export function QuitPlanChat() {
         ],
       },
       { key: "age", prompt: "كم عمرك؟ (اختياري، يساعد على اختيار الأداة المناسبة)", type: "number", optional: true },
+      { key: "daily_use_pattern", prompt: "صف نمط استخدامك اليومي باختصار: كم مرة تقريبًا ومتى يزيد الاستخدام؟", type: "text", validate: (v) => (v.trim().length < 2 ? "اكتب وصفًا قصيرًا من فضلك." : null) },
+      { key: "time_to_first_use", prompt: "بعد الاستيقاظ، متى غالبًا يأتي أول استخدام للتدخين أو النيكوتين؟", type: "text", validate: (v) => (v.trim().length < 1 ? "اكتب الوقت التقريبي من فضلك." : null) },
+      { key: "craving_pattern", prompt: "متى تكون الرغبة الشديدة أقوى؟ مثل: الصباح، بعد الأكل، التوتر، السهر…", type: "text", validate: (v) => (v.trim().length < 2 ? "اكتب نمط الرغبة باختصار." : null) },
+      { key: "previous_quit_attempts", prompt: "هل حاولت الإقلاع أو التقليل سابقًا؟ ماذا ساعدك أو صعّب عليك؟", type: "text", validate: (v) => (v.trim().length < 2 ? "اكتب تجربة قصيرة من فضلك." : null) },
       ...aQs,
       {
         key: "readiness",
@@ -283,6 +292,7 @@ export function QuitPlanChat() {
           { label: "الإقلاع تمامًا", value: "quit_full" },
           { label: "التقليل أولًا", value: "reduce_first" },
           { label: "فهم الوضع", value: "understand" },
+          { label: "غير جاهز الآن", value: "not_ready_now" },
         ],
       },
       { key: "quit_date", prompt: "متى تنوي تاريخ الإقلاع أو بدء التقليل؟ (YYYY-MM-DD، أو اكتب 'تخطّي')", type: "skip-or-text", optional: true },
@@ -297,6 +307,15 @@ export function QuitPlanChat() {
           { label: "إيميل", value: "email" },
           { label: "واتساب (رابط wa.me)", value: "whatsapp" },
           { label: "بدون متابعة", value: "none" },
+        ],
+      },
+      {
+        key: "reminder_consent",
+        prompt: "هل توافق أن نحفظ لك تذكيرات متابعة للخطة؟",
+        type: "choice",
+        choices: [
+          { label: "نعم، احفظ التذكيرات", value: "yes" },
+          { label: "لا الآن", value: "no" },
         ],
       },
       {
@@ -376,6 +395,10 @@ export function QuitPlanChat() {
       case "city": next.city = value; break;
       case "product": next.product = value as QuitProduct; break;
       case "age": next.age = value && value !== "تخطّي" ? Number(value) : undefined; break;
+      case "daily_use_pattern": next.daily_use_pattern = value; break;
+      case "time_to_first_use": next.time_to_first_use = value; break;
+      case "craving_pattern": next.craving_pattern = value; break;
+      case "previous_quit_attempts": next.previous_quit_attempts = value; break;
       case "readiness": next.readiness = value as ReadinessStage; break;
       case "goal": next.goal = value as QuitGoal; break;
       case "quit_date":
@@ -392,6 +415,9 @@ export function QuitPlanChat() {
         break;
       case "followup_preference":
         next.followup_preference = value as State["followup_preference"];
+        break;
+      case "reminder_consent":
+        next.reminder_consent = value === "yes";
         break;
       case "consent":
         if (value !== "yes") {
@@ -437,12 +463,17 @@ export function QuitPlanChat() {
               city: next.city,
               product: next.product,
               age: next.age,
+              daily_use_pattern: next.daily_use_pattern,
+              time_to_first_use: next.time_to_first_use,
+              craving_pattern: next.craving_pattern,
+              previous_quit_attempts: next.previous_quit_attempts,
               readiness: next.readiness,
               goal: next.goal,
               quit_date: next.quit_date ?? null,
               triggers: next.triggers,
               support_person: next.support_name ? { name: next.support_name, relation: next.support_relation } : null,
               followup_preference: next.followup_preference,
+              reminder_consent: next.reminder_consent,
               assessment_answers,
             },
           },

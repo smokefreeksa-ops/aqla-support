@@ -17,7 +17,7 @@ import {
 } from "./scoring";
 
 export type QuitProduct = "cigarettes" | "vape" | "shisha" | "pouches" | "youth" | "other";
-export type QuitGoal = "quit_full" | "reduce_first" | "understand";
+export type QuitGoal = "quit_full" | "reduce_first" | "understand" | "not_ready_now";
 export type ReadinessStage =
   | "quit_now"
   | "quit_prepare"
@@ -31,12 +31,17 @@ export interface QuitPlanIntake {
   city: string;
   product: QuitProduct;
   age?: number;
+  daily_use_pattern?: string;
+  time_to_first_use?: string;
+  craving_pattern?: string;
+  previous_quit_attempts?: string;
   readiness: ReadinessStage;
   goal: QuitGoal;
   quit_date?: string | null;
   triggers: string[];
   support_person?: { name?: string; relation?: string; phone?: string } | null;
   followup_preference?: "email" | "whatsapp" | "none";
+  reminder_consent?: boolean;
   assessment_answers: Record<string, unknown>;
   emergency_consent?: boolean;
 }
@@ -157,6 +162,7 @@ const GOAL_AR: Record<QuitGoal, string> = {
   quit_full: "الإقلاع تمامًا",
   reduce_first: "التقليل أولًا",
   understand: "فهم الوضع",
+  not_ready_now: "غير جاهز الآن",
 };
 
 const READINESS_AR: Record<ReadinessStage, string> = {
@@ -174,6 +180,12 @@ const PRODUCT_AR: Record<QuitProduct, string> = {
   pouches: "أكياس / منتجات نيكوتين فموية",
   youth: "تقييم الشباب وفقدان الاستقلالية",
   other: "أخرى",
+};
+
+const FOLLOWUP_AR: Record<NonNullable<QuitPlanIntake["followup_preference"]>, string> = {
+  email: "إيميل",
+  whatsapp: "واتساب",
+  none: "بدون متابعة",
 };
 
 // ---- Evidence-based trigger-specific actions (Arabic) ----
@@ -250,6 +262,7 @@ export const REFERENCES: { id: string; citation: string; full: string }[] = [
 
 export interface PharmacyOptionDetail {
   name: string;
+  what_is: string;
   purpose: string;
   common_issues: string;
   safety: string;
@@ -260,13 +273,14 @@ export interface QuitPlanJSON {
   title: string;
   subtitle: string;
   identity: { nickname: string; email: string; city: string };
-  use: { product: QuitProduct; product_ar: string; age?: number };
+  use: { product: QuitProduct; product_ar: string; age?: number; daily_use_pattern?: string; time_to_first_use?: string; craving_pattern?: string; previous_quit_attempts?: string };
   assessment: QuitPlanScore;
   summary_citation: string;
   score_meaning: string;
   readiness: { code: ReadinessStage; label_ar: string };
   goal: { code: QuitGoal; label_ar: string; text: string };
   dates: { quit_or_reduce_date: string | null; followup_next: string };
+  followup_preference_ar: string;
   triggers: string[];
   trigger_plan: string[];
   trigger_plan_citation: string;
@@ -295,6 +309,7 @@ export interface QuitPlanJSON {
   emergency_disclaimer: string;
   followup_schedule: string[];
   contact: { whatsapp: string; email: string; site: string };
+  aqla_links: { label: string; href: string }[];
   references: { id: string; full: string }[];
 }
 
@@ -315,7 +330,9 @@ export function buildQuitPlan(intake: QuitPlanIntake, score: QuitPlanScore): Qui
       ? "هدفك الآن هو الإقلاع الكامل. سنبني الخطة حول تاريخ بداية واضح، إدارة المحفزات، خطة رغبة شديدة، ومتابعة منتظمة. (WHO 2024; USPSTF 2021)"
       : intake.goal === "reduce_first"
         ? "هدفك الآن هو التقليل أولًا كخطوة نحو الإقلاع. سنركّز على تقليل عدد المرات، تحديد أوقات الاستخدام، وبناء بدائل عملية لكل محفز. (WHO 2024; NCI PDQ)"
-        : "هدفك الآن هو فهم وضعك. حتى لو لم تكن جاهزًا للإقلاع الكامل اليوم، يمكن البدء بخطوة واضحة مثل فهم المحفزات أو تحديد موعد قريب. (WHO 2024; NCI PDQ)";
+        : intake.goal === "not_ready_now"
+          ? "هدفك الآن ليس الإقلاع الكامل فورًا. الخطة ستركّز على تقليل الضرر، فهم المحفزات، وتجهيز خطوة صغيرة دون ضغط أو لوم. (WHO 2024; NCI PDQ)"
+          : "هدفك الآن هو فهم وضعك. حتى لو لم تكن جاهزًا للإقلاع الكامل اليوم، يمكن البدء بخطوة واضحة مثل فهم المحفزات أو تحديد موعد قريب. (WHO 2024; NCI PDQ)";
 
   const score_meaning = `نطاق نتيجتك: ${score.band_ar} على ${score.instrument_label_ar}. هذه النتيجة ليست تشخيصًا، لكنها مؤشر يساعدنا على اختيار مستوى الدعم المناسب وبناء خطة عملية تناسب نمط استخدامك. (WHO 2024)`;
 
@@ -325,13 +342,22 @@ export function buildQuitPlan(intake: QuitPlanIntake, score: QuitPlanScore): Qui
     subtitle:
       "خطة مبنية على إجاباتك، وتجمع بين الدعم السلوكي، إدارة المحفزات، المتابعة، وخيارات يمكن مناقشتها مع الصيدلي أو الطبيب.",
     identity: { nickname: intake.nickname, email: intake.email, city: intake.city },
-    use: { product: intake.product, product_ar: PRODUCT_AR[intake.product], age: intake.age },
+    use: {
+      product: intake.product,
+      product_ar: PRODUCT_AR[intake.product],
+      age: intake.age,
+      daily_use_pattern: intake.daily_use_pattern,
+      time_to_first_use: intake.time_to_first_use,
+      craving_pattern: intake.craving_pattern,
+      previous_quit_attempts: intake.previous_quit_attempts,
+    },
     assessment: score,
     summary_citation: "(WHO 2024; USPSTF 2021)",
     score_meaning,
     readiness: { code: intake.readiness, label_ar: READINESS_AR[intake.readiness] },
     goal: { code: intake.goal, label_ar: GOAL_AR[intake.goal], text: goalText },
     dates: { quit_or_reduce_date: quitDate, followup_next: addDays(now, 7) },
+    followup_preference_ar: FOLLOWUP_AR[intake.followup_preference ?? "email"],
     triggers,
     trigger_plan,
     trigger_plan_citation: "(CDC 2024; NCI PDQ)",
@@ -401,6 +427,7 @@ export function buildQuitPlan(intake: QuitPlanIntake, score: QuitPlanScore): Qui
       nrt_details: [
         {
           name: "لصقات النيكوتين",
+          what_is: "لاصقة توضع على الجلد وتطلق النيكوتين تدريجيًا.",
           purpose:
             "تعطي مستوى ثابتًا من النيكوتين خلال اليوم، وقد تناسب من لديه رغبة متكررة أو استخدام يومي منتظم.",
           common_issues: "تهيج الجلد، أحلام مزعجة أو اضطراب النوم عند بعض الأشخاص.",
@@ -409,12 +436,14 @@ export function buildQuitPlan(intake: QuitPlanIntake, score: QuitPlanScore): Qui
         },
         {
           name: "علكة النيكوتين",
+          what_is: "علكة علاجية تحتوي على نيكوتين وتُستخدم بطريقة محددة داخل الفم.",
           purpose: "تساعد مع الرغبات المفاجئة لأنها تُستخدم عند الحاجة.",
           common_issues: "تهيج الفم، الفواق، ألم الفك أو اضطراب المعدة.",
           safety: "يجب استخدامها بالطريقة الصحيحة حسب تعليمات المنتج والصيدلي.",
         },
         {
           name: "أقراص/مصّات النيكوتين",
+          what_is: "أقراص أو مصّات تذوب تدريجيًا في الفم وتطلق النيكوتين.",
           purpose:
             "تذوب في الفم وتساعد في الرغبات المفاجئة، وقد تناسب من لا يفضّل العلكة.",
           common_issues: "تهيج الحلق أو الفم، الفواق، حرقة المعدة.",
@@ -422,6 +451,7 @@ export function buildQuitPlan(intake: QuitPlanIntake, score: QuitPlanScore): Qui
         },
         {
           name: "بخاخ النيكوتين أو مستنشق النيكوتين (إن توفر)",
+          what_is: "منتجات نيكوتين سريعة نسبيًا قد لا تتوفر في كل مكان وقد تحتاج توجيهًا متخصصًا.",
           purpose:
             "خيارات أسرع لبعض الرغبات، وقد تحتاج وصفة أو إرشاد مختص حسب النظام المحلي.",
           common_issues: "تهيج الأنف أو الحلق أو السعال حسب المنتج.",
@@ -435,6 +465,7 @@ export function buildQuitPlan(intake: QuitPlanIntake, score: QuitPlanScore): Qui
       prescription_details: [
         {
           name: "Varenicline / Champix (حيث يتوفر)",
+          what_is: "دواء غير نيكوتيني بوصفة طبية يُسأل عنه الطبيب أو الصيدلي فقط.",
           purpose:
             "دواء غير نيكوتيني قد يساعد على تقليل الرغبة ويقلل الإحساس بالمكافأة من النيكوتين. يرتبط بمستقبلات النيكوتين في الدماغ، فيخفّف بعض أعراض الانسحاب ويجعل تأثير النيكوتين أقل إشباعًا عند حدوث استخدام.",
           common_issues:
@@ -444,6 +475,7 @@ export function buildQuitPlan(intake: QuitPlanIntake, score: QuitPlanScore): Qui
         },
         {
           name: "Bupropion SR",
+          what_is: "دواء وصفي غير نيكوتيني يحتاج تقييمًا طبيًا أو صيدليًا قبل الاستخدام.",
           purpose:
             "دواء وصفي غير نيكوتيني قد يساعد بعض الأشخاص على تقليل الرغبة وأعراض الانسحاب. يؤثر على مسارات في الدماغ مرتبطة بالرغبة والمزاج وأعراض الانسحاب.",
           common_issues:
@@ -488,6 +520,13 @@ export function buildQuitPlan(intake: QuitPlanIntake, score: QuitPlanScore): Qui
       email: "smokefreeksa@gmail.com",
       site: "https://aqla-support.lovable.app",
     },
+    aqla_links: [
+      { label: "تعديل الخطة", href: "https://aqla-support.lovable.app/quit-pathway" },
+      { label: "تحميل PDF", href: "سيظهر زر التحميل في صفحة الخطة" },
+      { label: "إرسال الخطة إلى البريد", href: "يتم إرسال رابط الخطة بعد إنشائها إذا كان الإرسال مفعّلًا" },
+      { label: "تواصل واتساب/اتصال", href: "https://wa.me/966555096412" },
+      { label: "طلب مراجعة مختص", href: "mailto:smokefreeksa@gmail.com" },
+    ],
     references: REFERENCES.map((r) => ({ id: r.id, full: r.full })),
   };
 }
