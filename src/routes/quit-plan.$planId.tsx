@@ -125,6 +125,10 @@ function PlanPage() {
           <Row k="المدينة" v={planJson.identity.city} />
           <Row k="تاريخ إنشاء الخطة" v={new Date(planJson.meta.generated_at).toLocaleString("ar-SA")} />
           <Row k="المنتج" v={planJson.use.product_ar} />
+          {planJson.use.daily_use_pattern && <Row k="نمط الاستخدام اليومي" v={planJson.use.daily_use_pattern} />}
+          {planJson.use.time_to_first_use && <Row k="أول استخدام بعد الاستيقاظ" v={planJson.use.time_to_first_use} />}
+          {planJson.use.craving_pattern && <Row k="نمط الرغبة الشديدة" v={planJson.use.craving_pattern} />}
+          {planJson.use.previous_quit_attempts && <Row k="محاولات سابقة" v={planJson.use.previous_quit_attempts} />}
           <Row k="الأداة المستخدمة" v={planJson.assessment.instrument_label_ar} />
           <Row k="نطاق النتيجة" v={`${planJson.assessment.band_ar} (مجموع ${planJson.assessment.total})`} />
           {!planJson.assessment.validated && <p className="text-xs text-amber-600">تقييم مكيّف (غير معتمد).</p>}
@@ -181,6 +185,7 @@ function PlanPage() {
             {planJson.pharmacy_discussion.nrt_details.map((o, i) => (
               <div key={i} className="rounded-md border border-border bg-background p-3">
                 <p className="font-semibold">• {o.name}</p>
+                <p className="text-xs mt-1"><span className="text-muted-foreground">ما هو؟</span> {o.what_is}</p>
                 <p className="text-xs mt-1"><span className="text-muted-foreground">الفائدة:</span> {o.purpose}</p>
                 <p className="text-xs mt-1"><span className="text-muted-foreground">أعراض محتملة:</span> {o.common_issues}</p>
                 <p className="text-xs mt-1"><span className="text-muted-foreground">ملاحظة سلامة:</span> {o.safety}</p>
@@ -193,6 +198,7 @@ function PlanPage() {
             {planJson.pharmacy_discussion.prescription_details.map((o, i) => (
               <div key={i} className="rounded-md border border-border bg-background p-3">
                 <p className="font-semibold">• {o.name}</p>
+                <p className="text-xs mt-1"><span className="text-muted-foreground">ما هو؟</span> {o.what_is}</p>
                 <p className="text-xs mt-1"><span className="text-muted-foreground">الفائدة:</span> {o.purpose}</p>
                 <p className="text-xs mt-1"><span className="text-muted-foreground">أعراض محتملة:</span> {o.common_issues}</p>
                 <p className="text-xs mt-1"><span className="text-muted-foreground">ملاحظة سلامة:</span> {o.safety}</p>
@@ -218,6 +224,8 @@ function PlanPage() {
         </div>
 
         <Section title="N. المتابعة">
+          <Row k="طريقة المتابعة المختارة" v={planJson.followup_preference_ar} />
+          <Row k="المتابعة القادمة" v={planJson.dates.followup_next} />
           <List items={planJson.followup_schedule} />
           <div className="flex flex-wrap gap-2 mt-3">
             {(["24h", "3d", "7d", "14d", "28d"] as const).map((t) => (
@@ -227,6 +235,10 @@ function PlanPage() {
             ))}
           </div>
           {reminderMsg && <p className="mt-2 text-xs text-muted-foreground">{reminderMsg}</p>}
+        </Section>
+
+        <Section title="O. روابط أقلع">
+          <List items={planJson.aqla_links.map((l) => `${l.label}: ${l.href}`)} />
         </Section>
 
         <Section title="P. المراجع">
