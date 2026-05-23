@@ -230,7 +230,7 @@ export const finalizeQuitPlan = createServerFn({ method: "POST" })
             "not_ready_score",
             "discuss_alternatives",
           ]),
-          goal: z.enum(["quit_full", "reduce_first", "understand"]),
+          goal: z.enum(["quit_full", "reduce_first", "understand", "not_ready_now"]),
           quit_date: z.string().nullable().optional(),
           triggers: z.array(z.string()).default([]),
           support_person: z
