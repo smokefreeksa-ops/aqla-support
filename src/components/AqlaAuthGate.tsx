@@ -22,10 +22,66 @@ function isPublicPath(pathname: string): boolean {
   return PUBLIC_PREFIXES.some((p) => pathname.startsWith(p));
 }
 
+// Preview-only auth bypass. NEVER active on the published production domain.
+// Activated by visiting any URL with ?test_auth=1 in Lovable preview or dev.
+const TEST_AUTH_KEY = "aqla_test_auth_bypass";
+
+function isPreviewHost(): boolean {
+  if (typeof window === "undefined") return false;
+  const host = window.location.hostname;
+  // Vite dev
+  if (import.meta.env.DEV) return true;
+  // Lovable preview sandboxes (id-preview--*, *-dev.lovable.app, *.sandbox.lovable.dev, etc.)
+  // Explicitly EXCLUDE the production hosts: aqla-support.lovable.app and any custom domain.
+  if (host === "aqla-support.lovable.app") return false;
+  if (host.endsWith(".lovable.app") && (host.startsWith("id-preview--") || host.includes("--") || host.endsWith("-dev.lovable.app"))) {
+    return true;
+  }
+  if (host.endsWith(".lovable.dev") || host.endsWith(".sandbox.lovable.dev")) return true;
+  if (host === "localhost" || host === "127.0.0.1") return true;
+  return false;
+}
+
+function readTestAuthBypass(): boolean {
+  if (typeof window === "undefined") return false;
+  if (!isPreviewHost()) return false;
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("test_auth") === "1") {
+      sessionStorage.setItem(TEST_AUTH_KEY, "1");
+      return true;
+    }
+    if (params.get("test_auth") === "0") {
+      sessionStorage.removeItem(TEST_AUTH_KEY);
+      return false;
+    }
+    return sessionStorage.getItem(TEST_AUTH_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function TestAuthBanner() {
+  return (
+    <div
+      dir="rtl"
+      className="fixed top-0 inset-x-0 z-[200] bg-amber-500 text-black text-center text-xs font-semibold py-1.5 px-3 shadow-md"
+      role="status"
+    >
+      وضع اختبار المعاينة مفعل — Preview test mode (no real user data)
+    </div>
+  );
+}
+
 export function AqlaAuthGate({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(false);
+  const [testAuth, setTestAuth] = useState(false);
+
+  useEffect(() => {
+    setTestAuth(readTestAuthBypass());
+  }, [location.pathname, location.search]);
 
   useEffect(() => {
     let mounted = true;
@@ -66,9 +122,14 @@ export function AqlaAuthGate({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!session && !publicRoute) {
+  if (!session && !publicRoute && !testAuth) {
     return <AqlaWelcomeGate />;
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      {testAuth && !session ? <TestAuthBanner /> : null}
+      {children}
+    </>
+  );
 }
