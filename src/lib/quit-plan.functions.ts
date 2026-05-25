@@ -266,7 +266,7 @@ export const finalizeQuitPlan = createServerFn({ method: "POST" })
     const intake = data.intake as QuitPlanIntake;
     const score = computeScore(intake);
     const plan: QuitPlanJSON = buildQuitPlan(intake, score);
-    const planUrl = `${SITE_URL}/quit-plan/${data.planId}`;
+    const planUrl = `${SITE_URL}/quit-plan/${data.planToken}`;
 
     const { error } = await supabaseAdmin
       .from("quit_plans")
