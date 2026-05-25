@@ -183,6 +183,7 @@ export const saveAnswer = createServerFn({ method: "POST" })
     z
       .object({
         planId: z.string().uuid(),
+        planToken: z.string().min(8).max(80),
         key: z.string().min(1).max(60),
         value: z.unknown(),
       })
@@ -191,10 +192,13 @@ export const saveAnswer = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { data: existing, error: rErr } = await supabaseAdmin
       .from("quit_plans")
-      .select("intake_answers")
+      .select("intake_answers, plan_token")
       .eq("id", data.planId)
       .single();
     if (rErr || !existing) throw new Error("Plan not found");
+    if ((existing as { plan_token: string | null }).plan_token !== data.planToken) {
+      throw new Error("Forbidden: invalid plan token");
+    }
     const next = {
       ...((existing.intake_answers as Record<string, unknown>) ?? {}),
       [data.key]: data.value,
@@ -213,6 +217,7 @@ export const finalizeQuitPlan = createServerFn({ method: "POST" })
     z
       .object({
         planId: z.string().uuid(),
+        planToken: z.string().min(8).max(80),
         intake: z.object({
           nickname: z.string().min(1),
           email: z.string().email(),
@@ -250,6 +255,14 @@ export const finalizeQuitPlan = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data }) => {
+    const { data: ownerRow } = await supabaseAdmin
+      .from("quit_plans")
+      .select("plan_token")
+      .eq("id", data.planId)
+      .single();
+    if (!ownerRow || (ownerRow as { plan_token: string | null }).plan_token !== data.planToken) {
+      throw new Error("Forbidden: invalid plan token");
+    }
     const intake = data.intake as QuitPlanIntake;
     const score = computeScore(intake);
     const plan: QuitPlanJSON = buildQuitPlan(intake, score);

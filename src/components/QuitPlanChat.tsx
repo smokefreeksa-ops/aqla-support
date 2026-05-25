@@ -210,6 +210,7 @@ export function QuitPlanChat() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [planId, setPlanId] = useState<string | null>(null);
+  const [planToken, setPlanToken] = useState<string | null>(null);
   const [stepIndex, setStepIndex] = useState(0);
   const [emergency, setEmergency] = useState<string | null>(null);
   const [state, setState] = useState<State>(() => {
@@ -343,14 +344,14 @@ export function QuitPlanChat() {
   }, []);
 
   async function persistAnswer(key: string, value: unknown) {
-    if (!planId) return;
+    if (!planId || !planToken) return;
     try {
-      await saveFn({ data: { planId, key, value } });
+      await saveFn({ data: { planId, planToken, key, value } });
     } catch { /* best effort */ }
   }
 
-  async function ensurePlan(s: State) {
-    if (planId) return planId;
+  async function ensurePlan(s: State): Promise<{ id: string; token: string }> {
+    if (planId && planToken) return { id: planId, token: planToken };
     const anon = getOrCreateAnonId();
     const res = await startFn({
       data: {
@@ -363,7 +364,8 @@ export function QuitPlanChat() {
       },
     });
     setPlanId(res.planId);
-    return res.planId;
+    setPlanToken(res.planToken);
+    return { id: res.planId, token: res.planToken };
   }
 
   async function advance(userText: string, displayLabel?: string) {
@@ -439,8 +441,8 @@ export function QuitPlanChat() {
     // After basic 4 fields collected, create plan row
     if (!planId && next.nickname && next.email && next.city && current.key === "product") {
       try {
-        const id = await ensurePlan(next);
-        await saveFn({ data: { planId: id, key: current.key, value } });
+        const ensured = await ensurePlan(next);
+        await saveFn({ data: { planId: ensured.id, planToken: ensured.token, key: current.key, value } });
       } catch (e) {
         console.error(e);
       }

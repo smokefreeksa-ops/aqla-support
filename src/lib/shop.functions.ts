@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { ensureStaff } from "./_authz.server";
 import { renderKeyValueHtml, sendAdminNotification } from "./notifications.server";
 
 export type ShopProduct = {
@@ -256,8 +258,10 @@ const AdminListInput = z.object({
 });
 
 export const adminListNrtRequests = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => AdminListInput.parse(input ?? {}))
-  .handler(async ({ data }) => {
+  .handler(async ({ context, data }) => {
+    await ensureStaff(context.userId);
     let q = supabaseAdmin
       .from("nrt_requests" as never)
       .select(
@@ -298,8 +302,10 @@ const UpdateInput = z.object({
 });
 
 export const adminUpdateNrtRequest = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => UpdateInput.parse(input))
-  .handler(async ({ data }) => {
+  .handler(async ({ context, data }) => {
+    await ensureStaff(context.userId);
     // Read current row for old status & to append note
     const { data: current, error: readErr } = await supabaseAdmin
       .from("nrt_requests" as never)
@@ -338,7 +344,10 @@ export const adminUpdateNrtRequest = createServerFn({ method: "POST" })
     return { ok: true, error: null as string | null };
   });
 
-export const adminExportNrtRequestsCsv = createServerFn({ method: "GET" }).handler(async () => {
+export const adminExportNrtRequestsCsv = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await ensureStaff(context.userId);
   const { data: rows, error } = await supabaseAdmin
     .from("nrt_requests" as never)
     .select(

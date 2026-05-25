@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { ensureAdmin } from "./_authz.server";
 import { renderKeyValueHtml, sendAdminNotification } from "./notifications.server";
 import { TRAINING_MODULES, OVERALL_PASS, MODULE_PASS } from "./training-content";
 
@@ -282,47 +284,55 @@ export const verifyCertificate = createServerFn({ method: "GET" })
   });
 
 // --------- Admin analytics ---------
-export const getAdminTrainingAnalytics = createServerFn({ method: "GET" }).handler(async () => {
-  const { data, error } = await supabaseAdmin.rpc("get_admin_training_analytics" as never);
-  if (error) return { ok: false as const, error: error.message, analytics_json: null as string | null };
-  return { ok: true as const, error: null as string | null, analytics_json: JSON.stringify(data ?? null) as string | null };
-});
+export const getAdminTrainingAnalytics = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await ensureAdmin(context.userId);
+    const { data, error } = await supabaseAdmin.rpc("get_admin_training_analytics" as never);
+    if (error) return { ok: false as const, error: error.message, analytics_json: null as string | null };
+    return { ok: true as const, error: null as string | null, analytics_json: JSON.stringify(data ?? null) as string | null };
+  });
 
 // --------- Admin list trainees & export ---------
-export const listTrainees = createServerFn({ method: "GET" }).handler(async () => {
-  const { data: users } = await supabaseAdmin
-    .from("training_users" as never)
-    .select("id, full_name, email, mobile, city, role, created_at, preferred_language")
-    .order("created_at", { ascending: false })
-    .limit(500);
-  const { data: certs } = await supabaseAdmin
-    .from("training_certificates" as never)
-    .select("training_user_id, certificate_code, overall_score, issued_at, is_valid");
-  const certByUser = new Map<string, { certificate_code: string; overall_score: number; issued_at: string; is_valid: boolean }>();
-  for (const c of (certs as Array<{ training_user_id: string; certificate_code: string; overall_score: number; issued_at: string; is_valid: boolean }> | null) ?? []) {
-    certByUser.set(c.training_user_id, c);
-  }
-  type Row = {
-    id: string; full_name: string; email: string; mobile: string | null; city: string | null;
-    role: string | null; created_at: string; preferred_language: string | null;
-    certificate_code: string | null; overall_score: number | null; issued_at: string | null; is_valid: boolean | null;
-  };
-  const rows: Row[] = ((users as Array<Omit<Row, "certificate_code" | "overall_score" | "issued_at" | "is_valid">> | null) ?? []).map((u) => {
-    const c = certByUser.get(u.id);
-    return {
-      ...u,
-      certificate_code: c?.certificate_code ?? null,
-      overall_score: c?.overall_score ?? null,
-      issued_at: c?.issued_at ?? null,
-      is_valid: c?.is_valid ?? null,
+export const listTrainees = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await ensureAdmin(context.userId);
+    const { data: users } = await supabaseAdmin
+      .from("training_users" as never)
+      .select("id, full_name, email, mobile, city, role, created_at, preferred_language")
+      .order("created_at", { ascending: false })
+      .limit(500);
+    const { data: certs } = await supabaseAdmin
+      .from("training_certificates" as never)
+      .select("training_user_id, certificate_code, overall_score, issued_at, is_valid");
+    const certByUser = new Map<string, { certificate_code: string; overall_score: number; issued_at: string; is_valid: boolean }>();
+    for (const c of (certs as Array<{ training_user_id: string; certificate_code: string; overall_score: number; issued_at: string; is_valid: boolean }> | null) ?? []) {
+      certByUser.set(c.training_user_id, c);
+    }
+    type Row = {
+      id: string; full_name: string; email: string; mobile: string | null; city: string | null;
+      role: string | null; created_at: string; preferred_language: string | null;
+      certificate_code: string | null; overall_score: number | null; issued_at: string | null; is_valid: boolean | null;
     };
+    const rows: Row[] = ((users as Array<Omit<Row, "certificate_code" | "overall_score" | "issued_at" | "is_valid">> | null) ?? []).map((u) => {
+      const c = certByUser.get(u.id);
+      return {
+        ...u,
+        certificate_code: c?.certificate_code ?? null,
+        overall_score: c?.overall_score ?? null,
+        issued_at: c?.issued_at ?? null,
+        is_valid: c?.is_valid ?? null,
+      };
+    });
+    return { rows };
   });
-  return { rows };
-});
 
 export const revokeCertificate = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ certificate_code: z.string().min(4).max(64), valid: z.boolean() }).parse(input))
-  .handler(async ({ data }) => {
+  .handler(async ({ context, data }) => {
+    await ensureAdmin(context.userId);
     const { error } = await supabaseAdmin
       .from("training_certificates" as never)
       .update({ is_valid: data.valid } as never)

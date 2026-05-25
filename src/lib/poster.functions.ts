@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { ensureAdmin } from "./_authz.server";
 
 export type PosterPublicStats = {
   generated_at: string;
@@ -116,7 +118,10 @@ export const getPosterPublicStats = createServerFn({ method: "GET" }).handler(as
   return { stats: data as unknown as PosterPublicStats, error: null as string | null };
 });
 
-export const getAdminPosterAnalytics = createServerFn({ method: "GET" }).handler(async () => {
+export const getAdminPosterAnalytics = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await ensureAdmin(context.userId);
   const { data, error } = await supabaseAdmin.rpc("get_admin_poster_analytics");
   if (error) {
     console.error("get_admin_poster_analytics error:", error);
