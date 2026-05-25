@@ -27,7 +27,7 @@ export const Route = createFileRoute("/training")({
 });
 
 type Lang = "ar" | "en";
-type Trainee = { id: string; full_name: string; email: string; preferred_language: string };
+type Trainee = { id: string; full_name: string; email: string; preferred_language: string; session_token: string };
 
 const STORE_KEY = "aqla_trainee_v1";
 
@@ -58,7 +58,7 @@ function TrainingPage() {
   useEffect(() => {
     if (!trainee) return;
     (async () => {
-      const res = await progressFn({ data: { training_user_id: trainee.id } });
+      const res = await progressFn({ data: { training_user_id: trainee.id, session_token: trainee.session_token } });
       setProgress(res.progress);
       setCertificate(res.certificate ?? null);
     })();
@@ -73,10 +73,10 @@ function TrainingPage() {
 
   async function handleIssue() {
     if (!trainee) return;
-    const res = await issueFn({ data: { training_user_id: trainee.id, overall_score: overall } });
+    const res = await issueFn({ data: { training_user_id: trainee.id, session_token: trainee.session_token, overall_score: overall } });
     if (!res.ok) { toast.error(res.error); return; }
     toast.success(lang === "ar" ? "تم إصدار الشهادة" : "Certificate issued");
-    const r = await progressFn({ data: { training_user_id: trainee.id } });
+    const r = await progressFn({ data: { training_user_id: trainee.id, session_token: trainee.session_token } });
     setCertificate(r.certificate ?? null);
   }
 
@@ -196,8 +196,9 @@ function TrainingPage() {
                         lang={lang}
                         moduleSlug={m.slug}
                         traineeId={trainee.id}
+                        sessionToken={trainee.session_token}
                         onScoreSubmitted={async () => {
-                          const r = await progressFn({ data: { training_user_id: trainee.id } });
+                          const r = await progressFn({ data: { training_user_id: trainee.id, session_token: trainee.session_token } });
                           setProgress(r.progress);
                           setCertificate(r.certificate ?? null);
                         }}
@@ -336,11 +337,12 @@ function RegistrationForm({
 }
 
 function ModulePanel({
-  lang, moduleSlug, traineeId, onScoreSubmitted, submitFn,
+  lang, moduleSlug, traineeId, sessionToken, onScoreSubmitted, submitFn,
 }: {
   lang: Lang;
   moduleSlug: string;
   traineeId: string;
+  sessionToken: string;
   onScoreSubmitted: () => Promise<void> | void;
   submitFn: ReturnType<typeof useServerFn<typeof submitModuleScore>>;
 }) {
@@ -364,7 +366,7 @@ function ModulePanel({
     items.forEach((it, i) => { if (answers[i] === it.correct) correct++; });
     const s = Math.round((correct / total) * 100);
     setScore(s);
-    const res = await submitFn({ data: { training_user_id: traineeId, module_slug: moduleSlug, score: s } });
+    const res = await submitFn({ data: { training_user_id: traineeId, session_token: sessionToken, module_slug: moduleSlug, score: s } });
     if (res.ok) {
       setSubmitted(true);
       toast.success(s >= MODULE_PASS ? (lang === "ar" ? "اجتزت الوحدة" : "Module passed") : (lang === "ar" ? "أعد المحاولة" : "Try again"));

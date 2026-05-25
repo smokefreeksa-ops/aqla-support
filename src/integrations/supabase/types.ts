@@ -3440,6 +3440,7 @@ export type Database = {
           mobile: string | null
           preferred_language: string | null
           role: string | null
+          session_token: string
         }
         Insert: {
           age_group?: string | null
@@ -3452,6 +3453,7 @@ export type Database = {
           mobile?: string | null
           preferred_language?: string | null
           role?: string | null
+          session_token?: string
         }
         Update: {
           age_group?: string | null
@@ -3464,6 +3466,7 @@ export type Database = {
           mobile?: string | null
           preferred_language?: string | null
           role?: string | null
+          session_token?: string
         }
         Relationships: []
       }

@@ -8,21 +8,21 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import type { QuitPlanJSON } from "@/lib/quit-plan-builder";
 
-export const Route = createFileRoute("/quit-plan/$planId")({
+export const Route = createFileRoute("/quit-plan/$planToken")({
   head: () => ({ meta: [{ title: "خطة أقلع الشخصية" }] }),
   component: PlanPage,
 });
 
 function PlanPage() {
-  const { planId } = Route.useParams();
+  const { planToken } = Route.useParams();
   const getFn = useServerFn(getQuitPlan);
   const remindFn = useServerFn(scheduleReminder);
   const [downloading, setDownloading] = useState(false);
   const [reminderMsg, setReminderMsg] = useState<string | null>(null);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["quit-plan", planId],
-    queryFn: () => getFn({ data: { planId } }),
+    queryKey: ["quit-plan", planToken],
+    queryFn: () => getFn({ data: { planToken } }),
   });
 
   const plan = data?.plan as { id: string; nickname: string | null; plan: QuitPlanJSON | null; email_sent_at: string | null } | null | undefined;
@@ -39,11 +39,11 @@ function PlanPage() {
         import("qrcode"),
       ]);
       const qrDataUrl = await QR.toDataURL(shareUrl, { margin: 1, width: 200 });
-      const blob = await pdf(<QuitPlanPdf plan={planJson} qrDataUrl={qrDataUrl} shareUrl={shareUrl} planId={plan?.id ?? planId} />).toBlob();
+      const blob = await pdf(<QuitPlanPdf plan={planJson} qrDataUrl={qrDataUrl} shareUrl={shareUrl} planId={plan?.id ?? planToken} />).toBlob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `aqla-quit-plan-${plan?.id ?? planId}.pdf`;
+      a.download = `aqla-quit-plan-${plan?.id ?? planToken}.pdf`;
       a.click();
       URL.revokeObjectURL(url);
     } catch (e) {
@@ -56,7 +56,7 @@ function PlanPage() {
 
   async function schedule(type: "24h" | "3d" | "7d" | "14d" | "28d") {
     try {
-      const res = await remindFn({ data: { planId, type, channel: "email" } });
+      const res = await remindFn({ data: { planToken, type, channel: "email" } });
       setReminderMsg(res.message);
     } catch {
       setReminderMsg("تعذر حفظ التذكير الآن، حاول لاحقًا.");

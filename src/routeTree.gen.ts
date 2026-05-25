@@ -55,7 +55,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as QuitPlanPlanIdRouteImport } from './routes/quit-plan.$planId'
+import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planToken'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
 import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
@@ -292,9 +292,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const QuitPlanPlanIdRoute = QuitPlanPlanIdRouteImport.update({
-  id: '/$planId',
-  path: '/$planId',
+const QuitPlanPlanTokenRoute = QuitPlanPlanTokenRouteImport.update({
+  id: '/$planToken',
+  path: '/$planToken',
   getParentRoute: () => QuitPlanRoute,
 } as any)
 const CertificateCodeRoute = CertificateCodeRouteImport.update({
@@ -373,7 +373,7 @@ export interface FileRoutesByFullPath {
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
-  '/quit-plan/$planId': typeof QuitPlanPlanIdRoute
+  '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
 }
@@ -427,7 +427,7 @@ export interface FileRoutesByTo {
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
-  '/quit-plan/$planId': typeof QuitPlanPlanIdRoute
+  '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
 }
@@ -482,7 +482,7 @@ export interface FileRoutesById {
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
-  '/quit-plan/$planId': typeof QuitPlanPlanIdRoute
+  '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
 }
@@ -538,7 +538,7 @@ export interface FileRouteTypes {
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
-    | '/quit-plan/$planId'
+    | '/quit-plan/$planToken'
     | '/share/$type/$id'
     | '/share/invite/$code'
   fileRoutesByTo: FileRoutesByTo
@@ -592,7 +592,7 @@ export interface FileRouteTypes {
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
-    | '/quit-plan/$planId'
+    | '/quit-plan/$planToken'
     | '/share/$type/$id'
     | '/share/invite/$code'
   id:
@@ -646,7 +646,7 @@ export interface FileRouteTypes {
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
-    | '/quit-plan/$planId'
+    | '/quit-plan/$planToken'
     | '/share/$type/$id'
     | '/share/invite/$code'
   fileRoutesById: FileRoutesById
@@ -1027,11 +1027,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/quit-plan/$planId': {
-      id: '/quit-plan/$planId'
-      path: '/$planId'
-      fullPath: '/quit-plan/$planId'
-      preLoaderRoute: typeof QuitPlanPlanIdRouteImport
+    '/quit-plan/$planToken': {
+      id: '/quit-plan/$planToken'
+      path: '/$planToken'
+      fullPath: '/quit-plan/$planToken'
+      preLoaderRoute: typeof QuitPlanPlanTokenRouteImport
       parentRoute: typeof QuitPlanRoute
     }
     '/certificate/$code': {
@@ -1085,11 +1085,11 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface QuitPlanRouteChildren {
-  QuitPlanPlanIdRoute: typeof QuitPlanPlanIdRoute
+  QuitPlanPlanTokenRoute: typeof QuitPlanPlanTokenRoute
 }
 
 const QuitPlanRouteChildren: QuitPlanRouteChildren = {
-  QuitPlanPlanIdRoute: QuitPlanPlanIdRoute,
+  QuitPlanPlanTokenRoute: QuitPlanPlanTokenRoute,
 }
 
 const QuitPlanRouteWithChildren = QuitPlanRoute._addFileChildren(
