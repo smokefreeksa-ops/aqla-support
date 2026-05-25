@@ -217,6 +217,7 @@ export const finalizeQuitPlan = createServerFn({ method: "POST" })
     z
       .object({
         planId: z.string().uuid(),
+        planToken: z.string().min(8).max(80),
         intake: z.object({
           nickname: z.string().min(1),
           email: z.string().email(),
