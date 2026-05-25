@@ -51,6 +51,7 @@ import { Route as ChallengePathwayRouteImport } from './routes/challenge-pathway
 import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AssessmentRouteImport } from './routes/assessment'
+import { Route as AqlaQuitEngineRouteImport } from './routes/aqla-quit-engine'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
@@ -59,8 +60,10 @@ import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planT
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
 import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
+import { Route as AdminAqlaQuitEngineRouteImport } from './routes/admin.aqla-quit-engine'
 import { Route as ShareInviteCodeRouteImport } from './routes/share.invite.$code'
 import { Route as ShareTypeIdRouteImport } from './routes/share.$type.$id'
+import { Route as AqlaQuitEngineResultResultIdRouteImport } from './routes/aqla-quit-engine.result.$resultId'
 
 const WhenToSeekHelpRoute = WhenToSeekHelpRouteImport.update({
   id: '/when-to-seek-help',
@@ -272,6 +275,11 @@ const AssessmentRoute = AssessmentRouteImport.update({
   path: '/assessment',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AqlaQuitEngineRoute = AqlaQuitEngineRouteImport.update({
+  id: '/aqla-quit-engine',
+  path: '/aqla-quit-engine',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -312,6 +320,11 @@ const AdminDataDictionaryRoute = AdminDataDictionaryRouteImport.update({
   path: '/data-dictionary',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAqlaQuitEngineRoute = AdminAqlaQuitEngineRouteImport.update({
+  id: '/aqla-quit-engine',
+  path: '/aqla-quit-engine',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ShareInviteCodeRoute = ShareInviteCodeRouteImport.update({
   id: '/share/invite/$code',
   path: '/share/invite/$code',
@@ -322,12 +335,19 @@ const ShareTypeIdRoute = ShareTypeIdRouteImport.update({
   path: '/share/$type/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AqlaQuitEngineResultResultIdRoute =
+  AqlaQuitEngineResultResultIdRouteImport.update({
+    id: '/result/$resultId',
+    path: '/result/$resultId',
+    getParentRoute: () => AqlaQuitEngineRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
   '/admin': typeof AdminRouteWithChildren
+  '/aqla-quit-engine': typeof AqlaQuitEngineRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
   '/certificates': typeof CertificatesRoute
@@ -370,10 +390,12 @@ export interface FileRoutesByFullPath {
   '/updates': typeof UpdatesRoute
   '/volunteer': typeof VolunteerRoute
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
+  '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
+  '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
 }
@@ -382,6 +404,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
   '/admin': typeof AdminRouteWithChildren
+  '/aqla-quit-engine': typeof AqlaQuitEngineRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
   '/certificates': typeof CertificatesRoute
@@ -424,10 +447,12 @@ export interface FileRoutesByTo {
   '/updates': typeof UpdatesRoute
   '/volunteer': typeof VolunteerRoute
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
+  '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
+  '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
 }
@@ -437,6 +462,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/academy': typeof AcademyRoute
   '/admin': typeof AdminRouteWithChildren
+  '/aqla-quit-engine': typeof AqlaQuitEngineRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
   '/certificates': typeof CertificatesRoute
@@ -479,10 +505,12 @@ export interface FileRoutesById {
   '/updates': typeof UpdatesRoute
   '/volunteer': typeof VolunteerRoute
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
+  '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
+  '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
 }
@@ -493,6 +521,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/academy'
     | '/admin'
+    | '/aqla-quit-engine'
     | '/assessment'
     | '/auth'
     | '/certificates'
@@ -535,10 +564,12 @@ export interface FileRouteTypes {
     | '/updates'
     | '/volunteer'
     | '/when-to-seek-help'
+    | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
     | '/quit-plan/$planToken'
+    | '/aqla-quit-engine/result/$resultId'
     | '/share/$type/$id'
     | '/share/invite/$code'
   fileRoutesByTo: FileRoutesByTo
@@ -547,6 +578,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/academy'
     | '/admin'
+    | '/aqla-quit-engine'
     | '/assessment'
     | '/auth'
     | '/certificates'
@@ -589,10 +621,12 @@ export interface FileRouteTypes {
     | '/updates'
     | '/volunteer'
     | '/when-to-seek-help'
+    | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
     | '/quit-plan/$planToken'
+    | '/aqla-quit-engine/result/$resultId'
     | '/share/$type/$id'
     | '/share/invite/$code'
   id:
@@ -601,6 +635,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/academy'
     | '/admin'
+    | '/aqla-quit-engine'
     | '/assessment'
     | '/auth'
     | '/certificates'
@@ -643,10 +678,12 @@ export interface FileRouteTypes {
     | '/updates'
     | '/volunteer'
     | '/when-to-seek-help'
+    | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
     | '/quit-plan/$planToken'
+    | '/aqla-quit-engine/result/$resultId'
     | '/share/$type/$id'
     | '/share/invite/$code'
   fileRoutesById: FileRoutesById
@@ -656,6 +693,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AcademyRoute: typeof AcademyRoute
   AdminRoute: typeof AdminRouteWithChildren
+  AqlaQuitEngineRoute: typeof AqlaQuitEngineRouteWithChildren
   AssessmentRoute: typeof AssessmentRoute
   AuthRoute: typeof AuthRoute
   CertificatesRoute: typeof CertificatesRoute
@@ -999,6 +1037,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessmentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/aqla-quit-engine': {
+      id: '/aqla-quit-engine'
+      path: '/aqla-quit-engine'
+      fullPath: '/aqla-quit-engine'
+      preLoaderRoute: typeof AqlaQuitEngineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -1055,6 +1100,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDataDictionaryRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/aqla-quit-engine': {
+      id: '/admin/aqla-quit-engine'
+      path: '/aqla-quit-engine'
+      fullPath: '/admin/aqla-quit-engine'
+      preLoaderRoute: typeof AdminAqlaQuitEngineRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/share/invite/$code': {
       id: '/share/invite/$code'
       path: '/share/invite/$code'
@@ -1069,20 +1121,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShareTypeIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/aqla-quit-engine/result/$resultId': {
+      id: '/aqla-quit-engine/result/$resultId'
+      path: '/result/$resultId'
+      fullPath: '/aqla-quit-engine/result/$resultId'
+      preLoaderRoute: typeof AqlaQuitEngineResultResultIdRouteImport
+      parentRoute: typeof AqlaQuitEngineRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminAqlaQuitEngineRoute: typeof AdminAqlaQuitEngineRoute
   AdminDataDictionaryRoute: typeof AdminDataDictionaryRoute
   AdminQuitPlanEmailsRoute: typeof AdminQuitPlanEmailsRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAqlaQuitEngineRoute: AdminAqlaQuitEngineRoute,
   AdminDataDictionaryRoute: AdminDataDictionaryRoute,
   AdminQuitPlanEmailsRoute: AdminQuitPlanEmailsRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface AqlaQuitEngineRouteChildren {
+  AqlaQuitEngineResultResultIdRoute: typeof AqlaQuitEngineResultResultIdRoute
+}
+
+const AqlaQuitEngineRouteChildren: AqlaQuitEngineRouteChildren = {
+  AqlaQuitEngineResultResultIdRoute: AqlaQuitEngineResultResultIdRoute,
+}
+
+const AqlaQuitEngineRouteWithChildren = AqlaQuitEngineRoute._addFileChildren(
+  AqlaQuitEngineRouteChildren,
+)
 
 interface QuitPlanRouteChildren {
   QuitPlanPlanTokenRoute: typeof QuitPlanPlanTokenRoute
@@ -1101,6 +1174,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AcademyRoute: AcademyRoute,
   AdminRoute: AdminRouteWithChildren,
+  AqlaQuitEngineRoute: AqlaQuitEngineRouteWithChildren,
   AssessmentRoute: AssessmentRoute,
   AuthRoute: AuthRoute,
   CertificatesRoute: CertificatesRoute,

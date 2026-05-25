@@ -488,6 +488,202 @@ export type Database = {
         }
         Relationships: []
       }
+      aqla_quit_engine_email_logs: {
+        Row: {
+          created_at: string
+          email: string | null
+          error_message: string | null
+          id: string
+          recipient_type: string
+          result_id: string
+          status: string
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          error_message?: string | null
+          id?: string
+          recipient_type: string
+          result_id: string
+          status: string
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          error_message?: string | null
+          id?: string
+          recipient_type?: string
+          result_id?: string
+          status?: string
+          subject?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "aqla_quit_engine_email_logs_result_id_fkey"
+            columns: ["result_id"]
+            isOneToOne: false
+            referencedRelation: "aqla_quit_engine_results"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      aqla_quit_engine_followups: {
+        Row: {
+          created_at: string
+          followup_type: string
+          id: string
+          result_id: string
+          scheduled_at: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          followup_type: string
+          id?: string
+          result_id: string
+          scheduled_at: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          followup_type?: string
+          id?: string
+          result_id?: string
+          scheduled_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "aqla_quit_engine_followups_result_id_fkey"
+            columns: ["result_id"]
+            isOneToOne: false
+            referencedRelation: "aqla_quit_engine_results"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      aqla_quit_engine_results: {
+        Row: {
+          admin_notified: boolean
+          aqla_intensity_score: number
+          cigarettes_per_day: string | null
+          confidence_score: number | null
+          created_at: string
+          dependence_category: string | null
+          email: string | null
+          email_sent: boolean
+          first_use_after_waking: string | null
+          hsi_score: number | null
+          id: string
+          importance_score: number | null
+          longest_abstinence: string | null
+          mixed_use: boolean
+          nicotine_pouch_frequency: string | null
+          pdf_generated: boolean
+          personal_reasons: Json
+          previous_quit_attempts: string | null
+          primary_product: string | null
+          primary_trigger_pattern: string | null
+          product_types: Json
+          readiness_category: string | null
+          readiness_score: number | null
+          referral_needed: boolean
+          relapse_causes: Json
+          relapse_prevention_mode: boolean
+          result_json: Json
+          safety_flags: Json
+          secondary_trigger_pattern: string | null
+          session_id: string | null
+          shisha_session_duration: string | null
+          shisha_sessions_per_week: string | null
+          support_person_name: string | null
+          triggers: Json
+          user_id: string | null
+          user_name: string | null
+          vape_pattern: string | null
+        }
+        Insert: {
+          admin_notified?: boolean
+          aqla_intensity_score?: number
+          cigarettes_per_day?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          dependence_category?: string | null
+          email?: string | null
+          email_sent?: boolean
+          first_use_after_waking?: string | null
+          hsi_score?: number | null
+          id?: string
+          importance_score?: number | null
+          longest_abstinence?: string | null
+          mixed_use?: boolean
+          nicotine_pouch_frequency?: string | null
+          pdf_generated?: boolean
+          personal_reasons?: Json
+          previous_quit_attempts?: string | null
+          primary_product?: string | null
+          primary_trigger_pattern?: string | null
+          product_types?: Json
+          readiness_category?: string | null
+          readiness_score?: number | null
+          referral_needed?: boolean
+          relapse_causes?: Json
+          relapse_prevention_mode?: boolean
+          result_json?: Json
+          safety_flags?: Json
+          secondary_trigger_pattern?: string | null
+          session_id?: string | null
+          shisha_session_duration?: string | null
+          shisha_sessions_per_week?: string | null
+          support_person_name?: string | null
+          triggers?: Json
+          user_id?: string | null
+          user_name?: string | null
+          vape_pattern?: string | null
+        }
+        Update: {
+          admin_notified?: boolean
+          aqla_intensity_score?: number
+          cigarettes_per_day?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          dependence_category?: string | null
+          email?: string | null
+          email_sent?: boolean
+          first_use_after_waking?: string | null
+          hsi_score?: number | null
+          id?: string
+          importance_score?: number | null
+          longest_abstinence?: string | null
+          mixed_use?: boolean
+          nicotine_pouch_frequency?: string | null
+          pdf_generated?: boolean
+          personal_reasons?: Json
+          previous_quit_attempts?: string | null
+          primary_product?: string | null
+          primary_trigger_pattern?: string | null
+          product_types?: Json
+          readiness_category?: string | null
+          readiness_score?: number | null
+          referral_needed?: boolean
+          relapse_causes?: Json
+          relapse_prevention_mode?: boolean
+          result_json?: Json
+          safety_flags?: Json
+          secondary_trigger_pattern?: string | null
+          session_id?: string | null
+          shisha_session_duration?: string | null
+          shisha_sessions_per_week?: string | null
+          support_person_name?: string | null
+          triggers?: Json
+          user_id?: string | null
+          user_name?: string | null
+          vape_pattern?: string | null
+        }
+        Relationships: []
+      }
       assessment_responses: {
         Row: {
           anonymous_session_id: string | null
