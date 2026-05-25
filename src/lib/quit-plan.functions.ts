@@ -342,25 +342,23 @@ export const finalizeQuitPlan = createServerFn({ method: "POST" })
   });
 
 // ---------------- getQuitPlan ----------------
+// Ownership: requires the planToken issued at plan creation. Bare-UUID lookups are no longer allowed.
 export const getQuitPlan = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) =>
     z
       .object({
-        planId: z.string().uuid().optional(),
-        planToken: z.string().min(8).max(80).optional(),
+        planToken: z.string().min(8).max(80),
       })
-      .refine((v) => v.planId || v.planToken, { message: "planId or planToken required" })
       .parse(input),
   )
   .handler(async ({ data }) => {
-    const q = supabaseAdmin
+    const { data: row, error } = await supabaseAdmin
       .from("quit_plans")
       .select(
         "id, plan_token, nickname, email, city, product, assessment_tool, score_total, score_band, risk_flag, validated, readiness, quit_goal, quit_date, triggers, plan, status, created_at, email_sent_at, admin_notified_at",
-      );
-    const { data: row, error } = data.planId
-      ? await q.eq("id", data.planId).maybeSingle()
-      : await q.eq("plan_token", data.planToken!).maybeSingle();
+      )
+      .eq("plan_token", data.planToken)
+      .maybeSingle();
     if (error) throw new Error(error.message);
     if (!row) return { plan: null };
     return { plan: row };
@@ -371,18 +369,24 @@ export const scheduleReminder = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) =>
     z
       .object({
-        planId: z.string().uuid(),
+        planToken: z.string().min(8).max(80),
         type: z.enum(["24h", "3d", "7d", "14d", "28d"]),
         channel: z.enum(["email", "whatsapp"]).default("email"),
       })
       .parse(input),
   )
   .handler(async ({ data }) => {
+    const { data: owner } = await supabaseAdmin
+      .from("quit_plans")
+      .select("id")
+      .eq("plan_token", data.planToken)
+      .maybeSingle();
+    if (!owner) throw new Error("Forbidden: invalid plan token");
     const offsets: Record<string, number> = { "24h": 1, "3d": 3, "7d": 7, "14d": 14, "28d": 28 };
     const d = new Date();
     d.setDate(d.getDate() + offsets[data.type]);
     const { error } = await supabaseAdmin.from("quit_plan_reminders").insert({
-      quit_plan_id: data.planId,
+      quit_plan_id: (owner as { id: string }).id,
       reminder_type: data.type,
       scheduled_at: d.toISOString(),
       channel: data.channel,
