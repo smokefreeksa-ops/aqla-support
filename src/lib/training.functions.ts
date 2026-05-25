@@ -58,18 +58,30 @@ export const registerTrainee = createServerFn({ method: "POST" })
     const { data: row, error } = await supabaseAdmin
       .from("training_users" as never)
       .insert(data as never)
-      .select("id, full_name, email, preferred_language")
+      .select("id, full_name, email, preferred_language, session_token")
       .single();
     if (error || !row) {
       return { ok: false as const, error: error?.message ?? "Could not register" };
     }
-    const r = row as unknown as { id: string; full_name: string; email: string; preferred_language: string };
+    const r = row as unknown as { id: string; full_name: string; email: string; preferred_language: string; session_token: string };
     return { ok: true as const, trainee: r };
   });
+
+// Validate that (training_user_id, session_token) belong together. Throws on mismatch.
+async function ensureTraineeOwnership(training_user_id: string, session_token: string): Promise<void> {
+  const { data } = await supabaseAdmin
+    .from("training_users" as never)
+    .select("id")
+    .eq("id", training_user_id)
+    .eq("session_token", session_token)
+    .maybeSingle();
+  if (!data) throw new Error("Forbidden: invalid trainee session");
+}
 
 // --------- Submit module attempt ---------
 const ScoreInput = z.object({
   training_user_id: z.string().uuid(),
+  session_token: z.string().min(8).max(80),
   module_slug: z.string().min(1).max(40),
   score: z.number().int().min(0).max(100),
 });
