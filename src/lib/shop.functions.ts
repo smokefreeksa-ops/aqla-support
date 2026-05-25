@@ -344,7 +344,10 @@ export const adminUpdateNrtRequest = createServerFn({ method: "POST" })
     return { ok: true, error: null as string | null };
   });
 
-export const adminExportNrtRequestsCsv = createServerFn({ method: "GET" }).handler(async () => {
+export const adminExportNrtRequestsCsv = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await ensureStaff(context.userId);
   const { data: rows, error } = await supabaseAdmin
     .from("nrt_requests" as never)
     .select(
