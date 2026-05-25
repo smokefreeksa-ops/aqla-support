@@ -39,11 +39,11 @@ function PlanPage() {
         import("qrcode"),
       ]);
       const qrDataUrl = await QR.toDataURL(shareUrl, { margin: 1, width: 200 });
-      const blob = await pdf(<QuitPlanPdf plan={planJson} qrDataUrl={qrDataUrl} shareUrl={shareUrl} planId={plan?.id ?? planId} />).toBlob();
+      const blob = await pdf(<QuitPlanPdf plan={planJson} qrDataUrl={qrDataUrl} shareUrl={shareUrl} planId={plan?.id ?? planToken} />).toBlob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `aqla-quit-plan-${plan?.id ?? planId}.pdf`;
+      a.download = `aqla-quit-plan-${plan?.id ?? planToken}.pdf`;
       a.click();
       URL.revokeObjectURL(url);
     } catch (e) {
