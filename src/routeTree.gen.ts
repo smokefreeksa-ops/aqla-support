@@ -51,6 +51,7 @@ import { Route as ChallengePathwayRouteImport } from './routes/challenge-pathway
 import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AssessmentRouteImport } from './routes/assessment'
+import { Route as AqlaVoiceChatRouteImport } from './routes/aqla-voice-chat'
 import { Route as AqlaQuitEngineRouteImport } from './routes/aqla-quit-engine'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcademyRouteImport } from './routes/academy'
@@ -275,6 +276,11 @@ const AssessmentRoute = AssessmentRouteImport.update({
   path: '/assessment',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AqlaVoiceChatRoute = AqlaVoiceChatRouteImport.update({
+  id: '/aqla-voice-chat',
+  path: '/aqla-voice-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AqlaQuitEngineRoute = AqlaQuitEngineRouteImport.update({
   id: '/aqla-quit-engine',
   path: '/aqla-quit-engine',
@@ -348,6 +354,7 @@ export interface FileRoutesByFullPath {
   '/academy': typeof AcademyRoute
   '/admin': typeof AdminRouteWithChildren
   '/aqla-quit-engine': typeof AqlaQuitEngineRouteWithChildren
+  '/aqla-voice-chat': typeof AqlaVoiceChatRoute
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
   '/certificates': typeof CertificatesRoute
@@ -405,6 +412,7 @@ export interface FileRoutesByTo {
   '/academy': typeof AcademyRoute
   '/admin': typeof AdminRouteWithChildren
   '/aqla-quit-engine': typeof AqlaQuitEngineRouteWithChildren
+  '/aqla-voice-chat': typeof AqlaVoiceChatRoute
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
   '/certificates': typeof CertificatesRoute
@@ -463,6 +471,7 @@ export interface FileRoutesById {
   '/academy': typeof AcademyRoute
   '/admin': typeof AdminRouteWithChildren
   '/aqla-quit-engine': typeof AqlaQuitEngineRouteWithChildren
+  '/aqla-voice-chat': typeof AqlaVoiceChatRoute
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
   '/certificates': typeof CertificatesRoute
@@ -522,6 +531,7 @@ export interface FileRouteTypes {
     | '/academy'
     | '/admin'
     | '/aqla-quit-engine'
+    | '/aqla-voice-chat'
     | '/assessment'
     | '/auth'
     | '/certificates'
@@ -579,6 +589,7 @@ export interface FileRouteTypes {
     | '/academy'
     | '/admin'
     | '/aqla-quit-engine'
+    | '/aqla-voice-chat'
     | '/assessment'
     | '/auth'
     | '/certificates'
@@ -636,6 +647,7 @@ export interface FileRouteTypes {
     | '/academy'
     | '/admin'
     | '/aqla-quit-engine'
+    | '/aqla-voice-chat'
     | '/assessment'
     | '/auth'
     | '/certificates'
@@ -694,6 +706,7 @@ export interface RootRouteChildren {
   AcademyRoute: typeof AcademyRoute
   AdminRoute: typeof AdminRouteWithChildren
   AqlaQuitEngineRoute: typeof AqlaQuitEngineRouteWithChildren
+  AqlaVoiceChatRoute: typeof AqlaVoiceChatRoute
   AssessmentRoute: typeof AssessmentRoute
   AuthRoute: typeof AuthRoute
   CertificatesRoute: typeof CertificatesRoute
@@ -1037,6 +1050,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessmentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/aqla-voice-chat': {
+      id: '/aqla-voice-chat'
+      path: '/aqla-voice-chat'
+      fullPath: '/aqla-voice-chat'
+      preLoaderRoute: typeof AqlaVoiceChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/aqla-quit-engine': {
       id: '/aqla-quit-engine'
       path: '/aqla-quit-engine'
@@ -1175,6 +1195,7 @@ const rootRouteChildren: RootRouteChildren = {
   AcademyRoute: AcademyRoute,
   AdminRoute: AdminRouteWithChildren,
   AqlaQuitEngineRoute: AqlaQuitEngineRouteWithChildren,
+  AqlaVoiceChatRoute: AqlaVoiceChatRoute,
   AssessmentRoute: AssessmentRoute,
   AuthRoute: AuthRoute,
   CertificatesRoute: CertificatesRoute,
@@ -1224,13 +1245,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
