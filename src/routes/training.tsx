@@ -196,8 +196,9 @@ function TrainingPage() {
                         lang={lang}
                         moduleSlug={m.slug}
                         traineeId={trainee.id}
+                        sessionToken={trainee.session_token}
                         onScoreSubmitted={async () => {
-                          const r = await progressFn({ data: { training_user_id: trainee.id } });
+                          const r = await progressFn({ data: { training_user_id: trainee.id, session_token: trainee.session_token } });
                           setProgress(r.progress);
                           setCertificate(r.certificate ?? null);
                         }}
