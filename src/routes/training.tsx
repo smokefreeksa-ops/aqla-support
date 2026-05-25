@@ -366,7 +366,7 @@ function ModulePanel({
     items.forEach((it, i) => { if (answers[i] === it.correct) correct++; });
     const s = Math.round((correct / total) * 100);
     setScore(s);
-    const res = await submitFn({ data: { training_user_id: traineeId, module_slug: moduleSlug, score: s } });
+    const res = await submitFn({ data: { training_user_id: traineeId, session_token: sessionToken, module_slug: moduleSlug, score: s } });
     if (res.ok) {
       setSubmitted(true);
       toast.success(s >= MODULE_PASS ? (lang === "ar" ? "اجتزت الوحدة" : "Module passed") : (lang === "ar" ? "أعد المحاولة" : "Try again"));
