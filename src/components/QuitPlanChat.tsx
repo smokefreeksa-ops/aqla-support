@@ -441,8 +441,8 @@ export function QuitPlanChat() {
     // After basic 4 fields collected, create plan row
     if (!planId && next.nickname && next.email && next.city && current.key === "product") {
       try {
-        const id = await ensurePlan(next);
-        await saveFn({ data: { planId: id, key: current.key, value } });
+        const ensured = await ensurePlan(next);
+        await saveFn({ data: { planId: ensured.id, planToken: ensured.token, key: current.key, value } });
       } catch (e) {
         console.error(e);
       }
