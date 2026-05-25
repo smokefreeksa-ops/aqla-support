@@ -89,6 +89,7 @@ const ScoreInput = z.object({
 export const submitModuleScore = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => ScoreInput.parse(input))
   .handler(async ({ data }) => {
+    await ensureTraineeOwnership(data.training_user_id, data.session_token);
     const slugMap = await ensureModulesSeeded();
     const module_id = slugMap[data.module_slug];
     if (!module_id) return { ok: false as const, error: "Unknown module" };
