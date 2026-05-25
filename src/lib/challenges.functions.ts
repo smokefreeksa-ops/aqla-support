@@ -44,7 +44,10 @@ export const getChallengePublicStats = createServerFn({ method: "GET" }).handler
   return { stats: data as unknown as ChallengePublicStats, error: null as string | null };
 });
 
-export const getAdminChallengeAnalytics = createServerFn({ method: "GET" }).handler(async () => {
+export const getAdminChallengeAnalytics = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await ensureAdmin(context.userId);
   const { data, error } = await supabaseAdmin.rpc("get_admin_challenge_analytics" as never);
   if (error) {
     console.error("get_admin_challenge_analytics error:", error);
