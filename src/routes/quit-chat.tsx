@@ -56,6 +56,7 @@ function sendEmailPayload(userData: Answers) {
 }
 
 function QuitChatPage() {
+  const [answers, setAnswers] = useState<Answers>({});
   return (
     <>
       <div
@@ -70,10 +71,11 @@ function QuitChatPage() {
               محادثة تفاعلية لبناء خطتك الشخصية للتحرر من النيكوتين.
             </p>
           </header>
-          <Chat />
+          <Chat answers={answers} setAnswers={setAnswers} />
         </main>
         <SiteFooter />
       </div>
+      <PrintableQuitPlan data={answers} />
       <PrintStyles />
     </>
   );
@@ -91,13 +93,13 @@ function PrintStyles() {
 }
 
 
-function Chat() {
+function Chat({ answers, setAnswers }: { answers: Answers; setAnswers: React.Dispatch<React.SetStateAction<Answers>> }) {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Msg[]>([]);
   const [state, setState] = useState(0);
-  const [answers, setAnswers] = useState<Answers>({});
   const [input, setInput] = useState("");
   const [multiSel, setMultiSel] = useState<string[]>([]);
+
   const [typing, setTyping] = useState(false);
   const [locked, setLocked] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
