@@ -56,6 +56,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as QuitPlanPlanIdRouteImport } from './routes/quit-plan.$planId'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
+import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
 import { Route as ShareInviteCodeRouteImport } from './routes/share.invite.$code'
 import { Route as ShareTypeIdRouteImport } from './routes/share.$type.$id'
@@ -295,6 +296,11 @@ const CertificateCodeRoute = CertificateCodeRouteImport.update({
   path: '/certificate/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminQuitPlanEmailsRoute = AdminQuitPlanEmailsRouteImport.update({
+  id: '/quit-plan-emails',
+  path: '/quit-plan-emails',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminDataDictionaryRoute = AdminDataDictionaryRouteImport.update({
   id: '/data-dictionary',
   path: '/data-dictionary',
@@ -358,6 +364,7 @@ export interface FileRoutesByFullPath {
   '/volunteer': typeof VolunteerRoute
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
+  '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/quit-plan/$planId': typeof QuitPlanPlanIdRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
@@ -410,6 +417,7 @@ export interface FileRoutesByTo {
   '/volunteer': typeof VolunteerRoute
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
+  '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/quit-plan/$planId': typeof QuitPlanPlanIdRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
@@ -463,6 +471,7 @@ export interface FileRoutesById {
   '/volunteer': typeof VolunteerRoute
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
+  '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/quit-plan/$planId': typeof QuitPlanPlanIdRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
@@ -517,6 +526,7 @@ export interface FileRouteTypes {
     | '/volunteer'
     | '/when-to-seek-help'
     | '/admin/data-dictionary'
+    | '/admin/quit-plan-emails'
     | '/certificate/$code'
     | '/quit-plan/$planId'
     | '/share/$type/$id'
@@ -569,6 +579,7 @@ export interface FileRouteTypes {
     | '/volunteer'
     | '/when-to-seek-help'
     | '/admin/data-dictionary'
+    | '/admin/quit-plan-emails'
     | '/certificate/$code'
     | '/quit-plan/$planId'
     | '/share/$type/$id'
@@ -621,6 +632,7 @@ export interface FileRouteTypes {
     | '/volunteer'
     | '/when-to-seek-help'
     | '/admin/data-dictionary'
+    | '/admin/quit-plan-emails'
     | '/certificate/$code'
     | '/quit-plan/$planId'
     | '/share/$type/$id'
@@ -1009,6 +1021,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CertificateCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/quit-plan-emails': {
+      id: '/admin/quit-plan-emails'
+      path: '/quit-plan-emails'
+      fullPath: '/admin/quit-plan-emails'
+      preLoaderRoute: typeof AdminQuitPlanEmailsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/data-dictionary': {
       id: '/admin/data-dictionary'
       path: '/data-dictionary'
@@ -1035,10 +1054,12 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminDataDictionaryRoute: typeof AdminDataDictionaryRoute
+  AdminQuitPlanEmailsRoute: typeof AdminQuitPlanEmailsRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminDataDictionaryRoute: AdminDataDictionaryRoute,
+  AdminQuitPlanEmailsRoute: AdminQuitPlanEmailsRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
