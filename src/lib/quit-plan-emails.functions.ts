@@ -54,12 +54,12 @@ export const listQuitPlanEmails = createServerFn({ method: "GET" })
     if (planIds.length > 0) {
       const { data: plans } = await supabaseAdmin
         .from("quit_plans")
-        .select("id, created_at, user_email")
+        .select("id, created_at, email")
         .in("id", planIds);
       plansById = Object.fromEntries(
-        (plans ?? []).map((p: { id: string; created_at: string | null; user_email: string | null }) => [
+        ((plans ?? []) as Array<{ id: string; created_at: string | null; email: string | null }>).map((p) => [
           p.id,
-          { created_at: p.created_at, user_email: p.user_email },
+          { created_at: p.created_at, user_email: p.email },
         ]),
       );
     }
