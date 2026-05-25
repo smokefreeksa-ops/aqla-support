@@ -27,7 +27,7 @@ export const Route = createFileRoute("/training")({
 });
 
 type Lang = "ar" | "en";
-type Trainee = { id: string; full_name: string; email: string; preferred_language: string };
+type Trainee = { id: string; full_name: string; email: string; preferred_language: string; session_token: string };
 
 const STORE_KEY = "aqla_trainee_v1";
 
