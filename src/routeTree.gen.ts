@@ -24,6 +24,7 @@ import { Route as RequestSupportRouteImport } from './routes/request-support'
 import { Route as RelapseSupportRouteImport } from './routes/relapse-support'
 import { Route as QuitPlanRouteImport } from './routes/quit-plan'
 import { Route as QuitPathwayRouteImport } from './routes/quit-pathway'
+import { Route as QuitChatRouteImport } from './routes/quit-chat'
 import { Route as QuitCenterRouteImport } from './routes/quit-center'
 import { Route as ProfessionalLibraryRouteImport } from './routes/professional-library'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -134,6 +135,11 @@ const QuitPlanRoute = QuitPlanRouteImport.update({
 const QuitPathwayRoute = QuitPathwayRouteImport.update({
   id: '/quit-pathway',
   path: '/quit-pathway',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuitChatRoute = QuitChatRouteImport.update({
+  id: '/quit-chat',
+  path: '/quit-chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuitCenterRoute = QuitCenterRouteImport.update({
@@ -348,6 +354,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/professional-library': typeof ProfessionalLibraryRoute
   '/quit-center': typeof QuitCenterRoute
+  '/quit-chat': typeof QuitChatRoute
   '/quit-pathway': typeof QuitPathwayRoute
   '/quit-plan': typeof QuitPlanRouteWithChildren
   '/relapse-support': typeof RelapseSupportRoute
@@ -401,6 +408,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/professional-library': typeof ProfessionalLibraryRoute
   '/quit-center': typeof QuitCenterRoute
+  '/quit-chat': typeof QuitChatRoute
   '/quit-pathway': typeof QuitPathwayRoute
   '/quit-plan': typeof QuitPlanRouteWithChildren
   '/relapse-support': typeof RelapseSupportRoute
@@ -455,6 +463,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/professional-library': typeof ProfessionalLibraryRoute
   '/quit-center': typeof QuitCenterRoute
+  '/quit-chat': typeof QuitChatRoute
   '/quit-pathway': typeof QuitPathwayRoute
   '/quit-plan': typeof QuitPlanRouteWithChildren
   '/relapse-support': typeof RelapseSupportRoute
@@ -510,6 +519,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/professional-library'
     | '/quit-center'
+    | '/quit-chat'
     | '/quit-pathway'
     | '/quit-plan'
     | '/relapse-support'
@@ -563,6 +573,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/professional-library'
     | '/quit-center'
+    | '/quit-chat'
     | '/quit-pathway'
     | '/quit-plan'
     | '/relapse-support'
@@ -616,6 +627,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/professional-library'
     | '/quit-center'
+    | '/quit-chat'
     | '/quit-pathway'
     | '/quit-plan'
     | '/relapse-support'
@@ -670,6 +682,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ProfessionalLibraryRoute: typeof ProfessionalLibraryRoute
   QuitCenterRoute: typeof QuitCenterRoute
+  QuitChatRoute: typeof QuitChatRoute
   QuitPathwayRoute: typeof QuitPathwayRoute
   QuitPlanRoute: typeof QuitPlanRouteWithChildren
   RelapseSupportRoute: typeof RelapseSupportRoute
@@ -795,6 +808,13 @@ declare module '@tanstack/react-router' {
       path: '/quit-pathway'
       fullPath: '/quit-pathway'
       preLoaderRoute: typeof QuitPathwayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quit-chat': {
+      id: '/quit-chat'
+      path: '/quit-chat'
+      fullPath: '/quit-chat'
+      preLoaderRoute: typeof QuitChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quit-center': {
@@ -1107,6 +1127,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ProfessionalLibraryRoute: ProfessionalLibraryRoute,
   QuitCenterRoute: QuitCenterRoute,
+  QuitChatRoute: QuitChatRoute,
   QuitPathwayRoute: QuitPathwayRoute,
   QuitPlanRoute: QuitPlanRouteWithChildren,
   RelapseSupportRoute: RelapseSupportRoute,
@@ -1129,13 +1150,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
