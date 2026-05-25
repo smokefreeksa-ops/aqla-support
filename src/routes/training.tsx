@@ -337,11 +337,12 @@ function RegistrationForm({
 }
 
 function ModulePanel({
-  lang, moduleSlug, traineeId, onScoreSubmitted, submitFn,
+  lang, moduleSlug, traineeId, sessionToken, onScoreSubmitted, submitFn,
 }: {
   lang: Lang;
   moduleSlug: string;
   traineeId: string;
+  sessionToken: string;
   onScoreSubmitted: () => Promise<void> | void;
   submitFn: ReturnType<typeof useServerFn<typeof submitModuleScore>>;
 }) {
