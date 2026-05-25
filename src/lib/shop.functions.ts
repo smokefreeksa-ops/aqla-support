@@ -302,8 +302,10 @@ const UpdateInput = z.object({
 });
 
 export const adminUpdateNrtRequest = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => UpdateInput.parse(input))
-  .handler(async ({ data }) => {
+  .handler(async ({ context, data }) => {
+    await ensureStaff(context.userId);
     // Read current row for old status & to append note
     const { data: current, error: readErr } = await supabaseAdmin
       .from("nrt_requests" as never)
