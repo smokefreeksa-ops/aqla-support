@@ -210,6 +210,7 @@ export function QuitPlanChat() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [planId, setPlanId] = useState<string | null>(null);
+  const [planToken, setPlanToken] = useState<string | null>(null);
   const [stepIndex, setStepIndex] = useState(0);
   const [emergency, setEmergency] = useState<string | null>(null);
   const [state, setState] = useState<State>(() => {
