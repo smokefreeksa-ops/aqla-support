@@ -118,7 +118,10 @@ export const getPosterPublicStats = createServerFn({ method: "GET" }).handler(as
   return { stats: data as unknown as PosterPublicStats, error: null as string | null };
 });
 
-export const getAdminPosterAnalytics = createServerFn({ method: "GET" }).handler(async () => {
+export const getAdminPosterAnalytics = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await ensureAdmin(context.userId);
   const { data, error } = await supabaseAdmin.rpc("get_admin_poster_analytics");
   if (error) {
     console.error("get_admin_poster_analytics error:", error);
