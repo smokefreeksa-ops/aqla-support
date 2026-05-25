@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Send, Printer, LayoutDashboard } from "lucide-react";
+import { PrintableQuitPlan } from "@/components/PrintableQuitPlan";
 
 export const Route = createFileRoute("/quit-chat")({
   head: () => ({
