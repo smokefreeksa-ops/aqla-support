@@ -31,6 +31,7 @@ export const appRoutes = {
   whenToSeekHelp: "/when-to-seek-help",
   assessment: "/assessment",
   aqlaQuitEngine: "/aqla-quit-engine",
+  aqlaVoiceChat: "/aqla-voice-chat",
   english: "/en",
   // External
   whatsapp: "https://wa.me/966555096412",
@@ -71,6 +72,7 @@ export const internalRoutes: ReadonlySet<string> = new Set([
   appRoutes.whenToSeekHelp,
   appRoutes.assessment,
   appRoutes.aqlaQuitEngine,
+  appRoutes.aqlaVoiceChat,
   appRoutes.english,
   "/admin",
   "/admin/link-audit",
