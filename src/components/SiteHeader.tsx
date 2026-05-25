@@ -15,6 +15,7 @@ const NAV: NavItem[] = [
   { ar: "مسار الإقلاع", en: "Quit Pathway", to: appRoutes.quitPathway },
   { ar: "مسار المساعدة", en: "Help Someone", to: appRoutes.helpPathway },
   { ar: "التحديات والأنشطة", en: "Challenges & Activities", to: appRoutes.challengePathway },
+  { ar: "أقلع الشخصي", en: "Aqla Quit Engine", to: appRoutes.aqlaQuitEngine },
   { ar: "التعلم والتدريب", en: "Learn & Train", to: appRoutes.learnTrain },
   { ar: "الشهادات", en: "Certificates", to: appRoutes.certificates },
   { ar: "طلب الدعم", en: "Request Support", to: appRoutes.requestSupport },
