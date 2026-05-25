@@ -564,8 +564,7 @@ function Chat({ answers, setAnswers }: { answers: Answers; setAnswers: React.Dis
           </div>
         )}
       </div>
-
-      <PrintableSummary a={answers} />
     </>
+
   );
 }
