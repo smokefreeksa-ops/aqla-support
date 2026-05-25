@@ -344,14 +344,14 @@ export function QuitPlanChat() {
   }, []);
 
   async function persistAnswer(key: string, value: unknown) {
-    if (!planId) return;
+    if (!planId || !planToken) return;
     try {
-      await saveFn({ data: { planId, key, value } });
+      await saveFn({ data: { planId, planToken, key, value } });
     } catch { /* best effort */ }
   }
 
-  async function ensurePlan(s: State) {
-    if (planId) return planId;
+  async function ensurePlan(s: State): Promise<{ id: string; token: string }> {
+    if (planId && planToken) return { id: planId, token: planToken };
     const anon = getOrCreateAnonId();
     const res = await startFn({
       data: {
@@ -364,7 +364,8 @@ export function QuitPlanChat() {
       },
     });
     setPlanId(res.planId);
-    return res.planId;
+    setPlanToken(res.planToken);
+    return { id: res.planId, token: res.planToken };
   }
 
   async function advance(userText: string, displayLabel?: string) {
