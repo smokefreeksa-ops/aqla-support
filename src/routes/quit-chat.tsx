@@ -57,94 +57,39 @@ function sendEmailPayload(userData: Answers) {
 
 function QuitChatPage() {
   return (
-    <div dir="rtl" className="min-h-screen bg-background font-[Tajawal,Cairo,system-ui,sans-serif] text-right">
-      <SiteHeader />
-      <main className="mx-auto max-w-2xl px-3 py-6 sm:py-10">
-        <header className="mb-4 text-right">
-          <h1 className="text-2xl font-bold tracking-tight">مساعد أقلع الذكي</h1>
-          <p className="mt-1 text-sm text-foreground/70">محادثة تفاعلية لبناء خطتك الشخصية للتحرر من النيكوتين.</p>
-        </header>
-        <Chat />
-      </main>
-      <SiteFooter />
+    <>
+      <div
+        dir="rtl"
+        className="min-h-screen bg-background font-[Tajawal,Cairo,system-ui,sans-serif] text-right print:hidden"
+      >
+        <SiteHeader />
+        <main className="mx-auto max-w-2xl px-3 py-6 sm:py-10">
+          <header className="mb-4 text-right">
+            <h1 className="text-2xl font-bold tracking-tight">مساعد أقلع الذكي</h1>
+            <p className="mt-1 text-sm text-foreground/70">
+              محادثة تفاعلية لبناء خطتك الشخصية للتحرر من النيكوتين.
+            </p>
+          </header>
+          <Chat />
+        </main>
+        <SiteFooter />
+      </div>
       <PrintStyles />
-    </div>
+    </>
   );
 }
 
 function PrintStyles() {
   return (
     <style>{`
+      @page { size: A4; margin: 14mm; }
       @media print {
-        body * { visibility: hidden !important; }
-        #aqla-print-area, #aqla-print-area * { visibility: visible !important; }
-        #aqla-print-area { position: absolute; inset: 0; width: 100%; padding: 24px; background: white; color: black; }
+        html, body { background: white !important; }
       }
-      #aqla-print-area { display: none; }
-      @media print { #aqla-print-area { display: block; } }
     `}</style>
   );
 }
 
-function PrintableSummary({ a }: { a: Answers }) {
-  const dependency =
-    (a.fagerstromScore ?? 0) >= 5 ? "اعتماد مرتفع — يُنصح بدمج بدائل النيكوتين الطبية (NRT)" : "اعتماد خفيف إلى متوسط — التحكم السلوكي مناسب";
-  return (
-    <div id="aqla-print-area" dir="rtl" className="text-right">
-      <div style={{ borderBottom: "2px solid #0c4a6e", paddingBottom: 12, marginBottom: 20 }}>
-        <h1 style={{ fontSize: 26, fontWeight: 800, color: "#0c4a6e", margin: 0 }}>خطة الإقلاع الشخصية — أقلع</h1>
-        <p style={{ margin: "6px 0 0", color: "#475569", fontSize: 13 }}>وثيقة مُولّدة آلياً من منصة أقلع للدعم الإكلينيكي</p>
-      </div>
-
-      <section style={{ marginBottom: 18 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0c4a6e", marginBottom: 8 }}>المعلومات الأساسية</h2>
-        <table style={{ width: "100%", fontSize: 14, borderCollapse: "collapse" }}>
-          <tbody>
-            <Row k="الاسم" v={a.userName} />
-            <Row k="المدينة" v={a.city} />
-            <Row k="البريد الإلكتروني" v={a.email} />
-            <Row k="المنتج الأساسي" v={a.product} />
-          </tbody>
-        </table>
-      </section>
-
-      <section style={{ marginBottom: 18 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0c4a6e", marginBottom: 8 }}>تقييم Fagerström للاعتماد على النيكوتين</h2>
-        <table style={{ width: "100%", fontSize: 14, borderCollapse: "collapse" }}>
-          <tbody>
-            <Row k="النتيجة الإجمالية (FTND)" v={`${a.fagerstromScore ?? "—"} / 8`} />
-            <Row k="التفسير الإكلينيكي" v={dependency} />
-            <Row k="مستوى الاستعداد للإقلاع" v={a.readiness ? `${a.readiness} / 10` : "—"} />
-          </tbody>
-        </table>
-      </section>
-
-      <section style={{ marginBottom: 18 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0c4a6e", marginBottom: 8 }}>خطة START</h2>
-        <table style={{ width: "100%", fontSize: 14, borderCollapse: "collapse" }}>
-          <tbody>
-            <Row k="يوم الاستقلال (تاريخ الإقلاع)" v={a.quitDate} />
-            <Row k="المحفزات / الفخاخ" v={a.triggers?.join("، ")} />
-            <Row k="شخص الدعم" v={a.supporter} />
-          </tbody>
-        </table>
-      </section>
-
-      <p style={{ marginTop: 24, fontSize: 12, color: "#64748b", borderTop: "1px solid #e2e8f0", paddingTop: 10 }}>
-        هذه الوثيقة لأغراض الدعم والتثقيف الصحي ولا تُغني عن استشارة الطبيب المختص.
-      </p>
-    </div>
-  );
-}
-
-function Row({ k, v }: { k: string; v?: string | number }) {
-  return (
-    <tr>
-      <td style={{ padding: "6px 0", color: "#475569", width: "40%" }}>{k}</td>
-      <td style={{ padding: "6px 0", fontWeight: 600 }}>{v ?? "—"}</td>
-    </tr>
-  );
-}
 
 function Chat() {
   const navigate = useNavigate();
