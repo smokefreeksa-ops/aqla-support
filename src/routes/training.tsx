@@ -58,7 +58,7 @@ function TrainingPage() {
   useEffect(() => {
     if (!trainee) return;
     (async () => {
-      const res = await progressFn({ data: { training_user_id: trainee.id } });
+      const res = await progressFn({ data: { training_user_id: trainee.id, session_token: trainee.session_token } });
       setProgress(res.progress);
       setCertificate(res.certificate ?? null);
     })();
@@ -73,10 +73,10 @@ function TrainingPage() {
 
   async function handleIssue() {
     if (!trainee) return;
-    const res = await issueFn({ data: { training_user_id: trainee.id, overall_score: overall } });
+    const res = await issueFn({ data: { training_user_id: trainee.id, session_token: trainee.session_token, overall_score: overall } });
     if (!res.ok) { toast.error(res.error); return; }
     toast.success(lang === "ar" ? "تم إصدار الشهادة" : "Certificate issued");
-    const r = await progressFn({ data: { training_user_id: trainee.id } });
+    const r = await progressFn({ data: { training_user_id: trainee.id, session_token: trainee.session_token } });
     setCertificate(r.certificate ?? null);
   }
 
