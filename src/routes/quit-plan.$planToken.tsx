@@ -56,7 +56,7 @@ function PlanPage() {
 
   async function schedule(type: "24h" | "3d" | "7d" | "14d" | "28d") {
     try {
-      const res = await remindFn({ data: { planId, type, channel: "email" } });
+      const res = await remindFn({ data: { planToken, type, channel: "email" } });
       setReminderMsg(res.message);
     } catch {
       setReminderMsg("تعذر حفظ التذكير الآن، حاول لاحقًا.");
