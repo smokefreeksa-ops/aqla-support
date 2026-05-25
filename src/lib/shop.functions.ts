@@ -258,8 +258,10 @@ const AdminListInput = z.object({
 });
 
 export const adminListNrtRequests = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => AdminListInput.parse(input ?? {}))
-  .handler(async ({ data }) => {
+  .handler(async ({ context, data }) => {
+    await ensureStaff(context.userId);
     let q = supabaseAdmin
       .from("nrt_requests" as never)
       .select(
