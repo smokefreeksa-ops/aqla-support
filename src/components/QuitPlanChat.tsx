@@ -490,7 +490,7 @@ export function QuitPlanChat() {
               : "تم إنشاء الخطة، لكن تعذر إرسال البريد الإلكتروني حاليًا. يمكنك تحميل الخطة PDF أو نسخ الرابط.",
           },
         ]);
-        await navigate({ to: "/quit-plan/$planId", params: { planId: res.planId } });
+        await navigate({ to: "/quit-plan/$planToken", params: { planToken: res.planToken ?? "" } });
       } catch (e) {
         console.error(e);
         setMessages((m) => [...m, { role: "assistant", content: "صار خطأ تقني أثناء إنشاء الخطة. حاول مرة ثانية، وإذا تكرر، تواصل معنا واتساب." }]);
