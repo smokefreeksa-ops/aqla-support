@@ -8,7 +8,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import type { QuitPlanJSON } from "@/lib/quit-plan-builder";
 
-export const Route = createFileRoute("/quit-plan/$planId")({
+export const Route = createFileRoute("/quit-plan/$planToken")({
   head: () => ({ meta: [{ title: "خطة أقلع الشخصية" }] }),
   component: PlanPage,
 });
