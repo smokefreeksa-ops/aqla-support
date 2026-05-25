@@ -166,6 +166,7 @@ export const getTraineeProgress = createServerFn({ method: "POST" })
 // --------- Issue certificate ---------
 const IssueInput = z.object({
   training_user_id: z.string().uuid(),
+  session_token: z.string().min(8).max(80),
   overall_score: z.number().int().min(0).max(100),
 });
 
@@ -182,6 +183,7 @@ function genVerifyHash(): string {
 export const issueTrainingCertificate = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => IssueInput.parse(input))
   .handler(async ({ data }) => {
+    await ensureTraineeOwnership(data.training_user_id, data.session_token);
     if (data.overall_score < OVERALL_PASS) {
       return { ok: false as const, error: "Score below pass threshold" };
     }
