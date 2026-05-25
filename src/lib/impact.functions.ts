@@ -174,7 +174,10 @@ const EMPTY_ADMIN: AdminAnalytics = {
   whatsapp_clicks: 0, chatbot_opens: 0,
 };
 
-export const getAdminAnalyticsDashboard = createServerFn({ method: "GET" }).handler(async () => {
+export const getAdminAnalyticsDashboard = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await ensureAdmin(context.userId);
   const { data, error } = await supabaseAdmin.rpc("get_admin_analytics_dashboard" as never);
   if (error) {
     console.error("get_admin_analytics_dashboard error", error);
