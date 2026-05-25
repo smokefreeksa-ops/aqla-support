@@ -1,9 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLang, useLangState, LangContext } from "@/lib/i18n";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { QuitPlanChat } from "@/components/QuitPlanChat";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Wind, ChevronLeft } from "lucide-react";
 
 export const Route = createFileRoute("/quit-pathway")({
   head: () => ({
