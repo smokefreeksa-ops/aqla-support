@@ -132,11 +132,15 @@ export const submitModuleScore = createServerFn({ method: "POST" })
   });
 
 // --------- Get trainee progress ---------
-const ProgressInput = z.object({ training_user_id: z.string().uuid() });
+const ProgressInput = z.object({
+  training_user_id: z.string().uuid(),
+  session_token: z.string().min(8).max(80),
+});
 
 export const getTraineeProgress = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => ProgressInput.parse(input))
   .handler(async ({ data }) => {
+    await ensureTraineeOwnership(data.training_user_id, data.session_token);
     const slugMap = await ensureModulesSeeded();
     const idToSlug = Object.fromEntries(Object.entries(slugMap).map(([s, i]) => [i, s]));
     const { data: rows } = await supabaseAdmin
