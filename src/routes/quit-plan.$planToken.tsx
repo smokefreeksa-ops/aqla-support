@@ -14,15 +14,15 @@ export const Route = createFileRoute("/quit-plan/$planToken")({
 });
 
 function PlanPage() {
-  const { planId } = Route.useParams();
+  const { planToken } = Route.useParams();
   const getFn = useServerFn(getQuitPlan);
   const remindFn = useServerFn(scheduleReminder);
   const [downloading, setDownloading] = useState(false);
   const [reminderMsg, setReminderMsg] = useState<string | null>(null);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["quit-plan", planId],
-    queryFn: () => getFn({ data: { planId } }),
+    queryKey: ["quit-plan", planToken],
+    queryFn: () => getFn({ data: { planToken } }),
   });
 
   const plan = data?.plan as { id: string; nickname: string | null; plan: QuitPlanJSON | null; email_sent_at: string | null } | null | undefined;
