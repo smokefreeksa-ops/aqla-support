@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { ensureAdmin } from "./_authz.server";
 import { renderKeyValueHtml, sendAdminNotification } from "./notifications.server";
 import { TRAINING_MODULES, OVERALL_PASS, MODULE_PASS } from "./training-content";
 
