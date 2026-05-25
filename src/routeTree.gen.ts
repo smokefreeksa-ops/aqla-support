@@ -39,6 +39,7 @@ import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as HelpPathwayRouteImport } from './routes/help-pathway'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as EnRouteImport } from './routes/en'
+import { Route as DtxRouteImport } from './routes/dtx'
 import { Route as CravingCoachRouteImport } from './routes/craving-coach'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -209,6 +210,11 @@ const EnRoute = EnRouteImport.update({
   path: '/en',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DtxRoute = DtxRouteImport.update({
+  id: '/dtx',
+  path: '/dtx',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CravingCoachRoute = CravingCoachRouteImport.update({
   id: '/craving-coach',
   path: '/craving-coach',
@@ -320,6 +326,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/craving-coach': typeof CravingCoachRoute
+  '/dtx': typeof DtxRoute
   '/en': typeof EnRoute
   '/faq': typeof FaqRoute
   '/help-pathway': typeof HelpPathwayRoute
@@ -371,6 +378,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/craving-coach': typeof CravingCoachRoute
+  '/dtx': typeof DtxRoute
   '/en': typeof EnRoute
   '/faq': typeof FaqRoute
   '/help-pathway': typeof HelpPathwayRoute
@@ -423,6 +431,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/craving-coach': typeof CravingCoachRoute
+  '/dtx': typeof DtxRoute
   '/en': typeof EnRoute
   '/faq': typeof FaqRoute
   '/help-pathway': typeof HelpPathwayRoute
@@ -476,6 +485,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cookies'
     | '/craving-coach'
+    | '/dtx'
     | '/en'
     | '/faq'
     | '/help-pathway'
@@ -527,6 +537,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cookies'
     | '/craving-coach'
+    | '/dtx'
     | '/en'
     | '/faq'
     | '/help-pathway'
@@ -578,6 +589,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cookies'
     | '/craving-coach'
+    | '/dtx'
     | '/en'
     | '/faq'
     | '/help-pathway'
@@ -630,6 +642,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   CookiesRoute: typeof CookiesRoute
   CravingCoachRoute: typeof CravingCoachRoute
+  DtxRoute: typeof DtxRoute
   EnRoute: typeof EnRoute
   FaqRoute: typeof FaqRoute
   HelpPathwayRoute: typeof HelpPathwayRoute
@@ -877,6 +890,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dtx': {
+      id: '/dtx'
+      path: '/dtx'
+      fullPath: '/dtx'
+      preLoaderRoute: typeof DtxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/craving-coach': {
       id: '/craving-coach'
       path: '/craving-coach'
@@ -1050,6 +1070,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   CookiesRoute: CookiesRoute,
   CravingCoachRoute: CravingCoachRoute,
+  DtxRoute: DtxRoute,
   EnRoute: EnRoute,
   FaqRoute: FaqRoute,
   HelpPathwayRoute: HelpPathwayRoute,
@@ -1087,13 +1108,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

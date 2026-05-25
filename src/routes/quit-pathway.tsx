@@ -1,9 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLang, useLangState, LangContext } from "@/lib/i18n";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { QuitPlanChat } from "@/components/QuitPlanChat";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Wind, ChevronLeft } from "lucide-react";
 
 export const Route = createFileRoute("/quit-pathway")({
   head: () => ({
@@ -53,6 +53,29 @@ function Inner() {
         <div className="mt-6">
           <QuitPlanChat />
         </div>
+
+        <Link
+          to="/dtx"
+          className="mt-6 block rounded-2xl border border-cyan-500/30 bg-gradient-to-br from-cyan-950/40 via-slate-900 to-slate-900 p-5 hover:border-cyan-400/60 transition group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-cyan-400 to-teal-600 grid place-content-center shrink-0">
+              <Wind className="h-5 w-5 text-slate-950" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-[11px] font-bold tracking-widest text-cyan-400">جديد · NEW</div>
+              <div className="font-bold text-foreground">
+                {isAr ? "وحدة DTx السريرية — رحلة الإقلاع العلاجية الرقمية" : "DTx Clinical Module — Digital Therapeutics Journey"}
+              </div>
+              <p className="text-xs text-foreground/70 mt-1 leading-6">
+                {isAr
+                  ? "الميثاق السيادي، تقييم Fagerström، لوحة القيادة الحية، أدوات HALT، تحدي التنفس، ومجدول NRT."
+                  : "Sovereign Pact, Fagerström assessment, live ROI dashboard, HALT tools, breathing challenge, NRT tracker."}
+              </p>
+            </div>
+            <ChevronLeft className="h-5 w-5 text-cyan-400 group-hover:-translate-x-1 transition" />
+          </div>
+        </Link>
       </main>
       <SiteFooter />
     </div>

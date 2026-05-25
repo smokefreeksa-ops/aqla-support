@@ -1046,6 +1046,114 @@ export type Database = {
           },
         ]
       }
+      dtx_halt_events: {
+        Row: {
+          created_at: string
+          id: string
+          trigger_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          trigger_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          trigger_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      dtx_nrt_log: {
+        Row: {
+          created_at: string
+          id: string
+          log_date: string
+          taken: boolean
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          log_date?: string
+          taken?: boolean
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          log_date?: string
+          taken?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
+      dtx_pacts: {
+        Row: {
+          created_at: string
+          ftnd_score: number | null
+          full_name: string
+          id: string
+          monthly_spend: number
+          quit_start_date: string
+          readiness_score: number | null
+          reason_1: string
+          reason_2: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          ftnd_score?: number | null
+          full_name: string
+          id?: string
+          monthly_spend?: number
+          quit_start_date: string
+          readiness_score?: number | null
+          reason_1: string
+          reason_2: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          ftnd_score?: number | null
+          full_name?: string
+          id?: string
+          monthly_spend?: number
+          quit_start_date?: string
+          readiness_score?: number | null
+          reason_1?: string
+          reason_2?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      dtx_slips: {
+        Row: {
+          created_at: string
+          id: string
+          reason: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reason: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reason?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       educational_modules: {
         Row: {
           content_ar: string | null
