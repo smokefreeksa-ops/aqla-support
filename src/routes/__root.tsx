@@ -13,6 +13,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { FloatingWhatsAppButton } from "@/components/FloatingWhatsAppButton";
 import { AqlaAssistant } from "@/components/AqlaAssistant";
 import { AqlaAuthGate } from "@/components/AqlaAuthGate";
+import { ChallengeBanner } from "@/components/ChallengeBanner";
 
 function NotFoundComponent() {
   return (
