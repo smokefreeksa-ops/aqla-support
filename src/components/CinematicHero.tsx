@@ -75,9 +75,8 @@ const PATHS_EN: PathItem[] = [
 
 
 /**
- * Cinematic hero: brilliant animated polygonal/orbital shape behind the headline.
- * Headline + supporting copy fade in sequentially, hold a few seconds, then
- * dissolve into the shape, leaving only an elegant emblem behind.
+ * Cinematic hero: headline + supporting copy fade in, then dissolve into a
+ * clean square frame that houses a rotating set of pathway cards.
  */
 export function CinematicHero({ isAr }: Props) {
   const [stage, setStage] = useState<0 | 1 | 2 | 3>(0);
@@ -113,21 +112,21 @@ export function CinematicHero({ isAr }: Props) {
     <section className="relative overflow-hidden min-h-[640px]">
       <style>{css}</style>
 
-      {/* deep cinematic backdrop */}
+      {/* soft cinematic backdrop */}
       <div aria-hidden className="pointer-events-none absolute inset-0 aqla-cine-bg" />
       <div aria-hidden className="pointer-events-none absolute inset-0 aqla-cine-vignette" />
 
-      {/* the brilliant complex shape */}
+      {/* clean square frame behind the card */}
       <div
         aria-hidden
         className={`pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-[1400ms] ease-out ${
-          dissolved ? "scale-110 opacity-100" : "scale-100 opacity-70"
+          dissolved ? "scale-100 opacity-100" : "scale-95 opacity-0"
         }`}
       >
-        <BrilliantShape />
+        <CleanSquare />
       </div>
 
-      {/* Clickable cycling pathway card — appears inside the circle after dissolve */}
+      {/* Clickable cycling pathway card — appears inside the square after dissolve */}
       {dissolved && (
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-[300px] sm:w-[340px]">
           {PATHS.map((p, i) => (
