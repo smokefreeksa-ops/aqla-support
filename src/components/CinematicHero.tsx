@@ -1,0 +1,258 @@
+import { useEffect, useState } from "react";
+
+type Props = { isAr: boolean };
+
+/**
+ * Cinematic hero: brilliant animated polygonal/orbital shape behind the headline.
+ * Headline + supporting copy fade in sequentially, hold a few seconds, then
+ * dissolve into the shape, leaving only an elegant emblem behind.
+ */
+export function CinematicHero({ isAr }: Props) {
+  const [stage, setStage] = useState<0 | 1 | 2 | 3>(0);
+  // 0: initial / 1: title in / 2: subtext in / 3: dissolve
+
+  useEffect(() => {
+    const t1 = setTimeout(() => setStage(1), 250);
+    const t2 = setTimeout(() => setStage(2), 1400);
+    const t3 = setTimeout(() => setStage(3), 6200);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, []);
+
+  const dissolved = stage === 3;
+
+  return (
+    <section className="relative overflow-hidden">
+      <style>{css}</style>
+
+      {/* deep cinematic backdrop */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 aqla-cine-bg" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 aqla-cine-vignette" />
+
+      {/* the brilliant complex shape */}
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-[1400ms] ease-out ${
+          dissolved ? "scale-110 opacity-100" : "scale-100 opacity-70"
+        }`}
+      >
+        <BrilliantShape />
+      </div>
+
+      <div
+        className={`relative mx-auto max-w-3xl px-4 pt-20 pb-12 sm:pt-28 sm:pb-16 ${
+          isAr ? "text-right" : "text-left"
+        } md:text-center`}
+      >
+        {/* Title */}
+        <h1
+          className={`text-5xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl transition-all duration-[1200ms] ease-out ${
+            stage >= 1 && !dissolved
+              ? "opacity-100 translate-y-0 blur-0"
+              : stage === 0
+              ? "opacity-0 translate-y-4 blur-md"
+              : "opacity-0 -translate-y-2 blur-md scale-105"
+          }`}
+          style={{
+            textShadow: "0 0 40px color-mix(in oklab, var(--primary) 25%, transparent)",
+          }}
+        >
+          {isAr ? "أقلع" : "Aqla"}
+        </h1>
+
+        {/* Supervisor line */}
+        <p
+          className={`mx-auto mt-8 max-w-2xl text-[15px] leading-7 text-foreground/80 sm:text-base transition-all duration-[1000ms] ease-out ${
+            stage >= 2 && !dissolved
+              ? "opacity-100 translate-y-0 blur-0"
+              : stage < 2
+              ? "opacity-0 translate-y-3 blur-sm"
+              : "opacity-0 -translate-y-1 blur-sm"
+          }`}
+          style={{ transitionDelay: stage >= 2 && !dissolved ? "0ms" : "0ms" }}
+        >
+          {isAr
+            ? "بإشراف سعادة الدكتور مالك عبدالملك الذبياني وفريق من الأخصائيين المدربين."
+            : "Supervised by Dr. Malik Abdulmalik AlThubayani and a team of trained specialists."}
+        </p>
+
+        {/* Mission paragraph */}
+        <p
+          className={`mx-auto mt-4 max-w-2xl text-[12.5px] leading-7 text-foreground/55 sm:text-[13px] transition-all duration-[1200ms] ease-out ${
+            stage >= 2 && !dissolved
+              ? "opacity-100 translate-y-0 blur-0"
+              : stage < 2
+              ? "opacity-0 translate-y-3 blur-sm"
+              : "opacity-0 -translate-y-1 blur-sm"
+          }`}
+          style={{ transitionDelay: stage >= 2 && !dissolved ? "250ms" : "0ms" }}
+        >
+          {isAr
+            ? "في أقلع، نضع صحة الإنسان وجودة الحياة في قلب رسالتنا، ونسعى لجعل أول خطوة للإقلاع أسهل، وأقرب، وأكثر إنسانية — بما يتماشى مع مستهدفات رؤية المملكة 2030 بقيادة صاحب السمو الملكي الأمير محمد بن سلمان بن عبدالعزيز آل سعود."
+            : "At Aqla, we place human health and quality of life at the heart of our mission, striving to make the first step toward cessation easier, closer, and more humane — in alignment with Vision 2030 under HRH Crown Prince Mohammed bin Salman."}
+        </p>
+
+        {/* Emblem that remains after dissolve */}
+        <div
+          aria-hidden
+          className={`pointer-events-none mx-auto mt-6 grid h-12 w-12 place-items-center transition-all duration-[1200ms] ease-out ${
+            dissolved ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+          }`}
+        >
+          <span className="aqla-emblem-dot" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BrilliantShape() {
+  return (
+    <svg
+      width="640"
+      height="640"
+      viewBox="0 0 640 640"
+      className="aqla-shape-root"
+      style={{ filter: "drop-shadow(0 0 60px color-mix(in oklab, var(--primary) 35%, transparent))" }}
+    >
+      <defs>
+        <radialGradient id="aqla-core" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="oklch(0.95 0.05 240)" stopOpacity="0.9" />
+          <stop offset="55%" stopColor="oklch(0.6 0.18 245)" stopOpacity="0.35" />
+          <stop offset="100%" stopColor="oklch(0.3 0.12 260)" stopOpacity="0" />
+        </radialGradient>
+        <linearGradient id="aqla-stroke" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="oklch(0.85 0.14 200)" />
+          <stop offset="50%" stopColor="oklch(0.7 0.18 260)" />
+          <stop offset="100%" stopColor="oklch(0.65 0.2 320)" />
+        </linearGradient>
+      </defs>
+
+      {/* central glow */}
+      <circle cx="320" cy="320" r="220" fill="url(#aqla-core)" className="aqla-core-pulse" />
+
+      {/* concentric polygons rotating at different speeds */}
+      <g transform="translate(320 320)">
+        <g className="aqla-rot-slow">
+          <Polygon sides={12} r={260} stroke="url(#aqla-stroke)" opacity={0.55} />
+        </g>
+        <g className="aqla-rot-rev">
+          <Polygon sides={9} r={210} stroke="url(#aqla-stroke)" opacity={0.7} />
+        </g>
+        <g className="aqla-rot-mid">
+          <Polygon sides={6} r={160} stroke="url(#aqla-stroke)" opacity={0.85} />
+        </g>
+        <g className="aqla-rot-fast">
+          <Polygon sides={3} r={110} stroke="url(#aqla-stroke)" opacity={0.9} />
+        </g>
+
+        {/* orbiting nodes */}
+        {Array.from({ length: 12 }).map((_, i) => {
+          const a = (i / 12) * Math.PI * 2;
+          const r = 260;
+          const x = Math.cos(a) * r;
+          const y = Math.sin(a) * r;
+          return (
+            <circle
+              key={i}
+              cx={x}
+              cy={y}
+              r={2.5}
+              fill="oklch(0.92 0.08 220)"
+              className="aqla-node"
+              style={{ animationDelay: `${i * 0.18}s` }}
+            />
+          );
+        })}
+
+        {/* sweeping rays */}
+        <g className="aqla-rot-slow" opacity={0.35}>
+          {Array.from({ length: 24 }).map((_, i) => {
+            const a = (i / 24) * Math.PI * 2;
+            const x1 = Math.cos(a) * 120;
+            const y1 = Math.sin(a) * 120;
+            const x2 = Math.cos(a) * 300;
+            const y2 = Math.sin(a) * 300;
+            return (
+              <line
+                key={i}
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                stroke="url(#aqla-stroke)"
+                strokeWidth={0.6}
+              />
+            );
+          })}
+        </g>
+      </g>
+    </svg>
+  );
+}
+
+function Polygon({
+  sides,
+  r,
+  stroke,
+  opacity,
+}: {
+  sides: number;
+  r: number;
+  stroke: string;
+  opacity: number;
+}) {
+  const pts = Array.from({ length: sides }, (_, i) => {
+    const a = (i / sides) * Math.PI * 2 - Math.PI / 2;
+    return `${Math.cos(a) * r},${Math.sin(a) * r}`;
+  }).join(" ");
+  return (
+    <polygon
+      points={pts}
+      fill="none"
+      stroke={stroke}
+      strokeWidth={1.1}
+      opacity={opacity}
+      strokeLinejoin="round"
+    />
+  );
+}
+
+const css = `
+@keyframes aqla-rot { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
+@keyframes aqla-rot-rev { from { transform: rotate(0deg);} to { transform: rotate(-360deg);} }
+@keyframes aqla-pulse { 0%,100% { opacity: .55; transform: scale(1);} 50% { opacity: .85; transform: scale(1.04);} }
+@keyframes aqla-node { 0%,100% { r: 2.2; opacity: .6;} 50% { r: 3.6; opacity: 1;} }
+@keyframes aqla-bg-shift {
+  0% { background-position: 0% 50%, 100% 0%; }
+  50% { background-position: 100% 50%, 0% 100%; }
+  100% { background-position: 0% 50%, 100% 0%; }
+}
+@keyframes aqla-emblem { 0%,100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 40%, transparent);} 50% { box-shadow: 0 0 0 10px transparent;} }
+
+.aqla-cine-bg {
+  background:
+    radial-gradient(60% 50% at 50% 40%, color-mix(in oklab, var(--primary) 14%, transparent), transparent 70%),
+    radial-gradient(50% 60% at 80% 80%, color-mix(in oklab, oklch(0.55 0.18 295) 12%, transparent), transparent 70%);
+  background-size: 200% 200%, 200% 200%;
+  animation: aqla-bg-shift 18s ease-in-out infinite;
+}
+.aqla-cine-vignette {
+  background: radial-gradient(80% 70% at 50% 45%, transparent 55%, color-mix(in oklab, var(--background) 90%, transparent) 100%);
+}
+.aqla-shape-root { transform-origin: center; }
+.aqla-rot-slow { transform-box: fill-box; transform-origin: center; animation: aqla-rot 60s linear infinite; }
+.aqla-rot-mid  { transform-box: fill-box; transform-origin: center; animation: aqla-rot 28s linear infinite; }
+.aqla-rot-fast { transform-box: fill-box; transform-origin: center; animation: aqla-rot 14s linear infinite; }
+.aqla-rot-rev  { transform-box: fill-box; transform-origin: center; animation: aqla-rot-rev 40s linear infinite; }
+.aqla-core-pulse { transform-box: fill-box; transform-origin: center; animation: aqla-pulse 6s ease-in-out infinite; }
+.aqla-node { animation: aqla-node 3.6s ease-in-out infinite; }
+.aqla-emblem-dot {
+  width: 10px; height: 10px; border-radius: 9999px;
+  background: linear-gradient(135deg, oklch(0.8 0.16 220), oklch(0.65 0.2 300));
+  animation: aqla-emblem 2.4s ease-in-out infinite;
+}
+`;

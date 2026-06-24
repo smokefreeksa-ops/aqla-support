@@ -7,6 +7,8 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ImpactSection } from "@/components/ImpactSection";
 import { VisitTracker } from "@/components/VisitTracker";
+import { CinematicHero } from "@/components/CinematicHero";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -95,27 +97,9 @@ function Inner() {
       <SiteHeader />
 
       <main>
-        {/* HERO — text only, no duplicate brand cards */}
-        <section className="relative overflow-hidden">
-          <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary/[0.05] via-background to-background" />
-          <div className={`relative mx-auto max-w-3xl px-4 pt-20 pb-12 sm:pt-28 sm:pb-16 ${isAr ? "text-right" : "text-left"} md:text-center`}>
-            <h1 className="text-5xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
-              {isAr ? "أقلع" : "Aqla"}
-            </h1>
+        {/* HERO — cinematic intro */}
+        <CinematicHero isAr={isAr} />
 
-            <p className="mx-auto mt-8 max-w-2xl text-[15px] leading-7 text-foreground/80 sm:text-base">
-              {isAr
-                ? "بإشراف سعادة الدكتور مالك عبدالملك الذبياني وفريق من الأخصائيين المدربين."
-                : "Supervised by Dr. Malik Abdulmalik AlThubayani and a team of trained specialists."}
-            </p>
-
-            <p className="mx-auto mt-4 max-w-2xl text-[12.5px] leading-7 text-foreground/55 sm:text-[13px]">
-              {isAr
-                ? "في أقلع، نضع صحة الإنسان وجودة الحياة في قلب رسالتنا، ونسعى لجعل أول خطوة للإقلاع أسهل، وأقرب، وأكثر إنسانية — بما يتماشى مع مستهدفات رؤية المملكة 2030 بقيادة صاحب السمو الملكي الأمير محمد بن سلمان بن عبدالعزيز آل سعود."
-                : "At Aqla, we place human health and quality of life at the heart of our mission, striving to make the first step toward cessation easier, closer, and more humane — in alignment with Vision 2030 under HRH Crown Prince Mohammed bin Salman."}
-            </p>
-          </div>
-        </section>
 
         {/* FOUR MAIN PATHS — single canonical grid */}
         <section id="pathways" className="scroll-mt-20 border-t border-border/40 bg-card/40">
