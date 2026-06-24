@@ -82,6 +82,9 @@ const PATHS_EN: PathItem[] = [
 export function CinematicHero({ isAr }: Props) {
   const [stage, setStage] = useState<0 | 1 | 2 | 3>(0);
   // 0: initial / 1: title in / 2: subtext in / 3: dissolve
+  const [pathIdx, setPathIdx] = useState(0);
+
+  const PATHS = isAr ? PATHS_AR : PATHS_EN;
 
   useEffect(() => {
     const t1 = setTimeout(() => setStage(1), 250);
@@ -93,6 +96,16 @@ export function CinematicHero({ isAr }: Props) {
       clearTimeout(t3);
     };
   }, []);
+
+  // After dissolve, cycle path cards every 5s
+  useEffect(() => {
+    if (stage !== 3) return;
+    const id = setInterval(() => {
+      setPathIdx((i) => (i + 1) % PATHS.length);
+    }, 5000);
+    return () => clearInterval(id);
+  }, [stage, PATHS.length]);
+
 
   const dissolved = stage === 3;
 
