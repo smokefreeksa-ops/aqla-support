@@ -232,15 +232,6 @@ export function CinematicHero({ isAr }: Props) {
             : "At Aqla, we place human health and quality of life at the heart of our mission, striving to make the first step toward cessation easier, closer, and more humane — in alignment with Vision 2030 under HRH Crown Prince Mohammed bin Salman."}
         </p>
 
-        {/* Emblem that remains after dissolve */}
-        <div
-          aria-hidden
-          className={`pointer-events-none mx-auto mt-6 grid h-12 w-12 place-items-center transition-all duration-[1200ms] ease-out ${
-            dissolved ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-          }`}
-        >
-          <span className="aqla-emblem-dot" />
-        </div>
       </div>
     </section>
   );
