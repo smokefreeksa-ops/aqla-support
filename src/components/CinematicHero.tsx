@@ -236,123 +236,25 @@ export function CinematicHero({ isAr }: Props) {
   );
 }
 
-function BrilliantShape() {
+function CleanSquare() {
   return (
-    <svg
-      width="640"
-      height="640"
-      viewBox="0 0 640 640"
-      className="aqla-shape-root"
-      style={{ filter: "drop-shadow(0 0 60px color-mix(in oklab, var(--primary) 35%, transparent))" }}
-    >
-      <defs>
-        <radialGradient id="aqla-core" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="oklch(0.95 0.05 240)" stopOpacity="0.9" />
-          <stop offset="55%" stopColor="oklch(0.6 0.18 245)" stopOpacity="0.35" />
-          <stop offset="100%" stopColor="oklch(0.3 0.12 260)" stopOpacity="0" />
-        </radialGradient>
-        <linearGradient id="aqla-stroke" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="oklch(0.85 0.14 200)" />
-          <stop offset="50%" stopColor="oklch(0.7 0.18 260)" />
-          <stop offset="100%" stopColor="oklch(0.65 0.2 320)" />
-        </linearGradient>
-      </defs>
-
-      {/* central glow */}
-      <circle cx="320" cy="320" r="220" fill="url(#aqla-core)" className="aqla-core-pulse" />
-
-      {/* concentric polygons rotating at different speeds */}
-      <g transform="translate(320 320)">
-        <g className="aqla-rot-slow">
-          <Polygon sides={12} r={260} stroke="url(#aqla-stroke)" opacity={0.55} />
-        </g>
-        <g className="aqla-rot-rev">
-          <Polygon sides={9} r={210} stroke="url(#aqla-stroke)" opacity={0.7} />
-        </g>
-        <g className="aqla-rot-mid">
-          <Polygon sides={6} r={160} stroke="url(#aqla-stroke)" opacity={0.85} />
-        </g>
-        <g className="aqla-rot-fast">
-          <Polygon sides={3} r={110} stroke="url(#aqla-stroke)" opacity={0.9} />
-        </g>
-
-        {/* orbiting nodes */}
-        {Array.from({ length: 12 }).map((_, i) => {
-          const a = (i / 12) * Math.PI * 2;
-          const r = 260;
-          const x = Math.cos(a) * r;
-          const y = Math.sin(a) * r;
-          return (
-            <circle
-              key={i}
-              cx={x}
-              cy={y}
-              r={2.5}
-              fill="oklch(0.92 0.08 220)"
-              className="aqla-node"
-              style={{ animationDelay: `${i * 0.18}s` }}
-            />
-          );
-        })}
-
-        {/* sweeping rays */}
-        <g className="aqla-rot-slow" opacity={0.35}>
-          {Array.from({ length: 24 }).map((_, i) => {
-            const a = (i / 24) * Math.PI * 2;
-            const x1 = Math.cos(a) * 120;
-            const y1 = Math.sin(a) * 120;
-            const x2 = Math.cos(a) * 300;
-            const y2 = Math.sin(a) * 300;
-            return (
-              <line
-                key={i}
-                x1={x1}
-                y1={y1}
-                x2={x2}
-                y2={y2}
-                stroke="url(#aqla-stroke)"
-                strokeWidth={0.6}
-              />
-            );
-          })}
-        </g>
-      </g>
-    </svg>
-  );
-}
-
-function Polygon({
-  sides,
-  r,
-  stroke,
-  opacity,
-}: {
-  sides: number;
-  r: number;
-  stroke: string;
-  opacity: number;
-}) {
-  const pts = Array.from({ length: sides }, (_, i) => {
-    const a = (i / sides) * Math.PI * 2 - Math.PI / 2;
-    return `${Math.cos(a) * r},${Math.sin(a) * r}`;
-  }).join(" ");
-  return (
-    <polygon
-      points={pts}
-      fill="none"
-      stroke={stroke}
-      strokeWidth={1.1}
-      opacity={opacity}
-      strokeLinejoin="round"
+    <div
+      className="aqla-clean-square"
+      style={{
+        width: 380,
+        height: 380,
+        borderRadius: 28,
+        background:
+          "linear-gradient(135deg, color-mix(in oklab, var(--primary) 12%, transparent), color-mix(in oklab, var(--primary) 4%, transparent))",
+        border: "1px solid color-mix(in oklab, var(--primary) 18%, transparent)",
+        boxShadow:
+          "0 0 0 1px color-mix(in oklab, var(--primary) 8%, transparent), 0 24px 80px -24px color-mix(in oklab, var(--primary) 25%, transparent)",
+      }}
     />
   );
 }
 
 const css = `
-@keyframes aqla-rot { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
-@keyframes aqla-rot-rev { from { transform: rotate(0deg);} to { transform: rotate(-360deg);} }
-@keyframes aqla-pulse { 0%,100% { opacity: .55; transform: scale(1);} 50% { opacity: .85; transform: scale(1.04);} }
-@keyframes aqla-node { 0%,100% { r: 2.2; opacity: .6;} 50% { r: 3.6; opacity: 1;} }
 @keyframes aqla-bg-shift {
   0% { background-position: 0% 50%, 100% 0%; }
   50% { background-position: 100% 50%, 0% 100%; }
@@ -362,21 +264,22 @@ const css = `
 
 .aqla-cine-bg {
   background:
-    radial-gradient(60% 50% at 50% 40%, color-mix(in oklab, var(--primary) 14%, transparent), transparent 70%),
-    radial-gradient(50% 60% at 80% 80%, color-mix(in oklab, oklch(0.55 0.18 295) 12%, transparent), transparent 70%);
+    radial-gradient(60% 50% at 50% 40%, color-mix(in oklab, var(--primary) 10%, transparent), transparent 70%),
+    radial-gradient(50% 60% at 80% 80%, color-mix(in oklab, var(--primary) 8%, transparent), transparent 70%);
   background-size: 200% 200%, 200% 200%;
   animation: aqla-bg-shift 18s ease-in-out infinite;
 }
 .aqla-cine-vignette {
   background: radial-gradient(80% 70% at 50% 45%, transparent 55%, color-mix(in oklab, var(--background) 90%, transparent) 100%);
 }
-.aqla-shape-root { transform-origin: center; }
-.aqla-rot-slow { transform-box: fill-box; transform-origin: center; animation: aqla-rot 60s linear infinite; }
-.aqla-rot-mid  { transform-box: fill-box; transform-origin: center; animation: aqla-rot 28s linear infinite; }
-.aqla-rot-fast { transform-box: fill-box; transform-origin: center; animation: aqla-rot 14s linear infinite; }
-.aqla-rot-rev  { transform-box: fill-box; transform-origin: center; animation: aqla-rot-rev 40s linear infinite; }
-.aqla-core-pulse { transform-box: fill-box; transform-origin: center; animation: aqla-pulse 6s ease-in-out infinite; }
-.aqla-node { animation: aqla-node 3.6s ease-in-out infinite; }
+.aqla-clean-square {
+  transform-origin: center;
+  animation: aqla-square-in 1.2s ease-out forwards;
+}
+@keyframes aqla-square-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
 .aqla-emblem-dot {
   width: 10px; height: 10px; border-radius: 9999px;
   background: linear-gradient(135deg, oklch(0.8 0.16 220), oklch(0.65 0.2 300));
