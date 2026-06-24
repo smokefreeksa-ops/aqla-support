@@ -1,6 +1,78 @@
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
+
+type PathItem = {
+  to: "/quit-pathway" | "/learn-train" | "/help-pathway" | "/challenge-pathway";
+  title: string;
+  description: string;
+  cta: string;
+};
 
 type Props = { isAr: boolean };
+
+const PATHS_AR: PathItem[] = [
+  {
+    to: "/quit-pathway",
+    title: "مركز أقلع الافتراضي لدعم الإقلاع",
+    description:
+      "تجربة تفاعلية تقودك من فهم استخدامك للتدخين أو النيكوتين، إلى التقييم، وبناء الخطة، والمتابعة، وطلب الدعم عند الحاجة.",
+    cta: "ادخل مركز الإقلاع",
+  },
+  {
+    to: "/learn-train",
+    title: "أكاديمية أقلع للتدريب والشهادات",
+    description:
+      "مركز تعليمي تفاعلي للتدريب، السيناريوهات، الاختبارات، والشهادات القابلة للتحميل والمشاركة والتحقق.",
+    cta: "ادخل الأكاديمية",
+  },
+  {
+    to: "/help-pathway",
+    title: "مسار أقلع لمساعدة شخص يهمك",
+    description:
+      "لمن يريد دعم صديق، قريب، طالب، زميل، أو شخص يهتم لأمره برسالة أو بطاقة دعم محترمة وآمنة.",
+    cta: "ابدأ مسار المساعدة",
+  },
+  {
+    to: "/challenge-pathway",
+    title: "مجتمع وتحديات أقلع",
+    description:
+      "للتحديات، الألعاب التوعوية، الهاشتاقات، دعوة الأصدقاء، النقاط، الأوسمة، بطاقات التوعية، وأثر أقلع المجتمعي.",
+    cta: "ادخل التحديات والمجتمع",
+  },
+];
+
+const PATHS_EN: PathItem[] = [
+  {
+    to: "/quit-pathway",
+    title: "Aqla Virtual Quit Center",
+    description:
+      "An interactive experience: understand your use, take the assessment, build your plan, follow up, and request support.",
+    cta: "Enter Quit Center",
+  },
+  {
+    to: "/learn-train",
+    title: "Aqla Academy for Training & Certification",
+    description:
+      "An interactive academy for training, scenarios, exams, and shareable verifiable certificates.",
+    cta: "Enter Academy",
+  },
+  {
+    to: "/help-pathway",
+    title: "Aqla Help Pathway",
+    description:
+      "Support a friend, relative, student, or colleague with a respectful, safe message or support card.",
+    cta: "Start Help Pathway",
+  },
+  {
+    to: "/challenge-pathway",
+    title: "Aqla Community & Challenges",
+    description:
+      "Challenges, awareness games, hashtags, invites, points, medals, awareness cards, and community impact.",
+    cta: "Enter Community & Challenges",
+  },
+];
+
 
 /**
  * Cinematic hero: brilliant animated polygonal/orbital shape behind the headline.
