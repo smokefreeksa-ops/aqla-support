@@ -7,6 +7,8 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ImpactSection } from "@/components/ImpactSection";
 import { VisitTracker } from "@/components/VisitTracker";
+import { CinematicHero } from "@/components/CinematicHero";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
