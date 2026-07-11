@@ -121,7 +121,7 @@ export function CinematicHero({ isAr }: Props) {
 
       {/* Clickable cycling pathway card — appears inside the square after dissolve */}
       {dissolved && (
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-[300px] sm:w-[340px]">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-[300px] sm:w-[340px]"><div className="relative aqla-text-drift">
           {PATHS.map((p, i) => (
             <Link
               key={p.to}
@@ -167,14 +167,17 @@ export function CinematicHero({ isAr }: Props) {
               />
             ))}
           </div>
+          </div>
         </div>
+
       )}
 
       <div
-        className={`relative mx-auto max-w-3xl px-4 pt-20 pb-12 sm:pt-28 sm:pb-16 ${
+        className={`relative mx-auto max-w-3xl px-4 pt-20 pb-12 sm:pt-28 sm:pb-16 aqla-text-drift ${
           isAr ? "text-right" : "text-left"
         } md:text-center`}
       >
+
         {/* Title */}
 
         <h1
@@ -267,6 +270,28 @@ function CubeBackdrop() {
       [0, 4], [1, 5], [2, 6], [3, 7],
     ];
 
+    // Hexagons inscribed on each of the 6 cube faces
+    type Axis = "x" | "y" | "z";
+    const hexFaces: Array<{ normal: Axis; sign: 1 | -1 }> = [
+      { normal: "z", sign: 1 }, { normal: "z", sign: -1 },
+      { normal: "x", sign: 1 }, { normal: "x", sign: -1 },
+      { normal: "y", sign: 1 }, { normal: "y", sign: -1 },
+    ];
+    const hexRadius = 0.9;
+    const hexagons: Array<Array<[number, number, number]>> = hexFaces.map(({ normal, sign }) => {
+      const pts: Array<[number, number, number]> = [];
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * Math.PI * 2 + Math.PI / 6;
+        const u = Math.cos(a) * hexRadius;
+        const v = Math.sin(a) * hexRadius;
+        if (normal === "z") pts.push([u, v, sign]);
+        else if (normal === "x") pts.push([sign, u, v]);
+        else pts.push([u, sign, v]);
+      }
+      return pts;
+    });
+
+
     // Get current theme foreground color
     const getColor = () => {
       const raw = getComputedStyle(document.documentElement).getPropertyValue("--foreground").trim() || "#000";
@@ -318,7 +343,7 @@ function CubeBackdrop() {
 
       const cx = width / 2;
       const cy = height / 2;
-      const baseSize = Math.min(width, height) * 0.16;
+      const baseSize = Math.min(width, height) * 0.42;
       const focal = Math.min(width, height) * 1.6;
 
       // Complex drift: forward/backward (z), side (x), up/down (y)
@@ -354,6 +379,26 @@ function CubeBackdrop() {
         ctx.lineTo(pb.x, pb.y);
         ctx.stroke();
       });
+
+      // Hexagons inscribed on each face — six-sided polygons
+      ctx.lineWidth = 0.9;
+      hexagons.forEach((hex) => {
+        const projHex = hex.map(([hx, hy, hz]) => {
+          const [rxv, ryv, rzv] = rotate(hx * baseSize, hy * baseSize, hz * baseSize, rx, ry, rz);
+          return { ...project(rxv + driftX, ryv + driftY, rzv + driftZ, focal, cx, cy), z: rzv };
+        });
+        const avgZNorm = projHex.reduce((s, p) => s + p.z, 0) / projHex.length / baseSize;
+        const alpha = 0.06 + 0.1 * Math.max(0, (avgZNorm + 1) / 2);
+        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        ctx.beginPath();
+        projHex.forEach((p, idx) => {
+          if (idx === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        });
+        ctx.closePath();
+        ctx.stroke();
+      });
+
 
       // Sparkling stars at vertices — fade completely in and out
       projected.forEach((p, i) => {
@@ -433,6 +478,17 @@ const css = `
 }
 @keyframes aqla-emblem { 0%,100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 40%, transparent);} 50% { box-shadow: 0 0 0 10px transparent;} }
 
+@keyframes aqla-text-drift {
+  0%   { transform: translate3d(0, 0, 0); }
+  25%  { transform: translate3d(6px, -4px, 0); }
+  50%  { transform: translate3d(-4px, 5px, 0); }
+  75%  { transform: translate3d(3px, 3px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+.aqla-text-drift { animation: aqla-text-drift 24s ease-in-out infinite; }
+.aqla-text-drift.absolute { animation: aqla-text-drift 24s ease-in-out infinite; }
+
 /* --- Cube backdrop is now drawn on a canvas for true 3D projection --- */
+
 `;
 
