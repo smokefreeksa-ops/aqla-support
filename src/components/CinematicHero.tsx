@@ -230,74 +230,183 @@ export function CinematicHero({ isAr }: Props) {
 }
 
 function CubeBackdrop() {
-  // 8 cube vertices in local space (unit cube, centered)
-  const V: Array<[number, number, number]> = [
-    [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
-    [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1],
-  ];
-  // 12 cube edges
-  const E: Array<[number, number]> = [
-    [0, 1], [1, 2], [2, 3], [3, 0],
-    [4, 5], [5, 6], [6, 7], [7, 4],
-    [0, 4], [1, 5], [2, 6], [3, 7],
-  ];
+  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    let width = 0;
+    let height = 0;
+    let raf = 0;
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      canvas.width = Math.max(1, Math.floor(width * dpr));
+      canvas.height = Math.max(1, Math.floor(height * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
+
+    // 8 cube vertices
+    const vertices: Array<[number, number, number]> = [
+      [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+      [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1],
+    ];
+    // 12 edges
+    const edges: Array<[number, number]> = [
+      [0, 1], [1, 2], [2, 3], [3, 0],
+      [4, 5], [5, 6], [6, 7], [7, 4],
+      [0, 4], [1, 5], [2, 6], [3, 7],
+    ];
+
+    // Get current theme foreground color
+    const getColor = () => {
+      const raw = getComputedStyle(document.documentElement).getPropertyValue("--foreground").trim() || "#000";
+      // If it's a CSS color in oklch/lab format, canvas may not parse it well.
+      // Fallback to a safe rgba based on theme.
+      return raw;
+    };
+
+    const parseColor = (raw: string) => {
+      const temp = document.createElement("div");
+      temp.style.color = raw;
+      temp.style.position = "absolute";
+      temp.style.opacity = "0";
+      document.body.appendChild(temp);
+      const computed = getComputedStyle(temp).color;
+      document.body.removeChild(temp);
+      return computed;
+    };
+
+    const rgbToValues = (rgb: string) => {
+      const m = rgb.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/);
+      if (!m) return [0, 0, 0];
+      return [parseFloat(m[1]), parseFloat(m[2]), parseFloat(m[3])];
+    };
+
+    const project = (x: number, y: number, z: number, focal: number, cx: number, cy: number) => {
+      const scale = focal / (focal + z);
+      return { x: cx + x * scale, y: cy + y * scale, scale };
+    };
+
+    const rotate = (x: number, y: number, z: number, rx: number, ry: number, rz: number) => {
+      // rotate around X
+      let y1 = y * Math.cos(rx) - z * Math.sin(rx);
+      let z1 = y * Math.sin(rx) + z * Math.cos(rx);
+      // rotate around Y
+      let x2 = x * Math.cos(ry) + z1 * Math.sin(ry);
+      let z2 = -x * Math.sin(ry) + z1 * Math.cos(ry);
+      // rotate around Z
+      let x3 = x2 * Math.cos(rz) - y1 * Math.sin(rz);
+      let y3 = x2 * Math.sin(rz) + y1 * Math.cos(rz);
+      return [x3, y3, z2];
+    };
+
+    const start = performance.now();
+
+    const render = (now: number) => {
+      const t = (now - start) / 1000;
+      ctx.clearRect(0, 0, width, height);
+
+      const cx = width / 2;
+      const cy = height / 2;
+      const baseSize = Math.min(width, height) * 0.35;
+      const focal = Math.min(width, height) * 0.8;
+
+      // Complex drift: forward/backward (z), side (x), up/down (y)
+      const driftX = Math.sin(t * 0.17) * width * 0.12 + Math.cos(t * 0.31) * width * 0.06;
+      const driftY = Math.cos(t * 0.23) * height * 0.1 + Math.sin(t * 0.41) * height * 0.05;
+      const driftZ = Math.sin(t * 0.13) * focal * 0.35 + Math.cos(t * 0.19) * focal * 0.15;
+
+      // Rotation speeds on all axes
+      const rx = t * 0.25 + Math.sin(t * 0.1) * 0.3;
+      const ry = t * 0.35 + Math.cos(t * 0.15) * 0.4;
+      const rz = t * 0.18 + Math.sin(t * 0.08) * 0.2;
+
+      const rawColor = getColor();
+      const parsed = parseColor(rawColor);
+      const [r, g, b] = rgbToValues(parsed);
+
+      const projected = vertices.map(([vx, vy, vz]) => {
+        const [rxv, ryv, rzv] = rotate(vx * baseSize, vy * baseSize, vz * baseSize, rx, ry, rz);
+        return project(rxv + driftX, ryv + driftY, rzv + driftZ, focal, cx, cy);
+      });
+
+      // Draw edges with depth fade
+      ctx.lineWidth = 1.5;
+      ctx.lineCap = "round";
+      edges.forEach(([a, b]) => {
+        const pa = projected[a];
+        const pb = projected[b];
+        const avgZ = (vertices[a][2] + vertices[b][2]) / 2;
+        const depthAlpha = 0.22 + 0.28 * Math.max(0, (avgZ + 1) / 2);
+        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${depthAlpha})`;
+        ctx.beginPath();
+        ctx.moveTo(pa.x, pa.y);
+        ctx.lineTo(pb.x, pb.y);
+        ctx.stroke();
+      });
+
+      // Sparkling stars at vertices
+      projected.forEach((p, i) => {
+        const phase = (t * 0.8 + i * 1.3) % (Math.PI * 2);
+        const sparkle = Math.max(0, Math.sin(phase));
+        if (sparkle < 0.05) return;
+        const starSize = 2 + sparkle * 5;
+        const alpha = sparkle * 0.85;
+
+        // soft glow
+        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, starSize * 3);
+        grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha * 0.6})`);
+        grad.addColorStop(0.4, `rgba(${r}, ${g}, ${b}, ${alpha * 0.2})`);
+        grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, starSize * 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 4-point star cross
+        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(p.x - starSize, p.y);
+        ctx.lineTo(p.x + starSize, p.y);
+        ctx.moveTo(p.x, p.y - starSize);
+        ctx.lineTo(p.x, p.y + starSize);
+        ctx.stroke();
+
+        // center dot
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      raf = requestAnimationFrame(render);
+    };
+
+    raf = requestAnimationFrame(render);
+
+    return () => {
+      window.removeEventListener("resize", resize);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
 
   return (
-    <div
+    <canvas
+      ref={canvasRef}
       aria-hidden
-      className="pointer-events-none absolute inset-0 overflow-hidden"
-      style={{ perspective: "1200px", perspectiveOrigin: "50% 50%" }}
-    >
-      <div className="aqla-cube-drift absolute left-1/2 top-1/2" style={{ transformStyle: "preserve-3d" }}>
-        <div className="aqla-cube-rot" style={{ transformStyle: "preserve-3d" }}>
-          <svg
-            width="520"
-            height="520"
-            viewBox="-1.6 -1.6 3.2 3.2"
-            style={{
-              position: "absolute",
-              left: -260,
-              top: -260,
-              overflow: "visible",
-              transformStyle: "preserve-3d",
-            }}
-          >
-            <defs>
-              <radialGradient id="aqla-star" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="currentColor" stopOpacity="1" />
-                <stop offset="35%" stopColor="currentColor" stopOpacity="0.85" />
-                <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
-              </radialGradient>
-            </defs>
-            <g style={{ color: "var(--foreground)" }}>
-              {E.map(([a, b], i) => {
-                const [x1, y1] = V[a];
-                const [x2, y2] = V[b];
-                return (
-                <line
-                    key={i}
-                    x1={x1} y1={y1} x2={x2} y2={y2}
-                    stroke="currentColor"
-                    strokeOpacity="0.45"
-                    strokeWidth="0.012"
-                    vectorEffect="non-scaling-stroke"
-                  />
-                );
-              })}
-              {V.map(([x, y], i) => (
-                <g key={i} className="aqla-spark" style={{ transformOrigin: `${x}px ${y}px`, animationDelay: `${(i * 0.55) % 4}s` }}>
-                  <circle cx={x} cy={y} r="0.14" fill="url(#aqla-star)" />
-                  <circle cx={x} cy={y} r="0.02" fill="currentColor" />
-                  {/* 4-point star cross */}
-                  <line x1={x - 0.18} y1={y} x2={x + 0.18} y2={y} stroke="currentColor" strokeWidth="0.006" strokeOpacity="0.9" vectorEffect="non-scaling-stroke" />
-                  <line x1={x} y1={y - 0.18} x2={x} y2={y + 0.18} stroke="currentColor" strokeWidth="0.006" strokeOpacity="0.9" vectorEffect="non-scaling-stroke" />
-                </g>
-              ))}
-            </g>
-          </svg>
-        </div>
-      </div>
-    </div>
+      className="pointer-events-none absolute inset-0 h-full w-full"
+    />
   );
 }
 
