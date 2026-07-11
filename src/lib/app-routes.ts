@@ -26,6 +26,7 @@ export const appRoutes = {
   supportInvite: "/support-invite",
   quitPlan: "/quit-plan",
   cravingCoach: "/craving-coach",
+  voiceCravingScan: "/voice-craving-scan",
   relapseSupport: "/relapse-support",
   safetyGuidance: "/safety-guidance",
   whenToSeekHelp: "/when-to-seek-help",
