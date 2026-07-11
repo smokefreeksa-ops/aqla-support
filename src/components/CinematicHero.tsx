@@ -476,6 +476,17 @@ const css = `
 }
 @keyframes aqla-emblem { 0%,100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 40%, transparent);} 50% { box-shadow: 0 0 0 10px transparent;} }
 
+@keyframes aqla-text-drift {
+  0%   { transform: translate3d(0, 0, 0); }
+  25%  { transform: translate3d(6px, -4px, 0); }
+  50%  { transform: translate3d(-4px, 5px, 0); }
+  75%  { transform: translate3d(3px, 3px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+.aqla-text-drift { animation: aqla-text-drift 24s ease-in-out infinite; }
+.aqla-text-drift.absolute { animation: aqla-text-drift 24s ease-in-out infinite; }
+
 /* --- Cube backdrop is now drawn on a canvas for true 3D projection --- */
+
 `;
 
