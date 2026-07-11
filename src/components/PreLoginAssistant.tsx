@@ -7,8 +7,6 @@ import { useDraggableWidget } from "@/hooks/use-draggable-widget";
 type Msg = { role: "user" | "assistant"; content: string };
 
 const BOT_NAME = "دردش مع أقلع 😄";
-const TEASER_1 = "اسأله عن أقلع، أو خلّه يقول لك نكتة… ترا بتستانس والله.";
-const TEASER_2 = "ما ودك تسجل الحين؟ ولا يهمك… حتى التسجيل يحتاج “نية إقلاع” شكله 😄";
 const OPENING =
   "يا هلا والله 👋\nأنا دردش مع أقلع 😄\nاسألني عن أقلع، أو خلّني أقول لك نكتة… ترا بتستانس والله.\nوإذا ما ودك تسجل الحين؟ ولا يهمك… حتى التسجيل يحتاج “نية إقلاع” شكله 😄";
 
@@ -112,28 +110,6 @@ export function PreLoginAssistant() {
               <MessageCircle className="h-4 w-4" />
               <span style={{ unicodeBidi: "plaintext" }}>{BOT_NAME}</span>
             </button>
-            <p
-              dir="rtl"
-              onClick={() => {
-                if (movedRef.current || launcher.dragging) return;
-                setOpen(true);
-              }}
-              className="max-w-[16rem] cursor-pointer rounded-xl bg-black/40 px-3 py-1.5 text-[11px] leading-relaxed text-[#f4f0e1] backdrop-blur-sm sm:text-xs"
-              style={{ unicodeBidi: "plaintext", textAlign: "right" }}
-            >
-              {TEASER_1}
-            </p>
-            <p
-              dir="rtl"
-              onClick={() => {
-                if (movedRef.current || launcher.dragging) return;
-                setOpen(true);
-              }}
-              className="max-w-[16rem] cursor-pointer rounded-xl bg-black/40 px-3 py-1.5 text-[11px] leading-relaxed text-[#f4f0e1] backdrop-blur-sm sm:text-xs"
-              style={{ unicodeBidi: "plaintext", textAlign: "right" }}
-            >
-              {TEASER_2}
-            </p>
           </div>
         </div>
       )}
