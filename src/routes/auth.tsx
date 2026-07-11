@@ -91,6 +91,8 @@ function LoginPage() {
           Roles (receptionist / physician) must be assigned by a physician/admin in the backend.
         </p>
       </Card>
+      </div>
     </div>
+
   );
 }
