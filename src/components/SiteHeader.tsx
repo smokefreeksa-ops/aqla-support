@@ -17,6 +17,7 @@ const NAV: NavItem[] = [
   { ar: "التحديات والأنشطة", en: "Challenges & Activities", to: appRoutes.challengePathway },
   { ar: "أقلع الشخصي", en: "Aqla Quit Engine", to: appRoutes.aqlaQuitEngine },
   { ar: "المساعد الصوتي", en: "Voice Assistant", to: appRoutes.aqlaVoiceChat },
+  { ar: "فحص الرغبة الصوتي", en: "Voice Craving Scan", to: appRoutes.voiceCravingScan },
   { ar: "التعلم والتدريب", en: "Learn & Train", to: appRoutes.learnTrain },
   { ar: "الشهادات", en: "Certificates", to: appRoutes.certificates },
   { ar: "طلب الدعم", en: "Request Support", to: appRoutes.requestSupport },

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WhenToSeekHelpRouteImport } from './routes/when-to-seek-help'
 import { Route as VolunteerRouteImport } from './routes/volunteer'
+import { Route as VoiceCravingScanRouteImport } from './routes/voice-craving-scan'
 import { Route as UpdatesRouteImport } from './routes/updates'
 import { Route as TrainingRouteImport } from './routes/training'
 import { Route as ToolsRouteImport } from './routes/tools'
@@ -74,6 +75,11 @@ const WhenToSeekHelpRoute = WhenToSeekHelpRouteImport.update({
 const VolunteerRoute = VolunteerRouteImport.update({
   id: '/volunteer',
   path: '/volunteer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VoiceCravingScanRoute = VoiceCravingScanRouteImport.update({
+  id: '/voice-craving-scan',
+  path: '/voice-craving-scan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UpdatesRoute = UpdatesRouteImport.update({
@@ -395,6 +401,7 @@ export interface FileRoutesByFullPath {
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
   '/updates': typeof UpdatesRoute
+  '/voice-craving-scan': typeof VoiceCravingScanRoute
   '/volunteer': typeof VolunteerRoute
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
@@ -453,6 +460,7 @@ export interface FileRoutesByTo {
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
   '/updates': typeof UpdatesRoute
+  '/voice-craving-scan': typeof VoiceCravingScanRoute
   '/volunteer': typeof VolunteerRoute
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
@@ -512,6 +520,7 @@ export interface FileRoutesById {
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
   '/updates': typeof UpdatesRoute
+  '/voice-craving-scan': typeof VoiceCravingScanRoute
   '/volunteer': typeof VolunteerRoute
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
@@ -572,6 +581,7 @@ export interface FileRouteTypes {
     | '/tools'
     | '/training'
     | '/updates'
+    | '/voice-craving-scan'
     | '/volunteer'
     | '/when-to-seek-help'
     | '/admin/aqla-quit-engine'
@@ -630,6 +640,7 @@ export interface FileRouteTypes {
     | '/tools'
     | '/training'
     | '/updates'
+    | '/voice-craving-scan'
     | '/volunteer'
     | '/when-to-seek-help'
     | '/admin/aqla-quit-engine'
@@ -688,6 +699,7 @@ export interface FileRouteTypes {
     | '/tools'
     | '/training'
     | '/updates'
+    | '/voice-craving-scan'
     | '/volunteer'
     | '/when-to-seek-help'
     | '/admin/aqla-quit-engine'
@@ -747,6 +759,7 @@ export interface RootRouteChildren {
   ToolsRoute: typeof ToolsRoute
   TrainingRoute: typeof TrainingRoute
   UpdatesRoute: typeof UpdatesRoute
+  VoiceCravingScanRoute: typeof VoiceCravingScanRoute
   VolunteerRoute: typeof VolunteerRoute
   WhenToSeekHelpRoute: typeof WhenToSeekHelpRoute
   CertificateCodeRoute: typeof CertificateCodeRoute
@@ -768,6 +781,13 @@ declare module '@tanstack/react-router' {
       path: '/volunteer'
       fullPath: '/volunteer'
       preLoaderRoute: typeof VolunteerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/voice-craving-scan': {
+      id: '/voice-craving-scan'
+      path: '/voice-craving-scan'
+      fullPath: '/voice-craving-scan'
+      preLoaderRoute: typeof VoiceCravingScanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/updates': {
@@ -1236,6 +1256,7 @@ const rootRouteChildren: RootRouteChildren = {
   ToolsRoute: ToolsRoute,
   TrainingRoute: TrainingRoute,
   UpdatesRoute: UpdatesRoute,
+  VoiceCravingScanRoute: VoiceCravingScanRoute,
   VolunteerRoute: VolunteerRoute,
   WhenToSeekHelpRoute: WhenToSeekHelpRoute,
   CertificateCodeRoute: CertificateCodeRoute,
