@@ -125,6 +125,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <GlobalVideoBackground />
       <AqlaAuthGate>
         <ChallengeBanner />
         <Outlet />
