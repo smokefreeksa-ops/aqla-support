@@ -277,7 +277,7 @@ function CubeBackdrop() {
       { normal: "x", sign: 1 }, { normal: "x", sign: -1 },
       { normal: "y", sign: 1 }, { normal: "y", sign: -1 },
     ];
-    const hexRadius = 0.9;
+    const hexRadius = 1;
     const hexagons: Array<Array<[number, number, number]>> = hexFaces.map(({ normal, sign }) => {
       const pts: Array<[number, number, number]> = [];
       for (let i = 0; i < 6; i++) {
@@ -290,6 +290,13 @@ function CubeBackdrop() {
       }
       return pts;
     });
+
+    // Random per-vertex sparkle phases so vertices don't blink in order
+    const cubeSparklePhase = vertices.map(() => Math.random() * Math.PI * 2);
+    const cubeSparkleSpeed = vertices.map(() => 0.5 + Math.random() * 0.9);
+    const hexSparklePhase = hexagons.map((h) => h.map(() => Math.random() * Math.PI * 2));
+    const hexSparkleSpeed = hexagons.map((h) => h.map(() => 0.4 + Math.random() * 0.8));
+
 
 
     // Get current theme foreground color
@@ -343,29 +350,44 @@ function CubeBackdrop() {
 
       const cx = width / 2;
       const cy = height / 2;
-      const baseSize = Math.min(width, height) * 0.42;
+      const baseSize = Math.min(width, height) * 0.28;
       const focal = Math.min(width, height) * 1.6;
 
-      // Complex drift: forward/backward (z), side (x), up/down (y)
-      const driftX = Math.sin(t * 0.17) * width * 0.04 + Math.cos(t * 0.31) * width * 0.02;
-      const driftY = Math.cos(t * 0.23) * height * 0.035 + Math.sin(t * 0.41) * height * 0.015;
-      const driftZ = Math.sin(t * 0.13) * focal * 0.12 + Math.cos(t * 0.19) * focal * 0.05;
+      // Keep-out zone in the middle so shapes never touch the highlighted card
+      const keepOut = Math.max(240, Math.min(width, height) * 0.32);
 
-      // Rotation speeds on all axes
-      const rx = t * 0.25 + Math.sin(t * 0.1) * 0.3;
-      const ry = t * 0.35 + Math.cos(t * 0.15) * 0.4;
-      const rz = t * 0.18 + Math.sin(t * 0.08) * 0.2;
+      // ----- CUBE motion (independent) -----
+      // Orbits around the keep-out zone on one side
+      const cubeOrbitAngle = t * 0.18;
+      const cubeOrbitRadius = keepOut + baseSize * 0.9;
+      const cubeDriftX = Math.cos(cubeOrbitAngle) * cubeOrbitRadius + Math.sin(t * 0.31) * width * 0.02;
+      const cubeDriftY = Math.sin(cubeOrbitAngle) * (cubeOrbitRadius * 0.55) + Math.cos(t * 0.41) * height * 0.015;
+      const cubeDriftZ = Math.sin(t * 0.13) * focal * 0.12 + Math.cos(t * 0.19) * focal * 0.05;
+      const cubeRx = t * 0.25 + Math.sin(t * 0.1) * 0.3;
+      const cubeRy = t * 0.35 + Math.cos(t * 0.15) * 0.4;
+      const cubeRz = t * 0.18 + Math.sin(t * 0.08) * 0.2;
+
+      // ----- HEXAGON motion (independent — opposite orbit, different speeds) -----
+      const hexOrbitAngle = -t * 0.14 + Math.PI;
+      const hexOrbitRadius = keepOut + baseSize * 1.05;
+      const hexDriftX = Math.cos(hexOrbitAngle) * hexOrbitRadius + Math.cos(t * 0.27) * width * 0.02;
+      const hexDriftY = Math.sin(hexOrbitAngle) * (hexOrbitRadius * 0.5) + Math.sin(t * 0.37) * height * 0.02;
+      const hexDriftZ = Math.cos(t * 0.11) * focal * 0.14 + Math.sin(t * 0.23) * focal * 0.06;
+      const hexRx = -t * 0.32 + Math.cos(t * 0.09) * 0.4;
+      const hexRy = t * 0.21 + Math.sin(t * 0.13) * 0.35;
+      const hexRz = -t * 0.27 + Math.cos(t * 0.07) * 0.25;
 
       const rawColor = getColor();
       const parsed = parseColor(rawColor);
       const [r, g, b] = rgbToValues(parsed);
 
+      // Cube vertices projected
       const projected = vertices.map(([vx, vy, vz]) => {
-        const [rxv, ryv, rzv] = rotate(vx * baseSize, vy * baseSize, vz * baseSize, rx, ry, rz);
-        return project(rxv + driftX, ryv + driftY, rzv + driftZ, focal, cx, cy);
+        const [rxv, ryv, rzv] = rotate(vx * baseSize, vy * baseSize, vz * baseSize, cubeRx, cubeRy, cubeRz);
+        return { ...project(rxv + cubeDriftX, ryv + cubeDriftY, rzv + cubeDriftZ, focal, cx, cy), z: rzv };
       });
 
-      // Draw edges with depth fade — very subtle background-only feel
+      // Cube edges
       ctx.lineWidth = 1.2;
       ctx.lineCap = "round";
       edges.forEach(([a, b]) => {
@@ -380,15 +402,17 @@ function CubeBackdrop() {
         ctx.stroke();
       });
 
-      // Hexagons inscribed on each face — six-sided polygons
+      // Hexagons — using their OWN transform, fully decoupled from the cube
       ctx.lineWidth = 0.9;
-      hexagons.forEach((hex) => {
-        const projHex = hex.map(([hx, hy, hz]) => {
-          const [rxv, ryv, rzv] = rotate(hx * baseSize, hy * baseSize, hz * baseSize, rx, ry, rz);
-          return { ...project(rxv + driftX, ryv + driftY, rzv + driftZ, focal, cx, cy), z: rzv };
-        });
+      const hexProjectedAll = hexagons.map((hex) =>
+        hex.map(([hx, hy, hz]) => {
+          const [rxv, ryv, rzv] = rotate(hx * baseSize, hy * baseSize, hz * baseSize, hexRx, hexRy, hexRz);
+          return { ...project(rxv + hexDriftX, ryv + hexDriftY, rzv + hexDriftZ, focal, cx, cy), z: rzv };
+        })
+      );
+      hexProjectedAll.forEach((projHex) => {
         const avgZNorm = projHex.reduce((s, p) => s + p.z, 0) / projHex.length / baseSize;
-        const alpha = 0.06 + 0.1 * Math.max(0, (avgZNorm + 1) / 2);
+        const alpha = 0.08 + 0.12 * Math.max(0, (avgZNorm + 1) / 2);
         ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
         ctx.beginPath();
         projHex.forEach((p, idx) => {
@@ -399,46 +423,58 @@ function CubeBackdrop() {
         ctx.stroke();
       });
 
-
-      // Sparkling stars at vertices — fade completely in and out
-      projected.forEach((p, i) => {
-        const phase = (t * 0.8 + i * 1.3) % (Math.PI * 2);
-        const sparkle = Math.max(0, Math.sin(phase));
+      const drawStar = (px: number, py: number, sparkle: number) => {
         if (sparkle < 0.05) return;
+        // Fade out if inside keep-out zone (protects the center text)
+        const dx = px - cx;
+        const dy = py - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < keepOut) return;
         const starSize = 1.5 + sparkle * 3.5;
-        const alpha = sparkle * 0.55;
-
-        // soft glow
-        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, starSize * 3);
+        const alpha = sparkle * 0.6;
+        const grad = ctx.createRadialGradient(px, py, 0, px, py, starSize * 3);
         grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha * 0.5})`);
         grad.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, ${alpha * 0.15})`);
         grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
         ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, starSize * 3, 0, Math.PI * 2);
+        ctx.arc(px, py, starSize * 3, 0, Math.PI * 2);
         ctx.fill();
-
-        // 4-point star cross
         ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
         ctx.lineWidth = 0.8;
         ctx.beginPath();
-        ctx.moveTo(p.x - starSize, p.y);
-        ctx.lineTo(p.x + starSize, p.y);
-        ctx.moveTo(p.x, p.y - starSize);
-        ctx.lineTo(p.x, p.y + starSize);
+        ctx.moveTo(px - starSize, py);
+        ctx.lineTo(px + starSize, py);
+        ctx.moveTo(px, py - starSize);
+        ctx.lineTo(px, py + starSize);
         ctx.stroke();
-
-        // center dot
         ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 1, 0, Math.PI * 2);
+        ctx.arc(px, py, 1, 0, Math.PI * 2);
         ctx.fill();
+      };
+
+      // Cube vertex sparkles — random phase & speed, so they blink out of order
+      projected.forEach((p, i) => {
+        const phase = cubeSparklePhase[i] + t * cubeSparkleSpeed[i];
+        const sparkle = Math.max(0, Math.sin(phase));
+        drawStar(p.x, p.y, sparkle);
+      });
+
+      // Hexagon vertex sparkles — independent random phases
+      hexProjectedAll.forEach((projHex, hi) => {
+        projHex.forEach((p, vi) => {
+          const phase = hexSparklePhase[hi][vi] + t * hexSparkleSpeed[hi][vi];
+          const sparkle = Math.max(0, Math.sin(phase));
+          drawStar(p.x, p.y, sparkle);
+        });
       });
 
       raf = requestAnimationFrame(render);
     };
 
     raf = requestAnimationFrame(render);
+
 
     return () => {
       window.removeEventListener("resize", resize);
