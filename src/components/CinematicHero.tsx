@@ -265,7 +265,7 @@ function CubeBackdrop() {
             <defs>
               <radialGradient id="aqla-star" cx="50%" cy="50%" r="50%">
                 <stop offset="0%" stopColor="currentColor" stopOpacity="1" />
-                <stop offset="40%" stopColor="currentColor" stopOpacity="0.6" />
+                <stop offset="35%" stopColor="currentColor" stopOpacity="0.85" />
                 <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
               </radialGradient>
             </defs>
