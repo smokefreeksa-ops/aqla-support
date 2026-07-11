@@ -362,62 +362,43 @@ function CubeBackdrop() {
       return [x3, y3, z2];
     };
 
-    const start = performance.now();
-
-    const render = (now: number) => {
-      const t = (now - start) / 1000;
-      ctx.clearRect(0, 0, width, height);
-
       const cx = width / 2;
       const cy = height / 2;
-      const baseSize = Math.min(width, height) * 0.28;
-      const focal = Math.min(width, height) * 1.6;
+      const baseRadius = Math.min(width * 0.44, height * 0.46);
 
-      // Keep-out zone in the middle so shapes never touch the highlighted card
-      const keepOut = Math.max(240, Math.min(width, height) * 0.32);
-
-      // ----- HEXAGON motion (independent) -----
-      const hexOrbitAngle = -t * 0.14 + Math.PI;
-      const hexOrbitRadius = keepOut + baseSize * 1.05;
-      const hexDriftX = Math.cos(hexOrbitAngle) * hexOrbitRadius + Math.cos(t * 0.27) * width * 0.02;
-      const hexDriftY = Math.sin(hexOrbitAngle) * (hexOrbitRadius * 0.5) + Math.sin(t * 0.37) * height * 0.02;
-      const hexDriftZ = Math.cos(t * 0.11) * focal * 0.14 + Math.sin(t * 0.23) * focal * 0.06;
-      const hexRx = -t * 0.32 + Math.cos(t * 0.09) * 0.4;
-      const hexRy = t * 0.21 + Math.sin(t * 0.13) * 0.35;
-      const hexRz = -t * 0.27 + Math.cos(t * 0.07) * 0.25;
-
-      // Pure white sparkles + hex lines for the Apple-dark backdrop
+      // Pure white for Apple-dark theme
       const r = 255, g = 255, b = 255;
 
-      // Hexagons — using their OWN transform
-      ctx.lineWidth = 0.9;
-      ctx.lineCap = "round";
-      const hexProjectedAll = hexagons.map((hex) =>
-        hex.map(([hx, hy, hz]) => {
-          const [rxv, ryv, rzv] = rotate(hx * baseSize, hy * baseSize, hz * baseSize, hexRx, hexRy, hexRz);
-          return { ...project(rxv + hexDriftX, ryv + hexDriftY, rzv + hexDriftZ, focal, cx, cy), z: rzv };
-        })
-      );
-      hexProjectedAll.forEach((projHex) => {
-        const avgZNorm = projHex.reduce((s, p) => s + p.z, 0) / projHex.length / baseSize;
-        const alpha = 0.08 + 0.12 * Math.max(0, (avgZNorm + 1) / 2);
-        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
-        ctx.beginPath();
-        projHex.forEach((p, idx) => {
-          if (idx === 0) ctx.moveTo(p.x, p.y);
-          else ctx.lineTo(p.x, p.y);
-        });
-        ctx.closePath();
-        ctx.stroke();
+      // Compute each vertex position with fully independent jitter
+      const vertices = vertexJitter.map((j, i) => {
+        const baseAngle = (i / VERTEX_COUNT) * Math.PI * 2 - Math.PI / 2; // flat-top-ish
+        const tWobble = Math.sin(j.tPhase + t * j.tSpeed) * j.tAmp;
+        const angle = baseAngle + tWobble;
+        const rBreath = 1 + Math.sin(j.rPhase + t * j.rSpeed) * j.rAmp;
+        const radius = baseRadius * rBreath;
+        const jx = Math.sin(j.xPhase + t * j.xSpeed) * j.jAmp;
+        const jy = Math.cos(j.yPhase + t * j.ySpeed) * j.jAmp;
+        return {
+          x: cx + Math.cos(angle) * radius + jx,
+          y: cy + Math.sin(angle) * radius + jy,
+        };
       });
+
+      // Hexagon outline
+      ctx.lineWidth = 1;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.18)`;
+      ctx.beginPath();
+      vertices.forEach((p, idx) => {
+        if (idx === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
+      });
+      ctx.closePath();
+      ctx.stroke();
 
       const drawStar = (px: number, py: number, sparkle: number) => {
         if (sparkle < 0.05) return;
-        const dx = px - cx;
-        const dy = py - cy;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < keepOut) return;
-        const starSize = 1.2 + sparkle * 4.5;
+        const starSize = 1.5 + sparkle * 5.5;
         const alpha = sparkle * 0.95;
 
         // Outer soft glow
@@ -430,50 +411,44 @@ function CubeBackdrop() {
         ctx.arc(px, py, starSize * 5, 0, Math.PI * 2);
         ctx.fill();
 
-        // 4-point shining star shape
-        const draw4PointStar = (size: number, fillAlpha: number) => {
-          const outer = size * 2.2;
-          const inner = size * 0.35;
-          ctx.beginPath();
-          for (let i = 0; i < 8; i++) {
-            const angle = (i * Math.PI) / 4 - Math.PI / 2;
-            const radius = i % 2 === 0 ? outer : inner;
-            const x = px + Math.cos(angle) * radius;
-            const y = py + Math.sin(angle) * radius;
-            if (i === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          }
-          ctx.closePath();
-          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${fillAlpha})`;
-          ctx.fill();
-        };
-
-        draw4PointStar(starSize, alpha);
+        // 4-point shining star
+        const outer = starSize * 2.4;
+        const inner = starSize * 0.35;
+        ctx.beginPath();
+        for (let i = 0; i < 8; i++) {
+          const a = (i * Math.PI) / 4 - Math.PI / 2;
+          const rad = i % 2 === 0 ? outer : inner;
+          const x = px + Math.cos(a) * rad;
+          const y = py + Math.sin(a) * rad;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        ctx.fill();
 
         // Bright white core
-        const coreGrad = ctx.createRadialGradient(px, py, 0, px, py, starSize * 1.2);
-        coreGrad.addColorStop(0, `rgba(255, 255, 255, ${alpha * 0.9})`);
-        coreGrad.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, ${alpha * 0.4})`);
-        coreGrad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+        const coreGrad = ctx.createRadialGradient(px, py, 0, px, py, starSize * 1.3);
+        coreGrad.addColorStop(0, `rgba(255, 255, 255, ${alpha})`);
+        coreGrad.addColorStop(0.5, `rgba(255, 255, 255, ${alpha * 0.5})`);
+        coreGrad.addColorStop(1, `rgba(255, 255, 255, 0)`);
         ctx.fillStyle = coreGrad;
         ctx.beginPath();
-        ctx.arc(px, py, starSize * 1.2, 0, Math.PI * 2);
+        ctx.arc(px, py, starSize * 1.3, 0, Math.PI * 2);
         ctx.fill();
 
         // Tiny bright center dot
         ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
         ctx.beginPath();
-        ctx.arc(px, py, 0.8 + sparkle * 1.2, 0, Math.PI * 2);
+        ctx.arc(px, py, 0.8 + sparkle * 1.4, 0, Math.PI * 2);
         ctx.fill();
       };
 
-      // Hexagon vertex sparkles — independent random phases
-      hexProjectedAll.forEach((projHex, hi) => {
-        projHex.forEach((p, vi) => {
-          const phase = hexSparklePhase[hi][vi] + t * hexSparkleSpeed[hi][vi];
-          const sparkle = Math.max(0, Math.sin(phase));
-          drawStar(p.x, p.y, sparkle);
-        });
+      // Vertex sparkles — each vertex twinkles on its own random phase
+      vertices.forEach((p, i) => {
+        const j = vertexJitter[i];
+        const sparkle = Math.max(0, Math.sin(j.sPhase + t * j.sSpeed));
+        drawStar(p.x, p.y, 0.35 + sparkle * 0.65);
       });
 
       raf = requestAnimationFrame(render);
