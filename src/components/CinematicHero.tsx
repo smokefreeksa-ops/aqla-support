@@ -385,39 +385,55 @@ function CubeBackdrop() {
         const dy = py - cy;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < keepOut) return;
-        const starSize = 1.5 + sparkle * 3.5;
-        const alpha = sparkle * 0.6;
-        const grad = ctx.createRadialGradient(px, py, 0, px, py, starSize * 3);
-        grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha * 0.5})`);
-        grad.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, ${alpha * 0.15})`);
+        const starSize = 1.2 + sparkle * 4.5;
+        const alpha = sparkle * 0.95;
+
+        // Outer soft glow
+        const grad = ctx.createRadialGradient(px, py, 0, px, py, starSize * 5);
+        grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha * 0.35})`);
+        grad.addColorStop(0.4, `rgba(${r}, ${g}, ${b}, ${alpha * 0.12})`);
         grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
         ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.arc(px, py, starSize * 3, 0, Math.PI * 2);
+        ctx.arc(px, py, starSize * 5, 0, Math.PI * 2);
         ctx.fill();
-        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
-        ctx.lineWidth = 0.8;
+
+        // 4-point shining star shape
+        const draw4PointStar = (size: number, fillAlpha: number) => {
+          const outer = size * 2.2;
+          const inner = size * 0.35;
+          ctx.beginPath();
+          for (let i = 0; i < 8; i++) {
+            const angle = (i * Math.PI) / 4 - Math.PI / 2;
+            const radius = i % 2 === 0 ? outer : inner;
+            const x = px + Math.cos(angle) * radius;
+            const y = py + Math.sin(angle) * radius;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${fillAlpha})`;
+          ctx.fill();
+        };
+
+        draw4PointStar(starSize, alpha);
+
+        // Bright white core
+        const coreGrad = ctx.createRadialGradient(px, py, 0, px, py, starSize * 1.2);
+        coreGrad.addColorStop(0, `rgba(255, 255, 255, ${alpha * 0.9})`);
+        coreGrad.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, ${alpha * 0.4})`);
+        coreGrad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+        ctx.fillStyle = coreGrad;
         ctx.beginPath();
-        ctx.moveTo(px - starSize, py);
-        ctx.lineTo(px + starSize, py);
-        ctx.moveTo(px, py - starSize);
-        ctx.lineTo(px, py + starSize);
-        ctx.stroke();
-        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        ctx.arc(px, py, starSize * 1.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Tiny bright center dot
+        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
         ctx.beginPath();
-        ctx.arc(px, py, 1, 0, Math.PI * 2);
+        ctx.arc(px, py, 0.8 + sparkle * 1.2, 0, Math.PI * 2);
         ctx.fill();
       };
-
-      // Hexagon vertex sparkles — independent random phases
-      hexProjectedAll.forEach((projHex, hi) => {
-        projHex.forEach((p, vi) => {
-          const phase = hexSparklePhase[hi][vi] + t * hexSparkleSpeed[hi][vi];
-          const sparkle = Math.max(0, Math.sin(phase));
-          drawStar(p.x, p.y, sparkle);
-        });
-      });
-
 
       // Hexagon vertex sparkles — independent random phases
       hexProjectedAll.forEach((projHex, hi) => {
