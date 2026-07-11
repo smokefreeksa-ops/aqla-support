@@ -252,7 +252,7 @@ export function CinematicHero({ isAr }: Props) {
               : "opacity-0 -translate-y-2 blur-md scale-105"
           }`}
           style={{
-            textShadow: "0 0 40px color-mix(in oklab, var(--primary) 25%, transparent)",
+            textShadow: "0 0 60px rgba(255,255,255,0.25)",
           }}
         >
           {isAr ? "أقلع" : "Aqla"}
