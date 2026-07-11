@@ -50,12 +50,25 @@ function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen grid place-items-center bg-background px-4">
-      <Card className="w-full max-w-sm p-6">
+    <div className="min-h-screen grid place-items-center bg-background px-4 py-8">
+      <div className="w-full max-w-sm space-y-4">
+        <div
+          dir="rtl"
+          className="rounded-2xl border border-[#006C35]/25 bg-gradient-to-br from-[#006C35]/10 to-[#00A65A]/5 p-4 text-center shadow-sm"
+        >
+          <p className="text-sm font-semibold leading-6 text-[#006C35]">
+            شارك تجربتك مع أظرف النيكوتين وساهم في البحث العلمي 🌱
+          </p>
+          <p className="mt-1 text-xs text-foreground/70">
+            تسجيلك يساعدنا نفهم أكثر ونطوّر دعم الإقلاع في السعودية.
+          </p>
+        </div>
+        <Card className="w-full p-6">
         <Link to="/" className="flex items-center gap-2 text-xs text-muted-foreground">
           <img src={aqlaLogo} alt="Aqla — أقلع logo" className="h-10 w-auto object-contain" />
           <span>← Aqla — أقلع</span>
         </Link>
+
         <h1 className="mt-3 text-xl font-semibold">{mode === "signin" ? "Staff Login" : "Create staff account"}</h1>
         <form onSubmit={handle} className="mt-4 space-y-3">
           <div className="space-y-1.5">
