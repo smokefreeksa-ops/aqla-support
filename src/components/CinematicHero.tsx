@@ -258,19 +258,7 @@ function CubeBackdrop() {
     resize();
     window.addEventListener("resize", resize);
 
-    // 8 cube vertices
-    const vertices: Array<[number, number, number]> = [
-      [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
-      [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1],
-    ];
-    // 12 edges
-    const edges: Array<[number, number]> = [
-      [0, 1], [1, 2], [2, 3], [3, 0],
-      [4, 5], [5, 6], [6, 7], [7, 4],
-      [0, 4], [1, 5], [2, 6], [3, 7],
-    ];
-
-    // Hexagons inscribed on each of the 6 cube faces
+    // Hexagons inscribed on each of the 6 (virtual) cube faces
     type Axis = "x" | "y" | "z";
     const hexFaces: Array<{ normal: Axis; sign: 1 | -1 }> = [
       { normal: "z", sign: 1 }, { normal: "z", sign: -1 },
@@ -292,10 +280,9 @@ function CubeBackdrop() {
     });
 
     // Random per-vertex sparkle phases so vertices don't blink in order
-    const cubeSparklePhase = vertices.map(() => Math.random() * Math.PI * 2);
-    const cubeSparkleSpeed = vertices.map(() => 0.5 + Math.random() * 0.9);
     const hexSparklePhase = hexagons.map((h) => h.map(() => Math.random() * Math.PI * 2));
     const hexSparkleSpeed = hexagons.map((h) => h.map(() => 0.4 + Math.random() * 0.8));
+
 
 
 
