@@ -14,6 +14,7 @@ import { FloatingWhatsAppButton } from "@/components/FloatingWhatsAppButton";
 import { AqlaAssistant } from "@/components/AqlaAssistant";
 import { AqlaAuthGate } from "@/components/AqlaAuthGate";
 import { ChallengeBanner } from "@/components/ChallengeBanner";
+import { GlobalVideoBackground } from "@/components/GlobalVideoBackground";
 
 function NotFoundComponent() {
   return (
