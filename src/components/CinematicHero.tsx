@@ -171,10 +171,11 @@ export function CinematicHero({ isAr }: Props) {
       )}
 
       <div
-        className={`relative mx-auto max-w-3xl px-4 pt-20 pb-12 sm:pt-28 sm:pb-16 ${
+        className={`relative mx-auto max-w-3xl px-4 pt-20 pb-12 sm:pt-28 sm:pb-16 aqla-text-drift ${
           isAr ? "text-right" : "text-left"
         } md:text-center`}
       >
+
         {/* Title */}
 
         <h1
