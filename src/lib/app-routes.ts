@@ -68,6 +68,7 @@ export const internalRoutes: ReadonlySet<string> = new Set([
   appRoutes.supportInvite,
   appRoutes.quitPlan,
   appRoutes.cravingCoach,
+  appRoutes.voiceCravingScan,
   appRoutes.relapseSupport,
   appRoutes.safetyGuidance,
   appRoutes.whenToSeekHelp,
