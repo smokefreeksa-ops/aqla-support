@@ -47,14 +47,14 @@ function PublicationCarousel({ onPublicationClick }: { onPublicationClick: () =>
   return (
     <div className="w-full max-w-lg mx-auto mt-8">
       <div className="flex items-center justify-center gap-2 mb-3">
-        <div className="h-px flex-1" style={{ background: "rgba(41,211,194,0.2)" }} />
+        <div className="h-px flex-1" style={{ background: "rgba(0,166,90,0.2)" }} />
         <span
           className="text-xs font-semibold tracking-widest px-3"
-          style={{ color: "rgba(41,211,194,0.65)" }}
+          style={{ color: "rgba(0,166,90,0.65)" }}
         >
           أحدث أبحاثنا المنشورة
         </span>
-        <div className="h-px flex-1" style={{ background: "rgba(41,211,194,0.2)" }} />
+        <div className="h-px flex-1" style={{ background: "rgba(0,166,90,0.2)" }} />
       </div>
       <a
         href={pub.url}
@@ -63,13 +63,13 @@ function PublicationCarousel({ onPublicationClick }: { onPublicationClick: () =>
         onClick={onPublicationClick}
         className="group flex items-start gap-3 w-full rounded-xl px-5 py-4 hover:scale-[1.02] transition"
         style={{
-          background: "rgba(41, 211, 194, 0.07)",
-          border: "1px solid rgba(41, 211, 194, 0.18)",
+          background: "rgba(0,166,90, 0.07)",
+          border: "1px solid rgba(0,166,90, 0.18)",
           opacity: visible ? 1 : 0,
           transition: "opacity 0.4s ease, transform 0.3s ease",
         }}
       >
-        <BookOpen className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: "#29d3c2" }} />
+        <BookOpen className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: "#00A65A" }} />
         <div className="flex-1 text-right">
           <p
             className="text-sm font-semibold leading-snug mb-0.5 group-hover:underline"
@@ -83,7 +83,7 @@ function PublicationCarousel({ onPublicationClick }: { onPublicationClick: () =>
         </div>
         <ExternalLink
           className="w-4 h-4 flex-shrink-0 opacity-40 group-hover:opacity-80 transition-opacity mt-0.5"
-          style={{ color: "#29d3c2" }}
+          style={{ color: "#00A65A" }}
         />
       </a>
     </div>
@@ -189,7 +189,7 @@ function TypewriterHeadline() {
     <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] text-white mb-5">
       <span
         style={{
-          background: "linear-gradient(135deg, #29d3c2 0%, #39a7ff 50%, #a78bfa 100%)",
+          background: "linear-gradient(135deg, #00A65A 0%, #006C35 50%, #a78bfa 100%)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
           backgroundClip: "text",
@@ -277,11 +277,11 @@ export default function HeroSection() {
       <div className="absolute inset-0 z-[1] pointer-events-none">
         <div
           className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full opacity-[0.07]"
-          style={{ background: "radial-gradient(ellipse, #29d3c2 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(ellipse, #00A65A 0%, transparent 70%)" }}
         />
         <div
           className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full opacity-[0.05]"
-          style={{ background: "radial-gradient(ellipse, #39a7ff 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(ellipse, #006C35 0%, transparent 70%)" }}
         />
       </div>
 
@@ -292,9 +292,9 @@ export default function HeroSection() {
             background: "rgba(5, 9, 10, 0.55)",
             backdropFilter: "blur(24px) saturate(180%)",
             WebkitBackdropFilter: "blur(24px) saturate(180%)",
-            border: "1px solid rgba(184, 255, 244, 0.12)",
+            border: "1px solid rgba(180,255,210, 0.12)",
             boxShadow:
-              "0 8px 48px rgba(41, 211, 194, 0.08), 0 1px 0 rgba(184,255,244,0.08) inset",
+              "0 8px 48px rgba(0,166,90, 0.08), 0 1px 0 rgba(180,255,210,0.08) inset",
           }}
         >
           {[
@@ -306,7 +306,7 @@ export default function HeroSection() {
             <div
               key={i}
               className={`absolute w-8 h-8 md:w-10 md:h-10 ${cls}`}
-              style={{ borderColor: "rgba(41, 211, 194, 0.4)" }}
+              style={{ borderColor: "rgba(0,166,90, 0.4)" }}
             />
           ))}
 
@@ -347,11 +347,11 @@ export default function HeroSection() {
                 onClick={() => track("quit_intent")}
                 className="flex items-center justify-center font-bold rounded-xl text-white transition-colors duration-200 active:scale-95"
                 style={{
-                  background: "linear-gradient(135deg, #29d3c2 0%, #39a7ff 100%)",
+                  background: "linear-gradient(135deg, #00A65A 0%, #006C35 100%)",
                   boxShadow:
                     spotlight === 1
-                      ? "0 6px 36px rgba(41, 211, 194, 0.60)"
-                      : "0 4px 24px rgba(41, 211, 194, 0.40)",
+                      ? "0 6px 36px rgba(0,166,90, 0.60)"
+                      : "0 4px 24px rgba(0,166,90, 0.40)",
                   fontSize: spotlight === 1 ? "1.25rem" : "1rem",
                   padding: spotlight === 1 ? "1rem 2.5rem" : "0.875rem 2rem",
                   transition:
@@ -408,7 +408,7 @@ export default function HeroSection() {
           >
             <div
               className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0"
-              style={{ background: "linear-gradient(135deg, #29d3c2, #39a7ff)" }}
+              style={{ background: "linear-gradient(135deg, #00A65A, #006C35)" }}
             >
               <Play className="w-3.5 h-3.5 fill-white text-white ml-0.5" />
             </div>
@@ -426,7 +426,7 @@ export default function HeroSection() {
           { value: "95%", label: "معدل الرضا" },
         ].map((item) => (
           <div key={item.label} className="flex items-center gap-2">
-            <span className="text-xl font-extrabold" style={{ color: "#29d3c2" }}>
+            <span className="text-xl font-extrabold" style={{ color: "#00A65A" }}>
               {item.value}
             </span>
             <span className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
