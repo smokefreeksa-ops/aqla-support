@@ -7,7 +7,15 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ImpactSection } from "@/components/ImpactSection";
 import { VisitTracker } from "@/components/VisitTracker";
-import { CinematicHero } from "@/components/CinematicHero";
+import HeroSection from "@/components/imported/HeroSection";
+import AboutSection from "@/components/imported/AboutSection";
+import DrMalikCard from "@/components/imported/DrMalikCard";
+import FeaturesSection from "@/components/imported/FeaturesSection";
+import ModulesSection from "@/components/imported/ModulesSection";
+import InteractiveToolsSection from "@/components/imported/InteractiveToolsSection";
+import CTASection from "@/components/imported/CTASection";
+import DesktopCursor from "@/components/imported/DesktopCursor";
+
 
 
 export const Route = createFileRoute("/")({
@@ -94,14 +102,14 @@ function Inner() {
 
   return (
     <div dir={dir} className="min-h-screen bg-background">
+      <DesktopCursor />
       <SiteHeader />
 
       <main>
-        {/* HERO — cinematic intro */}
-        <CinematicHero isAr={isAr} />
+        {/* HERO — new imported design */}
+        <HeroSection />
 
-
-        {/* FOUR MAIN PATHS — single canonical grid */}
+        {/* FOUR MAIN PATHS — canonical grid */}
         <section id="pathways" className="scroll-mt-20 border-t border-border/40 bg-card/40">
           <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -112,8 +120,23 @@ function Inner() {
           </div>
         </section>
 
+        {/* DR MALIK AI card */}
+        <DrMalikCard />
+
+        {/* ABOUT the founder */}
+        <AboutSection />
+
+        {/* PROGRAM FEATURES */}
+        <FeaturesSection />
+
+        {/* LEARNING MODULES */}
+        <ModulesSection />
+
+        {/* INTERACTIVE TOOLS */}
+        <InteractiveToolsSection />
+
         {/* SAFETY STRIP */}
-        <section className="border-t border-border/40">
+        <section className="border-t border-border/40 bg-background">
           <div className="mx-auto max-w-4xl px-4 py-6 text-center">
             <p className="text-[12px] leading-6 text-muted-foreground sm:text-[13px]">
               {isAr
@@ -123,11 +146,15 @@ function Inner() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+        <section className="bg-background mx-auto max-w-6xl px-4 py-12 sm:py-16">
           <ImpactSection isAr={isAr} />
         </section>
 
+        {/* FINAL CTA */}
+        <CTASection />
+
         <VisitTracker path="/" />
+
       </main>
 
       <SiteFooter />
