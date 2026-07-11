@@ -167,7 +167,9 @@ export function CinematicHero({ isAr }: Props) {
               />
             ))}
           </div>
+          </div>
         </div>
+
       )}
 
       <div
