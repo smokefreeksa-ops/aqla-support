@@ -362,6 +362,12 @@ function CubeBackdrop() {
       return [x3, y3, z2];
     };
 
+    const start = performance.now();
+
+    const render = (now: number) => {
+      const t = (now - start) / 1000;
+      ctx.clearRect(0, 0, width, height);
+
       const cx = width / 2;
       const cy = height / 2;
       const baseRadius = Math.min(width * 0.44, height * 0.46);
