@@ -116,15 +116,8 @@ export function CinematicHero({ isAr }: Props) {
       <div aria-hidden className="pointer-events-none absolute inset-0 aqla-cine-bg" />
       <div aria-hidden className="pointer-events-none absolute inset-0 aqla-cine-vignette" />
 
-      {/* clean square frame behind the card */}
-      <div
-        aria-hidden
-        className={`pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-[1400ms] ease-out ${
-          dissolved ? "scale-100 opacity-100" : "scale-95 opacity-0"
-        }`}
-      >
-        <CleanSquare />
-      </div>
+      {/* Cinematic 3D cube background — drifts on all axes with sparkling vertices */}
+      <CubeBackdrop />
 
       {/* Clickable cycling pathway card — appears inside the square after dissolve */}
       {dissolved && (
