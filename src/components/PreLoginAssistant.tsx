@@ -7,8 +7,6 @@ import { useDraggableWidget } from "@/hooks/use-draggable-widget";
 type Msg = { role: "user" | "assistant"; content: string };
 
 const BOT_NAME = "دردش مع أقلع 😄";
-const TEASER_1 = "اسأله عن أقلع، أو خلّه يقول لك نكتة… ترا بتستانس والله.";
-const TEASER_2 = "ما ودك تسجل الحين؟ ولا يهمك… حتى التسجيل يحتاج “نية إقلاع” شكله 😄";
 const OPENING =
   "يا هلا والله 👋\nأنا دردش مع أقلع 😄\nاسألني عن أقلع، أو خلّني أقول لك نكتة… ترا بتستانس والله.\nوإذا ما ودك تسجل الحين؟ ولا يهمك… حتى التسجيل يحتاج “نية إقلاع” شكله 😄";
 
