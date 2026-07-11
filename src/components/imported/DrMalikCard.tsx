@@ -21,7 +21,7 @@ export default function DrMalikCard() {
         className="absolute inset-0 pointer-events-none opacity-[0.04]"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(41,211,194,1) 1px, transparent 1px), linear-gradient(90deg, rgba(41,211,194,1) 1px, transparent 1px)",
+            "linear-gradient(rgba(0,166,90,1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,166,90,1) 1px, transparent 1px)",
           backgroundSize: "60px 60px",
         }}
       />
@@ -30,7 +30,7 @@ export default function DrMalikCard() {
         className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 rounded-full pointer-events-none"
         style={{
           background:
-            "radial-gradient(circle, rgba(41,211,194,0.08) 0%, transparent 70%)",
+            "radial-gradient(circle, rgba(0,166,90,0.08) 0%, transparent 70%)",
         }}
       />
       <div
@@ -46,10 +46,10 @@ export default function DrMalikCard() {
           className="rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-10 md:gap-14"
           style={{
             background: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(41,211,194,0.18)",
+            border: "1px solid rgba(0,166,90,0.18)",
             backdropFilter: "blur(20px)",
             boxShadow:
-              "0 0 60px rgba(41,211,194,0.06), inset 0 1px 0 rgba(255,255,255,0.06)",
+              "0 0 60px rgba(0,166,90,0.06), inset 0 1px 0 rgba(255,255,255,0.06)",
           }}
         >
           <div className="flex-shrink-0 flex flex-col items-center gap-4">
@@ -57,19 +57,19 @@ export default function DrMalikCard() {
               className="relative w-32 h-32 md:w-40 md:h-40 rounded-full flex items-center justify-center"
               style={{
                 background:
-                  "linear-gradient(135deg, rgba(41,211,194,0.15), rgba(167,139,250,0.15))",
-                border: "2px solid rgba(41,211,194,0.35)",
-                boxShadow: "0 0 40px rgba(41,211,194,0.20)",
+                  "linear-gradient(135deg, rgba(0,166,90,0.15), rgba(167,139,250,0.15))",
+                border: "2px solid rgba(0,166,90,0.35)",
+                boxShadow: "0 0 40px rgba(0,166,90,0.20)",
               }}
             >
               <div
                 className="absolute inset-0 rounded-full animate-ping"
                 style={{
-                  border: "1px solid rgba(41,211,194,0.25)",
+                  border: "1px solid rgba(0,166,90,0.25)",
                   animationDuration: "2.5s",
                 }}
               />
-              <Brain className="w-16 h-16 md:w-20 md:h-20" style={{ color: "#29d3c2" }} />
+              <Brain className="w-16 h-16 md:w-20 md:h-20" style={{ color: "#00A65A" }} />
             </div>
 
             <div
@@ -89,9 +89,9 @@ export default function DrMalikCard() {
             <div
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold mb-4"
               style={{
-                background: "rgba(41,211,194,0.10)",
-                border: "1px solid rgba(41,211,194,0.25)",
-                color: "#29d3c2",
+                background: "rgba(0,166,90,0.10)",
+                border: "1px solid rgba(0,166,90,0.25)",
+                color: "#00A65A",
               }}
             >
               <Sparkles className="w-3.5 h-3.5" />
@@ -102,7 +102,7 @@ export default function DrMalikCard() {
               className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-2 leading-tight"
               style={{
                 background:
-                  "linear-gradient(135deg, #ffffff 0%, #29d3c2 60%, #a78bfa 100%)",
+                  "linear-gradient(135deg, #ffffff 0%, #00A65A 60%, #a78bfa 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -129,7 +129,7 @@ export default function DrMalikCard() {
                     border: "1px solid rgba(255,255,255,0.07)",
                   }}
                 >
-                  <Icon className="w-4 h-4 flex-shrink-0" style={{ color: "#29d3c2" }} />
+                  <Icon className="w-4 h-4 flex-shrink-0" style={{ color: "#00A65A" }} />
                   <span
                     className="text-sm"
                     style={{ color: "rgba(255,255,255,0.75)" }}
@@ -145,8 +145,8 @@ export default function DrMalikCard() {
               className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-white font-bold text-base md:text-lg transition-all duration-200 hover:scale-[1.03] active:scale-[0.97]"
               style={{
                 background:
-                  "linear-gradient(135deg, #29d3c2 0%, #39a7ff 50%, #a78bfa 100%)",
-                boxShadow: "0 8px 32px rgba(41,211,194,0.35)",
+                  "linear-gradient(135deg, #00A65A 0%, #006C35 50%, #a78bfa 100%)",
+                boxShadow: "0 8px 32px rgba(0,166,90,0.35)",
               }}
             >
               <MessageCircle className="w-5 h-5 flex-shrink-0" />
