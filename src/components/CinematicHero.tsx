@@ -267,6 +267,28 @@ function CubeBackdrop() {
       [0, 4], [1, 5], [2, 6], [3, 7],
     ];
 
+    // Hexagons inscribed on each of the 6 cube faces
+    type Axis = "x" | "y" | "z";
+    const hexFaces: Array<{ normal: Axis; sign: 1 | -1 }> = [
+      { normal: "z", sign: 1 }, { normal: "z", sign: -1 },
+      { normal: "x", sign: 1 }, { normal: "x", sign: -1 },
+      { normal: "y", sign: 1 }, { normal: "y", sign: -1 },
+    ];
+    const hexRadius = 0.9;
+    const hexagons: Array<Array<[number, number, number]>> = hexFaces.map(({ normal, sign }) => {
+      const pts: Array<[number, number, number]> = [];
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * Math.PI * 2 + Math.PI / 6;
+        const u = Math.cos(a) * hexRadius;
+        const v = Math.sin(a) * hexRadius;
+        if (normal === "z") pts.push([u, v, sign]);
+        else if (normal === "x") pts.push([sign, u, v]);
+        else pts.push([u, sign, v]);
+      }
+      return pts;
+    });
+
+
     // Get current theme foreground color
     const getColor = () => {
       const raw = getComputedStyle(document.documentElement).getPropertyValue("--foreground").trim() || "#000";
