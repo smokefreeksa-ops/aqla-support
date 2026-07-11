@@ -244,7 +244,7 @@ export function CinematicHero({ isAr }: Props) {
         {/* Title */}
 
         <h1
-          className={`text-5xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl transition-all duration-[1200ms] ease-out ${
+          className={`text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl transition-all duration-[1200ms] ease-out ${
             stage >= 1 && !dissolved
               ? "opacity-100 translate-y-0 blur-0"
               : stage === 0
