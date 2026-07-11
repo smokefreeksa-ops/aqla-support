@@ -416,9 +416,8 @@ function CubeBackdrop() {
       const hexRy = t * 0.21 + Math.sin(t * 0.13) * 0.35;
       const hexRz = -t * 0.27 + Math.cos(t * 0.07) * 0.25;
 
-      const rawColor = getColor();
-      const parsed = parseColor(rawColor);
-      const [r, g, b] = rgbToValues(parsed);
+      // Pure white sparkles + hex lines for the Apple-dark backdrop
+      const r = 255, g = 255, b = 255;
 
       // Hexagons — using their OWN transform
       ctx.lineWidth = 0.9;
