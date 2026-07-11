@@ -7,7 +7,15 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ImpactSection } from "@/components/ImpactSection";
 import { VisitTracker } from "@/components/VisitTracker";
-import { CinematicHero } from "@/components/CinematicHero";
+import HeroSection from "@/components/imported/HeroSection";
+import AboutSection from "@/components/imported/AboutSection";
+import DrMalikCard from "@/components/imported/DrMalikCard";
+import FeaturesSection from "@/components/imported/FeaturesSection";
+import ModulesSection from "@/components/imported/ModulesSection";
+import InteractiveToolsSection from "@/components/imported/InteractiveToolsSection";
+import CTASection from "@/components/imported/CTASection";
+import DesktopCursor from "@/components/imported/DesktopCursor";
+
 
 
 export const Route = createFileRoute("/")({
