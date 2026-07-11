@@ -318,13 +318,13 @@ function CubeBackdrop() {
 
       const cx = width / 2;
       const cy = height / 2;
-      const baseSize = Math.min(width, height) * 0.35;
-      const focal = Math.min(width, height) * 0.8;
+      const baseSize = Math.min(width, height) * 0.22;
+      const focal = Math.min(width, height) * 1.2;
 
       // Complex drift: forward/backward (z), side (x), up/down (y)
-      const driftX = Math.sin(t * 0.17) * width * 0.12 + Math.cos(t * 0.31) * width * 0.06;
-      const driftY = Math.cos(t * 0.23) * height * 0.1 + Math.sin(t * 0.41) * height * 0.05;
-      const driftZ = Math.sin(t * 0.13) * focal * 0.35 + Math.cos(t * 0.19) * focal * 0.15;
+      const driftX = Math.sin(t * 0.17) * width * 0.06 + Math.cos(t * 0.31) * width * 0.03;
+      const driftY = Math.cos(t * 0.23) * height * 0.05 + Math.sin(t * 0.41) * height * 0.025;
+      const driftZ = Math.sin(t * 0.13) * focal * 0.18 + Math.cos(t * 0.19) * focal * 0.08;
 
       // Rotation speeds on all axes
       const rx = t * 0.25 + Math.sin(t * 0.1) * 0.3;
