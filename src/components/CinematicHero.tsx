@@ -377,6 +377,26 @@ function CubeBackdrop() {
         ctx.stroke();
       });
 
+      // Hexagons inscribed on each face — six-sided polygons
+      ctx.lineWidth = 0.9;
+      hexagons.forEach((hex) => {
+        const projHex = hex.map(([hx, hy, hz]) => {
+          const [rxv, ryv, rzv] = rotate(hx * baseSize, hy * baseSize, hz * baseSize, rx, ry, rz);
+          return { ...project(rxv + driftX, ryv + driftY, rzv + driftZ, focal, cx, cy), z: rzv };
+        });
+        const avgZNorm = projHex.reduce((s, p) => s + p.z, 0) / projHex.length / baseSize;
+        const alpha = 0.06 + 0.1 * Math.max(0, (avgZNorm + 1) / 2);
+        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        ctx.beginPath();
+        projHex.forEach((p, idx) => {
+          if (idx === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        });
+        ctx.closePath();
+        ctx.stroke();
+      });
+
+
       // Sparkling stars at vertices — fade completely in and out
       projected.forEach((p, i) => {
         const phase = (t * 0.8 + i * 1.3) % (Math.PI * 2);
