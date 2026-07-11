@@ -349,30 +349,7 @@ function CubeBackdrop() {
 
 
 
-    // Get current theme foreground color
-    const getColor = () => {
-      const raw = getComputedStyle(document.documentElement).getPropertyValue("--foreground").trim() || "#000";
-      // If it's a CSS color in oklch/lab format, canvas may not parse it well.
-      // Fallback to a safe rgba based on theme.
-      return raw;
-    };
-
-    const parseColor = (raw: string) => {
-      const temp = document.createElement("div");
-      temp.style.color = raw;
-      temp.style.position = "absolute";
-      temp.style.opacity = "0";
-      document.body.appendChild(temp);
-      const computed = getComputedStyle(temp).color;
-      document.body.removeChild(temp);
-      return computed;
-    };
-
-    const rgbToValues = (rgb: string) => {
-      const m = rgb.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/);
-      if (!m) return [0, 0, 0];
-      return [parseFloat(m[1]), parseFloat(m[2]), parseFloat(m[3])];
-    };
+    // (Colors are hardcoded to pure white in the render loop for the Apple-dark theme.)
 
     const project = (x: number, y: number, z: number, focal: number, cx: number, cy: number) => {
       const scale = focal / (focal + z);
