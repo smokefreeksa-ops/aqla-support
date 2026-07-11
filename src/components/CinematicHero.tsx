@@ -121,7 +121,7 @@ export function CinematicHero({ isAr }: Props) {
 
       {/* Clickable cycling pathway card — appears inside the square after dissolve */}
       {dissolved && (
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-[300px] sm:w-[340px]">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-[300px] sm:w-[340px] aqla-text-drift">
           {PATHS.map((p, i) => (
             <Link
               key={p.to}
