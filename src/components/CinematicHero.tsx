@@ -230,9 +230,9 @@ export function CinematicHero({ isAr }: Props) {
 }
 
 function CubeBackdrop() {
-  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
