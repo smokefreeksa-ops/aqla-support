@@ -274,12 +274,12 @@ function CubeBackdrop() {
                 const [x1, y1] = V[a];
                 const [x2, y2] = V[b];
                 return (
-                  <line
+                <line
                     key={i}
                     x1={x1} y1={y1} x2={x2} y2={y2}
                     stroke="currentColor"
-                    strokeOpacity="0.18"
-                    strokeWidth="0.008"
+                    strokeOpacity="0.45"
+                    strokeWidth="0.012"
                     vectorEffect="non-scaling-stroke"
                   />
                 );
