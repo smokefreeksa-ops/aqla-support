@@ -533,15 +533,22 @@ const css = `
   50% { background-position: 100% 50%, 0% 100%; }
   100% { background-position: 0% 50%, 100% 0%; }
 }
+.aqla-hero-dark {
+  /* Apple-style deep space */
+  background:
+    radial-gradient(120% 80% at 50% 0%, #10131a 0%, #06070a 55%, #000 100%);
+}
 .aqla-cine-bg {
   background:
-    radial-gradient(60% 50% at 50% 40%, color-mix(in oklab, var(--primary) 10%, transparent), transparent 70%),
-    radial-gradient(50% 60% at 80% 80%, color-mix(in oklab, var(--primary) 8%, transparent), transparent 70%);
-  background-size: 200% 200%, 200% 200%;
-  animation: aqla-bg-shift 18s ease-in-out infinite;
+    radial-gradient(50% 40% at 50% 30%, rgba(120, 170, 255, 0.10), transparent 70%),
+    radial-gradient(45% 55% at 85% 85%, rgba(180, 130, 255, 0.08), transparent 70%),
+    radial-gradient(40% 50% at 15% 80%, rgba(100, 200, 255, 0.06), transparent 70%);
+  background-size: 220% 220%, 220% 220%, 220% 220%;
+  animation: aqla-bg-shift 22s ease-in-out infinite;
 }
 .aqla-cine-vignette {
-  background: radial-gradient(80% 70% at 50% 45%, transparent 55%, color-mix(in oklab, var(--background) 90%, transparent) 100%);
+  background:
+    radial-gradient(90% 80% at 50% 50%, transparent 45%, rgba(0,0,0,0.75) 100%);
 }
 .aqla-emblem-dot {
   width: 10px; height: 10px; border-radius: 9999px;
