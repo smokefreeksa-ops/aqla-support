@@ -340,7 +340,7 @@ function CubeBackdrop() {
 
       const cx = width / 2;
       const cy = height / 2;
-      const baseSize = Math.min(width, height) * 0.16;
+      const baseSize = Math.min(width, height) * 0.42;
       const focal = Math.min(width, height) * 1.6;
 
       // Complex drift: forward/backward (z), side (x), up/down (y)
