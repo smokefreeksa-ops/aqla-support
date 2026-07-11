@@ -355,18 +355,18 @@ function CubeBackdrop() {
         ctx.stroke();
       });
 
-      // Sparkling stars at vertices
+      // Sparkling stars at vertices — fade completely in and out
       projected.forEach((p, i) => {
         const phase = (t * 0.8 + i * 1.3) % (Math.PI * 2);
         const sparkle = Math.max(0, Math.sin(phase));
         if (sparkle < 0.05) return;
-        const starSize = 2 + sparkle * 5;
-        const alpha = sparkle * 0.85;
+        const starSize = 1.5 + sparkle * 3.5;
+        const alpha = sparkle * 0.55;
 
         // soft glow
         const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, starSize * 3);
-        grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha * 0.6})`);
-        grad.addColorStop(0.4, `rgba(${r}, ${g}, ${b}, ${alpha * 0.2})`);
+        grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha * 0.5})`);
+        grad.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, ${alpha * 0.15})`);
         grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
         ctx.fillStyle = grad;
         ctx.beginPath();
@@ -375,7 +375,7 @@ function CubeBackdrop() {
 
         // 4-point star cross
         ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 0.8;
         ctx.beginPath();
         ctx.moveTo(p.x - starSize, p.y);
         ctx.lineTo(p.x + starSize, p.y);
@@ -386,7 +386,7 @@ function CubeBackdrop() {
         // center dot
         ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, 1, 0, Math.PI * 2);
         ctx.fill();
       });
 
