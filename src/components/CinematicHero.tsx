@@ -258,19 +258,7 @@ function CubeBackdrop() {
     resize();
     window.addEventListener("resize", resize);
 
-    // 8 cube vertices
-    const vertices: Array<[number, number, number]> = [
-      [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
-      [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1],
-    ];
-    // 12 edges
-    const edges: Array<[number, number]> = [
-      [0, 1], [1, 2], [2, 3], [3, 0],
-      [4, 5], [5, 6], [6, 7], [7, 4],
-      [0, 4], [1, 5], [2, 6], [3, 7],
-    ];
-
-    // Hexagons inscribed on each of the 6 cube faces
+    // Hexagons inscribed on each of the 6 (virtual) cube faces
     type Axis = "x" | "y" | "z";
     const hexFaces: Array<{ normal: Axis; sign: 1 | -1 }> = [
       { normal: "z", sign: 1 }, { normal: "z", sign: -1 },
@@ -292,10 +280,9 @@ function CubeBackdrop() {
     });
 
     // Random per-vertex sparkle phases so vertices don't blink in order
-    const cubeSparklePhase = vertices.map(() => Math.random() * Math.PI * 2);
-    const cubeSparkleSpeed = vertices.map(() => 0.5 + Math.random() * 0.9);
     const hexSparklePhase = hexagons.map((h) => h.map(() => Math.random() * Math.PI * 2));
     const hexSparkleSpeed = hexagons.map((h) => h.map(() => 0.4 + Math.random() * 0.8));
+
 
 
 
@@ -356,18 +343,7 @@ function CubeBackdrop() {
       // Keep-out zone in the middle so shapes never touch the highlighted card
       const keepOut = Math.max(240, Math.min(width, height) * 0.32);
 
-      // ----- CUBE motion (independent) -----
-      // Orbits around the keep-out zone on one side
-      const cubeOrbitAngle = t * 0.18;
-      const cubeOrbitRadius = keepOut + baseSize * 0.9;
-      const cubeDriftX = Math.cos(cubeOrbitAngle) * cubeOrbitRadius + Math.sin(t * 0.31) * width * 0.02;
-      const cubeDriftY = Math.sin(cubeOrbitAngle) * (cubeOrbitRadius * 0.55) + Math.cos(t * 0.41) * height * 0.015;
-      const cubeDriftZ = Math.sin(t * 0.13) * focal * 0.12 + Math.cos(t * 0.19) * focal * 0.05;
-      const cubeRx = t * 0.25 + Math.sin(t * 0.1) * 0.3;
-      const cubeRy = t * 0.35 + Math.cos(t * 0.15) * 0.4;
-      const cubeRz = t * 0.18 + Math.sin(t * 0.08) * 0.2;
-
-      // ----- HEXAGON motion (independent — opposite orbit, different speeds) -----
+      // ----- HEXAGON motion (independent) -----
       const hexOrbitAngle = -t * 0.14 + Math.PI;
       const hexOrbitRadius = keepOut + baseSize * 1.05;
       const hexDriftX = Math.cos(hexOrbitAngle) * hexOrbitRadius + Math.cos(t * 0.27) * width * 0.02;
@@ -381,29 +357,9 @@ function CubeBackdrop() {
       const parsed = parseColor(rawColor);
       const [r, g, b] = rgbToValues(parsed);
 
-      // Cube vertices projected
-      const projected = vertices.map(([vx, vy, vz]) => {
-        const [rxv, ryv, rzv] = rotate(vx * baseSize, vy * baseSize, vz * baseSize, cubeRx, cubeRy, cubeRz);
-        return { ...project(rxv + cubeDriftX, ryv + cubeDriftY, rzv + cubeDriftZ, focal, cx, cy), z: rzv };
-      });
-
-      // Cube edges
-      ctx.lineWidth = 1.2;
-      ctx.lineCap = "round";
-      edges.forEach(([a, b]) => {
-        const pa = projected[a];
-        const pb = projected[b];
-        const avgZ = (vertices[a][2] + vertices[b][2]) / 2;
-        const depthAlpha = 0.1 + 0.15 * Math.max(0, (avgZ + 1) / 2);
-        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${depthAlpha})`;
-        ctx.beginPath();
-        ctx.moveTo(pa.x, pa.y);
-        ctx.lineTo(pb.x, pb.y);
-        ctx.stroke();
-      });
-
-      // Hexagons — using their OWN transform, fully decoupled from the cube
+      // Hexagons — using their OWN transform
       ctx.lineWidth = 0.9;
+      ctx.lineCap = "round";
       const hexProjectedAll = hexagons.map((hex) =>
         hex.map(([hx, hy, hz]) => {
           const [rxv, ryv, rzv] = rotate(hx * baseSize, hy * baseSize, hz * baseSize, hexRx, hexRy, hexRz);
@@ -425,7 +381,6 @@ function CubeBackdrop() {
 
       const drawStar = (px: number, py: number, sparkle: number) => {
         if (sparkle < 0.05) return;
-        // Fade out if inside keep-out zone (protects the center text)
         const dx = px - cx;
         const dy = py - cy;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -454,12 +409,15 @@ function CubeBackdrop() {
         ctx.fill();
       };
 
-      // Cube vertex sparkles — random phase & speed, so they blink out of order
-      projected.forEach((p, i) => {
-        const phase = cubeSparklePhase[i] + t * cubeSparkleSpeed[i];
-        const sparkle = Math.max(0, Math.sin(phase));
-        drawStar(p.x, p.y, sparkle);
+      // Hexagon vertex sparkles — independent random phases
+      hexProjectedAll.forEach((projHex, hi) => {
+        projHex.forEach((p, vi) => {
+          const phase = hexSparklePhase[hi][vi] + t * hexSparkleSpeed[hi][vi];
+          const sparkle = Math.max(0, Math.sin(phase));
+          drawStar(p.x, p.y, sparkle);
+        });
       });
+
 
       // Hexagon vertex sparkles — independent random phases
       hexProjectedAll.forEach((projHex, hi) => {
