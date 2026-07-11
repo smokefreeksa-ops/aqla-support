@@ -276,7 +276,7 @@ export function CinematicHero({ isAr }: Props) {
 
         {/* Mission paragraph */}
         <p
-          className={`mx-auto mt-4 max-w-2xl text-[12.5px] leading-7 text-foreground/55 sm:text-[13px] transition-all duration-[1200ms] ease-out ${
+          className={`mx-auto mt-4 max-w-2xl text-[12.5px] leading-7 text-white/55 sm:text-[13px] transition-all duration-[1200ms] ease-out ${
             stage >= 2 && !dissolved
               ? "opacity-100 translate-y-0 blur-0"
               : stage < 2
