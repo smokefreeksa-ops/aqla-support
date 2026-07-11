@@ -85,6 +85,9 @@ export function CinematicHero({ isAr }: Props) {
 
   const PATHS = isAr ? PATHS_AR : PATHS_EN;
 
+  const [paused, setPaused] = useState(false);
+  const [progress, setProgress] = useState(0);
+
   useEffect(() => {
     const t1 = setTimeout(() => setStage(1), 250);
     const t2 = setTimeout(() => setStage(2), 1400);
@@ -96,14 +99,36 @@ export function CinematicHero({ isAr }: Props) {
     };
   }, []);
 
-  // After dissolve, cycle path cards every 5s
+  // Keyboard nav: ← / → to move between cards once dissolved
   useEffect(() => {
     if (stage !== 3) return;
-    const id = setInterval(() => {
-      setPathIdx((i) => (i + 1) % PATHS.length);
-    }, 5000);
-    return () => clearInterval(id);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") setPathIdx((i) => (i + 1) % PATHS.length);
+      else if (e.key === "ArrowLeft") setPathIdx((i) => (i - 1 + PATHS.length) % PATHS.length);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [stage, PATHS.length]);
+
+  // Autoplay + smooth progress bar (pauses on hover/focus)
+  useEffect(() => {
+    if (stage !== 3 || paused) return;
+    const duration = 5000;
+    const startedAt = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - startedAt) / duration);
+      setProgress(p);
+      if (p >= 1) {
+        setPathIdx((i) => (i + 1) % PATHS.length);
+        setProgress(0);
+      } else {
+        raf = requestAnimationFrame(tick);
+      }
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [stage, paused, pathIdx, PATHS.length]);
 
 
   const dissolved = stage === 3;
