@@ -143,17 +143,6 @@ export function FloatingWhatsAppButton({ forceVisible = false }: { forceVisible?
           <span className="text-right leading-snug">{MAIN_LINE}</span>
         </button>
 
-        {/* Fine line teaser */}
-        {!menuOpen && (
-          <p
-            dir="rtl"
-            onClick={handleButtonClick}
-            className="max-w-[min(18rem,70vw)] cursor-pointer rounded-xl bg-black/40 px-3 py-1.5 text-[11px] leading-relaxed text-[#f4f0e1] backdrop-blur-sm sm:text-xs"
-            style={{ unicodeBidi: "plaintext", textAlign: "right" }}
-          >
-            {FINE_LINE}
-          </p>
-        )}
       </div>
     </div>
   );
