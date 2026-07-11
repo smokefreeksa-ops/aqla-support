@@ -4,8 +4,7 @@ import { Phone, MessageCircle, X } from "lucide-react";
 import { trackEvent } from "@/lib/track-event";
 import { useDraggableWidget } from "@/hooks/use-draggable-widget";
 
-const MAIN_LINE = "طوّلناها عليك؟ خذ العلم على الجوال \u{1F604}";
-const FINE_LINE = "واتساب أو اتصال… بس لا تعلّم أحد، البطارية على قدّها. وإذا أنت مدخن، أبشر… بنداريك شوي \u{1F47B}";
+const MAIN_LINE = "تواصل مع فريق أقلع";
 
 export function FloatingWhatsAppButton({ forceVisible = false }: { forceVisible?: boolean } = {}) {
   const location = useLocation();
