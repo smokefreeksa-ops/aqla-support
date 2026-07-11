@@ -4,8 +4,7 @@ import { Phone, MessageCircle, X } from "lucide-react";
 import { trackEvent } from "@/lib/track-event";
 import { useDraggableWidget } from "@/hooks/use-draggable-widget";
 
-const MAIN_LINE = "طوّلناها عليك؟ خذ العلم على الجوال \u{1F604}";
-const FINE_LINE = "واتساب أو اتصال… بس لا تعلّم أحد، البطارية على قدّها. وإذا أنت مدخن، أبشر… بنداريك شوي \u{1F47B}";
+const MAIN_LINE = "تواصل مع فريق أقلع";
 
 export function FloatingWhatsAppButton({ forceVisible = false }: { forceVisible?: boolean } = {}) {
   const location = useLocation();
@@ -144,17 +143,6 @@ export function FloatingWhatsAppButton({ forceVisible = false }: { forceVisible?
           <span className="text-right leading-snug">{MAIN_LINE}</span>
         </button>
 
-        {/* Fine line teaser */}
-        {!menuOpen && (
-          <p
-            dir="rtl"
-            onClick={handleButtonClick}
-            className="max-w-[min(18rem,70vw)] cursor-pointer rounded-xl bg-black/40 px-3 py-1.5 text-[11px] leading-relaxed text-[#f4f0e1] backdrop-blur-sm sm:text-xs"
-            style={{ unicodeBidi: "plaintext", textAlign: "right" }}
-          >
-            {FINE_LINE}
-          </p>
-        )}
       </div>
     </div>
   );
