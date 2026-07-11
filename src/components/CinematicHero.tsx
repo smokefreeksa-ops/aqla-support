@@ -260,7 +260,7 @@ export function CinematicHero({ isAr }: Props) {
 
         {/* Supervisor line */}
         <p
-          className={`mx-auto mt-8 max-w-2xl text-[15px] leading-7 text-foreground/80 sm:text-base transition-all duration-[1000ms] ease-out ${
+          className={`mx-auto mt-8 max-w-2xl text-[15px] leading-7 text-white/80 sm:text-base transition-all duration-[1000ms] ease-out ${
             stage >= 2 && !dissolved
               ? "opacity-100 translate-y-0 blur-0"
               : stage < 2
