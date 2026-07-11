@@ -475,9 +475,6 @@ function CubeBackdrop() {
 
     raf = requestAnimationFrame(render);
 
-    };
-
-    raf = requestAnimationFrame(render);
 
     return () => {
       window.removeEventListener("resize", resize);
