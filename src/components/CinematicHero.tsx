@@ -321,30 +321,23 @@ function CubeBackdrop() {
     resize();
     window.addEventListener("resize", resize);
 
-    // Hexagons inscribed on each of the 6 (virtual) cube faces
-    type Axis = "x" | "y" | "z";
-    const hexFaces: Array<{ normal: Axis; sign: 1 | -1 }> = [
-      { normal: "z", sign: 1 }, { normal: "z", sign: -1 },
-      { normal: "x", sign: 1 }, { normal: "x", sign: -1 },
-      { normal: "y", sign: 1 }, { normal: "y", sign: -1 },
-    ];
-    const hexRadius = 1;
-    const hexagons: Array<Array<[number, number, number]>> = hexFaces.map(({ normal, sign }) => {
-      const pts: Array<[number, number, number]> = [];
-      for (let i = 0; i < 6; i++) {
-        const a = (i / 6) * Math.PI * 2 + Math.PI / 6;
-        const u = Math.cos(a) * hexRadius;
-        const v = Math.sin(a) * hexRadius;
-        if (normal === "z") pts.push([u, v, sign]);
-        else if (normal === "x") pts.push([sign, u, v]);
-        else pts.push([u, sign, v]);
-      }
-      return pts;
-    });
-
-    // Random per-vertex sparkle phases so vertices don't blink in order
-    const hexSparklePhase = hexagons.map((h) => h.map(() => Math.random() * Math.PI * 2));
-    const hexSparkleSpeed = hexagons.map((h) => h.map(() => 0.4 + Math.random() * 0.8));
+    // Single centered hexagon — 6 vertices, each with fully independent jitter phases
+    const VERTEX_COUNT = 6;
+    const vertexJitter = Array.from({ length: VERTEX_COUNT }, () => ({
+      rPhase: Math.random() * Math.PI * 2,
+      rSpeed: 0.25 + Math.random() * 0.55,
+      rAmp: 0.04 + Math.random() * 0.09, // fraction of radius (breathing)
+      tPhase: Math.random() * Math.PI * 2,
+      tSpeed: 0.18 + Math.random() * 0.5,
+      tAmp: 0.05 + Math.random() * 0.12, // radians (tangential wobble)
+      xPhase: Math.random() * Math.PI * 2,
+      xSpeed: 0.7 + Math.random() * 1.3,
+      yPhase: Math.random() * Math.PI * 2,
+      ySpeed: 0.7 + Math.random() * 1.3,
+      jAmp: 3 + Math.random() * 6, // px (micro-jitter)
+      sPhase: Math.random() * Math.PI * 2,
+      sSpeed: 0.4 + Math.random() * 1.0,
+    }));
 
 
 
