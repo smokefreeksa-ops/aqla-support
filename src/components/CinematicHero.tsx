@@ -433,40 +433,6 @@ const css = `
 }
 @keyframes aqla-emblem { 0%,100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 40%, transparent);} 50% { box-shadow: 0 0 0 10px transparent;} }
 
-/* --- Cube backdrop (background only, monochrome) --- */
-@keyframes aqla-cube-drift {
-  0%   { transform: translate3d(-8%, -4%, -60px); }
-  20%  { transform: translate3d( 6%, -8%,  40px); }
-  40%  { transform: translate3d(10%,  6%, -30px); }
-  60%  { transform: translate3d(-4%, 10%,  80px); }
-  80%  { transform: translate3d(-10%, 2%, -50px); }
-  100% { transform: translate3d(-8%, -4%, -60px); }
-}
-@keyframes aqla-cube-rot {
-  0%   { transform: rotateX(0deg)   rotateY(0deg)   rotateZ(0deg); }
-  25%  { transform: rotateX(45deg)  rotateY(90deg)  rotateZ(15deg); }
-  50%  { transform: rotateX(90deg)  rotateY(180deg) rotateZ(-10deg); }
-  75%  { transform: rotateX(135deg) rotateY(270deg) rotateZ(20deg); }
-  100% { transform: rotateX(180deg) rotateY(360deg) rotateZ(0deg); }
-}
-.aqla-cube-drift {
-  animation: aqla-cube-drift 22s ease-in-out infinite;
-  will-change: transform;
-}
-.aqla-cube-rot {
-  animation: aqla-cube-rot 28s linear infinite;
-  will-change: transform;
-}
-@keyframes aqla-spark {
-  0%, 100% { opacity: 0; transform: scale(0.4); filter: drop-shadow(0 0 0 currentColor); }
-  35%      { opacity: 1; transform: scale(1.35); filter: drop-shadow(0 0 6px currentColor); }
-  55%      { opacity: 0.95; transform: scale(1.05); filter: drop-shadow(0 0 3px currentColor); }
-  80%      { opacity: 0.3; transform: scale(0.8); filter: drop-shadow(0 0 0 currentColor); }
-}
-.aqla-spark {
-  transform-box: fill-box;
-  animation: aqla-spark 4s ease-in-out infinite;
-  opacity: 0;
-}
+/* --- Cube backdrop is now drawn on a canvas for true 3D projection --- */
 `;
 
