@@ -349,9 +349,10 @@ const css = `
   will-change: transform;
 }
 @keyframes aqla-spark {
-  0%, 100% { opacity: 0; transform: scale(0.4); }
-  40%      { opacity: 1; transform: scale(1.15); }
-  60%      { opacity: 0.9; transform: scale(1); }
+  0%, 100% { opacity: 0; transform: scale(0.4); filter: drop-shadow(0 0 0 currentColor); }
+  35%      { opacity: 1; transform: scale(1.35); filter: drop-shadow(0 0 6px currentColor); }
+  55%      { opacity: 0.95; transform: scale(1.05); filter: drop-shadow(0 0 3px currentColor); }
+  80%      { opacity: 0.3; transform: scale(0.8); filter: drop-shadow(0 0 0 currentColor); }
 }
 .aqla-spark {
   transform-box: fill-box;
