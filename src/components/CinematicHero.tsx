@@ -116,15 +116,8 @@ export function CinematicHero({ isAr }: Props) {
       <div aria-hidden className="pointer-events-none absolute inset-0 aqla-cine-bg" />
       <div aria-hidden className="pointer-events-none absolute inset-0 aqla-cine-vignette" />
 
-      {/* clean square frame behind the card */}
-      <div
-        aria-hidden
-        className={`pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-[1400ms] ease-out ${
-          dissolved ? "scale-100 opacity-100" : "scale-95 opacity-0"
-        }`}
-      >
-        <CleanSquare />
-      </div>
+      {/* Cinematic 3D cube background — drifts on all axes with sparkling vertices */}
+      <CubeBackdrop />
 
       {/* Clickable cycling pathway card — appears inside the square after dissolve */}
       {dissolved && (
@@ -236,21 +229,75 @@ export function CinematicHero({ isAr }: Props) {
   );
 }
 
-function CleanSquare() {
+function CubeBackdrop() {
+  // 8 cube vertices in local space (unit cube, centered)
+  const V: Array<[number, number, number]> = [
+    [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+    [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1],
+  ];
+  // 12 cube edges
+  const E: Array<[number, number]> = [
+    [0, 1], [1, 2], [2, 3], [3, 0],
+    [4, 5], [5, 6], [6, 7], [7, 4],
+    [0, 4], [1, 5], [2, 6], [3, 7],
+  ];
+
   return (
     <div
-      className="aqla-clean-square"
-      style={{
-        width: 380,
-        height: 380,
-        borderRadius: 28,
-        background:
-          "linear-gradient(135deg, color-mix(in oklab, var(--primary) 12%, transparent), color-mix(in oklab, var(--primary) 4%, transparent))",
-        border: "1px solid color-mix(in oklab, var(--primary) 18%, transparent)",
-        boxShadow:
-          "0 0 0 1px color-mix(in oklab, var(--primary) 8%, transparent), 0 24px 80px -24px color-mix(in oklab, var(--primary) 25%, transparent)",
-      }}
-    />
+      aria-hidden
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+      style={{ perspective: "1200px", perspectiveOrigin: "50% 50%" }}
+    >
+      <div className="aqla-cube-drift absolute left-1/2 top-1/2" style={{ transformStyle: "preserve-3d" }}>
+        <div className="aqla-cube-rot" style={{ transformStyle: "preserve-3d" }}>
+          <svg
+            width="520"
+            height="520"
+            viewBox="-1.6 -1.6 3.2 3.2"
+            style={{
+              position: "absolute",
+              left: -260,
+              top: -260,
+              overflow: "visible",
+              transformStyle: "preserve-3d",
+            }}
+          >
+            <defs>
+              <radialGradient id="aqla-star" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="currentColor" stopOpacity="1" />
+                <stop offset="40%" stopColor="currentColor" stopOpacity="0.6" />
+                <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
+              </radialGradient>
+            </defs>
+            <g style={{ color: "var(--foreground)" }}>
+              {E.map(([a, b], i) => {
+                const [x1, y1] = V[a];
+                const [x2, y2] = V[b];
+                return (
+                  <line
+                    key={i}
+                    x1={x1} y1={y1} x2={x2} y2={y2}
+                    stroke="currentColor"
+                    strokeOpacity="0.18"
+                    strokeWidth="0.008"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                );
+              })}
+              {V.map(([x, y], i) => (
+                <g key={i} className="aqla-spark" style={{ transformOrigin: `${x}px ${y}px`, animationDelay: `${(i * 0.55) % 4}s` }}>
+                  <circle cx={x} cy={y} r="0.14" fill="url(#aqla-star)" />
+                  <circle cx={x} cy={y} r="0.02" fill="currentColor" />
+                  {/* 4-point star cross */}
+                  <line x1={x - 0.18} y1={y} x2={x + 0.18} y2={y} stroke="currentColor" strokeWidth="0.006" strokeOpacity="0.9" vectorEffect="non-scaling-stroke" />
+                  <line x1={x} y1={y - 0.18} x2={x} y2={y + 0.18} stroke="currentColor" strokeWidth="0.006" strokeOpacity="0.9" vectorEffect="non-scaling-stroke" />
+                </g>
+              ))}
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -260,8 +307,6 @@ const css = `
   50% { background-position: 100% 50%, 0% 100%; }
   100% { background-position: 0% 50%, 100% 0%; }
 }
-@keyframes aqla-emblem { 0%,100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 40%, transparent);} 50% { box-shadow: 0 0 0 10px transparent;} }
-
 .aqla-cine-bg {
   background:
     radial-gradient(60% 50% at 50% 40%, color-mix(in oklab, var(--primary) 10%, transparent), transparent 70%),
@@ -272,17 +317,46 @@ const css = `
 .aqla-cine-vignette {
   background: radial-gradient(80% 70% at 50% 45%, transparent 55%, color-mix(in oklab, var(--background) 90%, transparent) 100%);
 }
-.aqla-clean-square {
-  transform-origin: center;
-  animation: aqla-square-in 1.2s ease-out forwards;
-}
-@keyframes aqla-square-in {
-  from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: scale(1); }
-}
 .aqla-emblem-dot {
   width: 10px; height: 10px; border-radius: 9999px;
   background: linear-gradient(135deg, oklch(0.8 0.16 220), oklch(0.65 0.2 300));
   animation: aqla-emblem 2.4s ease-in-out infinite;
 }
+@keyframes aqla-emblem { 0%,100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 40%, transparent);} 50% { box-shadow: 0 0 0 10px transparent;} }
+
+/* --- Cube backdrop (background only, monochrome) --- */
+@keyframes aqla-cube-drift {
+  0%   { transform: translate3d(-8%, -4%, -60px); }
+  20%  { transform: translate3d( 6%, -8%,  40px); }
+  40%  { transform: translate3d(10%,  6%, -30px); }
+  60%  { transform: translate3d(-4%, 10%,  80px); }
+  80%  { transform: translate3d(-10%, 2%, -50px); }
+  100% { transform: translate3d(-8%, -4%, -60px); }
+}
+@keyframes aqla-cube-rot {
+  0%   { transform: rotateX(0deg)   rotateY(0deg)   rotateZ(0deg); }
+  25%  { transform: rotateX(45deg)  rotateY(90deg)  rotateZ(15deg); }
+  50%  { transform: rotateX(90deg)  rotateY(180deg) rotateZ(-10deg); }
+  75%  { transform: rotateX(135deg) rotateY(270deg) rotateZ(20deg); }
+  100% { transform: rotateX(180deg) rotateY(360deg) rotateZ(0deg); }
+}
+.aqla-cube-drift {
+  animation: aqla-cube-drift 22s ease-in-out infinite;
+  will-change: transform;
+}
+.aqla-cube-rot {
+  animation: aqla-cube-rot 28s linear infinite;
+  will-change: transform;
+}
+@keyframes aqla-spark {
+  0%, 100% { opacity: 0; transform: scale(0.4); }
+  40%      { opacity: 1; transform: scale(1.15); }
+  60%      { opacity: 0.9; transform: scale(1); }
+}
+.aqla-spark {
+  transform-box: fill-box;
+  animation: aqla-spark 4s ease-in-out infinite;
+  opacity: 0;
+}
 `;
+
