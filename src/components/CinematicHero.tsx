@@ -277,7 +277,7 @@ function CubeBackdrop() {
       { normal: "x", sign: 1 }, { normal: "x", sign: -1 },
       { normal: "y", sign: 1 }, { normal: "y", sign: -1 },
     ];
-    const hexRadius = 0.9;
+    const hexRadius = 1;
     const hexagons: Array<Array<[number, number, number]>> = hexFaces.map(({ normal, sign }) => {
       const pts: Array<[number, number, number]> = [];
       for (let i = 0; i < 6; i++) {
@@ -290,6 +290,13 @@ function CubeBackdrop() {
       }
       return pts;
     });
+
+    // Random per-vertex sparkle phases so vertices don't blink in order
+    const cubeSparklePhase = vertices.map(() => Math.random() * Math.PI * 2);
+    const cubeSparkleSpeed = vertices.map(() => 0.5 + Math.random() * 0.9);
+    const hexSparklePhase = hexagons.map((h) => h.map(() => Math.random() * Math.PI * 2));
+    const hexSparkleSpeed = hexagons.map((h) => h.map(() => 0.4 + Math.random() * 0.8));
+
 
 
     // Get current theme foreground color
