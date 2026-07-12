@@ -214,10 +214,15 @@ export function AqlaWelcomeGate() {
         />
 
         <h1
-          className="text-3xl font-bold tracking-tight text-[#f6e7b8] sm:text-4xl"
+          className="text-center"
           style={{ unicodeBidi: "plaintext" }}
         >
-          يا هلا والله في أقلع
+          <span className="block text-3xl font-bold tracking-tight text-[#f6e7b8] sm:text-4xl">
+            أقلع | Aqla
+          </span>
+          <span className="mt-2 block text-lg font-medium leading-snug text-[#eae3c6]/90 sm:text-xl">
+            نحو حياة بلا تدخين
+          </span>
         </h1>
 
         <p
@@ -225,7 +230,7 @@ export function AqlaWelcomeGate() {
           className="mt-4 text-base leading-relaxed text-[#eae3c6] sm:text-lg"
           style={{ textAlign: "right", unicodeBidi: "plaintext" }}
         >
-          للدخول إلى المنصة والاطلاع على المسارات والخدمات، نرجو التسجيل باستخدام حساب Google أو رقم الجوال أو البريد الإلكتروني.
+          حياك الله في أقلع، رحلتك تبدأ من هنا
         </p>
 
         <p className="mt-2 text-xs text-[#d6cda3] sm:text-sm">منصة مجانية للجميع، وستبقى مجانية.</p>
