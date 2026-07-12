@@ -1,72 +1,76 @@
-# Aqla Core Product Fix — Quit Plan & Academy Certificate Flows
+# Aqla SOS — Closed-Loop Craving Rescue Engine
 
-This is a large, multi-system build. Before I start editing 20+ files and creating database tables, I need to confirm scope and a few critical decisions so we don't waste cycles.
+Build one focused feature: a full-screen, voice-triggered, personality-adaptive SOS flow that interrupts a craving in under 60 seconds and adapts across sessions. No other Aqla pages are touched except to mount the global SOS button.
 
-## What you're asking for (my understanding)
+## Scope (single feature, self-contained)
 
-**Two end-to-end product flows must actually work**, not just look good:
+**New route:** `/sos` — full-screen, no site header/footer, RTL Arabic-first.
 
-1. **Quit Plan flow** (`/quit-pathway`) — chatbot-led intake → deterministic scoring (FTND/PSE/HONC/LWDS-11/oral-adapted) → personalized Arabic quit plan → PDF download → email to user → admin notification to `smokefreeksa@gmail.com` → schedulable reminders.
+**New global button:** persistent red circular "نجدة" button visible on authenticated pages (fixed bottom-inline, thumb-friendly, subtle pulse when idle only). Not on the pre-login landing.
 
-2. **Academy flow** (`/learn-train`) — chatbot-led training across 16 domains → practice scenarios → progress saved → final exam (code-scored, ≥80% to pass) → certificate (PDF + PNG) with QR verification → download/share/email.
+**Everything else on the site stays as-is.**
 
-Plus: fix navigation so quit-plan clicks never bounce to homepage; keep `/learn-train` strictly academy (no help-pathway content); clear medication safety rules (no doses, refer to pharmacist).
+## Feature loop (must actually work end-to-end)
 
-## Proposed implementation plan
+1. Tap SOS → full-screen takeover, craving slider `قوة الرغبة الآن؟ 0–10` (~1 tap)
+2. Request mic permission → 5s voice capture with live waveform + `5→4→3→2→1`
+3. Local acoustic analysis via Web Audio `AnalyserNode` (no upload, no transcript)
+4. Context fusion (score + persona + local hour + recent history)
+5. Deterministic protocol selector → one of 4 protocols
+6. 45–60s guided protocol (single dominant instruction per step, countdown, haptics)
+7. Post-craving slider → delta computed
+8. If `cravingAfter ≥ 7`: automatic **second rescue loop** with a different protocol
+9. Completion screen: `انخفضت الرغبة من X إلى Y` + optional trigger tag + optional REDCap CTA
+10. Session logged (derived features only, never audio)
 
-### Phase 1 — Database & infrastructure
-- Migration: `quit_plans`, `quit_plan_reminders`, `quit_plan_emails` tables (per your schema).
-- Verify/extend academy tables (`academy_attempts`, `academy_certificates` already exist).
-- pg_cron job to process `quit_plan_reminders` (calls a public server route).
-- Storage bucket for generated PDFs (or generate on-demand).
+## Four protocols (genuinely different, not four breathing exercises)
 
-### Phase 2 — Quit Plan flow
-- New server functions in `src/lib/quit-plan.functions.ts`:
-  - `startQuitPlanIntake`, `saveQuitPlanAnswer`, `finalizeQuitPlan` (runs scoring from `scoring.ts`, builds plan JSON, stores row).
-  - `generateQuitPlanPdf` (server-side PDF using `@react-pdf/renderer` or HTML→PDF).
-  - `emailQuitPlanToUser`, `notifyAdminQuitPlan`, `scheduleReminder`.
-- New chatbot component `QuitPlanChat` (or extend `AqlaCenterChat`) that runs a **deterministic 16-step intake state machine** with AI used only for warm phrasing/explanations between steps — never for scoring or routing.
-- New route `/quit-plan/$planId` to view/download generated plan.
-- Update `/quit-pathway` to host the new flow; remove any redirect-to-home behavior.
+- **Calm** — stationary orb, guided exhale, wave reframe, grounding (60s) — for high acoustic score
+- **Energy Discharge** — stand, fist clench, palm press, shoulder shake, exhale (45–60s) — fight
+- **Safe Escape** — physical interruption: step away, put device out of reach, turn body, water (60s) — flight
+- **Reboot** — one command at a time, tap a large circle, single breath, pick water-or-10-steps (45s) — freeze
 
-### Phase 3 — Academy flow
-- Content module `src/lib/academy-curriculum.ts` with the 16 domains, lessons, practice questions, scenarios, and exam bank.
-- Server functions: `getAcademyProgress`, `submitLessonAnswer`, `startExam`, `submitExam` (uses `scoreExam()`), `issueCertificate` (only if ≥80%).
-- Certificate generation: PDF + PNG with QR linking to `/verify/$code`, stored in storage bucket.
-- New chatbot component `AcademyChat` that runs deterministic lesson progression + exam mode (no AI hints during exam).
-- Update `/learn-train` to host only this; strip any help-pathway content if present.
+Selector rule (transparent, deterministic):
+`score ≥ 0.72 → Calm (acute override)` else by `persona.stressResponse` (fight/flight/freeze) else `neuroticism ≥ 70 → Calm` else `Calm (default)`. Historical effectiveness used as tie-breaker.
 
-### Phase 4 — Email & admin notifications
-- Use existing transactional email infra (Lovable Emails).
-- Templates: `quit-plan-user`, `quit-plan-admin`, `certificate-issued`, `reminder`.
-- Clear fallback UI when email isn't configured ("تم إنشاء الخطة، لكن تعذر إرسال البريد…").
+## Privacy boundary (hard rule enforced in code)
 
-### Phase 5 — Safety & QA
-- Hard-coded safety guards in chat handler: medication-dose questions → fixed pharmacist-referral reply; emergency keywords (ألم صدر, ضيق تنفس) → urgent-care reply. These bypass the AI.
-- Manual QA walkthrough of both flows end-to-end before declaring done.
+Raw microphone audio never leaves the browser tab, is never persisted, is never uploaded. Mic tracks stopped and audio nodes disconnected the moment analysis returns. Only derived numeric features + session outcome persist to the backend. Explicit `PRIVACY BOUNDARY` code comments in the voice module.
 
-## Decisions I need from you before starting
+## Persistence
 
-This is ~2-3 days of focused work. To avoid building the wrong thing, I need answers to these — otherwise I'll have to make assumptions and you may reject the result.
+New backend table `sos_sessions` (Lovable Cloud, RLS scoped to `auth.uid()`), stores only derived features, protocol id, selection reason, craving before/after, completion status, timestamp, optional trigger, persona snapshot version. No audio columns. Reads own rows only.
 
-**1. Email infrastructure.** The project has `EMAIL_FROM_ADDRESS` and `EMAIL_PROVIDER_API_KEY` secrets but I need to confirm Lovable Emails is set up with a verified sending domain. Should I:
-   - (a) Use the existing Lovable Emails setup (you confirm the domain is verified), or
-   - (b) Set up email infrastructure from scratch as part of this work, or
-   - (c) Ship without real email and only show "download PDF" + admin-mailto links for now?
+## What ships
 
-**2. PDF generation strategy.** Server-side PDF in a Cloudflare Worker is constrained (no native libs). Options:
-   - (a) `@react-pdf/renderer` (pure JS, works in Workers, basic styling),
-   - (b) HTML + client-side `html2pdf.js`/`jsPDF` (richer styling, but generated in browser),
-   - (c) External service (Browserless, etc. — needs new API key).
-   I recommend **(a) for quit plans and certificates** — works server-side, emailable, no extra services. Confirm?
+**New folder** `src/features/sos/`:
+- `sos.types.ts`, `sos.constants.ts`, `sos.protocols.ts`, `sos.selector.ts`, `sos.scoring.ts`, `sos.storage.ts`
+- `SOSEngine.ts` — central state machine (`idle | permission | voice_capture | local_analysis | context_fusion | protocol_selected | protocol_delivery | post_craving_check | logging | complete | fallback`)
+- `hooks/useSOSMachine.ts`, `hooks/useVoiceAnalysis.ts`, `hooks/useHaptics.ts`
+- `components/SOSButton.tsx`, `SOSScreen.tsx`, `VoiceCapture.tsx`, `AnalysisTransition.tsx`, `ProtocolDelivery.tsx`, `CravingRating.tsx`, `SOSComplete.tsx`
 
-**3. WhatsApp reminders.** You said "do not promise automated WhatsApp unless configured." I'll implement: email reminders (real), WhatsApp = generates a `wa.me` link the user can tap themselves. OK?
+**New route** `src/routes/sos.tsx` (full-screen, no site chrome).
 
-**4. Scope of academy content.** Writing all 16 training domains with lessons + scenarios + exam questions is a lot of Arabic content. Should I:
-   - (a) Write full curriculum content for all 16 domains now (large delivery, ~1 week of writing alone), or
-   - (b) Build the **engine** (progression, scoring, certificate) with 3-4 domains fully written as a working vertical slice, and stub the rest with TODOs so you/an editor can fill in content later?
-   I strongly recommend **(b)** — otherwise this PR is unreviewable and content quality will suffer.
+**Mount SOSButton** once inside the authenticated layout so it appears on all logged-in pages.
 
-**5. Existing `AqlaCenterChat`.** It currently delegates everything to the AI assistant via `chatWithAssistant`. The quit plan flow needs a **deterministic state machine** (collect name → email → city → product → … → score → plan), with AI used only for natural-sounding transitions. I'll build a new `QuitPlanChat` component rather than retrofitting the generic one. OK?
+**Migration** creating `sos_sessions` with grants + RLS.
 
-Please answer those 5 questions (even short answers — "a, a, yes, b, yes" works) and I'll start with the database migration and Phase 1 immediately.
+**Debug panel** behind `?sosDebug=1` (dev only): current state, signal quality, derived features, score, persona, selected protocol, reason, timings.
+
+## Explicitly NOT in scope
+
+- No changes to landing page, hero, existing tools, headers, footers, other routes.
+- No new personality assessment inside SOS — reads existing persona if present, otherwise uses default protocol and continues.
+- No location/GPS, no speech recognition, no transcription.
+- No autonomous ML retraining — selector stays readable rules with historical tie-break.
+- No native mobile.
+
+## Acceptance criteria
+
+Ten scenarios (A–J) from the spec — including mic-denied fallback, silent-input fallback, high-score → Calm override, persona-driven routing, second rescue loop trigger, completion delta screen, and network/DB inspection showing zero raw audio leaves the device.
+
+## One thing to confirm
+
+- **Persona source**: does the existing Aqla profile already expose `stressResponse`, big-five scores, and `chronotype`? If yes I'll wire to it; if no, I'll build a dev-only persona adapter with mock values (isolated behind a clearly marked file) so the loop works today, and expose a `TODO` seam for real persona wiring later.
+
+If yes, ship exactly the above. Approve and I build.

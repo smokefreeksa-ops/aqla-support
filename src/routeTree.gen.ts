@@ -18,6 +18,7 @@ import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SupportInviteRouteImport } from './routes/support-invite'
 import { Route as StartRouteImport } from './routes/start'
+import { Route as SosRouteImport } from './routes/sos'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SharingPolicyRouteImport } from './routes/sharing-policy'
 import { Route as SafetyGuidanceRouteImport } from './routes/safety-guidance'
@@ -110,6 +111,11 @@ const SupportInviteRoute = SupportInviteRouteImport.update({
 const StartRoute = StartRouteImport.update({
   id: '/start',
   path: '/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SosRoute = SosRouteImport.update({
+  id: '/sos',
+  path: '/sos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShopRoute = ShopRouteImport.update({
@@ -395,6 +401,7 @@ export interface FileRoutesByFullPath {
   '/safety-guidance': typeof SafetyGuidanceRoute
   '/sharing-policy': typeof SharingPolicyRoute
   '/shop': typeof ShopRoute
+  '/sos': typeof SosRoute
   '/start': typeof StartRoute
   '/support-invite': typeof SupportInviteRoute
   '/terms': typeof TermsRoute
@@ -454,6 +461,7 @@ export interface FileRoutesByTo {
   '/safety-guidance': typeof SafetyGuidanceRoute
   '/sharing-policy': typeof SharingPolicyRoute
   '/shop': typeof ShopRoute
+  '/sos': typeof SosRoute
   '/start': typeof StartRoute
   '/support-invite': typeof SupportInviteRoute
   '/terms': typeof TermsRoute
@@ -514,6 +522,7 @@ export interface FileRoutesById {
   '/safety-guidance': typeof SafetyGuidanceRoute
   '/sharing-policy': typeof SharingPolicyRoute
   '/shop': typeof ShopRoute
+  '/sos': typeof SosRoute
   '/start': typeof StartRoute
   '/support-invite': typeof SupportInviteRoute
   '/terms': typeof TermsRoute
@@ -575,6 +584,7 @@ export interface FileRouteTypes {
     | '/safety-guidance'
     | '/sharing-policy'
     | '/shop'
+    | '/sos'
     | '/start'
     | '/support-invite'
     | '/terms'
@@ -634,6 +644,7 @@ export interface FileRouteTypes {
     | '/safety-guidance'
     | '/sharing-policy'
     | '/shop'
+    | '/sos'
     | '/start'
     | '/support-invite'
     | '/terms'
@@ -693,6 +704,7 @@ export interface FileRouteTypes {
     | '/safety-guidance'
     | '/sharing-policy'
     | '/shop'
+    | '/sos'
     | '/start'
     | '/support-invite'
     | '/terms'
@@ -753,6 +765,7 @@ export interface RootRouteChildren {
   SafetyGuidanceRoute: typeof SafetyGuidanceRoute
   SharingPolicyRoute: typeof SharingPolicyRoute
   ShopRoute: typeof ShopRoute
+  SosRoute: typeof SosRoute
   StartRoute: typeof StartRoute
   SupportInviteRoute: typeof SupportInviteRoute
   TermsRoute: typeof TermsRoute
@@ -830,6 +843,13 @@ declare module '@tanstack/react-router' {
       path: '/start'
       fullPath: '/start'
       preLoaderRoute: typeof StartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sos': {
+      id: '/sos'
+      path: '/sos'
+      fullPath: '/sos'
+      preLoaderRoute: typeof SosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shop': {
@@ -1250,6 +1270,7 @@ const rootRouteChildren: RootRouteChildren = {
   SafetyGuidanceRoute: SafetyGuidanceRoute,
   SharingPolicyRoute: SharingPolicyRoute,
   ShopRoute: ShopRoute,
+  SosRoute: SosRoute,
   StartRoute: StartRoute,
   SupportInviteRoute: SupportInviteRoute,
   TermsRoute: TermsRoute,

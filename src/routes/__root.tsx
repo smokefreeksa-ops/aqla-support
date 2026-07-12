@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -15,6 +16,7 @@ import { AqlaAssistant } from "@/components/AqlaAssistant";
 import { AqlaAuthGate } from "@/components/AqlaAuthGate";
 import { ChallengeBanner } from "@/components/ChallengeBanner";
 import { GlobalVideoBackground } from "@/components/GlobalVideoBackground";
+import { SOSButton } from "@/features/sos/components/SOSButton";
 
 function NotFoundComponent() {
   return (
@@ -122,6 +124,8 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const onSosRoute = pathname === "/sos" || pathname.startsWith("/sos/");
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -131,6 +135,7 @@ function RootComponent() {
         <Outlet />
         <FloatingWhatsAppButton />
         <AqlaAssistant />
+        <SOSButton hidden={onSosRoute} />
       </AqlaAuthGate>
       <Toaster richColors position="top-center" />
     </QueryClientProvider>
