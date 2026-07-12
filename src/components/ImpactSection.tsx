@@ -217,7 +217,7 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
               animation: "aqlaNumPulse 2s ease-in-out infinite",
             }}
           >
-            <CountFlash value={active.value} />
+            <CountFlash value={active.value} suffix={active.suffix} />
           </div>
           <div className="mt-2 text-[13px] font-medium text-foreground/85">{active.label}</div>
         </div>
