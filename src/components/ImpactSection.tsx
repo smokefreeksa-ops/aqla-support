@@ -17,10 +17,11 @@ type Slide = {
   icon: React.ReactNode;
   label: string;
   value: number;
+  suffix?: string;
   hue: [string, string]; // gradient stops
 };
 
-function CountFlash({ value }: { value: number }) {
+function CountFlash({ value, suffix }: { value: number; suffix?: string }) {
   const [n, setN] = useState(0);
   useEffect(() => {
     setN(0);
@@ -38,7 +39,7 @@ function CountFlash({ value }: { value: number }) {
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [value]);
-  return <>{n.toLocaleString()}</>;
+  return <>{n.toLocaleString("en-US")}{suffix}</>;
 }
 
 export function ImpactSection({ isAr }: { isAr: boolean }) {
@@ -51,10 +52,10 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
   const s: ImpactStats = data ?? EMPTY;
 
   const slides: Slide[] = [
-    { icon: <Eye className="h-5 w-5" />, label: isAr ? "زيارات الموقع" : "Visits", value: s.total_visits, hue: ["#60a5fa", "#1e3a8a"] },
+    { icon: <Users className="h-5 w-5" />, label: isAr ? "طالب مسجل" : "Registered students", value: 8000, suffix: "+", hue: ["#00A65A", "#006C35"] },
     { icon: <ClipboardCheck className="h-5 w-5" />, label: isAr ? "التقييمات المكتملة" : "Assessments", value: s.assessments_completed, hue: ["#34d399", "#065f46"] },
     { icon: <Stethoscope className="h-5 w-5" />, label: isAr ? "حالات مراجعة مختص" : "Doctor-review", value: s.doctor_review_count, hue: ["#f472b6", "#831843"] },
-    { icon: <Users className="h-5 w-5" />, label: isAr ? "طلبات المتطوعين" : "Volunteers", value: s.volunteer_applicants, hue: ["#fbbf24", "#7c2d12"] },
+    { icon: <Eye className="h-5 w-5" />, label: isAr ? "زيارات الموقع" : "Visits", value: s.total_visits, hue: ["#60a5fa", "#1e3a8a"] },
     { icon: <MapPin className="h-5 w-5" />, label: isAr ? "المدن المشاركة" : "Cities", value: s.cities_represented, hue: ["#a78bfa", "#3b0764"] },
     { icon: <Share2 className="h-5 w-5" />, label: isAr ? "المشاركات الاجتماعية" : "Shares", value: s.whatsapp_clicks, hue: ["#22d3ee", "#0e7490"] },
   ];
@@ -216,7 +217,7 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
               animation: "aqlaNumPulse 2s ease-in-out infinite",
             }}
           >
-            <CountFlash value={active.value} />
+            <CountFlash value={active.value} suffix={active.suffix} />
           </div>
           <div className="mt-2 text-[13px] font-medium text-foreground/85">{active.label}</div>
         </div>
