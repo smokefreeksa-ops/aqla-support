@@ -143,6 +143,7 @@ export function SiteHeader() {
           </nav>
         </div>
       )}
-    </header>
+      </header>
+    </div>
   );
 }
