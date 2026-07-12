@@ -428,7 +428,7 @@ export default function HeroSection() {
           { value: "95%", label: "معدل الرضا" },
         ].map((item) => (
           <div key={item.label} className="flex items-center gap-2">
-            <span className="text-xl font-extrabold" style={{ color: "#00A65A" }}>
+            <span className="text-xl font-extrabold tabular-nums" style={{ color: "#00A65A" }}>
               {item.value}
             </span>
             <span className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
