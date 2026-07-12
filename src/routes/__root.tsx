@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -15,6 +16,7 @@ import { AqlaAssistant } from "@/components/AqlaAssistant";
 import { AqlaAuthGate } from "@/components/AqlaAuthGate";
 import { ChallengeBanner } from "@/components/ChallengeBanner";
 import { GlobalVideoBackground } from "@/components/GlobalVideoBackground";
+import { SOSButton } from "@/features/sos/components/SOSButton";
 
 function NotFoundComponent() {
   return (
