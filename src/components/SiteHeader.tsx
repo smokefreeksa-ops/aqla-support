@@ -12,7 +12,6 @@ type NavItem = { ar: string; en: string; to: string };
 
 const NAV: NavItem[] = [
   { ar: "الرئيسية", en: "Home", to: appRoutes.home },
-  { ar: "ابدأ الآن", en: "Start Now", to: appRoutes.start },
   { ar: "مسار الإقلاع", en: "Quit Pathway", to: appRoutes.quitPathway },
   { ar: "مسار المساعدة", en: "Help Someone", to: appRoutes.helpPathway },
   { ar: "التحديات والأنشطة", en: "Challenges & Activities", to: appRoutes.challengePathway },
@@ -89,17 +88,20 @@ export function SiteHeader() {
             <Languages className="h-3.5 w-3.5" />
             {lang === "ar" ? "EN" : "ع"}
           </Button>
-          <Link to={appRoutes.staffLogin} className="hidden sm:inline-flex">
-            <Button variant="outline" size="sm" className="text-xs">
-              {lang === "ar" ? "دخول الموظفين" : "Staff"}
-            </Button>
-          </Link>
-          <Link to={appRoutes.start} className="hidden md:inline-flex">
-            <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs">
-              {lang === "ar" ? "ابدأ الآن" : "Start Now"}
-            </Button>
-          </Link>
-          {signedIn && (
+          {!signedIn ? (
+            <>
+              <Link to={appRoutes.staffLogin} className="hidden sm:inline-flex">
+                <Button variant="outline" size="sm" className="text-xs">
+                  {lang === "ar" ? "دخول الموظفين" : "Staff"}
+                </Button>
+              </Link>
+              <Link to={appRoutes.start} className="hidden md:inline-flex">
+                <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs">
+                  {lang === "ar" ? "ابدأ الآن" : "Start Now"}
+                </Button>
+              </Link>
+            </>
+          ) : (
             <Button
               variant="ghost"
               size="sm"
