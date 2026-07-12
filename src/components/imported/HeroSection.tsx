@@ -423,12 +423,12 @@ export default function HeroSection() {
 
       <div className="relative z-10 flex flex-wrap items-center justify-center gap-6 px-4">
         {[
-          { value: "8,000+", label: "طالب مسجل" },
+          { value: "1,926", label: "طالب مسجل" },
           { value: "7", label: "وحدات تعليمية" },
           { value: "95%", label: "معدل الرضا" },
         ].map((item) => (
           <div key={item.label} className="flex items-center gap-2">
-            <span className="text-xl font-extrabold" style={{ color: "#00A65A" }}>
+            <span className="text-xl font-extrabold tabular-nums" style={{ color: "#00A65A" }}>
               {item.value}
             </span>
             <span className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
