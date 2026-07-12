@@ -438,13 +438,20 @@ export default function HeroSection() {
         ))}
       </div>
 
-      <div
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 animate-bounce z-10"
-        style={{ color: "rgba(255,255,255,0.35)" }}
+      <button
+        type="button"
+        onClick={() => {
+          const el = document.getElementById("pathways");
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+          else window.scrollBy({ top: window.innerHeight, behavior: "smooth" });
+        }}
+        aria-label="مرر لأسفل"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 animate-bounce z-10 cursor-pointer hover:text-white/70 transition-colors"
+        style={{ color: "rgba(255,255,255,0.35)", background: "transparent", border: "none" }}
       >
         <span className="text-xs">مرر لأسفل</span>
         <ChevronDown className="w-4 h-4" />
-      </div>
+      </button>
     </section>
   );
 }

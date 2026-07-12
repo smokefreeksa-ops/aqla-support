@@ -195,8 +195,7 @@ function PathwayCard({ to, title, description, cta, icon, tone }: Path) {
     <Card className={`group relative overflow-hidden rounded-3xl border-border/60 bg-card p-0 shadow-sm transition-all ring-1 ring-transparent ${t.ring} hover:-translate-y-1 hover:shadow-xl`}>
       <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${t.glow} opacity-60`} aria-hidden />
       <div className="relative flex h-full flex-col p-6">
-        <div className={`grid h-12 w-12 place-items-center rounded-2xl ${t.iconBg}`}>{icon}</div>
-        <h3 className="mt-5 text-[17px] font-semibold leading-snug tracking-tight">{title}</h3>
+        <h3 className="text-[17px] font-semibold leading-snug tracking-tight">{title}</h3>
         <p className="mt-3 text-[13px] leading-6 text-foreground/70">{description}</p>
         <div className="mt-6">
           <Link to={to}>
