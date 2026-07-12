@@ -1,5 +1,4 @@
-// TODO: replace with the actual REDCap questionnaire link from the researcher.
-export const RESEARCH_REDCAP_URL = "https://redcap.link/aqla-research";
+export const RESEARCH_REDCAP_URL = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM";
 
 export function ResearchBanner() {
   return (
