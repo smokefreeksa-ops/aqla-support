@@ -10,21 +10,31 @@ import aqlaLogo from "@/assets/aqla-logo.png";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [{ title: "Staff Login — Aqla" }] }),
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//") ? s.next : "",
+  }),
   component: LoginPage,
 });
 
 function LoginPage() {
   const nav = useNavigate();
+  const { next } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [loading, setLoading] = useState(false);
 
+  const goNext = () => {
+    if (next) window.location.href = next;
+    else nav({ to: "/admin" });
+  };
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) nav({ to: "/admin" });
+      if (data.session) goNext();
     });
-  }, [nav]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function handle(e: React.FormEvent) {
     e.preventDefault();
@@ -34,14 +44,17 @@ function LoginPage() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
       } else {
+        const emailRedirectTo = next
+          ? window.location.origin + next
+          : window.location.origin + "/admin";
         const { error } = await supabase.auth.signUp({
           email, password,
-          options: { emailRedirectTo: window.location.origin + "/admin" },
+          options: { emailRedirectTo },
         });
         if (error) throw error;
         toast.success("Account created. Ask a physician/admin to assign your role.");
       }
-      nav({ to: "/admin" });
+      goNext();
     } catch (err) {
       toast.error((err as Error).message);
     } finally {
