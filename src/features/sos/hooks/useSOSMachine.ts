@@ -74,25 +74,6 @@ export function useSOSMachine(): SOSMachine {
     setState("voice_capture");
   }, []);
 
-  const skipVoice = useCallback(() => {
-    setAcoustic(undefined);
-    runSelection(undefined);
-  }, []);
-
-  const onVoiceCaptured = useCallback((a: AcousticState | undefined) => {
-    if (!a || a.signalQuality < MIN_SIGNAL_QUALITY) {
-      setState("fallback");
-      setAcoustic(a);
-      // Still deliver an intervention.
-      runSelection(undefined);
-      return;
-    }
-    setAcoustic(a);
-    setState("local_analysis");
-    // Small transition delay for the UI ("Preparing your intervention…").
-    window.setTimeout(() => runSelection(a), 500);
-  }, []);
-
   const runSelection = useCallback(
     (a: AcousticState | undefined) => {
       setState("context_fusion");
@@ -113,6 +94,31 @@ export function useSOSMachine(): SOSMachine {
       // Small pause so users see the routing screen briefly.
       window.setTimeout(() => setState("protocol_delivery"), 900);
     },
+    [persona, cravingBefore],
+  );
+
+  const skipVoice = useCallback(() => {
+    setAcoustic(undefined);
+    runSelection(undefined);
+  }, [runSelection]);
+
+  const onVoiceCaptured = useCallback(
+    (a: AcousticState | undefined) => {
+      if (!a || a.signalQuality < MIN_SIGNAL_QUALITY) {
+        setState("fallback");
+        setAcoustic(a);
+        // Still deliver an intervention.
+        runSelection(undefined);
+        return;
+      }
+      setAcoustic(a);
+      setState("local_analysis");
+      // Small transition delay for the UI ("Preparing your intervention…").
+      window.setTimeout(() => runSelection(a), 500);
+    },
+    [runSelection],
+  );
+
     [persona, cravingBefore],
   );
 
