@@ -119,8 +119,7 @@ export function useSOSMachine(): SOSMachine {
     [runSelection],
   );
 
-    [persona, cravingBefore],
-  );
+
 
   const goToDelivery = useCallback(() => setState("protocol_delivery"), []);
 
