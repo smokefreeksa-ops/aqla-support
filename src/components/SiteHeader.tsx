@@ -52,7 +52,9 @@ export function SiteHeader() {
   }
 
   return (
-    <header dir={dir} className="sticky top-0 z-40 border-b border-border/60 bg-card/85 backdrop-blur supports-[backdrop-filter]:bg-card/70">
+    <div className="sticky top-0 z-40">
+      <ResearchBanner />
+      <header dir={dir} className="border-b border-border/60 bg-card/85 backdrop-blur supports-[backdrop-filter]:bg-card/70">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5">
         <Link to={appRoutes.home} className="flex shrink-0 items-center gap-2.5">
           <img src={aqlaLogo} alt="Aqla — أقلع" className="h-9 w-auto object-contain sm:h-10" />
