@@ -17,10 +17,11 @@ type Slide = {
   icon: React.ReactNode;
   label: string;
   value: number;
+  suffix?: string;
   hue: [string, string]; // gradient stops
 };
 
-function CountFlash({ value }: { value: number }) {
+function CountFlash({ value, suffix }: { value: number; suffix?: string }) {
   const [n, setN] = useState(0);
   useEffect(() => {
     setN(0);
@@ -38,7 +39,7 @@ function CountFlash({ value }: { value: number }) {
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [value]);
-  return <>{n.toLocaleString()}</>;
+  return <>{n.toLocaleString("en-US")}{suffix}</>;
 }
 
 export function ImpactSection({ isAr }: { isAr: boolean }) {
