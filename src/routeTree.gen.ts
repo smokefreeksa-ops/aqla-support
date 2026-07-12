@@ -34,6 +34,7 @@ import { Route as PosterStudioRouteImport } from './routes/poster-studio'
 import { Route as PointsMedalsRouteImport } from './routes/points-medals'
 import { Route as MovementRouteImport } from './routes/movement'
 import { Route as MedicalDisclaimerRouteImport } from './routes/medical-disclaimer'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LearnTrainRouteImport } from './routes/learn-train'
 import { Route as LearnRouteImport } from './routes/learn'
@@ -64,9 +65,13 @@ import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
 import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
 import { Route as AdminAqlaQuitEngineRouteImport } from './routes/admin.aqla-quit-engine'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as ShareInviteCodeRouteImport } from './routes/share.invite.$code'
 import { Route as ShareTypeIdRouteImport } from './routes/share.$type.$id'
 import { Route as AqlaQuitEngineResultResultIdRouteImport } from './routes/aqla-quit-engine.result.$resultId'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 
 const WhenToSeekHelpRoute = WhenToSeekHelpRouteImport.update({
   id: '/when-to-seek-help',
@@ -191,6 +196,11 @@ const MovementRoute = MovementRouteImport.update({
 const MedicalDisclaimerRoute = MedicalDisclaimerRouteImport.update({
   id: '/medical-disclaimer',
   path: '/medical-disclaimer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -343,6 +353,18 @@ const AdminAqlaQuitEngineRoute = AdminAqlaQuitEngineRouteImport.update({
   path: '/aqla-quit-engine',
   getParentRoute: () => AdminRoute,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ShareInviteCodeRoute = ShareInviteCodeRouteImport.update({
   id: '/share/invite/$code',
   path: '/share/invite/$code',
@@ -359,6 +381,17 @@ const AqlaQuitEngineResultResultIdRoute =
     path: '/result/$resultId',
     getParentRoute: () => AqlaQuitEngineRoute,
   } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -386,6 +419,7 @@ export interface FileRoutesByFullPath {
   '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
   '/login': typeof LoginRoute
+  '/mcp': typeof McpRoute
   '/medical-disclaimer': typeof MedicalDisclaimerRoute
   '/movement': typeof MovementRoute
   '/points-medals': typeof PointsMedalsRoute
@@ -411,11 +445,15 @@ export interface FileRoutesByFullPath {
   '/voice-craving-scan': typeof VoiceCravingScanRoute
   '/volunteer': typeof VolunteerRoute
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
@@ -446,6 +484,7 @@ export interface FileRoutesByTo {
   '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
   '/login': typeof LoginRoute
+  '/mcp': typeof McpRoute
   '/medical-disclaimer': typeof MedicalDisclaimerRoute
   '/movement': typeof MovementRoute
   '/points-medals': typeof PointsMedalsRoute
@@ -471,11 +510,15 @@ export interface FileRoutesByTo {
   '/voice-craving-scan': typeof VoiceCravingScanRoute
   '/volunteer': typeof VolunteerRoute
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
@@ -507,6 +550,7 @@ export interface FileRoutesById {
   '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
   '/login': typeof LoginRoute
+  '/mcp': typeof McpRoute
   '/medical-disclaimer': typeof MedicalDisclaimerRoute
   '/movement': typeof MovementRoute
   '/points-medals': typeof PointsMedalsRoute
@@ -532,11 +576,15 @@ export interface FileRoutesById {
   '/voice-craving-scan': typeof VoiceCravingScanRoute
   '/volunteer': typeof VolunteerRoute
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
@@ -569,6 +617,7 @@ export interface FileRouteTypes {
     | '/learn'
     | '/learn-train'
     | '/login'
+    | '/mcp'
     | '/medical-disclaimer'
     | '/movement'
     | '/points-medals'
@@ -594,11 +643,15 @@ export interface FileRouteTypes {
     | '/voice-craving-scan'
     | '/volunteer'
     | '/when-to-seek-help'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
     | '/quit-plan/$planToken'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/aqla-quit-engine/result/$resultId'
     | '/share/$type/$id'
     | '/share/invite/$code'
@@ -629,6 +682,7 @@ export interface FileRouteTypes {
     | '/learn'
     | '/learn-train'
     | '/login'
+    | '/mcp'
     | '/medical-disclaimer'
     | '/movement'
     | '/points-medals'
@@ -654,11 +708,15 @@ export interface FileRouteTypes {
     | '/voice-craving-scan'
     | '/volunteer'
     | '/when-to-seek-help'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
     | '/quit-plan/$planToken'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/aqla-quit-engine/result/$resultId'
     | '/share/$type/$id'
     | '/share/invite/$code'
@@ -689,6 +747,7 @@ export interface FileRouteTypes {
     | '/learn'
     | '/learn-train'
     | '/login'
+    | '/mcp'
     | '/medical-disclaimer'
     | '/movement'
     | '/points-medals'
@@ -714,11 +773,15 @@ export interface FileRouteTypes {
     | '/voice-craving-scan'
     | '/volunteer'
     | '/when-to-seek-help'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
     | '/quit-plan/$planToken'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/aqla-quit-engine/result/$resultId'
     | '/share/$type/$id'
     | '/share/invite/$code'
@@ -750,6 +813,7 @@ export interface RootRouteChildren {
   LearnRoute: typeof LearnRoute
   LearnTrainRoute: typeof LearnTrainRoute
   LoginRoute: typeof LoginRoute
+  McpRoute: typeof McpRoute
   MedicalDisclaimerRoute: typeof MedicalDisclaimerRoute
   MovementRoute: typeof MovementRoute
   PointsMedalsRoute: typeof PointsMedalsRoute
@@ -775,7 +839,11 @@ export interface RootRouteChildren {
   VoiceCravingScanRoute: typeof VoiceCravingScanRoute
   VolunteerRoute: typeof VolunteerRoute
   WhenToSeekHelpRoute: typeof WhenToSeekHelpRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   CertificateCodeRoute: typeof CertificateCodeRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ShareTypeIdRoute: typeof ShareTypeIdRoute
   ShareInviteCodeRoute: typeof ShareInviteCodeRoute
 }
@@ -955,6 +1023,13 @@ declare module '@tanstack/react-router' {
       path: '/medical-disclaimer'
       fullPath: '/medical-disclaimer'
       preLoaderRoute: typeof MedicalDisclaimerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -1167,6 +1242,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAqlaQuitEngineRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/share/invite/$code': {
       id: '/share/invite/$code'
       path: '/share/invite/$code'
@@ -1187,6 +1276,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/aqla-quit-engine/result/$resultId'
       preLoaderRoute: typeof AqlaQuitEngineResultResultIdRouteImport
       parentRoute: typeof AqlaQuitEngineRoute
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -1255,6 +1358,7 @@ const rootRouteChildren: RootRouteChildren = {
   LearnRoute: LearnRoute,
   LearnTrainRoute: LearnTrainRoute,
   LoginRoute: LoginRoute,
+  McpRoute: McpRoute,
   MedicalDisclaimerRoute: MedicalDisclaimerRoute,
   MovementRoute: MovementRoute,
   PointsMedalsRoute: PointsMedalsRoute,
@@ -1280,7 +1384,12 @@ const rootRouteChildren: RootRouteChildren = {
   VoiceCravingScanRoute: VoiceCravingScanRoute,
   VolunteerRoute: VolunteerRoute,
   WhenToSeekHelpRoute: WhenToSeekHelpRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   CertificateCodeRoute: CertificateCodeRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ShareTypeIdRoute: ShareTypeIdRoute,
   ShareInviteCodeRoute: ShareInviteCodeRoute,
 }
