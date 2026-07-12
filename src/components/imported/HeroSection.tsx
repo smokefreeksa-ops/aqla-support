@@ -13,6 +13,7 @@ import {
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { getPublicImpactStats } from "@/lib/impact.functions";
 import { trackEvent } from "@/lib/track-event";
+import StarField from "./StarField";
 
 const PUBLICATIONS = [
   {
@@ -271,16 +272,17 @@ export default function HeroSection() {
   return (
     <section
       id="home"
-      className="relative flex flex-col min-h-[92vh] items-center justify-center pt-24 pb-20 overflow-visible"
-      style={{ background: "transparent" }}
+      className="relative flex flex-col min-h-[92vh] items-center justify-center pt-24 pb-20 overflow-hidden"
+      style={{ background: "#000" }}
     >
+      <StarField count={160} />
       <div className="absolute inset-0 z-[1] pointer-events-none">
         <div
-          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full opacity-[0.07]"
+          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full opacity-[0.10]"
           style={{ background: "radial-gradient(ellipse, #00A65A 0%, transparent 70%)" }}
         />
         <div
-          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full opacity-[0.05]"
+          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full opacity-[0.08]"
           style={{ background: "radial-gradient(ellipse, #006C35 0%, transparent 70%)" }}
         />
       </div>

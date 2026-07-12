@@ -337,3 +337,18 @@
   .typewriter-cursor { animation: none !important; }
 }
 
+
+/* Twinkling stars */
+@keyframes star-twinkle {
+  0%, 100% { opacity: var(--star-min, 0.2); transform: scale(0.85); }
+  50%      { opacity: 1; transform: scale(1.15); }
+}
+.star-twinkle {
+  animation-name: star-twinkle;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: opacity, transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .star-twinkle { animation: none !important; }
+}
