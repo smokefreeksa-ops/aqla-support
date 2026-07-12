@@ -6,6 +6,7 @@ import { useLang } from "@/lib/i18n";
 import { appRoutes } from "@/lib/app-routes";
 import { supabase } from "@/integrations/supabase/client";
 import aqlaLogo from "@/assets/aqla-logo.png";
+import { ResearchBanner } from "@/components/ResearchBanner";
 
 type NavItem = { ar: string; en: string; to: string };
 
