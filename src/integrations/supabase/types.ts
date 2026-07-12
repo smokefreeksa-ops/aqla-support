@@ -3366,6 +3366,78 @@ export type Database = {
         }
         Relationships: []
       }
+      sos_sessions: {
+        Row: {
+          acoustic_features: Json | null
+          anonymous_session_id: string | null
+          completed_at: string | null
+          craving_after: number | null
+          craving_before: number
+          craving_delta: number | null
+          created_at: string
+          current_state_score: number | null
+          day_of_week: number | null
+          first_protocol_id: string | null
+          id: string
+          is_second_loop: boolean
+          local_hour: number | null
+          persona_snapshot: Json | null
+          protocol_completed: boolean
+          protocol_id: string
+          selection_reason: string
+          signal_quality: number | null
+          started_at: string
+          trigger_tag: string | null
+          user_id: string | null
+        }
+        Insert: {
+          acoustic_features?: Json | null
+          anonymous_session_id?: string | null
+          completed_at?: string | null
+          craving_after?: number | null
+          craving_before: number
+          craving_delta?: number | null
+          created_at?: string
+          current_state_score?: number | null
+          day_of_week?: number | null
+          first_protocol_id?: string | null
+          id?: string
+          is_second_loop?: boolean
+          local_hour?: number | null
+          persona_snapshot?: Json | null
+          protocol_completed?: boolean
+          protocol_id: string
+          selection_reason: string
+          signal_quality?: number | null
+          started_at?: string
+          trigger_tag?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          acoustic_features?: Json | null
+          anonymous_session_id?: string | null
+          completed_at?: string | null
+          craving_after?: number | null
+          craving_before?: number
+          craving_delta?: number | null
+          created_at?: string
+          current_state_score?: number | null
+          day_of_week?: number | null
+          first_protocol_id?: string | null
+          id?: string
+          is_second_loop?: boolean
+          local_hour?: number | null
+          persona_snapshot?: Json | null
+          protocol_completed?: boolean
+          protocol_id?: string
+          selection_reason?: string
+          signal_quality?: number | null
+          started_at?: string
+          trigger_tag?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       training_case_scenarios: {
         Row: {
           correct_option_index: number
