@@ -15,7 +15,6 @@ import ModulesSection from "@/components/imported/ModulesSection";
 import InteractiveToolsSection from "@/components/imported/InteractiveToolsSection";
 import CTASection from "@/components/imported/CTASection";
 import DesktopCursor from "@/components/imported/DesktopCursor";
-import { VoiceScanBanner } from "@/components/VoiceScanBanner";
 
 
 
@@ -110,8 +109,6 @@ function Inner() {
         {/* HERO — new imported design */}
         <HeroSection />
 
-        {/* VOICE SCAN PROMO */}
-        <VoiceScanBanner />
 
 
         <section id="pathways" className="scroll-mt-20 border-t border-border/40 bg-card/40">
