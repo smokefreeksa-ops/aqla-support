@@ -124,6 +124,8 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const onSosRoute = pathname === "/sos" || pathname.startsWith("/sos/");
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -133,6 +135,7 @@ function RootComponent() {
         <Outlet />
         <FloatingWhatsAppButton />
         <AqlaAssistant />
+        <SOSButton hidden={onSosRoute} />
       </AqlaAuthGate>
       <Toaster richColors position="top-center" />
     </QueryClientProvider>
