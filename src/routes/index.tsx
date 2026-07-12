@@ -109,8 +109,6 @@ function Inner() {
         {/* HERO — new imported design */}
         <HeroSection />
 
-        {/* VOICE SCAN PROMO */}
-        <VoiceScanBanner />
 
 
         <section id="pathways" className="scroll-mt-20 border-t border-border/40 bg-card/40">
