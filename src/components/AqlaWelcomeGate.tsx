@@ -193,9 +193,13 @@ export function AqlaWelcomeGate() {
     <div
       dir="rtl"
       lang="ar"
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-y-auto bg-gradient-to-b from-[#0b3a25] via-[#0e4a30] to-[#072018] px-5 py-10 text-[#f4f0e1]"
+      className="fixed inset-0 z-[100] flex flex-col items-center overflow-y-auto bg-gradient-to-b from-[#0b3a25] via-[#0e4a30] to-[#072018] text-[#f4f0e1]"
       style={{ unicodeBidi: "plaintext" }}
     >
+      <div className="sticky top-0 z-20 w-full">
+        <ResearchBanner />
+      </div>
+      <div className="flex w-full flex-1 flex-col items-center justify-center px-5 py-10">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 h-[60vmin] w-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#c9a84c]/10 blur-3xl" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/40 to-transparent" />
