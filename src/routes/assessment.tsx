@@ -884,23 +884,213 @@ function ResultView({
   }
 
   function downloadSummary() {
-    const lines = [
-      `Aqla Assessment Summary`,
-      `Participant ID: ${result.participantCode}`,
-      `Products: ${productLabels.join(", ")}`,
-      `Readiness: ${readinessLabel}`,
-      `Cohort: ${result.cohort}`,
-      `Cohort reason: ${result.cohortReason}`,
-      `Doctor review needed: ${result.doctorReviewNeeded ? "Yes" : "No"}`,
-      ftnd ? `FTND score: ${ftnd.total}/10 — ${ftnd.category}` : "",
-      nic ? `Nicotine control: ${nic.yes_count}/10 — ${nic.category}` : "",
-      savedFollow ? `Follow-up preference: ${savedFollow}` : "",
-    ].filter(Boolean).join("\n");
-    const blob = new Blob([lines], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = `aqla_${result.participantCode}.txt`; a.click();
-    URL.revokeObjectURL(url);
+    const isAr = lang === "ar";
+    const now = new Date();
+    const dateStr = now.toLocaleDateString(isAr ? "ar-EG" : "en-GB", {
+      year: "numeric", month: "long", day: "numeric",
+    });
+    const timeStr = now.toLocaleTimeString(isAr ? "ar-EG" : "en-GB", {
+      hour: "2-digit", minute: "2-digit",
+    });
+    const ftndPct = ftnd ? (ftnd.total / 10) * 100 : 0;
+    const nicPct = nic ? (nic.yes_count / 10) * 100 : 0;
+    const followLabel = savedFollow
+      ? followOptions.find((o) => o.v === savedFollow)?.label ?? savedFollow
+      : (isAr ? "لم يُختَر بعد" : "Not yet selected");
+
+    const nextSteps: string[] = (() => {
+      const base: string[] = [];
+      if (result.urgent) {
+        base.push(isAr
+          ? "التواصل الفوري مع خط الدعم أو أقرب مركز صحي — حالتك تستدعي مراجعة عاجلة."
+          : "Contact the support line or nearest health center immediately — your case needs urgent review.");
+      }
+      if (result.doctorReviewNeeded) {
+        base.push(isAr
+          ? "سيتم توجيه ملفك لمراجعة الطبيب وفق تفضيل التواصل المحدد."
+          : "Your file will be routed to a clinician using your chosen contact method.");
+      }
+      if (ftnd && ftnd.total >= 6) {
+        base.push(isAr
+          ? "درجة اعتماد عالية — يُوصى بخطة إقلاع مدعومة دوائياً وسلوكياً."
+          : "High dependence score — a supported cessation plan (pharmacological + behavioral) is recommended.");
+      } else if (ftnd && ftnd.total >= 4) {
+        base.push(isAr
+          ? "اعتماد متوسط — دعم سلوكي منتظم ومتابعة أسبوعية."
+          : "Moderate dependence — structured behavioral support with weekly follow-up.");
+      }
+      if (result.cohort) {
+        base.push(isAr
+          ? `مسارك (${result.cohort}) يتضمن محتوى تعليمي مخصص — تابع الرسائل الأسبوعية.`
+          : `Your cohort (${result.cohort}) includes tailored educational content — watch for weekly messages.`);
+      }
+      base.push(isAr
+        ? "احتفظ بهذه الوثيقة كمرجع عند مراجعة الطبيب أو الصيدلي."
+        : "Keep this document as a reference when consulting your physician or pharmacist.");
+      return base;
+    })();
+
+    const logoUrl = `${window.location.origin}/aqla-logo.png`;
+    const html = `<!doctype html>
+<html lang="${isAr ? "ar" : "en"}" dir="${isAr ? "rtl" : "ltr"}">
+<head>
+<meta charset="utf-8" />
+<title>Aqla — ${result.participantCode}</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: ${isAr ? "'Segoe UI', 'Tahoma', 'Arial'" : "'Inter', 'Helvetica', 'Arial'"}, sans-serif;
+    color: #0f172a; background: #fff; font-size: 12px; line-height: 1.55;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 8px; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 3px solid #0f766e; }
+  header img { height: 44px; width: auto; object-fit: contain; }
+  .brand { font-size: 20px; font-weight: 700; color: #0f766e; letter-spacing: .3px; }
+  .meta { text-align: ${isAr ? "left" : "right"}; font-size: 11px; color: #475569; }
+  h1 { font-size: 22px; margin: 20px 0 4px; color: #0f172a; }
+  .subtitle { color: #64748b; font-size: 12px; margin-bottom: 18px; }
+  .code-badge {
+    display: inline-block; padding: 6px 14px; border-radius: 999px;
+    background: #ecfdf5; color: #065f46; font-family: 'Courier New', monospace;
+    font-weight: 700; font-size: 13px; letter-spacing: 1px; border: 1px solid #a7f3d0;
+  }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .card { border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 14px; background: #f8fafc; }
+  .card .label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 4px; font-weight: 600; }
+  .card .value { font-size: 13px; font-weight: 600; color: #0f172a; }
+  section { margin-top: 22px; page-break-inside: avoid; }
+  section h2 { font-size: 14px; margin: 0 0 10px; color: #0f766e; padding-bottom: 6px; border-bottom: 1px solid #e2e8f0; }
+  .score-row { display: flex; align-items: center; gap: 14px; margin: 10px 0; }
+  .score-num { font-size: 28px; font-weight: 800; color: #0f766e; min-width: 76px; text-align: center; }
+  .score-num small { font-size: 12px; color: #94a3b8; font-weight: 500; }
+  .bar { flex: 1; height: 12px; background: #e2e8f0; border-radius: 999px; overflow: hidden; position: relative; }
+  .bar > span { display: block; height: 100%; background: linear-gradient(90deg, #10b981, #0f766e); border-radius: 999px; }
+  [dir="rtl"] .bar > span { margin-${isAr ? "right" : "left"}: 0; }
+  .score-cat { font-size: 11px; color: #475569; margin-top: 4px; }
+  .cohort-box { padding: 14px; border-radius: 10px; background: linear-gradient(135deg, #ecfdf5, #f0fdfa); border: 1px solid #a7f3d0; }
+  .cohort-letter { display: inline-block; width: 40px; height: 40px; line-height: 40px; text-align: center; font-size: 20px; font-weight: 800; background: #0f766e; color: #fff; border-radius: 50%; }
+  .flag { padding: 12px 14px; border-radius: 10px; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; margin-top: 10px; }
+  ol.steps { padding-${isAr ? "right" : "left"}: 18px; margin: 8px 0 0; }
+  ol.steps li { margin: 6px 0; }
+  .disclaimer { margin-top: 24px; padding: 12px 14px; border-radius: 8px; background: #fffbeb; border: 1px solid #fde68a; color: #78350f; font-size: 11px; }
+  footer { margin-top: 26px; padding-top: 14px; border-top: 1px solid #e2e8f0; font-size: 10px; color: #64748b; display: flex; justify-content: space-between; gap: 12px; }
+  @media print { .noprint { display: none !important; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+  .print-btn { position: fixed; top: 16px; ${isAr ? "left" : "right"}: 16px; background: #0f766e; color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(15,118,110,.3); }
+</style>
+</head>
+<body>
+<button class="print-btn noprint" onclick="window.print()">${isAr ? "🖨️ حفظ كـ PDF" : "🖨️ Save as PDF"}</button>
+<div class="wrap">
+  <header>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <img src="${logoUrl}" alt="Aqla" onerror="this.style.display='none'" />
+      <div>
+        <div class="brand">Aqla ${isAr ? "— لا تتّن" : ""}</div>
+        <div style="font-size:11px; color:#64748b;">${isAr ? "ملخّص تقييم النيكوتين" : "Nicotine Assessment Summary"}</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div>${dateStr}</div>
+      <div>${timeStr}</div>
+      <div style="margin-top:4px;">v1.0</div>
+    </div>
+  </header>
+
+  <h1>${isAr ? "ملخّص التقييم الشخصي" : "Personal Assessment Summary"}</h1>
+  <div class="subtitle">${isAr ? "وثيقة تعليمية مخصّصة — ليست تشخيصاً طبياً" : "Personalised educational document — not a medical diagnosis"}</div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="label">${isAr ? "رمز المشارك" : "Participant Code"}</div>
+      <div class="value"><span class="code-badge">${result.participantCode}</span></div>
+    </div>
+    <div class="card">
+      <div class="label">${isAr ? "المسار" : "Cohort"}</div>
+      <div class="value"><span class="cohort-letter">${result.cohort}</span> &nbsp; <span style="color:#475569; font-weight:500;">${result.cohortReason}</span></div>
+    </div>
+    <div class="card">
+      <div class="label">${isAr ? "المنتجات المستخدمة" : "Products Used"}</div>
+      <div class="value">${productLabels.join(" • ") || "—"}</div>
+    </div>
+    <div class="card">
+      <div class="label">${isAr ? "مرحلة الجاهزية" : "Readiness Stage"}</div>
+      <div class="value">${readinessLabel}</div>
+    </div>
+  </div>
+
+  ${ftnd ? `
+  <section>
+    <h2>${isAr ? "درجة الاعتماد على السجائر (FTND)" : "Cigarette Dependence (FTND)"}</h2>
+    <div class="score-row">
+      <div class="score-num">${ftnd.total}<small>/10</small></div>
+      <div style="flex:1;">
+        <div class="bar"><span style="width:${ftndPct}%"></span></div>
+        <div class="score-cat">${ftnd.category}</div>
+      </div>
+    </div>
+  </section>` : ""}
+
+  ${nic ? `
+  <section>
+    <h2>${isAr ? "التحكم في النيكوتين (HONC)" : "Nicotine Control (HONC)"}</h2>
+    <div class="score-row">
+      <div class="score-num">${nic.yes_count}<small>/10</small></div>
+      <div style="flex:1;">
+        <div class="bar"><span style="width:${nicPct}%; background:linear-gradient(90deg,#f59e0b,#d97706);"></span></div>
+        <div class="score-cat">${nic.category}</div>
+      </div>
+    </div>
+  </section>` : ""}
+
+  <section>
+    <h2>${isAr ? "تفضيل المتابعة" : "Follow-up Preference"}</h2>
+    <div class="card" style="background:#fff;">
+      <div class="value">${followLabel}</div>
+    </div>
+  </section>
+
+  ${result.urgent || result.doctorReviewNeeded ? `
+  <section>
+    <h2>${isAr ? "تنبيهات هامة" : "Important Flags"}</h2>
+    ${result.urgent ? `<div class="flag"><strong>⚠ ${isAr ? "مراجعة عاجلة:" : "Urgent review:"}</strong> ${isAr ? "يرجى التواصل مع خط الدعم في أقرب وقت." : "Please contact the support line as soon as possible."}</div>` : ""}
+    ${result.doctorReviewNeeded ? `<div class="flag" style="background:#fef3c7; border-color:#fde68a; color:#78350f;"><strong>👨‍⚕️ ${isAr ? "مراجعة الطبيب:" : "Clinician review:"}</strong> ${isAr ? "سيتم توجيه ملفك للمراجعة." : "Your file will be routed for review."}</div>` : ""}
+  </section>` : ""}
+
+  <section>
+    <h2>${isAr ? "الخطوات القادمة الموصى بها" : "Recommended Next Steps"}</h2>
+    <ol class="steps">
+      ${nextSteps.map((s) => `<li>${s}</li>`).join("")}
+    </ol>
+  </section>
+
+  <div class="disclaimer">
+    <strong>${isAr ? "تنبيه:" : "Disclaimer:"}</strong>
+    ${isAr
+      ? "هذه الوثيقة تعليمية تلخّص إجاباتك خلال التقييم، وليست تشخيصاً طبياً ولا تُغني عن استشارة الطبيب أو الصيدلي المختص."
+      : "This is an educational summary of your assessment answers. It is not a medical diagnosis and does not replace consultation with a qualified physician or pharmacist."}
+  </div>
+
+  <footer>
+    <div>Aqla — ${isAr ? "منصة دعم الإقلاع عن النيكوتين" : "Nicotine Cessation Support Platform"}</div>
+    <div>aqla1.com &nbsp;•&nbsp; ${result.participantCode}</div>
+  </footer>
+</div>
+<script>
+  window.addEventListener('load', function () { setTimeout(function(){ window.print(); }, 400); });
+</script>
+</body>
+</html>`;
+
+    const w = window.open("", "_blank", "width=900,height=1000");
+    if (!w) {
+      toast.error(isAr ? "يرجى السماح بالنوافذ المنبثقة لتحميل الملخّص" : "Please allow pop-ups to download the summary");
+      return;
+    }
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
   }
 
   return (
