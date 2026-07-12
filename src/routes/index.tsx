@@ -110,7 +110,10 @@ function Inner() {
         {/* HERO — new imported design */}
         <HeroSection />
 
-        {/* FOUR MAIN PATHS — canonical grid */}
+        {/* VOICE SCAN PROMO */}
+        <VoiceScanBanner />
+
+
         <section id="pathways" className="scroll-mt-20 border-t border-border/40 bg-card/40">
           <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
