@@ -152,8 +152,12 @@ function Inner() {
           <ImpactSection isAr={isAr} />
         </section>
 
+        {/* KNOW YOUR SMOKING LIFE — self-contained interactive tools */}
+        <KnowYourSmokingSection />
+
         {/* FINAL CTA */}
         <CTASection />
+
 
         <VisitTracker path="/" />
 
