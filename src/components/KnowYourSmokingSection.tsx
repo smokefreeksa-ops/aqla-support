@@ -1,0 +1,1814 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+
+/* =====================================================================================
+   Know Your Smoking Life — self-contained bilingual section.
+   No backend, no storage, no analytics. All state is React-local.
+   ===================================================================================== */
+
+type Lang = "en" | "ar";
+const T = (en: string, ar: string, lang: Lang) => (lang === "ar" ? ar : en);
+
+const tokens = {
+  bg: "#EAF3F0",
+  card: "#FFFFFF",
+  border: "#D5E3DD",
+  ink: "#10352F",
+  primary: "#1B6E5F",
+  ember: "#E08A2E",
+  warn: "#C4452F",
+  softTeal: "#DFF0EA",
+  softEmber: "#FBEEDC",
+  softWarn: "#F9E7E2",
+};
+
+export default function KnowYourSmokingSection() {
+  const [lang, setLang] = useState<Lang>("ar");
+  const dir = lang === "ar" ? "rtl" : "ltr";
+  const [open, setOpen] = useState<number | null>(null);
+  const [done, setDone] = useState<Record<number, boolean>>({});
+
+  const setDoneFor = (idx: number, val: boolean) =>
+    setDone((d) => (d[idx] === val ? d : { ...d, [idx]: val }));
+
+  const doneCount = Object.values(done).filter(Boolean).length;
+  // Tool 5 (shooter) is not part of the 4-quarter burn signature per spec.
+  const burnCount = [0, 1, 2, 3].filter((i) => done[i]).length;
+
+  const tools = [
+    {
+      emoji: "💸",
+      name: T("The Money Counter", "عدّاد المال", lang),
+      desc: T(
+        "See what smoking really costs you.",
+        "شاهد كم يكلفك التدخين فعلاً.",
+        lang
+      ),
+      time: T("~1 min", "≈ دقيقة", lang),
+    },
+    {
+      emoji: "🧲",
+      name: T("The Grip Test", "اختبار القبضة", lang),
+      desc: T(
+        "How tight is nicotine's grip on you?",
+        "كم قبضة النيكوتين عليك؟",
+        lang
+      ),
+      time: T("~1 min", "≈ دقيقة", lang),
+    },
+    {
+      emoji: "🪞",
+      name: T("The Mirror", "المرآة", lang),
+      desc: T(
+        "Which parts of you keep the smoke alive?",
+        "أي جوانبك تبقي التدخين مشتعلاً؟",
+        lang
+      ),
+      time: T("~1 min", "≈ دقيقة", lang),
+    },
+    {
+      emoji: "🧭",
+      name: T("The Compass", "البوصلة", lang),
+      desc: T(
+        "How ready are you to quit — really?",
+        "كم أنت مستعد للإقلاع فعلاً؟",
+        lang
+      ),
+      time: T("~1 min", "≈ دقيقة", lang),
+    },
+    {
+      emoji: "🎯",
+      name: T("Shoot the Cigarettes", "صوّب على السجائر", lang),
+      desc: T(
+        "30 seconds. Aim. Break more than glass.",
+        "٣٠ ثانية. صوّب. اكسر أكثر من الزجاج.",
+        lang
+      ),
+      time: T("30 sec", "٣٠ ثانية", lang),
+    },
+  ];
+
+  return (
+    <section
+      dir={dir}
+      lang={lang}
+      style={{ background: tokens.bg, color: tokens.ink }}
+      className="border-t"
+      aria-label="Know Your Smoking Life"
+    >
+      <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
+        {/* Language toggle (scoped to this section only) */}
+        <div className="flex items-center justify-end mb-6">
+          <div
+            role="group"
+            aria-label="Language"
+            className="inline-flex overflow-hidden rounded-full border"
+            style={{ borderColor: tokens.border, background: "#fff" }}
+          >
+            <button
+              onClick={() => setLang("en")}
+              className="px-3 py-1 text-sm"
+              style={{
+                background: lang === "en" ? tokens.primary : "transparent",
+                color: lang === "en" ? "#fff" : tokens.ink,
+              }}
+            >
+              EN
+            </button>
+            <button
+              onClick={() => setLang("ar")}
+              className="px-3 py-1 text-sm"
+              style={{
+                background: lang === "ar" ? tokens.primary : "transparent",
+                color: lang === "ar" ? "#fff" : tokens.ink,
+              }}
+            >
+              عربي
+            </button>
+          </div>
+        </div>
+
+        <h2 className="text-2xl sm:text-3xl font-bold leading-tight">
+          {T(
+            "Four quick ways to know your smoking",
+            "أربع طرق سريعة لتعرف حياتك مع التدخين",
+            lang
+          )}
+        </h2>
+        <p className="mt-2 text-sm sm:text-base opacity-80">
+          {T(
+            "Each tool stands on its own, takes about a minute, and gives your answer immediately.",
+            "كل أداة مستقلة، تستغرق دقيقة، وتعطيك إجابتك فوراً.",
+            lang
+          )}
+        </p>
+        <p className="mt-1 text-xs opacity-70">
+          {T(
+            "Your answers never leave this page.",
+            "إجاباتك لا تغادر هذه الصفحة.",
+            lang
+          )}
+        </p>
+
+        {/* Cigarette burn signature */}
+        <CigaretteBurn count={burnCount} lang={lang} />
+
+        {/* Cards grid */}
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {tools.map((tool, i) => {
+            const isOpen = open === i;
+            const isDone = !!done[i];
+            return (
+              <div
+                key={i}
+                style={{
+                  background: tokens.card,
+                  borderColor: tokens.border,
+                  borderRadius: 18,
+                }}
+                className={`border overflow-hidden transition ${
+                  isOpen ? "sm:col-span-2 lg:col-span-3" : ""
+                }`}
+              >
+                <button
+                  onClick={() => setOpen(isOpen ? null : i)}
+                  className="w-full text-start p-5 focus:outline-none focus-visible:ring-2"
+                  style={{ outlineColor: tokens.primary }}
+                  aria-expanded={isOpen}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3">
+                      <div
+                        className="text-2xl"
+                        aria-hidden
+                      >
+                        {tool.emoji}
+                      </div>
+                      <div>
+                        <div className="font-semibold text-base">
+                          {tool.name}
+                        </div>
+                        <div className="text-sm opacity-75 mt-1">
+                          {tool.desc}
+                        </div>
+                        <div className="text-xs opacity-60 mt-1">
+                          ⏱ {tool.time}
+                        </div>
+                      </div>
+                    </div>
+                    {isDone && (
+                      <span
+                        className="shrink-0 rounded-full px-2 py-1 text-xs font-medium"
+                        style={{
+                          background: tokens.softTeal,
+                          color: tokens.primary,
+                        }}
+                      >
+                        {T("Done ✓", "تم ✓", lang)}
+                      </span>
+                    )}
+                  </div>
+                </button>
+                {isOpen && (
+                  <div
+                    className="border-t p-5"
+                    style={{ borderColor: tokens.border }}
+                  >
+                    {i === 0 && (
+                      <MoneyCounter
+                        lang={lang}
+                        onDone={(v) => setDoneFor(0, v)}
+                      />
+                    )}
+                    {i === 1 && (
+                      <GripTest lang={lang} onDone={(v) => setDoneFor(1, v)} />
+                    )}
+                    {i === 2 && (
+                      <Mirror lang={lang} onDone={(v) => setDoneFor(2, v)} />
+                    )}
+                    {i === 3 && (
+                      <Compass lang={lang} onDone={(v) => setDoneFor(3, v)} />
+                    )}
+                    {i === 4 && (
+                      <Shooter lang={lang} onDone={(v) => setDoneFor(4, v)} />
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <p className="mt-10 text-xs opacity-60 max-w-3xl">
+          {T(
+            "This tool is educational. The dependence questions are adapted from the Fagerström Test for Cigarette Dependence; the trait items are brief self-reflection prompts. It is not a medical diagnosis.",
+            "هذه الأداة تعليمية. أسئلة الاعتماد مقتبسة من اختبار فاجيرستروم للاعتماد على النيكوتين؛ وعبارات السمات هي دعوات قصيرة للتأمل الذاتي. ليست تشخيصاً طبياً.",
+            lang
+          )}
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* --------------------------- Cigarette burn signature --------------------------- */
+function CigaretteBurn({ count, lang }: { count: number; lang: Lang }) {
+  const pct = Math.min(1, count / 4);
+  const all = count >= 4;
+  return (
+    <div className="mt-6">
+      <div
+        className="relative w-full max-w-xl h-10 mx-auto"
+        role="img"
+        aria-label={T(
+          `${count} of 4 tools completed`,
+          `${count} من 4 أدوات مكتملة`,
+          lang
+        )}
+      >
+        {/* body */}
+        <div
+          className="absolute inset-y-2 left-0 right-10 rounded-l-full overflow-hidden border"
+          style={{ borderColor: "#cfcfcf", background: "#fff" }}
+        >
+          <div
+            className="h-full transition-all duration-700 motion-reduce:transition-none"
+            style={{
+              width: `${pct * 100}%`,
+              background:
+                "repeating-linear-gradient(90deg,#4b4b4b 0 6px,#666 6px 10px)",
+            }}
+          />
+        </div>
+        {/* filter */}
+        <div
+          className="absolute inset-y-2 right-0 w-10 rounded-r-full border"
+          style={{
+            background:
+              "repeating-linear-gradient(90deg,#d9b877 0 4px,#c9a45c 4px 8px)",
+            borderColor: "#b89452",
+          }}
+        />
+        {/* ember */}
+        {count > 0 && count < 4 && (
+          <div
+            className="absolute top-1/2 -translate-y-1/2 h-4 w-4 rounded-full shadow motion-reduce:animate-none"
+            style={{
+              left: `calc(${pct * 100}% - 8px)`,
+              background:
+                "radial-gradient(circle,#fff2b3 0%,#ffb84d 40%,#e0570a 80%)",
+              boxShadow: "0 0 12px 3px rgba(224,138,46,0.7)",
+              animation: "pulse 1.2s ease-in-out infinite",
+            }}
+            aria-hidden
+          />
+        )}
+      </div>
+      <p className="mt-2 text-center text-xs sm:text-sm opacity-75">
+        {all
+          ? T(
+              "You burned the whole thing — and learned more than any cigarette ever taught you.",
+              "أحرقتها كاملة — وتعلمت منها أكثر مما علّمتك أي سيجارة.",
+              lang
+            )
+          : T(
+              "Each tool you finish burns a quarter of this cigarette — your first one to finish, not smoke.",
+              "كل أداة تُكملها تحرق ربع هذه السيجارة — أول سيجارة تنهيها دون أن تدخنها.",
+              lang
+            )}
+      </p>
+    </div>
+  );
+}
+
+/* ================================ TOOL 1 — Money =============================== */
+function MoneyCounter({
+  lang,
+  onDone,
+}: {
+  lang: Lang;
+  onDone: (v: boolean) => void;
+}) {
+  const [cigsPerDay, setCigsPerDay] = useState(20);
+  const [packPrice, setPackPrice] = useState(30);
+  const [packSize, setPackSize] = useState(20);
+  const [years, setYears] = useState(10);
+  const [currency, setCurrency] = useState<"SAR" | "USD" | "EUR" | "GBP">(
+    "SAR"
+  );
+
+  useEffect(() => {
+    onDone(packPrice > 0 && years > 0);
+  }, [packPrice, years, onDone]);
+
+  const perDay = (cigsPerDay / packSize) * packPrice;
+  const perYear = perDay * 365;
+  const total = perYear * years;
+  const cigs = cigsPerDay * 365 * years;
+  const minutes = cigs * 6;
+  const days = Math.round(minutes / 60 / 24);
+
+  const rate = { SAR: 3.75, USD: 1, EUR: 0.92, GBP: 0.79 }[currency];
+  const perYearUSD = perYear / rate;
+  const flights = Math.floor(perYearUSD / 500);
+  const phones = Math.floor(perYearUSD / 1100);
+  const groceries = Math.floor(perYearUSD / 420);
+
+  const fmt = (n: number) =>
+    new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(n);
+
+  return (
+    <div className="space-y-5">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field
+          label={T("Cigarettes per day", "عدد السجائر يومياً", lang)}
+        >
+          <input
+            type="range"
+            min={1}
+            max={60}
+            value={cigsPerDay}
+            onChange={(e) => setCigsPerDay(+e.target.value)}
+            className="w-full"
+            aria-label="cigarettes per day"
+          />
+          <div className="text-sm mt-1">{cigsPerDay}</div>
+        </Field>
+        <Field label={T("Price per pack", "سعر العلبة", lang)}>
+          <input
+            type="number"
+            value={packPrice}
+            min={0}
+            onChange={(e) => setPackPrice(+e.target.value || 0)}
+            className="w-full rounded-md border px-3 py-2"
+            style={{ borderColor: tokens.border }}
+          />
+        </Field>
+        <Field label={T("Cigarettes per pack", "عدد السجائر بالعلبة", lang)}>
+          <select
+            value={packSize}
+            onChange={(e) => setPackSize(+e.target.value)}
+            className="w-full rounded-md border px-3 py-2"
+            style={{ borderColor: tokens.border }}
+          >
+            <option value={20}>20</option>
+            <option value={10}>10</option>
+            <option value={25}>25</option>
+          </select>
+        </Field>
+        <Field label={T("Years smoking", "سنوات التدخين", lang)}>
+          <input
+            type="number"
+            value={years}
+            min={0}
+            onChange={(e) => setYears(+e.target.value || 0)}
+            className="w-full rounded-md border px-3 py-2"
+            style={{ borderColor: tokens.border }}
+          />
+        </Field>
+        <Field label={T("Currency", "العملة", lang)}>
+          <select
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value as typeof currency)}
+            className="w-full rounded-md border px-3 py-2"
+            style={{ borderColor: tokens.border }}
+          >
+            <option>SAR</option>
+            <option>USD</option>
+            <option>EUR</option>
+            <option>GBP</option>
+          </select>
+        </Field>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <Stat
+          value={`${fmt(perYear)} ${currency}`}
+          label={T("Spent every year", "الإنفاق السنوي", lang)}
+        />
+        <Stat
+          value={`${fmt(total)} ${currency}`}
+          label={T("Since you started", "منذ أن بدأت", lang)}
+          ember
+        />
+        <Stat
+          value={fmt(cigs)}
+          label={T("Cigarettes smoked", "السجائر المدخّنة", lang)}
+        />
+        <Stat
+          value={`${fmt(days)} ${T("days", "يوم", lang)}`}
+          label={T("Days of life spent smoking", "أيام قضيتها في التدخين", lang)}
+          ember
+        />
+      </div>
+
+      <div
+        className="rounded-xl p-4 text-sm"
+        style={{ background: tokens.softEmber, color: tokens.ink }}
+      >
+        <div className="font-medium mb-2">
+          {T(
+            "Your yearly smoking money could have been…",
+            "ما تنفقه سنوياً كان يمكن أن يكون…",
+            lang
+          )}
+        </div>
+        <ul className="grid gap-1 sm:grid-cols-3">
+          <li>
+            ✈️ {fmt(flights)}{" "}
+            {T("round-trip flights", "رحلة طيران ذهاب وعودة", lang)}
+          </li>
+          <li>
+            📱 {fmt(phones)} {T("new smartphones", "هاتف جديد", lang)}
+          </li>
+          <li>
+            🛒 {fmt(groceries)}{" "}
+            {T("months of family groceries", "شهر من مؤن الأسرة", lang)}
+          </li>
+        </ul>
+        <p className="text-xs opacity-70 mt-2">
+          {T(
+            "Approximate typical prices, for perspective only.",
+            "أسعار تقريبية للمقارنة فقط.",
+            lang
+          )}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* ================================ TOOL 2 — Grip =============================== */
+type GQ = { q: [string, string]; opts: [string, string, number][] };
+const grip = (): GQ[] => [
+  {
+    q: [
+      "How soon after waking do you smoke your first cigarette?",
+      "متى تدخّن أول سيجارة بعد الاستيقاظ؟",
+    ],
+    opts: [
+      ["Within 5 min", "خلال 5 دقائق", 3],
+      ["6–30 min", "6–30 دقيقة", 2],
+      ["31–60 min", "31–60 دقيقة", 1],
+      ["After 60 min", "بعد 60 دقيقة", 0],
+    ],
+  },
+  {
+    q: [
+      "Difficult not to smoke where forbidden (mosque, hospital, plane)?",
+      "هل يصعب عليك ألا تدخن في الأماكن الممنوعة (مسجد، مستشفى، طائرة)؟",
+    ],
+    opts: [
+      ["Yes", "نعم", 1],
+      ["No", "لا", 0],
+    ],
+  },
+  {
+    q: [
+      "Which cigarette would you hate most to give up?",
+      "أي سيجارة يصعب عليك التخلي عنها أكثر؟",
+    ],
+    opts: [
+      ["First in morning", "أول سيجارة في الصباح", 1],
+      ["Any other", "أي سيجارة أخرى", 0],
+    ],
+  },
+  {
+    q: ["Cigarettes per day?", "عدد السجائر يومياً؟"],
+    opts: [
+      ["≤10", "≤10", 0],
+      ["11–20", "11–20", 1],
+      ["21–30", "21–30", 2],
+      ["≥31", "≥31", 3],
+    ],
+  },
+  {
+    q: [
+      "Smoke more in first hours after waking than rest of day?",
+      "هل تدخن في الساعات الأولى بعد الاستيقاظ أكثر من باقي اليوم؟",
+    ],
+    opts: [
+      ["Yes", "نعم", 1],
+      ["No", "لا", 0],
+    ],
+  },
+  {
+    q: [
+      "Smoke even when ill in bed most of the day?",
+      "هل تدخن حتى حين تكون مريضاً في الفراش معظم اليوم؟",
+    ],
+    opts: [
+      ["Yes", "نعم", 1],
+      ["No", "لا", 0],
+    ],
+  },
+];
+
+function GripTest({
+  lang,
+  onDone,
+}: {
+  lang: Lang;
+  onDone: (v: boolean) => void;
+}) {
+  const qs = useMemo(grip, []);
+  const [ans, setAns] = useState<(number | null)[]>(Array(6).fill(null));
+  const complete = ans.every((a) => a !== null);
+  const score = ans.reduce<number>((s, a) => s + (a ?? 0), 0);
+
+  useEffect(() => {
+    onDone(complete);
+  }, [complete, onDone]);
+
+  const level = (() => {
+    if (score <= 2)
+      return {
+        name: T("Low dependence", "اعتماد منخفض", lang),
+        color: tokens.primary,
+        bg: tokens.softTeal,
+        text: T(
+          "Habit and routine are a bigger opponent than nicotine; behaviour change strategies can carry most of the weight.",
+          "العادة والروتين خصم أكبر من النيكوتين؛ استراتيجيات تغيير السلوك تكفي غالباً.",
+          lang
+        ),
+      };
+    if (score <= 4)
+      return {
+        name: T("Moderate", "متوسط", lang),
+        color: tokens.ember,
+        bg: tokens.softEmber,
+        text: T(
+          "A real but manageable hold; a clear plan plus support puts success in reach.",
+          "قبضة حقيقية لكن يمكن إدارتها؛ خطة واضحة مع الدعم تجعل النجاح ممكناً.",
+          lang
+        ),
+      };
+    if (score <= 7)
+      return {
+        name: T("High", "عالٍ", lang),
+        color: tokens.warn,
+        bg: tokens.softWarn,
+        text: T(
+          "Nicotine replacement or medication roughly doubles quit success at this level; talk to a clinician or cessation service.",
+          "بدائل النيكوتين أو الأدوية تضاعف فرص النجاح تقريباً عند هذا المستوى؛ راجع مختصاً أو خدمة إقلاع.",
+          lang
+        ),
+      };
+    return {
+      name: T("Very high", "عالٍ جداً", lang),
+      color: tokens.warn,
+      bg: tokens.softWarn,
+      text: T(
+        "Do not attempt on willpower alone; combined medication plus counselling exists for this level and works.",
+        "لا تعتمد على الإرادة وحدها؛ العلاج الدوائي مع الإرشاد النفسي مصمّم لهذا المستوى وفعّال.",
+        lang
+      ),
+    };
+  })();
+
+  const q1 = ans[0];
+  const extra =
+    q1 !== null
+      ? q1 >= 2
+        ? T(
+            "Time to first cigarette is the strongest single sign of dependence — yours suggests a strong morning need for nicotine.",
+            "الوقت إلى أول سيجارة هو أقوى مؤشر للاعتماد — ويشير جوابك إلى حاجة صباحية قوية للنيكوتين.",
+            lang
+          )
+        : T(
+            "Time to first cigarette is the strongest single sign of dependence — nicotine is not the first thing your body demands.",
+            "الوقت إلى أول سيجارة هو أقوى مؤشر للاعتماد — والنيكوتين ليس أول ما يطلبه جسمك.",
+            lang
+          )
+      : "";
+
+  return (
+    <div className="space-y-4">
+      {qs.map((q, i) => (
+        <fieldset key={i} className="space-y-2">
+          <legend className="font-medium text-sm">
+            {i + 1}. {lang === "ar" ? q.q[1] : q.q[0]}
+          </legend>
+          <div className="flex flex-wrap gap-2">
+            {q.opts.map(([en, ar, sc], j) => {
+              const selected = ans[i] === sc;
+              return (
+                <label
+                  key={j}
+                  className="cursor-pointer rounded-full border px-3 py-1 text-sm"
+                  style={{
+                    borderColor: selected ? tokens.primary : tokens.border,
+                    background: selected ? tokens.primary : "#fff",
+                    color: selected ? "#fff" : tokens.ink,
+                  }}
+                >
+                  <input
+                    type="radio"
+                    name={`grip-${i}`}
+                    className="sr-only"
+                    checked={selected}
+                    onChange={() =>
+                      setAns((a) => {
+                        const c = [...a];
+                        c[i] = sc;
+                        return c;
+                      })
+                    }
+                  />
+                  {lang === "ar" ? ar : en}
+                </label>
+              );
+            })}
+          </div>
+        </fieldset>
+      ))}
+
+      {complete && (
+        <div
+          className="rounded-xl p-4 mt-4 flex flex-col sm:flex-row items-center gap-4"
+          style={{ background: level.bg }}
+        >
+          <Gauge score={score} max={10} color={level.color} />
+          <div>
+            <div
+              className="font-semibold text-lg"
+              style={{ color: level.color }}
+            >
+              {level.name} — {score}/10
+            </div>
+            <p className="text-sm mt-1">{level.text}</p>
+            <p className="text-xs mt-2 opacity-80">{extra}</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Gauge({
+  score,
+  max,
+  color,
+}: {
+  score: number;
+  max: number;
+  color: string;
+}) {
+  const pct = score / max;
+  const r = 40;
+  const c = 2 * Math.PI * r;
+  return (
+    <svg width={110} height={110} viewBox="0 0 110 110" aria-hidden>
+      <circle
+        cx={55}
+        cy={55}
+        r={r}
+        stroke="#e5e5e5"
+        strokeWidth={10}
+        fill="none"
+      />
+      <circle
+        cx={55}
+        cy={55}
+        r={r}
+        stroke={color}
+        strokeWidth={10}
+        fill="none"
+        strokeDasharray={c}
+        strokeDashoffset={c * (1 - pct)}
+        strokeLinecap="round"
+        transform="rotate(-90 55 55)"
+        style={{ transition: "stroke-dashoffset .8s ease" }}
+      />
+      <text
+        x="55"
+        y="60"
+        textAnchor="middle"
+        fontSize="20"
+        fontWeight="700"
+        fill={color}
+      >
+        {score}
+      </text>
+    </svg>
+  );
+}
+
+/* =============================== TOOL 3 — Mirror ============================== */
+function Mirror({
+  lang,
+  onDone,
+}: {
+  lang: Lang;
+  onDone: (v: boolean) => void;
+}) {
+  const items: [string, string][] = [
+    [
+      "I get stressed, tense, or anxious easily",
+      "أتوتر وأقلق بسهولة",
+    ],
+    [
+      "I am organized and stick to routines and plans",
+      "أنا منظم وألتزم بالروتين والخطط",
+    ],
+    [
+      "I am outgoing — most of my smoking happens around people",
+      "أنا اجتماعي ومعظم تدخيني مع الناس",
+    ],
+    [
+      "I get bored quickly and love new experiences",
+      "أملّ بسرعة وأحب التجارب الجديدة",
+    ],
+    [
+      "I often light a cigarette without noticing — automatically",
+      "كثيراً ما أشعل سيجارة دون أن أنتبه",
+    ],
+  ];
+  const [vals, setVals] = useState<number[]>([4, 4, 4, 4, 4]);
+  const triggerOpts: [string, string][] = [
+    ["with coffee or tea", "مع القهوة أو الشاي"],
+    ["after meals", "بعد الوجبات"],
+    ["when stressed", "عند التوتر"],
+    ["with smoking friends", "مع أصدقاء يدخنون"],
+    ["when bored", "عند الملل"],
+    ["first thing after waking", "أول شيء بعد الاستيقاظ"],
+    ["while driving", "أثناء القيادة"],
+    ["on the phone", "على الهاتف"],
+    ["after exercise", "بعد التمرين"],
+    ["before sleep", "قبل النوم"],
+  ];
+  const [triggers, setTriggers] = useState<number[]>([]);
+  const [shown, setShown] = useState(false);
+
+  const toggle = (i: number) =>
+    setTriggers((t) => (t.includes(i) ? t.filter((x) => x !== i) : [...t, i]));
+
+  const reveal = () => {
+    setShown(true);
+    onDone(true);
+  };
+
+  const insights: string[] = [];
+  if (vals[0] >= 5)
+    insights.push(
+      T(
+        "Stress fuels the smoking; withdrawal itself creates part of the tension. Build stress tools before quit day (breathing, short walks, prayer breaks).",
+        "التوتر يغذي التدخين؛ والانسحاب نفسه يخلق جزءاً من التوتر. جهّز أدوات التوتر قبل يوم الإقلاع (تنفس، مشي قصير، فواصل صلاة).",
+        lang
+      )
+    );
+  if (vals[1] <= 3)
+    insights.push(
+      T(
+        "Borrow structure — fixed quit date, phone alarms, written two-week plan.",
+        "استعِر البنية — تاريخ إقلاع محدد، تنبيهات هاتف، خطة مكتوبة لأسبوعين.",
+        lang
+      )
+    );
+  if (vals[1] >= 6)
+    insights.push(
+      T(
+        "Planning is a genuine quitting advantage — write the plan.",
+        "التخطيط ميزة حقيقية للإقلاع — اكتب خطتك.",
+        lang
+      )
+    );
+  if (vals[2] >= 5)
+    insights.push(
+      T(
+        "Change the setting for two weeks, tell friends, hold something else, recruit a quit buddy.",
+        "غيّر البيئة لأسبوعين، أخبر أصدقاءك، أمسك شيئاً غير السيجارة، جنّد رفيق إقلاع.",
+        lang
+      )
+    );
+  if (vals[3] >= 5)
+    insights.push(
+      T(
+        "Replace nicotine's stimulation with a new challenge; boredom is the relapse door.",
+        "استبدل تحفيز النيكوتين بتحدٍّ جديد؛ الملل هو باب الانتكاسة.",
+        lang
+      )
+    );
+  if (vals[4] >= 5)
+    insights.push(
+      T(
+        "Break the pairings — change places, switch hands, keep cigarettes far so every smoke requires a decision.",
+        "اكسر الاقترانات — غيّر الأماكن، بدّل اليد، أبعد السجائر ليصبح كل تدخين قراراً.",
+        lang
+      )
+    );
+  if (triggers.length > 0) {
+    const list = triggers
+      .map((i) => (lang === "ar" ? triggerOpts[i][1] : triggerOpts[i][0]))
+      .join("، ");
+    insights.push(
+      T(
+        `Your triggers: ${list} — each is a learned pairing; plan a specific replacement for every one.`,
+        `محفزاتك: ${list} — كل واحد اقتران متعلَّم؛ خطط لبديل محدد لكل منها.`,
+        lang
+      )
+    );
+  }
+  if (insights.length === 0)
+    insights.push(
+      T(
+        "Your traits are balanced — focus on a clear practical plan for quit day.",
+        "سماتك متوازنة — ركّز على خطة عملية واضحة ليوم الإقلاع.",
+        lang
+      )
+    );
+
+  return (
+    <div className="space-y-4">
+      <div className="font-medium">
+        {T("How much is this like you? (1–7)", "كم يشبهك هذا؟ (1–7)", lang)}
+      </div>
+      {items.map((it, i) => (
+        <div key={i}>
+          <label className="text-sm">{lang === "ar" ? it[1] : it[0]}</label>
+          <div className="flex items-center gap-3">
+            <input
+              type="range"
+              min={1}
+              max={7}
+              value={vals[i]}
+              onChange={(e) =>
+                setVals((v) => {
+                  const c = [...v];
+                  c[i] = +e.target.value;
+                  return c;
+                })
+              }
+              className="w-full"
+              aria-label={it[0]}
+            />
+            <span className="text-sm w-6 text-center">{vals[i]}</span>
+          </div>
+        </div>
+      ))}
+
+      <div>
+        <div className="font-medium mt-2 mb-1">
+          {T("When do you usually smoke?", "متى تدخن عادة؟", lang)}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {triggerOpts.map(([en, ar], i) => {
+            const selected = triggers.includes(i);
+            return (
+              <button
+                key={i}
+                onClick={() => toggle(i)}
+                className="rounded-full border px-3 py-1 text-sm"
+                style={{
+                  borderColor: selected ? tokens.primary : tokens.border,
+                  background: selected ? tokens.softTeal : "#fff",
+                  color: tokens.ink,
+                }}
+              >
+                {lang === "ar" ? ar : en}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <button
+        onClick={reveal}
+        className="rounded-full px-4 py-2 text-sm font-medium"
+        style={{ background: tokens.primary, color: "#fff" }}
+      >
+        {T("Show me the mirror", "أرني المرآة", lang)}
+      </button>
+
+      {shown && (
+        <div className="space-y-2 mt-3">
+          {insights.map((s, i) => (
+            <div
+              key={i}
+              className="rounded-xl p-3 text-sm"
+              style={{ background: tokens.softTeal }}
+            >
+              {s}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ============================== TOOL 4 — Compass ============================== */
+function Compass({
+  lang,
+  onDone,
+}: {
+  lang: Lang;
+  onDone: (v: boolean) => void;
+}) {
+  const [imp, setImp] = useState(5);
+  const [conf, setConf] = useState(5);
+  const [attempts, setAttempts] = useState<
+    "never" | "once" | "2-4" | "5+" | null
+  >(null);
+  const [shown, setShown] = useState(false);
+
+  const reveal = () => {
+    if (attempts) {
+      setShown(true);
+      onDone(true);
+    }
+  };
+
+  const main = (() => {
+    if (imp >= 7 && conf >= 7)
+      return T(
+        "Genuinely ready — set a quit date within 14 days, tell someone, prepare replacements this week.",
+        "جاهز فعلاً — حدّد تاريخ إقلاع خلال 14 يوماً، أخبر شخصاً، وجهّز البدائل هذا الأسبوع.",
+        lang
+      );
+    if (imp >= 7 && conf < 7)
+      return T(
+        "Confidence is what support fixes — NRT, medication, or a programme can double the odds; willpower alone is not required.",
+        "الدعم يعالج الثقة — بدائل النيكوتين، الأدوية، أو برنامج، تضاعف الفرص؛ الإرادة وحدها ليست ضرورية.",
+        lang
+      );
+    if (imp < 7 && conf >= 7)
+      return T(
+        "Try the Money Counter above — those are your numbers, not statistics; revisit in a month.",
+        "جرّب عدّاد المال أعلاه — تلك أرقامك أنت، لا إحصاءات عامة؛ عاود بعد شهر.",
+        lang
+      );
+    return T(
+      "Honest starting point, no pressure; keep the numbers in mind and the door open.",
+      "نقطة بداية صادقة دون ضغط؛ احتفظ بالأرقام في ذهنك وأبقِ الباب مفتوحاً.",
+      lang
+    );
+  })();
+
+  const attemptMsg =
+    attempts === "never"
+      ? T(
+          "Plan properly from day one.",
+          "خطط بشكل جيد من اليوم الأول.",
+          lang
+        )
+      : attempts === "once"
+      ? T(
+          "Training, not failure — most quitters needed several tries.",
+          "تدريب لا فشل — معظم من أقلعوا احتاجوا محاولات عديدة.",
+          lang
+        )
+      : attempts === "2-4"
+      ? T(
+          "You know your weak moments — that is a map.",
+          "تعرف لحظات ضعفك — هذه خريطة.",
+          lang
+        )
+      : attempts === "5+"
+      ? T(
+          "Persistence, not weakness — with the right support, the next can be the last.",
+          "مثابرة لا ضعف — مع الدعم المناسب، القادمة قد تكون الأخيرة.",
+          lang
+        )
+      : "";
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <label className="text-sm">
+          {T(
+            "How important is quitting to you right now? (0–10)",
+            "كم يهمك الإقلاع الآن؟ (0–10)",
+            lang
+          )}
+        </label>
+        <div className="flex items-center gap-3">
+          <input
+            type="range"
+            min={0}
+            max={10}
+            value={imp}
+            onChange={(e) => setImp(+e.target.value)}
+            className="w-full"
+          />
+          <span className="text-sm w-6 text-center">{imp}</span>
+        </div>
+      </div>
+      <div>
+        <label className="text-sm">
+          {T(
+            "If you decided today, how confident are you that you could quit? (0–10)",
+            "لو قررت اليوم، كم أنت واثق أنك قادر على الإقلاع؟ (0–10)",
+            lang
+          )}
+        </label>
+        <div className="flex items-center gap-3">
+          <input
+            type="range"
+            min={0}
+            max={10}
+            value={conf}
+            onChange={(e) => setConf(+e.target.value)}
+            className="w-full"
+          />
+          <span className="text-sm w-6 text-center">{conf}</span>
+        </div>
+      </div>
+      <fieldset>
+        <legend className="text-sm mb-1">
+          {T(
+            "Have you tried to quit before?",
+            "هل حاولت الإقلاع من قبل؟",
+            lang
+          )}
+        </legend>
+        <div className="flex flex-wrap gap-2">
+          {(
+            [
+              ["never", T("never", "لم أحاول", lang)],
+              ["once", T("once", "مرة", lang)],
+              ["2-4", T("2–4 times", "2–4 مرات", lang)],
+              ["5+", T("5+ times", "5+ مرات", lang)],
+            ] as const
+          ).map(([v, label]) => {
+            const sel = attempts === v;
+            return (
+              <label
+                key={v}
+                className="cursor-pointer rounded-full border px-3 py-1 text-sm"
+                style={{
+                  borderColor: sel ? tokens.primary : tokens.border,
+                  background: sel ? tokens.primary : "#fff",
+                  color: sel ? "#fff" : tokens.ink,
+                }}
+              >
+                <input
+                  type="radio"
+                  name="attempts"
+                  className="sr-only"
+                  checked={sel}
+                  onChange={() => setAttempts(v)}
+                />
+                {label}
+              </label>
+            );
+          })}
+        </div>
+      </fieldset>
+
+      <button
+        onClick={reveal}
+        disabled={!attempts}
+        className="rounded-full px-4 py-2 text-sm font-medium disabled:opacity-50"
+        style={{ background: tokens.primary, color: "#fff" }}
+      >
+        {T("Read my compass", "اقرأ بوصلتي", lang)}
+      </button>
+
+      {shown && (
+        <div className="space-y-2 mt-2">
+          <div
+            className="rounded-xl p-3 text-sm"
+            style={{ background: tokens.softTeal }}
+          >
+            {main}
+          </div>
+          <div
+            className="rounded-xl p-3 text-sm"
+            style={{ background: tokens.softEmber }}
+          >
+            {attemptMsg}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* =============================== TOOL 5 — Shooter ============================= */
+function Shooter({
+  lang,
+  onDone,
+}: {
+  lang: Lang;
+  onDone: (v: boolean) => void;
+}) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const crackCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [muted, setMuted] = useState(false);
+  const [running, setRunning] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(30);
+  const [hits, setHits] = useState(0);
+  const [shots, setShots] = useState(0);
+  const [streak, setStreak] = useState(0);
+  const [bestStreak, setBestStreak] = useState(0);
+  const [combo, setCombo] = useState(0);
+  const [score, setScore] = useState(0);
+  const [best, setBest] = useState({ score: 0, acc: 0 });
+  const [ended, setEnded] = useState(false);
+
+  const audioRef = useRef<AudioContext | null>(null);
+  const mutedRef = useRef(muted);
+  useEffect(() => {
+    mutedRef.current = muted;
+  }, [muted]);
+
+  const ensureAudio = () => {
+    if (typeof window === "undefined") return null;
+    if (!audioRef.current) {
+      const Ctx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext })
+          .webkitAudioContext;
+      audioRef.current = new Ctx();
+    }
+    if (audioRef.current.state === "suspended") {
+      audioRef.current.resume();
+    }
+    return audioRef.current;
+  };
+
+  const noiseBuffer = (ctx: AudioContext, dur = 0.2) => {
+    const b = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
+    const d = b.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    return b;
+  };
+
+  const playShot = () => {
+    if (mutedRef.current) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    const o = ctx.createOscillator();
+    o.type = "square";
+    o.frequency.setValueAtTime(600, ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.08);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.25, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.09);
+    o.connect(g).connect(ctx.destination);
+    o.start();
+    o.stop(ctx.currentTime + 0.1);
+    // click
+    const n = ctx.createBufferSource();
+    n.buffer = noiseBuffer(ctx, 0.03);
+    const ng = ctx.createGain();
+    ng.gain.value = 0.15;
+    n.connect(ng).connect(ctx.destination);
+    n.start();
+  };
+
+  const playHit = (comboStep: number) => {
+    if (mutedRef.current) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    // filtered noise burst
+    const n = ctx.createBufferSource();
+    n.buffer = noiseBuffer(ctx, 0.12);
+    const bp = ctx.createBiquadFilter();
+    bp.type = "bandpass";
+    bp.frequency.value = 1800;
+    const ng = ctx.createGain();
+    ng.gain.setValueAtTime(0.25, ctx.currentTime);
+    ng.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.13);
+    n.connect(bp).connect(ng).connect(ctx.destination);
+    n.start();
+    // ping
+    const semis = Math.min(comboStep, 8);
+    const base = 880 * Math.pow(2, semis / 12);
+    const o = ctx.createOscillator();
+    o.type = "sine";
+    o.frequency.setValueAtTime(base, ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(base * 1.5, ctx.currentTime + 0.12);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.3, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+    o.connect(g).connect(ctx.destination);
+    o.start();
+    o.stop(ctx.currentTime + 0.21);
+  };
+
+  const playMiss = () => {
+    if (mutedRef.current) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    for (let i = 0; i < 3; i++) {
+      const n = ctx.createBufferSource();
+      n.buffer = noiseBuffer(ctx, 0.08);
+      const hp = ctx.createBiquadFilter();
+      hp.type = "highpass";
+      hp.frequency.value = 2000 + Math.random() * 1500;
+      const g = ctx.createGain();
+      const t = ctx.currentTime + i * 0.04;
+      g.gain.setValueAtTime(0.2, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
+      n.connect(hp).connect(g).connect(ctx.destination);
+      n.start(t);
+    }
+  };
+
+  const playTick = () => {
+    if (mutedRef.current) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    const o = ctx.createOscillator();
+    o.type = "sine";
+    o.frequency.value = 1000;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.15, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
+    o.connect(g).connect(ctx.destination);
+    o.start();
+    o.stop(ctx.currentTime + 0.07);
+  };
+
+  const playEnd = (isNewBest: boolean) => {
+    if (mutedRef.current) return;
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    const notes = isNewBest ? [523, 659, 784] : [523, 392];
+    notes.forEach((f, i) => {
+      const o = ctx.createOscillator();
+      o.type = "triangle";
+      o.frequency.value = f;
+      const g = ctx.createGain();
+      const t = ctx.currentTime + i * 0.15;
+      g.gain.setValueAtTime(0.25, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+      o.connect(g).connect(ctx.destination);
+      o.start(t);
+      o.stop(t + 0.26);
+    });
+  };
+
+  // Game refs (mutable state for RAF loop)
+  const stateRef = useRef({
+    W: 480,
+    H: 360,
+    angle: 0,
+    cigs: [] as { alive: boolean; respawnAt: number }[],
+    particles: [] as {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      life: number;
+      max: number;
+      color: string;
+      size: number;
+      rot: number;
+      vrot: number;
+      kind: "spark" | "ash" | "shard" | "half";
+    }[],
+    running: false,
+    startedAt: 0,
+    lastCountdown: -1,
+    prefersReducedMotion: false,
+  });
+
+  useEffect(() => {
+    stateRef.current.prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  }, []);
+
+  useEffect(() => {
+    stateRef.current.cigs = Array.from({ length: 6 }, () => ({
+      alive: true,
+      respawnAt: 0,
+    }));
+  }, []);
+
+  useEffect(() => {
+    let raf = 0;
+    const loop = (t: number) => {
+      const st = stateRef.current;
+      const cvs = canvasRef.current;
+      const crackC = crackCanvasRef.current;
+      if (!cvs || !crackC) {
+        raf = requestAnimationFrame(loop);
+        return;
+      }
+      const ctx = cvs.getContext("2d");
+      if (!ctx) {
+        raf = requestAnimationFrame(loop);
+        return;
+      }
+      const W = cvs.width;
+      const H = cvs.height;
+      ctx.clearRect(0, 0, W, H);
+      // background
+      ctx.fillStyle = "#f4f9f7";
+      ctx.fillRect(0, 0, W, H);
+      // composited cracks
+      ctx.drawImage(crackC, 0, 0);
+
+      // update angle
+      if (st.running && !st.prefersReducedMotion) st.angle += 0.008;
+
+      // Hexagon
+      const cx = W / 2;
+      const cy = H / 2;
+      const R = Math.min(W, H) * 0.32;
+      ctx.strokeStyle = tokens.primary;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const a = st.angle + (i / 6) * Math.PI * 2;
+        const x = cx + Math.cos(a) * R;
+        const y = cy + Math.sin(a) * R;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+
+      // Cigarettes at vertices
+      const now = performance.now();
+      st.cigs.forEach((c, i) => {
+        if (!c.alive && now >= c.respawnAt) c.alive = true;
+        if (!c.alive) return;
+        const a = st.angle + (i / 6) * Math.PI * 2;
+        const x = cx + Math.cos(a) * R;
+        const y = cy + Math.sin(a) * R;
+        drawCig(ctx, x, y, a + Math.PI / 2);
+      });
+
+      // Particles
+      st.particles = st.particles.filter((p) => p.life < p.max);
+      st.particles.forEach((p) => {
+        p.life += 16;
+        p.vy += 0.25;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vrot;
+        const alpha = 1 - p.life / p.max;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, alpha);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        if (p.kind === "half") {
+          ctx.fillRect(-p.size, -2, p.size * 2, 4);
+        } else if (p.kind === "shard") {
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.lineTo(p.size, 0);
+          ctx.lineTo(p.size * 0.4, p.size);
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          ctx.beginPath();
+          ctx.arc(0, 0, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      });
+
+      // Countdown ticks
+      if (st.running) {
+        const elapsed = (now - st.startedAt) / 1000;
+        const left = Math.max(0, 30 - elapsed);
+        const wholeLeft = Math.ceil(left);
+        if (wholeLeft !== st.lastCountdown) {
+          st.lastCountdown = wholeLeft;
+          if (wholeLeft <= 5 && wholeLeft > 0) playTick();
+        }
+        setTimeLeft(wholeLeft);
+        if (left <= 0) endRound();
+      }
+
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function drawCig(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    rot: number
+  ) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    // body
+    ctx.fillStyle = "#fff";
+    ctx.strokeStyle = "#bbb";
+    ctx.lineWidth = 1;
+    ctx.fillRect(-18, -5, 26, 10);
+    ctx.strokeRect(-18, -5, 26, 10);
+    // filter
+    ctx.fillStyle = "#d9b877";
+    ctx.fillRect(8, -5, 10, 10);
+    // ember
+    ctx.fillStyle = tokens.warn;
+    ctx.beginPath();
+    ctx.arc(-18, 0, 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function spawnParticles(
+    x: number,
+    y: number,
+    kind: "hit" | "miss",
+    hexEdge = false
+  ) {
+    const st = stateRef.current;
+    if (st.prefersReducedMotion) return;
+    const cap = 150;
+    const add = (p: (typeof st.particles)[number]) => {
+      if (st.particles.length < cap) st.particles.push(p);
+    };
+    if (kind === "hit") {
+      // two halves
+      for (let i = 0; i < 2; i++) {
+        add({
+          x,
+          y,
+          vx: (Math.random() - 0.5) * 6,
+          vy: -3 - Math.random() * 2,
+          life: 0,
+          max: 900,
+          color: "#fff",
+          size: 10,
+          rot: Math.random() * Math.PI,
+          vrot: (Math.random() - 0.5) * 0.4,
+          kind: "half",
+        });
+      }
+      // sparks
+      for (let i = 0; i < 10; i++) {
+        add({
+          x,
+          y,
+          vx: (Math.random() - 0.5) * 5,
+          vy: (Math.random() - 0.5) * 5,
+          life: 0,
+          max: 500,
+          color: tokens.ember,
+          size: 2,
+          rot: 0,
+          vrot: 0,
+          kind: "spark",
+        });
+      }
+      // ash
+      for (let i = 0; i < 8; i++) {
+        add({
+          x,
+          y,
+          vx: (Math.random() - 0.5) * 3,
+          vy: (Math.random() - 0.5) * 3,
+          life: 0,
+          max: 700,
+          color: "#888",
+          size: 3,
+          rot: 0,
+          vrot: 0,
+          kind: "ash",
+        });
+      }
+    } else {
+      // shards
+      for (let i = 0; i < 3; i++) {
+        add({
+          x,
+          y,
+          vx: (Math.random() - 0.5) * 5,
+          vy: -2 - Math.random() * 3,
+          life: 0,
+          max: 700,
+          color: "rgba(16,53,47,0.6)",
+          size: 5,
+          rot: Math.random(),
+          vrot: (Math.random() - 0.5) * 0.5,
+          kind: "shard",
+        });
+      }
+      if (hexEdge) {
+        for (let i = 0; i < 5; i++) {
+          add({
+            x,
+            y,
+            vx: (Math.random() - 0.5) * 4,
+            vy: (Math.random() - 0.5) * 4,
+            life: 0,
+            max: 400,
+            color: tokens.ember,
+            size: 2,
+            rot: 0,
+            vrot: 0,
+            kind: "spark",
+          });
+        }
+      }
+    }
+  }
+
+  function drawCrackAt(x: number, y: number, isEdge: boolean) {
+    const crackC = crackCanvasRef.current;
+    if (!crackC) return;
+    const ctx = crackC.getContext("2d");
+    if (!ctx) return;
+    ctx.save();
+    ctx.strokeStyle = "rgba(16,53,47,0.55)";
+    ctx.lineWidth = isEdge ? 2 : 1;
+    ctx.translate(x, y);
+    const n = 5 + Math.floor(Math.random() * 4);
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const len = isEdge ? 8 + Math.random() * 8 : 12 + Math.random() * 20;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      let px = 0;
+      let py = 0;
+      const steps = 3;
+      for (let s = 1; s <= steps; s++) {
+        const jitter = (Math.random() - 0.5) * 6;
+        const na = a + jitter * 0.05;
+        px = (Math.cos(na) * len * s) / steps;
+        py = (Math.sin(na) * len * s) / steps;
+        ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function handleCanvasClick(e: React.MouseEvent<HTMLCanvasElement>) {
+    ensureAudio();
+    if (!running) return;
+    const cvs = canvasRef.current;
+    if (!cvs) return;
+    const rect = cvs.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * cvs.width;
+    const y = ((e.clientY - rect.top) / rect.height) * cvs.height;
+    playShot();
+    setShots((s) => s + 1);
+
+    const st = stateRef.current;
+    const cx = cvs.width / 2;
+    const cy = cvs.height / 2;
+    const R = Math.min(cvs.width, cvs.height) * 0.32;
+
+    let hitIndex = -1;
+    st.cigs.forEach((c, i) => {
+      if (!c.alive) return;
+      const a = st.angle + (i / 6) * Math.PI * 2;
+      const px = cx + Math.cos(a) * R;
+      const py = cy + Math.sin(a) * R;
+      const d = Math.hypot(px - x, py - y);
+      if (d < 22 && hitIndex === -1) hitIndex = i;
+    });
+
+    if (hitIndex >= 0) {
+      st.cigs[hitIndex].alive = false;
+      st.cigs[hitIndex].respawnAt = performance.now() + 1500;
+      setHits((h) => h + 1);
+      setStreak((s) => {
+        const ns = s + 1;
+        setBestStreak((b) => Math.max(b, ns));
+        return ns;
+      });
+      setCombo((c) => {
+        const nc = c + 1;
+        playHit(nc);
+        return nc;
+      });
+      setScore((sc) => sc + 10);
+      spawnParticles(x, y, "hit");
+    } else {
+      // Check hex edge proximity
+      const distToCenter = Math.hypot(x - cx, y - cy);
+      const nearEdge = Math.abs(distToCenter - R) < 10;
+      playMiss();
+      setStreak(0);
+      setCombo(0);
+      drawCrackAt(x, y, nearEdge);
+      spawnParticles(x, y, "miss", nearEdge);
+    }
+  }
+
+  const startRound = () => {
+    ensureAudio();
+    const crackC = crackCanvasRef.current;
+    if (crackC) {
+      const ctx = crackC.getContext("2d");
+      ctx?.clearRect(0, 0, crackC.width, crackC.height);
+    }
+    setHits(0);
+    setShots(0);
+    setStreak(0);
+    setBestStreak(0);
+    setCombo(0);
+    setScore(0);
+    setEnded(false);
+    setTimeLeft(30);
+    stateRef.current.cigs = Array.from({ length: 6 }, () => ({
+      alive: true,
+      respawnAt: 0,
+    }));
+    stateRef.current.startedAt = performance.now();
+    stateRef.current.running = true;
+    stateRef.current.lastCountdown = -1;
+    setRunning(true);
+  };
+
+  const endRound = () => {
+    if (!stateRef.current.running) return;
+    stateRef.current.running = false;
+    setRunning(false);
+    setEnded(true);
+    onDone(true);
+    setBest((b) => {
+      const acc = shots > 0 ? Math.round((hits / shots) * 100) : 0;
+      const isNewBest = score > b.score;
+      playEnd(isNewBest);
+      return {
+        score: Math.max(b.score, score),
+        acc: Math.max(b.acc, acc),
+      };
+    });
+  };
+
+  const accuracy = shots > 0 ? Math.round((hits / shots) * 100) : 0;
+
+  return (
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap gap-4 text-sm">
+          <span>🎯 {T("Hits", "إصابات", lang)}: <b>{hits}</b></span>
+          <span>🔫 {T("Shots", "طلقات", lang)}: <b>{shots}</b></span>
+          <span>📊 {T("Accuracy", "الدقة", lang)}: <b>{accuracy}%</b></span>
+          <span>🔥 {T("Best streak", "أفضل سلسلة", lang)}: <b>{bestStreak}</b></span>
+          <span>⏱ {timeLeft}s</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setMuted((m) => !m)}
+            className="rounded-full border px-2 py-1 text-sm"
+            style={{ borderColor: tokens.border, background: "#fff" }}
+            aria-label={muted ? "Unmute" : "Mute"}
+          >
+            {muted ? "🔇" : "🔊"}
+          </button>
+          {!running && (
+            <button
+              onClick={startRound}
+              className="rounded-full px-4 py-1 text-sm font-medium"
+              style={{ background: tokens.primary, color: "#fff" }}
+            >
+              {ended
+                ? T("Play again", "العب مجدداً", lang)
+                : T("Start", "ابدأ", lang)}
+            </button>
+          )}
+        </div>
+      </div>
+      <div className="relative w-full" style={{ aspectRatio: "4 / 3" }}>
+        <canvas
+          ref={canvasRef}
+          width={480}
+          height={360}
+          onMouseDown={handleCanvasClick}
+          className="w-full h-full rounded-xl border cursor-crosshair"
+          style={{ borderColor: tokens.border, background: "#f4f9f7" }}
+          aria-label="Shooting game canvas"
+        />
+        <canvas
+          ref={crackCanvasRef}
+          width={480}
+          height={360}
+          className="hidden"
+        />
+        {ended && (
+          <div
+            className="absolute inset-0 flex items-center justify-center rounded-xl"
+            style={{ background: "rgba(16,53,47,0.85)", color: "#fff" }}
+          >
+            <div className="text-center p-4 max-w-sm">
+              <div className="text-lg font-semibold mb-2">
+                {T("Round complete", "انتهت الجولة", lang)}
+              </div>
+              <div className="text-sm space-y-1">
+                <div>🎯 {hits} / 🔫 {shots} — {accuracy}%</div>
+                <div>🔥 {T("Best streak", "أفضل سلسلة", lang)}: {bestStreak}</div>
+                <div>🏆 {T("Score", "النقاط", lang)}: {score}</div>
+                <div className="opacity-80 text-xs mt-2">
+                  {T("Session best", "أفضل جلسة", lang)}: {best.score} / {best.acc}%
+                </div>
+                {accuracy >= 70 && (
+                  <div className="mt-2" style={{ color: tokens.ember }}>
+                    {T(
+                      "Precision like this deserves a quit date.",
+                      "دقة كهذه تستحق تاريخ إقلاع.",
+                      lang
+                    )}
+                  </div>
+                )}
+                {shots - hits > hits && (
+                  <div className="mt-2 text-xs opacity-90">
+                    {T(
+                      "You broke more glass than cigarettes — cravings win when we rush. Slow down, aim, breathe.",
+                      "كسرت زجاجاً أكثر من السجائر — الرغبة تفوز حين نستعجل. تمهّل، صوّب، تنفّس.",
+                      lang
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      <p className="text-xs opacity-70">
+        {T(
+          "Tap the moving cigarettes. Every shot breaks something.",
+          "انقر على السجائر المتحركة. كل طلقة تكسر شيئاً.",
+          lang
+        )}
+      </p>
+    </div>
+  );
+}
+
+/* --------------------------- shared small components --------------------------- */
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <label className="block text-sm">
+      <div className="mb-1 font-medium">{label}</div>
+      {children}
+    </label>
+  );
+}
+function Stat({
+  value,
+  label,
+  ember,
+}: {
+  value: string;
+  label: string;
+  ember?: boolean;
+}) {
+  return (
+    <div
+      className="rounded-xl p-3 text-white"
+      style={{
+        background: ember
+          ? "linear-gradient(135deg,#E08A2E,#C4452F)"
+          : "linear-gradient(135deg,#10352F,#1B6E5F)",
+      }}
+    >
+      <div className="text-xl font-bold leading-tight">{value}</div>
+      <div className="text-xs opacity-90 mt-1">{label}</div>
+    </div>
+  );
+}
