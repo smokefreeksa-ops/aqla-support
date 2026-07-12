@@ -247,14 +247,24 @@ export function AqlaWelcomeGate() {
 
           {mode === "choose" && (
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-              <button
-                type="button"
-                onClick={() => setMode("phone")}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#c9a84c]/40 bg-transparent px-4 py-2.5 text-sm font-semibold text-[#f4f0e1] transition hover:bg-white/5"
-              >
-                <Phone className="h-4 w-4" />
-                <span>الدخول برقم الجوال</span>
-              </button>
+              <div className="relative">
+                <button
+                  type="button"
+                  disabled
+                  aria-disabled="true"
+                  title="قريبًا"
+                  className="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-[#c9a84c]/25 bg-transparent px-4 py-2.5 text-sm font-semibold text-[#f4f0e1]/55 opacity-70"
+                >
+                  <Phone className="h-4 w-4" />
+                  <span>الدخول برقم الجوال</span>
+                </button>
+                <span
+                  className="pointer-events-none absolute -top-2 left-1/2 -translate-x-1/2 rounded-full border border-[#c9a84c]/50 bg-black/40 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#f6e7b8] backdrop-blur-sm"
+                  style={{ unicodeBidi: "plaintext" }}
+                >
+                  قريبًا · Coming soon
+                </span>
+              </div>
               <button
                 type="button"
                 onClick={() => setMode("email")}
