@@ -264,10 +264,10 @@ export function AqlaWelcomeGate() {
                   <span>الدخول برقم الجوال</span>
                 </button>
                 <span
-                  className="pointer-events-none absolute -top-2 left-1/2 -translate-x-1/2 rounded-full border border-[#c9a84c]/50 bg-black/40 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#f6e7b8] backdrop-blur-sm"
+                  className="pointer-events-none absolute -top-2 end-2 rounded-full border border-[#c9a84c]/50 bg-black/70 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[#f6e7b8] backdrop-blur-sm"
                   style={{ unicodeBidi: "plaintext" }}
                 >
-                  قريبًا · Coming soon
+                  قريبًا
                 </span>
               </div>
               <button
