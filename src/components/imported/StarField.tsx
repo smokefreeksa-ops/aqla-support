@@ -5,18 +5,24 @@ import { useMemo } from "react";
  * Pure CSS animation, no JS on tick — cheap on mobile.
  */
 export default function StarField({ count = 140 }: { count?: number }) {
+  const seeded = (index: number, salt: number) => {
+    const value = Math.sin(index * 12.9898 + salt * 78.233) * 43758.5453;
+    return value - Math.floor(value);
+  };
+
   const stars = useMemo(
     () =>
       Array.from({ length: count }, (_, i) => {
-        const size = Math.random() < 0.85 ? 1 : Math.random() < 0.6 ? 1.5 : 2;
+        const sizeSeed = seeded(i, 1);
+        const size = sizeSeed < 0.85 ? 1 : sizeSeed < 0.94 ? 1.5 : 2;
         return {
           id: i,
-          top: Math.random() * 100,
-          left: Math.random() * 100,
+          top: seeded(i, 2) * 100,
+          left: seeded(i, 3) * 100,
           size,
-          delay: Math.random() * 6,
-          duration: 2.5 + Math.random() * 4,
-          baseOpacity: 0.35 + Math.random() * 0.5,
+          delay: seeded(i, 4) * 6,
+          duration: 2.5 + seeded(i, 5) * 4,
+          baseOpacity: 0.35 + seeded(i, 6) * 0.5,
         };
       }),
     [count],

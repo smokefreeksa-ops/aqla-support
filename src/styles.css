@@ -352,3 +352,50 @@
 @media (prefers-reduced-motion: reduce) {
   .star-twinkle { animation: none !important; }
 }
+
+@media (hover: none), (pointer: coarse) {
+  html,
+  body {
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .aqla-hero-panel,
+  .glass-card,
+  .bg-card\/70,
+  .backdrop-blur,
+  .backdrop-blur-sm,
+  .backdrop-blur-\[2px\] {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .star-twinkle,
+  .study-banner-flash,
+  .typewriter-cursor,
+  .shimmer,
+  .animate-bounce,
+  .animate-ping,
+  .animate-pulse-soft,
+  .animate-breathe,
+  .animate-float-slow,
+  .animate-float-soft,
+  [style*="aqlaHexSpin"],
+  [style*="aqlaHexSpinRev"],
+  [style*="aqlaDotOrbit"],
+  [style*="aqlaBgGlow"],
+  [style*="aqlaNumPulse"],
+  [style*="aqlaFlashIn"] {
+    animation: none !important;
+  }
+
+  .glass-card,
+  .glass-card:hover,
+  .card-neumorphic,
+  .hover\:-translate-y-1:hover,
+  .hover\:scale-\[1\.02\]:hover,
+  .hover\:scale-105:hover {
+    transform: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -13,7 +13,7 @@ export function SOSButton({
   const [reduce, setReduce] = useState(false);
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce), (hover: none), (pointer: coarse)");
     setReduce(mq.matches);
     const h = () => setReduce(mq.matches);
     mq.addEventListener?.("change", h);
@@ -31,6 +31,9 @@ export function SOSButton({
         }
         .aqla-sos-fab { animation: aqlaSosIdlePulse 2.4s ease-in-out infinite; }
         @media (prefers-reduced-motion: reduce) {
+          .aqla-sos-fab { animation: none; }
+        }
+        @media (hover: none), (pointer: coarse) {
           .aqla-sos-fab { animation: none; }
         }
       `}</style>
