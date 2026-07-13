@@ -103,7 +103,7 @@ function Inner() {
         </section>
 
         <Tabs value={tab} onValueChange={setTab} className="mt-8">
-          <TabsList dir={isAr ? "rtl" : "ltr"} className={`mx-auto flex w-full max-w-3xl flex-wrap justify-center gap-1 bg-muted/50 ${isAr ? "flex-row-reverse" : ""}`}>
+          <TabsList dir={isAr ? "rtl" : "ltr"} className="mx-auto flex w-full max-w-3xl flex-wrap justify-center gap-1 bg-muted/50">
             <TabsTrigger value="all">{t("الكل", "All")}</TabsTrigger>
             {CATEGORIES.map((c) => (
               <TabsTrigger key={c.v} value={c.v}>{isAr ? c.ar : c.en}</TabsTrigger>

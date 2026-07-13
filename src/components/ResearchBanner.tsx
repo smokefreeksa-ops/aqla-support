@@ -48,7 +48,7 @@ export function ResearchBanner() {
         />
         <div className="relative mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-3 gap-y-1">
           <p className="text-[13px] font-semibold leading-5 text-white drop-shadow-sm sm:text-sm">
-            شارك تجربتك مع أظرف النيكوتين وساهم في الدراسة
+            شارك تجربتك مع أضرار النيكوتين وساهم في الدراسة
           </p>
           <span className="text-[12px] font-semibold text-white underline decoration-white/60 underline-offset-2 group-hover:decoration-white">
             شارك في الدراسة ←
