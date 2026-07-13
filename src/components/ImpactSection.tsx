@@ -21,9 +21,26 @@ type Slide = {
   hue: [string, string]; // gradient stops
 };
 
-function CountFlash({ value, suffix }: { value: number; suffix?: string }) {
+function useScrollStableMotion() {
+  const [stable, setStable] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce), (hover: none), (pointer: coarse)");
+    const update = () => setStable(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
+  return stable;
+}
+
+function CountFlash({ value, suffix, animate = true }: { value: number; suffix?: string; animate?: boolean }) {
   const [n, setN] = useState(0);
   useEffect(() => {
+    if (!animate) {
+      setN(value);
+      return;
+    }
     setN(0);
     if (value <= 0) return;
     const duration = 1100;
@@ -38,7 +55,7 @@ function CountFlash({ value, suffix }: { value: number; suffix?: string }) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [value]);
+  }, [animate, value]);
   return <>{n.toLocaleString("en-US")}{suffix}</>;
 }
 
@@ -50,6 +67,7 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
     staleTime: 60_000,
   });
   const s: ImpactStats = data ?? EMPTY;
+  const scrollStableMotion = useScrollStableMotion();
 
   const slides: Slide[] = [
     { icon: <Users className="h-5 w-5" />, label: isAr ? "طالب مسجل" : "Registered students", value: 1926, hue: ["#00A65A", "#006C35"] },
@@ -62,9 +80,10 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
 
   const [idx, setIdx] = useState(0);
   useEffect(() => {
+    if (scrollStableMotion) return;
     const t = window.setInterval(() => setIdx((i) => (i + 1) % slides.length), 2600);
     return () => window.clearInterval(t);
-  }, [slides.length]);
+  }, [scrollStableMotion, slides.length]);
 
   const active = slides[idx];
 
@@ -104,7 +123,7 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
           className="absolute inset-0 rounded-full blur-3xl"
           style={{
             background: `radial-gradient(circle at 50% 50%, ${active.hue[0]}55, transparent 60%)`,
-            animation: "aqlaBgGlow 3s ease-in-out infinite",
+            animation: scrollStableMotion ? "none" : "aqlaBgGlow 3s ease-in-out infinite",
             transition: "background 1.2s ease",
           }}
         />
@@ -113,7 +132,7 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
         <svg
           viewBox="0 0 200 200"
           className="absolute"
-          style={{ width: 340, height: 340, animation: "aqlaHexSpin 28s linear infinite" }}
+          style={{ width: 340, height: 340, animation: scrollStableMotion ? "none" : "aqlaHexSpin 28s linear infinite" }}
         >
           <defs>
             <linearGradient id="hexOuter" x1="0" y1="0" x2="1" y2="1">
@@ -135,7 +154,7 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
         <svg
           viewBox="0 0 200 200"
           className="absolute"
-          style={{ width: 280, height: 280, animation: "aqlaHexSpinRev 18s linear infinite" }}
+          style={{ width: 280, height: 280, animation: scrollStableMotion ? "none" : "aqlaHexSpinRev 18s linear infinite" }}
         >
           <polygon points={hexPoints} fill="none" stroke={active.hue[0]} strokeOpacity="0.45" strokeWidth="0.6" />
         </svg>
@@ -144,7 +163,7 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
         <svg
           viewBox="0 0 200 200"
           className="absolute"
-          style={{ width: 230, height: 230, animation: "aqlaHexSpin 12s linear infinite" }}
+          style={{ width: 230, height: 230, animation: scrollStableMotion ? "none" : "aqlaHexSpin 12s linear infinite" }}
         >
           <defs>
             <linearGradient id="hexInner" x1="0" y1="0" x2="1" y2="1">
@@ -168,7 +187,7 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
         {/* orbiting dots */}
         <div
           className="absolute"
-          style={{ width: 340, height: 340, animation: "aqlaDotOrbit 14s linear infinite" }}
+          style={{ width: 340, height: 340, animation: scrollStableMotion ? "none" : "aqlaDotOrbit 14s linear infinite" }}
         >
           {slides.map((sl, i) => {
             const angle = (i / slides.length) * Math.PI * 2 - Math.PI / 2;
@@ -196,7 +215,7 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
           key={idx}
           dir={isAr ? "rtl" : "ltr"}
           className="relative z-10 flex flex-col items-center justify-center text-center"
-          style={{ animation: "aqlaFlashIn .9s ease-out both" }}
+          style={{ animation: scrollStableMotion ? "none" : "aqlaFlashIn .9s ease-out both" }}
         >
           <div
             className="grid h-11 w-11 place-items-center rounded-xl backdrop-blur-sm mb-2"
@@ -214,10 +233,10 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
               color: active.hue[0],
               fontSize: 56,
               lineHeight: 1,
-              animation: "aqlaNumPulse 2s ease-in-out infinite",
+              animation: scrollStableMotion ? "none" : "aqlaNumPulse 2s ease-in-out infinite",
             }}
           >
-            <CountFlash value={active.value} suffix={active.suffix} />
+            <CountFlash value={active.value} suffix={active.suffix} animate={!scrollStableMotion} />
           </div>
           <div className="mt-2 text-[13px] font-medium text-foreground/85">{active.label}</div>
         </div>

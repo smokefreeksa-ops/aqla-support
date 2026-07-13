@@ -32,6 +32,7 @@ export function useDraggableWidget(opts: {
   const ref = useRef<HTMLDivElement | null>(null);
   const [pos, setPos] = useState<Pos | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [dragEnabled, setDragEnabled] = useState(false);
   const dragState = useRef<{
     startX: number;
     startY: number;
@@ -52,9 +53,29 @@ export function useDraggableWidget(opts: {
     };
   }, []);
 
-  // Load saved position
   useEffect(() => {
     if (typeof window === "undefined") return;
+    const finePointer = window.matchMedia("(pointer: fine)");
+    const hoverPointer = window.matchMedia("(hover: hover)");
+    const update = () => {
+      const enabled = finePointer.matches && hoverPointer.matches;
+      setDragEnabled(enabled);
+      if (!enabled) setPos(null);
+    };
+    update();
+    finePointer.addEventListener?.("change", update);
+    hoverPointer.addEventListener?.("change", update);
+    return () => {
+      finePointer.removeEventListener?.("change", update);
+      hoverPointer.removeEventListener?.("change", update);
+    };
+  }, []);
+
+  // Load saved position on desktop pointers only. On phones, dragging a fixed
+  // widget competes with page scrolling and can feel like the page is shaking.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!dragEnabled) return;
     try {
       const raw = localStorage.getItem(storageKey);
       if (!raw) return;
@@ -74,7 +95,7 @@ export function useDraggableWidget(opts: {
     } catch {
       /* ignore */
     }
-  }, [storageKey]);
+  }, [dragEnabled, storageKey]);
 
   const onPointerMove = useCallback(
     (e: PointerEvent) => {
@@ -113,6 +134,7 @@ export function useDraggableWidget(opts: {
 
   const onPointerDown = useCallback(
     (e: React.PointerEvent) => {
+      if (!dragEnabled) return;
       // only left button / touch / pen
       if (e.button !== 0 && e.pointerType === "mouse") return;
       const el = ref.current;
@@ -129,7 +151,7 @@ export function useDraggableWidget(opts: {
       window.addEventListener("pointermove", onPointerMove);
       window.addEventListener("pointerup", onPointerUp);
     },
-    [onPointerMove, onPointerUp],
+    [dragEnabled, onPointerMove, onPointerUp],
   );
 
   // Reclamp on resize
@@ -138,9 +160,10 @@ export function useDraggableWidget(opts: {
     const handler = () => {
       setPos((p) => (p ? clampToViewport(p) : p));
     };
-    window.addEventListener("resize", handler);
+      if (!dragEnabled) return;
+      window.addEventListener("resize", handler);
     return () => window.removeEventListener("resize", handler);
-  }, [clampToViewport]);
+  }, [clampToViewport, dragEnabled]);
 
   const reset = useCallback(() => {
     try {
@@ -158,17 +181,17 @@ export function useDraggableWidget(opts: {
         top: pos.y,
         right: "auto",
         bottom: "auto",
-        touchAction: "none",
-        userSelect: "none",
+        touchAction: dragEnabled ? "none" : "manipulation",
+        userSelect: dragEnabled ? "none" : "auto",
         cursor: dragging ? "grabbing" : "grab",
       }
     : {
         position: "fixed",
         bottom: `calc(${defaultBottom}px + env(safe-area-inset-bottom, 0px))`,
         [defaultSide]: defaultSideOffset,
-        touchAction: "none",
-        userSelect: "none",
-        cursor: dragging ? "grabbing" : "grab",
+        touchAction: dragEnabled ? "none" : "manipulation",
+        userSelect: dragEnabled ? "none" : "auto",
+        cursor: dragEnabled ? (dragging ? "grabbing" : "grab") : "auto",
       };
 
   return { ref, style, onPointerDown, reset, dragging };

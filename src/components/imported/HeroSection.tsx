@@ -275,7 +275,7 @@ export default function HeroSection() {
       className="relative flex flex-col min-h-[92vh] items-center justify-center pt-24 pb-20 overflow-hidden"
       style={{ background: "#000" }}
     >
-      <StarField count={160} />
+      <StarField count={96} />
       <div className="absolute inset-0 z-[1] pointer-events-none">
         <div
           className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full opacity-[0.10]"
@@ -289,7 +289,7 @@ export default function HeroSection() {
 
       <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 my-6">
         <div
-          className="relative px-8 py-12 sm:px-12 sm:py-16 md:px-16 md:py-20 w-full text-center rounded-2xl overflow-visible"
+          className="aqla-hero-panel relative px-8 py-12 sm:px-12 sm:py-16 md:px-16 md:py-20 w-full text-center rounded-2xl overflow-visible"
           style={{
             background: "rgba(5, 9, 10, 0.55)",
             backdropFilter: "blur(24px) saturate(180%)",
