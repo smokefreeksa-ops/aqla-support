@@ -22,7 +22,7 @@ const PUBLICATIONS = [
     url: "https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2025.1641308/full",
   },
   {
-    titleAr: "استخدام أظرف النيكوتين ونتائج الإقلاع: مسح وطني",
+    titleAr: "استخدام أضرار النيكوتين ونتائج الإقلاع: مسح وطني",
     journal: "Frontiers in Public Health · 2026",
     url: "https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2026.1806892/full",
   },
