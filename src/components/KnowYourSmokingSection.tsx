@@ -108,10 +108,11 @@ export default function KnowYourSmokingSection() {
 
   return (
     <section
+      id="know-your-smoking"
       dir={dir}
       lang={lang}
       style={{ background: tokens.bg, color: tokens.ink }}
-      className="border-t"
+      className="scroll-mt-24 border-t"
       aria-label="Know Your Smoking Life"
     >
       <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
