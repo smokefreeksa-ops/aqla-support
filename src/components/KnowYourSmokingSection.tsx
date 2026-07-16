@@ -1800,7 +1800,18 @@ function Shooter({
                     )}
                   </div>
                 )}
+                <ShareScore
+                  lang={lang}
+                  hash="kys-4"
+                  tone="dark"
+                  headline={T(
+                    `I scored ${score} in Aqla's Shoot-the-Cigarettes — ${hits}/${shots} (${accuracy}%). Beat me:`,
+                    `سجّلت ${score} نقطة في لعبة صوّب على السجائر — ${hits}/${shots} (${accuracy}%). تحدّاني:`,
+                    lang
+                  )}
+                />
               </div>
+
             </div>
           </div>
         )}
