@@ -27,12 +27,31 @@ export default function KnowYourSmokingSection() {
   const [open, setOpen] = useState<number | null>(null);
   const [done, setDone] = useState<Record<number, boolean>>({});
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const applyHash = () => {
+      const m = window.location.hash.match(/^#kys-(\d+)$/);
+      if (m) {
+        const idx = Number(m[1]);
+        if (idx >= 0 && idx <= 4) {
+          setOpen(idx);
+          const el = document.getElementById("know-your-smoking");
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+    };
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
+  }, []);
+
   const setDoneFor = (idx: number, val: boolean) =>
     setDone((d) => (d[idx] === val ? d : { ...d, [idx]: val }));
 
   const doneCount = Object.values(done).filter(Boolean).length;
   // Tool 5 (shooter) is not part of the 4-quarter burn signature per spec.
   const burnCount = [0, 1, 2, 3].filter((i) => done[i]).length;
+
 
   const tools = [
     {
