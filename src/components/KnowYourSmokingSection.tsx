@@ -693,23 +693,35 @@ function GripTest({
       ))}
 
       {complete && (
-        <div
-          className="rounded-xl p-4 mt-4 flex flex-col sm:flex-row items-center gap-4"
-          style={{ background: level.bg }}
-        >
-          <Gauge score={score} max={10} color={level.color} />
-          <div>
-            <div
-              className="font-semibold text-lg"
-              style={{ color: level.color }}
-            >
-              {level.name} — {score}/10
+        <div className="mt-4 space-y-3">
+          <div
+            className="rounded-xl p-4 flex flex-col sm:flex-row items-center gap-4"
+            style={{ background: level.bg }}
+          >
+            <Gauge score={score} max={10} color={level.color} />
+            <div>
+              <div
+                className="font-semibold text-lg"
+                style={{ color: level.color }}
+              >
+                {level.name} — {score}/10
+              </div>
+              <p className="text-sm mt-1">{level.text}</p>
+              <p className="text-xs mt-2 opacity-80">{extra}</p>
             </div>
-            <p className="text-sm mt-1">{level.text}</p>
-            <p className="text-xs mt-2 opacity-80">{extra}</p>
           </div>
+          <ShareScore
+            lang={lang}
+            hash="kys-1"
+            headline={T(
+              `My nicotine grip score is ${score}/10 — ${level.name}. Test yours on Aqla:`,
+              `درجة قبضة النيكوتين عندي ${score}/10 — ${level.name}. اختبر نفسك على أقلع:`,
+              lang
+            )}
+          />
         </div>
       )}
+
     </div>
   );
 }
