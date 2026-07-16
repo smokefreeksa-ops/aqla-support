@@ -492,7 +492,17 @@ function MoneyCounter({
             lang
           )}
         </p>
+        <ShareScore
+          lang={lang}
+          hash="kys-0"
+          headline={T(
+            `I've spent ~${fmt(total)} ${currency} on smoking — and ${fmt(days)} days of my life. See yours on Aqla.`,
+            `أنفقت ~${fmt(total)} ${currency} على التدخين — وخسرت ${fmt(days)} يوماً من عمري. احسب أنت الآن على أقلع.`,
+            lang
+          )}
+        />
       </div>
+
     </div>
   );
 }
@@ -683,23 +693,35 @@ function GripTest({
       ))}
 
       {complete && (
-        <div
-          className="rounded-xl p-4 mt-4 flex flex-col sm:flex-row items-center gap-4"
-          style={{ background: level.bg }}
-        >
-          <Gauge score={score} max={10} color={level.color} />
-          <div>
-            <div
-              className="font-semibold text-lg"
-              style={{ color: level.color }}
-            >
-              {level.name} — {score}/10
+        <div className="mt-4 space-y-3">
+          <div
+            className="rounded-xl p-4 flex flex-col sm:flex-row items-center gap-4"
+            style={{ background: level.bg }}
+          >
+            <Gauge score={score} max={10} color={level.color} />
+            <div>
+              <div
+                className="font-semibold text-lg"
+                style={{ color: level.color }}
+              >
+                {level.name} — {score}/10
+              </div>
+              <p className="text-sm mt-1">{level.text}</p>
+              <p className="text-xs mt-2 opacity-80">{extra}</p>
             </div>
-            <p className="text-sm mt-1">{level.text}</p>
-            <p className="text-xs mt-2 opacity-80">{extra}</p>
           </div>
+          <ShareScore
+            lang={lang}
+            hash="kys-1"
+            headline={T(
+              `My nicotine grip score is ${score}/10 — ${level.name}. Test yours on Aqla:`,
+              `درجة قبضة النيكوتين عندي ${score}/10 — ${level.name}. اختبر نفسك على أقلع:`,
+              lang
+            )}
+          />
         </div>
       )}
+
     </div>
   );
 }
@@ -1778,7 +1800,18 @@ function Shooter({
                     )}
                   </div>
                 )}
+                <ShareScore
+                  lang={lang}
+                  hash="kys-4"
+                  tone="dark"
+                  headline={T(
+                    `I scored ${score} in Aqla's Shoot-the-Cigarettes — ${hits}/${shots} (${accuracy}%). Beat me:`,
+                    `سجّلت ${score} نقطة في لعبة صوّب على السجائر — ${hits}/${shots} (${accuracy}%). تحدّاني:`,
+                    lang
+                  )}
+                />
               </div>
+
             </div>
           </div>
         )}
@@ -1832,3 +1865,94 @@ function Stat({
     </div>
   );
 }
+
+/* --------------------------- Share your result --------------------------- */
+const SHARE_URL = "https://aqla1.com";
+function ShareScore({
+  lang,
+  headline,
+  hash,
+  tone = "teal",
+}: {
+  lang: Lang;
+  headline: string;
+  hash: string; // e.g. "kys-0"
+  tone?: "teal" | "ember" | "dark";
+}) {
+  const url = `${SHARE_URL}/#${hash}`;
+  const tagline = T(
+    "Try Aqla — free, no signup:",
+    "جرّب أقلع — مجاناً وبدون تسجيل:",
+    lang
+  );
+  const fullText = `${headline}\n\n${tagline} ${url}`;
+  const enc = encodeURIComponent(fullText);
+  const [copied, setCopied] = useState(false);
+
+  async function nativeShare() {
+    if (typeof navigator !== "undefined" && (navigator as Navigator & { share?: (d: ShareData) => Promise<void> }).share) {
+      try {
+        await (navigator as Navigator & { share: (d: ShareData) => Promise<void> }).share({
+          title: "Aqla — أقلع",
+          text: `${headline}\n\n${tagline}`,
+          url,
+        });
+        return;
+      } catch { /* user cancelled */ }
+    }
+    void copy();
+  }
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(fullText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    } catch { /* ignore */ }
+  }
+
+  const btnBase =
+    "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition active:scale-95";
+  const primary =
+    tone === "dark"
+      ? { background: "#fff", color: "#10352F" }
+      : tone === "ember"
+      ? { background: "#C4452F", color: "#fff" }
+      : { background: "#1B6E5F", color: "#fff" };
+  const ghost =
+    tone === "dark"
+      ? { background: "rgba(255,255,255,0.15)", color: "#fff", border: "1px solid rgba(255,255,255,0.35)" }
+      : { background: "#fff", color: "#10352F", border: "1px solid #D5E3DD" };
+
+  return (
+    <div className="mt-3 flex flex-wrap items-center gap-2">
+      <span className={tone === "dark" ? "text-xs opacity-80" : "text-xs opacity-70"}>
+        {T("Share your result:", "شارك نتيجتك:", lang)}
+      </span>
+      <button type="button" onClick={() => void nativeShare()} className={btnBase} style={primary}>
+        📣 {T("Share", "شارك", lang)}
+      </button>
+      <a
+        href={`https://wa.me/?text=${enc}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={btnBase}
+        style={ghost}
+      >
+        🟢 WhatsApp
+      </a>
+      <a
+        href={`https://twitter.com/intent/tweet?text=${enc}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={btnBase}
+        style={ghost}
+      >
+        𝕏
+      </a>
+      <button type="button" onClick={() => void copy()} className={btnBase} style={ghost}>
+        {copied ? T("Copied ✓", "تم النسخ ✓", lang) : T("Copy link", "نسخ الرابط", lang)}
+      </button>
+    </div>
+  );
+}
+
