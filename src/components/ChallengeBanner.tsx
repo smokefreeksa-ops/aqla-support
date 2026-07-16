@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Linkedin, Twitter, X as XIcon } from "lucide-react";
+import { Linkedin, Twitter } from "lucide-react";
 import { toast } from "sonner";
 
 const STORAGE = "aqla.challenge.banner.v1";
