@@ -438,7 +438,7 @@ export default function HeroSection() {
               } else {
                 window.location.hash = item.hash;
               }
-              track("quick_tool_click");
+              track("quit_intent");
             }}
             className="group inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 active:scale-95"
             style={{
