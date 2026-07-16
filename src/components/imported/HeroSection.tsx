@@ -421,22 +421,39 @@ export default function HeroSection() {
         </div>
       </div>
 
-      <div className="relative z-10 flex flex-wrap items-center justify-center gap-6 px-4">
+      <div className="relative z-10 flex flex-wrap items-center justify-center gap-3 px-4">
         {[
-          { value: "1,926", label: "طالب مسجل" },
-          { value: "7", label: "وحدات تعليمية" },
-          { value: "95%", label: "معدل الرضا" },
+          { emoji: "🧲", label: "اختبار الإدمان", hash: "#kys-1" },
+          { emoji: "💸", label: "عدّاد المال", hash: "#kys-0" },
+          { emoji: "🎯", label: "صوّب على السجائر", hash: "#kys-4" },
         ].map((item) => (
-          <div key={item.label} className="flex items-center gap-2">
-            <span className="text-xl font-extrabold tabular-nums" style={{ color: "#00A65A" }}>
-              {item.value}
-            </span>
-            <span className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
-              {item.label}
-            </span>
-          </div>
+          <button
+            key={item.hash}
+            type="button"
+            onClick={() => {
+              const el = document.getElementById("know-your-smoking");
+              if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+              if (window.location.hash === item.hash) {
+                window.dispatchEvent(new HashChangeEvent("hashchange"));
+              } else {
+                window.location.hash = item.hash;
+              }
+              track("quit_intent");
+            }}
+            className="group inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 active:scale-95"
+            style={{
+              border: "1px solid rgba(0,166,90,0.35)",
+              background: "rgba(0,166,90,0.12)",
+              color: "rgba(255,255,255,0.92)",
+            }}
+          >
+            <span className="text-base" aria-hidden>{item.emoji}</span>
+            <span>{item.label}</span>
+            <span className="text-[11px] opacity-70">جرّبها الآن ←</span>
+          </button>
         ))}
       </div>
+
 
       <button
         type="button"
