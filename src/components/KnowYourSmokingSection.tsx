@@ -492,7 +492,17 @@ function MoneyCounter({
             lang
           )}
         </p>
+        <ShareScore
+          lang={lang}
+          hash="kys-0"
+          headline={T(
+            `I've spent ~${fmt(total)} ${currency} on smoking — and ${fmt(days)} days of my life. See yours on Aqla.`,
+            `أنفقت ~${fmt(total)} ${currency} على التدخين — وخسرت ${fmt(days)} يوماً من عمري. احسب أنت الآن على أقلع.`,
+            lang
+          )}
+        />
       </div>
+
     </div>
   );
 }
