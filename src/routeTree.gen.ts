@@ -13,6 +13,7 @@ import { Route as WhenToSeekHelpRouteImport } from './routes/when-to-seek-help'
 import { Route as VolunteerRouteImport } from './routes/volunteer'
 import { Route as VoiceCravingScanRouteImport } from './routes/voice-craving-scan'
 import { Route as UpdatesRouteImport } from './routes/updates'
+import { Route as TryRouteImport } from './routes/try'
 import { Route as TrainingRouteImport } from './routes/training'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -91,6 +92,11 @@ const VoiceCravingScanRoute = VoiceCravingScanRouteImport.update({
 const UpdatesRoute = UpdatesRouteImport.update({
   id: '/updates',
   path: '/updates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TryRoute = TryRouteImport.update({
+  id: '/try',
+  path: '/try',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TrainingRoute = TrainingRouteImport.update({
@@ -441,6 +447,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
+  '/try': typeof TryRoute
   '/updates': typeof UpdatesRoute
   '/voice-craving-scan': typeof VoiceCravingScanRoute
   '/volunteer': typeof VolunteerRoute
@@ -506,6 +513,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
+  '/try': typeof TryRoute
   '/updates': typeof UpdatesRoute
   '/voice-craving-scan': typeof VoiceCravingScanRoute
   '/volunteer': typeof VolunteerRoute
@@ -572,6 +580,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
+  '/try': typeof TryRoute
   '/updates': typeof UpdatesRoute
   '/voice-craving-scan': typeof VoiceCravingScanRoute
   '/volunteer': typeof VolunteerRoute
@@ -639,6 +648,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tools'
     | '/training'
+    | '/try'
     | '/updates'
     | '/voice-craving-scan'
     | '/volunteer'
@@ -704,6 +714,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tools'
     | '/training'
+    | '/try'
     | '/updates'
     | '/voice-craving-scan'
     | '/volunteer'
@@ -769,6 +780,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tools'
     | '/training'
+    | '/try'
     | '/updates'
     | '/voice-craving-scan'
     | '/volunteer'
@@ -835,6 +847,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   ToolsRoute: typeof ToolsRoute
   TrainingRoute: typeof TrainingRoute
+  TryRoute: typeof TryRoute
   UpdatesRoute: typeof UpdatesRoute
   VoiceCravingScanRoute: typeof VoiceCravingScanRoute
   VolunteerRoute: typeof VolunteerRoute
@@ -876,6 +889,13 @@ declare module '@tanstack/react-router' {
       path: '/updates'
       fullPath: '/updates'
       preLoaderRoute: typeof UpdatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/try': {
+      id: '/try'
+      path: '/try'
+      fullPath: '/try'
+      preLoaderRoute: typeof TryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/training': {
@@ -1380,6 +1400,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   ToolsRoute: ToolsRoute,
   TrainingRoute: TrainingRoute,
+  TryRoute: TryRoute,
   UpdatesRoute: UpdatesRoute,
   VoiceCravingScanRoute: VoiceCravingScanRoute,
   VolunteerRoute: VolunteerRoute,
