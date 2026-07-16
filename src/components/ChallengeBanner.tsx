@@ -133,14 +133,8 @@ export function ChallengeBanner() {
             <Twitter className="h-3.5 w-3.5" />
           </a>
           <span className="text-[11px] opacity-80 hidden sm:inline">تابعنا</span>
-          <button
-            onClick={() => setDismissed(true)}
-            aria-label="إغلاق"
-            className="ms-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition"
-          >
-            <XIcon className="h-3 w-3" />
-          </button>
         </div>
+
       </div>
 
       {open && (
