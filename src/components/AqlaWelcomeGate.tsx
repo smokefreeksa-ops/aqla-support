@@ -235,6 +235,42 @@ export function AqlaWelcomeGate() {
 
         <p className="mt-2 text-xs text-[#d6cda3] sm:text-sm">منصة مجانية للجميع، وستبقى مجانية.</p>
 
+        {/* === Try-before-you-sign-in: 3 viral tools, no registration === */}
+        <div className="mt-6 rounded-2xl border border-[#c9a84c]/30 bg-black/25 p-3 text-right">
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <span className="text-[11px] font-semibold text-[#f6e7b8]">جرّبها الآن — بدون تسجيل</span>
+            <span className="rounded-full bg-[#c9a84c]/20 px-2 py-0.5 text-[10px] font-semibold text-[#f6e7b8]">
+              مجاناً
+            </span>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <a
+              href="/try#kys-1"
+              className="group flex flex-col items-center gap-1 rounded-xl border border-white/10 bg-white/5 px-2 py-3 text-center transition hover:border-[#c9a84c]/50 hover:bg-white/10"
+            >
+              <span className="text-2xl" aria-hidden>🧲</span>
+              <span className="text-[11px] font-semibold leading-tight text-[#f4f0e1]">اختبار الإدمان</span>
+              <span className="text-[10px] text-[#d6cda3] group-hover:text-[#f6e7b8]">جرّبها ←</span>
+            </a>
+            <a
+              href="/try#kys-0"
+              className="group flex flex-col items-center gap-1 rounded-xl border border-white/10 bg-white/5 px-2 py-3 text-center transition hover:border-[#c9a84c]/50 hover:bg-white/10"
+            >
+              <span className="text-2xl" aria-hidden>💸</span>
+              <span className="text-[11px] font-semibold leading-tight text-[#f4f0e1]">عدّاد المال</span>
+              <span className="text-[10px] text-[#d6cda3] group-hover:text-[#f6e7b8]">جرّبها ←</span>
+            </a>
+            <a
+              href="/try#kys-4"
+              className="group flex flex-col items-center gap-1 rounded-xl border border-white/10 bg-white/5 px-2 py-3 text-center transition hover:border-[#c9a84c]/50 hover:bg-white/10"
+            >
+              <span className="text-2xl" aria-hidden>🎯</span>
+              <span className="text-[11px] font-semibold leading-tight text-[#f4f0e1]">صوّب على السجائر</span>
+              <span className="text-[10px] text-[#d6cda3] group-hover:text-[#f6e7b8]">جرّبها ←</span>
+            </a>
+          </div>
+        </div>
+
         {/* === Login options === */}
         <div className="mt-6 space-y-3">
           {/* Google — always visible & prominent */}
