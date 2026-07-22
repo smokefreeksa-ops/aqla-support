@@ -6,7 +6,7 @@ import { ArrowRight, Loader2, Mail, Phone } from "lucide-react";
 import aqlaLogo from "@/assets/aqla-logo.png";
 import { PreLoginAssistant } from "@/components/PreLoginAssistant";
 import { FloatingWhatsAppButton } from "@/components/FloatingWhatsAppButton";
-import { ResearchBanner } from "@/components/ResearchBanner";
+import { ResearchBanner, RESEARCH_REDCAP_URL } from "@/components/ResearchBanner";
 
 type Mode = "choose" | "phone" | "email";
 type PhoneStep = "enter" | "verify";
@@ -55,6 +55,21 @@ function normalizePhone(country: string, local: string): string | null {
 
 export function AqlaWelcomeGate() {
   const [mode, setMode] = useState<Mode>("choose");
+  const [showStudyHero, setShowStudyHero] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    try {
+      return sessionStorage.getItem("aqla_study_hero_skipped") !== "1";
+    } catch {
+      return true;
+    }
+  });
+
+  function skipStudyHero() {
+    setShowStudyHero(false);
+    try {
+      sessionStorage.setItem("aqla_study_hero_skipped", "1");
+    } catch { /* ignore */ }
+  }
 
   // Google
   const [googleLoading, setGoogleLoading] = useState(false);
@@ -199,6 +214,38 @@ export function AqlaWelcomeGate() {
       <div className="sticky top-0 z-20 w-full">
         <ResearchBanner />
       </div>
+      {showStudyHero && (
+        <section
+          dir="rtl"
+          className="relative z-10 w-full border-b border-white/10 bg-gradient-to-b from-white/[0.06] to-transparent px-5 pb-6 pt-8 backdrop-blur-sm"
+        >
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="inline-block rounded-full border border-[#c9a84c]/40 bg-[#c9a84c]/10 px-3 py-1 text-[10px] font-semibold tracking-wide text-[#f6e7b8]">
+              دراسة علمية · KAU
+            </span>
+            <h2 className="mt-3 text-xl font-bold leading-snug text-[#f6e7b8] sm:text-2xl">
+              شارك تجربتك مع أضرار النيكوتين وساهم في الدراسة
+            </h2>
+            <div className="mt-5 flex flex-col items-center justify-center gap-2 sm:flex-row-reverse">
+              <a
+                href={RESEARCH_REDCAP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#c9a84c] px-6 py-2.5 text-sm font-bold text-[#0b3a25] shadow-lg transition hover:brightness-110 sm:w-auto"
+              >
+                شارك في الدراسة
+              </a>
+              <button
+                type="button"
+                onClick={skipStudyHero}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/25 bg-transparent px-6 py-2.5 text-sm font-semibold text-[#f4f0e1]/85 transition hover:bg-white/5 sm:w-auto"
+              >
+                تخطي
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
       <div className="flex w-full flex-1 flex-col items-center justify-center px-5 py-10">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 h-[60vmin] w-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#c9a84c]/10 blur-3xl" />
@@ -243,30 +290,37 @@ export function AqlaWelcomeGate() {
               مجاناً
             </span>
           </div>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
             <a
               href="/try#kys-1"
-              className="group flex flex-col items-center gap-1 rounded-xl border border-white/10 bg-white/5 px-2 py-3 text-center transition hover:border-[#c9a84c]/50 hover:bg-white/10"
+              className="group flex flex-col items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-4 text-center transition hover:border-[#c9a84c]/60 hover:bg-white/10 active:scale-[0.98]"
             >
               <span className="text-2xl" aria-hidden>🧲</span>
-              <span className="text-[11px] font-semibold leading-tight text-[#f4f0e1]">اختبار الإدمان</span>
-              <span className="text-[10px] text-[#d6cda3] group-hover:text-[#f6e7b8]">جرّبها ←</span>
+              <span className="text-[12px] font-semibold leading-tight text-[#f4f0e1]">
+                اختبر اعتمادك على النيكوتين
+              </span>
+              <span className="text-[10px] font-semibold text-[#f6e7b8] group-hover:underline">ابدأ الآن ←</span>
             </a>
             <a
               href="/try#kys-0"
-              className="group flex flex-col items-center gap-1 rounded-xl border border-white/10 bg-white/5 px-2 py-3 text-center transition hover:border-[#c9a84c]/50 hover:bg-white/10"
+              className="group flex flex-col items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-4 text-center transition hover:border-[#c9a84c]/60 hover:bg-white/10 active:scale-[0.98]"
             >
               <span className="text-2xl" aria-hidden>💸</span>
-              <span className="text-[11px] font-semibold leading-tight text-[#f4f0e1]">عدّاد المال</span>
-              <span className="text-[10px] text-[#d6cda3] group-hover:text-[#f6e7b8]">جرّبها ←</span>
+              <span className="text-[12px] font-semibold leading-tight text-[#f4f0e1]">
+                كم تنفق على التدخين؟
+              </span>
+              <span className="text-[10px] font-semibold text-[#f6e7b8] group-hover:underline">ابدأ الآن ←</span>
             </a>
             <a
               href="/try#kys-4"
-              className="group flex flex-col items-center gap-1 rounded-xl border border-white/10 bg-white/5 px-2 py-3 text-center transition hover:border-[#c9a84c]/50 hover:bg-white/10"
+              className="group relative flex flex-col items-center gap-1.5 overflow-hidden rounded-xl border border-white/10 bg-white/5 px-3 py-4 text-center transition hover:border-[#c9a84c]/60 hover:bg-white/10 active:scale-[0.98]"
             >
-              <span className="text-2xl" aria-hidden>🎯</span>
-              <span className="text-[11px] font-semibold leading-tight text-[#f4f0e1]">صوّب على السجائر</span>
-              <span className="text-[10px] text-[#d6cda3] group-hover:text-[#f6e7b8]">جرّبها ←</span>
+              <HexAnim />
+              <span className="relative text-2xl" aria-hidden>🎯</span>
+              <span className="relative text-[12px] font-semibold leading-tight text-[#f4f0e1]">
+                تحدي كسر عادة التدخين
+              </span>
+              <span className="relative text-[10px] font-semibold text-[#f6e7b8] group-hover:underline">ابدأ الآن ←</span>
             </a>
           </div>
         </div>
@@ -508,5 +562,41 @@ function GoogleMark() {
       <path fill="#4CAF50" d="M24 44c5.5 0 10.5-2.1 14.3-5.5l-6.6-5.4C29.6 34.7 26.9 36 24 36c-5.2 0-9.7-3.3-11.3-8l-6.5 5C9.4 39.6 16.1 44 24 44z"/>
       <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.3 5.6l6.6 5.4C41 35.9 44 30.5 44 24c0-1.3-.1-2.3-.4-3.5z"/>
     </svg>
+  );
+}
+
+function HexAnim() {
+  return (
+    <>
+      <style>{`
+        @keyframes aqlaHexFloat {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          50% { transform: translate(4px, -6px) rotate(180deg); }
+        }
+        @keyframes aqlaHexFloat2 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          50% { transform: translate(-6px, 4px) rotate(-160deg); }
+        }
+        @keyframes aqlaHexFloat3 {
+          0%, 100% { transform: translate(0, 0) rotate(30deg); }
+          50% { transform: translate(3px, 5px) rotate(210deg); }
+        }
+        .aqla-hex { animation: aqlaHexFloat 5s ease-in-out infinite; }
+        .aqla-hex-2 { animation: aqlaHexFloat2 6.5s ease-in-out infinite; }
+        .aqla-hex-3 { animation: aqlaHexFloat3 7.5s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .aqla-hex, .aqla-hex-2, .aqla-hex-3 { animation: none; }
+        }
+      `}</style>
+      <svg
+        aria-hidden
+        viewBox="0 0 100 100"
+        className="pointer-events-none absolute inset-0 h-full w-full opacity-60"
+      >
+        <polygon className="aqla-hex" points="20,18 28,14 36,18 36,26 28,30 20,26" fill="none" stroke="#c9a84c" strokeWidth="1.2" style={{ transformOrigin: "28px 22px" }} />
+        <polygon className="aqla-hex-2" points="72,20 80,16 88,20 88,28 80,32 72,28" fill="none" stroke="#f6e7b8" strokeWidth="1" style={{ transformOrigin: "80px 24px" }} />
+        <polygon className="aqla-hex-3" points="74,72 82,68 90,72 90,80 82,84 74,80" fill="none" stroke="#c9a84c" strokeWidth="1" style={{ transformOrigin: "82px 76px" }} />
+      </svg>
+    </>
   );
 }
