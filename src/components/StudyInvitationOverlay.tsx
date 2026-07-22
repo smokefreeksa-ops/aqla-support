@@ -72,7 +72,7 @@ function GalaxyCanvas() {
 
       const cx = width * 0.5;
       const cy = height * 0.5;
-      const R = Math.max(width, height) * 0.7;
+      const R = Math.hypot(width, height) * 1.6;
 
       // Soft core glow
       const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 0.5);
