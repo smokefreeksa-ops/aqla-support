@@ -88,9 +88,9 @@ function GalaxyCanvas() {
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
         const angle = p.a + baseRot * p.speed;
-        const rad = p.r * R * 0.55;
+        const rad = p.r * R * 0.75;
         const x = cx + Math.cos(angle) * rad;
-        const y = cy + Math.sin(angle) * rad * 0.55; // flatten to disc
+        const y = cy + Math.sin(angle) * rad * 0.8; // gentle disc flatten
         ctx.fillStyle = colorFor(p.hue, p.alpha);
         ctx.beginPath();
         ctx.arc(x, y, p.size, 0, Math.PI * 2);
