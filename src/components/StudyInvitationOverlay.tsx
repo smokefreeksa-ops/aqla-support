@@ -113,13 +113,7 @@ function GalaxyCanvas() {
       ref={ref}
       aria-hidden
       className="pointer-events-none absolute inset-0 h-full w-full"
-      style={{
-        mixBlendMode: "screen",
-        WebkitMaskImage:
-          "radial-gradient(ellipse 20% 18% at 50% 50%, transparent 0%, rgba(0,0,0,0.35) 55%, #000 80%)",
-        maskImage:
-          "radial-gradient(ellipse 20% 18% at 50% 50%, transparent 0%, rgba(0,0,0,0.35) 55%, #000 80%)",
-      }}
+      style={{ mixBlendMode: "screen" }}
     />
   );
 }
@@ -355,10 +349,9 @@ export function StudyInvitationOverlay() {
         className="relative flex max-h-[92vh] w-full max-w-[520px] flex-col overflow-hidden rounded-[28px] outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
         style={{
           background:
-            "linear-gradient(160deg, rgba(11,58,37,0.22) 0%, rgba(8,38,24,0.28) 100%)",
-          backdropFilter: "blur(10px) saturate(140%)",
-          WebkitBackdropFilter: "blur(10px) saturate(140%)",
-          border: "1px solid rgba(255,255,255,0.10)",
+            "linear-gradient(160deg, rgba(11,58,37,0.06) 0%, rgba(8,38,24,0.10) 100%)",
+          backdropFilter: "blur(4px) saturate(120%)",
+          border: "1px solid rgba(255,255,255,0.12)",
           boxShadow:
             "0 40px 100px -40px rgba(0,0,0,0.75), 0 0 0 1px rgba(201,168,76,0.06) inset",
           transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
