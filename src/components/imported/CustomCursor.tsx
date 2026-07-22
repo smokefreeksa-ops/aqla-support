@@ -47,7 +47,7 @@ export default function CustomCursor() {
     document.addEventListener("mouseleave", onMouseLeave);
     document.addEventListener("mouseenter", onMouseEnter);
 
-    const LERP = 0.12;
+    const LERP = 0.28;
     const animate = () => {
       ringPos.current.x += (mousePos.current.x - ringPos.current.x) * LERP;
       ringPos.current.y += (mousePos.current.y - ringPos.current.y) * LERP;
