@@ -55,6 +55,21 @@ function normalizePhone(country: string, local: string): string | null {
 
 export function AqlaWelcomeGate() {
   const [mode, setMode] = useState<Mode>("choose");
+  const [showStudyHero, setShowStudyHero] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    try {
+      return sessionStorage.getItem("aqla_study_hero_skipped") !== "1";
+    } catch {
+      return true;
+    }
+  });
+
+  function skipStudyHero() {
+    setShowStudyHero(false);
+    try {
+      sessionStorage.setItem("aqla_study_hero_skipped", "1");
+    } catch { /* ignore */ }
+  }
 
   // Google
   const [googleLoading, setGoogleLoading] = useState(false);
