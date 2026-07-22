@@ -71,9 +71,9 @@ export default function CustomCursor() {
   }, [visible]);
 
   const dotSize =
-    state === "clicking" ? 6 : state === "hovering" ? 20 : state === "text" ? 0 : 8;
-  const ringSize = state === "clicking" ? 28 : state === "hovering" ? 60 : 36;
-  const ringOpacity = state === "hovering" ? 0.5 : state === "clicking" ? 0.8 : 0.7;
+    state === "clicking" ? 4 : state === "hovering" ? 8 : state === "text" ? 0 : 5;
+  const ringSize = state === "clicking" ? 20 : state === "hovering" ? 34 : 22;
+  const ringOpacity = state === "hovering" ? 0.55 : state === "clicking" ? 0.75 : 0.45;
   const isTextState = state === "text";
 
   return (
@@ -86,17 +86,19 @@ export default function CustomCursor() {
           top: 0,
           left: 0,
           width: isTextState ? 2 : dotSize,
-          height: isTextState ? 20 : dotSize,
+          height: isTextState ? 18 : dotSize,
           marginLeft: isTextState ? -1 : -(dotSize / 2),
-          marginTop: isTextState ? -10 : -(dotSize / 2),
+          marginTop: isTextState ? -9 : -(dotSize / 2),
           borderRadius: isTextState ? 1 : "50%",
-          backgroundColor: "#29d3c2",
+          backgroundColor: "rgba(255,255,255,0.95)",
+          boxShadow: "0 0 6px rgba(255,255,255,0.35)",
           pointerEvents: "none",
           zIndex: 99999,
           opacity: visible ? 1 : 0,
           transition:
-            "width 150ms ease, height 150ms ease, margin 150ms ease, border-radius 150ms ease, opacity 200ms ease",
+            "width 200ms ease, height 200ms ease, margin 200ms ease, border-radius 200ms ease, opacity 250ms ease",
           willChange: "transform",
+          mixBlendMode: "difference",
         }}
       />
       <div
@@ -111,15 +113,16 @@ export default function CustomCursor() {
           marginLeft: -(ringSize / 2),
           marginTop: -(ringSize / 2),
           borderRadius: "50%",
-          border: "1.5px solid #29d3c2",
+          border: "1px solid rgba(255,255,255,0.55)",
           backgroundColor:
-            state === "hovering" ? "rgba(41,211,194,0.10)" : "transparent",
+            state === "hovering" ? "rgba(255,255,255,0.06)" : "transparent",
           pointerEvents: "none",
           zIndex: 99998,
           opacity: visible ? ringOpacity : 0,
           transition:
-            "width 200ms cubic-bezier(0.23,1,0.32,1), height 200ms cubic-bezier(0.23,1,0.32,1), margin 200ms cubic-bezier(0.23,1,0.32,1), opacity 200ms ease, background-color 200ms ease",
+            "width 260ms cubic-bezier(0.22,1,0.36,1), height 260ms cubic-bezier(0.22,1,0.36,1), margin 260ms cubic-bezier(0.22,1,0.36,1), opacity 250ms ease, background-color 250ms ease",
           willChange: "transform",
+          mixBlendMode: "difference",
         }}
       />
     </>
