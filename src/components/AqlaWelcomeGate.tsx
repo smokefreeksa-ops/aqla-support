@@ -214,6 +214,38 @@ export function AqlaWelcomeGate() {
       <div className="sticky top-0 z-20 w-full">
         <ResearchBanner />
       </div>
+      {showStudyHero && (
+        <section
+          dir="rtl"
+          className="relative z-10 w-full border-b border-white/10 bg-gradient-to-b from-white/[0.06] to-transparent px-5 pb-6 pt-8 backdrop-blur-sm"
+        >
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="inline-block rounded-full border border-[#c9a84c]/40 bg-[#c9a84c]/10 px-3 py-1 text-[10px] font-semibold tracking-wide text-[#f6e7b8]">
+              دراسة علمية · KAU
+            </span>
+            <h2 className="mt-3 text-xl font-bold leading-snug text-[#f6e7b8] sm:text-2xl">
+              شارك تجربتك مع أضرار النيكوتين وساهم في الدراسة
+            </h2>
+            <div className="mt-5 flex flex-col items-center justify-center gap-2 sm:flex-row-reverse">
+              <a
+                href={RESEARCH_REDCAP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#c9a84c] px-6 py-2.5 text-sm font-bold text-[#0b3a25] shadow-lg transition hover:brightness-110 sm:w-auto"
+              >
+                شارك في الدراسة
+              </a>
+              <button
+                type="button"
+                onClick={skipStudyHero}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/25 bg-transparent px-6 py-2.5 text-sm font-semibold text-[#f4f0e1]/85 transition hover:bg-white/5 sm:w-auto"
+              >
+                تخطي
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
       <div className="flex w-full flex-1 flex-col items-center justify-center px-5 py-10">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 h-[60vmin] w-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#c9a84c]/10 blur-3xl" />
