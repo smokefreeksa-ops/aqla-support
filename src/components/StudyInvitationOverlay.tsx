@@ -113,7 +113,13 @@ function GalaxyCanvas() {
       ref={ref}
       aria-hidden
       className="pointer-events-none absolute inset-0 h-full w-full"
-      style={{ mixBlendMode: "screen" }}
+      style={{
+        mixBlendMode: "screen",
+        WebkitMaskImage:
+          "radial-gradient(ellipse 32% 28% at 50% 50%, transparent 0%, rgba(0,0,0,0.15) 45%, #000 70%)",
+        maskImage:
+          "radial-gradient(ellipse 32% 28% at 50% 50%, transparent 0%, rgba(0,0,0,0.15) 45%, #000 70%)",
+      }}
     />
   );
 }
