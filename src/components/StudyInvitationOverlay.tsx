@@ -196,7 +196,7 @@ export function StudyInvitationOverlay() {
     <div
       className="fixed inset-0 z-[300] flex items-center justify-center px-4 py-6 sm:px-6"
       style={{
-        background: "rgba(15, 23, 30, 0.55)",
+        background: "rgba(6, 24, 16, 0.72)",
         backdropFilter: "blur(22px) saturate(140%)",
         paddingTop: "max(env(safe-area-inset-top), 1rem)",
         paddingBottom: "max(env(safe-area-inset-bottom), 1rem)",
@@ -211,15 +211,24 @@ export function StudyInvitationOverlay() {
         tabIndex={-1}
         dir={t.dir}
         lang={lang}
-        className="relative flex max-h-[92vh] w-full max-w-[520px] flex-col overflow-hidden rounded-[28px] border border-white/60 bg-white/85 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.35)] outline-none focus-visible:ring-2 focus-visible:ring-[#0b6b3a]/50"
-        style={{ backdropFilter: "blur(24px) saturate(160%)" }}
+        className="relative flex max-h-[92vh] w-full max-w-[520px] flex-col overflow-hidden rounded-[28px] border border-white/10 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)] outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/50"
+        style={{
+          background:
+            "linear-gradient(160deg, #0b3a25 0%, #0a2f1f 55%, #082618 100%)",
+          backdropFilter: "blur(24px) saturate(160%)",
+        }}
       >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
+        />
+
         {/* Language switch */}
         <div className={`absolute top-3 ${isRTL ? "left-3" : "right-3"} z-10`}>
           <button
             type="button"
             onClick={() => setLang(lang === "ar" ? "en" : "ar")}
-            className="inline-flex h-9 min-w-[44px] items-center justify-center rounded-full border border-black/10 bg-white/70 px-3 text-[12px] font-medium text-neutral-700 backdrop-blur transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b6b3a]/40"
+            className="inline-flex h-9 min-w-[44px] items-center justify-center rounded-full border border-white/15 bg-white/[0.06] px-3 text-[12px] font-medium text-white/85 backdrop-blur transition hover:bg-white/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/50"
             aria-label={lang === "ar" ? "Switch to English" : "التبديل إلى العربية"}
           >
             {t.langSwitchOther}
@@ -229,8 +238,8 @@ export function StudyInvitationOverlay() {
         <div className="flex flex-col gap-6 px-6 pb-6 pt-10 sm:px-9 sm:pt-11">
           {/* Badge */}
           <div className="flex items-center justify-center gap-2 text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-black/[0.08] bg-white/70 px-3 py-1.5 text-[12px] font-medium text-neutral-700">
-              <IconUniversity className="h-4 w-4 text-[#0b6b3a]" />
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 text-[12px] font-medium text-white/85">
+              <IconUniversity className="h-4 w-4 text-[#c9a84c]" />
               {t.badge}
             </span>
           </div>
@@ -238,7 +247,7 @@ export function StudyInvitationOverlay() {
           {/* Title */}
           <h2
             id="aqla-study-title"
-            className={`text-center font-semibold tracking-tight text-neutral-900 ${
+            className={`text-center font-semibold tracking-tight text-white ${
               isRTL ? "text-[26px] leading-[1.35] sm:text-[30px]" : "text-[24px] leading-[1.25] sm:text-[28px]"
             }`}
           >
@@ -250,27 +259,27 @@ export function StudyInvitationOverlay() {
             <button
               type="button"
               onClick={participate}
-              className="inline-flex min-h-[48px] w-full items-center justify-center rounded-2xl bg-[#0b6b3a] px-6 text-[15px] font-semibold text-white shadow-[0_10px_24px_-12px_rgba(11,107,58,0.6)] transition duration-200 hover:bg-[#0a5f34] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b6b3a]/50 focus-visible:ring-offset-2 motion-reduce:transition-none"
+              className="inline-flex min-h-[48px] w-full items-center justify-center rounded-2xl bg-[#c9a84c] px-6 text-[15px] font-semibold text-[#0b3a25] shadow-[0_10px_24px_-12px_rgba(201,168,76,0.55)] transition duration-200 hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b3a25] motion-reduce:transition-none"
             >
               {t.participate}
             </button>
             <button
               type="button"
               onClick={close}
-              className="inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl bg-transparent px-6 text-[14px] font-medium text-neutral-600 transition duration-200 hover:text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-300 motion-reduce:transition-none"
+              className="inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl border border-white/15 bg-transparent px-6 text-[14px] font-medium text-white/85 transition duration-200 hover:bg-white/[0.06] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 motion-reduce:transition-none"
             >
               {t.skip}
             </button>
           </div>
 
           {/* Details toggle */}
-          <div className="border-t border-black/[0.06] pt-3">
+          <div className="border-t border-white/10 pt-3">
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="aqla-study-details"
-              className="mx-auto inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-full px-3 text-[13px] font-medium text-neutral-600 transition hover:text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-300"
+              className="mx-auto inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-full px-3 text-[13px] font-medium text-white/75 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
             >
               <span>{t.detailsToggle}</span>
               <IconChevron open={open} />
@@ -287,28 +296,28 @@ export function StudyInvitationOverlay() {
               }}
             >
               <div className="min-h-0 overflow-hidden">
-                <div className="mt-3 max-h-[46vh] overflow-y-auto rounded-2xl bg-black/[0.02] p-4 sm:p-5">
-                  <h3 className="text-[15px] font-semibold text-neutral-900">
+                <div className="mt-3 max-h-[46vh] overflow-y-auto rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5">
+                  <h3 className="text-[15px] font-semibold text-white">
                     {t.detailsTitle}
                   </h3>
-                  <p className="mt-3 text-[14px] leading-[1.75] text-neutral-700">{t.p1}</p>
-                  <p className="mt-2.5 text-[14px] leading-[1.75] text-neutral-700">{t.p2}</p>
-                  <p className="mt-2.5 text-[14px] leading-[1.75] text-neutral-700">
-                    {t.p3Prefix} <span className="font-semibold text-neutral-900">{t.p3Amount}</span>.
+                  <p className="mt-3 text-[14px] leading-[1.75] text-white/80">{t.p1}</p>
+                  <p className="mt-2.5 text-[14px] leading-[1.75] text-white/80">{t.p2}</p>
+                  <p className="mt-2.5 text-[14px] leading-[1.75] text-white/80">
+                    {t.p3Prefix} <span className="font-semibold text-[#f0d78c]">{t.p3Amount}</span>.
                   </p>
 
                   <ul className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
                     {[
-                      { icon: <IconCheck className="h-4 w-4 text-[#0b6b3a]" />, label: t.voluntary },
-                      { icon: <IconLock className="h-4 w-4 text-[#0b6b3a]" />, label: t.confidential },
-                      { icon: <IconMask className="h-4 w-4 text-[#0b6b3a]" />, label: t.anonymous },
-                      { icon: <IconGift className="h-4 w-4 text-[#0b6b3a]" />, label: t.prize },
+                      { icon: <IconCheck className="h-4 w-4 text-[#c9a84c]" />, label: t.voluntary },
+                      { icon: <IconLock className="h-4 w-4 text-[#c9a84c]" />, label: t.confidential },
+                      { icon: <IconMask className="h-4 w-4 text-[#c9a84c]" />, label: t.anonymous },
+                      { icon: <IconGift className="h-4 w-4 text-[#c9a84c]" />, label: t.prize },
                     ].map((item, i) => (
                       <li
                         key={i}
-                        className="flex items-center gap-2 rounded-xl border border-black/[0.06] bg-white/70 px-3 py-2 text-[12.5px] text-neutral-700"
+                        className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-[12.5px] text-white/85"
                       >
-                        <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#0b6b3a]/[0.08]">
+                        <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#c9a84c]/15">
                           {item.icon}
                         </span>
                         <span className="min-w-0 truncate">{item.label}</span>
@@ -316,12 +325,12 @@ export function StudyInvitationOverlay() {
                     ))}
                   </ul>
 
-                  <div className="mt-4 flex items-center gap-2 text-[13px] text-neutral-700">
-                    <IconMail className="h-4 w-4 shrink-0 text-[#0b6b3a]" />
-                    <span className="text-neutral-500">{t.contactLabel}</span>
+                  <div className="mt-4 flex items-center gap-2 text-[13px] text-white/80">
+                    <IconMail className="h-4 w-4 shrink-0 text-[#c9a84c]" />
+                    <span className="text-white/60">{t.contactLabel}</span>
                     <a
                       href="mailto:smokefreeksa@gmail.com"
-                      className="min-w-0 truncate font-medium text-[#0b6b3a] underline decoration-[#0b6b3a]/30 underline-offset-2 hover:decoration-[#0b6b3a]"
+                      className="min-w-0 truncate font-medium text-[#f0d78c] underline decoration-[#c9a84c]/40 underline-offset-2 hover:decoration-[#c9a84c]"
                     >
                       smokefreeksa@gmail.com
                     </a>
