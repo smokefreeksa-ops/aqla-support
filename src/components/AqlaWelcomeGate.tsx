@@ -564,3 +564,39 @@ function GoogleMark() {
     </svg>
   );
 }
+
+function HexAnim() {
+  return (
+    <>
+      <style>{`
+        @keyframes aqlaHexFloat {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          50% { transform: translate(4px, -6px) rotate(180deg); }
+        }
+        @keyframes aqlaHexFloat2 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          50% { transform: translate(-6px, 4px) rotate(-160deg); }
+        }
+        @keyframes aqlaHexFloat3 {
+          0%, 100% { transform: translate(0, 0) rotate(30deg); }
+          50% { transform: translate(3px, 5px) rotate(210deg); }
+        }
+        .aqla-hex { animation: aqlaHexFloat 5s ease-in-out infinite; }
+        .aqla-hex-2 { animation: aqlaHexFloat2 6.5s ease-in-out infinite; }
+        .aqla-hex-3 { animation: aqlaHexFloat3 7.5s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .aqla-hex, .aqla-hex-2, .aqla-hex-3 { animation: none; }
+        }
+      `}</style>
+      <svg
+        aria-hidden
+        viewBox="0 0 100 100"
+        className="pointer-events-none absolute inset-0 h-full w-full opacity-60"
+      >
+        <polygon className="aqla-hex" points="20,18 28,14 36,18 36,26 28,30 20,26" fill="none" stroke="#c9a84c" strokeWidth="1.2" style={{ transformOrigin: "28px 22px" }} />
+        <polygon className="aqla-hex-2" points="72,20 80,16 88,20 88,28 80,32 72,28" fill="none" stroke="#f6e7b8" strokeWidth="1" style={{ transformOrigin: "80px 24px" }} />
+        <polygon className="aqla-hex-3" points="74,72 82,68 90,72 90,80 82,84 74,80" fill="none" stroke="#c9a84c" strokeWidth="1" style={{ transformOrigin: "82px 76px" }} />
+      </svg>
+    </>
+  );
+}
