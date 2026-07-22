@@ -16,6 +16,7 @@ import { AqlaAssistant } from "@/components/AqlaAssistant";
 import { AqlaAuthGate } from "@/components/AqlaAuthGate";
 import { ChallengeBanner } from "@/components/ChallengeBanner";
 import { SOSButton } from "@/features/sos/components/SOSButton";
+import { StudyInvitationOverlay } from "@/components/StudyInvitationOverlay";
 
 function NotFoundComponent() {
   return (
