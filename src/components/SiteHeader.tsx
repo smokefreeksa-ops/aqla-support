@@ -6,7 +6,7 @@ import { useLang } from "@/lib/i18n";
 import { appRoutes } from "@/lib/app-routes";
 import { supabase } from "@/integrations/supabase/client";
 import aqlaLogo from "@/assets/aqla-logo.png";
-import { ResearchBanner } from "@/components/ResearchBanner";
+
 
 type NavItem = { ar: string; en: string; to: string };
 
@@ -52,7 +52,6 @@ export function SiteHeader() {
 
   return (
     <div className="sticky top-0 z-40">
-      <ResearchBanner />
       <header dir={dir} className="border-b border-border/60 bg-card/85 backdrop-blur supports-[backdrop-filter]:bg-card/70">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5">
         <Link to={appRoutes.home} className="flex shrink-0 items-center gap-2.5">
