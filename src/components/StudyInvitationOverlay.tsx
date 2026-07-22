@@ -335,6 +335,7 @@ export function StudyInvitationOverlay() {
       role="presentation"
     >
       <LuxuryStarfield />
+      <GalaxyCanvas />
 
       {/* Modal */}
       <div
