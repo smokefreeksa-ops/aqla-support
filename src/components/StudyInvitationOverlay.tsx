@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const REDCAP_URL = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM";
 const STORAGE_KEY = "aqla_study_overlay_dismissed";
@@ -7,7 +7,8 @@ type Lang = "ar" | "en";
 
 const COPY: Record<Lang, {
   dir: "rtl" | "ltr";
-  badge: string;
+  eyebrow: string;
+  university: string;
   title: string;
   participate: string;
   skip: string;
@@ -22,14 +23,13 @@ const COPY: Record<Lang, {
   confidential: string;
   anonymous: string;
   prize: string;
-  contact: string;
   langSwitchOther: string;
-  close: string;
 }> = {
   ar: {
     dir: "rtl",
-    badge: "دراسة من جامعة الملك عبدالعزيز",
-    title: "ساهم برأيك في دعم خيارات أكثر صحة",
+    eyebrow: "دراسة علمية",
+    university: "جامعة الملك عبدالعزيز",
+    title: "شارك برأيك حول دور منتجات النيكوتين الخالية من التبغ في الحد من أضرار التدخين",
     participate: "شارك في الدراسة",
     skip: "تخطي",
     detailsToggle: "تفاصيل الدراسة",
@@ -43,14 +43,13 @@ const COPY: Record<Lang, {
     confidential: "إجابات سرية",
     anonymous: "مجهولة الهوية",
     prize: "سحب على ٥٠٠ ريال سعودي",
-    contact: "التواصل للاستفسارات",
     langSwitchOther: "English",
-    close: "إغلاق",
   },
   en: {
     dir: "ltr",
-    badge: "A study from King Abdulaziz University",
-    title: "Share your view to support healthier choices",
+    eyebrow: "Scientific study",
+    university: "King Abdulaziz University",
+    title: "Share your view on the role of tobacco-free nicotine products in reducing smoking harm",
     participate: "Take part in the study",
     skip: "Skip",
     detailsToggle: "Study details",
@@ -64,74 +63,20 @@ const COPY: Record<Lang, {
     confidential: "Confidential answers",
     anonymous: "Anonymous responses",
     prize: "SAR 500 prize draw",
-    contact: "Contact for questions",
     langSwitchOther: "العربية",
-    close: "Close",
   },
 };
 
-// Minimal inline icons (stroke-based, calm)
-function IconUniversity({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
-      <path d="M12 3l10 5-10 5L2 8l10-5z" />
-      <path d="M6 10v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5" />
-      <path d="M22 8v6" />
-    </svg>
-  );
-}
-function IconCheck({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
-      <path d="M20 6L9 17l-5-5" />
-    </svg>
-  );
-}
-function IconLock({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
-      <rect x="4" y="10" width="16" height="10" rx="2" />
-      <path d="M8 10V7a4 4 0 118 0v3" />
-    </svg>
-  );
-}
-function IconMask({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M8 14c1.2 1 2.5 1.5 4 1.5s2.8-.5 4-1.5" />
-      <circle cx="9" cy="10" r="0.8" fill="currentColor" />
-      <circle cx="15" cy="10" r="0.8" fill="currentColor" />
-    </svg>
-  );
-}
-function IconGift({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
-      <rect x="3" y="8" width="18" height="4" rx="1" />
-      <path d="M5 12v8h14v-8M12 8v12" />
-      <path d="M12 8s-3-4-5-2 2 2 5 2zM12 8s3-4 5-2-2 2-5 2z" />
-    </svg>
-  );
-}
-function IconMail({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
-      <rect x="3" y="5" width="18" height="14" rx="2" />
-      <path d="M3 7l9 6 9-6" />
-    </svg>
-  );
-}
 function IconChevron({ open }: { open: boolean }) {
   return (
     <svg
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.8"
+      strokeWidth="1.6"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="h-4 w-4 transition-transform duration-300 ease-out motion-reduce:transition-none"
+      className="h-3.5 w-3.5 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
       style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
       aria-hidden
     >
@@ -140,8 +85,74 @@ function IconChevron({ open }: { open: boolean }) {
   );
 }
 
+// Luxurious, calm starfield — small bright pinpoints on deep night sky.
+function LuxuryStarfield() {
+  const stars = useMemo(() => {
+    const seed = (i: number, s: number) => {
+      const v = Math.sin(i * 12.9898 + s * 78.233) * 43758.5453;
+      return v - Math.floor(v);
+    };
+    const count = 110;
+    return Array.from({ length: count }, (_, i) => {
+      const r = seed(i, 1);
+      const size = r < 0.78 ? 1 : r < 0.94 ? 1.4 : 2;
+      return {
+        id: i,
+        top: seed(i, 2) * 100,
+        left: seed(i, 3) * 100,
+        size,
+        delay: seed(i, 4) * 8,
+        duration: 4 + seed(i, 5) * 6,
+        opacity: 0.25 + seed(i, 6) * 0.55,
+        glow: size >= 2,
+      };
+    });
+  }, []);
+
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+    >
+      {/* deep sky gradient */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 90% 70% at 50% 40%, #0a1a14 0%, #05100b 55%, #020806 100%)",
+        }}
+      />
+      {/* subtle aurora wash */}
+      <div
+        className="absolute inset-0 opacity-60"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 40% at 20% 20%, rgba(201,168,76,0.06), transparent 60%), radial-gradient(ellipse 50% 40% at 80% 80%, rgba(11,58,37,0.35), transparent 60%)",
+        }}
+      />
+      {stars.map((s) => (
+        <span
+          key={s.id}
+          className="absolute rounded-full bg-white star-twinkle motion-reduce:animate-none"
+          style={{
+            top: `${s.top}%`,
+            left: `${s.left}%`,
+            width: `${s.size}px`,
+            height: `${s.size}px`,
+            opacity: s.opacity,
+            animationDelay: `${s.delay}s`,
+            animationDuration: `${s.duration}s`,
+            boxShadow: s.glow ? "0 0 6px rgba(255,255,255,0.7)" : undefined,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function StudyInvitationOverlay() {
   const [visible, setVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [lang, setLang] = useState<Lang>("ar");
   const [open, setOpen] = useState(false);
   const dialogRef = useRef<HTMLDivElement | null>(null);
@@ -157,15 +168,17 @@ export function StudyInvitationOverlay() {
 
   useEffect(() => {
     if (!visible) return;
+    // trigger fade-in next frame
+    const r = requestAnimationFrame(() => setMounted(true));
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    // focus dialog for keyboard users
-    const id = window.setTimeout(() => dialogRef.current?.focus(), 30);
+    const id = window.setTimeout(() => dialogRef.current?.focus(), 40);
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
     };
     window.addEventListener("keydown", onKey);
     return () => {
+      cancelAnimationFrame(r);
       document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
       window.clearTimeout(id);
@@ -196,13 +209,16 @@ export function StudyInvitationOverlay() {
     <div
       className="fixed inset-0 z-[300] flex items-center justify-center px-4 py-6 sm:px-6"
       style={{
-        background: "rgba(6, 24, 16, 0.72)",
-        backdropFilter: "blur(22px) saturate(140%)",
+        opacity: mounted ? 1 : 0,
+        transition: "opacity 500ms ease-out",
         paddingTop: "max(env(safe-area-inset-top), 1rem)",
         paddingBottom: "max(env(safe-area-inset-bottom), 1rem)",
       }}
       role="presentation"
     >
+      <LuxuryStarfield />
+
+      {/* Modal */}
       <div
         ref={dialogRef}
         role="dialog"
@@ -211,16 +227,21 @@ export function StudyInvitationOverlay() {
         tabIndex={-1}
         dir={t.dir}
         lang={lang}
-        className="relative flex max-h-[92vh] w-full max-w-[520px] flex-col overflow-hidden rounded-[28px] border border-white/10 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)] outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/50"
+        className="relative flex max-h-[92vh] w-full max-w-[520px] flex-col overflow-hidden rounded-[28px] outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
         style={{
           background:
-            "linear-gradient(160deg, #0b3a25 0%, #0a2f1f 55%, #082618 100%)",
-          backdropFilter: "blur(24px) saturate(160%)",
+            "linear-gradient(160deg, rgba(11,58,37,0.72) 0%, rgba(8,38,24,0.78) 100%)",
+          backdropFilter: "blur(28px) saturate(160%)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          boxShadow:
+            "0 40px 100px -40px rgba(0,0,0,0.75), 0 0 0 1px rgba(201,168,76,0.06) inset",
+          transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
+          transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
         }}
       >
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/40 to-transparent"
         />
 
         {/* Language switch */}
@@ -228,19 +249,25 @@ export function StudyInvitationOverlay() {
           <button
             type="button"
             onClick={() => setLang(lang === "ar" ? "en" : "ar")}
-            className="inline-flex h-9 min-w-[44px] items-center justify-center rounded-full border border-white/15 bg-white/[0.06] px-3 text-[12px] font-medium text-white/85 backdrop-blur transition hover:bg-white/[0.12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/50"
+            className="inline-flex h-8 min-w-[40px] items-center justify-center rounded-full border border-white/12 bg-white/[0.04] px-3 text-[11px] font-medium tracking-wide text-white/75 backdrop-blur transition-colors duration-300 hover:bg-white/[0.09] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
             aria-label={lang === "ar" ? "Switch to English" : "التبديل إلى العربية"}
           >
             {t.langSwitchOther}
           </button>
         </div>
 
-        <div className="flex flex-col gap-6 px-6 pb-6 pt-10 sm:px-9 sm:pt-11">
-          {/* Badge */}
-          <div className="flex items-center justify-center gap-2 text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 text-[12px] font-medium text-white/85">
-              <IconUniversity className="h-4 w-4 text-[#c9a84c]" />
-              {t.badge}
+        <div className="flex flex-col gap-7 px-7 pb-8 pt-12 sm:px-10 sm:pt-14">
+          {/* Eyebrow */}
+          <div className="flex flex-col items-center gap-1.5 text-center">
+            <div className="flex items-center gap-2">
+              <span aria-hidden className="h-px w-6 bg-[#c9a84c]/50" />
+              <span className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c9a84c]">
+                {t.eyebrow}
+              </span>
+              <span aria-hidden className="h-px w-6 bg-[#c9a84c]/50" />
+            </div>
+            <span className="text-[13px] font-medium text-white/70">
+              {t.university}
             </span>
           </div>
 
@@ -248,7 +275,9 @@ export function StudyInvitationOverlay() {
           <h2
             id="aqla-study-title"
             className={`text-center font-semibold tracking-tight text-white ${
-              isRTL ? "text-[26px] leading-[1.35] sm:text-[30px]" : "text-[24px] leading-[1.25] sm:text-[28px]"
+              isRTL
+                ? "text-[22px] leading-[1.55] sm:text-[25px]"
+                : "text-[21px] leading-[1.45] sm:text-[24px]"
             }`}
           >
             {t.title}
@@ -259,27 +288,31 @@ export function StudyInvitationOverlay() {
             <button
               type="button"
               onClick={participate}
-              className="inline-flex min-h-[48px] w-full items-center justify-center rounded-2xl bg-[#c9a84c] px-6 text-[15px] font-semibold text-[#0b3a25] shadow-[0_10px_24px_-12px_rgba(201,168,76,0.55)] transition duration-200 hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b3a25] motion-reduce:transition-none"
+              className="group relative inline-flex min-h-[50px] w-full items-center justify-center overflow-hidden rounded-2xl bg-[#c9a84c] px-6 text-[15px] font-semibold text-[#0b3a25] shadow-[0_14px_30px_-14px_rgba(201,168,76,0.6)] transition-all duration-300 hover:brightness-[1.05] hover:shadow-[0_18px_40px_-14px_rgba(201,168,76,0.75)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b3a25] motion-reduce:transition-none"
             >
-              {t.participate}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-[1400ms] ease-out group-hover:translate-x-full"
+              />
+              <span className="relative">{t.participate}</span>
             </button>
             <button
               type="button"
               onClick={close}
-              className="inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl border border-white/15 bg-transparent px-6 text-[14px] font-medium text-white/85 transition duration-200 hover:bg-white/[0.06] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 motion-reduce:transition-none"
+              className="inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl border border-white/12 bg-transparent px-6 text-[13.5px] font-medium text-white/70 transition-colors duration-300 hover:border-white/25 hover:bg-white/[0.04] hover:text-white/95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/25 motion-reduce:transition-none"
             >
               {t.skip}
             </button>
           </div>
 
           {/* Details toggle */}
-          <div className="border-t border-white/10 pt-3">
+          <div className="border-t border-white/8 pt-2">
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="aqla-study-details"
-              className="mx-auto inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-full px-3 text-[13px] font-medium text-white/75 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+              className="mx-auto inline-flex min-h-[40px] items-center justify-center gap-1.5 rounded-full px-3 text-[12.5px] font-medium tracking-wide text-white/60 transition-colors duration-300 hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/25"
             >
               <span>{t.detailsToggle}</span>
               <IconChevron open={open} />
@@ -289,48 +322,39 @@ export function StudyInvitationOverlay() {
               id="aqla-study-details"
               role="region"
               aria-hidden={!open}
-              className="grid overflow-hidden transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none"
+              className="grid overflow-hidden transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
               style={{
                 gridTemplateRows: open ? "1fr" : "0fr",
                 opacity: open ? 1 : 0,
               }}
             >
               <div className="min-h-0 overflow-hidden">
-                <div className="mt-3 max-h-[46vh] overflow-y-auto rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5">
-                  <h3 className="text-[15px] font-semibold text-white">
+                <div className="mt-3 max-h-[42vh] overflow-y-auto rounded-2xl border border-white/8 bg-white/[0.03] p-5">
+                  <h3 className="text-[14px] font-semibold text-white/95">
                     {t.detailsTitle}
                   </h3>
-                  <p className="mt-3 text-[14px] leading-[1.75] text-white/80">{t.p1}</p>
-                  <p className="mt-2.5 text-[14px] leading-[1.75] text-white/80">{t.p2}</p>
-                  <p className="mt-2.5 text-[14px] leading-[1.75] text-white/80">
+                  <p className="mt-3 text-[13.5px] leading-[1.85] text-white/75">{t.p1}</p>
+                  <p className="mt-2 text-[13.5px] leading-[1.85] text-white/75">{t.p2}</p>
+                  <p className="mt-2 text-[13.5px] leading-[1.85] text-white/75">
                     {t.p3Prefix} <span className="font-semibold text-[#f0d78c]">{t.p3Amount}</span>.
                   </p>
 
-                  <ul className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                    {[
-                      { icon: <IconCheck className="h-4 w-4 text-[#c9a84c]" />, label: t.voluntary },
-                      { icon: <IconLock className="h-4 w-4 text-[#c9a84c]" />, label: t.confidential },
-                      { icon: <IconMask className="h-4 w-4 text-[#c9a84c]" />, label: t.anonymous },
-                      { icon: <IconGift className="h-4 w-4 text-[#c9a84c]" />, label: t.prize },
-                    ].map((item, i) => (
+                  <ul className="mt-4 flex flex-wrap gap-1.5">
+                    {[t.voluntary, t.confidential, t.anonymous, t.prize].map((label, i) => (
                       <li
                         key={i}
-                        className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-[12.5px] text-white/85"
+                        className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[11.5px] text-white/70"
                       >
-                        <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#c9a84c]/15">
-                          {item.icon}
-                        </span>
-                        <span className="min-w-0 truncate">{item.label}</span>
+                        {label}
                       </li>
                     ))}
                   </ul>
 
-                  <div className="mt-4 flex items-center gap-2 text-[13px] text-white/80">
-                    <IconMail className="h-4 w-4 shrink-0 text-[#c9a84c]" />
-                    <span className="text-white/60">{t.contactLabel}</span>
+                  <div className="mt-4 flex items-center gap-2 text-[12.5px] text-white/70">
+                    <span className="text-white/50">{t.contactLabel}</span>
                     <a
                       href="mailto:smokefreeksa@gmail.com"
-                      className="min-w-0 truncate font-medium text-[#f0d78c] underline decoration-[#c9a84c]/40 underline-offset-2 hover:decoration-[#c9a84c]"
+                      className="min-w-0 truncate font-medium text-[#f0d78c] underline decoration-[#c9a84c]/30 underline-offset-2 transition-colors hover:decoration-[#c9a84c]"
                     >
                       smokefreeksa@gmail.com
                     </a>

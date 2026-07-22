@@ -3,17 +3,17 @@ import { useEffect, useRef } from "react";
 interface TrailPoint {
   x: number;
   y: number;
-  hue: number;
-  width: number;
   alpha: number;
-  age: number;
+  width: number;
 }
 
-const MAX_POINTS = 120;
-const FADE_RATE = 0.018;
-const BASE_HUE = 220;
-const HUE_RANGE = 100;
+const MAX_POINTS = 26;
+const FADE_RATE = 0.06;
 
+/**
+ * Elegant, subtle cursor tail — a soft white ribbon that stays visually
+ * connected to the pointer. No color cycling, no flashy blending.
+ */
 export default function CursorTrail() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -26,94 +26,61 @@ export default function CursorTrail() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener("resize", resize);
 
     const points: TrailPoint[] = [];
     let mouse = { x: -999, y: -999 };
-    let prevMouse = { x: -999, y: -999 };
-    let hue = BASE_HUE;
+    let prev = { x: -999, y: -999 };
     let rafId = 0;
 
     const onMove = (e: MouseEvent) => {
-      prevMouse = { ...mouse };
+      prev = mouse;
       mouse = { x: e.clientX, y: e.clientY };
-
-      const dx = mouse.x - prevMouse.x;
-      const dy = mouse.y - prevMouse.y;
-      const speed = Math.sqrt(dx * dx + dy * dy);
-
-      const targetHue = BASE_HUE + Math.min(speed * 1.8, HUE_RANGE);
-      hue += (targetHue - hue) * 0.08;
-
-      const width = 4 + Math.min(speed * 0.7, 14);
-
-      points.push({ x: mouse.x, y: mouse.y, hue, width, alpha: 0.55, age: 0 });
+      const dx = mouse.x - prev.x;
+      const dy = mouse.y - prev.y;
+      const speed = Math.min(Math.sqrt(dx * dx + dy * dy), 40);
+      const width = 1.2 + speed * 0.06;
+      points.push({ x: mouse.x, y: mouse.y, alpha: 0.55, width });
       if (points.length > MAX_POINTS) points.splice(0, points.length - MAX_POINTS);
     };
 
     window.addEventListener("mousemove", onMove);
 
-    const drawCurve = (
-      pts: TrailPoint[],
-      widthMul: number,
-      alphaMul: number,
-      blur: number,
-      composite: GlobalCompositeOperation,
-    ) => {
-      if (pts.length < 3) return;
-      ctx.save();
-      ctx.globalCompositeOperation = composite;
-      ctx.filter = blur > 0 ? `blur(${blur}px)` : "none";
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-
-      for (let i = 1; i < pts.length - 1; i++) {
-        const p0 = pts[i - 1];
-        const p1 = pts[i];
-        const p2 = pts[i + 1];
-
-        const alpha = p1.alpha * alphaMul;
-        if (alpha < 0.005) continue;
-
-        const mx1 = (p0.x + p1.x) / 2;
-        const my1 = (p0.y + p1.y) / 2;
-        const mx2 = (p1.x + p2.x) / 2;
-        const my2 = (p1.y + p2.y) / 2;
-
-        ctx.beginPath();
-        ctx.moveTo(mx1, my1);
-        ctx.quadraticCurveTo(p1.x, p1.y, mx2, my2);
-        ctx.strokeStyle = `hsla(${p1.hue}, 100%, 65%, ${alpha})`;
-        ctx.lineWidth = p1.width * widthMul;
-        ctx.stroke();
-      }
-
-      ctx.restore();
-    };
-
     const draw = () => {
-      ctx.save();
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.fillStyle = "rgba(0,0,0,0.06)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.restore();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       for (let i = points.length - 1; i >= 0; i--) {
         points[i].alpha -= FADE_RATE;
-        points[i].age++;
         if (points[i].alpha <= 0) points.splice(i, 1);
       }
 
-      if (points.length > 2) {
-        drawCurve(points, 5.5, 0.12, 18, "lighter");
-        drawCurve(points, 2.8, 0.22, 8, "lighter");
-        drawCurve(points, 1.0, 0.9, 0, "lighter");
-        drawCurve(points, 0.3, 0.55, 0, "lighter");
+      if (points.length >= 2) {
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        for (let i = 1; i < points.length - 1; i++) {
+          const p0 = points[i - 1];
+          const p1 = points[i];
+          const p2 = points[i + 1];
+          const mx1 = (p0.x + p1.x) / 2;
+          const my1 = (p0.y + p1.y) / 2;
+          const mx2 = (p1.x + p2.x) / 2;
+          const my2 = (p1.y + p2.y) / 2;
+          ctx.beginPath();
+          ctx.moveTo(mx1, my1);
+          ctx.quadraticCurveTo(p1.x, p1.y, mx2, my2);
+          ctx.strokeStyle = `rgba(255, 255, 255, ${p1.alpha * 0.5})`;
+          ctx.lineWidth = p1.width;
+          ctx.stroke();
+        }
       }
 
       rafId = requestAnimationFrame(draw);
@@ -138,8 +105,7 @@ export default function CursorTrail() {
         width: "100vw",
         height: "100vh",
         pointerEvents: "none",
-        zIndex: 40,
-        mixBlendMode: "screen",
+        zIndex: 99997,
       }}
     />
   );
