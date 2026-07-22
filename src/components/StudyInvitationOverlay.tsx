@@ -116,9 +116,9 @@ function GalaxyCanvas() {
       style={{
         mixBlendMode: "screen",
         WebkitMaskImage:
-          "radial-gradient(ellipse 32% 28% at 50% 50%, transparent 0%, rgba(0,0,0,0.15) 45%, #000 70%)",
+          "radial-gradient(ellipse 20% 18% at 50% 50%, transparent 0%, rgba(0,0,0,0.35) 55%, #000 80%)",
         maskImage:
-          "radial-gradient(ellipse 32% 28% at 50% 50%, transparent 0%, rgba(0,0,0,0.15) 45%, #000 70%)",
+          "radial-gradient(ellipse 20% 18% at 50% 50%, transparent 0%, rgba(0,0,0,0.35) 55%, #000 80%)",
       }}
     />
   );
