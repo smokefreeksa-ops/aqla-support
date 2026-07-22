@@ -6,7 +6,7 @@ import { ArrowRight, Loader2, Mail, Phone } from "lucide-react";
 import aqlaLogo from "@/assets/aqla-logo.png";
 import { PreLoginAssistant } from "@/components/PreLoginAssistant";
 import { FloatingWhatsAppButton } from "@/components/FloatingWhatsAppButton";
-import { ResearchBanner, RESEARCH_REDCAP_URL } from "@/components/ResearchBanner";
+
 
 type Mode = "choose" | "phone" | "email";
 type PhoneStep = "enter" | "verify";
