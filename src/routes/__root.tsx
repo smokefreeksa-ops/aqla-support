@@ -171,6 +171,7 @@ function RootComponent() {
         <AqlaAssistant />
         <SOSButton hidden={onSosRoute} />
       </AqlaAuthGate>
+      <StudyInvitationOverlay />
       <Toaster richColors position="top-center" />
     </QueryClientProvider>
   );
