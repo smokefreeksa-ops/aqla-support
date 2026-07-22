@@ -72,7 +72,7 @@ function GalaxyCanvas() {
 
       const cx = width * 0.5;
       const cy = height * 0.5;
-      const R = Math.max(width, height) * 0.7;
+      const R = Math.hypot(width, height) * 1.6;
 
       // Soft core glow
       const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 0.5);
@@ -88,9 +88,9 @@ function GalaxyCanvas() {
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
         const angle = p.a + baseRot * p.speed;
-        const rad = p.r * R * 0.55;
+        const rad = p.r * R * 0.75;
         const x = cx + Math.cos(angle) * rad;
-        const y = cy + Math.sin(angle) * rad * 0.55; // flatten to disc
+        const y = cy + Math.sin(angle) * rad * 0.8; // gentle disc flatten
         ctx.fillStyle = colorFor(p.hue, p.alpha);
         ctx.beginPath();
         ctx.arc(x, y, p.size, 0, Math.PI * 2);
@@ -349,9 +349,9 @@ export function StudyInvitationOverlay() {
         className="relative flex max-h-[92vh] w-full max-w-[520px] flex-col overflow-hidden rounded-[28px] outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
         style={{
           background:
-            "linear-gradient(160deg, rgba(11,58,37,0.06) 0%, rgba(8,38,24,0.10) 100%)",
-          backdropFilter: "blur(4px) saturate(120%)",
-          border: "1px solid rgba(255,255,255,0.12)",
+            "linear-gradient(160deg, rgba(11,58,37,0.02) 0%, rgba(8,38,24,0.04) 100%)",
+          backdropFilter: "blur(2px) saturate(115%)",
+          border: "1px solid rgba(255,255,255,0.10)",
           boxShadow:
             "0 40px 100px -40px rgba(0,0,0,0.75), 0 0 0 1px rgba(201,168,76,0.06) inset",
           transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
