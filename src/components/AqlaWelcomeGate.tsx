@@ -258,15 +258,6 @@ export function AqlaWelcomeGate() {
               مجاناً
             </span>
           </div>
-          <div className="grid grid-cols-3 gap-2">
-        {/* === Try-before-you-sign-in: 3 viral tools, no registration === */}
-        <div className="mt-6 rounded-2xl border border-[#c9a84c]/30 bg-black/25 p-3 text-right">
-          <div className="mb-2 flex items-center justify-between gap-2">
-            <span className="text-[11px] font-semibold text-[#f6e7b8]">جرّبها الآن — بدون تسجيل</span>
-            <span className="rounded-full bg-[#c9a84c]/20 px-2 py-0.5 text-[10px] font-semibold text-[#f6e7b8]">
-              مجاناً
-            </span>
-          </div>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
             <a
               href="/try#kys-1"
