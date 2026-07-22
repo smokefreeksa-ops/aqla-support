@@ -133,7 +133,7 @@ function LuxuryStarfield() {
       {stars.map((s) => (
         <span
           key={s.id}
-          className="absolute rounded-full bg-white aqla-star-twinkle motion-reduce:animate-none"
+          className="absolute rounded-full bg-white star-twinkle motion-reduce:animate-none"
           style={{
             top: `${s.top}%`,
             left: `${s.left}%`,
