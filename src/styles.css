@@ -438,3 +438,68 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ------------------------------------------------------------------
+ * Mobile text centering pass (visual only, RTL preserved)
+ * Scope: <=640px, inside <main>. Excludes nav/header/footer, form
+ * controls, tables, code, and anything opted-out with .no-mobile-center
+ * or [data-no-mobile-center]. Design, colors, and layout untouched.
+ * ------------------------------------------------------------------ */
+@media (max-width: 640px) {
+  main :is(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, label, small, span.block, .lead, .subtitle, .description, .card-title, .card-description) {
+    text-align: center;
+    margin-inline: auto;
+    text-wrap: balance;
+    max-width: 42ch;
+    line-height: 1.65;
+  }
+
+  main :is(h1, h2, h3, h4, h5, h6) {
+    text-wrap: balance;
+    line-height: 1.35;
+  }
+
+  /* Neutralize hard-coded left/right alignment on text nodes so RTL stays
+     correct but visual alignment is centered on small screens. */
+  main .text-right,
+  main .text-left,
+  main .sm\:text-right,
+  main .sm\:text-left,
+  main .md\:text-right,
+  main .md\:text-left {
+    text-align: center !important;
+  }
+
+  /* Center common flex/grid text containers (cards, hero copy blocks). */
+  main .card,
+  main [class*="Card"],
+  main .hero,
+  main .cta,
+  main .prose {
+    text-align: center;
+  }
+
+  main .card :is(.flex, .inline-flex),
+  main .cta :is(.flex, .inline-flex),
+  main .hero :is(.flex, .inline-flex) {
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Opt-outs */
+  main .no-mobile-center,
+  main [data-no-mobile-center],
+  main .no-mobile-center *,
+  main [data-no-mobile-center] * {
+    text-align: revert !important;
+    margin-inline: revert !important;
+    max-width: revert !important;
+  }
+
+  /* Never touch these — they need their own alignment/width. */
+  main :is(input, textarea, select, button, code, pre, kbd, samp, table, th, td, [role="tab"], [role="menu"], [role="listbox"], [role="dialog"] header) {
+    text-align: revert;
+    margin-inline: revert;
+    max-width: revert;
+  }
+}
