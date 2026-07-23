@@ -40,8 +40,10 @@ export function SOSButton({
       <Link
         to="/sos"
         aria-label="نجدة — أريد التدخين الآن"
-        className="aqla-sos-fab fixed z-[60] bottom-4 end-4 sm:bottom-6 sm:end-6 grid place-items-center h-16 w-16 sm:h-[72px] sm:w-[72px] rounded-full text-white select-none active:scale-95 transition-transform focus:outline-none focus-visible:ring-4 focus-visible:ring-red-300"
+        className="aqla-sos-fab fixed z-[60] grid place-items-center h-14 w-14 sm:h-[72px] sm:w-[72px] rounded-full text-white select-none active:scale-95 transition-transform focus:outline-none focus-visible:ring-4 focus-visible:ring-red-300"
         style={{
+          bottom: "calc(env(safe-area-inset-bottom, 0px) + 16px)",
+          insetInlineEnd: "16px",
           backgroundImage:
             "radial-gradient(circle at 30% 25%, #fca5a5 0%, #ef4444 45%, #991b1b 100%)",
           border: "2px solid rgba(255,255,255,0.7)",
@@ -49,7 +51,7 @@ export function SOSButton({
         }}
       >
         <span className="flex flex-col items-center leading-none">
-          <span className="text-[15px] font-extrabold tracking-tight">نجدة</span>
+          <span className="text-[14px] font-extrabold tracking-tight">نجدة</span>
           <span className="text-[9px] mt-0.5 opacity-90">SOS</span>
         </span>
       </Link>
