@@ -223,15 +223,7 @@ export function AqlaWelcomeGate() {
           </span>
         </h1>
 
-        <p
-          dir="rtl"
-          className="mt-4 text-base leading-relaxed text-[#eae3c6] sm:text-lg"
-          style={{ textAlign: "right", unicodeBidi: "plaintext" }}
-        >
-          حياك الله في أقلع، رحلتك تبدأ من هنا
-        </p>
-
-        <p className="mt-2 text-xs text-[#d6cda3] sm:text-sm">منصة مجانية للجميع، وستبقى مجانية.</p>
+        <p className="mt-4 text-xs text-[#d6cda3] sm:text-sm">منصة مجانية للجميع، وستبقى مجانية.</p>
 
         {/* === Try-before-you-sign-in: 3 viral tools, no registration === */}
         <div className="mt-6 rounded-2xl border border-[#c9a84c]/30 bg-black/25 p-3 text-right">
