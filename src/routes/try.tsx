@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import KnowYourSmokingSection from "@/components/KnowYourSmokingSection";
 import aqlaLogo from "@/assets/aqla-logo.png";
