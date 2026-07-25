@@ -64,6 +64,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TryIndexRouteImport } from './routes/try.index'
 import { Route as TryShootRouteImport } from './routes/try.shoot'
 import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planToken'
+import { Route as ModulesSlugRouteImport } from './routes/modules.$slug'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
 import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
@@ -351,6 +352,11 @@ const QuitPlanPlanTokenRoute = QuitPlanPlanTokenRouteImport.update({
   path: '/$planToken',
   getParentRoute: () => QuitPlanRoute,
 } as any)
+const ModulesSlugRoute = ModulesSlugRouteImport.update({
+  id: '/modules/$slug',
+  path: '/modules/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CertificateCodeRoute = CertificateCodeRouteImport.update({
   id: '/certificate/$code',
   path: '/certificate/$code',
@@ -470,6 +476,7 @@ export interface FileRoutesByFullPath {
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
+  '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
   '/try/': typeof TryIndexRoute
@@ -537,6 +544,7 @@ export interface FileRoutesByTo {
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
+  '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
   '/try': typeof TryIndexRoute
@@ -606,6 +614,7 @@ export interface FileRoutesById {
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
+  '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
   '/try/': typeof TryIndexRoute
@@ -676,6 +685,7 @@ export interface FileRouteTypes {
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
+    | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
     | '/try/'
@@ -743,6 +753,7 @@ export interface FileRouteTypes {
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
+    | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
     | '/try'
@@ -811,6 +822,7 @@ export interface FileRouteTypes {
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
+    | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
     | '/try/'
@@ -877,6 +889,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   CertificateCodeRoute: typeof CertificateCodeRoute
+  ModulesSlugRoute: typeof ModulesSlugRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ShareTypeIdRoute: typeof ShareTypeIdRoute
@@ -1270,6 +1283,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuitPlanPlanTokenRouteImport
       parentRoute: typeof QuitPlanRoute
     }
+    '/modules/$slug': {
+      id: '/modules/$slug'
+      path: '/modules/$slug'
+      fullPath: '/modules/$slug'
+      preLoaderRoute: typeof ModulesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/certificate/$code': {
       id: '/certificate/$code'
       path: '/certificate/$code'
@@ -1457,6 +1477,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   CertificateCodeRoute: CertificateCodeRoute,
+  ModulesSlugRoute: ModulesSlugRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ShareTypeIdRoute: ShareTypeIdRoute,
