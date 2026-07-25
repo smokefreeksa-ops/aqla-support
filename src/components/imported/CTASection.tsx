@@ -15,7 +15,7 @@ export default function CTASection() {
 
   return (
     <section id="register" className="relative overflow-hidden py-24 md:py-32">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-700 via-blue-600 to-blue-800" />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #0b3a25 0%, #0e4a30 55%, #072018 100%)" }} />
       <div
         className="absolute inset-0 opacity-10 pointer-events-none"
         style={{
