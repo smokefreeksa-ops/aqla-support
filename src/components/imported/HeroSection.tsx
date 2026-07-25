@@ -272,7 +272,7 @@ export default function HeroSection() {
   return (
     <section
       id="home"
-      className="relative flex flex-col min-h-[92vh] items-center justify-center pt-24 pb-20 overflow-hidden"
+      className="relative flex flex-col min-h-[92vh] items-center justify-center pt-24 pb-28 overflow-hidden"
       style={{ background: "#000" }}
     >
       <StarField count={96} />
@@ -286,6 +286,15 @@ export default function HeroSection() {
           style={{ background: "radial-gradient(ellipse, #006C35 0%, transparent 70%)" }}
         />
       </div>
+      {/* Seamless bottom fade into the page background — removes the hard black→ivory seam */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 z-[2]"
+        style={{
+          background:
+            "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.55) 45%, oklch(0.987 0.006 95) 100%)",
+        }}
+      />
 
       <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 my-6">
         <div
