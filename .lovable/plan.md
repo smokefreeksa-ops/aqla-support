@@ -1,76 +1,73 @@
-# Aqla SOS — Closed-Loop Craving Rescue Engine
 
-Build one focused feature: a full-screen, voice-triggered, personality-adaptive SOS flow that interrupts a craving in under 60 seconds and adapts across sessions. No other Aqla pages are touched except to mount the global SOS button.
+## Goal
+Upgrade the "صوّب على السجائر" mini-game into a more visceral, share-worthy experience: rename it, replace the flat target with a realistic lit cigarette rendered inside a 3D-looking hexagon, make the gunshot sound significantly stronger, and turn the hit reaction into a large shattered-glass burst that flies out of the game canvas into the surrounding page.
 
-## Scope (single feature, self-contained)
+## Scope (frontend / presentation only)
+All work stays inside the existing shooter feature. No backend, no schema.
 
-**New route:** `/sos` — full-screen, no site header/footer, RTL Arabic-first.
+### 1. Rename everywhere
+Rename the tool from **"صوّب على السجائر"** → **"تحدي كسر عادة التدخين"** (keep English as "Break the Smoking Habit Challenge").
 
-**New global button:** persistent red circular "نجدة" button visible on authenticated pages (fixed bottom-inline, thumb-friendly, subtle pulse when idle only). Not on the pre-login landing.
+Files touched:
+- `src/components/KnowYourSmokingSection.tsx` — the `tools[4]` entry (`name`, `blurb`, share card title, meta).
+- `src/routes/try.shoot.tsx` — page `<title>`, meta description, og:title/description, header copy.
+- `src/components/ChallengeBanner.tsx` — the amber pill currently reading "صوّب على السجائر".
+- `src/routes/index.tsx` / `HeroSection` shortcut button label (if it references the old name).
 
-**Everything else on the site stays as-is.**
+Route path `/try/shoot` stays (avoids breaking shared links).
 
-## Feature loop (must actually work end-to-end)
+### 2. Realistic lit cigarette target
+Currently targets are drawn as simple shapes. Replace with a canvas-rendered lit cigarette:
+- White paper body with subtle paper texture (thin horizontal noise lines).
+- Tan/orange filter band at the base with brand ring.
+- Glowing ember tip: radial gradient (bright yellow core → orange → deep red), pulsing every ~400ms.
+- Rising smoke: 2–3 semi-transparent gray puffs drifting upward with slight sway (sine curve), fading out.
+- Random slight rotation per spawn so no two look identical.
 
-1. Tap SOS → full-screen takeover, craving slider `قوة الرغبة الآن؟ 0–10` (~1 tap)
-2. Request mic permission → 5s voice capture with live waveform + `5→4→3→2→1`
-3. Local acoustic analysis via Web Audio `AnalyserNode` (no upload, no transcript)
-4. Context fusion (score + persona + local hour + recent history)
-5. Deterministic protocol selector → one of 4 protocols
-6. 45–60s guided protocol (single dominant instruction per step, countdown, haptics)
-7. Post-craving slider → delta computed
-8. If `cravingAfter ≥ 7`: automatic **second rescue loop** with a different protocol
-9. Completion screen: `انخفضت الرغبة من X إلى Y` + optional trigger tag + optional REDCap CTA
-10. Session logged (derived features only, never audio)
+Implemented as a pure `<canvas>` draw routine inside the existing `Shooter` component — no new image assets, keeps bundle size flat.
 
-## Four protocols (genuinely different, not four breathing exercises)
+### 3. 3D hexagon frame
+Wrap the game canvas in a hexagon "arena":
+- CSS `clip-path: polygon(...)` for the hex silhouette.
+- Layered shadows + inner highlight + subtle `perspective` / `rotateX(6deg)` on the container to fake depth.
+- Gold rim (matches Aqla palette) with `box-shadow` glow.
+- Small hex chrome corners at the six vertices for the "3D bevel" feel.
+- Falls back gracefully on mobile (reduce perspective to avoid layout jitter).
 
-- **Calm** — stationary orb, guided exhale, wave reframe, grounding (60s) — for high acoustic score
-- **Energy Discharge** — stand, fist clench, palm press, shoulder shake, exhale (45–60s) — fight
-- **Safe Escape** — physical interruption: step away, put device out of reach, turn body, water (60s) — flight
-- **Reboot** — one command at a time, tap a large circle, single breath, pick water-or-10-steps (45s) — freeze
+### 4. Stronger gunshot audio
+Current shot is a short Web Audio blip. Upgrade to a layered impulse:
+- **Layer A** — low-end thump: sine 60Hz, quick exp decay ~80ms, high gain.
+- **Layer B** — mid crack: filtered white-noise burst through a bandpass @ 1.2kHz, ~120ms decay.
+- **Layer C** — high snap: noise burst through highpass @ 4kHz, 40ms, adds "crack".
+- **Tail** — short convolver reverb (algorithmic impulse generated in-code) for room feel.
+- Master compressor to keep it loud without clipping.
+- Respect a mute toggle already present in the game UI.
 
-Selector rule (transparent, deterministic):
-`score ≥ 0.72 → Calm (acute override)` else by `persona.stressResponse` (fight/flight/freeze) else `neuroticism ≥ 70 → Calm` else `Calm (default)`. Historical effectiveness used as tie-breaker.
+Still Web Audio only — no audio files added.
 
-## Privacy boundary (hard rule enforced in code)
+### 5. "4D" shattered-glass explosion
+On hit, spawn a large glass-shatter burst that visibly escapes the hexagon and flies across the page:
+- Render shards on a **full-viewport fixed `<canvas>`** (pointer-events: none, z-index above the game) that mounts only while the game is active — this is what lets shards travel outside the hex.
+- Per hit: spawn 40–70 polygonal shards with:
+  - Randomized triangular/quad geometry.
+  - Initial velocity radiating outward from impact point + strong upward bias.
+  - Gravity, air drag, angular velocity (tumbling).
+  - Gradient fill (cool white → pale cyan) with a bright specular edge stroke → reads as glass.
+  - Alpha fade over 1.2–1.8s, then removed.
+- Add a brief radial white flash (80ms) at impact for the "camera pop".
+- Screen-shake: 120ms translate on the hex arena only (not the whole page — avoids mobile scroll jank).
+- Cap concurrent shards (~400) to protect low-end devices; auto-reduce count when `prefers-reduced-motion` or on small viewports.
 
-Raw microphone audio never leaves the browser tab, is never persisted, is never uploaded. Mic tracks stopped and audio nodes disconnected the moment analysis returns. Only derived numeric features + session outcome persist to the backend. Explicit `PRIVACY BOUNDARY` code comments in the voice module.
+### 6. Mobile / perf guards
+- Reduce shard count and skip perspective on `matchMedia('(max-width: 640px)')`.
+- Respect `prefers-reduced-motion`: keep rename + cigarette art, drop shatter to a simple opacity flash and skip screen-shake.
+- All new canvases sized with `devicePixelRatio` clamp at 2.
 
-## Persistence
+## Out of scope
+- Score-share card layout (already implemented last turn) — only the tool title string inside it updates.
+- Backend, analytics events, new routes.
 
-New backend table `sos_sessions` (Lovable Cloud, RLS scoped to `auth.uid()`), stores only derived features, protocol id, selection reason, craving before/after, completion status, timestamp, optional trigger, persona snapshot version. No audio columns. Reads own rows only.
-
-## What ships
-
-**New folder** `src/features/sos/`:
-- `sos.types.ts`, `sos.constants.ts`, `sos.protocols.ts`, `sos.selector.ts`, `sos.scoring.ts`, `sos.storage.ts`
-- `SOSEngine.ts` — central state machine (`idle | permission | voice_capture | local_analysis | context_fusion | protocol_selected | protocol_delivery | post_craving_check | logging | complete | fallback`)
-- `hooks/useSOSMachine.ts`, `hooks/useVoiceAnalysis.ts`, `hooks/useHaptics.ts`
-- `components/SOSButton.tsx`, `SOSScreen.tsx`, `VoiceCapture.tsx`, `AnalysisTransition.tsx`, `ProtocolDelivery.tsx`, `CravingRating.tsx`, `SOSComplete.tsx`
-
-**New route** `src/routes/sos.tsx` (full-screen, no site chrome).
-
-**Mount SOSButton** once inside the authenticated layout so it appears on all logged-in pages.
-
-**Migration** creating `sos_sessions` with grants + RLS.
-
-**Debug panel** behind `?sosDebug=1` (dev only): current state, signal quality, derived features, score, persona, selected protocol, reason, timings.
-
-## Explicitly NOT in scope
-
-- No changes to landing page, hero, existing tools, headers, footers, other routes.
-- No new personality assessment inside SOS — reads existing persona if present, otherwise uses default protocol and continues.
-- No location/GPS, no speech recognition, no transcription.
-- No autonomous ML retraining — selector stays readable rules with historical tie-break.
-- No native mobile.
-
-## Acceptance criteria
-
-Ten scenarios (A–J) from the spec — including mic-denied fallback, silent-input fallback, high-score → Calm override, persona-driven routing, second rescue loop trigger, completion delta screen, and network/DB inspection showing zero raw audio leaves the device.
-
-## One thing to confirm
-
-- **Persona source**: does the existing Aqla profile already expose `stressResponse`, big-five scores, and `chronotype`? If yes I'll wire to it; if no, I'll build a dev-only persona adapter with mock values (isolated behind a clearly marked file) so the loop works today, and expose a `TODO` seam for real persona wiring later.
-
-If yes, ship exactly the above. Approve and I build.
+## Technical notes
+- Everything lives in `src/components/KnowYourSmokingSection.tsx` (the `Shooter` subcomponent) plus small copy edits in the files listed under §1.
+- No new dependencies; canvas + Web Audio API only.
+- No changes to `src/routes/try.tsx` layout or `AqlaAuthGate` public-route list — `/try/shoot` already works unauthenticated.
