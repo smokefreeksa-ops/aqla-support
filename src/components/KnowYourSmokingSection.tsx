@@ -126,6 +126,83 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
     },
   ];
 
+  const isStandalone =
+    standaloneTool !== undefined && standaloneTool >= 0 && standaloneTool <= 4;
+
+  if (isStandalone) {
+    const i = standaloneTool;
+    const tool = tools[i];
+    return (
+      <section
+        dir={dir}
+        lang={lang}
+        style={{ background: tokens.bg, color: tokens.ink }}
+        className="min-h-screen"
+        aria-label={tool.name}
+      >
+        <div className="mx-auto max-w-3xl px-4 py-6 sm:py-10">
+          <Link
+            to="/try"
+            className="inline-flex items-center gap-1.5 text-sm font-medium opacity-80 hover:opacity-100"
+          >
+            <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+            {T("All tools", "كل الأدوات", lang)}
+          </Link>
+
+          <div
+            className="mt-6 border overflow-hidden"
+            style={{
+              background: tokens.card,
+              borderColor: tokens.border,
+              borderRadius: 18,
+            }}
+          >
+            <div className="w-full text-start p-5">
+              <div className="flex items-start gap-3">
+                <div className="text-2xl" aria-hidden>
+                  {tool.emoji}
+                </div>
+                <div>
+                  <div className="font-semibold text-base">{tool.name}</div>
+                  <div className="text-sm opacity-75 mt-1">{tool.desc}</div>
+                  <div className="text-xs opacity-60 mt-1">⏱ {tool.time}</div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="border-t p-5"
+              style={{ borderColor: tokens.border }}
+            >
+              {i === 0 && (
+                <MoneyCounter lang={lang} onDone={(v) => setDoneFor(0, v)} />
+              )}
+              {i === 1 && (
+                <GripTest lang={lang} onDone={(v) => setDoneFor(1, v)} />
+              )}
+              {i === 2 && (
+                <Mirror lang={lang} onDone={(v) => setDoneFor(2, v)} />
+              )}
+              {i === 3 && (
+                <Compass lang={lang} onDone={(v) => setDoneFor(3, v)} />
+              )}
+              {i === 4 && (
+                <Shooter lang={lang} onDone={(v) => setDoneFor(4, v)} />
+              )}
+            </div>
+          </div>
+
+          <p className="mt-6 text-xs opacity-60 max-w-3xl">
+            {T(
+              "This tool is educational. The dependence questions are adapted from the Fagerström Test for Cigarette Dependence; the trait items are brief self-reflection prompts. It is not a medical diagnosis.",
+              "هذه الأداة تعليمية. أسئلة الاعتماد مقتبسة من اختبار فاجيرستروم للاعتماد على النيكوتين؛ وعبارات السمات هي دعوات قصيرة للتأمل الذاتي. ليست تشخيصاً طبياً.",
+              lang
+            )}
+          </p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       id="know-your-smoking"
@@ -218,10 +295,7 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3">
-                      <div
-                        className="text-2xl"
-                        aria-hidden
-                      >
+                      <div className="text-2xl" aria-hidden>
                         {tool.emoji}
                       </div>
                       <div>
