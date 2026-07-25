@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { verifyAcademyCertificate } from "@/lib/academy-certificate.functions";
 import { BadgeCheck, Download, Share2, Link as LinkIcon, ShieldCheck, XCircle } from "lucide-react";
+import { SITE_URL } from "@/lib/site";
 
 export const Route = createFileRoute("/academy-certificate/$code")({
   head: ({ params }) => ({
