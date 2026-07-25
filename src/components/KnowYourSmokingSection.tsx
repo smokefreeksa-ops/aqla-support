@@ -198,7 +198,7 @@ export default function KnowYourSmokingSection() {
                   borderColor: tokens.border,
                   borderRadius: 18,
                 }}
-                className={`border overflow-hidden transition scroll-mt-28 ${
+                className={`border overflow-hidden transition ${
                   isOpen ? "sm:col-span-2 lg:col-span-3" : ""
                 }`}
               >
