@@ -1,10 +1,13 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { useLang, useLangState, LangContext } from "@/lib/i18n";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getModule, MODULES, type Module } from "@/data/modules";
-import { CheckCircle2, XCircle, ArrowRight, ArrowLeft, BookOpen, ExternalLink } from "lucide-react";
+import { issueAcademyCertificate } from "@/lib/academy-certificate.functions";
+import { toast } from "sonner";
+import { CheckCircle2, XCircle, ArrowRight, ArrowLeft, BookOpen, ExternalLink, Award } from "lucide-react";
 
 export const Route = createFileRoute("/modules/$slug")({
   loader: ({ params }) => {
