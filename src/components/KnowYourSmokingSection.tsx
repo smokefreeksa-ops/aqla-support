@@ -2216,36 +2216,96 @@ function Shooter({
           willChange: "transform",
         }}
       >
-        {/* 3D hexagon frame */}
+        {/* Professional layered background */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0"
+          className="absolute inset-0 rounded-2xl overflow-hidden"
           style={{
-            transform: "rotateX(8deg)",
-            transformStyle: "preserve-3d",
+            background:
+              "radial-gradient(ellipse at 50% 30%, #0f4a30 0%, #072518 55%, #030f0a 100%)",
+            boxShadow:
+              "0 30px 80px -30px rgba(0,0,0,0.7), inset 0 0 60px rgba(0,0,0,0.4)",
           }}
         >
+          {/* subtle grid pattern */}
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 opacity-[0.12]"
             style={{
-              clipPath:
-                "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
-              background:
-                "linear-gradient(135deg, rgba(11,58,37,0.85), rgba(4,26,17,0.9))",
-              boxShadow:
-                "inset 0 0 0 2px rgba(217,184,119,0.55), inset 0 0 40px rgba(0,0,0,0.55), 0 20px 60px -20px rgba(0,0,0,0.6)",
+              backgroundImage:
+                "linear-gradient(rgba(217,184,119,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(217,184,119,0.35) 1px, transparent 1px)",
+              backgroundSize: "28px 28px",
             }}
           />
+          {/* vignette */}
           <div
             className="absolute inset-0"
             style={{
-              clipPath:
-                "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
               background:
-                "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.15), transparent 45%)",
+                "radial-gradient(circle at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%)",
             }}
           />
         </div>
+
+        {/* Outer hexagon — rotates clockwise */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 hex-spin-cw"
+          style={{ transformStyle: "preserve-3d" }}
+        >
+          <div
+            className="absolute inset-[-6%]"
+            style={{
+              clipPath:
+                "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
+              background:
+                "conic-gradient(from 0deg, rgba(217,184,119,0.0), rgba(217,184,119,0.55), rgba(217,184,119,0.0) 40%, rgba(217,184,119,0.35), rgba(217,184,119,0.0))",
+              filter: "blur(0.3px)",
+              opacity: 0.9,
+            }}
+          />
+          <div
+            className="absolute inset-[-6%]"
+            style={{
+              clipPath:
+                "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
+              boxShadow:
+                "inset 0 0 0 2px rgba(217,184,119,0.75), inset 0 0 40px rgba(217,184,119,0.15)",
+            }}
+          />
+        </div>
+
+        {/* Inner hexagon — rotates counter-clockwise with drift */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 hex-drift"
+        >
+          <div
+            className="absolute inset-0 hex-spin-ccw"
+            style={{ transformStyle: "preserve-3d" }}
+          >
+            <div
+              className="absolute inset-[6%]"
+              style={{
+                clipPath:
+                  "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
+                background:
+                  "linear-gradient(135deg, rgba(11,58,37,0.55), rgba(4,26,17,0.75))",
+                boxShadow:
+                  "inset 0 0 0 1.5px rgba(255,255,255,0.18), inset 0 0 30px rgba(0,0,0,0.5)",
+              }}
+            />
+            <div
+              className="absolute inset-[6%]"
+              style={{
+                clipPath:
+                  "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
+                background:
+                  "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.18), transparent 45%)",
+              }}
+            />
+          </div>
+        </div>
+
         <canvas
           ref={canvasRef}
           width={480}
@@ -2255,10 +2315,12 @@ function Shooter({
           style={{
             clipPath:
               "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
-            background: "#f4f9f7",
+            background:
+              "radial-gradient(ellipse at 50% 40%, rgba(244,249,247,0.96), rgba(210,228,220,0.9))",
           }}
           aria-label="Shooting game canvas"
         />
+
         <canvas
           ref={crackCanvasRef}
           width={480}
