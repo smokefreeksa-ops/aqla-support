@@ -61,6 +61,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TryShootRouteImport } from './routes/try.shoot'
 import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planToken'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
 import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
@@ -334,6 +335,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TryShootRoute = TryShootRouteImport.update({
+  id: '/shoot',
+  path: '/shoot',
+  getParentRoute: () => TryRoute,
+} as any)
 const QuitPlanPlanTokenRoute = QuitPlanPlanTokenRouteImport.update({
   id: '/$planToken',
   path: '/$planToken',
@@ -447,7 +453,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
-  '/try': typeof TryRoute
+  '/try': typeof TryRouteWithChildren
   '/updates': typeof UpdatesRoute
   '/voice-craving-scan': typeof VoiceCravingScanRoute
   '/volunteer': typeof VolunteerRoute
@@ -459,6 +465,7 @@ export interface FileRoutesByFullPath {
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
+  '/try/shoot': typeof TryShootRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
@@ -513,7 +520,7 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
-  '/try': typeof TryRoute
+  '/try': typeof TryRouteWithChildren
   '/updates': typeof UpdatesRoute
   '/voice-craving-scan': typeof VoiceCravingScanRoute
   '/volunteer': typeof VolunteerRoute
@@ -525,6 +532,7 @@ export interface FileRoutesByTo {
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
+  '/try/shoot': typeof TryShootRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
@@ -580,7 +588,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
-  '/try': typeof TryRoute
+  '/try': typeof TryRouteWithChildren
   '/updates': typeof UpdatesRoute
   '/voice-craving-scan': typeof VoiceCravingScanRoute
   '/volunteer': typeof VolunteerRoute
@@ -592,6 +600,7 @@ export interface FileRoutesById {
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
+  '/try/shoot': typeof TryShootRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
@@ -660,6 +669,7 @@ export interface FileRouteTypes {
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
     | '/quit-plan/$planToken'
+    | '/try/shoot'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/aqla-quit-engine/result/$resultId'
@@ -726,6 +736,7 @@ export interface FileRouteTypes {
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
     | '/quit-plan/$planToken'
+    | '/try/shoot'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/aqla-quit-engine/result/$resultId'
@@ -792,6 +803,7 @@ export interface FileRouteTypes {
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
     | '/quit-plan/$planToken'
+    | '/try/shoot'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/aqla-quit-engine/result/$resultId'
@@ -847,7 +859,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   ToolsRoute: typeof ToolsRoute
   TrainingRoute: typeof TrainingRoute
-  TryRoute: typeof TryRoute
+  TryRoute: typeof TryRouteWithChildren
   UpdatesRoute: typeof UpdatesRoute
   VoiceCravingScanRoute: typeof VoiceCravingScanRoute
   VolunteerRoute: typeof VolunteerRoute
@@ -1227,6 +1239,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/try/shoot': {
+      id: '/try/shoot'
+      path: '/shoot'
+      fullPath: '/try/shoot'
+      preLoaderRoute: typeof TryShootRouteImport
+      parentRoute: typeof TryRoute
+    }
     '/quit-plan/$planToken': {
       id: '/quit-plan/$planToken'
       path: '/$planToken'
@@ -1352,6 +1371,16 @@ const QuitPlanRouteWithChildren = QuitPlanRoute._addFileChildren(
   QuitPlanRouteChildren,
 )
 
+interface TryRouteChildren {
+  TryShootRoute: typeof TryShootRoute
+}
+
+const TryRouteChildren: TryRouteChildren = {
+  TryShootRoute: TryShootRoute,
+}
+
+const TryRouteWithChildren = TryRoute._addFileChildren(TryRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -1400,7 +1429,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   ToolsRoute: ToolsRoute,
   TrainingRoute: TrainingRoute,
-  TryRoute: TryRoute,
+  TryRoute: TryRouteWithChildren,
   UpdatesRoute: UpdatesRoute,
   VoiceCravingScanRoute: VoiceCravingScanRoute,
   VolunteerRoute: VolunteerRoute,
