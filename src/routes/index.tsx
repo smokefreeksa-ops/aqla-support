@@ -116,7 +116,7 @@ function Inner() {
 
 
 
-        <section id="pathways" className="scroll-mt-20 border-t border-border/40 bg-card/40">
+        <section id="pathways" className="scroll-mt-20 border-t border-[#c9a84c]/20">
           <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {paths.map((p) => (
