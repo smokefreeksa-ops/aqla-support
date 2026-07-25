@@ -47,20 +47,14 @@ export default function KnowYourSmokingSection() {
             const stickyHeader = document.querySelector("header.sticky, header.fixed") as HTMLElement | null;
             const headerOffset = (stickyHeader?.offsetHeight ?? 56) + 8;
             const top = card.getBoundingClientRect().top + window.scrollY - headerOffset;
-            // eslint-disable-next-line no-console
-            console.log("[KYS] before scroll", window.scrollY, "target", top, "cardTop", card.getBoundingClientRect().top, "restoration", window.history.scrollRestoration);
-            document.documentElement.scrollTop = top;
-            document.body.scrollTop = top;
-            window.scrollTo(0, top);
-            // eslint-disable-next-line no-console
-            console.log("[KYS] after scroll", window.scrollY);
+            window.scrollTo({ top, behavior: "auto" });
             // Expand after the scroll has settled.
             window.setTimeout(() => setOpen(idx), 80);
             // Restore auto scroll restoration shortly after.
             window.setTimeout(() => {
               window.history.scrollRestoration = originalScrollRestoration;
             }, 600);
-          }, 120);
+          }, 3000);
         }
       }
     };
