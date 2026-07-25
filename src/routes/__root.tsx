@@ -166,7 +166,6 @@ function RootComponent() {
       
       <AqlaAuthGate>
         <ResearchBanner />
-        <ChallengeBanner />
         <Outlet />
         <FloatingWhatsAppButton />
         <AqlaAssistant />
