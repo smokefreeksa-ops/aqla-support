@@ -293,6 +293,29 @@
   .shimmer { animation: none !important; }
 }
 
+/* Dual rotating hexagon frames for the shooter arena */
+@keyframes hex-spin-cw {
+  from { transform: rotateX(8deg) rotateZ(0deg); }
+  to   { transform: rotateX(8deg) rotateZ(360deg); }
+}
+@keyframes hex-spin-ccw {
+  from { transform: rotateX(-6deg) rotateZ(0deg); }
+  to   { transform: rotateX(-6deg) rotateZ(-360deg); }
+}
+@keyframes hex-drift {
+  0%,100% { transform: translate3d(0,0,0) scale(1); }
+  25%     { transform: translate3d(6px,-4px,0) scale(1.015); }
+  50%     { transform: translate3d(-4px,6px,0) scale(0.99); }
+  75%     { transform: translate3d(-6px,-3px,0) scale(1.01); }
+}
+.hex-spin-cw  { animation: hex-spin-cw 24s linear infinite; transform-origin: 50% 50%; }
+.hex-spin-ccw { animation: hex-spin-ccw 34s linear infinite; transform-origin: 50% 50%; }
+.hex-drift    { animation: hex-drift 9s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hex-spin-cw, .hex-spin-ccw, .hex-drift { animation: none !important; }
+}
+
 /* Trust/gold chip */
 .gold-ring {
   box-shadow: inset 0 0 0 1px oklch(0.78 0.11 85 / 0.45);
