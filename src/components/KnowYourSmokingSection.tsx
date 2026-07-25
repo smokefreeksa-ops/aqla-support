@@ -2143,14 +2143,57 @@ function Shooter({
           )}
         </div>
       </div>
-      <div className="relative w-full" style={{ aspectRatio: "4 / 3" }}>
+      <div
+        ref={arenaShakeRef}
+        className="relative w-full mx-auto"
+        style={{
+          aspectRatio: "4 / 3",
+          maxWidth: 640,
+          perspective: "1200px",
+          willChange: "transform",
+        }}
+      >
+        {/* 3D hexagon frame */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            transform: "rotateX(8deg)",
+            transformStyle: "preserve-3d",
+          }}
+        >
+          <div
+            className="absolute inset-0"
+            style={{
+              clipPath:
+                "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
+              background:
+                "linear-gradient(135deg, rgba(11,58,37,0.85), rgba(4,26,17,0.9))",
+              boxShadow:
+                "inset 0 0 0 2px rgba(217,184,119,0.55), inset 0 0 40px rgba(0,0,0,0.55), 0 20px 60px -20px rgba(0,0,0,0.6)",
+            }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              clipPath:
+                "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
+              background:
+                "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.15), transparent 45%)",
+            }}
+          />
+        </div>
         <canvas
           ref={canvasRef}
           width={480}
           height={360}
           onMouseDown={handleCanvasClick}
-          className="w-full h-full rounded-xl border cursor-crosshair"
-          style={{ borderColor: tokens.border, background: "#f4f9f7" }}
+          className="relative w-full h-full cursor-crosshair"
+          style={{
+            clipPath:
+              "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
+            background: "#f4f9f7",
+          }}
           aria-label="Shooting game canvas"
         />
         <canvas
