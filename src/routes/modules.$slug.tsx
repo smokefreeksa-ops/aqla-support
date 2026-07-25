@@ -1,10 +1,13 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { useLang, useLangState, LangContext } from "@/lib/i18n";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getModule, MODULES, type Module } from "@/data/modules";
-import { CheckCircle2, XCircle, ArrowRight, ArrowLeft, BookOpen, ExternalLink } from "lucide-react";
+import { issueAcademyCertificate } from "@/lib/academy-certificate.functions";
+import { toast } from "sonner";
+import { CheckCircle2, XCircle, ArrowRight, ArrowLeft, BookOpen, ExternalLink, Award } from "lucide-react";
 
 export const Route = createFileRoute("/modules/$slug")({
   loader: ({ params }) => {
@@ -52,6 +55,44 @@ function Inner() {
     (n, q, i) => n + (answers[i] === q.correctIndex ? 1 : 0),
     0,
   );
+  const scorePct = Math.round((correct / mod.quiz.length) * 100);
+  const passed = submitted && scorePct >= 80;
+
+  const [fullName, setFullName] = useState("");
+  const [issuing, setIssuing] = useState(false);
+  const issueFn = useServerFn(issueAcademyCertificate);
+  const navigate = useNavigate();
+
+  async function claimCertificate() {
+    if (fullName.trim().length < 2) {
+      toast.error(isAr ? "أدخل اسمك الكامل" : "Enter your full name");
+      return;
+    }
+    setIssuing(true);
+    try {
+      const answersMap: Record<string, number> = {};
+      Object.entries(answers).forEach(([k, v]) => { answersMap[String(k)] = v; });
+      const res = await issueFn({
+        data: {
+          module_slug: mod.slug,
+          full_name: fullName,
+          answers: answersMap,
+          language: lang,
+        },
+      });
+      if (!res.ok || !res.certificate_code) {
+        toast.error(isAr ? "تعذّر إصدار الشهادة" : "Could not issue certificate");
+        return;
+      }
+      toast.success(isAr ? "تم إصدار شهادتك 🎉" : "Certificate issued 🎉");
+      navigate({ to: "/academy-certificate/$code", params: { code: res.certificate_code } });
+    } catch (e) {
+      console.error(e);
+      toast.error(isAr ? "خطأ في الشبكة" : "Network error");
+    } finally {
+      setIssuing(false);
+    }
+  }
 
   const Arrow = isAr ? ArrowLeft : ArrowRight;
 
@@ -202,7 +243,53 @@ function Inner() {
               </>
             )}
           </div>
+
+          {submitted && (
+            <div className={`mt-6 rounded-2xl border-2 p-5 ${passed ? "border-emerald-500 bg-emerald-50/60" : "border-amber-400 bg-amber-50/60"}`}>
+              <div className="flex items-center gap-2 mb-2">
+                <Award className={`w-5 h-5 ${passed ? "text-emerald-700" : "text-amber-700"}`} />
+                <div className="font-bold text-gray-900">
+                  {passed
+                    ? isAr ? `نجحت — ${scorePct}%` : `Passed — ${scorePct}%`
+                    : isAr ? `تحتاج 80% للحصول على الشهادة (نتيجتك ${scorePct}%)` : `Need 80% to earn the certificate (you scored ${scorePct}%)`}
+                </div>
+              </div>
+              {passed ? (
+                <div className="space-y-3">
+                  <p className="text-sm text-emerald-900">
+                    {isAr
+                      ? "أدخل اسمك الكامل كما ترغب بظهوره على الشهادة الرسمية."
+                      : "Enter your full name exactly as you want it printed on the certificate."}
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <input
+                      type="text"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder={isAr ? "الاسم الكامل" : "Full name"}
+                      className="flex-1 rounded-lg border border-emerald-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600"
+                      maxLength={120}
+                    />
+                    <button
+                      onClick={claimCertificate}
+                      disabled={issuing || fullName.trim().length < 2}
+                      className="px-5 py-2.5 rounded-lg bg-emerald-700 text-white text-sm font-bold hover:bg-emerald-800 disabled:opacity-40"
+                    >
+                      {issuing
+                        ? (isAr ? "جارٍ الإصدار..." : "Issuing...")
+                        : (isAr ? "أصدر الشهادة" : "Issue certificate")}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-amber-900">
+                  {isAr ? "أعد المحاولة بعد مراجعة المحتوى أعلاه." : "Retry after reviewing the content above."}
+                </p>
+              )}
+            </div>
+          )}
         </section>
+
 
         {/* Nav */}
         <nav className="mt-10 flex items-center justify-between gap-3 border-t border-gray-200 pt-5">
