@@ -146,7 +146,7 @@ export function ChallengeBanner() {
             className="inline-flex items-center gap-1.5 rounded-full bg-amber-400 text-red-950 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-amber-300 transition shadow-sm"
           >
             <Crosshair className="h-3.5 w-3.5" />
-            صوّب على السجائر
+            تحدي كسر عادة التدخين
           </Link>
         </div>
 

@@ -116,10 +116,10 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
     },
     {
       emoji: "🎯",
-      name: T("Shoot the Cigarettes", "صوّب على السجائر", lang),
+      name: T("Break the Smoking Habit Challenge", "تحدي كسر عادة التدخين", lang),
       desc: T(
-        "30 seconds. Aim. Break more than glass.",
-        "٣٠ ثانية. صوّب. اكسر أكثر من الزجاج.",
+        "30 seconds. Aim at lit cigarettes. Shatter more than glass.",
+        "٣٠ ثانية. صوّب على السجائر المولّعة. حطّم أكثر من الزجاج.",
         lang
       ),
       time: T("30 sec", "٣٠ ثانية", lang),
@@ -1315,23 +1315,63 @@ function Shooter({
     if (mutedRef.current) return;
     const ctx = ensureAudio();
     if (!ctx) return;
-    const o = ctx.createOscillator();
-    o.type = "square";
-    o.frequency.setValueAtTime(600, ctx.currentTime);
-    o.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.08);
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.25, ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.09);
-    o.connect(g).connect(ctx.destination);
-    o.start();
-    o.stop(ctx.currentTime + 0.1);
-    // click
-    const n = ctx.createBufferSource();
-    n.buffer = noiseBuffer(ctx, 0.03);
-    const ng = ctx.createGain();
-    ng.gain.value = 0.15;
-    n.connect(ng).connect(ctx.destination);
-    n.start();
+    const now = ctx.currentTime;
+    const master = ctx.createDynamicsCompressor();
+    master.threshold.value = -14;
+    master.knee.value = 24;
+    master.ratio.value = 12;
+    master.attack.value = 0.001;
+    master.release.value = 0.12;
+    master.connect(ctx.destination);
+
+    // Layer A — deep body thump (60Hz sine)
+    const thump = ctx.createOscillator();
+    thump.type = "sine";
+    thump.frequency.setValueAtTime(140, now);
+    thump.frequency.exponentialRampToValueAtTime(38, now + 0.09);
+    const thumpG = ctx.createGain();
+    thumpG.gain.setValueAtTime(0.9, now);
+    thumpG.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+    thump.connect(thumpG).connect(master);
+    thump.start(now);
+    thump.stop(now + 0.13);
+
+    // Layer B — mid crack (bandpass noise burst)
+    const midN = ctx.createBufferSource();
+    midN.buffer = noiseBuffer(ctx, 0.18);
+    const bp = ctx.createBiquadFilter();
+    bp.type = "bandpass";
+    bp.frequency.value = 1200;
+    bp.Q.value = 0.9;
+    const midG = ctx.createGain();
+    midG.gain.setValueAtTime(0.85, now);
+    midG.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+    midN.connect(bp).connect(midG).connect(master);
+    midN.start(now);
+
+    // Layer C — high snap (highpass noise crack)
+    const hiN = ctx.createBufferSource();
+    hiN.buffer = noiseBuffer(ctx, 0.06);
+    const hp = ctx.createBiquadFilter();
+    hp.type = "highpass";
+    hp.frequency.value = 4200;
+    const hiG = ctx.createGain();
+    hiG.gain.setValueAtTime(0.7, now);
+    hiG.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+    hiN.connect(hp).connect(hiG).connect(master);
+    hiN.start(now);
+
+    // Layer D — muzzle tail (short filtered decay for room)
+    const tail = ctx.createBufferSource();
+    tail.buffer = noiseBuffer(ctx, 0.25);
+    const tailLp = ctx.createBiquadFilter();
+    tailLp.type = "lowpass";
+    tailLp.frequency.value = 900;
+    const tailG = ctx.createGain();
+    tailG.gain.setValueAtTime(0.35, now + 0.02);
+    tailG.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+    tail.connect(tailLp).connect(tailG).connect(master);
+    tail.start(now + 0.005);
   };
 
   const playHit = (comboStep: number) => {
@@ -1417,7 +1457,179 @@ function Shooter({
     });
   };
 
-  // Game refs (mutable state for RAF loop)
+  /* ============ Viewport-wide glass shatter (4D burst) ============ */
+  const shardCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const shardsRef = useRef<
+    {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      vrot: number;
+      rot: number;
+      life: number;
+      max: number;
+      size: number;
+      pts: { x: number; y: number }[];
+      hue: number;
+    }[]
+  >([]);
+  const flashRef = useRef<{ x: number; y: number; life: number; max: number }[]>([]);
+  const arenaShakeRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const sizeShardCanvas = () => {
+      const c = shardCanvasRef.current;
+      if (!c) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      c.width = window.innerWidth * dpr;
+      c.height = window.innerHeight * dpr;
+      c.style.width = window.innerWidth + "px";
+      c.style.height = window.innerHeight + "px";
+      const ctx = c.getContext("2d");
+      if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    sizeShardCanvas();
+    window.addEventListener("resize", sizeShardCanvas);
+
+    let raf = 0;
+    const loop = () => {
+      const c = shardCanvasRef.current;
+      if (!c) {
+        raf = requestAnimationFrame(loop);
+        return;
+      }
+      const ctx = c.getContext("2d");
+      if (!ctx) {
+        raf = requestAnimationFrame(loop);
+        return;
+      }
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+      // radial flashes
+      flashRef.current = flashRef.current.filter((f) => f.life < f.max);
+      flashRef.current.forEach((f) => {
+        f.life += 16;
+        const a = 1 - f.life / f.max;
+        const r = 40 + (f.life / f.max) * 180;
+        const g = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, r);
+        g.addColorStop(0, `rgba(255,255,255,${0.55 * a})`);
+        g.addColorStop(0.4, `rgba(200,240,255,${0.25 * a})`);
+        g.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // shards
+      shardsRef.current = shardsRef.current.filter((s) => s.life < s.max);
+      shardsRef.current.forEach((s) => {
+        s.life += 16;
+        s.vy += 0.55; // gravity
+        s.vx *= 0.995;
+        s.vy *= 0.995;
+        s.x += s.vx;
+        s.y += s.vy;
+        s.rot += s.vrot;
+        const a = Math.max(0, 1 - s.life / s.max);
+        ctx.save();
+        ctx.globalAlpha = a;
+        ctx.translate(s.x, s.y);
+        ctx.rotate(s.rot);
+        // glass gradient
+        const grad = ctx.createLinearGradient(-s.size, -s.size, s.size, s.size);
+        grad.addColorStop(0, `hsla(${s.hue},60%,96%,0.95)`);
+        grad.addColorStop(0.5, `hsla(${s.hue},50%,82%,0.75)`);
+        grad.addColorStop(1, `hsla(${s.hue},40%,68%,0.55)`);
+        ctx.fillStyle = grad;
+        ctx.strokeStyle = `hsla(${s.hue},70%,98%,${0.9 * a})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        s.pts.forEach((p, i) => {
+          if (i === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        });
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        // specular highlight
+        ctx.strokeStyle = `rgba(255,255,255,${0.7 * a})`;
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.moveTo(s.pts[0].x, s.pts[0].y);
+        ctx.lineTo(s.pts[1].x, s.pts[1].y);
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", sizeShardCanvas);
+    };
+  }, []);
+
+  function spawnGlassShatter(clientX: number, clientY: number) {
+    const st = stateRef.current;
+    if (st.prefersReducedMotion) {
+      flashRef.current.push({ x: clientX, y: clientY, life: 0, max: 220 });
+      return;
+    }
+    const isSmall = typeof window !== "undefined" && window.innerWidth < 640;
+    const count = isSmall ? 32 : 60;
+    const cap = 500;
+    // white flash
+    flashRef.current.push({ x: clientX, y: clientY, life: 0, max: 160 });
+    for (let i = 0; i < count; i++) {
+      if (shardsRef.current.length >= cap) break;
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 6 + Math.random() * 16;
+      const size = 6 + Math.random() * 22;
+      // polygon points (triangle or quad)
+      const sides = Math.random() < 0.55 ? 3 : 4;
+      const pts: { x: number; y: number }[] = [];
+      for (let k = 0; k < sides; k++) {
+        const a = (k / sides) * Math.PI * 2 + Math.random() * 0.9;
+        const r = size * (0.4 + Math.random() * 0.7);
+        pts.push({ x: Math.cos(a) * r, y: Math.sin(a) * r });
+      }
+      shardsRef.current.push({
+        x: clientX,
+        y: clientY,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - (4 + Math.random() * 6), // upward bias
+        vrot: (Math.random() - 0.5) * 0.6,
+        rot: Math.random() * Math.PI * 2,
+        life: 0,
+        max: 1400 + Math.random() * 700,
+        size,
+        pts,
+        hue: 180 + Math.random() * 30, // pale cyan-white
+      });
+    }
+    // arena shake
+    const el = arenaShakeRef.current;
+    if (el && !isSmall) {
+      el.style.transition = "transform 40ms";
+      let step = 0;
+      const shake = () => {
+        step++;
+        if (step > 6) {
+          el.style.transform = "";
+          return;
+        }
+        const dx = (Math.random() - 0.5) * 10;
+        const dy = (Math.random() - 0.5) * 10;
+        el.style.transform = `translate(${dx}px, ${dy}px)`;
+        setTimeout(shake, 45);
+      };
+      shake();
+    }
+  }
+
   const stateRef = useRef({
     W: 480,
     H: 360,
@@ -1567,23 +1779,107 @@ function Shooter({
     y: number,
     rot: number
   ) {
+    const t = performance.now() / 1000;
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(rot);
-    // body
-    ctx.fillStyle = "#fff";
-    ctx.strokeStyle = "#bbb";
-    ctx.lineWidth = 1;
-    ctx.fillRect(-18, -5, 26, 10);
-    ctx.strokeRect(-18, -5, 26, 10);
-    // filter
-    ctx.fillStyle = "#d9b877";
-    ctx.fillRect(8, -5, 10, 10);
-    // ember
-    ctx.fillStyle = tokens.warn;
+
+    // subtle drop shadow
+    ctx.save();
+    ctx.fillStyle = "rgba(0,0,0,0.18)";
     ctx.beginPath();
-    ctx.arc(-18, 0, 3, 0, Math.PI * 2);
+    ctx.ellipse(-2, 7, 22, 3, 0, 0, Math.PI * 2);
     ctx.fill();
+    ctx.restore();
+
+    // paper body — gradient white → cream
+    const paper = ctx.createLinearGradient(0, -5, 0, 5);
+    paper.addColorStop(0, "#fdfdfa");
+    paper.addColorStop(0.5, "#ffffff");
+    paper.addColorStop(1, "#e8e6dd");
+    ctx.fillStyle = paper;
+    ctx.fillRect(-20, -5, 28, 10);
+    // paper texture lines
+    ctx.strokeStyle = "rgba(180,175,160,0.35)";
+    ctx.lineWidth = 0.5;
+    for (let i = -18; i < 6; i += 3) {
+      ctx.beginPath();
+      ctx.moveTo(i, -4.5);
+      ctx.lineTo(i + 1.5, 4.5);
+      ctx.stroke();
+    }
+    ctx.strokeStyle = "rgba(150,145,130,0.5)";
+    ctx.lineWidth = 0.8;
+    ctx.strokeRect(-20, -5, 28, 10);
+
+    // filter — tan gradient with cork speckle
+    const filt = ctx.createLinearGradient(8, -5, 8, 5);
+    filt.addColorStop(0, "#d9a869");
+    filt.addColorStop(1, "#a8783f");
+    ctx.fillStyle = filt;
+    ctx.fillRect(8, -5, 12, 10);
+    ctx.fillStyle = "rgba(80,50,20,0.35)";
+    for (let i = 0; i < 14; i++) {
+      const dx = 8 + Math.random() * 12;
+      const dy = -5 + Math.random() * 10;
+      ctx.fillRect(dx, dy, 0.7, 0.7);
+    }
+    // brand ring
+    ctx.strokeStyle = "#8a5a2a";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(8, -5);
+    ctx.lineTo(8, 5);
+    ctx.stroke();
+
+    // burnt paper zone right at ember (charred edge)
+    const burn = ctx.createLinearGradient(-20, 0, -14, 0);
+    burn.addColorStop(0, "#2a1a10");
+    burn.addColorStop(0.6, "#6b3a1a");
+    burn.addColorStop(1, "rgba(107,58,26,0)");
+    ctx.fillStyle = burn;
+    ctx.fillRect(-20, -5, 7, 10);
+
+    // pulsing ember glow (halo)
+    const pulse = 0.7 + 0.3 * Math.sin(t * 5 + x * 0.13);
+    const glow = ctx.createRadialGradient(-20, 0, 0, -20, 0, 12);
+    glow.addColorStop(0, `rgba(255,220,120,${0.9 * pulse})`);
+    glow.addColorStop(0.4, `rgba(255,120,30,${0.55 * pulse})`);
+    glow.addColorStop(1, "rgba(255,60,0,0)");
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(-20, 0, 12, 0, Math.PI * 2);
+    ctx.fill();
+
+    // hot ember core
+    const emberG = ctx.createRadialGradient(-20, 0, 0, -20, 0, 4);
+    emberG.addColorStop(0, "#fff7c0");
+    emberG.addColorStop(0.35, "#ffb347");
+    emberG.addColorStop(1, "#c9310a");
+    ctx.fillStyle = emberG;
+    ctx.beginPath();
+    ctx.arc(-20, 0, 3.4 + pulse * 0.6, 0, Math.PI * 2);
+    ctx.fill();
+
+    // tiny hot flecks
+    if (Math.random() < 0.35) {
+      ctx.fillStyle = "#ffe08a";
+      ctx.fillRect(-20 + (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 3, 0.8, 0.8);
+    }
+
+    // wispy smoke
+    const smokeAlpha = 0.14;
+    for (let i = 0; i < 3; i++) {
+      const phase = t * 0.9 + i * 0.7 + x * 0.02;
+      const sx = -20 + Math.sin(phase) * 2;
+      const sy = -8 - i * 6 - (phase % 1) * 4;
+      const sr = 3 + i * 2;
+      ctx.fillStyle = `rgba(200,200,200,${smokeAlpha - i * 0.03})`;
+      ctx.beginPath();
+      ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
     ctx.restore();
   }
 
@@ -1757,6 +2053,8 @@ function Shooter({
       });
       setScore((sc) => sc + 10);
       spawnParticles(x, y, "hit");
+      // 4D shattered glass in viewport coordinates
+      spawnGlassShatter(e.clientX, e.clientY);
     } else {
       // Check hex edge proximity
       const distToCenter = Math.hypot(x - cx, y - cy);
@@ -1845,14 +2143,57 @@ function Shooter({
           )}
         </div>
       </div>
-      <div className="relative w-full" style={{ aspectRatio: "4 / 3" }}>
+      <div
+        ref={arenaShakeRef}
+        className="relative w-full mx-auto"
+        style={{
+          aspectRatio: "4 / 3",
+          maxWidth: 640,
+          perspective: "1200px",
+          willChange: "transform",
+        }}
+      >
+        {/* 3D hexagon frame */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            transform: "rotateX(8deg)",
+            transformStyle: "preserve-3d",
+          }}
+        >
+          <div
+            className="absolute inset-0"
+            style={{
+              clipPath:
+                "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
+              background:
+                "linear-gradient(135deg, rgba(11,58,37,0.85), rgba(4,26,17,0.9))",
+              boxShadow:
+                "inset 0 0 0 2px rgba(217,184,119,0.55), inset 0 0 40px rgba(0,0,0,0.55), 0 20px 60px -20px rgba(0,0,0,0.6)",
+            }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              clipPath:
+                "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
+              background:
+                "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.15), transparent 45%)",
+            }}
+          />
+        </div>
         <canvas
           ref={canvasRef}
           width={480}
           height={360}
           onMouseDown={handleCanvasClick}
-          className="w-full h-full rounded-xl border cursor-crosshair"
-          style={{ borderColor: tokens.border, background: "#f4f9f7" }}
+          className="relative w-full h-full cursor-crosshair"
+          style={{
+            clipPath:
+              "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
+            background: "#f4f9f7",
+          }}
           aria-label="Shooting game canvas"
         />
         <canvas
@@ -1900,12 +2241,16 @@ function Shooter({
                   hash="kys-4"
                   tone="dark"
                   headline={T(
-                    `I scored ${score} in Aqla's Shoot-the-Cigarettes — ${hits}/${shots} (${accuracy}%). Beat me:`,
-                    `سجّلت ${score} نقطة في لعبة صوّب على السجائر — ${hits}/${shots} (${accuracy}%). تحدّاني:`,
+                    `I scored ${score} in Aqla's Break-the-Smoking-Habit Challenge — ${hits}/${shots} (${accuracy}%). Beat me:`,
+                    `سجّلت ${score} نقطة في تحدي كسر عادة التدخين — ${hits}/${shots} (${accuracy}%). تحدّاني:`,
                     lang
                   )}
                   scoreCard={{
-                    title: T("Shoot the Cigarettes — Aqla", "صوّب على السجائر — أقلع", lang),
+                    title: T(
+                      "Break the Smoking Habit — Aqla",
+                      "تحدي كسر عادة التدخين — أقلع",
+                      lang
+                    ),
                     stats: [
                       { label: T("Score", "النقاط", lang), value: String(score) },
                       { label: T("Hits", "إصابات", lang), value: `${hits}/${shots}` },
@@ -1921,10 +2266,17 @@ function Shooter({
           </div>
         )}
       </div>
+      {/* Full-viewport shard canvas — glass flies outside the hex */}
+      <canvas
+        ref={shardCanvasRef}
+        className="fixed inset-0 pointer-events-none"
+        style={{ zIndex: 70 }}
+        aria-hidden
+      />
       <p className="text-xs opacity-70">
         {T(
-          "Tap the moving cigarettes. Every shot breaks something.",
-          "انقر على السجائر المتحركة. كل طلقة تكسر شيئاً.",
+          "Aim at the lit cigarettes. Every hit shatters glass across the screen.",
+          "صوّب على السجائر المولّعة. كل إصابة تنثر الزجاج في كل الشاشة.",
           lang
         )}
       </p>
