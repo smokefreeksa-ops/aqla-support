@@ -208,8 +208,9 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
       id="know-your-smoking"
       dir={dir}
       lang={lang}
-      style={{ background: tokens.bg, color: tokens.ink }}
-      className="scroll-mt-24 border-t"
+      style={{ background: "transparent", color: "#f4f0e1" }}
+      className="scroll-mt-24"
+
       aria-label="Know Your Smoking Life"
     >
       <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
