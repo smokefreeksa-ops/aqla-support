@@ -3,6 +3,8 @@
 // Evidence-based standardized template, personalized by user answers.
 // Sources cited inline: WHO 2024, USPSTF 2021, CDC 2024, FDA, NCI PDQ.
 
+import { SITE_URL } from "./site";
+
 import {
   scoreFtnd,
   scorePennStateEcig,
