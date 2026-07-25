@@ -103,7 +103,7 @@ export function ChallengeBanner() {
   }
 
   return (
-    <div dir="rtl" className="relative w-full overflow-hidden bg-gradient-to-l from-red-900 via-red-800 to-red-950 text-white shadow-lg">
+    <div dir="rtl" className="pointer-events-none relative w-full overflow-hidden bg-gradient-to-l from-red-900 via-red-800 to-red-950 text-white shadow-lg">
       {/* shimmer stars */}
       <div className="pointer-events-none absolute inset-0 opacity-40"
         style={{
@@ -118,8 +118,8 @@ export function ChallengeBanner() {
         @keyframes aqlaPulseDot { 0%,100% { opacity:1; transform:scale(1);} 50%{opacity:.55; transform:scale(1.35);} }
       `}</style>
 
-      <div className="relative flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 sm:py-3">
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 order-1">
+      <div className="pointer-events-none relative flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 sm:py-3">
+        <div className="pointer-events-none flex flex-wrap items-center gap-2 sm:gap-3 order-1">
           <span
             className="inline-block h-2.5 w-2.5 rounded-full bg-rose-300 shadow-[0_0_12px_rgba(255,200,200,.9)]"
             style={{ animation: "aqlaPulseDot 1.4s ease-in-out infinite" }}
@@ -129,13 +129,13 @@ export function ChallengeBanner() {
           </span>
           <button
             onClick={() => setOpen(true)}
-            className="rounded-full bg-white text-red-800 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-rose-50 transition"
+            className="pointer-events-auto rounded-full bg-white text-red-800 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-rose-50 transition"
           >
             انضم بسرعة
           </button>
           <Link
             to="/challenge-pathway"
-            className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/95 text-white text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-emerald-600 transition shadow-sm"
+            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full bg-emerald-500/95 text-white text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-emerald-600 transition shadow-sm"
           >
             <Trophy className="h-3.5 w-3.5" />
             مجتمع وتحديات أقلع
@@ -143,14 +143,14 @@ export function ChallengeBanner() {
           </Link>
           <Link
             to="/try/shoot"
-            className="inline-flex items-center gap-1.5 rounded-full bg-amber-400 text-red-950 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-amber-300 transition shadow-sm"
+            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full bg-amber-400 text-red-950 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-amber-300 transition shadow-sm"
           >
             <Crosshair className="h-3.5 w-3.5" />
             تحدي كسر عادة التدخين
           </Link>
         </div>
 
-        <div className="flex items-center gap-4 text-[11px] sm:text-xs order-3 sm:order-2 w-full sm:w-auto justify-between sm:justify-end">
+        <div className="pointer-events-none flex items-center gap-4 text-[11px] sm:text-xs order-3 sm:order-2 w-full sm:w-auto justify-between sm:justify-end">
           <span className="hidden sm:inline opacity-80">مباشر · تفاعل اللحظة</span>
           <Stat n={stats.joined} label="طالب انضم" />
           <Stat n={stats.cards} label="بطاقة أُنشئت" />
@@ -158,13 +158,13 @@ export function ChallengeBanner() {
           <Stat n={stats.visits} label="زيارة" />
         </div>
 
-        <div className="flex items-center gap-2 order-2 sm:order-3">
+        <div className="pointer-events-none flex items-center gap-2 order-2 sm:order-3">
           <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer"
-             className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
+             className="pointer-events-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
             <Linkedin className="h-3.5 w-3.5" />
           </a>
           <a href="https://twitter.com/" target="_blank" rel="noreferrer"
-             className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
+             className="pointer-events-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
             <Twitter className="h-3.5 w-3.5" />
           </a>
           <span className="text-[11px] opacity-80 hidden sm:inline">تابعنا</span>
@@ -174,7 +174,7 @@ export function ChallengeBanner() {
       </div>
 
       {open && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 px-4" onClick={() => setOpen(false)}>
+        <div className="pointer-events-auto fixed inset-0 z-[100] flex items-center justify-center bg-black/60 px-4" onClick={() => setOpen(false)}>
           <div
             dir="rtl"
             className="w-full max-w-md rounded-2xl bg-white text-slate-900 p-5 shadow-2xl"
