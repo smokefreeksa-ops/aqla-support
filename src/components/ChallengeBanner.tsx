@@ -103,7 +103,7 @@ export function ChallengeBanner() {
   }
 
   return (
-    <div dir="rtl" className="relative w-full overflow-hidden bg-gradient-to-l from-red-900 via-red-800 to-red-950 text-white shadow-lg">
+    <div dir="rtl" className="pointer-events-none relative w-full overflow-hidden bg-gradient-to-l from-red-900 via-red-800 to-red-950 text-white shadow-lg">
       {/* shimmer stars */}
       <div className="pointer-events-none absolute inset-0 opacity-40"
         style={{
@@ -118,8 +118,8 @@ export function ChallengeBanner() {
         @keyframes aqlaPulseDot { 0%,100% { opacity:1; transform:scale(1);} 50%{opacity:.55; transform:scale(1.35);} }
       `}</style>
 
-      <div className="relative flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 sm:py-3">
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 order-1">
+      <div className="pointer-events-none relative flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 sm:py-3">
+        <div className="pointer-events-none flex flex-wrap items-center gap-2 sm:gap-3 order-1">
           <span
             className="inline-block h-2.5 w-2.5 rounded-full bg-rose-300 shadow-[0_0_12px_rgba(255,200,200,.9)]"
             style={{ animation: "aqlaPulseDot 1.4s ease-in-out infinite" }}
@@ -129,13 +129,13 @@ export function ChallengeBanner() {
           </span>
           <button
             onClick={() => setOpen(true)}
-            className="rounded-full bg-white text-red-800 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-rose-50 transition"
+            className="pointer-events-auto rounded-full bg-white text-red-800 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-rose-50 transition"
           >
             انضم بسرعة
           </button>
           <Link
             to="/challenge-pathway"
-            className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/95 text-white text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-emerald-600 transition shadow-sm"
+            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full bg-emerald-500/95 text-white text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-emerald-600 transition shadow-sm"
           >
             <Trophy className="h-3.5 w-3.5" />
             مجتمع وتحديات أقلع
