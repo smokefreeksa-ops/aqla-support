@@ -392,7 +392,7 @@ function SupportInvitePage() {
                   </div>
                 </div>
                 <Badge variant="outline" className="border-emerald-600/40 text-emerald-700 text-[10px]">
-                  aqla-support.lovable.app
+                  {SITE_URL.replace(/^https?:\/\//, "")}
                 </Badge>
               </div>
 
