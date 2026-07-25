@@ -1319,90 +1319,153 @@ function Shooter({
     const master = ctx.createDynamicsCompressor();
     master.threshold.value = -14;
     master.knee.value = 24;
-    master.ratio.value = 12;
-    master.attack.value = 0.001;
-    master.release.value = 0.12;
+    master.ratio.value = 10;
+    master.attack.value = 0.002;
+    master.release.value = 0.15;
     master.connect(ctx.destination);
 
-    // Layer A — deep body thump (60Hz sine)
-    const thump = ctx.createOscillator();
-    thump.type = "sine";
-    thump.frequency.setValueAtTime(140, now);
-    thump.frequency.exponentialRampToValueAtTime(38, now + 0.09);
-    const thumpG = ctx.createGain();
-    thumpG.gain.setValueAtTime(0.9, now);
-    thumpG.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-    thump.connect(thumpG).connect(master);
-    thump.start(now);
-    thump.stop(now + 0.13);
-
-    // Layer B — mid crack (bandpass noise burst)
-    const midN = ctx.createBufferSource();
-    midN.buffer = noiseBuffer(ctx, 0.18);
+    // Rocket whoosh — long filtered noise sweeping from low→high
+    const dur = 0.75;
+    const n = ctx.createBufferSource();
+    n.buffer = noiseBuffer(ctx, dur);
     const bp = ctx.createBiquadFilter();
     bp.type = "bandpass";
-    bp.frequency.value = 1200;
-    bp.Q.value = 0.9;
-    const midG = ctx.createGain();
-    midG.gain.setValueAtTime(0.85, now);
-    midG.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
-    midN.connect(bp).connect(midG).connect(master);
-    midN.start(now);
+    bp.Q.value = 1.4;
+    bp.frequency.setValueAtTime(300, now);
+    bp.frequency.exponentialRampToValueAtTime(4200, now + dur);
+    const ng = ctx.createGain();
+    ng.gain.setValueAtTime(0.001, now);
+    ng.gain.exponentialRampToValueAtTime(0.85, now + 0.08);
+    ng.gain.exponentialRampToValueAtTime(0.001, now + dur);
+    n.connect(bp).connect(ng).connect(master);
+    n.start(now);
+    n.stop(now + dur);
 
-    // Layer C — high snap (highpass noise crack)
-    const hiN = ctx.createBufferSource();
-    hiN.buffer = noiseBuffer(ctx, 0.06);
-    const hp = ctx.createBiquadFilter();
-    hp.type = "highpass";
-    hp.frequency.value = 4200;
-    const hiG = ctx.createGain();
-    hiG.gain.setValueAtTime(0.7, now);
-    hiG.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-    hiN.connect(hp).connect(hiG).connect(master);
-    hiN.start(now);
+    // Roar body — sawtooth sweeping up (rocket engine)
+    const saw = ctx.createOscillator();
+    saw.type = "sawtooth";
+    saw.frequency.setValueAtTime(90, now);
+    saw.frequency.exponentialRampToValueAtTime(520, now + dur);
+    const sg = ctx.createGain();
+    sg.gain.setValueAtTime(0.001, now);
+    sg.gain.exponentialRampToValueAtTime(0.35, now + 0.1);
+    sg.gain.exponentialRampToValueAtTime(0.001, now + dur);
+    const sf = ctx.createBiquadFilter();
+    sf.type = "lowpass";
+    sf.frequency.value = 1600;
+    saw.connect(sf).connect(sg).connect(master);
+    saw.start(now);
+    saw.stop(now + dur);
 
-    // Layer D — muzzle tail (short filtered decay for room)
-    const tail = ctx.createBufferSource();
-    tail.buffer = noiseBuffer(ctx, 0.25);
-    const tailLp = ctx.createBiquadFilter();
-    tailLp.type = "lowpass";
-    tailLp.frequency.value = 900;
-    const tailG = ctx.createGain();
-    tailG.gain.setValueAtTime(0.35, now + 0.02);
-    tailG.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
-    tail.connect(tailLp).connect(tailG).connect(master);
-    tail.start(now + 0.005);
+    // Ignition click
+    const click = ctx.createOscillator();
+    click.type = "square";
+    click.frequency.value = 180;
+    const cg = ctx.createGain();
+    cg.gain.setValueAtTime(0.4, now);
+    cg.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+    click.connect(cg).connect(master);
+    click.start(now);
+    click.stop(now + 0.05);
   };
 
+  // Big explosion + crowd cheer on hit
   const playHit = (comboStep: number) => {
     if (mutedRef.current) return;
     const ctx = ensureAudio();
     if (!ctx) return;
-    // filtered noise burst
-    const n = ctx.createBufferSource();
-    n.buffer = noiseBuffer(ctx, 0.12);
-    const bp = ctx.createBiquadFilter();
-    bp.type = "bandpass";
-    bp.frequency.value = 1800;
-    const ng = ctx.createGain();
-    ng.gain.setValueAtTime(0.25, ctx.currentTime);
-    ng.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.13);
-    n.connect(bp).connect(ng).connect(ctx.destination);
-    n.start();
-    // ping
+    const now = ctx.currentTime;
+    const master = ctx.createDynamicsCompressor();
+    master.threshold.value = -16;
+    master.knee.value = 24;
+    master.ratio.value = 12;
+    master.attack.value = 0.001;
+    master.release.value = 0.2;
+    master.connect(ctx.destination);
+
+    // ---- EXPLOSION ----
+    // Deep boom sub
+    const boom = ctx.createOscillator();
+    boom.type = "sine";
+    boom.frequency.setValueAtTime(180, now);
+    boom.frequency.exponentialRampToValueAtTime(30, now + 0.35);
+    const bg = ctx.createGain();
+    bg.gain.setValueAtTime(1.1, now);
+    bg.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+    boom.connect(bg).connect(master);
+    boom.start(now);
+    boom.stop(now + 0.5);
+
+    // Debris crackle — lowpass noise long tail
+    const rumble = ctx.createBufferSource();
+    rumble.buffer = noiseBuffer(ctx, 0.7);
+    const rlp = ctx.createBiquadFilter();
+    rlp.type = "lowpass";
+    rlp.frequency.setValueAtTime(2200, now);
+    rlp.frequency.exponentialRampToValueAtTime(400, now + 0.6);
+    const rg = ctx.createGain();
+    rg.gain.setValueAtTime(0.9, now);
+    rg.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+    rumble.connect(rlp).connect(rg).connect(master);
+    rumble.start(now);
+
+    // Sharp crack on top
+    const crack = ctx.createBufferSource();
+    crack.buffer = noiseBuffer(ctx, 0.08);
+    const chp = ctx.createBiquadFilter();
+    chp.type = "highpass";
+    chp.frequency.value = 3500;
+    const cg2 = ctx.createGain();
+    cg2.gain.setValueAtTime(0.6, now);
+    cg2.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+    crack.connect(chp).connect(cg2).connect(master);
+    crack.start(now);
+
+    // ---- CROWD CHEER (synthesized applause + voice-band roar) ----
+    const cheerDur = 1.6;
+    const cheer = ctx.createBufferSource();
+    const sr = ctx.sampleRate;
+    const buf = ctx.createBuffer(1, Math.floor(sr * cheerDur), sr);
+    const data = buf.getChannelData(0);
+    // Applause: dense random claps modulated over voice band noise
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sr;
+      // base roar
+      let s = (Math.random() * 2 - 1) * 0.35;
+      // clap transients
+      if (Math.random() < 0.012) s += (Math.random() * 2 - 1) * 1.1;
+      // slow amplitude swell
+      const env = Math.sin((t / cheerDur) * Math.PI);
+      data[i] = s * env;
+    }
+    cheer.buffer = buf;
+    const cbp = ctx.createBiquadFilter();
+    cbp.type = "bandpass";
+    cbp.frequency.value = 1600;
+    cbp.Q.value = 0.7;
+    const chg = ctx.createGain();
+    chg.gain.setValueAtTime(0.001, now + 0.05);
+    chg.gain.exponentialRampToValueAtTime(0.55, now + 0.25);
+    chg.gain.exponentialRampToValueAtTime(0.001, now + 0.05 + cheerDur);
+    cheer.connect(cbp).connect(chg).connect(master);
+    cheer.start(now + 0.05);
+
+    // Whistle / triumphant ping rising with combo
     const semis = Math.min(comboStep, 8);
     const base = 880 * Math.pow(2, semis / 12);
     const o = ctx.createOscillator();
-    o.type = "sine";
-    o.frequency.setValueAtTime(base, ctx.currentTime);
-    o.frequency.exponentialRampToValueAtTime(base * 1.5, ctx.currentTime + 0.12);
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.3, ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
-    o.connect(g).connect(ctx.destination);
-    o.start();
-    o.stop(ctx.currentTime + 0.21);
+    o.type = "triangle";
+    o.frequency.setValueAtTime(base, now + 0.12);
+    o.frequency.exponentialRampToValueAtTime(base * 1.6, now + 0.35);
+    const og = ctx.createGain();
+    og.gain.setValueAtTime(0.001, now + 0.12);
+    og.gain.exponentialRampToValueAtTime(0.35, now + 0.18);
+    og.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+    o.connect(og).connect(master);
+    o.start(now + 0.12);
+    o.stop(now + 0.52);
   };
+
 
   const playMiss = () => {
     if (mutedRef.current) return;
@@ -2153,36 +2216,96 @@ function Shooter({
           willChange: "transform",
         }}
       >
-        {/* 3D hexagon frame */}
+        {/* Professional layered background */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0"
+          className="absolute inset-0 rounded-2xl overflow-hidden"
           style={{
-            transform: "rotateX(8deg)",
-            transformStyle: "preserve-3d",
+            background:
+              "radial-gradient(ellipse at 50% 30%, #0f4a30 0%, #072518 55%, #030f0a 100%)",
+            boxShadow:
+              "0 30px 80px -30px rgba(0,0,0,0.7), inset 0 0 60px rgba(0,0,0,0.4)",
           }}
         >
+          {/* subtle grid pattern */}
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 opacity-[0.12]"
             style={{
-              clipPath:
-                "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
-              background:
-                "linear-gradient(135deg, rgba(11,58,37,0.85), rgba(4,26,17,0.9))",
-              boxShadow:
-                "inset 0 0 0 2px rgba(217,184,119,0.55), inset 0 0 40px rgba(0,0,0,0.55), 0 20px 60px -20px rgba(0,0,0,0.6)",
+              backgroundImage:
+                "linear-gradient(rgba(217,184,119,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(217,184,119,0.35) 1px, transparent 1px)",
+              backgroundSize: "28px 28px",
             }}
           />
+          {/* vignette */}
           <div
             className="absolute inset-0"
             style={{
-              clipPath:
-                "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
               background:
-                "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.15), transparent 45%)",
+                "radial-gradient(circle at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%)",
             }}
           />
         </div>
+
+        {/* Outer hexagon — rotates clockwise */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 hex-spin-cw"
+          style={{ transformStyle: "preserve-3d" }}
+        >
+          <div
+            className="absolute inset-[-6%]"
+            style={{
+              clipPath:
+                "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
+              background:
+                "conic-gradient(from 0deg, rgba(217,184,119,0.0), rgba(217,184,119,0.55), rgba(217,184,119,0.0) 40%, rgba(217,184,119,0.35), rgba(217,184,119,0.0))",
+              filter: "blur(0.3px)",
+              opacity: 0.9,
+            }}
+          />
+          <div
+            className="absolute inset-[-6%]"
+            style={{
+              clipPath:
+                "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
+              boxShadow:
+                "inset 0 0 0 2px rgba(217,184,119,0.75), inset 0 0 40px rgba(217,184,119,0.15)",
+            }}
+          />
+        </div>
+
+        {/* Inner hexagon — rotates counter-clockwise with drift */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 hex-drift"
+        >
+          <div
+            className="absolute inset-0 hex-spin-ccw"
+            style={{ transformStyle: "preserve-3d" }}
+          >
+            <div
+              className="absolute inset-[6%]"
+              style={{
+                clipPath:
+                  "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
+                background:
+                  "linear-gradient(135deg, rgba(11,58,37,0.55), rgba(4,26,17,0.75))",
+                boxShadow:
+                  "inset 0 0 0 1.5px rgba(255,255,255,0.18), inset 0 0 30px rgba(0,0,0,0.5)",
+              }}
+            />
+            <div
+              className="absolute inset-[6%]"
+              style={{
+                clipPath:
+                  "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
+                background:
+                  "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.18), transparent 45%)",
+              }}
+            />
+          </div>
+        </div>
+
         <canvas
           ref={canvasRef}
           width={480}
@@ -2192,10 +2315,12 @@ function Shooter({
           style={{
             clipPath:
               "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
-            background: "#f4f9f7",
+            background:
+              "radial-gradient(ellipse at 50% 40%, rgba(244,249,247,0.96), rgba(210,228,220,0.9))",
           }}
           aria-label="Shooting game canvas"
         />
+
         <canvas
           ref={crackCanvasRef}
           width={480}
