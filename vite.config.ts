@@ -5,7 +5,8 @@
 //     error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... } }) if needed.
 import path from "node:path";
-import { defineConfig, loadEnv } from "@lovable.dev/vite-tanstack-config";
+import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { loadEnv } from "vite";
 import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/tanstack/vite";
 
 // Load all env vars (including non-VITE_ secrets like SUPABASE_SERVICE_ROLE_KEY)
