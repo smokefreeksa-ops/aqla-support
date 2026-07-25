@@ -46,7 +46,7 @@ export default function KnowYourSmokingSection() {
     return () => window.removeEventListener("hashchange", applyHash);
   }, []);
 
-  // After the requested card expands, scroll it just below the sticky header.
+  // After the requested card expands, scroll it directly under the sticky header.
   useEffect(() => {
     if (typeof window === "undefined") return;
     const idx = targetHashRef.current;
@@ -55,7 +55,8 @@ export default function KnowYourSmokingSection() {
     const timer = window.setTimeout(() => {
       const card = document.getElementById(`kys-${idx}`);
       if (!card) return;
-      const headerOffset = 80; // sticky header + safe space
+      const stickyHeader = document.querySelector("header.sticky, header.fixed") as HTMLElement | null;
+      const headerOffset = (stickyHeader?.offsetHeight ?? 56) + 8;
       const top = card.getBoundingClientRect().top + window.scrollY - headerOffset;
       window.scrollTo({ top, behavior: "smooth" });
     }, 80);
