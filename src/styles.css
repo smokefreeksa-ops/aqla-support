@@ -317,9 +317,10 @@
 /* ── Imported landing utilities ──────────────────────────────────────────── */
 .saudi-map-section {
   position: relative;
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 60%, #f1f5f9 100%);
-  color: #0f172a;
+  background: transparent;
+  color: #f4f0e1;
 }
+
 .saudi-map-content { position: relative; z-index: 1; }
 
 .section-badge {
