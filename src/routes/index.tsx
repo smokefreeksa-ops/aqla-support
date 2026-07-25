@@ -102,7 +102,11 @@ function Inner() {
   ];
 
   return (
-    <div dir={dir} className="min-h-screen bg-background">
+    <div
+      dir={dir}
+      className="min-h-screen text-[#f4f0e1]"
+      style={{ background: "linear-gradient(to bottom, #0b3a25 0%, #0e4a30 55%, #072018 100%)", backgroundAttachment: "fixed" }}
+    >
       <DesktopCursor />
       <SiteHeader />
 
@@ -112,7 +116,7 @@ function Inner() {
 
 
 
-        <section id="pathways" className="scroll-mt-20 border-t border-border/40 bg-card/40">
+        <section id="pathways" className="scroll-mt-20 border-t border-[#c9a84c]/20">
           <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {paths.map((p) => (
@@ -138,9 +142,9 @@ function Inner() {
         <InteractiveToolsSection />
 
         {/* SAFETY STRIP */}
-        <section className="border-t border-border/40 bg-background">
+        <section className="border-t border-[#c9a84c]/20">
           <div className="mx-auto max-w-4xl px-4 py-6 text-center">
-            <p className="text-[12px] leading-6 text-muted-foreground sm:text-[13px]">
+            <p className="text-[12px] leading-6 text-[#f4f0e1]/70 sm:text-[13px]">
               {isAr
                 ? "أقلع يقدم التوعية والدعم، ولا يقدم تشخيصًا أو علاجًا أو وصفة طبية. اختيار بدائل النيكوتين أو أدوية الإقلاع أو جرعاتها يحتاج مراجعة مختص أو صيدلي."
                 : "Aqla provides awareness and support. It does not provide diagnosis, treatment, or prescriptions."}
@@ -148,7 +152,7 @@ function Inner() {
           </div>
         </section>
 
-        <section className="bg-background mx-auto max-w-6xl px-4 py-12 sm:py-16">
+        <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
           <ImpactSection isAr={isAr} />
         </section>
 
