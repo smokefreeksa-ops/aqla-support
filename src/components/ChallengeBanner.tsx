@@ -119,7 +119,7 @@ export function ChallengeBanner() {
       `}</style>
 
       <div className="relative flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 sm:py-3">
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 order-1">
+        <div className="relative z-10 flex flex-wrap items-center gap-2 sm:gap-3 order-1">
           <span
             className="inline-block h-2.5 w-2.5 rounded-full bg-rose-300 shadow-[0_0_12px_rgba(255,200,200,.9)]"
             style={{ animation: "aqlaPulseDot 1.4s ease-in-out infinite" }}
@@ -129,13 +129,13 @@ export function ChallengeBanner() {
           </span>
           <button
             onClick={() => setOpen(true)}
-            className="rounded-full bg-white text-red-800 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-rose-50 transition"
+            className="relative z-10 rounded-full bg-white text-red-800 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-rose-50 transition"
           >
             انضم بسرعة
           </button>
           <Link
             to="/challenge-pathway"
-            className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/95 text-white text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-emerald-600 transition shadow-sm"
+            className="relative z-10 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/95 text-white text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-emerald-600 transition shadow-sm"
           >
             <Trophy className="h-3.5 w-3.5" />
             مجتمع وتحديات أقلع
@@ -143,7 +143,7 @@ export function ChallengeBanner() {
           </Link>
           <Link
             to="/try/shoot"
-            className="inline-flex items-center gap-1.5 rounded-full bg-amber-400 text-red-950 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-amber-300 transition shadow-sm"
+            className="relative z-10 inline-flex items-center gap-1.5 rounded-full bg-amber-400 text-red-950 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-amber-300 transition shadow-sm"
           >
             <Crosshair className="h-3.5 w-3.5" />
             تحدي كسر عادة التدخين
@@ -158,13 +158,13 @@ export function ChallengeBanner() {
           <Stat n={stats.visits} label="زيارة" />
         </div>
 
-        <div className="flex items-center gap-2 order-2 sm:order-3">
+        <div className="relative z-10 flex items-center gap-2 order-2 sm:order-3">
           <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer"
-             className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
+             className="relative z-10 inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
             <Linkedin className="h-3.5 w-3.5" />
           </a>
           <a href="https://twitter.com/" target="_blank" rel="noreferrer"
-             className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
+             className="relative z-10 inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
             <Twitter className="h-3.5 w-3.5" />
           </a>
           <span className="text-[11px] opacity-80 hidden sm:inline">تابعنا</span>
