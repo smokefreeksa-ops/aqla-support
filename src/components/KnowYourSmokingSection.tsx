@@ -43,12 +43,12 @@ export default function KnowYourSmokingSection() {
             const card = document.getElementById(`kys-${idx}`);
             if (!card) return;
             const stickyHeader = document.querySelector("header.sticky, header.fixed") as HTMLElement | null;
-            const headerOffset = (stickyHeader?.offsetHeight ?? 56) + 12;
+            const headerOffset = (stickyHeader?.offsetHeight ?? 56) + 8;
             const top = card.getBoundingClientRect().top + window.scrollY - headerOffset;
-            window.scrollTo({ top, behavior: "smooth" });
-            // Expand after the smooth scroll has had time to settle.
-            window.setTimeout(() => setOpen(idx), 450);
-          }, 120);
+            window.scrollTo({ top, behavior: "auto" });
+            // Expand after the scroll has settled.
+            window.setTimeout(() => setOpen(idx), 80);
+          }, 250);
         }
       }
     };
