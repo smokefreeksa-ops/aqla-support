@@ -77,6 +77,7 @@ import { Route as ShareTypeIdRouteImport } from './routes/share.$type.$id'
 import { Route as AqlaQuitEngineResultResultIdRouteImport } from './routes/aqla-quit-engine.result.$resultId'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
+import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 
 const WhenToSeekHelpRoute = WhenToSeekHelpRouteImport.update({
   id: '/when-to-seek-help',
@@ -422,6 +423,12 @@ const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailQueueProcessRoute =
+  LovableEmailQueueProcessRouteImport.update({
+    id: '/lovable/email/queue/process',
+    path: '/lovable/email/queue/process',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -492,6 +499,7 @@ export interface FileRoutesByFullPath {
   '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -561,6 +569,7 @@ export interface FileRoutesByTo {
   '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -632,6 +641,7 @@ export interface FileRoutesById {
   '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -704,6 +714,7 @@ export interface FileRouteTypes {
     | '/aqla-quit-engine/result/$resultId'
     | '/share/$type/$id'
     | '/share/invite/$code'
+    | '/lovable/email/queue/process'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -773,6 +784,7 @@ export interface FileRouteTypes {
     | '/aqla-quit-engine/result/$resultId'
     | '/share/$type/$id'
     | '/share/invite/$code'
+    | '/lovable/email/queue/process'
   id:
     | '__root__'
     | '/'
@@ -843,6 +855,7 @@ export interface FileRouteTypes {
     | '/aqla-quit-engine/result/$resultId'
     | '/share/$type/$id'
     | '/share/invite/$code'
+    | '/lovable/email/queue/process'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -907,6 +920,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ShareTypeIdRoute: typeof ShareTypeIdRoute
   ShareInviteCodeRoute: typeof ShareInviteCodeRoute
+  LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1387,6 +1401,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/queue/process': {
+      id: '/lovable/email/queue/process'
+      path: '/lovable/email/queue/process'
+      fullPath: '/lovable/email/queue/process'
+      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1503,6 +1524,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ShareTypeIdRoute: ShareTypeIdRoute,
   ShareInviteCodeRoute: ShareInviteCodeRoute,
+  LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
