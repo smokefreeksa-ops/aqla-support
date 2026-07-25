@@ -13,6 +13,7 @@ import { ShareButtons } from "@/components/ShareButtons";
 import { getAnonSessionId } from "@/lib/analytics";
 import { trackEvent } from "@/lib/track-event";
 import { toast } from "sonner";
+import { SITE_URL } from "@/lib/site";
 import aqlaLogo from "@/assets/aqla-logo.png";
 import html2canvas from "html2canvas";
 
