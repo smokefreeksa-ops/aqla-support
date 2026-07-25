@@ -7,8 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useEffect } from "react";
 import { trackEvent } from "@/lib/track-event";
-
-const SITE = "https://aqla-support.lovable.app";
+import { SITE_URL as SITE } from "@/lib/site";
 
 export const Route = createFileRoute("/share/invite/$code")({
   head: ({ params }) => {
