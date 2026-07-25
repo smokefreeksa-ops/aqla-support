@@ -1,13 +1,21 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useLang, useLangState, LangContext } from "@/lib/i18n";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getModule, MODULES, type Module } from "@/data/modules";
 import { issueAcademyCertificate } from "@/lib/academy-certificate.functions";
+import {
+  shuffleOptions,
+  newAttemptSeed,
+  scoreAttempt,
+  SCOPE_STATEMENT,
+  ACADEMY_ASSESSMENT_VERSION,
+  type AssessmentQuestion,
+} from "@/lib/assessment-runtime";
 import { toast } from "sonner";
-import { CheckCircle2, XCircle, ArrowRight, ArrowLeft, BookOpen, ExternalLink, Award } from "lucide-react";
+import { CheckCircle2, XCircle, ArrowRight, ArrowLeft, BookOpen, ExternalLink, Award, ShieldAlert } from "lucide-react";
 
 export const Route = createFileRoute("/modules/$slug")({
   loader: ({ params }) => {
@@ -49,24 +57,48 @@ function Inner() {
   const idx = MODULES.findIndex((m) => m.slug === mod.slug);
   const prev = MODULES[idx - 1];
   const next = MODULES[idx + 1];
-  const [answers, setAnswers] = useState<Record<number, number>>({});
+
+  // Per-attempt seed — shuffles option order for every fresh attempt.
+  const [attemptSeed, setAttemptSeed] = useState(() => newAttemptSeed());
+
+  // Answers stored by { [questionId]: optionKey } — position-independent.
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
-  const correct = mod.quiz.reduce(
-    (n, q, i) => n + (answers[i] === q.correctIndex ? 1 : 0),
-    0,
-  );
-  const scorePct = Math.round((correct / mod.quiz.length) * 100);
-  const passed = submitted && scorePct >= 80;
+
+  // Precompute the display order of each question's options for THIS attempt.
+  const shuffledOptionsByQ = useMemo(() => {
+    const m: Record<string, AssessmentQuestion["options"]> = {};
+    for (const qq of mod.quiz) {
+      m[qq.id] = shuffleOptions(qq.options, `${attemptSeed}:${qq.id}`);
+    }
+    return m;
+  }, [mod.quiz, attemptSeed]);
+
+  // Client-side score preview (server re-scores on cert issuance).
+  const result = useMemo(() => scoreAttempt(mod.quiz, answers, 80), [mod.quiz, answers]);
+  const passed = submitted && result.passed && result.safetyCriticalPassed;
+  const safetyBlocked = submitted && result.passed && !result.safetyCriticalPassed;
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [scopeAccepted, setScopeAccepted] = useState(false);
   const [issuing, setIssuing] = useState(false);
   const issueFn = useServerFn(issueAcademyCertificate);
   const navigate = useNavigate();
 
+  function resetAttempt() {
+    setAnswers({});
+    setSubmitted(false);
+    setAttemptSeed(newAttemptSeed());
+  }
+
   async function claimCertificate() {
     if (fullName.trim().length < 2) {
       toast.error(isAr ? "أدخل اسمك الكامل" : "Enter your full name");
+      return;
+    }
+    if (!scopeAccepted) {
+      toast.error(isAr ? "يجب الموافقة على تعهّد المتطوّع أولًا" : "You must accept the volunteer scope statement first");
       return;
     }
     const trimmedEmail = email.trim();
@@ -76,19 +108,29 @@ function Inner() {
     }
     setIssuing(true);
     try {
-      const answersMap: Record<string, number> = {};
-      Object.entries(answers).forEach(([k, v]) => { answersMap[String(k)] = v; });
       const res = await issueFn({
         data: {
           module_slug: mod.slug,
           full_name: fullName,
-          answers: answersMap,
+          answers,
+          scope_accepted: true,
           language: lang,
           recipient_email: trimmedEmail || null,
+          assessment_version: ACADEMY_ASSESSMENT_VERSION,
         },
       });
       if (!res.ok || !res.certificate_code) {
-        toast.error(isAr ? "تعذّر إصدار الشهادة" : "Could not issue certificate");
+        const msg =
+          res.error === "safety_critical_failed"
+            ? isAr
+              ? "لم تنجح لأن سؤالًا يتعلق بالسلامة أُجيب خطأً. راجع القسم المرتبط وأعد المحاولة."
+              : "Blocked — a safety-critical question was answered incorrectly. Review the safety section and retry."
+            : res.error === "scope_not_accepted"
+            ? isAr ? "يجب قبول تعهّد المتطوّع" : "Scope acceptance is required"
+            : res.error === "score_below_threshold"
+            ? isAr ? `نتيجتك ${res.score}% (المطلوب 80%)` : `Your score ${res.score}% (need 80%)`
+            : isAr ? "تعذّر إصدار الشهادة" : "Could not issue certificate";
+        toast.error(msg);
         return;
       }
       toast.success(
@@ -125,7 +167,7 @@ function Inner() {
           </h1>
           <p className="mt-2 text-gray-600 text-[15px]">{isAr ? mod.summary.ar : mod.summary.en}</p>
           <div className="mt-2 text-xs text-gray-400">
-            {isAr ? mod.duration.ar : mod.duration.en}
+            {isAr ? mod.duration.ar : mod.duration.en} · {isAr ? `الإصدار ${ACADEMY_ASSESSMENT_VERSION}` : `Assessment ${ACADEMY_ASSESSMENT_VERSION}`}
           </div>
         </div>
 
@@ -167,35 +209,52 @@ function Inner() {
 
         {/* Quiz */}
         <section className="mt-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-3">
+          <h2 className="text-xl font-bold text-gray-900 mb-1">
             {isAr ? "اختبار الوحدة" : "Module quiz"}
           </h2>
+          <p className="text-xs text-gray-500 mb-3">
+            {isAr
+              ? `يتم خلط ترتيب الخيارات لكل محاولة. تحتاج ${result.total ? Math.ceil(result.total * 0.8) : 0} من ${result.total} على الأقل، وكل سؤال يخص السلامة يجب أن يكون صحيحًا.`
+              : `Option order is shuffled each attempt. You need at least ${result.total ? Math.ceil(result.total * 0.8) : 0}/${result.total}, and every safety-critical question must be correct.`}
+          </p>
           <div className="space-y-4">
-            {mod.quiz.map((q, i) => {
-              const chosen = answers[i];
-              const isCorrect = submitted && chosen === q.correctIndex;
-              const isWrong = submitted && chosen !== undefined && chosen !== q.correctIndex;
+            {mod.quiz.map((qq, i) => {
+              const chosenKey = answers[qq.id];
+              const isCorrect = submitted && chosenKey === qq.correctKey;
+              const isWrong = submitted && chosenKey !== undefined && chosenKey !== qq.correctKey;
+              const opts = shuffledOptionsByQ[qq.id] ?? qq.options;
               return (
                 <div
-                  key={i}
+                  key={qq.id}
                   className={`rounded-xl border p-4 bg-white ${
                     isCorrect ? "border-emerald-400" : isWrong ? "border-red-400" : "border-gray-200"
                   }`}
                 >
-                  <div className="font-semibold text-gray-900 text-[15px] mb-3">
-                    {i + 1}. {isAr ? q.q.ar : q.q.en}
+                  <div className="flex items-start gap-2 mb-3">
+                    <div className="font-semibold text-gray-900 text-[15px] flex-1">
+                      {i + 1}. {isAr ? qq.q.ar : qq.q.en}
+                    </div>
+                    {qq.safetyCritical && (
+                      <span
+                        title={isAr ? "سؤال يخص السلامة — يجب أن يكون صحيحًا" : "Safety-critical — must be correct"}
+                        className="inline-flex items-center gap-1 rounded-md bg-amber-50 border border-amber-200 px-2 py-0.5 text-[10px] font-bold text-amber-800"
+                      >
+                        <ShieldAlert className="w-3 h-3" />
+                        {isAr ? "سلامة" : "Safety"}
+                      </span>
+                    )}
                   </div>
                   <div className="space-y-2">
-                    {q.options.map((opt, oi) => {
-                      const active = chosen === oi;
-                      const showCorrect = submitted && oi === q.correctIndex;
-                      const showWrong = submitted && active && oi !== q.correctIndex;
+                    {opts.map((opt) => {
+                      const active = chosenKey === opt.key;
+                      const showCorrect = submitted && opt.key === qq.correctKey;
+                      const showWrong = submitted && active && opt.key !== qq.correctKey;
                       return (
                         <button
-                          key={oi}
+                          key={opt.key}
                           type="button"
                           disabled={submitted}
-                          onClick={() => setAnswers((a) => ({ ...a, [i]: oi }))}
+                          onClick={() => setAnswers((a) => ({ ...a, [qq.id]: opt.key }))}
                           className={`w-full text-start px-3 py-2 rounded-lg border text-sm transition ${
                             showCorrect
                               ? "bg-emerald-50 border-emerald-400 text-emerald-900"
@@ -218,7 +277,8 @@ function Inner() {
                   {submitted && (
                     <div className="mt-3 text-xs text-gray-600 border-t border-gray-100 pt-2">
                       <span className="font-bold">{isAr ? "المرجع: " : "Reference: "}</span>
-                      {isAr ? q.explanation.ar : q.explanation.en}
+                      {isAr ? qq.explanation.ar : qq.explanation.en}
+                      <span className="ms-2 text-gray-400">· {qq.source}</span>
                     </div>
                   )}
                 </div>
@@ -226,7 +286,7 @@ function Inner() {
             })}
           </div>
 
-          <div className="mt-5 flex items-center gap-3">
+          <div className="mt-5 flex items-center gap-3 flex-wrap">
             {!submitted ? (
               <button
                 onClick={() => setSubmitted(true)}
@@ -239,76 +299,122 @@ function Inner() {
               <>
                 <div className="text-sm font-bold text-gray-900">
                   {isAr
-                    ? `نتيجتك: ${correct} من ${mod.quiz.length}`
-                    : `Your score: ${correct} / ${mod.quiz.length}`}
+                    ? `نتيجتك: ${result.correct} من ${result.total} (${result.percent}%)`
+                    : `Your score: ${result.correct} / ${result.total} (${result.percent}%)`}
                 </div>
                 <button
-                  onClick={() => {
-                    setAnswers({});
-                    setSubmitted(false);
-                  }}
+                  onClick={resetAttempt}
                   className="px-4 py-2 rounded-lg border border-gray-300 text-sm font-semibold hover:border-gray-400"
                 >
-                  {isAr ? "إعادة" : "Retry"}
+                  {isAr ? "إعادة (خيارات جديدة)" : "Retry (new option order)"}
                 </button>
               </>
             )}
           </div>
 
-          {submitted && (
-            <div className={`mt-6 rounded-2xl border-2 p-5 ${passed ? "border-emerald-500 bg-emerald-50/60" : "border-amber-400 bg-amber-50/60"}`}>
+          {safetyBlocked && (
+            <div className="mt-6 rounded-2xl border-2 border-red-400 bg-red-50/60 p-5">
               <div className="flex items-center gap-2 mb-2">
-                <Award className={`w-5 h-5 ${passed ? "text-emerald-700" : "text-amber-700"}`} />
+                <ShieldAlert className="w-5 h-5 text-red-700" />
                 <div className="font-bold text-gray-900">
-                  {passed
-                    ? isAr ? `نجحت — ${scorePct}%` : `Passed — ${scorePct}%`
-                    : isAr ? `تحتاج 80% للحصول على الشهادة (نتيجتك ${scorePct}%)` : `Need 80% to earn the certificate (you scored ${scorePct}%)`}
+                  {isAr ? "يلزم مراجعة جانب السلامة" : "Safety Review Required"}
                 </div>
               </div>
-              {passed ? (
-                <div className="space-y-3">
-                  <p className="text-sm text-emerald-900">
-                    {isAr
-                      ? "أدخل اسمك الكامل كما ترغب بظهوره على الشهادة الرسمية."
-                      : "Enter your full name exactly as you want it printed on the certificate."}
-                  </p>
-                  <div className="grid gap-2">
-                    <input
-                      type="text"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      placeholder={isAr ? "الاسم الكامل" : "Full name"}
-                      className="w-full rounded-lg border border-emerald-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600"
-                      maxLength={120}
-                    />
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder={isAr ? "البريد الإلكتروني (اختياري — لإرسال الشهادة)" : "Email (optional — to receive certificate)"}
-                      className="w-full rounded-lg border border-emerald-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600"
-                      maxLength={254}
-                    />
-                    <button
-                      onClick={claimCertificate}
-                      disabled={issuing || fullName.trim().length < 2}
-                      className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-emerald-700 text-white text-sm font-bold hover:bg-emerald-800 disabled:opacity-40"
-                    >
-                      {issuing
-                        ? (isAr ? "جارٍ الإصدار..." : "Issuing...")
-                        : (isAr ? "أصدر الشهادة وأرسلها" : "Issue & email certificate")}
-                    </button>
-                  </div>
+              <p className="text-sm text-red-900">
+                {isAr
+                  ? "درجتك الإجمالية تجاوزت الحد، لكن سؤالًا (أو أكثر) يخص السلامة أُجيب بشكل غير صحيح. الشهادة لا تُصدر حتى تُجيب على كل أسئلة السلامة بشكل صحيح. راجع «وحدة السلامة والحدود والإحالة» ثم أعد المحاولة."
+                  : "Your overall score passed, but at least one safety-critical question was answered incorrectly. A certificate is not issued until every safety-critical question is correct. Review the Safety, Boundaries & Referral module, then retry."}
+              </p>
+              <div className="mt-3">
+                <Link
+                  to="/modules/$slug"
+                  params={{ slug: "safety-and-referral" }}
+                  className="inline-flex items-center gap-1 text-sm font-bold text-red-800 underline"
+                >
+                  {isAr ? "افتح وحدة السلامة" : "Open the Safety module"}
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {passed && (
+            <div className="mt-6 rounded-2xl border-2 border-emerald-500 bg-emerald-50/60 p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <Award className="w-5 h-5 text-emerald-700" />
+                <div className="font-bold text-gray-900">
+                  {isAr ? `اجتزت التقييم — ${result.percent}%` : `Assessment Passed — ${result.percent}%`}
                 </div>
-              ) : (
-                <p className="text-sm text-amber-900">
-                  {isAr ? "أعد المحاولة بعد مراجعة المحتوى أعلاه." : "Retry after reviewing the content above."}
+              </div>
+              <p className="text-sm text-emerald-900">
+                {isAr
+                  ? "قبل إصدار الشهادة، يرجى إدخال اسمك والموافقة على تعهّد المتطوّع أدناه."
+                  : "Before we issue the certificate, please enter your name and confirm the volunteer scope statement below."}
+              </p>
+
+              {/* Scope statement */}
+              <div className="mt-4 rounded-lg border border-emerald-200 bg-white p-3">
+                <div className="text-xs font-bold text-emerald-800 mb-1">
+                  {isAr ? "تعهّد نطاق الدور" : "Scope & conduct statement"}
+                </div>
+                <p className="text-[13px] leading-6 text-gray-700">
+                  {isAr ? SCOPE_STATEMENT.ar : SCOPE_STATEMENT.en}
                 </p>
-              )}
+                <label className="mt-3 flex items-start gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={scopeAccepted}
+                    onChange={(e) => setScopeAccepted(e.target.checked)}
+                    className="mt-1"
+                  />
+                  <span className="text-sm text-gray-800">
+                    {isAr ? "أوافق على هذا التعهّد." : "I accept this statement."}
+                  </span>
+                </label>
+              </div>
+
+              <div className="mt-3 grid gap-2">
+                <input
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder={isAr ? "الاسم الكامل" : "Full name"}
+                  className="w-full rounded-lg border border-emerald-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600"
+                  maxLength={120}
+                />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={isAr ? "البريد الإلكتروني (اختياري — لإرسال الشهادة)" : "Email (optional — to receive certificate)"}
+                  className="w-full rounded-lg border border-emerald-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600"
+                  maxLength={254}
+                />
+                <button
+                  onClick={claimCertificate}
+                  disabled={issuing || fullName.trim().length < 2 || !scopeAccepted}
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-emerald-700 text-white text-sm font-bold hover:bg-emerald-800 disabled:opacity-40"
+                >
+                  {issuing
+                    ? (isAr ? "جارٍ الإصدار..." : "Issuing...")
+                    : (isAr ? "أصدر الشهادة" : "Issue certificate")}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {submitted && !result.passed && (
+            <div className="mt-6 rounded-2xl border-2 border-amber-400 bg-amber-50/60 p-5">
+              <div className="font-bold text-gray-900 mb-1">
+                {isAr ? `لم يتم الاجتياز بعد — ${result.percent}%` : `Not Yet Passed — ${result.percent}%`}
+              </div>
+              <p className="text-sm text-amber-900">
+                {isAr
+                  ? "راجع محتوى الوحدة أعلاه ثم أعد المحاولة. سيتم توليد ترتيب جديد للخيارات."
+                  : "Review the module content above, then retry. A new option order will be generated."}
+              </p>
             </div>
           )}
         </section>
-
 
         {/* Nav */}
         <nav className="mt-10 flex items-center justify-between gap-3 border-t border-gray-200 pt-5">
