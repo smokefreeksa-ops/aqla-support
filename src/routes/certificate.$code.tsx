@@ -113,7 +113,7 @@ function CertificatePage() {
                 </div>
 
                 <div className="flex items-center justify-between pt-4 text-xs text-stone-500 border-t">
-                  <div>Verify: aqla-support.lovable.app/certificate/{code}</div>
+                  <div>Verify: {SITE_URL.replace(/^https?:\/\//, "")}/certificate/{code}</div>
                   <div className="text-right">
                     <img
                       alt="QR"
