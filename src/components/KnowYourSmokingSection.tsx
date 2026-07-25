@@ -1315,23 +1315,63 @@ function Shooter({
     if (mutedRef.current) return;
     const ctx = ensureAudio();
     if (!ctx) return;
-    const o = ctx.createOscillator();
-    o.type = "square";
-    o.frequency.setValueAtTime(600, ctx.currentTime);
-    o.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.08);
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.25, ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.09);
-    o.connect(g).connect(ctx.destination);
-    o.start();
-    o.stop(ctx.currentTime + 0.1);
-    // click
-    const n = ctx.createBufferSource();
-    n.buffer = noiseBuffer(ctx, 0.03);
-    const ng = ctx.createGain();
-    ng.gain.value = 0.15;
-    n.connect(ng).connect(ctx.destination);
-    n.start();
+    const now = ctx.currentTime;
+    const master = ctx.createDynamicsCompressor();
+    master.threshold.value = -14;
+    master.knee.value = 24;
+    master.ratio.value = 12;
+    master.attack.value = 0.001;
+    master.release.value = 0.12;
+    master.connect(ctx.destination);
+
+    // Layer A — deep body thump (60Hz sine)
+    const thump = ctx.createOscillator();
+    thump.type = "sine";
+    thump.frequency.setValueAtTime(140, now);
+    thump.frequency.exponentialRampToValueAtTime(38, now + 0.09);
+    const thumpG = ctx.createGain();
+    thumpG.gain.setValueAtTime(0.9, now);
+    thumpG.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+    thump.connect(thumpG).connect(master);
+    thump.start(now);
+    thump.stop(now + 0.13);
+
+    // Layer B — mid crack (bandpass noise burst)
+    const midN = ctx.createBufferSource();
+    midN.buffer = noiseBuffer(ctx, 0.18);
+    const bp = ctx.createBiquadFilter();
+    bp.type = "bandpass";
+    bp.frequency.value = 1200;
+    bp.Q.value = 0.9;
+    const midG = ctx.createGain();
+    midG.gain.setValueAtTime(0.85, now);
+    midG.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+    midN.connect(bp).connect(midG).connect(master);
+    midN.start(now);
+
+    // Layer C — high snap (highpass noise crack)
+    const hiN = ctx.createBufferSource();
+    hiN.buffer = noiseBuffer(ctx, 0.06);
+    const hp = ctx.createBiquadFilter();
+    hp.type = "highpass";
+    hp.frequency.value = 4200;
+    const hiG = ctx.createGain();
+    hiG.gain.setValueAtTime(0.7, now);
+    hiG.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+    hiN.connect(hp).connect(hiG).connect(master);
+    hiN.start(now);
+
+    // Layer D — muzzle tail (short filtered decay for room)
+    const tail = ctx.createBufferSource();
+    tail.buffer = noiseBuffer(ctx, 0.25);
+    const tailLp = ctx.createBiquadFilter();
+    tailLp.type = "lowpass";
+    tailLp.frequency.value = 900;
+    const tailG = ctx.createGain();
+    tailG.gain.setValueAtTime(0.35, now + 0.02);
+    tailG.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+    tail.connect(tailLp).connect(tailG).connect(master);
+    tail.start(now + 0.005);
   };
 
   const playHit = (comboStep: number) => {
