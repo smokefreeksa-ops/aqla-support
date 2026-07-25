@@ -1,45 +1,65 @@
 import { useEffect, useState } from "react";
-import { Linkedin, Twitter } from "lucide-react";
+import { Linkedin, Twitter, Trophy, Crosshair, ArrowLeft } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
+import { getPublicImpactStats } from "@/lib/impact.functions";
 
 const STORAGE = "aqla.challenge.banner.v1";
 const OWNER_EMAIL = "prof.maliking@gmail.com";
 
 type Stats = { joined: number; cards: number; shares: number; visits: number };
 
-function loadStats(): Stats {
-  if (typeof window === "undefined") return { joined: 21, cards: 7, shares: 18, visits: 58 };
+function loadLocalDeltas(): Stats {
+  if (typeof window === "undefined") return { joined: 0, cards: 0, shares: 0, visits: 0 };
   try {
     const raw = localStorage.getItem(STORAGE);
     if (raw) return JSON.parse(raw);
   } catch { /* ignore */ }
-  return { joined: 21, cards: 7, shares: 18, visits: 58 };
+  return { joined: 0, cards: 0, shares: 0, visits: 0 };
 }
-function saveStats(s: Stats) {
+function saveLocalDeltas(s: Stats) {
   try { localStorage.setItem(STORAGE, JSON.stringify(s)); } catch { /* ignore */ }
 }
 
 export function ChallengeBanner() {
   const [open, setOpen] = useState(false);
   const [dismissed, setDismissed] = useState(false);
-  const [stats, setStats] = useState<Stats>(loadStats);
+  const [deltas, setDeltas] = useState<Stats>(loadLocalDeltas);
   const [sending, setSending] = useState(false);
 
+  const statsFn = useServerFn(getPublicImpactStats);
+  const { data: live } = useQuery({
+    queryKey: ["public-impact-stats", "banner"],
+    queryFn: () => statsFn(),
+    refetchInterval: 30_000,
+    staleTime: 15_000,
+  });
+
   useEffect(() => {
-    // count a visit once per tab session
+    // count a visit once per tab session (local delta only; canonical count comes from backend)
     if (typeof window === "undefined") return;
     const key = "aqla.challenge.visited";
     if (!sessionStorage.getItem(key)) {
       sessionStorage.setItem(key, "1");
-      setStats((s) => {
+      setDeltas((s) => {
         const next = { ...s, visits: s.visits + 1 };
-        saveStats(next);
+        saveLocalDeltas(next);
         return next;
       });
     }
   }, []);
 
   if (dismissed) return null;
+
+  const stats: Stats = {
+    joined: (live?.research_consent_count ?? 21) + deltas.joined,
+    cards: (live?.assessments_completed ?? 7) + deltas.cards,
+    shares: (live?.whatsapp_clicks ?? 0) + 18 + deltas.shares,
+    visits: (live?.total_visits ?? 0) + deltas.visits,
+  };
+
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
