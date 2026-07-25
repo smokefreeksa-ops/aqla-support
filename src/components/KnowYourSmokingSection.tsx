@@ -2053,6 +2053,8 @@ function Shooter({
       });
       setScore((sc) => sc + 10);
       spawnParticles(x, y, "hit");
+      // 4D shattered glass in viewport coordinates
+      spawnGlassShatter(e.clientX, e.clientY);
     } else {
       // Check hex edge proximity
       const distToCenter = Math.hypot(x - cx, y - cy);
