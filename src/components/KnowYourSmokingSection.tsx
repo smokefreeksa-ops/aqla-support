@@ -37,20 +37,9 @@ export default function KnowYourSmokingSection() {
         const idx = Number(m[1]);
         if (idx >= 0 && idx <= 4) {
           targetHashRef.current = idx;
-          // Wait for route scroll restoration + layout to settle, then scroll
-          // the target card just under the sticky header and expand it.
-          window.setTimeout(() => {
-            const card = document.getElementById(`kys-${idx}`);
-            if (!card) return;
-            const stickyHeader = document.querySelector("header.sticky, header.fixed") as HTMLElement | null;
-            const headerOffset = (stickyHeader?.offsetHeight ?? 56) + 8;
-            const top = card.getBoundingClientRect().top + window.scrollY - headerOffset;
-            // eslint-disable-next-line no-console
-            console.log("[KYS] scrollTo", top, "current", window.scrollY, "cardTop", card.getBoundingClientRect().top);
-            window.scrollTo({ top, behavior: "auto" });
-            // Expand after the scroll has settled.
-            window.setTimeout(() => setOpen(idx), 80);
-          }, 2100);
+          // The router restores scroll to the hash target; wait for that to
+          // finish, then expand the requested card.
+          window.setTimeout(() => setOpen(idx), 450);
         }
       }
     };
