@@ -142,9 +142,9 @@ function Inner() {
         <InteractiveToolsSection />
 
         {/* SAFETY STRIP */}
-        <section className="border-t border-border/40 bg-background">
+        <section className="border-t border-[#c9a84c]/20">
           <div className="mx-auto max-w-4xl px-4 py-6 text-center">
-            <p className="text-[12px] leading-6 text-muted-foreground sm:text-[13px]">
+            <p className="text-[12px] leading-6 text-[#f4f0e1]/70 sm:text-[13px]">
               {isAr
                 ? "أقلع يقدم التوعية والدعم، ولا يقدم تشخيصًا أو علاجًا أو وصفة طبية. اختيار بدائل النيكوتين أو أدوية الإقلاع أو جرعاتها يحتاج مراجعة مختص أو صيدلي."
                 : "Aqla provides awareness and support. It does not provide diagnosis, treatment, or prescriptions."}
@@ -152,7 +152,7 @@ function Inner() {
           </div>
         </section>
 
-        <section className="bg-background mx-auto max-w-6xl px-4 py-12 sm:py-16">
+        <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
           <ImpactSection isAr={isAr} />
         </section>
 
