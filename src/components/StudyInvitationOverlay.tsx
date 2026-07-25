@@ -325,20 +325,20 @@ export function StudyInvitationOverlay() {
   const isRTL = t.dir === "rtl";
 
   return (
-    <div
-      className="fixed inset-0 z-[300] flex flex-col"
-      style={{
-        opacity: mounted ? 1 : 0,
-        transition: "opacity 500ms ease-out",
-      }}
-      role="presentation"
-    >
-      <LuxuryStarfield />
-      <GalaxyCanvas />
+    <>
+      <div
+        className="fixed inset-0 z-[300] flex flex-col"
+        style={{
+          opacity: mounted ? 1 : 0,
+          transition: "opacity 500ms ease-out",
+        }}
+        role="presentation"
+      >
+        <LuxuryStarfield />
+        <GalaxyCanvas />
 
-      <div className="relative z-10 flex h-full flex-col">
-        <ChallengeBanner />
-        <div className="flex flex-1 items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6">
+        <div className="relative z-10 flex h-full flex-col">
+          <div className="flex flex-1 items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6">
           {/* Modal */}
           <div
             ref={dialogRef}
