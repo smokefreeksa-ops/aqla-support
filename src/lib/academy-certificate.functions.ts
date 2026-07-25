@@ -61,5 +61,16 @@ export const verifyAcademyCertificate = createServerFn({ method: "GET" })
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: row } = await supabaseAdmin.rpc("verify_academy_certificate" as never, { p_code: data.code } as never);
-    return (row as unknown as Record<string, unknown>) ?? { found: false };
+    return JSON.parse(JSON.stringify(row ?? { found: false })) as {
+      found: boolean;
+      is_valid?: boolean;
+      full_name?: string;
+      certificate_code?: string;
+      module_slug?: string;
+      track_slug?: string;
+      overall_score?: number;
+      issued_at?: string;
+      title_en?: string;
+      title_ar?: string;
+    };
   });
