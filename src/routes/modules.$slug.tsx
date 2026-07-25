@@ -55,6 +55,44 @@ function Inner() {
     (n, q, i) => n + (answers[i] === q.correctIndex ? 1 : 0),
     0,
   );
+  const scorePct = Math.round((correct / mod.quiz.length) * 100);
+  const passed = submitted && scorePct >= 80;
+
+  const [fullName, setFullName] = useState("");
+  const [issuing, setIssuing] = useState(false);
+  const issueFn = useServerFn(issueAcademyCertificate);
+  const navigate = useNavigate();
+
+  async function claimCertificate() {
+    if (fullName.trim().length < 2) {
+      toast.error(isAr ? "أدخل اسمك الكامل" : "Enter your full name");
+      return;
+    }
+    setIssuing(true);
+    try {
+      const answersMap: Record<string, number> = {};
+      Object.entries(answers).forEach(([k, v]) => { answersMap[String(k)] = v; });
+      const res = await issueFn({
+        data: {
+          module_slug: mod.slug,
+          full_name: fullName,
+          answers: answersMap,
+          language: lang,
+        },
+      });
+      if (!res.ok || !res.certificate_code) {
+        toast.error(isAr ? "تعذّر إصدار الشهادة" : "Could not issue certificate");
+        return;
+      }
+      toast.success(isAr ? "تم إصدار شهادتك 🎉" : "Certificate issued 🎉");
+      navigate({ to: "/academy-certificate/$code", params: { code: res.certificate_code } });
+    } catch (e) {
+      console.error(e);
+      toast.error(isAr ? "خطأ في الشبكة" : "Network error");
+    } finally {
+      setIssuing(false);
+    }
+  }
 
   const Arrow = isAr ? ArrowLeft : ArrowRight;
 
