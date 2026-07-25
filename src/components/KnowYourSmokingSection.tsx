@@ -1748,9 +1748,8 @@ function Shooter({
       const W = cvs.width;
       const H = cvs.height;
       ctx.clearRect(0, 0, W, H);
-      // background
-      ctx.fillStyle = "#f4f9f7";
-      ctx.fillRect(0, 0, W, H);
+      // background stays transparent — the dark arena shows through
+
       // composited cracks
       ctx.drawImage(crackC, 0, 0);
 
