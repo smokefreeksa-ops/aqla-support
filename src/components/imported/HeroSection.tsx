@@ -425,7 +425,7 @@ export default function HeroSection() {
         {[
           { emoji: "🧲", label: "اختبار الإدمان", hash: "#kys-1" },
           { emoji: "💸", label: "عدّاد المال", hash: "#kys-0" },
-          { emoji: "🎯", label: "صوّب على السجائر", hash: "#kys-4" },
+          { emoji: "🎯", label: "تحدي كسر عادة التدخين", hash: "#kys-4" },
         ].map((item) => (
           <button
             key={item.hash}
