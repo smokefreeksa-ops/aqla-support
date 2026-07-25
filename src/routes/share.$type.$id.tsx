@@ -5,8 +5,7 @@ import { AqlaLogoBadge } from "@/components/AqlaLogoBadge";
 import { ShareButtons } from "@/components/ShareButtons";
 import { getShareCard } from "@/lib/share.functions";
 import { ArrowLeft } from "lucide-react";
-
-const SITE = "https://aqla-support.lovable.app";
+import { SITE_URL as SITE } from "@/lib/site";
 
 export const Route = createFileRoute("/share/$type/$id")({
   loader: async ({ params }) => {

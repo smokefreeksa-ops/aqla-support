@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Copy, Linkedin, MessageCircle, Twitter, QrCode, Download, Share2 } from "lucide-react";
 import { trackEvent } from "@/lib/track-event";
+import { SITE_URL } from "@/lib/site";
 
 export const Route = createFileRoute("/invite-friends")({
   head: () => ({
@@ -241,7 +242,7 @@ function buildInviteSvg(opts: { isAr: boolean; url: string; code: string; messag
   </foreignObject>
   <text x="60" y="380" font-family="monospace" font-size="14" fill="#cdeeea">${escapeXml(code)}</text>
   <text x="740" y="380" text-anchor="end" font-family="monospace" font-size="14" fill="#cdeeea">${escapeXml(url)}</text>
-  <text x="400" y="420" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#9fd6cf">aqla-support.lovable.app</text>
+  <text x="400" y="420" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#9fd6cf">${escapeXml(SITE_URL.replace(/^https?:\/\//, ""))}</text>
 </svg>`;
 }
 

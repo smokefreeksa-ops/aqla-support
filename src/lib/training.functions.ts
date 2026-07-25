@@ -5,6 +5,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { ensureAdmin } from "./_authz.server";
 import { renderKeyValueHtml, sendAdminNotification } from "./notifications.server";
 import { TRAINING_MODULES, OVERALL_PASS, MODULE_PASS } from "./training-content";
+import { SITE_URL } from "./site";
 
 // --------- Lazy seed modules (idempotent) ---------
 async function ensureModulesSeeded(): Promise<Record<string, string>> {
@@ -259,7 +260,7 @@ export const issueTrainingCertificate = createServerFn({ method: "POST" })
         if (apiKey) {
           const lang = trainee.preferred_language === "en" ? "en" : "ar";
           const subject = lang === "ar" ? "شهادة تدريب أقلع الخاصة بك" : "Your Aqla Training Certificate";
-          const url = `https://aqla-support.lovable.app/certificate/${certificate_code}`;
+          const url = `${SITE_URL}/certificate/${certificate_code}`;
           const body = lang === "ar"
             ? `<p>مبروك! لقد أتممت بنجاح تدريب متطوعي أقلع لدعم الإقلاع عن التدخين والنيكوتين.</p><p>شهادتك متاحة هنا: <a href="${url}">${url}</a></p>`
             : `<p>Congratulations! You have successfully completed the Aqla Volunteer Smoking and Nicotine Cessation Support Training.</p><p>Your certificate is available here: <a href="${url}">${url}</a></p>`;

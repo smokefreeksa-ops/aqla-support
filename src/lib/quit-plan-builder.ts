@@ -3,6 +3,8 @@
 // Evidence-based standardized template, personalized by user answers.
 // Sources cited inline: WHO 2024, USPSTF 2021, CDC 2024, FDA, NCI PDQ.
 
+import { SITE_URL } from "./site";
+
 import {
   scoreFtnd,
   scorePennStateEcig,
@@ -518,10 +520,10 @@ export function buildQuitPlan(intake: QuitPlanIntake, score: QuitPlanScore): Qui
     contact: {
       whatsapp: "https://wa.me/966555096412",
       email: "smokefreeksa@gmail.com",
-      site: "https://aqla-support.lovable.app",
+      site: SITE_URL,
     },
     aqla_links: [
-      { label: "تعديل الخطة", href: "https://aqla-support.lovable.app/quit-pathway" },
+      { label: "تعديل الخطة", href: `${SITE_URL}/quit-pathway` },
       { label: "تحميل PDF", href: "سيظهر زر التحميل في صفحة الخطة" },
       { label: "إرسال الخطة إلى البريد", href: "يتم إرسال رابط الخطة بعد إنشائها إذا كان الإرسال مفعّلًا" },
       { label: "تواصل واتساب/اتصال", href: "https://wa.me/966555096412" },

@@ -7,9 +7,9 @@ import {
   type QuitPlanIntake,
   type QuitPlanJSON,
 } from "./quit-plan-builder";
+import { SITE_URL } from "./site";
 
 const ADMIN_EMAIL = "smokefreeksa@gmail.com";
-const SITE_URL = "https://aqla-support.lovable.app";
 
 function randomToken(): string {
   const a = new Uint8Array(24);

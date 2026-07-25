@@ -13,6 +13,7 @@ import {
 import { Languages, Download, Sparkles, ShieldCheck, MessageCircle, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { useLang, useLangState, LangContext } from "@/lib/i18n";
+import { SITE_URL } from "@/lib/site";
 import { AqlaLogoBadge } from "@/components/AqlaLogoBadge";
 import { ShareButtons } from "@/components/ShareButtons";
 import { createShareCard } from "@/lib/share.functions";
@@ -391,7 +392,7 @@ function SupportInvitePage() {
                   </div>
                 </div>
                 <Badge variant="outline" className="border-emerald-600/40 text-emerald-700 text-[10px]">
-                  aqla-support.lovable.app
+                  {SITE_URL.replace(/^https?:\/\//, "")}
                 </Badge>
               </div>
 

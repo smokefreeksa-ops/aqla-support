@@ -13,6 +13,7 @@ import { ShareButtons } from "@/components/ShareButtons";
 import { getAnonSessionId } from "@/lib/analytics";
 import { trackEvent } from "@/lib/track-event";
 import { toast } from "sonner";
+import { SITE_URL } from "@/lib/site";
 import aqlaLogo from "@/assets/aqla-logo.png";
 import html2canvas from "html2canvas";
 
@@ -509,7 +510,7 @@ function Inner() {
                     </Button>
                   ) : (
                     <ShareButtons
-                      shareUrl={`https://aqla-support.lovable.app${sharePath}`}
+                      shareUrl={`${SITE_URL}${sharePath}`}
                       textAr={`${finalMessage}\n\nصممت بطاقتي مع أقلع — جرّب أنت أيضًا.`}
                       textEn="I created my Aqla awareness card. Try yours too."
                       lang={isAr ? "ar" : "en"}
