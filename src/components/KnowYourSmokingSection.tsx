@@ -35,8 +35,14 @@ export default function KnowYourSmokingSection() {
         const idx = Number(m[1]);
         if (idx >= 0 && idx <= 4) {
           setOpen(idx);
-          const el = document.getElementById("know-your-smoking");
-          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+          // Scroll directly to the specific tool card, not the top of the section.
+          const card = document.getElementById(`kys-${idx}`);
+          if (card) {
+            card.scrollIntoView({ behavior: "smooth", block: "start" });
+          } else {
+            const el = document.getElementById("know-your-smoking");
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
         }
       }
     };
