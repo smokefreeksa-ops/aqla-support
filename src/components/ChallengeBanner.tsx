@@ -174,10 +174,10 @@ export function ChallengeBanner() {
       </div>
 
       {open && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 px-4" onClick={() => setOpen(false)}>
+        <div className="pointer-events-auto fixed inset-0 z-[100] flex items-center justify-center bg-black/60 px-4" onClick={() => setOpen(false)}>
           <div
             dir="rtl"
-            className="w-full max-w-md rounded-2xl bg-white text-slate-900 p-5 shadow-2xl"
+            className="pointer-events-auto w-full max-w-md rounded-2xl bg-white text-slate-900 p-5 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-3">
