@@ -1904,6 +1904,16 @@ function Shooter({
                     `سجّلت ${score} نقطة في لعبة صوّب على السجائر — ${hits}/${shots} (${accuracy}%). تحدّاني:`,
                     lang
                   )}
+                  scoreCard={{
+                    title: T("Shoot the Cigarettes — Aqla", "صوّب على السجائر — أقلع", lang),
+                    stats: [
+                      { label: T("Score", "النقاط", lang), value: String(score) },
+                      { label: T("Hits", "إصابات", lang), value: `${hits}/${shots}` },
+                      { label: T("Accuracy", "الدقة", lang), value: `${accuracy}%` },
+                      { label: T("Best streak", "أفضل سلسلة", lang), value: String(bestStreak) },
+                    ],
+                    cta: T("Try free at", "جرّبها مجاناً على", lang),
+                  }}
                 />
               </div>
 
