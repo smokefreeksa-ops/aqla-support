@@ -1457,7 +1457,179 @@ function Shooter({
     });
   };
 
-  // Game refs (mutable state for RAF loop)
+  /* ============ Viewport-wide glass shatter (4D burst) ============ */
+  const shardCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const shardsRef = useRef<
+    {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      vrot: number;
+      rot: number;
+      life: number;
+      max: number;
+      size: number;
+      pts: { x: number; y: number }[];
+      hue: number;
+    }[]
+  >([]);
+  const flashRef = useRef<{ x: number; y: number; life: number; max: number }[]>([]);
+  const arenaShakeRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const sizeShardCanvas = () => {
+      const c = shardCanvasRef.current;
+      if (!c) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      c.width = window.innerWidth * dpr;
+      c.height = window.innerHeight * dpr;
+      c.style.width = window.innerWidth + "px";
+      c.style.height = window.innerHeight + "px";
+      const ctx = c.getContext("2d");
+      if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    sizeShardCanvas();
+    window.addEventListener("resize", sizeShardCanvas);
+
+    let raf = 0;
+    const loop = () => {
+      const c = shardCanvasRef.current;
+      if (!c) {
+        raf = requestAnimationFrame(loop);
+        return;
+      }
+      const ctx = c.getContext("2d");
+      if (!ctx) {
+        raf = requestAnimationFrame(loop);
+        return;
+      }
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+      // radial flashes
+      flashRef.current = flashRef.current.filter((f) => f.life < f.max);
+      flashRef.current.forEach((f) => {
+        f.life += 16;
+        const a = 1 - f.life / f.max;
+        const r = 40 + (f.life / f.max) * 180;
+        const g = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, r);
+        g.addColorStop(0, `rgba(255,255,255,${0.55 * a})`);
+        g.addColorStop(0.4, `rgba(200,240,255,${0.25 * a})`);
+        g.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // shards
+      shardsRef.current = shardsRef.current.filter((s) => s.life < s.max);
+      shardsRef.current.forEach((s) => {
+        s.life += 16;
+        s.vy += 0.55; // gravity
+        s.vx *= 0.995;
+        s.vy *= 0.995;
+        s.x += s.vx;
+        s.y += s.vy;
+        s.rot += s.vrot;
+        const a = Math.max(0, 1 - s.life / s.max);
+        ctx.save();
+        ctx.globalAlpha = a;
+        ctx.translate(s.x, s.y);
+        ctx.rotate(s.rot);
+        // glass gradient
+        const grad = ctx.createLinearGradient(-s.size, -s.size, s.size, s.size);
+        grad.addColorStop(0, `hsla(${s.hue},60%,96%,0.95)`);
+        grad.addColorStop(0.5, `hsla(${s.hue},50%,82%,0.75)`);
+        grad.addColorStop(1, `hsla(${s.hue},40%,68%,0.55)`);
+        ctx.fillStyle = grad;
+        ctx.strokeStyle = `hsla(${s.hue},70%,98%,${0.9 * a})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        s.pts.forEach((p, i) => {
+          if (i === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        });
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        // specular highlight
+        ctx.strokeStyle = `rgba(255,255,255,${0.7 * a})`;
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.moveTo(s.pts[0].x, s.pts[0].y);
+        ctx.lineTo(s.pts[1].x, s.pts[1].y);
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", sizeShardCanvas);
+    };
+  }, []);
+
+  function spawnGlassShatter(clientX: number, clientY: number) {
+    const st = stateRef.current;
+    if (st.prefersReducedMotion) {
+      flashRef.current.push({ x: clientX, y: clientY, life: 0, max: 220 });
+      return;
+    }
+    const isSmall = typeof window !== "undefined" && window.innerWidth < 640;
+    const count = isSmall ? 32 : 60;
+    const cap = 500;
+    // white flash
+    flashRef.current.push({ x: clientX, y: clientY, life: 0, max: 160 });
+    for (let i = 0; i < count; i++) {
+      if (shardsRef.current.length >= cap) break;
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 6 + Math.random() * 16;
+      const size = 6 + Math.random() * 22;
+      // polygon points (triangle or quad)
+      const sides = Math.random() < 0.55 ? 3 : 4;
+      const pts: { x: number; y: number }[] = [];
+      for (let k = 0; k < sides; k++) {
+        const a = (k / sides) * Math.PI * 2 + Math.random() * 0.9;
+        const r = size * (0.4 + Math.random() * 0.7);
+        pts.push({ x: Math.cos(a) * r, y: Math.sin(a) * r });
+      }
+      shardsRef.current.push({
+        x: clientX,
+        y: clientY,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - (4 + Math.random() * 6), // upward bias
+        vrot: (Math.random() - 0.5) * 0.6,
+        rot: Math.random() * Math.PI * 2,
+        life: 0,
+        max: 1400 + Math.random() * 700,
+        size,
+        pts,
+        hue: 180 + Math.random() * 30, // pale cyan-white
+      });
+    }
+    // arena shake
+    const el = arenaShakeRef.current;
+    if (el && !isSmall) {
+      el.style.transition = "transform 40ms";
+      let step = 0;
+      const shake = () => {
+        step++;
+        if (step > 6) {
+          el.style.transform = "";
+          return;
+        }
+        const dx = (Math.random() - 0.5) * 10;
+        const dy = (Math.random() - 0.5) * 10;
+        el.style.transform = `translate(${dx}px, ${dy}px)`;
+        setTimeout(shake, 45);
+      };
+      shake();
+    }
+  }
+
   const stateRef = useRef({
     W: 480,
     H: 360,
