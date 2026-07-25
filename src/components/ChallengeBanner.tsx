@@ -143,7 +143,7 @@ export function ChallengeBanner() {
           </Link>
           <Link
             to="/try/shoot"
-            className="pointer-events-auto relative z-10 inline-flex items-center gap-1.5 rounded-full bg-amber-400 text-red-950 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-amber-300 transition shadow-sm"
+            className="inline-flex items-center gap-1.5 rounded-full bg-amber-400 text-red-950 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-amber-300 transition shadow-sm"
           >
             <Crosshair className="h-3.5 w-3.5" />
             تحدي كسر عادة التدخين
@@ -158,13 +158,13 @@ export function ChallengeBanner() {
           <Stat n={stats.visits} label="زيارة" />
         </div>
 
-        <div className="relative z-10 flex items-center gap-2 order-2 sm:order-3">
+        <div className="flex items-center gap-2 order-2 sm:order-3">
           <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer"
-             className="pointer-events-auto relative z-10 inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
+             className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
             <Linkedin className="h-3.5 w-3.5" />
           </a>
           <a href="https://twitter.com/" target="_blank" rel="noreferrer"
-             className="pointer-events-auto relative z-10 inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
+             className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
             <Twitter className="h-3.5 w-3.5" />
           </a>
           <span className="text-[11px] opacity-80 hidden sm:inline">تابعنا</span>
@@ -174,7 +174,7 @@ export function ChallengeBanner() {
       </div>
 
       {open && (
-        <div className="pointer-events-auto fixed inset-0 z-[100] flex items-center justify-center bg-black/60 px-4" onClick={() => setOpen(false)}>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 px-4" onClick={() => setOpen(false)}>
           <div
             dir="rtl"
             className="pointer-events-auto w-full max-w-md rounded-2xl bg-white text-slate-900 p-5 shadow-2xl"
