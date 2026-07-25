@@ -2241,12 +2241,16 @@ function Shooter({
                   hash="kys-4"
                   tone="dark"
                   headline={T(
-                    `I scored ${score} in Aqla's Shoot-the-Cigarettes — ${hits}/${shots} (${accuracy}%). Beat me:`,
-                    `سجّلت ${score} نقطة في لعبة صوّب على السجائر — ${hits}/${shots} (${accuracy}%). تحدّاني:`,
+                    `I scored ${score} in Aqla's Break-the-Smoking-Habit Challenge — ${hits}/${shots} (${accuracy}%). Beat me:`,
+                    `سجّلت ${score} نقطة في تحدي كسر عادة التدخين — ${hits}/${shots} (${accuracy}%). تحدّاني:`,
                     lang
                   )}
                   scoreCard={{
-                    title: T("Shoot the Cigarettes — Aqla", "صوّب على السجائر — أقلع", lang),
+                    title: T(
+                      "Break the Smoking Habit — Aqla",
+                      "تحدي كسر عادة التدخين — أقلع",
+                      lang
+                    ),
                     stats: [
                       { label: T("Score", "النقاط", lang), value: String(score) },
                       { label: T("Hits", "إصابات", lang), value: `${hits}/${shots}` },
@@ -2262,10 +2266,17 @@ function Shooter({
           </div>
         )}
       </div>
+      {/* Full-viewport shard canvas — glass flies outside the hex */}
+      <canvas
+        ref={shardCanvasRef}
+        className="fixed inset-0 pointer-events-none"
+        style={{ zIndex: 70 }}
+        aria-hidden
+      />
       <p className="text-xs opacity-70">
         {T(
-          "Tap the moving cigarettes. Every shot breaks something.",
-          "انقر على السجائر المتحركة. كل طلقة تكسر شيئاً.",
+          "Aim at the lit cigarettes. Every hit shatters glass across the screen.",
+          "صوّب على السجائر المولّعة. كل إصابة تنثر الزجاج في كل الشاشة.",
           lang
         )}
       </p>
