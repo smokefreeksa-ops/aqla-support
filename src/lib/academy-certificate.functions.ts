@@ -1,14 +1,22 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { MODULES } from "@/data/modules";
+import {
+  scoreAttempt,
+  ACADEMY_ASSESSMENT_VERSION,
+} from "@/lib/assessment-runtime";
 
 const IssueInput = z.object({
   module_slug: z.string().min(1).max(64),
   full_name: z.string().min(2).max(120),
-  answers: z.record(z.string(), z.number().int().min(0).max(10)),
+  // v2 shape: { [questionId]: optionKey }. Also accepts legacy numeric indices
+  // as strings for backward compat, but v2 quizzes always send keys.
+  answers: z.record(z.string(), z.string().min(1).max(8)),
+  scope_accepted: z.boolean(),
   language: z.string().max(8).nullable().optional(),
   duration_seconds: z.number().int().min(0).max(7200).nullable().optional(),
   recipient_email: z.string().email().max(254).nullable().optional(),
+  assessment_version: z.string().max(16).optional(),
 });
 
 function randomCode(len = 10) {
@@ -55,18 +63,13 @@ async function enqueueCertificateEmail(params: {
     const messageId = crypto.randomUUID();
     const certificateUrl = `${PUBLIC_SITE_URL}/academy-certificate/${params.certificateCode}`;
 
-    // Suppression check
     const { data: suppressed } = await supabaseAdmin
       .from("suppressed_emails" as never)
       .select("id")
       .eq("email", normalizedEmail)
       .maybeSingle();
-    if (suppressed) {
-      console.log("cert email suppressed:", normalizedEmail);
-      return;
-    }
+    if (suppressed) return;
 
-    // Unsubscribe token (upsert-and-read)
     let unsubscribeToken = generateToken();
     await supabaseAdmin
       .from("email_unsubscribe_tokens" as never)
@@ -79,8 +82,8 @@ async function enqueueCertificateEmail(params: {
       .select("token")
       .eq("email", normalizedEmail)
       .maybeSingle();
-    if (storedToken && (storedToken as any).token) {
-      unsubscribeToken = (storedToken as any).token;
+    if (storedToken && (storedToken as { token?: string }).token) {
+      unsubscribeToken = (storedToken as { token: string }).token;
     }
 
     const templateData = {
@@ -144,17 +147,59 @@ export const issueAcademyCertificate = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => IssueInput.parse(input))
   .handler(async ({ data }) => {
     const mod = MODULES.find((m) => m.slug === data.module_slug);
-    if (!mod) return { ok: false as const, error: "module_not_found", certificate_code: null as string | null };
+    if (!mod) {
+      return {
+        ok: false as const,
+        error: "module_not_found",
+        certificate_code: null as string | null,
+        score: 0,
+        threshold: 80,
+        safety_critical_passed: false,
+        safety_critical_missed: [] as string[],
+      };
+    }
 
-    const total = mod.quiz.length;
-    let correct = 0;
-    mod.quiz.forEach((q, i) => {
-      if (data.answers[String(i)] === q.correctIndex) correct += 1;
-    });
-    const score = Math.round((correct / total) * 100);
-    const threshold = 80;
-    if (score < threshold) {
-      return { ok: false as const, error: "score_below_threshold", score, threshold, certificate_code: null };
+    // v2 server-side scoring by stable answer keys — position-independent.
+    const result = scoreAttempt(mod.quiz, data.answers, 80);
+
+    // Scope acceptance is required.
+    if (!data.scope_accepted) {
+      return {
+        ok: false as const,
+        error: "scope_not_accepted",
+        certificate_code: null,
+        score: result.percent,
+        threshold: 80,
+        safety_critical_passed: result.safetyCriticalPassed,
+        safety_critical_missed: result.safetyCriticalMissed,
+      };
+    }
+
+    // Overall pass mark.
+    if (!result.passed) {
+      return {
+        ok: false as const,
+        error: "score_below_threshold",
+        certificate_code: null,
+        score: result.percent,
+        threshold: 80,
+        safety_critical_passed: result.safetyCriticalPassed,
+        safety_critical_missed: result.safetyCriticalMissed,
+      };
+    }
+
+    // Safety-critical gate — a passing overall score cannot compensate for
+    // an unsafe answer to a safety-critical question.
+    if (!result.safetyCriticalPassed) {
+      return {
+        ok: false as const,
+        error: "safety_critical_failed",
+        certificate_code: null,
+        score: result.percent,
+        threshold: 80,
+        safety_critical_passed: false,
+        safety_critical_missed: result.safetyCriticalMissed,
+      };
     }
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -167,27 +212,46 @@ export const issueAcademyCertificate = createServerFn({ method: "POST" })
         verification_hash: hash,
         full_name: data.full_name.trim(),
         module_slug: data.module_slug,
-        overall_score: score,
+        overall_score: result.percent,
         is_valid: true,
+        assessment_version: data.assessment_version ?? ACADEMY_ASSESSMENT_VERSION,
+        safety_critical_passed: true,
+        scope_accepted: true,
       } as never);
     if (error) {
       console.error("issueAcademyCertificate:", error);
-      return { ok: false as const, error: error.message, certificate_code: null };
+      return {
+        ok: false as const,
+        error: error.message,
+        certificate_code: null,
+        score: result.percent,
+        threshold: 80,
+        safety_critical_passed: true,
+        safety_critical_missed: [] as string[],
+      };
     }
 
-    // Fire-and-forget certificate email
     if (data.recipient_email) {
       await enqueueCertificateEmail({
         recipient: data.recipient_email,
         fullName: data.full_name.trim(),
         moduleTitleEn: mod.title.en,
         moduleTitleAr: mod.title.ar,
-        score,
+        score: result.percent,
         certificateCode: code,
       });
     }
 
-    return { ok: true as const, certificate_code: code, score, error: null, emailed: !!data.recipient_email };
+    return {
+      ok: true as const,
+      certificate_code: code,
+      score: result.percent,
+      threshold: 80,
+      safety_critical_passed: true,
+      safety_critical_missed: [] as string[],
+      error: null as string | null,
+      emailed: !!data.recipient_email,
+    };
   });
 
 const VerifyInput = z.object({ code: z.string().min(3).max(64) });
