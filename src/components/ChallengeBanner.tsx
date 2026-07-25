@@ -103,7 +103,7 @@ export function ChallengeBanner() {
   }
 
   return (
-    <div dir="rtl" className="relative w-full overflow-hidden bg-gradient-to-l from-red-900 via-red-800 to-red-950 text-white shadow-lg">
+    <div dir="rtl" className="pointer-events-none relative w-full overflow-hidden bg-gradient-to-l from-red-900 via-red-800 to-red-950 text-white shadow-lg">
       {/* shimmer stars */}
       <div className="pointer-events-none absolute inset-0 opacity-40"
         style={{
