@@ -102,7 +102,11 @@ function Inner() {
   ];
 
   return (
-    <div dir={dir} className="min-h-screen bg-background">
+    <div
+      dir={dir}
+      className="min-h-screen text-[#f4f0e1]"
+      style={{ background: "linear-gradient(to bottom, #0b3a25 0%, #0e4a30 55%, #072018 100%)", backgroundAttachment: "fixed" }}
+    >
       <DesktopCursor />
       <SiteHeader />
 
