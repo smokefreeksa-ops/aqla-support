@@ -63,6 +63,7 @@ export type Database = {
       }
       academy_certificates: {
         Row: {
+          assessment_version: string
           attempt_id: string | null
           certificate_code: string
           full_name: string
@@ -73,10 +74,13 @@ export type Database = {
           overall_score: number
           revoke_reason: string | null
           revoked_at: string | null
+          safety_critical_passed: boolean
+          scope_accepted: boolean
           track_slug: string | null
           verification_hash: string
         }
         Insert: {
+          assessment_version?: string
           attempt_id?: string | null
           certificate_code: string
           full_name: string
@@ -87,10 +91,13 @@ export type Database = {
           overall_score: number
           revoke_reason?: string | null
           revoked_at?: string | null
+          safety_critical_passed?: boolean
+          scope_accepted?: boolean
           track_slug?: string | null
           verification_hash: string
         }
         Update: {
+          assessment_version?: string
           attempt_id?: string | null
           certificate_code?: string
           full_name?: string
@@ -101,6 +108,8 @@ export type Database = {
           overall_score?: number
           revoke_reason?: string | null
           revoked_at?: string | null
+          safety_critical_passed?: boolean
+          scope_accepted?: boolean
           track_slug?: string | null
           verification_hash?: string
         }
@@ -3616,6 +3625,7 @@ export type Database = {
       }
       training_certificates: {
         Row: {
+          assessment_version: string
           certificate_code: string
           certificate_url: string | null
           created_at: string
@@ -3624,10 +3634,13 @@ export type Database = {
           is_valid: boolean
           issued_at: string
           overall_score: number
+          safety_critical_passed: boolean
+          scope_accepted: boolean
           training_user_id: string
           verification_hash: string | null
         }
         Insert: {
+          assessment_version?: string
           certificate_code: string
           certificate_url?: string | null
           created_at?: string
@@ -3636,10 +3649,13 @@ export type Database = {
           is_valid?: boolean
           issued_at?: string
           overall_score: number
+          safety_critical_passed?: boolean
+          scope_accepted?: boolean
           training_user_id: string
           verification_hash?: string | null
         }
         Update: {
+          assessment_version?: string
           certificate_code?: string
           certificate_url?: string | null
           created_at?: string
@@ -3648,6 +3664,8 @@ export type Database = {
           is_valid?: boolean
           issued_at?: string
           overall_score?: number
+          safety_critical_passed?: boolean
+          scope_accepted?: boolean
           training_user_id?: string
           verification_hash?: string | null
         }
