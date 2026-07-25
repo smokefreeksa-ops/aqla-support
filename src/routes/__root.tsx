@@ -17,6 +17,7 @@ import { AqlaAuthGate } from "@/components/AqlaAuthGate";
 import { ChallengeBanner } from "@/components/ChallengeBanner";
 import { SOSButton } from "@/features/sos/components/SOSButton";
 import { StudyInvitationOverlay } from "@/components/StudyInvitationOverlay";
+import { ResearchBanner } from "@/components/ResearchBanner";
 
 function NotFoundComponent() {
   return (
@@ -165,6 +166,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       
       <AqlaAuthGate>
+        <ResearchBanner />
         <ChallengeBanner />
         <Outlet />
         <FloatingWhatsAppButton />
