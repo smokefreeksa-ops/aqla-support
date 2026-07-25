@@ -243,7 +243,53 @@ function Inner() {
               </>
             )}
           </div>
+
+          {submitted && (
+            <div className={`mt-6 rounded-2xl border-2 p-5 ${passed ? "border-emerald-500 bg-emerald-50/60" : "border-amber-400 bg-amber-50/60"}`}>
+              <div className="flex items-center gap-2 mb-2">
+                <Award className={`w-5 h-5 ${passed ? "text-emerald-700" : "text-amber-700"}`} />
+                <div className="font-bold text-gray-900">
+                  {passed
+                    ? isAr ? `نجحت — ${scorePct}%` : `Passed — ${scorePct}%`
+                    : isAr ? `تحتاج 80% للحصول على الشهادة (نتيجتك ${scorePct}%)` : `Need 80% to earn the certificate (you scored ${scorePct}%)`}
+                </div>
+              </div>
+              {passed ? (
+                <div className="space-y-3">
+                  <p className="text-sm text-emerald-900">
+                    {isAr
+                      ? "أدخل اسمك الكامل كما ترغب بظهوره على الشهادة الرسمية."
+                      : "Enter your full name exactly as you want it printed on the certificate."}
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <input
+                      type="text"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder={isAr ? "الاسم الكامل" : "Full name"}
+                      className="flex-1 rounded-lg border border-emerald-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600"
+                      maxLength={120}
+                    />
+                    <button
+                      onClick={claimCertificate}
+                      disabled={issuing || fullName.trim().length < 2}
+                      className="px-5 py-2.5 rounded-lg bg-emerald-700 text-white text-sm font-bold hover:bg-emerald-800 disabled:opacity-40"
+                    >
+                      {issuing
+                        ? (isAr ? "جارٍ الإصدار..." : "Issuing...")
+                        : (isAr ? "أصدر الشهادة" : "Issue certificate")}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-amber-900">
+                  {isAr ? "أعد المحاولة بعد مراجعة المحتوى أعلاه." : "Retry after reviewing the content above."}
+                </p>
+              )}
+            </div>
+          )}
         </section>
+
 
         {/* Nav */}
         <nav className="mt-10 flex items-center justify-between gap-3 border-t border-gray-200 pt-5">
