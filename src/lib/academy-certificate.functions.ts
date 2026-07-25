@@ -8,6 +8,7 @@ const IssueInput = z.object({
   answers: z.record(z.string(), z.number().int().min(0).max(10)),
   language: z.string().max(8).nullable().optional(),
   duration_seconds: z.number().int().min(0).max(7200).nullable().optional(),
+  recipient_email: z.string().email().max(254).nullable().optional(),
 });
 
 function randomCode(len = 10) {
@@ -15,6 +16,128 @@ function randomCode(len = 10) {
   let s = "";
   for (let i = 0; i < len; i++) s += alphabet[Math.floor(Math.random() * alphabet.length)];
   return s;
+}
+
+const SITE_NAME = "aqla-support";
+const SENDER_DOMAIN = "notify.aqla1.com";
+const FROM_DOMAIN = "aqla1.com";
+const PUBLIC_SITE_URL = "https://aqla1.com";
+
+function generateToken(): string {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function enqueueCertificateEmail(params: {
+  recipient: string;
+  fullName: string;
+  moduleTitleEn: string;
+  moduleTitleAr: string;
+  score: number;
+  certificateCode: string;
+}) {
+  try {
+    const [{ supabaseAdmin }, React, { render }, { TEMPLATES }] = await Promise.all([
+      import("@/integrations/supabase/client.server"),
+      import("react"),
+      import("@react-email/render"),
+      import("@/lib/email-templates/registry"),
+    ]);
+
+    const template = TEMPLATES["academy-certificate"];
+    if (!template) {
+      console.error("academy-certificate template not registered");
+      return;
+    }
+
+    const normalizedEmail = params.recipient.toLowerCase();
+    const messageId = crypto.randomUUID();
+    const certificateUrl = `${PUBLIC_SITE_URL}/academy-certificate/${params.certificateCode}`;
+
+    // Suppression check
+    const { data: suppressed } = await supabaseAdmin
+      .from("suppressed_emails" as never)
+      .select("id")
+      .eq("email", normalizedEmail)
+      .maybeSingle();
+    if (suppressed) {
+      console.log("cert email suppressed:", normalizedEmail);
+      return;
+    }
+
+    // Unsubscribe token (upsert-and-read)
+    let unsubscribeToken = generateToken();
+    await supabaseAdmin
+      .from("email_unsubscribe_tokens" as never)
+      .upsert(
+        { token: unsubscribeToken, email: normalizedEmail } as never,
+        { onConflict: "email", ignoreDuplicates: true },
+      );
+    const { data: storedToken } = await supabaseAdmin
+      .from("email_unsubscribe_tokens" as never)
+      .select("token")
+      .eq("email", normalizedEmail)
+      .maybeSingle();
+    if (storedToken && (storedToken as any).token) {
+      unsubscribeToken = (storedToken as any).token;
+    }
+
+    const templateData = {
+      fullName: params.fullName,
+      moduleTitleEn: params.moduleTitleEn,
+      moduleTitleAr: params.moduleTitleAr,
+      score: params.score,
+      certificateCode: params.certificateCode,
+      certificateUrl,
+    };
+
+    const element = React.createElement(template.component, templateData);
+    const html = await render(element);
+    const text = await render(element, { plainText: true });
+    const subject =
+      typeof template.subject === "function"
+        ? template.subject(templateData)
+        : template.subject;
+
+    await supabaseAdmin.from("email_send_log" as never).insert({
+      message_id: messageId,
+      template_name: "academy-certificate",
+      recipient_email: params.recipient,
+      status: "pending",
+    } as never);
+
+    const { error: enqueueError } = await supabaseAdmin.rpc("enqueue_email" as never, {
+      queue_name: "transactional_emails",
+      payload: {
+        message_id: messageId,
+        to: params.recipient,
+        from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
+        sender_domain: SENDER_DOMAIN,
+        subject,
+        html,
+        text,
+        purpose: "transactional",
+        label: "academy-certificate",
+        idempotency_key: `academy-cert-${params.certificateCode}`,
+        unsubscribe_token: unsubscribeToken,
+        queued_at: new Date().toISOString(),
+      },
+    } as never);
+
+    if (enqueueError) {
+      console.error("cert email enqueue failed:", enqueueError);
+      await supabaseAdmin.from("email_send_log" as never).insert({
+        message_id: messageId,
+        template_name: "academy-certificate",
+        recipient_email: params.recipient,
+        status: "failed",
+        error_message: "Failed to enqueue email",
+      } as never);
+    }
+  } catch (err) {
+    console.error("enqueueCertificateEmail error:", err);
+  }
 }
 
 export const issueAcademyCertificate = createServerFn({ method: "POST" })
@@ -51,7 +174,20 @@ export const issueAcademyCertificate = createServerFn({ method: "POST" })
       console.error("issueAcademyCertificate:", error);
       return { ok: false as const, error: error.message, certificate_code: null };
     }
-    return { ok: true as const, certificate_code: code, score, error: null };
+
+    // Fire-and-forget certificate email
+    if (data.recipient_email) {
+      await enqueueCertificateEmail({
+        recipient: data.recipient_email,
+        fullName: data.full_name.trim(),
+        moduleTitleEn: mod.title.en,
+        moduleTitleAr: mod.title.ar,
+        score,
+        certificateCode: code,
+      });
+    }
+
+    return { ok: true as const, certificate_code: code, score, error: null, emailed: !!data.recipient_email };
   });
 
 const VerifyInput = z.object({ code: z.string().min(3).max(64) });

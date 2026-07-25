@@ -59,6 +59,7 @@ function Inner() {
   const passed = submitted && scorePct >= 80;
 
   const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
   const [issuing, setIssuing] = useState(false);
   const issueFn = useServerFn(issueAcademyCertificate);
   const navigate = useNavigate();
@@ -66,6 +67,11 @@ function Inner() {
   async function claimCertificate() {
     if (fullName.trim().length < 2) {
       toast.error(isAr ? "أدخل اسمك الكامل" : "Enter your full name");
+      return;
+    }
+    const trimmedEmail = email.trim();
+    if (trimmedEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(trimmedEmail)) {
+      toast.error(isAr ? "بريد إلكتروني غير صالح" : "Invalid email address");
       return;
     }
     setIssuing(true);
@@ -78,13 +84,18 @@ function Inner() {
           full_name: fullName,
           answers: answersMap,
           language: lang,
+          recipient_email: trimmedEmail || null,
         },
       });
       if (!res.ok || !res.certificate_code) {
         toast.error(isAr ? "تعذّر إصدار الشهادة" : "Could not issue certificate");
         return;
       }
-      toast.success(isAr ? "تم إصدار شهادتك 🎉" : "Certificate issued 🎉");
+      toast.success(
+        trimmedEmail
+          ? (isAr ? "تم إصدار شهادتك وأُرسلت إلى بريدك 🎉" : "Certificate issued & emailed 🎉")
+          : (isAr ? "تم إصدار شهادتك 🎉" : "Certificate issued 🎉"),
+      );
       navigate({ to: "/academy-certificate/$code", params: { code: res.certificate_code } });
     } catch (e) {
       console.error(e);
@@ -261,23 +272,31 @@ function Inner() {
                       ? "أدخل اسمك الكامل كما ترغب بظهوره على الشهادة الرسمية."
                       : "Enter your full name exactly as you want it printed on the certificate."}
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-2">
+                  <div className="grid gap-2">
                     <input
                       type="text"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder={isAr ? "الاسم الكامل" : "Full name"}
-                      className="flex-1 rounded-lg border border-emerald-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600"
+                      className="w-full rounded-lg border border-emerald-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600"
                       maxLength={120}
+                    />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder={isAr ? "البريد الإلكتروني (اختياري — لإرسال الشهادة)" : "Email (optional — to receive certificate)"}
+                      className="w-full rounded-lg border border-emerald-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600"
+                      maxLength={254}
                     />
                     <button
                       onClick={claimCertificate}
                       disabled={issuing || fullName.trim().length < 2}
-                      className="px-5 py-2.5 rounded-lg bg-emerald-700 text-white text-sm font-bold hover:bg-emerald-800 disabled:opacity-40"
+                      className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-emerald-700 text-white text-sm font-bold hover:bg-emerald-800 disabled:opacity-40"
                     >
                       {issuing
                         ? (isAr ? "جارٍ الإصدار..." : "Issuing...")
-                        : (isAr ? "أصدر الشهادة" : "Issue certificate")}
+                        : (isAr ? "أصدر الشهادة وأرسلها" : "Issue & email certificate")}
                     </button>
                   </div>
                 </div>
