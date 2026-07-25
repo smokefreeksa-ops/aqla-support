@@ -510,7 +510,7 @@ function Inner() {
                     </Button>
                   ) : (
                     <ShareButtons
-                      shareUrl={`https://aqla-support.lovable.app${sharePath}`}
+                      shareUrl={`${SITE_URL}${sharePath}`}
                       textAr={`${finalMessage}\n\nصممت بطاقتي مع أقلع — جرّب أنت أيضًا.`}
                       textEn="I created my Aqla awareness card. Try yours too."
                       lang={isAr ? "ar" : "en"}
