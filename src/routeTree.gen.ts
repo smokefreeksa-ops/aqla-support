@@ -65,6 +65,7 @@ import { Route as TryIndexRouteImport } from './routes/try.index'
 import { Route as TryShootRouteImport } from './routes/try.shoot'
 import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planToken'
 import { Route as ModulesSlugRouteImport } from './routes/modules.$slug'
+import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
 import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
@@ -74,9 +75,12 @@ import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } fr
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as ShareInviteCodeRouteImport } from './routes/share.invite.$code'
 import { Route as ShareTypeIdRouteImport } from './routes/share.$type.$id'
+import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as AqlaQuitEngineResultResultIdRouteImport } from './routes/aqla-quit-engine.result.$resultId'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
+import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 
 const WhenToSeekHelpRoute = WhenToSeekHelpRouteImport.update({
@@ -359,6 +363,11 @@ const ModulesSlugRoute = ModulesSlugRouteImport.update({
   path: '/modules/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
+  id: '/email/unsubscribe',
+  path: '/email/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CertificateCodeRoute = CertificateCodeRouteImport.update({
   id: '/certificate/$code',
   path: '/certificate/$code',
@@ -406,6 +415,11 @@ const ShareTypeIdRoute = ShareTypeIdRouteImport.update({
   path: '/share/$type/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
+  id: '/lovable/email/suppression',
+  path: '/lovable/email/suppression',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AqlaQuitEngineResultResultIdRoute =
   AqlaQuitEngineResultResultIdRouteImport.update({
     id: '/result/$resultId',
@@ -423,6 +437,18 @@ const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailTransactionalSendRoute =
+  LovableEmailTransactionalSendRouteImport.update({
+    id: '/lovable/email/transactional/send',
+    path: '/lovable/email/transactional/send',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailQueueProcessRoute =
   LovableEmailQueueProcessRouteImport.update({
     id: '/lovable/email/queue/process',
@@ -490,6 +516,7 @@ export interface FileRoutesByFullPath {
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
@@ -497,9 +524,12 @@ export interface FileRoutesByFullPath {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -560,6 +590,7 @@ export interface FileRoutesByTo {
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
@@ -567,9 +598,12 @@ export interface FileRoutesByTo {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -632,6 +666,7 @@ export interface FileRoutesById {
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
@@ -639,9 +674,12 @@ export interface FileRoutesById {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/share/$type/$id': typeof ShareTypeIdRoute
   '/share/invite/$code': typeof ShareInviteCodeRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -705,6 +743,7 @@ export interface FileRouteTypes {
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
+    | '/email/unsubscribe'
     | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
@@ -712,9 +751,12 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/aqla-quit-engine/result/$resultId'
+    | '/lovable/email/suppression'
     | '/share/$type/$id'
     | '/share/invite/$code'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -775,6 +817,7 @@ export interface FileRouteTypes {
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
+    | '/email/unsubscribe'
     | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
@@ -782,9 +825,12 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/aqla-quit-engine/result/$resultId'
+    | '/lovable/email/suppression'
     | '/share/$type/$id'
     | '/share/invite/$code'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
   id:
     | '__root__'
     | '/'
@@ -846,6 +892,7 @@ export interface FileRouteTypes {
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
+    | '/email/unsubscribe'
     | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
@@ -853,9 +900,12 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/aqla-quit-engine/result/$resultId'
+    | '/lovable/email/suppression'
     | '/share/$type/$id'
     | '/share/invite/$code'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -915,12 +965,16 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AcademyCertificateCodeRoute: typeof AcademyCertificateCodeRoute
   CertificateCodeRoute: typeof CertificateCodeRoute
+  EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   ModulesSlugRoute: typeof ModulesSlugRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ShareTypeIdRoute: typeof ShareTypeIdRoute
   ShareInviteCodeRoute: typeof ShareInviteCodeRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
+  LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
+  LovableEmailTransactionalSendRoute: typeof LovableEmailTransactionalSendRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1317,6 +1371,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/email/unsubscribe': {
+      id: '/email/unsubscribe'
+      path: '/email/unsubscribe'
+      fullPath: '/email/unsubscribe'
+      preLoaderRoute: typeof EmailUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/certificate/$code': {
       id: '/certificate/$code'
       path: '/certificate/$code'
@@ -1380,6 +1441,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShareTypeIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/suppression': {
+      id: '/lovable/email/suppression'
+      path: '/lovable/email/suppression'
+      fullPath: '/lovable/email/suppression'
+      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/aqla-quit-engine/result/$resultId': {
       id: '/aqla-quit-engine/result/$resultId'
       path: '/result/$resultId'
@@ -1399,6 +1467,20 @@ declare module '@tanstack/react-router' {
       path: '/.lovable/oauth/consent'
       fullPath: '/.lovable/oauth/consent'
       preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/send': {
+      id: '/lovable/email/transactional/send'
+      path: '/lovable/email/transactional/send'
+      fullPath: '/lovable/email/transactional/send'
+      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/queue/process': {
@@ -1519,12 +1601,16 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AcademyCertificateCodeRoute: AcademyCertificateCodeRoute,
   CertificateCodeRoute: CertificateCodeRoute,
+  EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   ModulesSlugRoute: ModulesSlugRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ShareTypeIdRoute: ShareTypeIdRoute,
   ShareInviteCodeRoute: ShareInviteCodeRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
+  LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
+  LovableEmailTransactionalSendRoute: LovableEmailTransactionalSendRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
