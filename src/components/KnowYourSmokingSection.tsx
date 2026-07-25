@@ -186,6 +186,7 @@ export default function KnowYourSmokingSection() {
             return (
               <div
                 key={i}
+                id={`kys-${i}`}
                 style={{
                   background: tokens.card,
                   borderColor: tokens.border,
