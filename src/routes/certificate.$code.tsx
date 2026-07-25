@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { verifyCertificate } from "@/lib/training.functions";
 import { ShieldCheck, Download, Share2, Link as LinkIcon, BadgeCheck, XCircle } from "lucide-react";
+import { SITE_URL } from "@/lib/site";
 
 export const Route = createFileRoute("/certificate/$code")({
   head: ({ params }) => ({
