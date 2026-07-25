@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChallengeBanner } from "@/components/ChallengeBanner";
 
 // Professional rotating galaxy — subtle spiral of particles on canvas.
 function GalaxyCanvas() {
@@ -488,9 +487,6 @@ export function StudyInvitationOverlay() {
       </div>
       </div>
     </div>
-  </div>
-  <div className="fixed top-0 left-0 right-0 z-[301]">
-    <ChallengeBanner />
   </div>
 </>
   );
