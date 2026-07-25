@@ -37,9 +37,24 @@ export default function KnowYourSmokingSection() {
         const idx = Number(m[1]);
         if (idx >= 0 && idx <= 4) {
           targetHashRef.current = idx;
-          // The router restores scroll to the hash target; wait for that to
-          // finish, then expand the requested card.
-          window.setTimeout(() => setOpen(idx), 450);
+          // Temporarily take over scroll restoration so the router/browser do
+          // not fight our manual scroll to the requested card.
+          const originalScrollRestoration = window.history.scrollRestoration;
+          window.history.scrollRestoration = "manual";
+          window.setTimeout(() => {
+            const card = document.getElementById(`kys-${idx}`);
+            if (!card) return;
+            const stickyHeader = document.querySelector("header.sticky, header.fixed") as HTMLElement | null;
+            const headerOffset = (stickyHeader?.offsetHeight ?? 56) + 8;
+            const top = card.getBoundingClientRect().top + window.scrollY - headerOffset;
+            window.scrollTo({ top, behavior: "auto" });
+            // Expand after the scroll has settled.
+            window.setTimeout(() => setOpen(idx), 80);
+            // Restore auto scroll restoration shortly after.
+            window.setTimeout(() => {
+              window.history.scrollRestoration = originalScrollRestoration;
+            }, 600);
+          }, 120);
         }
       }
     };
