@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useLang, useLangState, LangContext } from "@/lib/i18n";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { getModule, MODULES } from "@/data/modules";
+import { getModule, MODULES, type Module } from "@/data/modules";
 import { CheckCircle2, XCircle, ArrowRight, ArrowLeft, BookOpen, ExternalLink } from "lucide-react";
 
 export const Route = createFileRoute("/modules/$slug")({
@@ -40,7 +40,7 @@ function ModulePage() {
 }
 
 function Inner() {
-  const { mod } = Route.useLoaderData();
+  const { mod } = Route.useLoaderData() as { mod: Module };
   const { lang, dir } = useLang();
   const isAr = lang === "ar";
   const idx = MODULES.findIndex((m) => m.slug === mod.slug);
