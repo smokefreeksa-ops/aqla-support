@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
 
 /* =====================================================================================
    Know Your Smoking Life — self-contained bilingual section.
