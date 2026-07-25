@@ -1,48 +1,50 @@
-import { Zap, BookOpen, ArrowLeft } from "lucide-react";
-
-const modules = [
-  { num: "01", title: "أساسيات التبغ", desc: "حقائق أساسية حول أنواع التبغ ومخاطرها الصحية.", duration: "15 دقيقة", learners: "2,500+", tags: ["#أساسي", "#تعليمي"], wide: true, featured: true },
-  { num: "02", title: "أنواع منتجات التبغ", desc: "معلومات عن السجائر والشيشة والتبغ غير المدخن.", duration: "20 دقيقة", learners: "2,200+", tags: ["#نفسي"], wide: false, featured: false },
-  { num: "03", title: "النيكوتين والمخاطر", desc: "فهم إدمان النيكوتين وتأثيره على الدماغ والجسم.", duration: "18 دقيقة", learners: "2,800+", tags: ["#صحة"], wide: false, featured: false },
-  { num: "04", title: "استراتيجيات الإقلاع", desc: "نصائح عملية للإقلاع والبدائل وقصص نجاح ملهمة.", duration: "25 دقيقة", learners: "2,100+", tags: ["#استراتيجية"], wide: true, featured: false },
-  { num: "05", title: "السياسات المؤسسية", desc: "قواعد وأنظمة تعزز بيئة خالية من التدخين.", duration: "12 دقيقة", learners: "1,900+", tags: ["#سياسة"], wide: false, featured: false },
-  { num: "06", title: "فوائد الإقلاع", desc: "التحسينات الصحية وجدول التعافي بعد الإقلاع.", duration: "16 دقيقة", learners: "2,300+", tags: ["#تعافي"], wide: false, featured: false },
-  { num: "07", title: "عيادات الدعم", desc: "خدمات الدعم والموارد المتاحة لمساعدتك.", duration: "22 دقيقة", learners: "1,800+", tags: ["#دعم"], wide: false, featured: false },
-];
+import { Zap, BookOpen, ArrowLeft, ArrowRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { useLang } from "@/lib/i18n";
+import { MODULES } from "@/data/modules";
 
 export default function ModulesSection() {
+  const { lang } = useLang();
+  const isAr = lang === "ar";
+  const Arrow = isAr ? ArrowLeft : ArrowRight;
+
   return (
     <section id="modules" className="saudi-map-section py-24 md:py-32">
       <div className="saudi-map-content container mx-auto px-4 md:px-6 max-w-7xl">
         <div className="mb-16 md:mb-20">
           <div className="section-badge mb-6">
             <Zap className="w-3.5 h-3.5" />
-            المسار التعليمي
+            {isAr ? "المسار التعليمي" : "Learning Track"}
           </div>
           <div className="max-w-3xl">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-4 tracking-tight leading-[1.1]">
-              <span className="gradient-text">الوحدات التعليمية</span>
+              <span className="gradient-text">
+                {isAr ? "الوحدات التعليمية" : "Learning Modules"}
+              </span>
             </h2>
             <p className="text-lg md:text-xl text-gray-500 leading-relaxed max-w-2xl mb-5">
-              مجموعة شاملة من الوحدات لفهم مخاطر التدخين وتعلم استراتيجيات الإقلاع الفعالة.
+              {isAr
+                ? "منهج ثنائي اللغة مبني على مصادر منظمة الصحة العالمية (WHO) ومراكز مكافحة الأمراض الأمريكية (CDC)."
+                : "Bilingual curriculum grounded in WHO and U.S. CDC evidence."}
             </p>
-            <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-50 border border-blue-200">
-              <BookOpen className="w-4 h-4 text-blue-700" />
-              <span className="text-sm font-semibold text-blue-900">
-                ابدأ بالوحدة الأولى • 15 دقيقة فقط
+            <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-50 border border-emerald-200">
+              <BookOpen className="w-4 h-4 text-emerald-700" />
+              <span className="text-sm font-semibold text-emerald-900">
+                {isAr ? "ابدأ بالوحدة الأولى • 15 دقيقة فقط" : "Start with Module 1 • 15 min"}
               </span>
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-7xl mx-auto">
-          {modules.map((mod) => (
-            <a
-              key={mod.num}
-              href="/learn-train"
+          {MODULES.map((mod) => (
+            <Link
+              key={mod.slug}
+              to="/modules/$slug"
+              params={{ slug: mod.slug }}
               className={`group relative p-5 rounded-xl overflow-hidden transition-all duration-300 will-change-transform ${
                 mod.featured
-                  ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-xl shadow-blue-600/30 hover:shadow-2xl hover:-translate-y-1"
+                  ? "bg-gradient-to-br from-emerald-700 to-emerald-800 text-white shadow-xl shadow-emerald-700/30 hover:shadow-2xl hover:-translate-y-1"
                   : "glass-card"
               } ${mod.wide ? "md:col-span-2" : ""}`}
             >
@@ -50,27 +52,25 @@ export default function ModulesSection() {
                 <div className="flex items-center justify-between mb-3">
                   <span
                     className={`text-xs font-bold px-2.5 py-1 rounded-md ${
-                      mod.featured ? "bg-white/20 text-white" : "bg-blue-50 text-blue-600"
+                      mod.featured ? "bg-white/20 text-white" : "bg-emerald-50 text-emerald-700"
                     }`}
                   >
-                    الوحدة {mod.num}
+                    {isAr ? `الوحدة ${mod.num}` : `Module ${mod.num}`}
                   </span>
-                  <span
-                    className={`text-xs ${mod.featured ? "text-blue-100" : "text-gray-400"}`}
-                  >
-                    {mod.duration}
+                  <span className={`text-xs ${mod.featured ? "text-emerald-100" : "text-gray-400"}`}>
+                    {isAr ? mod.duration.ar : mod.duration.en}
                   </span>
                 </div>
 
                 <h3
                   className={`font-bold text-base leading-snug mb-2 ${mod.featured ? "text-white" : "text-gray-900"}`}
                 >
-                  {mod.title}
+                  {isAr ? mod.title.ar : mod.title.en}
                 </h3>
                 <p
-                  className={`text-sm leading-relaxed mb-4 ${mod.featured ? "text-blue-100" : "text-gray-500"}`}
+                  className={`text-sm leading-relaxed mb-4 ${mod.featured ? "text-emerald-50" : "text-gray-500"}`}
                 >
-                  {mod.desc}
+                  {isAr ? mod.summary.ar : mod.summary.en}
                 </p>
 
                 <div className="flex items-center justify-between">
@@ -79,44 +79,31 @@ export default function ModulesSection() {
                       <span
                         key={tag}
                         className={`text-xs px-2 py-0.5 rounded ${
-                          mod.featured ? "bg-white/15 text-blue-100" : "text-gray-400 bg-gray-50"
+                          mod.featured ? "bg-white/15 text-emerald-50" : "text-gray-500 bg-gray-50"
                         }`}
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
-                  <span
-                    className={`text-xs ${mod.featured ? "text-blue-100" : "text-gray-400"}`}
-                  >
-                    {mod.learners} متعلم
+                  <span className={`text-xs ${mod.featured ? "text-emerald-50" : "text-gray-400"}`}>
+                    {mod.quiz.length} {isAr ? "أسئلة" : "questions"}
                   </span>
                 </div>
 
-                <div
-                  className={`mt-3 pt-3 border-t ${mod.featured ? "border-white/20" : "border-gray-100"}`}
-                >
+                <div className={`mt-3 pt-3 border-t ${mod.featured ? "border-white/20" : "border-gray-100"}`}>
                   <span
                     className={`text-sm font-bold flex items-center gap-1 ${
-                      mod.featured ? "text-white" : "text-blue-600 group-hover:text-blue-700"
+                      mod.featured ? "text-white" : "text-emerald-700 group-hover:text-emerald-900"
                     } transition-colors`}
                   >
-                    ابدأ التعلم
-                    <ArrowLeft className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
+                    {isAr ? "ابدأ التعلم" : "Start learning"}
+                    <Arrow className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
                   </span>
                 </div>
               </div>
-            </a>
+            </Link>
           ))}
-        </div>
-
-        <div className="text-center mt-10">
-          <a
-            href="/learn-train"
-            className="inline-flex items-center gap-2 px-7 py-3.5 border-2 border-gray-200 rounded-xl text-gray-700 hover:border-blue-400 hover:text-blue-600 transition-all duration-200 text-sm font-semibold bg-white"
-          >
-            عرض جميع الوحدات
-          </a>
         </div>
       </div>
     </section>
