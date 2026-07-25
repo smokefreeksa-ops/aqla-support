@@ -27,6 +27,8 @@ export default function KnowYourSmokingSection() {
   const [open, setOpen] = useState<number | null>(null);
   const [done, setDone] = useState<Record<number, boolean>>({});
 
+  const targetHashRef = useRef<number | null>(null);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     const applyHash = () => {
@@ -34,15 +36,8 @@ export default function KnowYourSmokingSection() {
       if (m) {
         const idx = Number(m[1]);
         if (idx >= 0 && idx <= 4) {
+          targetHashRef.current = idx;
           setOpen(idx);
-          // Scroll directly to the specific tool card, not the top of the section.
-          const card = document.getElementById(`kys-${idx}`);
-          if (card) {
-            card.scrollIntoView({ behavior: "smooth", block: "start" });
-          } else {
-            const el = document.getElementById("know-your-smoking");
-            if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
         }
       }
     };
@@ -50,6 +45,22 @@ export default function KnowYourSmokingSection() {
     window.addEventListener("hashchange", applyHash);
     return () => window.removeEventListener("hashchange", applyHash);
   }, []);
+
+  // After the requested card expands, scroll it just below the sticky header.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const idx = targetHashRef.current;
+    if (idx === null || open !== idx) return;
+    targetHashRef.current = null;
+    const timer = window.setTimeout(() => {
+      const card = document.getElementById(`kys-${idx}`);
+      if (!card) return;
+      const headerOffset = 80; // sticky header + safe space
+      const top = card.getBoundingClientRect().top + window.scrollY - headerOffset;
+      window.scrollTo({ top, behavior: "smooth" });
+    }, 80);
+    return () => window.clearTimeout(timer);
+  }, [open]);
 
   const setDoneFor = (idx: number, val: boolean) =>
     setDone((d) => (d[idx] === val ? d : { ...d, [idx]: val }));
