@@ -116,10 +116,10 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
     },
     {
       emoji: "🎯",
-      name: T("Shoot the Cigarettes", "صوّب على السجائر", lang),
+      name: T("Break the Smoking Habit Challenge", "تحدي كسر عادة التدخين", lang),
       desc: T(
-        "30 seconds. Aim. Break more than glass.",
-        "٣٠ ثانية. صوّب. اكسر أكثر من الزجاج.",
+        "30 seconds. Aim at lit cigarettes. Shatter more than glass.",
+        "٣٠ ثانية. صوّب على السجائر المولّعة. حطّم أكثر من الزجاج.",
         lang
       ),
       time: T("30 sec", "٣٠ ثانية", lang),
