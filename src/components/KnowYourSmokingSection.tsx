@@ -37,7 +37,15 @@ export default function KnowYourSmokingSection() {
         const idx = Number(m[1]);
         if (idx >= 0 && idx <= 4) {
           targetHashRef.current = idx;
-          setOpen(idx);
+          // Scroll to the closed card first (stable position), then expand it.
+          const card = document.getElementById(`kys-${idx}`);
+          if (card) {
+            const stickyHeader = document.querySelector("header.sticky, header.fixed") as HTMLElement | null;
+            const headerOffset = (stickyHeader?.offsetHeight ?? 56) + 12;
+            const top = card.getBoundingClientRect().top + window.scrollY - headerOffset;
+            window.scrollTo({ top, behavior: "smooth" });
+          }
+          window.setTimeout(() => setOpen(idx), 220);
         }
       }
     };
@@ -45,23 +53,6 @@ export default function KnowYourSmokingSection() {
     window.addEventListener("hashchange", applyHash);
     return () => window.removeEventListener("hashchange", applyHash);
   }, []);
-
-  // After the requested card expands, scroll it directly under the sticky header.
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const idx = targetHashRef.current;
-    if (idx === null || open !== idx) return;
-    targetHashRef.current = null;
-    const timer = window.setTimeout(() => {
-      const card = document.getElementById(`kys-${idx}`);
-      if (!card) return;
-      const stickyHeader = document.querySelector("header.sticky, header.fixed") as HTMLElement | null;
-      const headerOffset = (stickyHeader?.offsetHeight ?? 56) + 48;
-      const top = card.getBoundingClientRect().top + window.scrollY - headerOffset;
-      window.scrollTo({ top, behavior: "smooth" });
-    }, 80);
-    return () => window.clearTimeout(timer);
-  }, [open]);
 
   const setDoneFor = (idx: number, val: boolean) =>
     setDone((d) => (d[idx] === val ? d : { ...d, [idx]: val }));
