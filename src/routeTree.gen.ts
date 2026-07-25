@@ -69,6 +69,7 @@ import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
 import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
 import { Route as AdminAqlaQuitEngineRouteImport } from './routes/admin.aqla-quit-engine'
+import { Route as AcademyCertificateCodeRouteImport } from './routes/academy-certificate.$code'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as ShareInviteCodeRouteImport } from './routes/share.invite.$code'
@@ -377,6 +378,11 @@ const AdminAqlaQuitEngineRoute = AdminAqlaQuitEngineRouteImport.update({
   path: '/aqla-quit-engine',
   getParentRoute: () => AdminRoute,
 } as any)
+const AcademyCertificateCodeRoute = AcademyCertificateCodeRouteImport.update({
+  id: '/academy-certificate/$code',
+  path: '/academy-certificate/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Char91DotwellKnownChar93OauthProtectedResourceRoute =
   Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
     id: '/.well-known/oauth-protected-resource',
@@ -472,6 +478,7 @@ export interface FileRoutesByFullPath {
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/academy-certificate/$code': typeof AcademyCertificateCodeRoute
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
@@ -540,6 +547,7 @@ export interface FileRoutesByTo {
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/academy-certificate/$code': typeof AcademyCertificateCodeRoute
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
@@ -610,6 +618,7 @@ export interface FileRoutesById {
   '/when-to-seek-help': typeof WhenToSeekHelpRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/academy-certificate/$code': typeof AcademyCertificateCodeRoute
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
@@ -681,6 +690,7 @@ export interface FileRouteTypes {
     | '/when-to-seek-help'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/academy-certificate/$code'
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
@@ -749,6 +759,7 @@ export interface FileRouteTypes {
     | '/when-to-seek-help'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/academy-certificate/$code'
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
@@ -818,6 +829,7 @@ export interface FileRouteTypes {
     | '/when-to-seek-help'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/academy-certificate/$code'
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
@@ -888,6 +900,7 @@ export interface RootRouteChildren {
   WhenToSeekHelpRoute: typeof WhenToSeekHelpRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  AcademyCertificateCodeRoute: typeof AcademyCertificateCodeRoute
   CertificateCodeRoute: typeof CertificateCodeRoute
   ModulesSlugRoute: typeof ModulesSlugRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
@@ -1318,6 +1331,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAqlaQuitEngineRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/academy-certificate/$code': {
+      id: '/academy-certificate/$code'
+      path: '/academy-certificate/$code'
+      fullPath: '/academy-certificate/$code'
+      preLoaderRoute: typeof AcademyCertificateCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/.well-known/oauth-protected-resource': {
       id: '/.well-known/oauth-protected-resource'
       path: '/.well-known/oauth-protected-resource'
@@ -1476,6 +1496,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  AcademyCertificateCodeRoute: AcademyCertificateCodeRoute,
   CertificateCodeRoute: CertificateCodeRoute,
   ModulesSlugRoute: ModulesSlugRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
