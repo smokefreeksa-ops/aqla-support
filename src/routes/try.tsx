@@ -19,6 +19,7 @@ export const Route = createFileRoute("/try")({
       },
     ],
   }),
+  scrollRestoration: false,
   component: TryPage,
 });
 
