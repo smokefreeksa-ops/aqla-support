@@ -37,15 +37,18 @@ export default function KnowYourSmokingSection() {
         const idx = Number(m[1]);
         if (idx >= 0 && idx <= 4) {
           targetHashRef.current = idx;
-          // Scroll to the closed card first (stable position), then expand it.
-          const card = document.getElementById(`kys-${idx}`);
-          if (card) {
+          // Wait for the closed cards to finish laying out, then scroll the
+          // target card just under the sticky header and expand it.
+          window.setTimeout(() => {
+            const card = document.getElementById(`kys-${idx}`);
+            if (!card) return;
             const stickyHeader = document.querySelector("header.sticky, header.fixed") as HTMLElement | null;
             const headerOffset = (stickyHeader?.offsetHeight ?? 56) + 12;
             const top = card.getBoundingClientRect().top + window.scrollY - headerOffset;
             window.scrollTo({ top, behavior: "smooth" });
-          }
-          window.setTimeout(() => setOpen(idx), 220);
+            // Expand after the smooth scroll has had time to settle.
+            window.setTimeout(() => setOpen(idx), 450);
+          }, 120);
         }
       }
     };
