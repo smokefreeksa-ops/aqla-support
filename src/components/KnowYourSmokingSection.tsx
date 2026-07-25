@@ -1978,11 +1978,17 @@ function ShareScore({
   headline,
   hash,
   tone = "teal",
+  scoreCard,
 }: {
   lang: Lang;
   headline: string;
   hash: string; // e.g. "kys-0"
   tone?: "teal" | "ember" | "dark";
+  scoreCard?: {
+    title: string;
+    stats: { label: string; value: string }[];
+    cta: string;
+  };
 }) {
   const url = `${SHARE_URL}/#${hash}`;
   const tagline = T(
@@ -1993,6 +1999,7 @@ function ShareScore({
   const fullText = `${headline}\n\n${tagline} ${url}`;
   const enc = encodeURIComponent(fullText);
   const [copied, setCopied] = useState(false);
+  const [imgBusy, setImgBusy] = useState(false);
 
   async function nativeShare() {
     if (typeof navigator !== "undefined" && (navigator as Navigator & { share?: (d: ShareData) => Promise<void> }).share) {
@@ -2015,8 +2022,137 @@ function ShareScore({
     } catch { /* ignore */ }
   }
 
+  function renderScoreCanvas(): HTMLCanvasElement | null {
+    if (!scoreCard) return null;
+    const W = 1080;
+    const H = 1080;
+    const canvas = document.createElement("canvas");
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return null;
+
+    // Saudi green gradient background
+    const bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, "#0b3a25");
+    bg.addColorStop(0.55, "#0e4a30");
+    bg.addColorStop(1, "#06231a");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Subtle glow
+    const glow = ctx.createRadialGradient(W / 2, H * 0.35, 40, W / 2, H * 0.35, 700);
+    glow.addColorStop(0, "rgba(255,215,120,0.20)");
+    glow.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.textAlign = "center";
+    ctx.direction = lang === "ar" ? "rtl" : "ltr";
+
+    // Brand
+    ctx.fillStyle = "#F6D68A";
+    ctx.font = "700 44px system-ui, -apple-system, 'Segoe UI', Tahoma";
+    ctx.fillText("أقلع | Aqla", W / 2, 130);
+
+    // Title
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "800 58px system-ui, -apple-system, 'Segoe UI', Tahoma";
+    ctx.fillText(scoreCard.title, W / 2, 220);
+
+    // Big score (first stat highlighted)
+    const primary = scoreCard.stats[0];
+    if (primary) {
+      ctx.fillStyle = "rgba(255,255,255,0.75)";
+      ctx.font = "500 40px system-ui";
+      ctx.fillText(primary.label, W / 2, 340);
+      ctx.fillStyle = "#F6D68A";
+      ctx.font = "900 260px system-ui";
+      ctx.fillText(primary.value, W / 2, 570);
+    }
+
+    // Stat row
+    const rest = scoreCard.stats.slice(1);
+    const rowY = 720;
+    const boxW = 260;
+    const gap = 24;
+    const totalW = rest.length * boxW + (rest.length - 1) * gap;
+    let x = (W - totalW) / 2;
+    rest.forEach((s) => {
+      ctx.fillStyle = "rgba(255,255,255,0.08)";
+      ctx.strokeStyle = "rgba(246,214,138,0.35)";
+      ctx.lineWidth = 2;
+      const r = 24;
+      const bx = x, by = rowY, bw = boxW, bh = 170;
+      ctx.beginPath();
+      ctx.moveTo(bx + r, by);
+      ctx.arcTo(bx + bw, by, bx + bw, by + bh, r);
+      ctx.arcTo(bx + bw, by + bh, bx, by + bh, r);
+      ctx.arcTo(bx, by + bh, bx, by, r);
+      ctx.arcTo(bx, by, bx + bw, by, r);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(255,255,255,0.75)";
+      ctx.font = "500 30px system-ui";
+      ctx.fillText(s.label, bx + bw / 2, by + 60);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "800 60px system-ui";
+      ctx.fillText(s.value, bx + bw / 2, by + 130);
+      x += boxW + gap;
+    });
+
+    // CTA / URL
+    ctx.fillStyle = "rgba(255,255,255,0.85)";
+    ctx.font = "500 34px system-ui";
+    ctx.fillText(scoreCard.cta, W / 2, 970);
+    ctx.fillStyle = "#F6D68A";
+    ctx.font = "800 44px system-ui";
+    ctx.fillText(SHARE_URL.replace(/^https?:\/\//, ""), W / 2, 1030);
+
+    return canvas;
+  }
+
+  async function shareImage() {
+    if (!scoreCard) return;
+    setImgBusy(true);
+    try {
+      const canvas = renderScoreCanvas();
+      if (!canvas) return;
+      const blob: Blob | null = await new Promise((res) =>
+        canvas.toBlob((b) => res(b), "image/png", 0.95)
+      );
+      if (!blob) return;
+      const file = new File([blob], "aqla-score.png", { type: "image/png" });
+      const nav = navigator as Navigator & {
+        canShare?: (d: { files?: File[] }) => boolean;
+        share?: (d: ShareData & { files?: File[] }) => Promise<void>;
+      };
+      if (nav.canShare && nav.canShare({ files: [file] }) && nav.share) {
+        try {
+          await nav.share({
+            files: [file],
+            title: "Aqla — أقلع",
+            text: `${headline}\n\n${tagline} ${url}`,
+          });
+          return;
+        } catch { /* fall through to download */ }
+      }
+      const dl = document.createElement("a");
+      dl.href = URL.createObjectURL(blob);
+      dl.download = "aqla-score.png";
+      document.body.appendChild(dl);
+      dl.click();
+      dl.remove();
+      setTimeout(() => URL.revokeObjectURL(dl.href), 2000);
+    } finally {
+      setImgBusy(false);
+    }
+  }
+
   const btnBase =
-    "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition active:scale-95";
+    "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition active:scale-95 disabled:opacity-60";
   const primary =
     tone === "dark"
       ? { background: "#fff", color: "#10352F" }
@@ -2033,7 +2169,20 @@ function ShareScore({
       <span className={tone === "dark" ? "text-xs opacity-80" : "text-xs opacity-70"}>
         {T("Share your result:", "شارك نتيجتك:", lang)}
       </span>
-      <button type="button" onClick={() => void nativeShare()} className={btnBase} style={primary}>
+      {scoreCard && (
+        <button
+          type="button"
+          onClick={() => void shareImage()}
+          disabled={imgBusy}
+          className={btnBase}
+          style={primary}
+        >
+          🖼️ {imgBusy
+            ? T("Preparing…", "جاري التحضير…", lang)
+            : T("Share image", "شارك صورة النتيجة", lang)}
+        </button>
+      )}
+      <button type="button" onClick={() => void nativeShare()} className={btnBase} style={scoreCard ? ghost : primary}>
         📣 {T("Share", "شارك", lang)}
       </button>
       <a
@@ -2060,4 +2209,5 @@ function ShareScore({
     </div>
   );
 }
+
 
