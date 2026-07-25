@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { ChallengeBanner } from "@/components/ChallengeBanner";
 
 // Professional rotating galaxy — subtle spiral of particles on canvas.
 function GalaxyCanvas() {
@@ -325,39 +326,40 @@ export function StudyInvitationOverlay() {
 
   return (
     <div
-      className="fixed inset-0 z-[300] flex items-center justify-center px-4 py-6 sm:px-6"
+      className="fixed inset-0 z-[300] flex flex-col"
       style={{
         opacity: mounted ? 1 : 0,
         transition: "opacity 500ms ease-out",
-        paddingTop: "max(env(safe-area-inset-top), 1rem)",
-        paddingBottom: "max(env(safe-area-inset-bottom), 1rem)",
       }}
       role="presentation"
     >
       <LuxuryStarfield />
       <GalaxyCanvas />
 
-      {/* Modal */}
-      <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="aqla-study-title"
-        tabIndex={-1}
-        dir={t.dir}
-        lang={lang}
-        className="relative flex max-h-[92vh] w-full max-w-[520px] flex-col overflow-hidden rounded-[28px] outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
-        style={{
-          background:
-            "linear-gradient(160deg, rgba(11,58,37,0.02) 0%, rgba(8,38,24,0.04) 100%)",
-          backdropFilter: "blur(2px) saturate(115%)",
-          border: "1px solid rgba(255,255,255,0.10)",
-          boxShadow:
-            "0 40px 100px -40px rgba(0,0,0,0.75), 0 0 0 1px rgba(201,168,76,0.06) inset",
-          transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
-          transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
-        }}
-      >
+      <div className="relative z-10 flex h-full flex-col">
+        <ChallengeBanner />
+        <div className="flex flex-1 items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6">
+          {/* Modal */}
+          <div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="aqla-study-title"
+            tabIndex={-1}
+            dir={t.dir}
+            lang={lang}
+            className="relative flex max-h-[92%] w-full max-w-[520px] flex-col overflow-hidden rounded-[28px] outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
+            style={{
+              background:
+                "linear-gradient(160deg, rgba(11,58,37,0.02) 0%, rgba(8,38,24,0.04) 100%)",
+              backdropFilter: "blur(2px) saturate(115%)",
+              border: "1px solid rgba(255,255,255,0.10)",
+              boxShadow:
+                "0 40px 100px -40px rgba(0,0,0,0.75), 0 0 0 1px rgba(201,168,76,0.06) inset",
+              transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
+              transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
+            }}
+          >
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/40 to-transparent"
@@ -485,5 +487,7 @@ export function StudyInvitationOverlay() {
         </div>
       </div>
     </div>
+  </div>
+</div>
   );
 }
