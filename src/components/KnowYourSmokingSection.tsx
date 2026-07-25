@@ -56,7 +56,7 @@ export default function KnowYourSmokingSection() {
       const card = document.getElementById(`kys-${idx}`);
       if (!card) return;
       const stickyHeader = document.querySelector("header.sticky, header.fixed") as HTMLElement | null;
-      const headerOffset = (stickyHeader?.offsetHeight ?? 56) + 28;
+      const headerOffset = (stickyHeader?.offsetHeight ?? 56) + 48;
       const top = card.getBoundingClientRect().top + window.scrollY - headerOffset;
       window.scrollTo({ top, behavior: "smooth" });
     }, 80);
