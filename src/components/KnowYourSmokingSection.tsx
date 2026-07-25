@@ -50,7 +50,7 @@ export default function KnowYourSmokingSection() {
             window.scrollTo({ top, behavior: "auto" });
             // Expand after the scroll has settled.
             window.setTimeout(() => setOpen(idx), 80);
-          }, 900);
+          }, 2100);
         }
       }
     };
