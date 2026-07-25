@@ -92,9 +92,9 @@ export function ChallengeBanner() {
     // Open mail client to deliver to owner email
     window.location.href = `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`;
 
-    setStats((s) => {
+    setDeltas((s) => {
       const next = { ...s, joined: s.joined + 1 };
-      saveStats(next);
+      saveLocalDeltas(next);
       return next;
     });
     toast.success("تم تسجيلك بنجاح ✨");
@@ -119,7 +119,7 @@ export function ChallengeBanner() {
       `}</style>
 
       <div className="relative flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 sm:py-3">
-        <div className="flex items-center gap-3 order-1">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 order-1">
           <span
             className="inline-block h-2.5 w-2.5 rounded-full bg-rose-300 shadow-[0_0_12px_rgba(255,200,200,.9)]"
             style={{ animation: "aqlaPulseDot 1.4s ease-in-out infinite" }}
@@ -129,10 +129,26 @@ export function ChallengeBanner() {
           </span>
           <button
             onClick={() => setOpen(true)}
-            className="ms-1 rounded-full bg-white text-red-800 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-rose-50 transition"
+            className="rounded-full bg-white text-red-800 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-rose-50 transition"
           >
             انضم بسرعة
           </button>
+          <Link
+            to="/challenge-pathway"
+            className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/95 text-white text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-emerald-600 transition shadow-sm"
+          >
+            <Trophy className="h-3.5 w-3.5" />
+            مجتمع وتحديات أقلع
+            <ArrowLeft className="h-3.5 w-3.5" />
+          </Link>
+          <Link
+            to="/try"
+            hash="kys-4"
+            className="inline-flex items-center gap-1.5 rounded-full bg-amber-400 text-red-950 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-amber-300 transition shadow-sm"
+          >
+            <Crosshair className="h-3.5 w-3.5" />
+            صوّب على السجائر
+          </Link>
         </div>
 
         <div className="flex items-center gap-4 text-[11px] sm:text-xs order-3 sm:order-2 w-full sm:w-auto justify-between sm:justify-end">
@@ -154,6 +170,7 @@ export function ChallengeBanner() {
           </a>
           <span className="text-[11px] opacity-80 hidden sm:inline">تابعنا</span>
         </div>
+
 
       </div>
 
