@@ -5,6 +5,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { ensureAdmin } from "./_authz.server";
 import { renderKeyValueHtml, sendAdminNotification } from "./notifications.server";
 import { TRAINING_MODULES, OVERALL_PASS, MODULE_PASS } from "./training-content";
+import { SITE_URL } from "./site";
 
 // --------- Lazy seed modules (idempotent) ---------
 async function ensureModulesSeeded(): Promise<Record<string, string>> {
