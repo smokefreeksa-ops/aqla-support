@@ -61,6 +61,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TryIndexRouteImport } from './routes/try.index'
 import { Route as TryShootRouteImport } from './routes/try.shoot'
 import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planToken'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
@@ -335,6 +336,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TryIndexRoute = TryIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TryRoute,
+} as any)
 const TryShootRoute = TryShootRouteImport.update({
   id: '/shoot',
   path: '/shoot',
@@ -466,6 +472,7 @@ export interface FileRoutesByFullPath {
   '/certificate/$code': typeof CertificateCodeRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
+  '/try/': typeof TryIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
@@ -520,7 +527,6 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/training': typeof TrainingRoute
-  '/try': typeof TryRouteWithChildren
   '/updates': typeof UpdatesRoute
   '/voice-craving-scan': typeof VoiceCravingScanRoute
   '/volunteer': typeof VolunteerRoute
@@ -533,6 +539,7 @@ export interface FileRoutesByTo {
   '/certificate/$code': typeof CertificateCodeRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
+  '/try': typeof TryIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
@@ -601,6 +608,7 @@ export interface FileRoutesById {
   '/certificate/$code': typeof CertificateCodeRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
+  '/try/': typeof TryIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/aqla-quit-engine/result/$resultId': typeof AqlaQuitEngineResultResultIdRoute
@@ -670,6 +678,7 @@ export interface FileRouteTypes {
     | '/certificate/$code'
     | '/quit-plan/$planToken'
     | '/try/shoot'
+    | '/try/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/aqla-quit-engine/result/$resultId'
@@ -724,7 +733,6 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tools'
     | '/training'
-    | '/try'
     | '/updates'
     | '/voice-craving-scan'
     | '/volunteer'
@@ -737,6 +745,7 @@ export interface FileRouteTypes {
     | '/certificate/$code'
     | '/quit-plan/$planToken'
     | '/try/shoot'
+    | '/try'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/aqla-quit-engine/result/$resultId'
@@ -804,6 +813,7 @@ export interface FileRouteTypes {
     | '/certificate/$code'
     | '/quit-plan/$planToken'
     | '/try/shoot'
+    | '/try/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/aqla-quit-engine/result/$resultId'
@@ -1239,6 +1249,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/try/': {
+      id: '/try/'
+      path: '/'
+      fullPath: '/try/'
+      preLoaderRoute: typeof TryIndexRouteImport
+      parentRoute: typeof TryRoute
+    }
     '/try/shoot': {
       id: '/try/shoot'
       path: '/shoot'
@@ -1373,10 +1390,12 @@ const QuitPlanRouteWithChildren = QuitPlanRoute._addFileChildren(
 
 interface TryRouteChildren {
   TryShootRoute: typeof TryShootRoute
+  TryIndexRoute: typeof TryIndexRoute
 }
 
 const TryRouteChildren: TryRouteChildren = {
   TryShootRoute: TryShootRoute,
+  TryIndexRoute: TryIndexRoute,
 }
 
 const TryRouteWithChildren = TryRoute._addFileChildren(TryRouteChildren)
