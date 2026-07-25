@@ -21,7 +21,7 @@ const tokens = {
   softWarn: "#F9E7E2",
 };
 
-export default function KnowYourSmokingSection() {
+export default function KnowYourSmokingSection({ standaloneTool }: { standaloneTool?: number }) {
   const [lang, setLang] = useState<Lang>("ar");
   const dir = lang === "ar" ? "rtl" : "ltr";
   const [open, setOpen] = useState<number | null>(null);
