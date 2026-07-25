@@ -45,6 +45,8 @@ export default function KnowYourSmokingSection() {
             const stickyHeader = document.querySelector("header.sticky, header.fixed") as HTMLElement | null;
             const headerOffset = (stickyHeader?.offsetHeight ?? 56) + 8;
             const top = card.getBoundingClientRect().top + window.scrollY - headerOffset;
+            // eslint-disable-next-line no-console
+            console.log("[KYS hash scroll] idx=", idx, "cardTop=", card.getBoundingClientRect().top, "scrollY=", window.scrollY, "targetTop=", top);
             window.scrollTo({ top, behavior: "auto" });
             // Expand after the scroll has settled.
             window.setTimeout(() => setOpen(idx), 80);
