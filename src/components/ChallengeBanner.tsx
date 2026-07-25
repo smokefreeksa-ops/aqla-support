@@ -1,45 +1,65 @@
 import { useEffect, useState } from "react";
-import { Linkedin, Twitter } from "lucide-react";
+import { Linkedin, Twitter, Trophy, Crosshair, ArrowLeft } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
+import { getPublicImpactStats } from "@/lib/impact.functions";
 
 const STORAGE = "aqla.challenge.banner.v1";
 const OWNER_EMAIL = "prof.maliking@gmail.com";
 
 type Stats = { joined: number; cards: number; shares: number; visits: number };
 
-function loadStats(): Stats {
-  if (typeof window === "undefined") return { joined: 21, cards: 7, shares: 18, visits: 58 };
+function loadLocalDeltas(): Stats {
+  if (typeof window === "undefined") return { joined: 0, cards: 0, shares: 0, visits: 0 };
   try {
     const raw = localStorage.getItem(STORAGE);
     if (raw) return JSON.parse(raw);
   } catch { /* ignore */ }
-  return { joined: 21, cards: 7, shares: 18, visits: 58 };
+  return { joined: 0, cards: 0, shares: 0, visits: 0 };
 }
-function saveStats(s: Stats) {
+function saveLocalDeltas(s: Stats) {
   try { localStorage.setItem(STORAGE, JSON.stringify(s)); } catch { /* ignore */ }
 }
 
 export function ChallengeBanner() {
   const [open, setOpen] = useState(false);
   const [dismissed, setDismissed] = useState(false);
-  const [stats, setStats] = useState<Stats>(loadStats);
+  const [deltas, setDeltas] = useState<Stats>(loadLocalDeltas);
   const [sending, setSending] = useState(false);
 
+  const statsFn = useServerFn(getPublicImpactStats);
+  const { data: live } = useQuery({
+    queryKey: ["public-impact-stats", "banner"],
+    queryFn: () => statsFn(),
+    refetchInterval: 30_000,
+    staleTime: 15_000,
+  });
+
   useEffect(() => {
-    // count a visit once per tab session
+    // count a visit once per tab session (local delta only; canonical count comes from backend)
     if (typeof window === "undefined") return;
     const key = "aqla.challenge.visited";
     if (!sessionStorage.getItem(key)) {
       sessionStorage.setItem(key, "1");
-      setStats((s) => {
+      setDeltas((s) => {
         const next = { ...s, visits: s.visits + 1 };
-        saveStats(next);
+        saveLocalDeltas(next);
         return next;
       });
     }
   }, []);
 
   if (dismissed) return null;
+
+  const stats: Stats = {
+    joined: (live?.research_consent_count ?? 21) + deltas.joined,
+    cards: (live?.assessments_completed ?? 7) + deltas.cards,
+    shares: (live?.whatsapp_clicks ?? 0) + 18 + deltas.shares,
+    visits: (live?.total_visits ?? 0) + deltas.visits,
+  };
+
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -72,9 +92,9 @@ export function ChallengeBanner() {
     // Open mail client to deliver to owner email
     window.location.href = `mailto:${OWNER_EMAIL}?subject=${subject}&body=${body}`;
 
-    setStats((s) => {
+    setDeltas((s) => {
       const next = { ...s, joined: s.joined + 1 };
-      saveStats(next);
+      saveLocalDeltas(next);
       return next;
     });
     toast.success("تم تسجيلك بنجاح ✨");
@@ -99,7 +119,7 @@ export function ChallengeBanner() {
       `}</style>
 
       <div className="relative flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 sm:py-3">
-        <div className="flex items-center gap-3 order-1">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 order-1">
           <span
             className="inline-block h-2.5 w-2.5 rounded-full bg-rose-300 shadow-[0_0_12px_rgba(255,200,200,.9)]"
             style={{ animation: "aqlaPulseDot 1.4s ease-in-out infinite" }}
@@ -109,10 +129,26 @@ export function ChallengeBanner() {
           </span>
           <button
             onClick={() => setOpen(true)}
-            className="ms-1 rounded-full bg-white text-red-800 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-rose-50 transition"
+            className="rounded-full bg-white text-red-800 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-rose-50 transition"
           >
             انضم بسرعة
           </button>
+          <Link
+            to="/challenge-pathway"
+            className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/95 text-white text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-emerald-600 transition shadow-sm"
+          >
+            <Trophy className="h-3.5 w-3.5" />
+            مجتمع وتحديات أقلع
+            <ArrowLeft className="h-3.5 w-3.5" />
+          </Link>
+          <Link
+            to="/try"
+            hash="kys-4"
+            className="inline-flex items-center gap-1.5 rounded-full bg-amber-400 text-red-950 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-amber-300 transition shadow-sm"
+          >
+            <Crosshair className="h-3.5 w-3.5" />
+            صوّب على السجائر
+          </Link>
         </div>
 
         <div className="flex items-center gap-4 text-[11px] sm:text-xs order-3 sm:order-2 w-full sm:w-auto justify-between sm:justify-end">
@@ -134,6 +170,7 @@ export function ChallengeBanner() {
           </a>
           <span className="text-[11px] opacity-80 hidden sm:inline">تابعنا</span>
         </div>
+
 
       </div>
 
