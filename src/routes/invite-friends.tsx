@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Copy, Linkedin, MessageCircle, Twitter, QrCode, Download, Share2 } from "lucide-react";
 import { trackEvent } from "@/lib/track-event";
+import { SITE_URL } from "@/lib/site";
 
 export const Route = createFileRoute("/invite-friends")({
   head: () => ({
