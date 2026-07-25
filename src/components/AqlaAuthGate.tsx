@@ -13,6 +13,7 @@ const PUBLIC_EXACT = new Set<string>([
   "/cookies",
   "/sharing-policy",
   "/try",
+  "/try/shoot",
 ]);
 
 // Public prefixes (dynamic routes)

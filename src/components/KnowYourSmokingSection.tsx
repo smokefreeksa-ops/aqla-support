@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
 
 /* =====================================================================================
    Know Your Smoking Life — self-contained bilingual section.
@@ -21,11 +23,13 @@ const tokens = {
   softWarn: "#F9E7E2",
 };
 
-export default function KnowYourSmokingSection() {
+export default function KnowYourSmokingSection({ standaloneTool }: { standaloneTool?: number }) {
   const [lang, setLang] = useState<Lang>("ar");
   const dir = lang === "ar" ? "rtl" : "ltr";
   const [open, setOpen] = useState<number | null>(null);
   const [done, setDone] = useState<Record<number, boolean>>({});
+
+  const targetHashRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -34,9 +38,25 @@ export default function KnowYourSmokingSection() {
       if (m) {
         const idx = Number(m[1]);
         if (idx >= 0 && idx <= 4) {
-          setOpen(idx);
-          const el = document.getElementById("know-your-smoking");
-          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+          targetHashRef.current = idx;
+          // Temporarily take over scroll restoration so the router/browser do
+          // not fight our manual scroll to the requested card.
+          const originalScrollRestoration = window.history.scrollRestoration;
+          window.history.scrollRestoration = "manual";
+          window.setTimeout(() => {
+            const card = document.getElementById(`kys-${idx}`);
+            if (!card) return;
+            const stickyHeader = document.querySelector("header.sticky, header.fixed") as HTMLElement | null;
+            const headerOffset = (stickyHeader?.offsetHeight ?? 56) + 8;
+            const top = card.getBoundingClientRect().top + window.scrollY - headerOffset;
+            window.scrollTo({ top, behavior: "auto" });
+            // Expand after the scroll has settled.
+            window.setTimeout(() => setOpen(idx), 80);
+            // Restore auto scroll restoration shortly after.
+            window.setTimeout(() => {
+              window.history.scrollRestoration = originalScrollRestoration;
+            }, 600);
+          }, 3000);
         }
       }
     };
@@ -105,6 +125,83 @@ export default function KnowYourSmokingSection() {
       time: T("30 sec", "٣٠ ثانية", lang),
     },
   ];
+
+  const isStandalone =
+    standaloneTool !== undefined && standaloneTool >= 0 && standaloneTool <= 4;
+
+  if (isStandalone) {
+    const i = standaloneTool;
+    const tool = tools[i];
+    return (
+      <section
+        dir={dir}
+        lang={lang}
+        style={{ background: tokens.bg, color: tokens.ink }}
+        className="min-h-screen"
+        aria-label={tool.name}
+      >
+        <div className="mx-auto max-w-3xl px-4 py-6 sm:py-10">
+          <Link
+            to="/try"
+            className="inline-flex items-center gap-1.5 text-sm font-medium opacity-80 hover:opacity-100"
+          >
+            <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+            {T("All tools", "كل الأدوات", lang)}
+          </Link>
+
+          <div
+            className="mt-6 border overflow-hidden"
+            style={{
+              background: tokens.card,
+              borderColor: tokens.border,
+              borderRadius: 18,
+            }}
+          >
+            <div className="w-full text-start p-5">
+              <div className="flex items-start gap-3">
+                <div className="text-2xl" aria-hidden>
+                  {tool.emoji}
+                </div>
+                <div>
+                  <div className="font-semibold text-base">{tool.name}</div>
+                  <div className="text-sm opacity-75 mt-1">{tool.desc}</div>
+                  <div className="text-xs opacity-60 mt-1">⏱ {tool.time}</div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="border-t p-5"
+              style={{ borderColor: tokens.border }}
+            >
+              {i === 0 && (
+                <MoneyCounter lang={lang} onDone={(v) => setDoneFor(0, v)} />
+              )}
+              {i === 1 && (
+                <GripTest lang={lang} onDone={(v) => setDoneFor(1, v)} />
+              )}
+              {i === 2 && (
+                <Mirror lang={lang} onDone={(v) => setDoneFor(2, v)} />
+              )}
+              {i === 3 && (
+                <Compass lang={lang} onDone={(v) => setDoneFor(3, v)} />
+              )}
+              {i === 4 && (
+                <Shooter lang={lang} onDone={(v) => setDoneFor(4, v)} />
+              )}
+            </div>
+          </div>
+
+          <p className="mt-6 text-xs opacity-60 max-w-3xl">
+            {T(
+              "This tool is educational. The dependence questions are adapted from the Fagerström Test for Cigarette Dependence; the trait items are brief self-reflection prompts. It is not a medical diagnosis.",
+              "هذه الأداة تعليمية. أسئلة الاعتماد مقتبسة من اختبار فاجيرستروم للاعتماد على النيكوتين؛ وعبارات السمات هي دعوات قصيرة للتأمل الذاتي. ليست تشخيصاً طبياً.",
+              lang
+            )}
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
@@ -180,12 +277,13 @@ export default function KnowYourSmokingSection() {
             return (
               <div
                 key={i}
+                id={`kys-${i}`}
                 style={{
                   background: tokens.card,
                   borderColor: tokens.border,
                   borderRadius: 18,
                 }}
-                className={`border overflow-hidden transition ${
+                className={`border overflow-hidden transition scroll-mt-28 ${
                   isOpen ? "sm:col-span-2 lg:col-span-3" : ""
                 }`}
               >
@@ -197,10 +295,7 @@ export default function KnowYourSmokingSection() {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3">
-                      <div
-                        className="text-2xl"
-                        aria-hidden
-                      >
+                      <div className="text-2xl" aria-hidden>
                         {tool.emoji}
                       </div>
                       <div>
