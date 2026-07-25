@@ -286,13 +286,13 @@ export default function HeroSection() {
           style={{ background: "linear-gradient(to right, transparent, rgba(201,168,76,0.4), transparent)" }}
         />
       </div>
-      {/* Seamless bottom fade into the ivory page background */}
+      {/* Seamless bottom fade into the green page background */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 z-[2]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 z-[2]"
         style={{
           background:
-            "linear-gradient(to bottom, transparent 0%, rgba(7,32,24,0.6) 45%, oklch(0.987 0.006 95) 100%)",
+            "linear-gradient(to bottom, transparent 0%, #0e4a30 100%)",
         }}
       />
 
