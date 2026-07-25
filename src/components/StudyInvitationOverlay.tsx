@@ -487,5 +487,7 @@ export function StudyInvitationOverlay() {
         </div>
       </div>
     </div>
+  </div>
+</div>
   );
 }
