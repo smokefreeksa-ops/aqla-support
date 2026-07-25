@@ -273,26 +273,26 @@ export default function HeroSection() {
     <section
       id="home"
       className="relative flex flex-col min-h-[92vh] items-center justify-center pt-24 pb-28 overflow-hidden"
-      style={{ background: "#000" }}
+      style={{ background: "linear-gradient(to bottom, #0b3a25 0%, #0e4a30 55%, #072018 100%)" }}
     >
       <StarField count={96} />
       <div className="absolute inset-0 z-[1] pointer-events-none">
         <div
-          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full opacity-[0.10]"
-          style={{ background: "radial-gradient(ellipse, #00A65A 0%, transparent 70%)" }}
+          className="absolute top-1/2 left-1/2 h-[60vmin] w-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.10] blur-3xl"
+          style={{ background: "#c9a84c" }}
         />
         <div
-          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full opacity-[0.08]"
-          style={{ background: "radial-gradient(ellipse, #006C35 0%, transparent 70%)" }}
+          className="absolute inset-x-0 top-0 h-px"
+          style={{ background: "linear-gradient(to right, transparent, rgba(201,168,76,0.4), transparent)" }}
         />
       </div>
-      {/* Seamless bottom fade into the page background — removes the hard black→ivory seam */}
+      {/* Seamless bottom fade into the ivory page background */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 h-40 z-[2]"
         style={{
           background:
-            "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.55) 45%, oklch(0.987 0.006 95) 100%)",
+            "linear-gradient(to bottom, transparent 0%, rgba(7,32,24,0.6) 45%, oklch(0.987 0.006 95) 100%)",
         }}
       />
 
