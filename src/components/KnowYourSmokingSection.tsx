@@ -1607,23 +1607,107 @@ function Shooter({
     y: number,
     rot: number
   ) {
+    const t = performance.now() / 1000;
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(rot);
-    // body
-    ctx.fillStyle = "#fff";
-    ctx.strokeStyle = "#bbb";
-    ctx.lineWidth = 1;
-    ctx.fillRect(-18, -5, 26, 10);
-    ctx.strokeRect(-18, -5, 26, 10);
-    // filter
-    ctx.fillStyle = "#d9b877";
-    ctx.fillRect(8, -5, 10, 10);
-    // ember
-    ctx.fillStyle = tokens.warn;
+
+    // subtle drop shadow
+    ctx.save();
+    ctx.fillStyle = "rgba(0,0,0,0.18)";
     ctx.beginPath();
-    ctx.arc(-18, 0, 3, 0, Math.PI * 2);
+    ctx.ellipse(-2, 7, 22, 3, 0, 0, Math.PI * 2);
     ctx.fill();
+    ctx.restore();
+
+    // paper body — gradient white → cream
+    const paper = ctx.createLinearGradient(0, -5, 0, 5);
+    paper.addColorStop(0, "#fdfdfa");
+    paper.addColorStop(0.5, "#ffffff");
+    paper.addColorStop(1, "#e8e6dd");
+    ctx.fillStyle = paper;
+    ctx.fillRect(-20, -5, 28, 10);
+    // paper texture lines
+    ctx.strokeStyle = "rgba(180,175,160,0.35)";
+    ctx.lineWidth = 0.5;
+    for (let i = -18; i < 6; i += 3) {
+      ctx.beginPath();
+      ctx.moveTo(i, -4.5);
+      ctx.lineTo(i + 1.5, 4.5);
+      ctx.stroke();
+    }
+    ctx.strokeStyle = "rgba(150,145,130,0.5)";
+    ctx.lineWidth = 0.8;
+    ctx.strokeRect(-20, -5, 28, 10);
+
+    // filter — tan gradient with cork speckle
+    const filt = ctx.createLinearGradient(8, -5, 8, 5);
+    filt.addColorStop(0, "#d9a869");
+    filt.addColorStop(1, "#a8783f");
+    ctx.fillStyle = filt;
+    ctx.fillRect(8, -5, 12, 10);
+    ctx.fillStyle = "rgba(80,50,20,0.35)";
+    for (let i = 0; i < 14; i++) {
+      const dx = 8 + Math.random() * 12;
+      const dy = -5 + Math.random() * 10;
+      ctx.fillRect(dx, dy, 0.7, 0.7);
+    }
+    // brand ring
+    ctx.strokeStyle = "#8a5a2a";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(8, -5);
+    ctx.lineTo(8, 5);
+    ctx.stroke();
+
+    // burnt paper zone right at ember (charred edge)
+    const burn = ctx.createLinearGradient(-20, 0, -14, 0);
+    burn.addColorStop(0, "#2a1a10");
+    burn.addColorStop(0.6, "#6b3a1a");
+    burn.addColorStop(1, "rgba(107,58,26,0)");
+    ctx.fillStyle = burn;
+    ctx.fillRect(-20, -5, 7, 10);
+
+    // pulsing ember glow (halo)
+    const pulse = 0.7 + 0.3 * Math.sin(t * 5 + x * 0.13);
+    const glow = ctx.createRadialGradient(-20, 0, 0, -20, 0, 12);
+    glow.addColorStop(0, `rgba(255,220,120,${0.9 * pulse})`);
+    glow.addColorStop(0.4, `rgba(255,120,30,${0.55 * pulse})`);
+    glow.addColorStop(1, "rgba(255,60,0,0)");
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(-20, 0, 12, 0, Math.PI * 2);
+    ctx.fill();
+
+    // hot ember core
+    const emberG = ctx.createRadialGradient(-20, 0, 0, -20, 0, 4);
+    emberG.addColorStop(0, "#fff7c0");
+    emberG.addColorStop(0.35, "#ffb347");
+    emberG.addColorStop(1, "#c9310a");
+    ctx.fillStyle = emberG;
+    ctx.beginPath();
+    ctx.arc(-20, 0, 3.4 + pulse * 0.6, 0, Math.PI * 2);
+    ctx.fill();
+
+    // tiny hot flecks
+    if (Math.random() < 0.35) {
+      ctx.fillStyle = "#ffe08a";
+      ctx.fillRect(-20 + (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 3, 0.8, 0.8);
+    }
+
+    // wispy smoke
+    const smokeAlpha = 0.14;
+    for (let i = 0; i < 3; i++) {
+      const phase = t * 0.9 + i * 0.7 + x * 0.02;
+      const sx = -20 + Math.sin(phase) * 2;
+      const sy = -8 - i * 6 - (phase % 1) * 4;
+      const sr = 3 + i * 2;
+      ctx.fillStyle = `rgba(200,200,200,${smokeAlpha - i * 0.03})`;
+      ctx.beginPath();
+      ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
     ctx.restore();
   }
 
