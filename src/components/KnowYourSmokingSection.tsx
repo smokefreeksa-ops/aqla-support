@@ -49,7 +49,9 @@ export default function KnowYourSmokingSection() {
             const top = card.getBoundingClientRect().top + window.scrollY - headerOffset;
             // eslint-disable-next-line no-console
             console.log("[KYS] before scroll", window.scrollY, "target", top, "cardTop", card.getBoundingClientRect().top, "restoration", window.history.scrollRestoration);
-            window.scrollTo({ top, behavior: "auto" });
+            document.documentElement.scrollTop = top;
+            document.body.scrollTop = top;
+            window.scrollTo(0, top);
             // eslint-disable-next-line no-console
             console.log("[KYS] after scroll", window.scrollY);
             // Expand after the scroll has settled.
