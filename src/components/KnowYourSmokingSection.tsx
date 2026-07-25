@@ -1748,9 +1748,8 @@ function Shooter({
       const W = cvs.width;
       const H = cvs.height;
       ctx.clearRect(0, 0, W, H);
-      // background
-      ctx.fillStyle = "#f4f9f7";
-      ctx.fillRect(0, 0, W, H);
+      // background stays transparent — the dark arena shows through
+
       // composited cracks
       ctx.drawImage(crackC, 0, 0);
 
@@ -2246,64 +2245,36 @@ function Shooter({
           />
         </div>
 
-        {/* Outer hexagon — rotates clockwise */}
+        {/* Outer hexagon — breathes inward */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 hex-spin-cw"
-          style={{ transformStyle: "preserve-3d" }}
+          className="pointer-events-none absolute inset-0 hex-pulse-out"
         >
           <div
-            className="absolute inset-[-6%]"
-            style={{
-              clipPath:
-                "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
-              background:
-                "conic-gradient(from 0deg, rgba(217,184,119,0.0), rgba(217,184,119,0.55), rgba(217,184,119,0.0) 40%, rgba(217,184,119,0.35), rgba(217,184,119,0.0))",
-              filter: "blur(0.3px)",
-              opacity: 0.9,
-            }}
-          />
-          <div
-            className="absolute inset-[-6%]"
+            className="absolute inset-[-4%]"
             style={{
               clipPath:
                 "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
               boxShadow:
-                "inset 0 0 0 2px rgba(217,184,119,0.75), inset 0 0 40px rgba(217,184,119,0.15)",
+                "inset 0 0 0 2px rgba(217,184,119,0.85), inset 0 0 40px rgba(217,184,119,0.18)",
             }}
           />
         </div>
 
-        {/* Inner hexagon — rotates counter-clockwise with drift */}
+        {/* Inner hexagon (rotated 30°) — breathes outward, meeting the outer */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 hex-drift"
+          className="pointer-events-none absolute inset-0 hex-pulse-in"
         >
           <div
-            className="absolute inset-0 hex-spin-ccw"
-            style={{ transformStyle: "preserve-3d" }}
-          >
-            <div
-              className="absolute inset-[6%]"
-              style={{
-                clipPath:
-                  "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
-                background:
-                  "linear-gradient(135deg, rgba(11,58,37,0.55), rgba(4,26,17,0.75))",
-                boxShadow:
-                  "inset 0 0 0 1.5px rgba(255,255,255,0.18), inset 0 0 30px rgba(0,0,0,0.5)",
-              }}
-            />
-            <div
-              className="absolute inset-[6%]"
-              style={{
-                clipPath:
-                  "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
-                background:
-                  "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.18), transparent 45%)",
-              }}
-            />
-          </div>
+            className="absolute inset-[10%]"
+            style={{
+              clipPath:
+                "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
+              boxShadow:
+                "inset 0 0 0 1.5px rgba(255,255,255,0.55), inset 0 0 24px rgba(255,255,255,0.08)",
+            }}
+          />
         </div>
 
         <canvas
@@ -2315,11 +2286,11 @@ function Shooter({
           style={{
             clipPath:
               "polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%)",
-            background:
-              "radial-gradient(ellipse at 50% 40%, rgba(244,249,247,0.96), rgba(210,228,220,0.9))",
+            background: "transparent",
           }}
           aria-label="Shooting game canvas"
         />
+
 
         <canvas
           ref={crackCanvasRef}

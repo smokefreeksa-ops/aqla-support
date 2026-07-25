@@ -293,27 +293,20 @@
   .shimmer { animation: none !important; }
 }
 
-/* Dual rotating hexagon frames for the shooter arena */
-@keyframes hex-spin-cw {
-  from { transform: rotateX(8deg) rotateZ(0deg); }
-  to   { transform: rotateX(8deg) rotateZ(360deg); }
+/* Dual interlocking hexagon frames — breathe into each other */
+@keyframes hex-pulse-out {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50%      { transform: scale(0.78); opacity: 1; }
 }
-@keyframes hex-spin-ccw {
-  from { transform: rotateX(-6deg) rotateZ(0deg); }
-  to   { transform: rotateX(-6deg) rotateZ(-360deg); }
+@keyframes hex-pulse-in {
+  0%, 100% { transform: scale(1) rotate(30deg); opacity: 0.85; }
+  50%      { transform: scale(1.28) rotate(30deg); opacity: 1; }
 }
-@keyframes hex-drift {
-  0%,100% { transform: translate3d(0,0,0) scale(1); }
-  25%     { transform: translate3d(6px,-4px,0) scale(1.015); }
-  50%     { transform: translate3d(-4px,6px,0) scale(0.99); }
-  75%     { transform: translate3d(-6px,-3px,0) scale(1.01); }
-}
-.hex-spin-cw  { animation: hex-spin-cw 24s linear infinite; transform-origin: 50% 50%; }
-.hex-spin-ccw { animation: hex-spin-ccw 34s linear infinite; transform-origin: 50% 50%; }
-.hex-drift    { animation: hex-drift 9s ease-in-out infinite; }
+.hex-pulse-out { animation: hex-pulse-out 4.5s ease-in-out infinite; transform-origin: 50% 50%; }
+.hex-pulse-in  { animation: hex-pulse-in  4.5s ease-in-out infinite; transform-origin: 50% 50%; }
 
 @media (prefers-reduced-motion: reduce) {
-  .hex-spin-cw, .hex-spin-ccw, .hex-drift { animation: none !important; }
+  .hex-pulse-out, .hex-pulse-in { animation: none !important; }
 }
 
 /* Trust/gold chip */
