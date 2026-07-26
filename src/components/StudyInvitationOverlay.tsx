@@ -297,11 +297,14 @@ export function StudyInvitationOverlay() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
     };
+    const onDismiss = () => close();
     window.addEventListener("keydown", onKey);
+    window.addEventListener("aqla:dismiss-study-overlay", onDismiss);
     return () => {
       cancelAnimationFrame(r);
       document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
+      window.removeEventListener("aqla:dismiss-study-overlay", onDismiss);
       window.clearTimeout(id);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
