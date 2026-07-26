@@ -339,7 +339,6 @@ export function StudyInvitationOverlay() {
         <GalaxyCanvas />
 
         <div className="relative z-10 flex h-full flex-col">
-          <div className="relative z-20"><ResearchBanner /></div>
           <div className="flex flex-1 items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6">
 
           {/* Modal */}
@@ -380,7 +379,9 @@ export function StudyInvitationOverlay() {
           </button>
         </div>
 
-        <div className="flex flex-col gap-7 px-7 pb-8 pt-12 sm:px-10 sm:pt-14">
+        <div className="flex flex-col gap-6 px-7 pb-8 pt-12 sm:px-10 sm:pt-14">
+          <ResearchBanner variant="hero" />
+
           {/* Eyebrow */}
           <div className="flex flex-col items-center gap-1.5 text-center">
             <div className="flex items-center gap-2">
