@@ -6,6 +6,7 @@ import { ArrowRight, Loader2, Mail, Phone } from "lucide-react";
 import aqlaLogo from "@/assets/aqla-logo.png";
 import { PreLoginAssistant } from "@/components/PreLoginAssistant";
 import { FloatingWhatsAppButton } from "@/components/FloatingWhatsAppButton";
+import { ResearchBanner } from "@/components/ResearchBanner";
 
 
 type Mode = "choose" | "phone" | "email";
