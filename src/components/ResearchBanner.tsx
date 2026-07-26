@@ -62,7 +62,7 @@ export function ResearchBanner() {
       <div
         dir="rtl"
         aria-hidden={!visible}
-        className="aqla-research-banner group relative block w-full overflow-hidden border-b border-red-500/30 px-4 py-2.5 backdrop-blur-sm"
+        className="aqla-research-banner group relative block w-full overflow-hidden border-b border-red-500/30 px-4 py-1 backdrop-blur-sm"
         style={{
           opacity: visible ? 1 : 0,
           transform: visible ? "translateY(0)" : "translateY(-8px)",
@@ -72,30 +72,28 @@ export function ResearchBanner() {
         }}
       >
         <span aria-hidden className="aqla-research-shine pointer-events-none absolute inset-0" />
-        <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-1.5 text-center sm:gap-2">
-          <p className="text-[13px] font-semibold leading-5 text-white drop-shadow-sm sm:text-sm">
+        <div className="relative mx-auto flex max-w-6xl flex-wrap sm:flex-nowrap items-center justify-center gap-2 px-4">
+          <p className="whitespace-nowrap text-[11px] font-semibold leading-tight text-white drop-shadow-sm sm:text-xs">
             تجربتك تهمنا وتساهم في البحث العلمي
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            <a
-              href={RESEARCH_REDCAP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 rounded-full bg-white/25 px-3 py-1 text-[12px] font-bold text-white ring-1 ring-white/40 transition-colors hover:bg-white/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-            >
-              شارك الآن في الدراسة
-            </a>
-            <Link
-              to="/poster-studio"
-              className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-semibold text-white ring-1 ring-white/25 transition-colors hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
-            >
-              أنشئ بطاقة إنجازك
-            </Link>
-            <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-semibold text-white ring-1 ring-white/20">
-              <span aria-hidden className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
-              {formatCount(visits)} زيارة
-            </span>
-          </div>
+          <a
+            href={RESEARCH_REDCAP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white/25 px-2.5 py-0.5 text-[10px] font-bold text-white ring-1 ring-white/40 transition-colors hover:bg-white/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:text-[11px]"
+          >
+            شارك الآن في الدراسة
+          </a>
+          <Link
+            to="/poster-studio"
+            className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-semibold text-white ring-1 ring-white/25 transition-colors hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 sm:text-[11px]"
+          >
+            أنشئ بطاقة إنجازك
+          </Link>
+          <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-white ring-1 ring-white/20 sm:text-[11px]">
+            <span aria-hidden className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+            {formatCount(visits)} زيارة
+          </span>
         </div>
       </div>
     </>
