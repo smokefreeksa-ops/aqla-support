@@ -71,7 +71,7 @@ export function ResearchBanner({ variant = "site" }: { variant?: "site" | "hero"
           </p>
           <Link
             to="/poster-studio"
-            className={`${isHero ? "inline-flex" : "hidden sm:inline-flex"} items-center gap-1 rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-semibold text-white ring-1 ring-white/25 transition-colors hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40`}
+            className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-semibold text-white ring-1 ring-white/25 transition-colors hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
           >
             أنشئ بطاقة إنجازك وشاركها مع زملائك
           </Link>
