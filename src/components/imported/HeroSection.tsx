@@ -401,7 +401,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <p className="text-sm mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>
+          <p className="text-sm mb-4" style={{ color: "rgba(255,255,255,0.75)" }}>
             مجاناً تماماً • مدعوم بالأدلة العلمية • ابدأ الآن
           </p>
 
