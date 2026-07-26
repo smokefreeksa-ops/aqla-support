@@ -165,7 +165,7 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
                 <div>
                   <div className="font-semibold text-base">{tool.name}</div>
                   <div className="text-sm opacity-75 mt-1">{tool.desc}</div>
-                  <div className="text-xs opacity-60 mt-1">⏱ {tool.time}</div>
+                  <div className="text-xs opacity-80 mt-1">⏱ {tool.time}</div>
                 </div>
               </div>
             </div>
@@ -283,6 +283,7 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
                   background: tokens.card,
                   borderColor: tokens.border,
                   borderRadius: 18,
+                  color: tokens.ink,
                 }}
                 className={`border overflow-hidden transition scroll-mt-28 ${
                   isOpen ? "sm:col-span-2 lg:col-span-3" : ""
@@ -306,7 +307,7 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
                         <div className="text-sm opacity-75 mt-1">
                           {tool.desc}
                         </div>
-                        <div className="text-xs opacity-60 mt-1">
+                        <div className="text-xs opacity-80 mt-1">
                           ⏱ {tool.time}
                         </div>
                       </div>
