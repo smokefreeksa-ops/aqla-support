@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { getPublicImpactStats } from "@/lib/impact.functions";
 
 export const RESEARCH_REDCAP_URL = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM";
+
+function formatCount(n: number): string {
+  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K+";
+  return String(n);
+}
 
 function useCycle(onMs: number, offMs: number) {
   const [visible, setVisible] = useState(true);
