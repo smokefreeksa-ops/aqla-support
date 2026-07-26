@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getPublicImpactStats } from "@/lib/impact.functions";
+import { Link } from "@tanstack/react-router";
 
 export const RESEARCH_REDCAP_URL = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM";
 
@@ -18,25 +17,8 @@ function useCycle(onMs: number, offMs: number) {
   return visible;
 }
 
-function formatCount(n: number) {
-  if (n >= 1000) {
-    const k = n / 1000;
-    return `${k.toFixed(k >= 10 ? 0 : 1)}K+`;
-  }
-  return `${n}`;
-}
-
 export function ResearchBanner({ variant = "site" }: { variant?: "site" | "hero" }) {
   const visible = useCycle(5000, 3000);
-  const { data } = useQuery({
-    queryKey: ["public-impact-stats-banner"],
-    queryFn: () => getPublicImpactStats(),
-    refetchInterval: 30_000,
-    staleTime: 15_000,
-  });
-
-  const visits = data?.total_visits ?? 0;
-  const uniques = data?.unique_visitors ?? 0;
   const isHero = variant === "hero";
 
   return (
@@ -64,10 +46,7 @@ export function ResearchBanner({ variant = "site" }: { variant?: "site" | "hero"
           .aqla-research-shine { animation: none; background: none; }
         }
       `}</style>
-      <a
-        href={RESEARCH_REDCAP_URL}
-        target="_blank"
-        rel="noopener noreferrer"
+      <div
         dir="rtl"
         aria-hidden={!visible}
         className={`aqla-research-banner group relative block w-full overflow-hidden text-center backdrop-blur-sm ${
@@ -90,17 +69,22 @@ export function ResearchBanner({ variant = "site" }: { variant?: "site" | "hero"
           <p className={`${isHero ? "text-[12.5px] sm:text-[13px]" : "text-[13px] sm:text-sm"} font-semibold leading-5 text-white drop-shadow-sm`}>
             شارك تجربتك مع أضرار النيكوتين وساهم في الدراسة
           </p>
-          <span className={`${isHero ? "inline-flex" : "hidden sm:inline-flex"} items-center gap-1 rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-semibold text-white ring-1 ring-white/25`}>
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-300" />
-            <span>{formatCount(visits)} زيارة</span>
-            <span className="opacity-60">·</span>
-            <span>{formatCount(uniques)} زائر</span>
-          </span>
-          <span className="text-[12px] font-semibold text-white underline decoration-white/60 underline-offset-2 group-hover:decoration-white">
-            شارك في الدراسة ←
-          </span>
+          <Link
+            to="/poster-studio"
+            className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-semibold text-white ring-1 ring-white/25 transition-colors hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+          >
+            أنشئ بطاقة إنجازك وشاركها مع زملائك
+          </Link>
+          <a
+            href={RESEARCH_REDCAP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[12px] font-semibold text-white underline decoration-white/60 underline-offset-2 transition-colors hover:decoration-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+          >
+            شارك في الدراسة
+          </a>
         </div>
-      </a>
+      </div>
     </>
   );
 }
