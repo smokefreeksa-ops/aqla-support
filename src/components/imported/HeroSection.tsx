@@ -78,7 +78,7 @@ function PublicationCarousel({ onPublicationClick }: { onPublicationClick: () =>
           >
             {pub.titleAr}
           </p>
-          <p className="text-xs" style={{ color: "rgba(255,255,255,0.40)" }}>
+          <p className="text-xs" style={{ color: "rgba(255,255,255,0.70)" }}>
             {pub.journal}
           </p>
         </div>
