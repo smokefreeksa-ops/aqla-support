@@ -51,7 +51,7 @@ function PublicationCarousel({ onPublicationClick }: { onPublicationClick: () =>
         <div className="h-px flex-1" style={{ background: "rgba(0,166,90,0.2)" }} />
         <span
           className="text-xs font-semibold tracking-widest px-3"
-          style={{ color: "rgba(0,166,90,0.65)" }}
+          style={{ color: "#34d399" }}
         >
           أحدث أبحاثنا المنشورة
         </span>
