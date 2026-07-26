@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ResearchBanner } from "@/components/ResearchBanner";
+
 
 
 // Professional rotating galaxy — subtle spiral of particles on canvas.
@@ -380,8 +380,6 @@ export function StudyInvitationOverlay() {
         </div>
 
         <div className="flex flex-col gap-6 px-7 pb-8 pt-12 sm:px-10 sm:pt-14">
-          <ResearchBanner variant="hero" />
-
           {/* Eyebrow */}
           <div className="flex flex-col items-center gap-1.5 text-center">
             <div className="flex items-center gap-2">
