@@ -32,7 +32,7 @@ export function ResearchBanner() {
     refetchInterval: 30_000,
     staleTime: 15_000,
   });
-  const visits = data?.unique_visitors ?? 0;
+  const visits = data?.visits_today ?? 0;
 
   return (
     <>
