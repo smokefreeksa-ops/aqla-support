@@ -32,7 +32,7 @@ export function ResearchBanner() {
     refetchInterval: 30_000,
     staleTime: 15_000,
   });
-  const visits = data?.unique_visitors ?? 0;
+  const visits = data?.visits_today ?? 0;
 
   return (
     <>
@@ -94,9 +94,12 @@ export function ResearchBanner() {
           >
             أنشئ بطاقة إنجازك
           </Link>
-          <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-white ring-1 ring-white/20 sm:text-[11px]">
+          <span
+            title="عدد الزيارات اليوم"
+            className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-white ring-1 ring-white/20 sm:text-[11px]"
+          >
             <span aria-hidden className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
-            {formatCount(visits)} زيارة
+            {formatCount(visits)} زيارة اليوم
           </span>
         </div>
       </div>
