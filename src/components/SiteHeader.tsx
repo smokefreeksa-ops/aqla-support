@@ -147,6 +147,8 @@ export function SiteHeader() {
         </div>
       )}
       </header>
+      <ResearchBanner />
     </div>
   );
 }
+
