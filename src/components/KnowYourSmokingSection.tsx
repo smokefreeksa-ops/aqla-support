@@ -165,7 +165,7 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
                 <div>
                   <div className="font-semibold text-base">{tool.name}</div>
                   <div className="text-sm opacity-75 mt-1">{tool.desc}</div>
-                  <div className="text-xs opacity-60 mt-1">⏱ {tool.time}</div>
+                  <div className="text-xs opacity-80 mt-1">⏱ {tool.time}</div>
                 </div>
               </div>
             </div>
