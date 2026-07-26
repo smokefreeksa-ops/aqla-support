@@ -26,7 +26,7 @@ function formatCount(n: number) {
   return `${n}`;
 }
 
-export function ResearchBanner() {
+export function ResearchBanner({ variant = "site" }: { variant?: "site" | "hero" }) {
   const visible = useCycle(5000, 3000);
   const { data } = useQuery({
     queryKey: ["public-impact-stats-banner"],
@@ -37,6 +37,7 @@ export function ResearchBanner() {
 
   const visits = data?.total_visits ?? 0;
   const uniques = data?.unique_visitors ?? 0;
+  const isHero = variant === "hero";
 
   return (
     <>
@@ -69,21 +70,27 @@ export function ResearchBanner() {
         rel="noopener noreferrer"
         dir="rtl"
         aria-hidden={!visible}
-        className="aqla-research-banner group relative block w-full overflow-hidden border-b border-red-500/30 px-4 py-2.5 text-center backdrop-blur-sm"
+        className={`aqla-research-banner group relative block w-full overflow-hidden text-center backdrop-blur-sm ${
+          isHero
+            ? "rounded-2xl border border-red-300/25 px-3 py-3 shadow-[0_18px_45px_-28px_rgba(248,113,113,0.75)]"
+            : "border-b border-red-500/30 px-4 py-2.5"
+        }`}
         style={{
           opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0)" : "translateY(-8px)",
+          transform: visible ? "translateY(0)" : isHero ? "translateY(-4px)" : "translateY(-8px)",
           pointerEvents: visible ? "auto" : "none",
           backgroundImage:
-            "linear-gradient(90deg, rgba(127,29,29,0.55) 0%, rgba(185,28,28,0.6) 25%, rgba(239,68,68,0.6) 50%, rgba(185,28,28,0.6) 75%, rgba(127,29,29,0.55) 100%)",
+            isHero
+              ? "linear-gradient(90deg, rgba(127,29,29,0.42) 0%, rgba(185,28,28,0.48) 25%, rgba(248,113,113,0.46) 50%, rgba(185,28,28,0.48) 75%, rgba(127,29,29,0.42) 100%)"
+              : "linear-gradient(90deg, rgba(127,29,29,0.55) 0%, rgba(185,28,28,0.6) 25%, rgba(239,68,68,0.6) 50%, rgba(185,28,28,0.6) 75%, rgba(127,29,29,0.55) 100%)",
         }}
       >
         <span aria-hidden className="aqla-research-shine pointer-events-none absolute inset-0" />
-        <div className="relative mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-3 gap-y-1">
-          <p className="text-[13px] font-semibold leading-5 text-white drop-shadow-sm sm:text-sm">
+        <div className={`relative mx-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1 ${isHero ? "max-w-md" : "max-w-6xl"}`}>
+          <p className={`${isHero ? "text-[12.5px] sm:text-[13px]" : "text-[13px] sm:text-sm"} font-semibold leading-5 text-white drop-shadow-sm`}>
             شارك تجربتك مع أضرار النيكوتين وساهم في الدراسة
           </p>
-          <span className="hidden items-center gap-1 rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-semibold text-white ring-1 ring-white/25 sm:inline-flex">
+          <span className={`${isHero ? "inline-flex" : "hidden sm:inline-flex"} items-center gap-1 rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-semibold text-white ring-1 ring-white/25`}>
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-300" />
             <span>{formatCount(visits)} زيارة</span>
             <span className="opacity-60">·</span>
