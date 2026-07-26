@@ -165,8 +165,8 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       
       <AqlaAuthGate>
-        <ResearchBanner />
         <Outlet />
+
         <FloatingWhatsAppButton />
         <AqlaAssistant />
         <SOSButton hidden={onSosRoute} />
