@@ -6,9 +6,9 @@ import { getPublicImpactStats } from "@/lib/impact.functions";
 export const RESEARCH_REDCAP_URL = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM";
 
 function formatCount(n: number): string {
-  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K+";
-  return String(n);
+  return new Intl.NumberFormat("ar-EG").format(n);
 }
+
 
 function useCycle(onMs: number, offMs: number) {
   const [visible, setVisible] = useState(true);
@@ -73,9 +73,14 @@ export function ResearchBanner() {
       >
         <span aria-hidden className="aqla-research-shine pointer-events-none absolute inset-0" />
         <div className="relative mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-3 gap-y-1">
-          <p className="text-[13px] font-semibold leading-5 text-white drop-shadow-sm sm:text-sm">
-            شارك تجربتك مع أضرار النيكوتين وساهم في الدراسة
-          </p>
+          <a
+            href={RESEARCH_REDCAP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 rounded-full bg-white/25 px-3 py-1 text-[12px] font-bold text-white ring-1 ring-white/40 transition-colors hover:bg-white/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+          >
+            شارك في الدراسة
+          </a>
           <Link
             to="/poster-studio"
             className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-semibold text-white ring-1 ring-white/25 transition-colors hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
@@ -86,15 +91,11 @@ export function ResearchBanner() {
             <span aria-hidden className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
             {formatCount(visits)} زيارة
           </span>
-          <a
-            href={RESEARCH_REDCAP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[12px] font-semibold text-white underline decoration-white/60 underline-offset-2 transition-colors hover:decoration-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
-          >
-            شارك في الدراسة
-          </a>
+          <p className="text-[13px] font-semibold leading-5 text-white drop-shadow-sm sm:text-sm">
+            شارك تجربتك مع أضرار النيكوتين وساهم في الدراسة
+          </p>
         </div>
+
       </div>
     </>
   );
