@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { getPublicImpactStats } from "@/lib/impact.functions";
 
 export const RESEARCH_REDCAP_URL = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM";
+
+function formatCount(n: number): string {
+  if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, "") + "K+";
+  return String(n);
+}
 
 function useCycle(onMs: number, offMs: number) {
   const [visible, setVisible] = useState(true);
@@ -19,6 +26,13 @@ function useCycle(onMs: number, offMs: number) {
 
 export function ResearchBanner() {
   const visible = useCycle(5000, 3000);
+  const { data } = useQuery({
+    queryKey: ["public-impact-stats-banner"],
+    queryFn: () => getPublicImpactStats(),
+    refetchInterval: 30_000,
+    staleTime: 15_000,
+  });
+  const visits = data?.total_visits ?? 0;
 
   return (
     <>
@@ -68,6 +82,10 @@ export function ResearchBanner() {
           >
             أنشئ بطاقة إنجازك وشاركها مع زملائك
           </Link>
+          <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-semibold text-white ring-1 ring-white/20">
+            <span aria-hidden className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+            {formatCount(visits)} زيارة
+          </span>
           <a
             href={RESEARCH_REDCAP_URL}
             target="_blank"
