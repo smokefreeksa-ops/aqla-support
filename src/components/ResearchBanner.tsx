@@ -82,6 +82,10 @@ export function ResearchBanner() {
           >
             أنشئ بطاقة إنجازك وشاركها مع زملائك
           </Link>
+          <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-0.5 text-[11px] font-semibold text-white ring-1 ring-white/20">
+            <span aria-hidden className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+            {formatCount(visits)} زيارة
+          </span>
           <a
             href={RESEARCH_REDCAP_URL}
             target="_blank"
