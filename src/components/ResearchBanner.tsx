@@ -26,6 +26,13 @@ function useCycle(onMs: number, offMs: number) {
 
 export function ResearchBanner() {
   const visible = useCycle(5000, 3000);
+  const { data } = useQuery({
+    queryKey: ["public-impact-stats-banner"],
+    queryFn: () => getPublicImpactStats(),
+    refetchInterval: 30_000,
+    staleTime: 15_000,
+  });
+  const visits = data?.total_visits ?? 0;
 
   return (
     <>
