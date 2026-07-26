@@ -283,6 +283,7 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
                   background: tokens.card,
                   borderColor: tokens.border,
                   borderRadius: 18,
+                  color: tokens.ink,
                 }}
                 className={`border overflow-hidden transition scroll-mt-28 ${
                   isOpen ? "sm:col-span-2 lg:col-span-3" : ""
