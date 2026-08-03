@@ -131,6 +131,7 @@ const COPY: Record<Lang, {
   eyebrow: string;
   university: string;
   title: string;
+  prizeSubtitle: string;
   participate: string;
   skip: string;
   detailsToggle: string;
@@ -151,6 +152,7 @@ const COPY: Record<Lang, {
     eyebrow: "دراسة علمية",
     university: "جامعة الملك عبدالعزيز",
     title: "شارك برأيك حول دور منتجات النيكوتين الخالية من التبغ في الحد من أضرار التدخين",
+    prizeSubtitle: "شارك في الاستبيان وادخل السحب للفوز بـ ٥٠٠ ريال سعودي",
     participate: "شارك في الدراسة",
     skip: "تخطي",
     detailsToggle: "تفاصيل الدراسة",
@@ -171,6 +173,7 @@ const COPY: Record<Lang, {
     eyebrow: "Scientific study",
     university: "King Abdulaziz University",
     title: "Share your view on the role of tobacco-free nicotine products in reducing smoking harm",
+    prizeSubtitle: "Take the survey and enter the draw to win SAR 500",
     participate: "Take part in the study",
     skip: "Skip",
     detailsToggle: "Study details",
