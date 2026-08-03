@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Gift } from "lucide-react";
 import { getPublicImpactStats } from "@/lib/impact.functions";
 
 export const RESEARCH_REDCAP_URL = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM";
@@ -33,21 +32,8 @@ export function ResearchBanner() {
           تجربتك تهمنا وتساهم في البحث العلمي
         </p>
 
-        {/* Prize badge */}
-        <div
-          className="inline-flex max-w-full items-center gap-1.5 rounded-full px-3 py-1.5 shadow-sm"
-          style={{
-            backgroundColor: "oklch(0.93 0.06 88)",
-            color: "oklch(0.35 0.08 85)",
-          }}
-        >
-          <Gift className="h-3.5 w-3.5 shrink-0" aria-hidden />
-          <span className="whitespace-normal text-[11px] font-bold leading-snug sm:text-xs">
-            شارك في الاستبيان وادخل السحب للفوز بـ ٥٠٠ ريال سعودي
-          </span>
-        </div>
-
         {/* Main CTA */}
+
         <a
           href={RESEARCH_REDCAP_URL}
           target="_blank"

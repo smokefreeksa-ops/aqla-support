@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Gift } from "lucide-react";
 import { ResearchBanner } from "@/components/ResearchBanner";
 
 
@@ -131,6 +132,7 @@ const COPY: Record<Lang, {
   eyebrow: string;
   university: string;
   title: string;
+  prizeSubtitle: string;
   participate: string;
   skip: string;
   detailsToggle: string;
@@ -151,6 +153,7 @@ const COPY: Record<Lang, {
     eyebrow: "دراسة علمية",
     university: "جامعة الملك عبدالعزيز",
     title: "شارك برأيك حول دور منتجات النيكوتين الخالية من التبغ في الحد من أضرار التدخين",
+    prizeSubtitle: "شارك في الاستبيان وادخل السحب للفوز بـ ٥٠٠ ريال سعودي",
     participate: "شارك في الدراسة",
     skip: "تخطي",
     detailsToggle: "تفاصيل الدراسة",
@@ -171,6 +174,7 @@ const COPY: Record<Lang, {
     eyebrow: "Scientific study",
     university: "King Abdulaziz University",
     title: "Share your view on the role of tobacco-free nicotine products in reducing smoking harm",
+    prizeSubtitle: "Take the survey and enter the draw to win SAR 500",
     participate: "Take part in the study",
     skip: "Skip",
     detailsToggle: "Study details",
@@ -412,6 +416,14 @@ export function StudyInvitationOverlay() {
           >
             {t.title}
           </h2>
+
+          {/* Prize subtitle */}
+          <div className="flex items-center justify-center gap-2">
+            <Gift className="h-4 w-4 shrink-0 text-[#f0d78c]" aria-hidden />
+            <p className="text-center text-[13.5px] font-semibold text-[#f0d78c] sm:text-[15px]">
+              {t.prizeSubtitle}
+            </p>
+          </div>
 
           {/* Actions */}
           <div className="flex flex-col gap-2.5">
