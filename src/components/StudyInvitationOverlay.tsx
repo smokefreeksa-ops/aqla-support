@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Gift } from "lucide-react";
 import { ResearchBanner } from "@/components/ResearchBanner";
 
 
@@ -415,6 +416,14 @@ export function StudyInvitationOverlay() {
           >
             {t.title}
           </h2>
+
+          {/* Prize subtitle */}
+          <div className="flex items-center justify-center gap-2">
+            <Gift className="h-4 w-4 shrink-0 text-[#f0d78c]" aria-hidden />
+            <p className="text-center text-[13.5px] font-semibold text-[#f0d78c] sm:text-[15px]">
+              {t.prizeSubtitle}
+            </p>
+          </div>
 
           {/* Actions */}
           <div className="flex flex-col gap-2.5">
