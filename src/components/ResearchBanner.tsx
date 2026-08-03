@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getPublicImpactStats } from "@/lib/impact.functions";
 
-export const RESEARCH_REDCAP_URL = "https://slanlslank.myds.me/surveys/?s=FLJKYNNLYEA7HXAM";
+export const RESEARCH_REDCAP_URL = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM";
 
 function formatCount(n: number): string {
   return new Intl.NumberFormat("ar-EG").format(n);
