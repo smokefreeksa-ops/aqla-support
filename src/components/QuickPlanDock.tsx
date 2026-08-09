@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { HeartPulse, ClipboardList, X } from "lucide-react";
 import { appRoutes } from "@/lib/app-routes";
+import { QuitChatDrawer } from "@/components/QuitChatDrawer";
 import { track } from "@/lib/events";
 
 const DISMISS_KEY = "aqla_quick_plan_dock_dismissed_v1";
@@ -19,6 +20,7 @@ function isHiddenPath(pathname: string) {
 export function QuickPlanDock() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [dismissed, setDismissed] = useState(true);
+  const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
     setDismissed(sessionStorage.getItem(DISMISS_KEY) === "1");
@@ -33,14 +35,16 @@ export function QuickPlanDock() {
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
       <div className="mx-auto flex max-w-6xl items-center gap-2 px-3 py-1.5 sm:gap-3 sm:px-4">
-        <Link
-          to={appRoutes.quitChat}
-          onClick={() => track("quick_action", "quit_plan_dock")}
+        <button
+          type="button"
+          onClick={() => {
+            track("quick_action", "quit_plan_dock");
+            setChatOpen(true);
+          }}
           className="inline-flex min-h-9 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-background px-3 text-[13px] font-bold text-primary shadow-sm transition-colors hover:bg-background/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-background sm:px-4 sm:text-sm"
         >
           <span>ابدأ خطة الإقلاع السريعة مع د. مالك</span>
-
-        </Link>
+        </button>
 
         <div className="flex min-w-0 flex-1 items-center justify-start gap-1.5 sm:gap-3">
           <Link
@@ -75,6 +79,7 @@ export function QuickPlanDock() {
           <X className="h-4 w-4" aria-hidden="true" />
         </button>
       </div>
+      <QuitChatDrawer open={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   );
 }
