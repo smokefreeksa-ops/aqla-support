@@ -64,6 +64,7 @@ import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TryIndexRouteImport } from './routes/try.index'
+import { Route as QuitPlanIndexRouteImport } from './routes/quit-plan.index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as TryShootRouteImport } from './routes/try.shoot'
 import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planToken'
@@ -368,6 +369,11 @@ const TryIndexRoute = TryIndexRouteImport.update({
   path: '/',
   getParentRoute: () => TryRoute,
 } as any)
+const QuitPlanIndexRoute = QuitPlanIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => QuitPlanRoute,
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -590,6 +596,7 @@ export interface FileRoutesByFullPath {
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/quit-plan/': typeof QuitPlanIndexRoute
   '/try/': typeof TryIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -637,7 +644,6 @@ export interface FileRoutesByTo {
   '/quit-center': typeof QuitCenterRoute
   '/quit-chat': typeof QuitChatRoute
   '/quit-pathway': typeof QuitPathwayRoute
-  '/quit-plan': typeof QuitPlanRouteWithChildren
   '/relapse-support': typeof RelapseSupportRoute
   '/request-support': typeof RequestSupportRoute
   '/safety-guidance': typeof SafetyGuidanceRoute
@@ -673,6 +679,7 @@ export interface FileRoutesByTo {
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/quit-plan': typeof QuitPlanIndexRoute
   '/try': typeof TryIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -759,6 +766,7 @@ export interface FileRoutesById {
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/quit-plan/': typeof QuitPlanIndexRoute
   '/try/': typeof TryIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -846,6 +854,7 @@ export interface FileRouteTypes {
     | '/quit-plan/$planToken'
     | '/try/shoot'
     | '/dashboard/'
+    | '/quit-plan/'
     | '/try/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -893,7 +902,6 @@ export interface FileRouteTypes {
     | '/quit-center'
     | '/quit-chat'
     | '/quit-pathway'
-    | '/quit-plan'
     | '/relapse-support'
     | '/request-support'
     | '/safety-guidance'
@@ -929,6 +937,7 @@ export interface FileRouteTypes {
     | '/quit-plan/$planToken'
     | '/try/shoot'
     | '/dashboard'
+    | '/quit-plan'
     | '/try'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -1014,6 +1023,7 @@ export interface FileRouteTypes {
     | '/quit-plan/$planToken'
     | '/try/shoot'
     | '/dashboard/'
+    | '/quit-plan/'
     | '/try/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -1484,6 +1494,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TryIndexRouteImport
       parentRoute: typeof TryRoute
     }
+    '/quit-plan/': {
+      id: '/quit-plan/'
+      path: '/'
+      fullPath: '/quit-plan/'
+      preLoaderRoute: typeof QuitPlanIndexRouteImport
+      parentRoute: typeof QuitPlanRoute
+    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/'
@@ -1737,10 +1754,12 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 
 interface QuitPlanRouteChildren {
   QuitPlanPlanTokenRoute: typeof QuitPlanPlanTokenRoute
+  QuitPlanIndexRoute: typeof QuitPlanIndexRoute
 }
 
 const QuitPlanRouteChildren: QuitPlanRouteChildren = {
   QuitPlanPlanTokenRoute: QuitPlanPlanTokenRoute,
+  QuitPlanIndexRoute: QuitPlanIndexRoute,
 }
 
 const QuitPlanRouteWithChildren = QuitPlanRoute._addFileChildren(
