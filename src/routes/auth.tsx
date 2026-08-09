@@ -29,7 +29,7 @@ function LoginPage() {
 
   const goNext = () => {
     if (next) window.location.href = next;
-    else nav({ to: "/admin" });
+    else nav({ to: "/dashboard" });
   };
 
   useEffect(() => {
@@ -49,7 +49,7 @@ function LoginPage() {
       } else {
         const emailRedirectTo = next
           ? window.location.origin + next
-          : window.location.origin + "/admin";
+          : window.location.origin + "/dashboard";
         const { error } = await supabase.auth.signUp({
           email, password,
           options: { emailRedirectTo },
