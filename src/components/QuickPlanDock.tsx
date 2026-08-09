@@ -38,9 +38,8 @@ export function QuickPlanDock() {
           onClick={() => track("quick_action", "quit_plan_dock")}
           className="inline-flex min-h-9 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-background px-3 text-[13px] font-bold text-primary shadow-sm transition-colors hover:bg-background/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-background sm:px-4 sm:text-sm"
         >
-          <Sparkles className="h-4 w-4 shrink-0" aria-hidden="true" />
-          <span>ابدأ خطتك الآن</span>
-          <span className="hidden sm:inline">— بالذكاء الاصطناعي</span>
+          <span>ابدأ خطة الإقلاع السريعة مع د. مالك</span>
+
         </Link>
 
         <div className="flex min-w-0 flex-1 items-center justify-start gap-1.5 sm:gap-3">
