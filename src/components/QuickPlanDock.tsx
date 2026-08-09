@@ -29,7 +29,7 @@ export function QuickPlanDock() {
   return (
     <div
       dir="rtl"
-      className="fixed inset-x-0 bottom-0 z-[70] border-t border-white/15 bg-primary/95 text-primary-foreground backdrop-blur supports-[backdrop-filter]:bg-primary/85"
+      className="fixed inset-x-0 bottom-0 z-[400] border-t border-white/15 bg-primary/95 text-primary-foreground backdrop-blur supports-[backdrop-filter]:bg-primary/85"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
       <div className="mx-auto flex max-w-6xl items-center gap-2 px-3 py-1.5 sm:gap-3 sm:px-4">
