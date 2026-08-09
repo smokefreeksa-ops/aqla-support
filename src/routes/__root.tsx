@@ -16,6 +16,7 @@ import { AqlaAssistant } from "@/components/AqlaAssistant";
 import { AqlaAuthGate } from "@/components/AqlaAuthGate";
 import { SOSButton } from "@/features/sos/components/SOSButton";
 import { StudyInvitationOverlay } from "@/components/StudyInvitationOverlay";
+import { CommandPalette } from "@/components/CommandPalette";
 
 
 function NotFoundComponent() {
@@ -172,6 +173,7 @@ function RootComponent() {
         <SOSButton hidden={onSosRoute} />
       </AqlaAuthGate>
       <StudyInvitationOverlay />
+      <CommandPalette />
       <Toaster richColors position="top-center" />
     </QueryClientProvider>
   );

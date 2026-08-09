@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { track } from "@/lib/events";
 
 /**
  * Global SOS button. Persistent, thumb-friendly, subtle idle pulse.
@@ -39,6 +40,7 @@ export function SOSButton({
       `}</style>
       <Link
         to="/sos"
+        onClick={() => track("sos_opened", "fab")}
         aria-label="نجدة — أريد التدخين الآن"
         className="aqla-sos-fab fixed z-[60] grid place-items-center h-14 w-14 sm:h-[72px] sm:w-[72px] rounded-full text-white select-none active:scale-95 transition-transform focus:outline-none focus-visible:ring-4 focus-visible:ring-red-300"
         style={{

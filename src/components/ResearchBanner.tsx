@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getPublicImpactStats } from "@/lib/impact.functions";
 
+import { track } from "@/lib/events";
+
 export const RESEARCH_REDCAP_URL = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM";
 
 function formatCount(n: number): string {
@@ -35,6 +37,7 @@ export function ResearchBanner() {
           href={RESEARCH_REDCAP_URL}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => track("study_banner_click", "banner")}
           className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-[10px] font-bold text-red-700 ring-1 ring-white/60 transition-colors hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:text-[11px]"
         >
           شارك الآن في الدراسة

@@ -6,6 +6,8 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { sendTransactionalEmail } from "@/lib/email/send";
+import { track } from "@/lib/events";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
 export const Route = createFileRoute("/auth")({
@@ -55,6 +57,13 @@ function LoginPage() {
           options: { emailRedirectTo },
         });
         if (error) throw error;
+        void sendTransactionalEmail({
+          templateName: "welcome",
+          recipientEmail: email,
+          idempotencyKey: `welcome-${email}`,
+          templateData: { fullName: email.split("@")[0] },
+        });
+        track("signup_complete", "auth");
         toast.success("Account created. Ask a physician/admin to assign your role.");
       }
       goNext();

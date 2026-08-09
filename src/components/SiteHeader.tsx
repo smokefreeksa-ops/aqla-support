@@ -6,6 +6,7 @@ import { useLang } from "@/lib/i18n";
 import { appRoutes } from "@/lib/app-routes";
 import { supabase } from "@/integrations/supabase/client";
 import { ResearchBanner } from "@/components/ResearchBanner";
+import { SearchTrigger } from "@/components/CommandPalette";
 import aqlaLogo from "@/assets/aqla-logo.png";
 
 
@@ -79,6 +80,8 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-1.5">
+          <SearchTrigger />
+
           <Button
             variant="ghost"
             size="sm"

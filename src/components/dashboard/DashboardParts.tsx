@@ -1,3 +1,4 @@
+import { track } from "@/lib/events";
 import { Link } from "@tanstack/react-router";
 import { Award, BookOpen, GraduationCap, TrendingUp, CheckCircle2, Lock, PlayCircle, FileText, CalendarDays, Video } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
@@ -85,7 +86,7 @@ export function CourseCard({ course, onStart }: { course: CourseView; onStart?: 
           <Progress value={course.percent} className="h-1.5" />
         </div>
         <div className="mt-4 flex items-center gap-2">
-          <Button asChild size="sm" className="flex-1" onClick={() => onStart?.(course.slug)}>
+          <Button asChild size="sm" className="flex-1" onClick={() => { track("module_start", course.slug); onStart?.(course.slug); }}>
             <Link to="/modules/$slug" params={{ slug: course.slug }}>
               {course.status === "completed" ? "مراجعة الوحدة" : course.status === "in_progress" ? "متابعة" : "ابدأ الآن"}
             </Link>
@@ -169,7 +170,7 @@ export function CertificateCard({ cert }: { cert: LearnerModel["certificates"][n
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           <Button asChild size="sm">
-            <Link to="/academy-certificate/$code" params={{ code: cert.certificate_code }}>عرض / تحميل PDF</Link>
+            <Link to="/academy-certificate/$code" params={{ code: cert.certificate_code }} onClick={() => track("certificate_download", cert.certificate_code)}>عرض / تحميل PDF</Link>
           </Button>
           <Button size="sm" variant="outline" onClick={() => window.print()}>طباعة</Button>
         </div>
