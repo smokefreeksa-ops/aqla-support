@@ -2,6 +2,7 @@
 // Order is declared here; scoring never depends on position.
 
 import type { ClinicalAnswers, ProductKey } from "./types";
+import { EMERGENCY_RED_FLAGS } from "./safety";
 
 export type QuestionKind =
   | "text"
