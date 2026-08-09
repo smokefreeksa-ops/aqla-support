@@ -184,7 +184,7 @@ function GroupRow({ group, expanded, onToggle }: { group: QuitPlanGroup; expande
           {expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
         </td>
         <td className="px-3 py-2 font-mono text-xs">
-          <Link to="/quit-plan/$planId" params={{ planId: group.quit_plan_id }} className="hover:underline" onClick={(e) => e.stopPropagation()}>
+          <Link to="/quit-plan/$planToken" params={{ planToken: group.quit_plan_id }} className="hover:underline" onClick={(e) => e.stopPropagation()}>
             {group.quit_plan_id.slice(0, 8)}…
           </Link>
           {group.plan_created_at && (

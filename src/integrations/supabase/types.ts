@@ -22,7 +22,9 @@ export type Database = {
           id: string
           language: string | null
           module_id: string
+          org_slug: string
           passed: boolean | null
+          program_slug: string
           raw_answers: Json
           score: number | null
           user_id: string | null
@@ -34,7 +36,9 @@ export type Database = {
           id?: string
           language?: string | null
           module_id: string
+          org_slug?: string
           passed?: boolean | null
+          program_slug?: string
           raw_answers?: Json
           score?: number | null
           user_id?: string | null
@@ -46,7 +50,9 @@ export type Database = {
           id?: string
           language?: string | null
           module_id?: string
+          org_slug?: string
           passed?: boolean | null
+          program_slug?: string
           raw_answers?: Json
           score?: number | null
           user_id?: string | null
@@ -66,51 +72,63 @@ export type Database = {
           assessment_version: string
           attempt_id: string | null
           certificate_code: string
+          certificate_type: string
           full_name: string
           id: string
           is_valid: boolean
           issued_at: string
           module_slug: string
+          org_slug: string
           overall_score: number
+          program_slug: string
           revoke_reason: string | null
           revoked_at: string | null
           safety_critical_passed: boolean
           scope_accepted: boolean
           track_slug: string | null
+          user_id: string | null
           verification_hash: string
         }
         Insert: {
           assessment_version?: string
           attempt_id?: string | null
           certificate_code: string
+          certificate_type?: string
           full_name: string
           id?: string
           is_valid?: boolean
           issued_at?: string
           module_slug: string
+          org_slug?: string
           overall_score: number
+          program_slug?: string
           revoke_reason?: string | null
           revoked_at?: string | null
           safety_critical_passed?: boolean
           scope_accepted?: boolean
           track_slug?: string | null
+          user_id?: string | null
           verification_hash: string
         }
         Update: {
           assessment_version?: string
           attempt_id?: string | null
           certificate_code?: string
+          certificate_type?: string
           full_name?: string
           id?: string
           is_valid?: boolean
           issued_at?: string
           module_slug?: string
+          org_slug?: string
           overall_score?: number
+          program_slug?: string
           revoke_reason?: string | null
           revoked_at?: string | null
           safety_critical_passed?: boolean
           scope_accepted?: boolean
           track_slug?: string | null
+          user_id?: string | null
           verification_hash?: string
         }
         Relationships: [
@@ -133,7 +151,9 @@ export type Database = {
           full_name: string | null
           id: string
           language: string
+          org_slug: string
           passed: boolean | null
+          program_slug: string
           raw_answers: Json
           score: number | null
           user_id: string | null
@@ -147,7 +167,9 @@ export type Database = {
           full_name?: string | null
           id?: string
           language?: string
+          org_slug?: string
           passed?: boolean | null
+          program_slug?: string
           raw_answers?: Json
           score?: number | null
           user_id?: string | null
@@ -161,7 +183,9 @@ export type Database = {
           full_name?: string | null
           id?: string
           language?: string
+          org_slug?: string
           passed?: boolean | null
+          program_slug?: string
           raw_answers?: Json
           score?: number | null
           user_id?: string | null
@@ -286,7 +310,9 @@ export type Database = {
           domain_slug: string
           id: string
           lesson_slug: string
+          org_slug: string
           practice_score: number | null
+          program_slug: string
           updated_at: string
           user_id: string | null
         }
@@ -298,7 +324,9 @@ export type Database = {
           domain_slug: string
           id?: string
           lesson_slug: string
+          org_slug?: string
           practice_score?: number | null
+          program_slug?: string
           updated_at?: string
           user_id?: string | null
         }
@@ -310,7 +338,9 @@ export type Database = {
           domain_slug?: string
           id?: string
           lesson_slug?: string
+          org_slug?: string
           practice_score?: number | null
+          program_slug?: string
           updated_at?: string
           user_id?: string | null
         }
@@ -1934,6 +1964,93 @@ export type Database = {
           },
         ]
       }
+      learner_profiles: {
+        Row: {
+          city: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          org_slug: string
+          preferred_language: string
+          program_slug: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          org_slug?: string
+          preferred_language?: string
+          program_slug?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          org_slug?: string
+          preferred_language?: string
+          program_slug?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      live_sessions: {
+        Row: {
+          created_at: string
+          description_ar: string | null
+          description_en: string | null
+          ends_at: string | null
+          id: string
+          is_published: boolean
+          join_url: string | null
+          org_slug: string
+          program_slug: string
+          session_type: string
+          starts_at: string
+          title_ar: string
+          title_en: string | null
+        }
+        Insert: {
+          created_at?: string
+          description_ar?: string | null
+          description_en?: string | null
+          ends_at?: string | null
+          id?: string
+          is_published?: boolean
+          join_url?: string | null
+          org_slug?: string
+          program_slug?: string
+          session_type?: string
+          starts_at: string
+          title_ar: string
+          title_en?: string | null
+        }
+        Update: {
+          created_at?: string
+          description_ar?: string | null
+          description_en?: string | null
+          ends_at?: string | null
+          id?: string
+          is_published?: boolean
+          join_url?: string | null
+          org_slug?: string
+          program_slug?: string
+          session_type?: string
+          starts_at?: string
+          title_ar?: string
+          title_en?: string | null
+        }
+        Relationships: []
+      }
       motivation_assessment: {
         Row: {
           barriers: string[] | null
@@ -2268,6 +2385,39 @@ export type Database = {
           severe_breathing_problem?: string | null
           taking_regular_medications?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      organisations: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          logo_url: string | null
+          name_ar: string
+          name_en: string
+          primary_color: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          logo_url?: string | null
+          name_ar: string
+          name_en: string
+          primary_color?: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          logo_url?: string | null
+          name_ar?: string
+          name_en?: string
+          primary_color?: string
+          slug?: string
         }
         Relationships: []
       }

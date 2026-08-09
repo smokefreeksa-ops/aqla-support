@@ -10,8 +10,11 @@ import aqlaLogo from "@/assets/aqla-logo.png";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [{ title: "Staff Login — Aqla" }] }),
-  validateSearch: (s: Record<string, unknown>) => ({
-    next: typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//") ? s.next : "",
+  validateSearch: (s: { next?: unknown }): { next?: string } => ({
+    next:
+      typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//")
+        ? s.next
+        : undefined,
   }),
   component: LoginPage,
 });
@@ -26,7 +29,7 @@ function LoginPage() {
 
   const goNext = () => {
     if (next) window.location.href = next;
-    else nav({ to: "/admin" });
+    else nav({ to: "/dashboard" });
   };
 
   useEffect(() => {
@@ -46,7 +49,7 @@ function LoginPage() {
       } else {
         const emailRedirectTo = next
           ? window.location.origin + next
-          : window.location.origin + "/admin";
+          : window.location.origin + "/dashboard";
         const { error } = await supabase.auth.signUp({
           email, password,
           options: { emailRedirectTo },

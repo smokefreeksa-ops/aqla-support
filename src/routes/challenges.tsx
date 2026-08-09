@@ -21,7 +21,7 @@ const TABS = ["all", "tools", "challenges", "cities", "points", "learn", "poster
 type TabKey = (typeof TABS)[number];
 
 export const Route = createFileRoute("/challenges")({
-  validateSearch: (search: Record<string, unknown>): { tab: TabKey } => {
+  validateSearch: (search: { tab?: unknown }): { tab?: TabKey } => {
     const raw = typeof search.tab === "string" ? search.tab : "all";
     const tab = (TABS as readonly string[]).includes(raw) ? (raw as TabKey) : "all";
     return { tab };
@@ -49,7 +49,7 @@ function PageWrap() {
 function HubPage() {
   const { lang, setLang, dir, t } = useLang();
   const isAr = lang === "ar";
-  const { tab } = Route.useSearch();
+  const { tab = "all" } = Route.useSearch();
   const navigate = useNavigate({ from: "/challenges" });
 
   useEffect(() => { trackEvent("challenge_hub_viewed"); }, []);
