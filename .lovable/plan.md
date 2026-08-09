@@ -233,7 +233,12 @@ dashboard delivery, no pharmacotherapy.
 28. Jurisdiction is captured before any location or service question.
 29. `GENERIC` output contains no Sehhaty, 937, 997 or SFDA reference and no invented foreign number.
 30. `SA` output uses Sehhaty for booking, 937 for support, 997 only for emergency.
-31. Stable cardiac history does not trigger emergency routing; active symptoms do.
+31a. Stable cardiac history triggers no escalation; the behavioural plan continues.
+31b. Recent cardiac event without emergency symptoms routes to clinician review, not urgent or emergency.
+31c. Active or worsening symptoms without red flags route to urgent / same-day care and never show 997.
+31d. True emergency red flags route to the emergency pathway; 997 appears only when jurisdiction is `SA`.
+31e. 997 never appears from any safety level below the emergency gate.
+
 32. Email consent value, timestamp and consent version are persisted server-side.
 33. Email is only attempted when stored consent is true.
 34. Provider not configured produces a truthful message plus a working plan link.
