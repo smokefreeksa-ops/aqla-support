@@ -76,6 +76,42 @@ Only a genuine emergency safety gate suppresses ordinary plan generation.
 - **Suicidal ideation or other genuine emergency** → emergency pathway; ordinary plan
   generation pauses.
 
+## 5b. Cardiac and respiratory routing
+
+The full six-level ladder is preserved. "Active symptom" is never treated as an automatic
+emergency. Four distinct states:
+
+- **Stable cardiac history** → behavioural plan continues normally; no urgent or
+  emergency routing.
+- **Recent cardiac event, no current emergency symptoms** → clinician review and
+  appropriate medical follow-up; the behavioural plan may continue; not automatically
+  urgent and not emergency.
+- **Active or worsening symptoms without emergency red flags** → urgent / same-day
+  clinical assessment. 997 is **not** shown.
+- **True emergency red flags** — chest pain now suggestive of an emergency, severe
+  breathlessness, coughing blood, loss of consciousness or other serious acute
+  deterioration, suicidal ideation or immediate risk of self-harm → emergency pathway.
+  997 is shown **only** when jurisdiction is `SA`; `GENERIC` uses the local-emergency
+  wording in §10.
+
+997 can never surface from any level below the emergency gate.
+
+## 5c. Privacy notice placement
+
+The privacy notice is shown **after** the minimal identity/location setup and **before**
+the first health-related question — tobacco/nicotine use, dependence, pregnancy, medical
+history or any other health item. It is not deferred to the medical-history section.
+
+In plain Arabic it explains, at minimum: that Aqla collects health-related answers to
+build the personalised quit plan; why those answers are needed; how they will be used;
+that identifiable admin/research sharing is disabled in Release 1; and that email
+delivery is separate and requires its own explicit consent.
+
+The exact wording is a placeholder and **requires formal PDPL/legal review before public
+production**. No final legal wording is invented here.
+
+
+
 ## 6. Pharmacotherapy feature gate
 
 `SAUDI_MEDICATION_CONTENT_APPROVED = false` is a hard release gate. **Flipping the flag
