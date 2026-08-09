@@ -345,11 +345,8 @@ export function StudyInvitationOverlay() {
         <LuxuryStarfield />
         <GalaxyCanvas />
 
-        <div className="relative z-10 flex h-full flex-col">
-          <div className="w-full shrink-0">
-            <ResearchBanner />
-          </div>
-          <div className="flex flex-1 items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6">
+          <div className="relative z-10 flex h-full flex-col">
+           <div className="flex flex-1 items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6">
 
           {/* Modal */}
           <div
