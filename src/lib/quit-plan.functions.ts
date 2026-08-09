@@ -8,6 +8,8 @@ import {
   type QuitPlanJSON,
 } from "./quit-plan-builder";
 import { SITE_URL } from "./site";
+import { ADMIN_RESEARCH_DISCLOSURE_ENABLED } from "./clinical/release-flags";
+
 
 const ADMIN_EMAIL = "smokefreeksa@gmail.com";
 
@@ -314,21 +316,13 @@ export const finalizeQuitPlan = createServerFn({ method: "POST" })
       await supabaseAdmin.from("quit_plans").update({ email_sent_at: new Date().toISOString() }).eq("id", data.planId);
     }
 
-    const adminSubject = "تم إنشاء خطة إقلاع جديدة في أقلع";
-    const adminResult = await sendEmail(ADMIN_EMAIL, adminSubject, adminPlanEmailHtml(plan, intake, data.planId, planUrl));
-    await logPlanEmail({
-      quitPlanId: data.planId,
-      recipientType: "admin",
-      email: ADMIN_EMAIL,
-      subject: adminSubject,
-      sent: adminResult.sent,
-      error: adminResult.error,
-    });
-    if (adminResult.sent) {
-      await supabaseAdmin.from("quit_plans").update({ admin_notified_at: new Date().toISOString() }).eq("id", data.planId);
-    } else {
-      console.error("quit plan admin email failed", adminResult.error);
-    }
+    // Release 1 governance: identifiable admin/research disclosure is DISABLED.
+    // No plan summary containing user identity or health answers is sent to any
+    // internal address, and no admin_notified_at is written.
+    const adminResult = ADMIN_RESEARCH_DISCLOSURE_ENABLED
+      ? await sendEmail(ADMIN_EMAIL, "تم إنشاء خطة إقلاع جديدة في أقلع", adminPlanEmailHtml(plan, intake, data.planId, planUrl))
+      : { sent: false as const, error: null };
+
 
     return {
       planId: data.planId,
