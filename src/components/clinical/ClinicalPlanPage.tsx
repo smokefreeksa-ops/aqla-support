@@ -14,11 +14,16 @@ export function ClinicalPlanPage({ plan, planToken }: { plan: ClinicalPlanJSON; 
   async function downloadPdf() {
     setDownloading(true);
     try {
+      const { ensurePdfRuntime } = await import("@/lib/pdf-runtime");
+      await ensurePdfRuntime();
       const [{ pdf }, { ClinicalPlanPdf }] = await Promise.all([
         import("@react-pdf/renderer"),
         import("@/lib/clinical/clinical-plan-pdf"),
       ]);
+
       const blob = await pdf(<ClinicalPlanPdf plan={plan} />).toBlob();
+
+
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;

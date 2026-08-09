@@ -284,12 +284,15 @@ export function StudyInvitationOverlay() {
   const t = COPY[lang];
 
   useEffect(() => {
+    // Never cover the personal plan page — it blocks the PDF download button.
+    if (typeof window !== "undefined" && window.location.pathname.startsWith("/quit-plan/")) return;
     try {
       if (sessionStorage.getItem(STORAGE_KEY) !== "1") setVisible(true);
     } catch {
       setVisible(true);
     }
   }, []);
+
 
   useEffect(() => {
     if (!visible) return;
