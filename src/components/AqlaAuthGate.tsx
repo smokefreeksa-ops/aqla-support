@@ -13,6 +13,7 @@ const PUBLIC_EXACT = new Set<string>([
   "/cookies",
   "/sharing-policy",
   "/try",
+  "/quit-chat",
   "/try/shoot",
 ]);
 
