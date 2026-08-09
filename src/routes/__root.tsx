@@ -122,12 +122,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Aqla — أقلع" },
       { property: "og:description", content: "A free physician-led digital pathway for smoking and nicotine cessation support, dependence assessment, volunteer training, and community awareness." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:site", content: "@SmokeOffKSA" },
       { name: "twitter:title", content: "Aqla — أقلع" },
       { name: "twitter:description", content: "A free physician-led digital pathway for smoking and nicotine cessation support, dependence assessment, volunteer training, and community awareness." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/wTHuJ10feueI7NPDEBXQcZYwzBx1/social-images/social-1779039803939-aqla.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/wTHuJ10feueI7NPDEBXQcZYwzBx1/social-images/social-1779039803939-aqla.webp" },
+      { property: "og:image", content: "https://aqla1.com/og-aqla.jpg?v=2" },
+      { name: "twitter:image", content: "https://aqla1.com/og-aqla.jpg?v=2" },
     ],
     links: [
       {
