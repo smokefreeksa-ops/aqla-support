@@ -70,8 +70,10 @@ import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planT
 import { Route as ModulesSlugRouteImport } from './routes/modules.$slug'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as DashboardSessionsRouteImport } from './routes/dashboard.sessions'
+import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
 import { Route as DashboardPathsRouteImport } from './routes/dashboard.paths'
 import { Route as DashboardLearningRouteImport } from './routes/dashboard.learning'
+import { Route as DashboardHistoryRouteImport } from './routes/dashboard.history'
 import { Route as DashboardCertificatesRouteImport } from './routes/dashboard.certificates'
 import { Route as DashboardCatalogueRouteImport } from './routes/dashboard.catalogue'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
@@ -396,6 +398,11 @@ const DashboardSessionsRoute = DashboardSessionsRouteImport.update({
   path: '/sessions',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardProfileRoute = DashboardProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardPathsRoute = DashboardPathsRouteImport.update({
   id: '/paths',
   path: '/paths',
@@ -404,6 +411,11 @@ const DashboardPathsRoute = DashboardPathsRouteImport.update({
 const DashboardLearningRoute = DashboardLearningRouteImport.update({
   id: '/learning',
   path: '/learning',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardHistoryRoute = DashboardHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardCertificatesRoute = DashboardCertificatesRouteImport.update({
@@ -568,8 +580,10 @@ export interface FileRoutesByFullPath {
   '/certificate/$code': typeof CertificateCodeRoute
   '/dashboard/catalogue': typeof DashboardCatalogueRoute
   '/dashboard/certificates': typeof DashboardCertificatesRoute
+  '/dashboard/history': typeof DashboardHistoryRoute
   '/dashboard/learning': typeof DashboardLearningRoute
   '/dashboard/paths': typeof DashboardPathsRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/sessions': typeof DashboardSessionsRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/modules/$slug': typeof ModulesSlugRoute
@@ -649,8 +663,10 @@ export interface FileRoutesByTo {
   '/certificate/$code': typeof CertificateCodeRoute
   '/dashboard/catalogue': typeof DashboardCatalogueRoute
   '/dashboard/certificates': typeof DashboardCertificatesRoute
+  '/dashboard/history': typeof DashboardHistoryRoute
   '/dashboard/learning': typeof DashboardLearningRoute
   '/dashboard/paths': typeof DashboardPathsRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/sessions': typeof DashboardSessionsRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/modules/$slug': typeof ModulesSlugRoute
@@ -733,8 +749,10 @@ export interface FileRoutesById {
   '/certificate/$code': typeof CertificateCodeRoute
   '/dashboard/catalogue': typeof DashboardCatalogueRoute
   '/dashboard/certificates': typeof DashboardCertificatesRoute
+  '/dashboard/history': typeof DashboardHistoryRoute
   '/dashboard/learning': typeof DashboardLearningRoute
   '/dashboard/paths': typeof DashboardPathsRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/sessions': typeof DashboardSessionsRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/modules/$slug': typeof ModulesSlugRoute
@@ -818,8 +836,10 @@ export interface FileRouteTypes {
     | '/certificate/$code'
     | '/dashboard/catalogue'
     | '/dashboard/certificates'
+    | '/dashboard/history'
     | '/dashboard/learning'
     | '/dashboard/paths'
+    | '/dashboard/profile'
     | '/dashboard/sessions'
     | '/email/unsubscribe'
     | '/modules/$slug'
@@ -899,8 +919,10 @@ export interface FileRouteTypes {
     | '/certificate/$code'
     | '/dashboard/catalogue'
     | '/dashboard/certificates'
+    | '/dashboard/history'
     | '/dashboard/learning'
     | '/dashboard/paths'
+    | '/dashboard/profile'
     | '/dashboard/sessions'
     | '/email/unsubscribe'
     | '/modules/$slug'
@@ -982,8 +1004,10 @@ export interface FileRouteTypes {
     | '/certificate/$code'
     | '/dashboard/catalogue'
     | '/dashboard/certificates'
+    | '/dashboard/history'
     | '/dashboard/learning'
     | '/dashboard/paths'
+    | '/dashboard/profile'
     | '/dashboard/sessions'
     | '/email/unsubscribe'
     | '/modules/$slug'
@@ -1502,6 +1526,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardSessionsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/profile': {
+      id: '/dashboard/profile'
+      path: '/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof DashboardProfileRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/paths': {
       id: '/dashboard/paths'
       path: '/paths'
@@ -1514,6 +1545,13 @@ declare module '@tanstack/react-router' {
       path: '/learning'
       fullPath: '/dashboard/learning'
       preLoaderRoute: typeof DashboardLearningRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/history': {
+      id: '/dashboard/history'
+      path: '/history'
+      fullPath: '/dashboard/history'
+      preLoaderRoute: typeof DashboardHistoryRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/certificates': {
@@ -1674,8 +1712,10 @@ const AqlaQuitEngineRouteWithChildren = AqlaQuitEngineRoute._addFileChildren(
 interface DashboardRouteChildren {
   DashboardCatalogueRoute: typeof DashboardCatalogueRoute
   DashboardCertificatesRoute: typeof DashboardCertificatesRoute
+  DashboardHistoryRoute: typeof DashboardHistoryRoute
   DashboardLearningRoute: typeof DashboardLearningRoute
   DashboardPathsRoute: typeof DashboardPathsRoute
+  DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardSessionsRoute: typeof DashboardSessionsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
@@ -1683,8 +1723,10 @@ interface DashboardRouteChildren {
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardCatalogueRoute: DashboardCatalogueRoute,
   DashboardCertificatesRoute: DashboardCertificatesRoute,
+  DashboardHistoryRoute: DashboardHistoryRoute,
   DashboardLearningRoute: DashboardLearningRoute,
   DashboardPathsRoute: DashboardPathsRoute,
+  DashboardProfileRoute: DashboardProfileRoute,
   DashboardSessionsRoute: DashboardSessionsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
