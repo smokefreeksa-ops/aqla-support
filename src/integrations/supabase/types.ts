@@ -3159,6 +3159,53 @@ export type Database = {
           },
         ]
       }
+      quit_plan_versions: {
+        Row: {
+          clinical_rule_version: string
+          created_at: string
+          generated_at: string
+          id: string
+          jurisdiction: string | null
+          plan_hash: string | null
+          plan_json: Json
+          plan_variant: string | null
+          plan_version: number
+          quit_plan_id: string
+        }
+        Insert: {
+          clinical_rule_version: string
+          created_at?: string
+          generated_at?: string
+          id?: string
+          jurisdiction?: string | null
+          plan_hash?: string | null
+          plan_json: Json
+          plan_variant?: string | null
+          plan_version: number
+          quit_plan_id: string
+        }
+        Update: {
+          clinical_rule_version?: string
+          created_at?: string
+          generated_at?: string
+          id?: string
+          jurisdiction?: string | null
+          plan_hash?: string | null
+          plan_json?: Json
+          plan_variant?: string | null
+          plan_version?: number
+          quit_plan_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quit_plan_versions_quit_plan_id_fkey"
+            columns: ["quit_plan_id"]
+            isOneToOne: false
+            referencedRelation: "quit_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quit_plans: {
         Row: {
           admin_notified_at: string | null

@@ -13,6 +13,8 @@ import {
   formatDate,
 } from "@/components/dashboard/DashboardParts";
 import { DashboardSkeleton, DashboardError } from "@/components/dashboard/DashboardStates";
+import { MyQuitPlansCard } from "@/components/dashboard/MyQuitPlansCard";
+
 
 export const Route = createFileRoute("/dashboard/")({
   component: DashboardHome,
@@ -30,7 +32,9 @@ function DashboardHome() {
     <div className="space-y-8">
       <WelcomeHeader model={model} />
 
+      <MyQuitPlansCard />
       <section>
+
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-lg font-bold">تعلّمي</h2>
           <Button asChild variant="ghost" size="sm"><Link to="/dashboard/learning">عرض الكل</Link></Button>
