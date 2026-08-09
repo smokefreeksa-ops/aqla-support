@@ -76,6 +76,42 @@ Only a genuine emergency safety gate suppresses ordinary plan generation.
 - **Suicidal ideation or other genuine emergency** → emergency pathway; ordinary plan
   generation pauses.
 
+## 5b. Cardiac and respiratory routing
+
+The full six-level ladder is preserved. "Active symptom" is never treated as an automatic
+emergency. Four distinct states:
+
+- **Stable cardiac history** → behavioural plan continues normally; no urgent or
+  emergency routing.
+- **Recent cardiac event, no current emergency symptoms** → clinician review and
+  appropriate medical follow-up; the behavioural plan may continue; not automatically
+  urgent and not emergency.
+- **Active or worsening symptoms without emergency red flags** → urgent / same-day
+  clinical assessment. 997 is **not** shown.
+- **True emergency red flags** — chest pain now suggestive of an emergency, severe
+  breathlessness, coughing blood, loss of consciousness or other serious acute
+  deterioration, suicidal ideation or immediate risk of self-harm → emergency pathway.
+  997 is shown **only** when jurisdiction is `SA`; `GENERIC` uses the local-emergency
+  wording in §10.
+
+997 can never surface from any level below the emergency gate.
+
+## 5c. Privacy notice placement
+
+The privacy notice is shown **after** the minimal identity/location setup and **before**
+the first health-related question — tobacco/nicotine use, dependence, pregnancy, medical
+history or any other health item. It is not deferred to the medical-history section.
+
+In plain Arabic it explains, at minimum: that Aqla collects health-related answers to
+build the personalised quit plan; why those answers are needed; how they will be used;
+that identifiable admin/research sharing is disabled in Release 1; and that email
+delivery is separate and requires its own explicit consent.
+
+The exact wording is a placeholder and **requires formal PDPL/legal review before public
+production**. No final legal wording is invented here.
+
+
+
 ## 6. Pharmacotherapy feature gate
 
 `SAUDI_MEDICATION_CONTENT_APPROVED = false` is a hard release gate. **Flipping the flag
@@ -197,7 +233,12 @@ dashboard delivery, no pharmacotherapy.
 28. Jurisdiction is captured before any location or service question.
 29. `GENERIC` output contains no Sehhaty, 937, 997 or SFDA reference and no invented foreign number.
 30. `SA` output uses Sehhaty for booking, 937 for support, 997 only for emergency.
-31. Stable cardiac history does not trigger emergency routing; active symptoms do.
+31a. Stable cardiac history triggers no escalation; the behavioural plan continues.
+31b. Recent cardiac event without emergency symptoms routes to clinician review, not urgent or emergency.
+31c. Active or worsening symptoms without red flags route to urgent / same-day care and never show 997.
+31d. True emergency red flags route to the emergency pathway; 997 appears only when jurisdiction is `SA`.
+31e. 997 never appears from any safety level below the emergency gate.
+
 32. Email consent value, timestamp and consent version are persisted server-side.
 33. Email is only attempted when stored consent is true.
 34. Provider not configured produces a truthful message plus a working plan link.
@@ -208,7 +249,9 @@ dashboard delivery, no pharmacotherapy.
     `safety_gate_level`, `safety_flags`, `plan_version`, `clinical_rule_version`,
     `generated_at` and `email_status` are all persisted.
 39. No personalised money figure appears unless spend data was collected.
-40. The privacy notice appears before the first health question.
+40. The privacy notice appears after identity/location setup and before the first
+    health-related question, and its wording is flagged for PDPL/legal review.
+
 
 ---
 
@@ -225,5 +268,14 @@ MEDICATION FLAG ALONE CAN ACTIVATE PHARMACOTHERAPY: NO
 CONSENT AND CLINICAL VERSIONING ARE PERSISTED: YES
 
 ONE IMMUTABLE PLAN_JSON SOURCE OF TRUTH: YES
+
+CARDIAC URGENT AND EMERGENCY PATHWAYS ARE DISTINCT: YES
+
+997 CAN APPEAR ONLY AFTER A TRUE SAUDI EMERGENCY GATE: YES
+
+PRIVACY NOTICE APPEARS BEFORE THE FIRST HEALTH-RELATED ASSESSMENT QUESTION: YES
+
+ALL OTHER CORRECTED RELEASE-1 REQUIREMENTS REMAIN UNCHANGED: YES
+
 
 READY TO APPROVE FOR IMPLEMENTATION: YES
