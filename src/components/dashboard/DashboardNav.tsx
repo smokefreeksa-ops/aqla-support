@@ -105,7 +105,7 @@ export function DashboardNav({
                 <span className="absolute end-1.5 top-1.5 h-2 w-2 rounded-full bg-amber-400" />
               )}
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" dir="rtl" className="w-72">
+            <DropdownMenuContent align="start" className="w-72">
               <DropdownMenuLabel>الإشعارات</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {notifications.length === 0 ? (
@@ -129,7 +129,7 @@ export function DashboardNav({
             >
               {initials || <User className="h-4 w-4" />}
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" dir="rtl" className="w-56">
+            <DropdownMenuContent align="start" className="w-56">
               <DropdownMenuLabel className="truncate">{displayName}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
