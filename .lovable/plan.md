@@ -1,73 +1,124 @@
+# High-impact Aqla improvements to review
 
-## Goal
-Upgrade the "صوّب على السجائر" mini-game into a more visceral, share-worthy experience: rename it, replace the flat target with a realistic lit cigarette rendered inside a 3D-looking hexagon, make the gunshot sound significantly stronger, and turn the hit reaction into a large shattered-glass burst that flies out of the game canvas into the surrounding page.
+No code changes are included yet. This is a prioritized menu of easy, high-impact improvements that can make Aqla feel more polished, trustworthy, and easier to use.
 
-## Scope (frontend / presentation only)
-All work stays inside the existing shooter feature. No backend, no schema.
+## Recommended first wave: biggest impression for the least effort
 
-### 1. Rename everywhere
-Rename the tool from **"صوّب على السجائر"** → **"تحدي كسر عادة التدخين"** (keep English as "Break the Smoking Habit Challenge").
+1. **Professional first-visit experience**
+   - Make the welcome overlay simpler and clearer.
+   - Use one primary action, one secondary action, and a visible close/continue option.
+   - Remember whether a visitor has already seen it, without blocking returning users.
 
-Files touched:
-- `src/components/KnowYourSmokingSection.tsx` — the `tools[4]` entry (`name`, `blurb`, share card title, meta).
-- `src/routes/try.shoot.tsx` — page `<title>`, meta description, og:title/description, header copy.
-- `src/components/ChallengeBanner.tsx` — the amber pill currently reading "صوّب على السجائر".
-- `src/routes/index.tsx` / `HeroSection` shortcut button label (if it references the old name).
+2. **Persistent, simpler navigation**
+   - Add a compact mobile bottom navigation for the most important destinations.
+   - Keep desktop navigation consistent across public pages and the learner dashboard.
+   - Add active-page states, breadcrumbs where useful, and a clear Arabic/English language switch.
 
-Route path `/try/shoot` stays (avoids breaking shared links).
+3. **Dashboard “next best action”**
+   - Promote one obvious next step: continue the next module, start the assessment, or claim a certificate.
+   - Add a clean progress summary, recent activity, and a resume button.
+   - Keep secondary features available without competing with the main action.
 
-### 2. Realistic lit cigarette target
-Currently targets are drawn as simple shapes. Replace with a canvas-rendered lit cigarette:
-- White paper body with subtle paper texture (thin horizontal noise lines).
-- Tan/orange filter band at the base with brand ring.
-- Glowing ember tip: radial gradient (bright yellow core → orange → deep red), pulsing every ~400ms.
-- Rising smoke: 2–3 semi-transparent gray puffs drifting upward with slight sway (sine curve), fading out.
-- Random slight rotation per spawn so no two look identical.
+4. **Loading, empty, success, and error states**
+   - Replace blank waits and generic errors with branded skeletons, friendly empty states, retry actions, and clear success confirmations.
+   - This is one of the fastest ways to make the product feel reliable.
 
-Implemented as a pure `<canvas>` draw routine inside the existing `Shooter` component — no new image assets, keeps bundle size flat.
+5. **Mobile usability pass**
+   - Review every key flow at phone width: sign-up, study invitation, dashboard, modules, assessment, certificates, poster creation, and SOS.
+   - Prevent clipped Arabic text, overlapping floating buttons, horizontal scrolling, and hard-to-tap controls.
 
-### 3. 3D hexagon frame
-Wrap the game canvas in a hexagon "arena":
-- CSS `clip-path: polygon(...)` for the hex silhouette.
-- Layered shadows + inner highlight + subtle `perspective` / `rotateX(6deg)` on the container to fake depth.
-- Gold rim (matches Aqla palette) with `box-shadow` glow.
-- Small hex chrome corners at the six vertices for the "3D bevel" feel.
-- Falls back gracefully on mobile (reduce perspective to avoid layout jitter).
+6. **Accessibility and readability polish**
+   - Keep WCAG AA contrast, visible keyboard focus, semantic headings, accessible labels, reduced-motion support, and screen-reader-friendly dialogs.
+   - Add a “text size / readability” preference only if testing shows it is needed.
 
-### 4. Stronger gunshot audio
-Current shot is a short Web Audio blip. Upgrade to a layered impulse:
-- **Layer A** — low-end thump: sine 60Hz, quick exp decay ~80ms, high gain.
-- **Layer B** — mid crack: filtered white-noise burst through a bandpass @ 1.2kHz, ~120ms decay.
-- **Layer C** — high snap: noise burst through highpass @ 4kHz, 40ms, adds "crack".
-- **Tail** — short convolver reverb (algorithmic impulse generated in-code) for room feel.
-- Master compressor to keep it loud without clipping.
-- Respect a mute toggle already present in the game UI.
+7. **Trust and safety layer**
+   - Add consistent medical disclaimers, source links, content-review dates, privacy wording, and a clear support/contact path.
+   - Use reassuring confirmation messages for study participation and account actions.
 
-Still Web Audio only — no audio files added.
+## High-value features that are still straightforward
 
-### 5. "4D" shattered-glass explosion
-On hit, spawn a large glass-shatter burst that visibly escapes the hexagon and flies across the page:
-- Render shards on a **full-viewport fixed `<canvas>`** (pointer-events: none, z-index above the game) that mounts only while the game is active — this is what lets shards travel outside the hex.
-- Per hit: spawn 40–70 polygonal shards with:
-  - Randomized triangular/quad geometry.
-  - Initial velocity radiating outward from impact point + strong upward bias.
-  - Gravity, air drag, angular velocity (tumbling).
-  - Gradient fill (cool white → pale cyan) with a bright specular edge stroke → reads as glass.
-  - Alpha fade over 1.2–1.8s, then removed.
-- Add a brief radial white flash (80ms) at impact for the "camera pop".
-- Screen-shake: 120ms translate on the hex arena only (not the whole page — avoids mobile scroll jank).
-- Cap concurrent shards (~400) to protect low-end devices; auto-reduce count when `prefers-reduced-motion` or on small viewports.
+8. **Personalized learner profile**
+   - Let learners set their name, city, preferred language, and learning goal.
+   - Use the name throughout the dashboard and certificate flow.
 
-### 6. Mobile / perf guards
-- Reduce shard count and skip perspective on `matchMedia('(max-width: 640px)')`.
-- Respect `prefers-reduced-motion`: keep rename + cigarette art, drop shatter to a simple opacity flash and skip screen-shake.
-- All new canvases sized with `devicePixelRatio` clamp at 2.
+9. **Real certificate and achievement sharing**
+   - Add a public verification page, QR code, downloadable PDF, print layout, and share buttons.
+   - Make shared cards look like official Aqla achievements rather than generic social images.
 
-## Out of scope
-- Score-share card layout (already implemented last turn) — only the tool title string inside it updates.
-- Backend, analytics events, new routes.
+10. **Module completion experience**
+    - Add “continue where you stopped,” completion celebrations, module bookmarks, and a concise end-of-module recap.
+    - Show how each module contributes to certification.
 
-## Technical notes
-- Everything lives in `src/components/KnowYourSmokingSection.tsx` (the `Shooter` subcomponent) plus small copy edits in the files listed under §1.
-- No new dependencies; canvas + Web Audio API only.
-- No changes to `src/routes/try.tsx` layout or `AqlaAuthGate` public-route list — `/try/shoot` already works unauthenticated.
+11. **Live sessions and reminders**
+    - Improve the calendar with timezone-aware dates, session status, add-to-calendar links, and reminder emails.
+    - Make join links appear only when appropriate.
+
+12. **Search and quick access**
+    - Add a lightweight site/dashboard search for modules, tools, FAQs, and support content.
+    - Include a “quick actions” menu for common tasks.
+
+13. **Branded transactional email**
+    - Send polished confirmation, certificate-issued, session-reminder, password/account, and study-participation emails through Lovable Email.
+    - Keep email content bilingual where appropriate.
+
+14. **Installable mobile experience**
+    - Add a lightweight PWA-style install prompt and app icon if the usage pattern supports it.
+    - Prioritize fast repeat access to the SOS and learner dashboard.
+
+## Lovable platform capabilities worth using
+
+15. **SEO and AI-search review**
+    - Audit titles, descriptions, structured data, accessibility signals, indexing, mobile usability, and page quality.
+    - Fix missing or inconsistent metadata page by page.
+
+16. **Analytics and conversion tracking**
+    - Track visits, study-banner clicks, sign-up completion, module starts/completions, assessment completion, certificate downloads, and SOS usage.
+    - Use the data to improve the actual user journey rather than only displaying a visitor counter.
+
+17. **Custom domain and publishing workflow**
+    - Keep the production domain, preview environment, and release process consistent.
+    - Use version history so design or content changes can be safely reverted.
+
+18. **Browser testing and regression checks**
+    - Create repeatable checks for the most important flows and desktop/mobile layouts.
+    - Catch broken links, inactive buttons, route errors, and contrast regressions before publishing.
+
+19. **Collaboration and controlled releases**
+    - Use project roles, review changes before release, and maintain a stable published version while testing new work.
+
+20. **Lovable AI enhancements, only where useful**
+    - Add guided bilingual help, content summarization, personalized learning suggestions, or a safe quit-support assistant.
+    - Keep medical guidance bounded by reviewed content and always show safety escalation paths.
+
+## Suggested order
+
+```text
+First impression + navigation
+        -> mobile/accessibility reliability
+        -> dashboard next action + learning flow
+        -> certificates/sharing + reminders
+        -> SEO/analytics/testing
+        -> optional AI enhancements
+```
+
+## Best small package to implement first
+
+- Professional welcome flow
+- Mobile navigation and responsive cleanup
+- Dashboard next-best-action card
+- Branded loading/empty/error/success states
+- Certificate verification and sharing polish
+- Accessibility, SEO, and broken-link audit
+- Conversion analytics for the key journeys
+
+Official Lovable references:
+- https://docs.lovable.dev/features/design-guidance
+- https://docs.lovable.dev/features/preview-toolbar
+- https://docs.lovable.dev/features/seo-aeo
+- https://docs.lovable.dev/features/analytics
+- https://docs.lovable.dev/features/browser-testing
+- https://docs.lovable.dev/features/custom-emails
+- https://docs.lovable.dev/features/ai
+- https://docs.lovable.dev/features/publish
+- https://docs.lovable.dev/features/projects/history
+- https://docs.lovable.dev/integrations/google-search-console
