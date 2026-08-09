@@ -8,13 +8,12 @@ import { Card } from "@/components/ui/card";
 type OAuthClient = { name?: string; client_name?: string; redirect_uri?: string } | null;
 type OAuthDetails = { client?: OAuthClient; redirect_url?: string; redirect_to?: string; scope?: string } | null;
 type OAuthResult = { data: OAuthDetails; error: { message: string } | null };
-const oauth = (supabase.auth as unknown as {
-  oauth: {
-    getAuthorizationDetails: (id: string) => Promise<OAuthResult>;
-    approveAuthorization: (id: string) => Promise<OAuthResult>;
-    denyAuthorization: (id: string) => Promise<OAuthResult>;
-  };
-}).oauth;
+type OAuthNamespace = {
+  getAuthorizationDetails: (id: string) => Promise<OAuthResult>;
+  approveAuthorization: (id: string) => Promise<OAuthResult>;
+  denyAuthorization: (id: string) => Promise<OAuthResult>;
+};
+
 
 export const Route = createFileRoute("/.lovable/oauth/consent")({
   ssr: false,
