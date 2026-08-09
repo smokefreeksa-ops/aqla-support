@@ -1,4 +1,9 @@
 import type { ComponentType } from 'react'
+import { template as welcomeTemplate } from './welcome'
+import { template as academyCertificateTemplate } from './academy-certificate'
+import { template as sessionReminderTemplate } from './session-reminder'
+import { template as studyThanksTemplate } from './study-thanks'
+
 
 export interface TemplateEntry {
   component: ComponentType<any>
