@@ -411,9 +411,10 @@ function Chat({ answers, setAnswers }: { answers: Answers; setAnswers: React.Dis
     <>
       <div
         dir="rtl"
-        className="text-right rounded-2xl border border-border bg-card shadow-sm flex flex-col h-[70vh] min-h-[520px]"
+        lang="ar"
+        className="text-right rounded-2xl border border-[#0b3a25]/15 bg-white shadow-sm flex flex-col h-[70vh] min-h-[520px] font-[IBM_Plex_Sans_Arabic,Tajawal,system-ui,sans-serif]"
       >
-        <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-4 space-y-3">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 sm:px-4 py-4 space-y-5">
           <AnimatePresence initial={false}>
             {messages.map((m, i) => (
               <motion.div
@@ -421,23 +422,32 @@ function Chat({ answers, setAnswers }: { answers: Answers; setAnswers: React.Dis
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25 }}
-                className={`flex ${m.from === "bot" ? "justify-end" : "justify-start"}`}
+                dir="rtl"
+                className="flex justify-start"
               >
                 {m.from === "bot" ? (
-                  <div className="flex items-end gap-2 max-w-[85%] flex-row-reverse">
-                    <div className="h-8 w-8 rounded-full bg-blue-900 grid place-content-center text-white text-xs font-bold shrink-0">
-                      أ
-                    </div>
-                    <div className="rounded-2xl rounded-tr-sm bg-blue-900 text-white px-4 py-2.5 text-[14px] leading-7 whitespace-pre-wrap text-right">
+                  <div className="flex items-start gap-2 sm:gap-3 max-w-[92%] sm:max-w-[86%]">
+                    <img
+                      src={aqlaLogo}
+                      alt="مساعد أقلع"
+                      className="h-8 w-8 shrink-0 rounded-full bg-white object-contain p-0.5 ring-1 ring-[#0b3a25]/20"
+                    />
+                    <div
+                      className="rounded-2xl rounded-tr-md bg-[#0b3a25] text-white px-4 py-2.5 text-[14.5px] leading-7 whitespace-pre-wrap"
+                      style={{ unicodeBidi: "plaintext" }}
+                    >
                       {m.text}
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-end gap-2 max-w-[85%]">
-                    <div className="h-8 w-8 rounded-full bg-slate-300 grid place-content-center text-slate-700 text-xs font-bold shrink-0">
+                  <div className="flex items-start gap-2 sm:gap-3 max-w-[80%] sm:max-w-[68%] pe-6 sm:pe-10">
+                    <div className="h-8 w-8 shrink-0 rounded-full bg-[#eaf3ed] grid place-content-center text-[#0b3a25] text-[11px] font-bold ring-1 ring-[#0b3a25]/15">
                       أنا
                     </div>
-                    <div className="rounded-2xl rounded-tl-sm bg-muted text-foreground px-4 py-2.5 text-[14px] leading-7 text-right">
+                    <div
+                      className="rounded-2xl rounded-tr-md bg-[#f2f8f4] text-[#12241b] ring-1 ring-[#0b3a25]/10 px-4 py-2.5 text-[14.5px] leading-7 whitespace-pre-wrap"
+                      style={{ unicodeBidi: "plaintext" }}
+                    >
                       {m.text}
                     </div>
                   </div>
@@ -447,10 +457,10 @@ function Chat({ answers, setAnswers }: { answers: Answers; setAnswers: React.Dis
           </AnimatePresence>
 
           {typing && (
-            <div className="flex justify-end">
-              <div className="flex items-end gap-2 flex-row-reverse">
-                <div className="h-8 w-8 rounded-full bg-blue-900 grid place-content-center text-white text-xs font-bold">أ</div>
-                <div className="rounded-2xl bg-blue-900/80 px-4 py-3">
+            <div dir="rtl" className="flex justify-start">
+              <div className="flex items-start gap-2 sm:gap-3">
+                <img src={aqlaLogo} alt="" className="h-8 w-8 rounded-full bg-white object-contain p-0.5 ring-1 ring-[#0b3a25]/20" />
+                <div className="rounded-2xl rounded-tr-md bg-[#0b3a25]/90 px-4 py-3">
                   <div className="flex gap-1">
                     <span className="h-1.5 w-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: "0ms" }} />
                     <span className="h-1.5 w-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: "150ms" }} />
@@ -462,12 +472,13 @@ function Chat({ answers, setAnswers }: { answers: Answers; setAnswers: React.Dis
           )}
 
           {showQuick && (
-            <div className="flex flex-wrap gap-2 justify-end pt-1">
+            <div dir="rtl" className="flex flex-wrap gap-2 justify-start pt-1">
               {last.quickReplies!.map((qr) => (
                 <button
                   key={qr.value}
                   onClick={() => handleQuick(qr)}
-                  className="rounded-full bg-blue-900 hover:bg-blue-700 text-white px-4 py-1.5 text-sm font-medium shadow-sm transition-colors"
+                  style={{ unicodeBidi: "plaintext" }}
+                  className="rounded-full bg-[#0b3a25] hover:bg-[#12543a] text-white px-4 py-1.5 text-sm font-medium shadow-sm transition-colors"
                 >
                   {qr.label}
                 </button>
@@ -476,12 +487,12 @@ function Chat({ answers, setAnswers }: { answers: Answers; setAnswers: React.Dis
           )}
 
           {showNumberRow && (
-            <div className="flex flex-wrap gap-2 justify-end pt-1">
+            <div dir="rtl" className="flex flex-wrap gap-2 justify-start pt-1">
               {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
                 <button
                   key={n}
                   onClick={() => handleNumber(n)}
-                  className="h-9 w-9 rounded-full bg-blue-900 hover:bg-blue-700 text-white text-sm font-semibold shadow-sm transition-colors"
+                  className="h-9 w-9 rounded-full bg-[#0b3a25] hover:bg-[#12543a] text-white text-sm font-semibold shadow-sm transition-colors"
                 >
                   {n}
                 </button>
@@ -490,8 +501,8 @@ function Chat({ answers, setAnswers }: { answers: Answers; setAnswers: React.Dis
           )}
 
           {showMulti && (
-            <div className="space-y-2 pt-1">
-              <div className="flex flex-wrap gap-2 justify-end">
+            <div dir="rtl" className="space-y-2 pt-1">
+              <div className="flex flex-wrap gap-2 justify-start">
                 {last.multi!.map((qr) => {
                   const active = multiSel.includes(qr.value);
                   return (
@@ -500,10 +511,11 @@ function Chat({ answers, setAnswers }: { answers: Answers; setAnswers: React.Dis
                       onClick={() =>
                         setMultiSel((s) => (s.includes(qr.value) ? s.filter((v) => v !== qr.value) : [...s, qr.value]))
                       }
+                      style={{ unicodeBidi: "plaintext" }}
                       className={`rounded-full px-4 py-1.5 text-sm font-medium shadow-sm transition-colors ${
                         active
-                          ? "bg-blue-500 hover:bg-blue-400 text-white ring-2 ring-blue-300"
-                          : "bg-blue-900 hover:bg-blue-700 text-white"
+                          ? "bg-[#0b3a25] text-white ring-2 ring-[#c9a84c]"
+                          : "bg-[#f2f8f4] text-[#0b3a25] ring-1 ring-[#0b3a25]/20 hover:bg-[#e6f1ea]"
                       }`}
                     >
                       {qr.label}
@@ -511,11 +523,11 @@ function Chat({ answers, setAnswers }: { answers: Answers; setAnswers: React.Dis
                   );
                 })}
               </div>
-              <div className="flex justify-end">
+              <div className="flex justify-start">
                 <button
                   onClick={handleMultiSubmit}
                   disabled={multiSel.length === 0}
-                  className="rounded-full bg-blue-500 hover:bg-blue-400 disabled:opacity-40 text-white px-5 py-1.5 text-sm font-semibold transition-colors"
+                  className="rounded-full bg-[#0b3a25] hover:bg-[#12543a] disabled:opacity-40 text-white px-5 py-1.5 text-sm font-semibold transition-colors"
                 >
                   إرسال
                 </button>
@@ -524,14 +536,14 @@ function Chat({ answers, setAnswers }: { answers: Answers; setAnswers: React.Dis
           )}
 
           {last?.from === "bot" && last.actions && (
-            <div className="pt-3 grid sm:grid-cols-2 gap-2">
+            <div dir="rtl" className="pt-3 grid sm:grid-cols-2 gap-2">
               {last.actions.map((a, i) => {
                 const Icon = a.icon === "print" ? Printer : a.icon === "dashboard" ? LayoutDashboard : null;
                 const base = "flex items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-bold shadow-md transition-colors";
                 const cls =
                   a.variant === "secondary"
-                    ? `${base} border-2 border-blue-900 text-blue-900 bg-white hover:bg-blue-50`
-                    : `${base} bg-blue-900 hover:bg-blue-800 text-white`;
+                    ? `${base} border-2 border-[#0b3a25] text-[#0b3a25] bg-white hover:bg-[#f2f8f4]`
+                    : `${base} bg-[#0b3a25] hover:bg-[#12543a] text-white`;
                 return (
                   <button key={i} onClick={a.onClick} className={cls}>
                     {Icon ? <Icon className="h-5 w-5" /> : null}
@@ -544,7 +556,7 @@ function Chat({ answers, setAnswers }: { answers: Answers; setAnswers: React.Dis
         </div>
 
         {showText && (
-          <div className="border-t border-border p-3 flex gap-2 items-center" dir="rtl">
+          <div className="border-t border-[#0b3a25]/10 p-3 flex gap-2 items-center" dir="rtl">
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -552,11 +564,12 @@ function Chat({ answers, setAnswers }: { answers: Answers; setAnswers: React.Dis
               placeholder={inputType === "email" ? "example@email.com" : "اكتب هنا..."}
               type={inputType}
               dir={inputType === "email" ? "ltr" : "rtl"}
-              className="flex-1 rounded-full bg-muted px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500/40 text-right"
+              lang="ar"
+              className="flex-1 rounded-full bg-[#f2f8f4] ring-1 ring-[#0b3a25]/10 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#0b3a25]/40 text-start"
             />
             <button
               onClick={handleSendText}
-              className="h-10 w-10 rounded-full bg-blue-900 hover:bg-blue-700 text-white grid place-content-center transition-colors"
+              className="h-10 w-10 shrink-0 rounded-full bg-[#0b3a25] hover:bg-[#12543a] text-white grid place-content-center transition-colors"
               aria-label="إرسال"
             >
               <Send className="h-4 w-4 -scale-x-100" />
