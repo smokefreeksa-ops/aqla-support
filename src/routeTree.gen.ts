@@ -64,6 +64,7 @@ import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TryIndexRouteImport } from './routes/try.index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as TryShootRouteImport } from './routes/try.shoot'
 import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planToken'
 import { Route as ModulesSlugRouteImport } from './routes/modules.$slug'
@@ -360,6 +361,11 @@ const TryIndexRoute = TryIndexRouteImport.update({
   path: '/',
   getParentRoute: () => TryRoute,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const TryShootRoute = TryShootRouteImport.update({
   id: '/shoot',
   path: '/shoot',
@@ -485,7 +491,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/craving-coach': typeof CravingCoachRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/dtx': typeof DtxRoute
   '/en': typeof EnRoute
   '/faq': typeof FaqRoute
@@ -534,6 +540,7 @@ export interface FileRoutesByFullPath {
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/try/': typeof TryIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -562,7 +569,6 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/craving-coach': typeof CravingCoachRoute
-  '/dashboard': typeof DashboardRoute
   '/dtx': typeof DtxRoute
   '/en': typeof EnRoute
   '/faq': typeof FaqRoute
@@ -610,6 +616,7 @@ export interface FileRoutesByTo {
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
+  '/dashboard': typeof DashboardIndexRoute
   '/try': typeof TryIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -639,7 +646,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/craving-coach': typeof CravingCoachRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/dtx': typeof DtxRoute
   '/en': typeof EnRoute
   '/faq': typeof FaqRoute
@@ -688,6 +695,7 @@ export interface FileRoutesById {
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/try/': typeof TryIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -767,6 +775,7 @@ export interface FileRouteTypes {
     | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
+    | '/dashboard/'
     | '/try/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -795,7 +804,6 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cookies'
     | '/craving-coach'
-    | '/dashboard'
     | '/dtx'
     | '/en'
     | '/faq'
@@ -843,6 +851,7 @@ export interface FileRouteTypes {
     | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
+    | '/dashboard'
     | '/try'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -920,6 +929,7 @@ export interface FileRouteTypes {
     | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
+    | '/dashboard/'
     | '/try/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -949,7 +959,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   CookiesRoute: typeof CookiesRoute
   CravingCoachRoute: typeof CravingCoachRoute
-  DashboardRoute: typeof DashboardRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   DtxRoute: typeof DtxRoute
   EnRoute: typeof EnRoute
   FaqRoute: typeof FaqRoute
@@ -1390,6 +1400,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TryIndexRouteImport
       parentRoute: typeof TryRoute
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/try/shoot': {
       id: '/try/shoot'
       path: '/shoot'
@@ -1559,6 +1576,18 @@ const AqlaQuitEngineRouteWithChildren = AqlaQuitEngineRoute._addFileChildren(
   AqlaQuitEngineRouteChildren,
 )
 
+interface DashboardRouteChildren {
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 interface QuitPlanRouteChildren {
   QuitPlanPlanTokenRoute: typeof QuitPlanPlanTokenRoute
 }
@@ -1600,7 +1629,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   CookiesRoute: CookiesRoute,
   CravingCoachRoute: CravingCoachRoute,
-  DashboardRoute: DashboardRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   DtxRoute: DtxRoute,
   EnRoute: EnRoute,
   FaqRoute: FaqRoute,
