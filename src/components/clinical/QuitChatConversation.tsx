@@ -158,11 +158,41 @@ export function QuitChatConversation({ onPlan }: { onPlan: (p: ClinicalPlanJSON)
     }
   };
 
+  const emergencyHold = async (a: ClinicalAnswers) => {
+    setCurrent(null);
+    setLocked(true);
+    const safety = evaluateSafety(a, a.jurisdiction === "SA" ? "SA" : "GENERIC");
+    await say(
+      `سلامتك الآن أهم من أي خطة.\n\n${safety.message_ar}\n\n${safety.actions_ar.join("\n")}`,
+      {},
+      400,
+    );
+    setMessages((m) => [
+      ...m,
+      {
+        from: "bot",
+        text: "أوقفنا بقية الأسئلة مؤقتًا. تقدر ترجع لأقلع وتكمل خطتك بعد ما تطمئن على سلامتك.",
+        actions: [
+          {
+            label: "العودة إلى أقلع",
+            onClick: () => navigate({ to: "/" }),
+            variant: "secondary",
+          },
+        ],
+      },
+    ]);
+  };
+
   const advance = async (a: ClinicalAnswers, ids: string[]) => {
     if (planIdRef.current) {
       void saveClinicalAnswers({
         data: { planId: planIdRef.current, answers: a as Record<string, unknown> },
       }).catch(() => undefined);
+    }
+    // Emergency gate fires immediately — no further questions, no plan, no email, no PDF.
+    if (hasEmergencyRedFlag(a)) {
+      await emergencyHold(a);
+      return;
     }
     const q = nextQuestion(a, ids);
     if (!q) {
