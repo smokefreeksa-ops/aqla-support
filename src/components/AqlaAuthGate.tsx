@@ -18,7 +18,7 @@ const PUBLIC_EXACT = new Set<string>([
 ]);
 
 // Public prefixes (dynamic routes)
-const PUBLIC_PREFIXES = ["/certificate/", "/share/"];
+const PUBLIC_PREFIXES = ["/certificate/", "/share/", "/quit-plan/"];
 
 function isPublicPath(pathname: string): boolean {
   if (PUBLIC_EXACT.has(pathname)) return true;
