@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { generatePlan, LIFETIME_SECTION_IDS } from "@/lib/clinical/plan-engine";
 import { canRenderMedicationContent } from "@/lib/clinical/release-flags";
 import type { ClinicalAnswers, ClinicalPlanJSON } from "@/lib/clinical/types";
+import { nextQuestion, hasEmergencyRedFlag } from "@/lib/clinical/questions";
+import { evaluateSafety } from "@/lib/clinical/safety";
 
 /**
  * Release 1 acceptance tests — one test per approved blocker fix.
@@ -181,5 +183,52 @@ describe("R1-8 legacy medication safety", () => {
     for (const term of ["نيكوتين بديل", "لصقة", "علكة النيكوتين", "varenicline", "bupropion"]) {
       expect(text).not.toContain(term);
     }
+  });
+});
+
+describe("R1-9 emergency hold stops the assessment immediately", () => {
+  const EMERGENCIES = [
+    "self_harm_risk",
+    "chest_pain_now",
+    "severe_breathlessness",
+    "coughing_blood",
+    "loss_of_consciousness",
+  ];
+
+  it("asks no further question once any emergency red flag is selected", () => {
+    for (const flag of EMERGENCIES) {
+      const answers: ClinicalAnswers = {
+        nickname: "مالك",
+        jurisdiction: "SA",
+        products: ["cigarettes"],
+        red_flags: [flag],
+      } as ClinicalAnswers;
+      // Only the questions up to red_flags have been answered.
+      const answered = ["nickname", "jurisdiction", "city", "privacy_ack", "products", "red_flags"];
+      expect(nextQuestion(answers, answered)).toBeNull();
+      // Even with almost nothing answered, no question may be asked.
+      expect(nextQuestion(answers, [])).toBeNull();
+      expect(hasEmergencyRedFlag(answers)).toBe(true);
+    }
+  });
+
+  it("keeps asking questions when no emergency red flag is selected", () => {
+    const answers = { nickname: "مالك", jurisdiction: "SA", red_flags: ["none"] } as ClinicalAnswers;
+    expect(hasEmergencyRedFlag(answers)).toBe(false);
+    expect(nextQuestion(answers, ["nickname", "jurisdiction", "city", "privacy_ack"])).not.toBeNull();
+  });
+
+  it("suppresses the plan and shows the right emergency message per jurisdiction", () => {
+    const answers = { red_flags: ["chest_pain_now"] } as ClinicalAnswers;
+    const sa = evaluateSafety(answers, "SA");
+    expect(sa.level).toBe("emergency");
+    expect(sa.suppress_plan).toBe(true);
+    expect(sa.message_ar).toContain("997");
+
+    const generic = evaluateSafety(answers, "GENERIC");
+    expect(generic.level).toBe("emergency");
+    expect(generic.suppress_plan).toBe(true);
+    expect(generic.message_ar).toContain("اتصل برقم الطوارئ المحلي في بلدك");
+    expect(generic.message_ar).not.toContain("997");
   });
 });
