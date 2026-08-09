@@ -10,7 +10,7 @@ import aqlaLogo from "@/assets/aqla-logo.png";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [{ title: "Staff Login — Aqla" }] }),
-  validateSearch: (s: Record<string, unknown>) => ({
+  validateSearch: (s: { next?: unknown }) => ({
     next: typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//") ? s.next : "",
   }),
   component: LoginPage,
