@@ -38,7 +38,7 @@ export function AqlaAssistant() {
   const launcher = useDraggableWidget({
     storageKey: "aqla_chat_position",
     defaultSide: "left",
-    defaultBottom: 24,
+    defaultBottom: 72,
     defaultSideOffset: 24,
   });
 

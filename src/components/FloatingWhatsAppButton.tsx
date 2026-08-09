@@ -15,7 +15,7 @@ export function FloatingWhatsAppButton({ forceVisible = false }: { forceVisible?
   const { ref, style, onPointerDown, dragging, reset } = useDraggableWidget({
     storageKey: "aqla_whatsapp_position",
     defaultSide: "right",
-    defaultBottom: 24,
+    defaultBottom: 72,
     defaultSideOffset: 24,
   });
 
