@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Send, Printer, LayoutDashboard } from "lucide-react";
 import { PrintableQuitPlan } from "@/components/PrintableQuitPlan";
+import aqlaLogo from "@/assets/aqla-logo.png";
 
 export const Route = createFileRoute("/quit-chat")({
   head: () => ({
