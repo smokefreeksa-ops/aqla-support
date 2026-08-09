@@ -69,6 +69,7 @@ import { Route as TryShootRouteImport } from './routes/try.shoot'
 import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planToken'
 import { Route as ModulesSlugRouteImport } from './routes/modules.$slug'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as DashboardLearningRouteImport } from './routes/dashboard.learning'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
 import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
@@ -386,6 +387,11 @@ const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardLearningRoute = DashboardLearningRouteImport.update({
+  id: '/learning',
+  path: '/learning',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const CertificateCodeRoute = CertificateCodeRouteImport.update({
   id: '/certificate/$code',
   path: '/certificate/$code',
@@ -536,6 +542,7 @@ export interface FileRoutesByFullPath {
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
+  '/dashboard/learning': typeof DashboardLearningRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
@@ -612,6 +619,7 @@ export interface FileRoutesByTo {
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
+  '/dashboard/learning': typeof DashboardLearningRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
@@ -691,6 +699,7 @@ export interface FileRoutesById {
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
+  '/dashboard/learning': typeof DashboardLearningRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
@@ -771,6 +780,7 @@ export interface FileRouteTypes {
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
+    | '/dashboard/learning'
     | '/email/unsubscribe'
     | '/modules/$slug'
     | '/quit-plan/$planToken'
@@ -847,6 +857,7 @@ export interface FileRouteTypes {
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
+    | '/dashboard/learning'
     | '/email/unsubscribe'
     | '/modules/$slug'
     | '/quit-plan/$planToken'
@@ -925,6 +936,7 @@ export interface FileRouteTypes {
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
+    | '/dashboard/learning'
     | '/email/unsubscribe'
     | '/modules/$slug'
     | '/quit-plan/$planToken'
@@ -1435,6 +1447,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/learning': {
+      id: '/dashboard/learning'
+      path: '/learning'
+      fullPath: '/dashboard/learning'
+      preLoaderRoute: typeof DashboardLearningRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/certificate/$code': {
       id: '/certificate/$code'
       path: '/certificate/$code'
@@ -1577,10 +1596,12 @@ const AqlaQuitEngineRouteWithChildren = AqlaQuitEngineRoute._addFileChildren(
 )
 
 interface DashboardRouteChildren {
+  DashboardLearningRoute: typeof DashboardLearningRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardLearningRoute: DashboardLearningRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
 
