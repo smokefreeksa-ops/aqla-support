@@ -72,6 +72,7 @@ import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe
 import { Route as DashboardSessionsRouteImport } from './routes/dashboard.sessions'
 import { Route as DashboardPathsRouteImport } from './routes/dashboard.paths'
 import { Route as DashboardLearningRouteImport } from './routes/dashboard.learning'
+import { Route as DashboardCertificatesRouteImport } from './routes/dashboard.certificates'
 import { Route as DashboardCatalogueRouteImport } from './routes/dashboard.catalogue'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
 import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
@@ -405,6 +406,11 @@ const DashboardLearningRoute = DashboardLearningRouteImport.update({
   path: '/learning',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardCertificatesRoute = DashboardCertificatesRouteImport.update({
+  id: '/certificates',
+  path: '/certificates',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardCatalogueRoute = DashboardCatalogueRouteImport.update({
   id: '/catalogue',
   path: '/catalogue',
@@ -561,6 +567,7 @@ export interface FileRoutesByFullPath {
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/dashboard/catalogue': typeof DashboardCatalogueRoute
+  '/dashboard/certificates': typeof DashboardCertificatesRoute
   '/dashboard/learning': typeof DashboardLearningRoute
   '/dashboard/paths': typeof DashboardPathsRoute
   '/dashboard/sessions': typeof DashboardSessionsRoute
@@ -641,6 +648,7 @@ export interface FileRoutesByTo {
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/dashboard/catalogue': typeof DashboardCatalogueRoute
+  '/dashboard/certificates': typeof DashboardCertificatesRoute
   '/dashboard/learning': typeof DashboardLearningRoute
   '/dashboard/paths': typeof DashboardPathsRoute
   '/dashboard/sessions': typeof DashboardSessionsRoute
@@ -724,6 +732,7 @@ export interface FileRoutesById {
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/dashboard/catalogue': typeof DashboardCatalogueRoute
+  '/dashboard/certificates': typeof DashboardCertificatesRoute
   '/dashboard/learning': typeof DashboardLearningRoute
   '/dashboard/paths': typeof DashboardPathsRoute
   '/dashboard/sessions': typeof DashboardSessionsRoute
@@ -808,6 +817,7 @@ export interface FileRouteTypes {
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
     | '/dashboard/catalogue'
+    | '/dashboard/certificates'
     | '/dashboard/learning'
     | '/dashboard/paths'
     | '/dashboard/sessions'
@@ -888,6 +898,7 @@ export interface FileRouteTypes {
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
     | '/dashboard/catalogue'
+    | '/dashboard/certificates'
     | '/dashboard/learning'
     | '/dashboard/paths'
     | '/dashboard/sessions'
@@ -970,6 +981,7 @@ export interface FileRouteTypes {
     | '/admin/quit-plan-emails'
     | '/certificate/$code'
     | '/dashboard/catalogue'
+    | '/dashboard/certificates'
     | '/dashboard/learning'
     | '/dashboard/paths'
     | '/dashboard/sessions'
@@ -1504,6 +1516,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLearningRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/certificates': {
+      id: '/dashboard/certificates'
+      path: '/certificates'
+      fullPath: '/dashboard/certificates'
+      preLoaderRoute: typeof DashboardCertificatesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/catalogue': {
       id: '/dashboard/catalogue'
       path: '/catalogue'
@@ -1654,6 +1673,7 @@ const AqlaQuitEngineRouteWithChildren = AqlaQuitEngineRoute._addFileChildren(
 
 interface DashboardRouteChildren {
   DashboardCatalogueRoute: typeof DashboardCatalogueRoute
+  DashboardCertificatesRoute: typeof DashboardCertificatesRoute
   DashboardLearningRoute: typeof DashboardLearningRoute
   DashboardPathsRoute: typeof DashboardPathsRoute
   DashboardSessionsRoute: typeof DashboardSessionsRoute
@@ -1662,6 +1682,7 @@ interface DashboardRouteChildren {
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardCatalogueRoute: DashboardCatalogueRoute,
+  DashboardCertificatesRoute: DashboardCertificatesRoute,
   DashboardLearningRoute: DashboardLearningRoute,
   DashboardPathsRoute: DashboardPathsRoute,
   DashboardSessionsRoute: DashboardSessionsRoute,
