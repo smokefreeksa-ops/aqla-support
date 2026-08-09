@@ -8,13 +8,12 @@ import { Card } from "@/components/ui/card";
 type OAuthClient = { name?: string; client_name?: string; redirect_uri?: string } | null;
 type OAuthDetails = { client?: OAuthClient; redirect_url?: string; redirect_to?: string; scope?: string } | null;
 type OAuthResult = { data: OAuthDetails; error: { message: string } | null };
-const oauth = (supabase.auth as unknown as {
-  oauth: {
-    getAuthorizationDetails: (id: string) => Promise<OAuthResult>;
-    approveAuthorization: (id: string) => Promise<OAuthResult>;
-    denyAuthorization: (id: string) => Promise<OAuthResult>;
-  };
-}).oauth;
+type OAuthNamespace = {
+  getAuthorizationDetails: (id: string) => Promise<OAuthResult>;
+  approveAuthorization: (id: string) => Promise<OAuthResult>;
+  denyAuthorization: (id: string) => Promise<OAuthResult>;
+};
+
 
 export const Route = createFileRoute("/.lovable/oauth/consent")({
   ssr: false,
@@ -29,7 +28,9 @@ export const Route = createFileRoute("/.lovable/oauth/consent")({
   },
   loader: async ({ location }) => {
     const authorizationId = new URLSearchParams(location.search).get("authorization_id")!;
+    const oauth = (supabase.auth as unknown as { oauth: OAuthNamespace }).oauth;
     const { data, error } = await oauth.getAuthorizationDetails(authorizationId);
+
     if (error) throw new Error(error.message);
     const immediate = data?.redirect_url ?? data?.redirect_to;
     if (immediate && !data?.client) throw redirect({ href: immediate });
@@ -56,9 +57,11 @@ function Consent() {
   async function decide(approve: boolean) {
     setBusy(true);
     setError(null);
+    const oauth = (supabase.auth as unknown as { oauth: OAuthNamespace }).oauth;
     const { data, error } = approve
       ? await oauth.approveAuthorization(authorization_id)
       : await oauth.denyAuthorization(authorization_id);
+
     if (error) { setBusy(false); setError(error.message); return; }
     const target = data?.redirect_url ?? data?.redirect_to;
     if (!target) { setBusy(false); setError("No redirect returned by the authorization server."); return; }
