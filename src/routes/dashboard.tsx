@@ -3,7 +3,6 @@ import { DashboardNav } from "@/components/dashboard/DashboardNav";
 import { useLearnerDashboard } from "@/hooks/useLearnerDashboard";
 
 export const Route = createFileRoute("/dashboard")({
-  ssr: false,
   head: () => ({
     meta: [
       { title: "لوحة المتعلم — أكاديمية أقلع" },
