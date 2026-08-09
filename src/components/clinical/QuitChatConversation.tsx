@@ -431,7 +431,7 @@ export function QuitChatConversation({ onPlan }: { onPlan: (p: ClinicalPlanJSON)
             type={inputType}
             dir={inputType === "text" ? "rtl" : "ltr"}
             lang="ar"
-            className="flex-1 rounded-full bg-[#f2f8f4] ring-1 ring-[#0b3a25]/10 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#0b3a25]/40 text-start"
+            className="flex-1 rounded-full bg-[#f2f8f4] ring-1 ring-[#0b3a25]/10 px-4 py-2.5 text-sm text-[#0b3a25] placeholder:text-[#66756d] outline-none focus:ring-2 focus:ring-[#0b3a25]/40 text-start"
           />
           <button
             onClick={handleSendText}
