@@ -75,11 +75,14 @@ function PlanPage() {
     if (!planJson) return;
     setDownloading(true);
     try {
+      const { ensurePdfRuntime } = await import("@/lib/pdf-runtime");
+      await ensurePdfRuntime();
       const [{ pdf }, { QuitPlanPdf }, QR] = await Promise.all([
         import("@react-pdf/renderer"),
         import("@/lib/quit-plan-pdf"),
         import("qrcode"),
       ]);
+
       const qrDataUrl = await QR.toDataURL(shareUrl, { margin: 1, width: 200 });
       const blob = await pdf(<QuitPlanPdf plan={planJson} qrDataUrl={qrDataUrl} shareUrl={shareUrl} planId={plan?.id ?? planToken} />).toBlob();
       const url = URL.createObjectURL(blob);
