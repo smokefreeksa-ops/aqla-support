@@ -10,6 +10,7 @@ import {
 import { QUESTIONS, nextQuestion, type Question } from "@/lib/clinical/questions";
 import type { ClinicalAnswers, ClinicalPlanJSON } from "@/lib/clinical/types";
 import aqlaLogo from "@/assets/aqla-logo.png";
+import { ClinicalPlanView } from "@/components/clinical/ClinicalPlanView";
 
 type Msg = {
   from: "bot" | "user";
