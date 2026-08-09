@@ -99,7 +99,7 @@ export function CommandPalette() {
     ));
 
   return (
-    <CommandDialog open={open} onOpenChange={setOpen} title="البحث السريع" description="ابحث في الوحدات والأدوات والصفحات">
+    <CommandDialog open={open} onOpenChange={setOpen}>
       <CommandInput placeholder="ابحث… / Search modules, tools, pages" />
       <CommandList>
         <CommandEmpty>لا توجد نتائج · No results</CommandEmpty>
