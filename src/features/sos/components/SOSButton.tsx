@@ -44,7 +44,7 @@ export function SOSButton({
         aria-label="نجدة — أريد التدخين الآن"
         className="aqla-sos-fab fixed z-[60] grid place-items-center h-14 w-14 sm:h-[72px] sm:w-[72px] rounded-full text-white select-none active:scale-95 transition-transform focus:outline-none focus-visible:ring-4 focus-visible:ring-red-300"
         style={{
-          bottom: "calc(env(safe-area-inset-bottom, 0px) + 16px)",
+          bottom: "calc(env(safe-area-inset-bottom, 0px) + 64px)",
           insetInlineEnd: "16px",
           backgroundImage:
             "radial-gradient(circle at 30% 25%, #fca5a5 0%, #ef4444 45%, #991b1b 100%)",

@@ -17,6 +17,7 @@ import { AqlaAuthGate } from "@/components/AqlaAuthGate";
 import { SOSButton } from "@/features/sos/components/SOSButton";
 import { StudyInvitationOverlay } from "@/components/StudyInvitationOverlay";
 import { CommandPalette } from "@/components/CommandPalette";
+import { QuickPlanDock } from "@/components/QuickPlanDock";
 
 
 function NotFoundComponent() {
@@ -174,6 +175,7 @@ function RootComponent() {
       </AqlaAuthGate>
       <StudyInvitationOverlay />
       <CommandPalette />
+      <QuickPlanDock />
       <Toaster richColors position="top-center" />
     </QueryClientProvider>
   );
