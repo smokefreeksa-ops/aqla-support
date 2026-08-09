@@ -6,6 +6,8 @@ import {
   startClinicalPlan,
   saveClinicalAnswers,
   finalizeClinicalPlan,
+  claimClinicalPlan,
+
 } from "@/lib/clinical/clinical-plan.functions";
 import { QUESTIONS, nextQuestion, type Question } from "@/lib/clinical/questions";
 import type { ClinicalAnswers, ClinicalPlanJSON } from "@/lib/clinical/types";
@@ -112,13 +114,28 @@ export function QuitChatConversation({ onPlan }: { onPlan: (p: ClinicalPlanJSON)
         { plan: res.plan },
         400,
       );
+      // Attach the plan to the signed-in user so it reopens from the dashboard.
+      void (async () => {
+        try {
+          const { supabase } = await import("@/integrations/supabase/client");
+          const { data: sess } = await supabase.auth.getSession();
+          if (sess.session) await claimClinicalPlan({ data: { planToken: res.planToken } });
+        } catch {
+          /* anonymous users keep the tokenised link only */
+        }
+      })();
+
       setMessages((m) => [
         ...m,
         {
           from: "bot",
           text: "وش تحب تسوي الحين؟",
           actions: [
-            { label: "طباعة / حفظ PDF", onClick: () => window.print(), icon: "print" },
+            {
+              label: "تحميل خطتي PDF",
+              onClick: () => navigate({ to: "/quit-plan/$planToken", params: { planToken: res.planToken } }),
+              icon: "print",
+            },
             {
               label: "الذهاب للوحة التحكم",
               onClick: () => navigate({ to: "/dashboard" }),
@@ -128,6 +145,7 @@ export function QuitChatConversation({ onPlan }: { onPlan: (p: ClinicalPlanJSON)
           ],
         },
       ]);
+
     } catch (e) {
       setTyping(false);
       setLocked(false);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { generatePlan } from "@/lib/clinical/plan-engine";
+import { generatePlan, LIFETIME_SECTION_IDS } from "@/lib/clinical/plan-engine";
 import { nextQuestion, QUESTIONS } from "@/lib/clinical/questions";
 import { canRenderMedicationContent, SAUDI_MEDICATION_CONTENT_APPROVED } from "@/lib/clinical/release-flags";
 import { SAUDI_IDENTIFIERS } from "@/lib/clinical/jurisdiction";
@@ -143,11 +143,12 @@ describe("relapse pathways", () => {
 });
 
 describe("timeline", () => {
-  it("covers preparation through one year and beyond", () => {
+  it("covers preparation through long-term maintenance", () => {
     const ids = gen({}).timeline.map((t) => t.id);
-    expect(ids).toEqual(["prep", "d0", "d1_3", "w1_2", "w3_4", "m2_3", "m4_6", "m7_12", "y1_plus"]);
+    expect(ids).toEqual([...LIFETIME_SECTION_IDS]);
   });
 });
+
 
 describe("determinism and privacy", () => {
   it("same answers produce the same plan (ignoring timestamp)", () => {

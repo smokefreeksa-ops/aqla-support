@@ -4,14 +4,55 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Download, Mail, MessageCircle, Loader2 } from "lucide-react";
 import { getQuitPlan, scheduleReminder } from "@/lib/quit-plan.functions";
+import { getClinicalPlan } from "@/lib/clinical/clinical-plan.functions";
+import { ClinicalPlanPage } from "@/components/clinical/ClinicalPlanPage";
+import type { ClinicalPlanJSON } from "@/lib/clinical/types";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import type { QuitPlanJSON } from "@/lib/quit-plan-builder";
 
 export const Route = createFileRoute("/quit-plan/$planToken")({
   head: () => ({ meta: [{ title: "خطة أقلع الشخصية" }] }),
-  component: PlanPage,
+  component: PlanRouter,
 });
+
+/**
+ * Release 1 plans are rendered by ClinicalPlanView. A Release 1 token is never
+ * passed into the legacy QuitPlanJSON renderer (which can contain medication wording).
+ */
+function PlanRouter() {
+  const { planToken } = Route.useParams();
+  const getClinical = useServerFn(getClinicalPlan);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["clinical-plan", planToken],
+    queryFn: () => getClinical({ data: { planToken } }),
+  });
+
+  if (isLoading) {
+    return (
+      <div dir="rtl" className="min-h-screen bg-background">
+        <SiteHeader />
+        <main className="mx-auto max-w-3xl px-4 py-10 text-center text-sm text-muted-foreground">
+          <Loader2 className="mx-auto h-6 w-6 animate-spin" /> جارٍ تحميل الخطة…
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
+
+  if (data?.isRelease1 && data.plan) {
+    return (
+      <div dir="rtl" className="min-h-screen bg-background">
+        <SiteHeader />
+        <ClinicalPlanPage plan={data.plan as ClinicalPlanJSON} planToken={planToken} />
+        <SiteFooter />
+      </div>
+    );
+  }
+
+  return <PlanPage />;
+}
 
 function PlanPage() {
   const { planToken } = Route.useParams();
@@ -28,6 +69,7 @@ function PlanPage() {
   const plan = data?.plan as { id: string; nickname: string | null; plan: QuitPlanJSON | null; email_sent_at: string | null } | null | undefined;
   const planJson = (plan?.plan ?? null) as QuitPlanJSON | null;
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+
 
   async function downloadPdf() {
     if (!planJson) return;
