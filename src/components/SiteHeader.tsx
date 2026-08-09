@@ -81,6 +81,7 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-1.5">
           <SearchTrigger />
+          <SearchTrigger />
           <Button
             variant="ghost"
             size="sm"
