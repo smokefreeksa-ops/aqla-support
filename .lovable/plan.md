@@ -249,7 +249,9 @@ dashboard delivery, no pharmacotherapy.
     `safety_gate_level`, `safety_flags`, `plan_version`, `clinical_rule_version`,
     `generated_at` and `email_status` are all persisted.
 39. No personalised money figure appears unless spend data was collected.
-40. The privacy notice appears before the first health question.
+40. The privacy notice appears after identity/location setup and before the first
+    health-related question, and its wording is flagged for PDPL/legal review.
+
 
 ---
 
