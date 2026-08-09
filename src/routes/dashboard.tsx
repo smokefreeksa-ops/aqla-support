@@ -3,6 +3,9 @@ import { DashboardNav } from "@/components/dashboard/DashboardNav";
 import { useLearnerDashboard } from "@/hooks/useLearnerDashboard";
 
 export const Route = createFileRoute("/dashboard")({
+  // Supabase keeps the session in localStorage, so the server has no bearer
+  // token for these protected server functions. Render this subtree client-side.
+  ssr: false,
   head: () => ({
     meta: [
       { title: "لوحة المتعلم — أكاديمية أقلع" },
