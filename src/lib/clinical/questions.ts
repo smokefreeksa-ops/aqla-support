@@ -2,6 +2,7 @@
 // Order is declared here; scoring never depends on position.
 
 import type { ClinicalAnswers, ProductKey } from "./types";
+import { EMERGENCY_RED_FLAGS } from "./safety";
 
 export type QuestionKind =
   | "text"
@@ -453,7 +454,19 @@ export const QUESTIONS: Question[] = [
   },
 ];
 
+/**
+ * True when the user has selected at least one true emergency red flag.
+ * Once true, the ordinary assessment must stop immediately.
+ */
+export function hasEmergencyRedFlag(answers: ClinicalAnswers): boolean {
+  return (answers.red_flags ?? []).some(
+    (f) => f !== "none" && (EMERGENCY_RED_FLAGS as readonly string[]).includes(f),
+  );
+}
+
 export function nextQuestion(answers: ClinicalAnswers, answeredIds: string[]): Question | null {
+  // Emergency hold: no further assessment questions may be asked.
+  if (hasEmergencyRedFlag(answers)) return null;
   for (const q of QUESTIONS) {
     if (answeredIds.includes(q.id as string)) continue;
     if (q.when && !q.when(answers)) continue;
