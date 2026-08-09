@@ -1,146 +1,229 @@
-# Aqla — Release 1 Implementation Plan (Behavioural Only)
+# Aqla — Release 1 Implementation Plan (Behavioural Only) — Corrected Final
 
 Scope is strictly Release 1: Saudi-first behavioural cessation support. No medication
-content, no dosing, no identifiable admin/research copy, no invented instruments.
+content, no dosing, no identifiable admin/research copy, no unvalidated instruments.
 
 ## Release gates
 
 | Gate | Value |
 |---|---|
 | Pharmacotherapy content generated | No |
+| Dependence instrument implemented | FTND only (cigarette users) |
 | Identifiable admin/research email copy | No (hard-disabled) |
 | Current `/quit-chat` visual experience | Preserved |
-| Existing `quit_plans` backend reused | Yes |
-| One `plan_json` source of truth | Yes |
-| Supported jurisdictions | `SA` (full Saudi routing), `GENERIC` (no Saudi identifiers) |
+| Existing `quit_plans` backend reused | Yes (extended, not replaced) |
+| One immutable `plan_json` | Yes |
+| Jurisdictions | `SA` (Saudi routing), `GENERIC` (no Saudi identifiers) |
+| Third engine created | No |
 
-A single flag file holds `SAUDI_MEDICATION_CONTENT_APPROVED = false`. Every medication
-branch reads it. Flipping it is the only change needed for a future pharmacotherapy release.
+## 1. Dependence instruments
 
-## Phase 1 — Truthfulness pass
+Release 1 implements exactly one instrument: the **full 6-item FTND (0–10)** via the
+existing `scoreFtnd`, offered **only to cigarette users**, and **optional** — declining
+still yields a complete plan.
 
-Remove every claim the system cannot honour today.
+Explicitly NOT used in the quit-plan engine in Release 1, even though functions exist in
+`scoring.ts`: Penn State e-cigarette index, LWDS-11, HONC, adapted oral-nicotine/pouch
+score, and any other product-specific dependence instrument. Each requires a separate
+evidence and validation review before extension into this engine.
 
-- Delete the mock `sendEmailPayload` console-log function and the unconditional
-  "تم إرسال الخطة للبريد بنجاح" toast in `/quit-chat`.
-- Remove "وإلى إدارة أقلع" (sent to Aqla administration) from all user-facing copy.
-- Remove the dependence-score sentence that recommends NRT patches ("أنصحك جداً تدمج
-  بدائل النيكوتين الطبية NRT مثل اللصقات"). Replace with a behavioural interpretation plus
-  a neutral "discuss options with a pharmacist or clinician" line — no product, no dose.
-- Remove stale clinic counts, cost claims, and any success-rate number not traceable to a
-  cited source.
-- Gate `PrintableQuitPlan` and `quit-plan-builder` medication sections behind the flag.
+For vape, shisha, pouches, heated tobacco or other non-cigarette products the engine
+collects **descriptive use information only** (what, how often, when first use occurs,
+where). It produces no validated score, no dependence band, and no medication content.
+`dependence_status` for those users is recorded as `descriptive_only`.
 
-## Phase 2 — Backend wiring
+## 2. Four distinct lapse / relapse pathways
 
-`/quit-chat` currently runs a local state machine with no persistence. Wire it to the
-existing server functions in `src/lib/quit-plan.functions.ts`:
+Four separate smoking states, each with its own IF → THEN recovery pathway. These are
+not craving techniques and are not interchangeable.
 
-- `startQuitPlan` on first user answer → returns `plan_id` + `plan_token`.
-- `saveAnswer` after each answered question (fire-and-forget, resumable).
-- `finalizeQuitPlan` at completion → writes `plan_json`, returns the shareable plan URL.
+- **A. One puff** → stop immediately; explicitly not framed as failure; identify the
+  trigger that produced it; resume the quit plan now.
+- **B. One cigarette** → treat as a lapse; remove remaining cigarettes and access;
+  identify what happened; restart abstinence immediately; activate additional support.
+- **C. One day of smoking** → higher-risk lapse; structured recovery review; restore the
+  quit plan immediately; increase behavioural and support intensity.
+- **D. Return to regular smoking** → relapse-recovery pathway; no shame or failure
+  framing; reassess triggers and the previous plan; choose a new quit or reduction
+  strategy; professional cessation support where appropriate.
 
-No new tables. No new edge functions. Answers are stored in `intake_answers`, the built
-plan in `plan`.
+Craving techniques (urge surfing, delay/distract/drink, paced breathing, environment
+change) live in a **separate craving-management section** and never substitute for the
+four pathways above.
 
-## Phase 3 — Assessment and branching
+## 3. Lifetime timeline
 
-A data-driven question bank (42 items) replaces hardcoded switch states, so questions can
-be reordered without breaking scoring.
+The plan is a one-time generated **lifetime** plan. Generated sections:
 
-- Jurisdiction is captured first (`SA` / `GENERIC`) and drives every downstream route.
-- Identity, age band, sex, pregnancy/breastfeeding status.
-- Multi-product inventory (cigarettes, vape, shisha, pouches, other) with a poly-use
-  complexity flag when two or more are active.
-- Optional dependence test: full 6-item FTND (max 10) for cigarettes; the validated
-  product-specific instruments already in `src/lib/scoring.ts` otherwise. Declining is a
-  supported path, not a dead end.
-- Readiness 0–10. Below 5 opens a motivational choice of four options (quit now, set a
-  future date, reduce-to-quit, not ready yet) instead of ending the conversation.
-- Triggers, past attempts, support person, follow-up preference.
+preparation before quit day · quit day · first 24 hours · first 72 hours · days 4–7 ·
+weeks 2–4 · months 2–3 · months 4–6 · months 7–12 · after one year · long-term relapse
+prevention and maintenance.
 
-## Phase 4 — Safety escalation ladder
+## 4. Under-18 pathway
 
-Six levels, evaluated from the answers rather than free text: self-management,
-pharmacist, cessation specialist, GP/doctor, urgent care, emergency.
+Being under 18 does **not** suppress plan generation. Under-18 users receive an
+adolescent behavioural cessation pathway, clinician handoff/referral where appropriate,
+no pharmacotherapy and no medication content, on-screen plan and PDF download available,
+and **email delivery disabled pending legal review** (`email_status = disabled_minor`).
 
-- Three-way cardiac logic: stable history / recent event / active symptoms — only the
-  third routes to emergency.
-- Mental-health instability and under-18 route to a clinician handoff before plan
-  generation.
-- Pregnancy and breastfeeding route to a dedicated behavioural branch with clinician-led
-  review, never a dead end.
-- `SA`: Sehhaty for booking, 937 for health support, 997 for emergency.
-- `GENERIC`: local emergency number and local health service, no Saudi identifiers.
+Only a genuine emergency safety gate suppresses ordinary plan generation.
 
-## Phase 5 — Plan generation
+## 5. Mental-health pathway
 
-A deterministic IF→THEN generator (no AI, no randomness) produces the behavioural plan:
-quit or reduction date, 24h/72h/week-1/week-2/month-1 timeline, a per-trigger coping
-line for each trigger selected, four rescue protocols (urge surf, delay-distract-drink,
-breathing, environment change), relapse recovery, support-person script, money saved,
-follow-up schedule, and cited references.
+- **Stable / monitored** → behavioural plan plus appropriate supportive content. Not suppressed.
+- **Unstable or unclear, no emergency red flag** → clinician review/handoff *plus*
+  behavioural support as appropriate.
+- **Suicidal ideation or other genuine emergency** → emergency pathway; ordinary plan
+  generation pauses.
 
-## Phase 6 — Single source of truth
+## 6. Pharmacotherapy feature gate
 
-One `plan_json` object is written once at finalize. The on-screen plan, the PDF, the
-email, the shared plan link, and the dashboard all render from that same object. Nothing
-downstream re-derives content.
+`SAUDI_MEDICATION_CONTENT_APPROVED = false` is a hard release gate. **Flipping the flag
+alone must never be sufficient to release pharmacotherapy.** Medication content may only
+render when BOTH conditions hold:
 
-## Phase 7 — Delivery
+1. `SAUDI_MEDICATION_CONTENT_APPROVED === true`, AND
+2. a valid, approved `clinical_rule_version` / `medication_content_version` is present
+   in the approved-versions registry.
 
-- Immediate on-screen plan plus a download button that always works offline of email.
-- Professional RTL A4 PDF using the Aqla logo and green identity.
-- Email only after an explicit, separate `plan_email` consent checkbox. The result
-  message reflects the real provider response — sent, queued, or "email is not available
-  right now, your plan is downloadable and saved at this link".
+Future activation additionally requires: unresolved Saudi regulatory evidence resolved;
+Saudi medication availability confirmed; current product labels stored and versioned;
+Arabic pharmacotherapy content clinically reviewed and back-translated; clinical
+governance sign-off; pharmacotherapy-specific acceptance tests passing. In Release 1
+medication output is structurally impossible.
 
-## Phase 8 — Privacy and governance
+## 7. Data and audit architecture
 
-- A short privacy notice shown before any health question is asked.
-- Admin/research disclosure paths removed from code, not just hidden in the UI.
-- Every clinical statement carries a source; unresolved Saudi items stay gated.
+The existing `quit_plans` table was inspected. It has `intake_answers`, `plan`,
+`plan_token`, `score_total`, `score_band`, `risk_flag`, `validated`, `assessment_tool`,
+`readiness`, `email_sent_at`, `status`. It does **not** currently store the required
+audit fields, so a **migration is required** — the earlier "no migration needed" claim
+was wrong.
+
+Added to `quit_plans` (no new duplicate table, no new engine):
+
+`country_code`, `jurisdiction`, `plan_variant`, `dependence_status`, `quit_strategy`,
+`safety_gate_level`, `safety_flags` (jsonb), `plan_version`, `clinical_rule_version`,
+`generated_at`, `email_status`, `plan_email_consent`, `plan_email_consent_at`,
+`plan_email_consent_version`.
+
+All of these are persisted server-side; none may exist only in browser state. Consent is
+persistently stored with its timestamp and the consent-text version shown to the user.
+Migration includes GRANTs and keeps existing RLS behaviour unchanged.
+
+## 8. One immutable `plan_json`
+
+Assessment → behavioural decision/personalisation engine runs **once** → immutable
+`plan_json` → rendered identically by on-screen plan, PDF, download, emailed PDF, and
+dashboard. No surface regenerates clinical or behavioural content independently.
+
+Regeneration creates a **new version** (`plan_version` incremented, new row/version
+record). An existing plan the user already received is never silently modified.
+
+## 9. Money-saved content
+
+No personalised money figure is produced unless the spend information was actually
+collected. The flow asks one optional cost question when the user wants savings
+included; if skipped, the plan uses general non-numerical motivation. Product prices are
+never invented or assumed.
+
+## 10. Generic / non-Saudi safety
+
+`GENERIC` gets the full behavioural plan, with no Sehhaty, no 937, no 997, no SFDA
+content, and no Saudi medication content. No foreign emergency number is invented. Urgent
+wording is: «اتصل برقم الطوارئ المحلي في بلدك أو اطلب المساعدة الطبية العاجلة.» until
+that jurisdiction has an approved profile.
+
+`SA` uses Sehhaty for booking, 937 for MOH health support, and 997 only for a true
+emergency.
+
+## Implementation phases
+
+1. **Truthfulness** — remove the mock email function and unconditional success toast in
+   `/quit-chat`, remove "وإلى إدارة أقلع" copy, remove the score-triggered NRT/patch
+   sentence, remove stale clinic/cost/success-rate claims.
+2. **Schema + audit** — migration adding the fields in §7.
+3. **Backend wiring** — `/quit-chat` calls the existing `startQuitPlan`, `saveAnswer`,
+   `finalizeQuitPlan`; one row per conversation, resumable, no duplicates.
+4. **Assessment runner** — data-driven bilingual question bank; jurisdiction captured
+   first; optional FTND for cigarette users only; descriptive-only for other products;
+   readiness below 5 opens four motivational options and never dead-ends.
+5. **Safety ladder** — six levels; three-way cardiac logic; §4 and §5 pathways; §10 routing.
+6. **Plan engine** — deterministic IF → THEN generator producing the §3 timeline, the
+   §2 four pathways, the separate craving section, per-trigger coping lines, support
+   script, follow-up schedule, §9 money handling, and cited references.
+7. **Delivery** — on-screen plan, always-available PDF download, email only with stored
+   explicit consent and truthful provider-result messaging.
+8. **Privacy and governance** — pre-health privacy notice; admin/research disclosure
+   paths removed from code, not merely hidden.
+
+## Preserved design
+
+Existing `/quit-chat` appearance, conversational bubbles, Arabic RTL, Aqla green
+identity, warm conversational wording, one question at a time, existing `quit_plans`
+backend, no third engine, behavioural-only Release 1, SA + GENERIC model, Sehhaty/937/997
+rules, identifiable admin/research copy disabled, consent-gated email, PDF/download/
+dashboard delivery, no pharmacotherapy.
 
 ## Acceptance tests
 
-1. No medication name, dose, or product appears anywhere in a generated plan.
-2. Flipping the medication flag is the only edit needed to expose medication branches.
-3. No success toast fires unless the provider returned success.
-4. Provider not configured → user sees a truthful fallback with a working plan link.
-5. No user-facing text claims data was sent to Aqla administration.
-6. High dependence score produces behavioural guidance plus a neutral clinician line.
-7. `startQuitPlan` creates exactly one row per conversation.
-8. Refreshing mid-conversation does not create a duplicate plan row.
-9. Every answered question is persisted in `intake_answers`.
-10. `finalizeQuitPlan` writes `plan_json` once and returns a resolvable plan URL.
-11. Jurisdiction is asked before any location or service question.
-12. `GENERIC` output contains no Saudi identifier (Sehhaty, 937, 997, SFDA).
-13. `SA` output contains Sehhaty for booking and 937 for support.
-14. Declining the dependence test still produces a complete plan.
-15. FTND totals 10 at maximum with all six items answered.
-16. FTND scoring is unchanged when question order changes.
-17. Two or more active products set the poly-use complexity flag.
-18. Readiness below 5 shows four options and never ends the conversation.
-19. Under-18 routes to clinician handoff before plan generation.
-20. Pregnancy routes to the behavioural pregnancy branch, not a dead end.
-21. Stable cardiac history does not trigger emergency routing.
-22. Active cardiac symptoms trigger emergency routing (997 in `SA`).
-23. Reported mental-health instability triggers clinician handoff.
-24. Each selected trigger yields at least one specific coping line.
-25. The same answers always generate an identical plan.
-26. Screen, PDF, email, and dashboard render identical plan content.
-27. The PDF renders RTL with correct Arabic shaping and no clipped text.
-28. Download works when email consent was declined.
-29. Email is only attempted when `plan_email` consent is true.
-30. The privacy notice appears before the first health question.
+1. FTND is offered only to cigarette users.
+2. FTND totals 0–10 across all six items and is order-independent.
+3. Declining FTND still produces a complete plan.
+4. Vape, shisha, pouch and other non-cigarette users never receive a dependence score.
+5. Non-cigarette users never receive a dependence band.
+6. No Penn State, LWDS-11, HONC or adapted-oral instrument is invoked by the engine.
+7. The one-puff pathway is generated with stop / not-failure / identify-trigger / resume.
+8. The one-cigarette pathway is generated with lapse framing, access removal, restart, support.
+9. The one-day pathway is generated with structured recovery review and increased intensity.
+10. The regular-smoking relapse pathway is generated with no shame framing and strategy reassessment.
+11. All four pathways are demonstrably different text and different logic.
+12. Craving techniques appear only in the craving section, never replacing the four pathways.
+13. Preparation, quit day, 24h, 72h and days 4–7 sections are generated.
+14. Weeks 2–4 generated.
+15. Months 2–3 generated.
+16. Months 4–6 generated.
+17. Months 7–12 generated.
+18. After-one-year section generated.
+19. Long-term maintenance / relapse-prevention section generated.
+20. Under-18 users still receive a full behavioural plan and PDF download.
+21. Under-18 email delivery is disabled and recorded as such.
+22. Stable mental-health condition does not suppress behavioural support.
+23. Unstable mental-health without red flags yields clinician handoff plus behavioural support.
+24. Suicidal ideation triggers the emergency pathway and pauses ordinary plan generation.
+25. Setting the medication flag true alone does not render any medication content.
+26. Medication content requires flag true AND an approved clinical rule version.
+27. No medication name, dose, or product appears anywhere in Release 1 output.
+28. Jurisdiction is captured before any location or service question.
+29. `GENERIC` output contains no Sehhaty, 937, 997 or SFDA reference and no invented foreign number.
+30. `SA` output uses Sehhaty for booking, 937 for support, 997 only for emergency.
+31. Stable cardiac history does not trigger emergency routing; active symptoms do.
+32. Email consent value, timestamp and consent version are persisted server-side.
+33. Email is only attempted when stored consent is true.
+34. Provider not configured produces a truthful message plus a working plan link.
+35. No user-facing text claims data was sent to Aqla administration.
+36. Screen, PDF, email and dashboard render byte-identical plan content from one `plan_json`.
+37. Regenerating a plan creates a new version; the prior version is unchanged.
+38. `country_code`, `jurisdiction`, `plan_variant`, `dependence_status`, `quit_strategy`,
+    `safety_gate_level`, `safety_flags`, `plan_version`, `clinical_rule_version`,
+    `generated_at` and `email_status` are all persisted.
+39. No personalised money figure appears unless spend data was collected.
+40. The privacy notice appears before the first health question.
 
-## Technical notes
+---
 
-- New: `src/lib/clinical/release-flags.ts`, `src/lib/clinical/questions.ts`,
-  `src/lib/clinical/safety.ts`, `src/lib/clinical/jurisdiction.ts`.
-- Modified: `src/routes/quit-chat.tsx` (runner over the question bank, same visuals),
-  `src/lib/quit-plan-builder.ts` (behavioural generator + flag gating),
-  `src/lib/quit-plan.functions.ts` (admin email path removed, consent-gated user email),
-  `src/components/PrintableQuitPlan.tsx` (renders from `plan_json`).
-- No schema migration required; `quit_plans` already has `intake_answers`, `plan`,
-  `plan_token`, `score_total`, `score_band`, `risk_flag`.
+FTND IS THE ONLY DEPENDENCE INSTRUMENT IMPLEMENTED IN RELEASE 1: YES
+
+ONE-PUFF, ONE-CIGARETTE, ONE-DAY AND REGULAR-RELAPSE PATHWAYS ARE FOUR DISTINCT PROTOCOLS: YES
+
+PLAN EXTENDS BEYOND 12 MONTHS: YES
+
+UNDER-18 BEHAVIOURAL PLAN REMAINS AVAILABLE: YES
+
+MEDICATION FLAG ALONE CAN ACTIVATE PHARMACOTHERAPY: NO
+
+CONSENT AND CLINICAL VERSIONING ARE PERSISTED: YES
+
+ONE IMMUTABLE PLAN_JSON SOURCE OF TRUTH: YES
+
+READY TO APPROVE FOR IMPLEMENTATION: YES
