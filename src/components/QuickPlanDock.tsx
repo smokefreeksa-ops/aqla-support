@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Sparkles, HeartPulse, ClipboardList, X } from "lucide-react";
+import { HeartPulse, ClipboardList, X } from "lucide-react";
 import { appRoutes } from "@/lib/app-routes";
 import { track } from "@/lib/events";
 
