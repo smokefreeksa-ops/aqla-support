@@ -57,9 +57,11 @@ function Consent() {
   async function decide(approve: boolean) {
     setBusy(true);
     setError(null);
+    const oauth = (supabase.auth as unknown as { oauth: OAuthNamespace }).oauth;
     const { data, error } = approve
       ? await oauth.approveAuthorization(authorization_id)
       : await oauth.denyAuthorization(authorization_id);
+
     if (error) { setBusy(false); setError(error.message); return; }
     const target = data?.redirect_url ?? data?.redirect_to;
     if (!target) { setBusy(false); setError("No redirect returned by the authorization server."); return; }
