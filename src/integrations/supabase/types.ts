@@ -3165,22 +3165,36 @@ export type Database = {
           anonymous_session_id: string
           assessment_tool: string | null
           city: string | null
+          clinical_rule_version: string | null
+          country_code: string | null
           created_at: string
+          dependence_status: string | null
           email: string | null
           email_sent_at: string | null
+          email_status: string
           followup_schedule: Json
+          generated_at: string | null
           id: string
           intake_answers: Json
+          jurisdiction: string
           money_setup: Json
           nickname: string | null
           pdf_url: string | null
           plan: Json
+          plan_email_consent: boolean
+          plan_email_consent_at: string | null
+          plan_email_consent_version: string | null
           plan_token: string | null
+          plan_variant: string | null
+          plan_version: number
           product: string | null
           quit_date: string | null
           quit_goal: string | null
+          quit_strategy: string | null
           readiness: string | null
           risk_flag: boolean | null
+          safety_flags: Json
+          safety_gate_level: string
           score_band: string | null
           score_total: number | null
           session_id: string
@@ -3196,22 +3210,36 @@ export type Database = {
           anonymous_session_id: string
           assessment_tool?: string | null
           city?: string | null
+          clinical_rule_version?: string | null
+          country_code?: string | null
           created_at?: string
+          dependence_status?: string | null
           email?: string | null
           email_sent_at?: string | null
+          email_status?: string
           followup_schedule?: Json
+          generated_at?: string | null
           id?: string
           intake_answers?: Json
+          jurisdiction?: string
           money_setup?: Json
           nickname?: string | null
           pdf_url?: string | null
           plan?: Json
+          plan_email_consent?: boolean
+          plan_email_consent_at?: string | null
+          plan_email_consent_version?: string | null
           plan_token?: string | null
+          plan_variant?: string | null
+          plan_version?: number
           product?: string | null
           quit_date?: string | null
           quit_goal?: string | null
+          quit_strategy?: string | null
           readiness?: string | null
           risk_flag?: boolean | null
+          safety_flags?: Json
+          safety_gate_level?: string
           score_band?: string | null
           score_total?: number | null
           session_id: string
@@ -3227,22 +3255,36 @@ export type Database = {
           anonymous_session_id?: string
           assessment_tool?: string | null
           city?: string | null
+          clinical_rule_version?: string | null
+          country_code?: string | null
           created_at?: string
+          dependence_status?: string | null
           email?: string | null
           email_sent_at?: string | null
+          email_status?: string
           followup_schedule?: Json
+          generated_at?: string | null
           id?: string
           intake_answers?: Json
+          jurisdiction?: string
           money_setup?: Json
           nickname?: string | null
           pdf_url?: string | null
           plan?: Json
+          plan_email_consent?: boolean
+          plan_email_consent_at?: string | null
+          plan_email_consent_version?: string | null
           plan_token?: string | null
+          plan_variant?: string | null
+          plan_version?: number
           product?: string | null
           quit_date?: string | null
           quit_goal?: string | null
+          quit_strategy?: string | null
           readiness?: string | null
           risk_flag?: boolean | null
+          safety_flags?: Json
+          safety_gate_level?: string
           score_band?: string | null
           score_total?: number | null
           session_id?: string
