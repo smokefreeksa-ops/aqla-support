@@ -9,7 +9,8 @@ import {
   claimClinicalPlan,
 
 } from "@/lib/clinical/clinical-plan.functions";
-import { QUESTIONS, nextQuestion, type Question } from "@/lib/clinical/questions";
+import { QUESTIONS, nextQuestion, hasEmergencyRedFlag, type Question } from "@/lib/clinical/questions";
+import { evaluateSafety } from "@/lib/clinical/safety";
 import type { ClinicalAnswers, ClinicalPlanJSON } from "@/lib/clinical/types";
 import aqlaLogo from "@/assets/aqla-logo.png";
 import { ClinicalPlanView } from "@/components/clinical/ClinicalPlanView";
