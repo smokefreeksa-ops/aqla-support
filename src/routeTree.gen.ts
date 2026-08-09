@@ -69,6 +69,7 @@ import { Route as TryShootRouteImport } from './routes/try.shoot'
 import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planToken'
 import { Route as ModulesSlugRouteImport } from './routes/modules.$slug'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as DashboardSessionsRouteImport } from './routes/dashboard.sessions'
 import { Route as DashboardPathsRouteImport } from './routes/dashboard.paths'
 import { Route as DashboardLearningRouteImport } from './routes/dashboard.learning'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
@@ -388,6 +389,11 @@ const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardSessionsRoute = DashboardSessionsRouteImport.update({
+  id: '/sessions',
+  path: '/sessions',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardPathsRoute = DashboardPathsRouteImport.update({
   id: '/paths',
   path: '/paths',
@@ -550,6 +556,7 @@ export interface FileRoutesByFullPath {
   '/certificate/$code': typeof CertificateCodeRoute
   '/dashboard/learning': typeof DashboardLearningRoute
   '/dashboard/paths': typeof DashboardPathsRoute
+  '/dashboard/sessions': typeof DashboardSessionsRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
@@ -628,6 +635,7 @@ export interface FileRoutesByTo {
   '/certificate/$code': typeof CertificateCodeRoute
   '/dashboard/learning': typeof DashboardLearningRoute
   '/dashboard/paths': typeof DashboardPathsRoute
+  '/dashboard/sessions': typeof DashboardSessionsRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
@@ -709,6 +717,7 @@ export interface FileRoutesById {
   '/certificate/$code': typeof CertificateCodeRoute
   '/dashboard/learning': typeof DashboardLearningRoute
   '/dashboard/paths': typeof DashboardPathsRoute
+  '/dashboard/sessions': typeof DashboardSessionsRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
@@ -791,6 +800,7 @@ export interface FileRouteTypes {
     | '/certificate/$code'
     | '/dashboard/learning'
     | '/dashboard/paths'
+    | '/dashboard/sessions'
     | '/email/unsubscribe'
     | '/modules/$slug'
     | '/quit-plan/$planToken'
@@ -869,6 +879,7 @@ export interface FileRouteTypes {
     | '/certificate/$code'
     | '/dashboard/learning'
     | '/dashboard/paths'
+    | '/dashboard/sessions'
     | '/email/unsubscribe'
     | '/modules/$slug'
     | '/quit-plan/$planToken'
@@ -949,6 +960,7 @@ export interface FileRouteTypes {
     | '/certificate/$code'
     | '/dashboard/learning'
     | '/dashboard/paths'
+    | '/dashboard/sessions'
     | '/email/unsubscribe'
     | '/modules/$slug'
     | '/quit-plan/$planToken'
@@ -1459,6 +1471,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/sessions': {
+      id: '/dashboard/sessions'
+      path: '/sessions'
+      fullPath: '/dashboard/sessions'
+      preLoaderRoute: typeof DashboardSessionsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/paths': {
       id: '/dashboard/paths'
       path: '/paths'
@@ -1617,12 +1636,14 @@ const AqlaQuitEngineRouteWithChildren = AqlaQuitEngineRoute._addFileChildren(
 interface DashboardRouteChildren {
   DashboardLearningRoute: typeof DashboardLearningRoute
   DashboardPathsRoute: typeof DashboardPathsRoute
+  DashboardSessionsRoute: typeof DashboardSessionsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardLearningRoute: DashboardLearningRoute,
   DashboardPathsRoute: DashboardPathsRoute,
+  DashboardSessionsRoute: DashboardSessionsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
 
