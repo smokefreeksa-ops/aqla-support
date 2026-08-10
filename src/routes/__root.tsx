@@ -126,8 +126,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:site", content: "@SmokeOffKSA" },
       { name: "twitter:title", content: "Aqla — أقلع" },
       { name: "twitter:description", content: "A free physician-led digital pathway for smoking and nicotine cessation support, dependence assessment, volunteer training, and community awareness." },
-      { property: "og:image", content: "https://aqla1.com/og-aqla.jpg?v=2" },
-      { name: "twitter:image", content: "https://aqla1.com/og-aqla.jpg?v=2" },
     ],
     links: [
       {
