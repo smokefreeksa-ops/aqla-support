@@ -169,13 +169,19 @@ export function StudyInvitationOverlay() {
         }}
         role="presentation"
       >
-        <SaudiFlagWave />
-        {/* Extra scrim so the study modal stays readable over the flag */}
+        {/* Deep Saudi-green environment */}
+        <div aria-hidden className="study-environment pointer-events-none absolute inset-0 z-0" />
+        {/* Flag stays, but blended into the green field instead of washing it out */}
+        <div className="pointer-events-none absolute inset-0 z-[1] opacity-25 mix-blend-soft-light">
+          <SaudiFlagWave />
+        </div>
+        {/* Edge vignette keeps the centre richer than the corners */}
         <div
-          className="pointer-events-none absolute inset-0 z-[1]"
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-[2]"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 45%, rgba(0,25,12,0.55) 0%, rgba(0,18,9,0.78) 55%, rgba(0,10,5,0.95) 100%)",
+              "radial-gradient(ellipse at 50% 48%, rgba(0,0,0,0) 30%, rgba(1,25,19,0.35) 70%, rgba(1,20,15,0.62) 100%)",
           }}
         />
 
@@ -199,12 +205,14 @@ export function StudyInvitationOverlay() {
               transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
             }}
           >
+            <div aria-hidden className="study-aura" />
             <div aria-hidden className="crystal-backlight" />
             <div className="crystal-panel flex max-h-full min-h-0 flex-col">
               <div aria-hidden className="crystal-edge-light" />
               <div aria-hidden className="crystal-inner-highlight" />
               <div aria-hidden className="glass-frost" />
               <div aria-hidden className="glass-noise" />
+
 
         <div
           aria-hidden
