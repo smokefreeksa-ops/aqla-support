@@ -554,25 +554,25 @@ body {
   width: 100%;
   isolation: isolate;
   filter:
-    drop-shadow(0 30px 55px rgba(0, 0, 0, 0.4))
-    drop-shadow(0 0 18px rgba(205, 255, 255, 0.42))
-    drop-shadow(0 0 42px rgba(48, 255, 231, 0.28));
+    drop-shadow(0 30px 55px rgba(0, 0, 0, 0.45))
+    drop-shadow(0 0 20px rgba(255, 255, 255, 0.75))
+    drop-shadow(0 0 55px rgba(255, 255, 255, 0.45));
 }
 
 .crystal-backlight {
   position: absolute;
-  inset: -70px -80px;
+  inset: -80px -90px;
   z-index: -5;
   pointer-events: none;
   background: radial-gradient(
     ellipse at 50% 45%,
-    rgba(210, 255, 255, 0.32) 0%,
-    rgba(79, 255, 235, 0.24) 20%,
-    rgba(0, 224, 205, 0.16) 40%,
-    rgba(0, 132, 127, 0.08) 58%,
-    transparent 74%
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.32) 22%,
+    rgba(255, 255, 255, 0.16) 44%,
+    rgba(255, 255, 255, 0.06) 62%,
+    transparent 76%
   );
-  filter: blur(42px);
+  filter: blur(46px);
 }
 
 .crystal-panel {
@@ -593,44 +593,44 @@ body {
     0 9%,
     3% 3%
   );
-  border: 2px solid rgba(235, 255, 255, 0.94);
+  border: 2px solid rgba(255, 255, 255, 1);
   background:
     radial-gradient(
-      ellipse at 50% 38%,
-      rgba(209, 255, 252, 0.24) 0%,
-      rgba(89, 245, 229, 0.12) 38%,
-      transparent 67%
+      ellipse at 50% 34%,
+      rgba(255, 255, 255, 0.42) 0%,
+      rgba(255, 255, 255, 0.18) 40%,
+      transparent 70%
     ),
     linear-gradient(
       128deg,
-      rgba(255, 255, 255, 0.3) 0%,
-      rgba(202, 255, 252, 0.13) 7%,
-      transparent 19%
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0.22) 8%,
+      transparent 22%
     ),
     linear-gradient(
       310deg,
-      rgba(255, 255, 255, 0.24) 0%,
-      rgba(125, 255, 242, 0.1) 10%,
-      transparent 25%
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.18) 11%,
+      transparent 27%
     ),
     linear-gradient(
       145deg,
-      rgba(172, 255, 249, 0.24) 0%,
-      rgba(71, 210, 200, 0.2) 22%,
-      rgba(10, 60, 62, 0.34) 48%,
-      rgba(47, 184, 177, 0.17) 72%,
-      rgba(185, 255, 250, 0.23) 100%
+      rgba(255, 255, 255, 0.34) 0%,
+      rgba(255, 255, 255, 0.2) 24%,
+      rgba(255, 255, 255, 0.12) 50%,
+      rgba(255, 255, 255, 0.2) 74%,
+      rgba(255, 255, 255, 0.36) 100%
     );
-  backdrop-filter: blur(16px) saturate(160%) brightness(1.16);
+  backdrop-filter: blur(18px) saturate(20%) brightness(1.45) contrast(1.05);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.75),
-    inset 0 0 12px rgba(228, 255, 255, 0.78),
-    inset 0 0 45px rgba(109, 255, 242, 0.28),
-    inset 0 -45px 90px rgba(0, 45, 48, 0.22),
-    0 0 10px rgba(245, 255, 255, 0.92),
-    0 0 24px rgba(134, 255, 247, 0.72),
-    0 0 55px rgba(34, 245, 224, 0.42),
-    0 0 105px rgba(0, 195, 181, 0.22);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.95),
+    inset 0 0 16px rgba(255, 255, 255, 0.95),
+    inset 0 0 60px rgba(255, 255, 255, 0.4),
+    inset 0 -45px 90px rgba(255, 255, 255, 0.12),
+    0 0 12px rgba(255, 255, 255, 1),
+    0 0 30px rgba(255, 255, 255, 0.85),
+    0 0 70px rgba(255, 255, 255, 0.5),
+    0 0 130px rgba(255, 255, 255, 0.28);
 }
 
 .crystal-panel::before {
@@ -653,11 +653,11 @@ body {
     0 9%,
     3% 3.4%
   );
-  border: 2px solid rgba(218, 255, 255, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.8);
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.25), transparent 13%),
-    linear-gradient(315deg, rgba(255, 255, 255, 0.18), transparent 16%);
-  box-shadow: inset 0 0 14px rgba(214, 255, 255, 0.34);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.4), transparent 14%),
+    linear-gradient(315deg, rgba(255, 255, 255, 0.3), transparent 17%);
+  box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.5);
 }
 
 .crystal-panel::after {
@@ -676,8 +676,8 @@ body {
     0 92%,
     0 8%
   );
-  border: 1px solid rgba(212, 255, 251, 0.24);
-  box-shadow: inset 0 0 20px rgba(181, 255, 248, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.2);
 }
 
 .crystal-inner-highlight {
@@ -689,15 +689,15 @@ body {
     linear-gradient(
       167deg,
       transparent 0 19%,
-      rgba(255, 255, 255, 0.11) 20%,
+      rgba(255, 255, 255, 0.2) 20%,
       transparent 36%
     ),
-    linear-gradient(72deg, rgba(255, 255, 255, 0.13) 0%, transparent 20%),
-    linear-gradient(288deg, rgba(204, 255, 251, 0.12) 0%, transparent 22%),
+    linear-gradient(72deg, rgba(255, 255, 255, 0.22) 0%, transparent 21%),
+    linear-gradient(288deg, rgba(255, 255, 255, 0.2) 0%, transparent 23%),
     radial-gradient(
-      ellipse at 50% 35%,
-      rgba(185, 255, 250, 0.19),
-      transparent 52%
+      ellipse at 50% 32%,
+      rgba(255, 255, 255, 0.3),
+      transparent 55%
     );
 }
 
@@ -706,12 +706,12 @@ body {
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.46;
+  opacity: 0.55;
   background:
-    radial-gradient(ellipse at 14% 18%, rgba(255, 255, 255, 0.22), transparent 11%),
-    radial-gradient(ellipse at 83% 20%, rgba(255, 255, 255, 0.15), transparent 12%),
-    radial-gradient(ellipse at 26% 72%, rgba(174, 255, 248, 0.1), transparent 17%),
-    radial-gradient(ellipse at 75% 64%, rgba(255, 255, 255, 0.12), transparent 15%);
+    radial-gradient(ellipse at 14% 18%, rgba(255, 255, 255, 0.35), transparent 12%),
+    radial-gradient(ellipse at 83% 20%, rgba(255, 255, 255, 0.28), transparent 13%),
+    radial-gradient(ellipse at 26% 72%, rgba(255, 255, 255, 0.22), transparent 17%),
+    radial-gradient(ellipse at 75% 64%, rgba(255, 255, 255, 0.24), transparent 15%);
   filter: blur(7px);
 }
 
@@ -720,18 +720,17 @@ body {
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  opacity: 0.075;
+  opacity: 0.09;
   background-image: repeating-radial-gradient(
     circle at 0 0,
     transparent 0,
-    rgba(255, 255, 255, 0.22) 1px,
+    rgba(255, 255, 255, 0.35) 1px,
     transparent 2px,
     transparent 7px
   );
   background-size: 19px 23px;
   mix-blend-mode: screen;
 }
-
 
 .crystal-edge-light {
   position: absolute;
@@ -740,13 +739,14 @@ body {
   pointer-events: none;
   clip-path: inherit;
   background:
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 1), transparent)
+      top / 84% 2px no-repeat,
     linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent)
-      top / 80% 2px no-repeat,
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.72), transparent)
-      bottom / 80% 2px no-repeat,
-    linear-gradient(180deg, transparent, rgba(207, 255, 252, 0.64), transparent)
-      left / 2px 78% no-repeat,
-    linear-gradient(180deg, transparent, rgba(207, 255, 252, 0.64), transparent)
-      right / 2px 78% no-repeat;
-  filter: drop-shadow(0 0 7px white) drop-shadow(0 0 13px #77fff1);
+      bottom / 84% 2px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.85), transparent)
+      left / 2px 82% no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.85), transparent)
+      right / 2px 82% no-repeat;
+  filter: drop-shadow(0 0 8px white) drop-shadow(0 0 16px rgba(255, 255, 255, 0.9));
 }
+
