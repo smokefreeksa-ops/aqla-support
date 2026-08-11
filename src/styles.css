@@ -556,58 +556,32 @@ body {
   --study-sage: #5a7a6a;
 }
 
-/* Deep Saudi-green field: dark at the edges, richer at the centre */
+/* Deep Saudi-green field: vivid, saturated, and completely untouched by the panel */
 .study-environment {
   background: radial-gradient(
     ellipse at 50% 48%,
-    #087052 0%,
-    #005b45 30%,
-    #003b2f 62%,
-    #01251d 100%
+    #0a8f6b 0%,
+    #007a5a 26%,
+    #00523f 55%,
+    #012d23 100%
   );
 }
 
-/* Soft emerald aura immediately behind the crystal */
+/* Aura removed so the green background stays untouched */
 .study-aura {
-  position: absolute;
-  inset: -110px -120px;
-  z-index: -4;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0, 190, 118, 0.3) 0%,
-    rgba(0, 145, 91, 0.2) 28%,
-    rgba(0, 105, 70, 0.1) 48%,
-    transparent 70%
-  );
-  filter: blur(48px);
+  display: none;
 }
 
 .crystal-shell {
   position: relative;
   width: 100%;
   isolation: isolate;
-  /* Tight rim illumination only — no broad white fog */
-  filter:
-    drop-shadow(0 0 3px rgba(255, 255, 255, 0.9))
-    drop-shadow(0 0 8px rgba(225, 255, 238, 0.55))
-    drop-shadow(0 0 24px rgba(0, 168, 107, 0.26))
-    drop-shadow(0 22px 40px rgba(0, 20, 14, 0.5));
+  /* No outward glow — all light stays inside the crystal */
 }
 
-/* Contained emerald backlight */
+/* Exterior backlight removed so the green background stays untouched */
 .crystal-backlight {
-  position: absolute;
-  inset: -18px -20px;
-  z-index: -5;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse at 50% 45%,
-    rgba(0, 190, 118, 0.22) 0%,
-    rgba(0, 130, 84, 0.14) 40%,
-    transparent 72%
-  );
-  filter: blur(22px);
+  display: none;
 }
 
 .crystal-panel {
