@@ -14,6 +14,7 @@ import { useTypewriter } from "@/hooks/useTypewriter";
 import { getPublicImpactStats } from "@/lib/impact.functions";
 import { trackEvent } from "@/lib/track-event";
 import SaudiFlagWave from "@/components/SaudiFlagWave";
+import aqlaLogo from "@/assets/aqla-logo.png";
 
 const PUBLICATIONS = [
   {
