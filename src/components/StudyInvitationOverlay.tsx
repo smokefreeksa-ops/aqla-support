@@ -268,7 +268,7 @@ export function StudyInvitationOverlay() {
           </h2>
 
           {/* Prize subtitle */}
-          <p className="text-center text-[13.5px] font-semibold text-[#c9a84c] sm:text-[15px]">
+          <p className="text-center text-[13.5px] font-bold text-[#a8862f] sm:text-[15px]">
             {t.prizeSubtitle}
           </p>
 
