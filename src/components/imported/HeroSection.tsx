@@ -342,6 +342,14 @@ export default function HeroSection() {
             </a>
           </div>
 
+          <div className="mb-5 flex justify-center">
+            <img
+              src={aqlaLogo}
+              alt="شعار أقلع — Aqla Logo"
+              className="h-20 w-auto object-contain drop-shadow-[0_4px_24px_rgba(0,0,0,0.45)] sm:h-24 md:h-28"
+            />
+          </div>
+
           <TypewriterHeadline />
 
           <p
