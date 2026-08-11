@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Zap } from "lucide-react";
 import { getPublicImpactStats } from "@/lib/impact.functions";
 import { QuitChatDrawer } from "@/components/QuitChatDrawer";
 
