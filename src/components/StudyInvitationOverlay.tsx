@@ -168,8 +168,15 @@ export function StudyInvitationOverlay() {
         }}
         role="presentation"
       >
-        <LuxuryStarfield />
-        <GalaxyCanvas />
+        <SaudiFlagWave />
+        {/* Extra scrim so the study modal stays readable over the flag */}
+        <div
+          className="pointer-events-none absolute inset-0 z-[1]"
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 45%, rgba(0,25,12,0.55) 0%, rgba(0,18,9,0.78) 55%, rgba(0,10,5,0.95) 100%)",
+          }}
+        />
 
           <div className="relative z-10 flex h-full flex-col">
            <ResearchBanner />
