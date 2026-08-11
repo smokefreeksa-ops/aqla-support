@@ -722,7 +722,7 @@ body {
   mix-blend-mode: screen;
 }
 
-/* Brilliant thin rim along the flat edges */
+/* Brilliant thin rim along the flat edges — no outward glow */
 .crystal-edge-light {
   position: absolute;
   inset: -1px;
@@ -738,7 +738,6 @@ body {
       left / 1.5px 82% no-repeat,
     linear-gradient(180deg, transparent, rgba(226, 255, 240, 0.7), transparent)
       right / 1.5px 82% no-repeat;
-  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.85));
 }
 
 

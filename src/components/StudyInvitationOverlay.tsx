@@ -175,15 +175,6 @@ export function StudyInvitationOverlay() {
         <div className="pointer-events-none absolute inset-0 z-[1] opacity-[0.14] mix-blend-soft-light">
           <SaudiFlagWave />
         </div>
-        {/* Green edge vignette keeps the centre richer than the corners */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 z-[2]"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 48%, rgba(0,90,68,0) 26%, rgba(0,50,39,0.34) 66%, rgba(1,40,31,0.6) 100%)",
-          }}
-        />
 
 
           <div className="relative z-10 flex h-full flex-col">
@@ -206,8 +197,6 @@ export function StudyInvitationOverlay() {
               transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
             }}
           >
-            <div aria-hidden className="study-aura" />
-            <div aria-hidden className="crystal-backlight" />
             <div className="crystal-panel flex max-h-full min-h-0 flex-col">
               <div aria-hidden className="crystal-edge-light" />
               <div aria-hidden className="crystal-inner-highlight" />
