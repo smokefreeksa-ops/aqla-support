@@ -200,10 +200,6 @@ export function StudyInvitationOverlay() {
             }}
           >
             <div aria-hidden className="crystal-backlight" />
-            <i aria-hidden className="corner-flare flare-tl" />
-            <i aria-hidden className="corner-flare flare-tr" />
-            <i aria-hidden className="corner-flare flare-bl" />
-            <i aria-hidden className="corner-flare flare-br" />
             <div className="crystal-panel flex max-h-full min-h-0 flex-col">
               <div aria-hidden className="crystal-edge-light" />
               <div aria-hidden className="crystal-inner-highlight" />
