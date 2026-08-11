@@ -602,25 +602,22 @@ body {
     0 9%,
     3% 3%
   );
-  border: 1.5px solid rgba(255, 255, 255, 0.85);
-  /* Translucent glass body — the green environment shows through */
+  border: 1.5px solid rgba(255, 255, 255, 0.72);
+  /* More translucent glass body so the green environment shows through */
   background: linear-gradient(
     145deg,
-    rgba(245, 255, 250, 0.24) 0%,
-    rgba(225, 245, 235, 0.15) 48%,
-    rgba(205, 232, 220, 0.2) 100%
+    rgba(245, 255, 250, 0.16) 0%,
+    rgba(225, 245, 235, 0.09) 48%,
+    rgba(205, 232, 220, 0.12) 100%
   );
-  backdrop-filter: blur(22px) saturate(135%) brightness(1.08);
+  backdrop-filter: blur(22px) saturate(120%) brightness(1.02);
 
+  /* Only inset light — no exterior glow leaks into the green background */
   box-shadow:
-    /* bright exterior rim */
-    inset 0 0 0 1px rgba(255, 255, 255, 0.55),
-    /* outer bevel light gathering at the perimeter */
-    inset 0 0 14px rgba(255, 255, 255, 0.28),
-    inset 0 -40px 70px rgba(255, 255, 255, 0.06),
-    inset 0 40px 70px rgba(0, 70, 48, 0.08),
-    0 0 2px rgba(255, 255, 255, 0.8),
-    0 0 14px rgba(0, 190, 118, 0.22);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.48),
+    inset 0 0 14px rgba(255, 255, 255, 0.22),
+    inset 0 -40px 70px rgba(255, 255, 255, 0.04),
+    inset 0 40px 70px rgba(0, 70, 48, 0.06);
 }
 
 /* Inset crystal line (first facet ring) */
