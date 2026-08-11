@@ -570,45 +570,46 @@ body {
 /* Soft emerald aura immediately behind the crystal */
 .study-aura {
   position: absolute;
-  inset: -110px -120px;
+  inset: -120px -130px;
   z-index: -4;
   pointer-events: none;
   background: radial-gradient(
     ellipse at center,
-    rgba(0, 168, 107, 0.32) 0%,
+    rgba(0, 168, 107, 0.3) 0%,
     rgba(0, 123, 82, 0.18) 35%,
     rgba(0, 80, 55, 0.08) 58%,
     transparent 72%
   );
-  filter: blur(38px);
+  filter: blur(42px);
 }
 
 .crystal-shell {
   position: relative;
   width: 100%;
   isolation: isolate;
-  /* White illumination stays tight on the crystal — no page-wide bleach */
+  /* White illumination stays tight on the rim — no page-wide bleach */
   filter:
-    drop-shadow(0 26px 60px rgba(0, 26, 17, 0.5))
-    drop-shadow(0 0 6px rgba(255, 255, 255, 0.55))
-    drop-shadow(0 0 18px rgba(190, 255, 220, 0.3));
+    drop-shadow(0 26px 60px rgba(0, 26, 17, 0.55))
+    drop-shadow(0 0 4px rgba(255, 255, 255, 0.6))
+    drop-shadow(0 0 10px rgba(190, 255, 220, 0.22));
 }
 
 /* Small, contained backlight — mint/emerald rather than broad white */
 .crystal-backlight {
   position: absolute;
-  inset: -26px -30px;
+  inset: -22px -26px;
   z-index: -5;
   pointer-events: none;
   background: radial-gradient(
     ellipse at 50% 45%,
-    rgba(226, 255, 240, 0.3) 0%,
-    rgba(0, 168, 107, 0.18) 34%,
-    rgba(0, 90, 62, 0.08) 56%,
+    rgba(226, 255, 240, 0.22) 0%,
+    rgba(0, 168, 107, 0.2) 34%,
+    rgba(0, 90, 62, 0.09) 56%,
     transparent 72%
   );
-  filter: blur(28px);
+  filter: blur(24px);
 }
+
 
 .crystal-panel {
   position: relative;
