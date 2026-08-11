@@ -216,8 +216,8 @@ export function AqlaWelcomeGate() {
       <div className="relative z-10 w-full max-w-xl rounded-3xl border border-[#c9a84c]/30 bg-black/20 px-6 py-9 text-center shadow-2xl backdrop-blur-sm sm:px-10 sm:py-12">
         <img
           src={aqlaLogo}
-          alt="أقلع — Aqla"
-          className="mx-auto mb-5 h-20 w-20 rounded-full bg-white/95 object-contain p-2 shadow-lg sm:h-24 sm:w-24"
+          alt="شعار أقلع — Aqla Logo"
+          className="mx-auto mb-5 h-24 w-auto object-contain drop-shadow-[0_6px_32px_rgba(0,0,0,0.45)] sm:h-28"
         />
 
         <h1

@@ -14,6 +14,7 @@ import { useTypewriter } from "@/hooks/useTypewriter";
 import { getPublicImpactStats } from "@/lib/impact.functions";
 import { trackEvent } from "@/lib/track-event";
 import SaudiFlagWave from "@/components/SaudiFlagWave";
+import aqlaLogo from "@/assets/aqla-logo.png";
 
 const PUBLICATIONS = [
   {
@@ -339,6 +340,14 @@ export default function HeroSection() {
               </span>
               <ExternalLink className="w-3.5 h-3.5 text-white/70 flex-shrink-0" />
             </a>
+          </div>
+
+          <div className="mb-5 flex justify-center">
+            <img
+              src={aqlaLogo}
+              alt="شعار أقلع — Aqla Logo"
+              className="h-20 w-auto object-contain drop-shadow-[0_4px_24px_rgba(0,0,0,0.45)] sm:h-24 md:h-28"
+            />
           </div>
 
           <TypewriterHeadline />
