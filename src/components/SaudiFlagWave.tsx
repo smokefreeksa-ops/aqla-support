@@ -64,34 +64,8 @@ export default function SaudiFlagWave() {
         </defs>
 
         <g filter={`url(#${filterId})`}>
-          {/* Green field */}
+          {/* Green field only */}
           <rect width="900" height="600" fill="#006C35" />
-
-          {/* Shahada - centered, white */}
-          <text
-            x="450"
-            y="265"
-            textAnchor="middle"
-            fill="#ffffff"
-            fontSize="68"
-            fontFamily="'Amiri', 'IBM Plex Sans Arabic', 'Tajawal', 'Noto Naskh Arabic', serif"
-            fontWeight="700"
-            style={{ lineHeight: 1.2 }}
-          >
-            لا إله إلا الله محمد رسول الله
-          </text>
-
-          {/* Stylized white scimitar (sword) beneath the shahada */}
-          <g transform="translate(0, 40)" fill="#ffffff">
-            {/* Blade */}
-            <path d="M 310 440 C 360 455, 480 455, 590 415 C 595 413, 600 410, 605 407 L 610 414 C 600 420, 590 426, 580 430 C 480 470, 360 470, 310 452 Z" />
-            {/* Tip */}
-            <path d="M 605 407 L 615 400 L 612 413 Z" />
-            {/* Handle */}
-            <path d="M 305 432 L 330 445 L 322 458 L 298 445 Z" />
-            {/* Crossguard */}
-            <path d="M 325 440 L 335 450 L 330 455 L 320 445 Z" />
-          </g>
         </g>
       </svg>
 
