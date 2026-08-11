@@ -193,18 +193,23 @@ export function StudyInvitationOverlay() {
             tabIndex={-1}
             dir={t.dir}
             lang={lang}
-            className="relative flex max-h-[92%] w-full max-w-[520px] flex-col overflow-hidden rounded-[28px] outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
+            className="crystal-shell relative flex max-h-[92%] w-full max-w-[520px] flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
             style={{
-              background:
-                "linear-gradient(160deg, rgba(11,58,37,0.02) 0%, rgba(8,38,24,0.04) 100%)",
-              backdropFilter: "blur(2px) saturate(115%)",
-              border: "1px solid rgba(255,255,255,0.10)",
-              boxShadow:
-                "0 40px 100px -40px rgba(0,0,0,0.75), 0 0 0 1px rgba(201,168,76,0.06) inset",
               transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
               transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
             }}
           >
+            <div aria-hidden className="crystal-backlight" />
+            <i aria-hidden className="corner-flare flare-tl" />
+            <i aria-hidden className="corner-flare flare-tr" />
+            <i aria-hidden className="corner-flare flare-bl" />
+            <i aria-hidden className="corner-flare flare-br" />
+            <div className="crystal-panel flex max-h-full min-h-0 flex-col">
+              <div aria-hidden className="crystal-edge-light" />
+              <div aria-hidden className="crystal-inner-highlight" />
+              <div aria-hidden className="glass-frost" />
+              <div aria-hidden className="glass-noise" />
+
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/40 to-transparent"
