@@ -13,7 +13,7 @@ import {
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { getPublicImpactStats } from "@/lib/impact.functions";
 import { trackEvent } from "@/lib/track-event";
-import StarField from "./StarField";
+import SaudiFlagWave from "@/components/SaudiFlagWave";
 
 const PUBLICATIONS = [
   {
@@ -273,9 +273,9 @@ export default function HeroSection() {
     <section
       id="home"
       className="relative flex flex-col min-h-[92vh] items-center justify-center pt-24 pb-28 overflow-hidden"
-      style={{ background: "linear-gradient(to bottom, #0b3a25 0%, #0e4a30 55%, #072018 100%)" }}
+      style={{ background: "#020806" }}
     >
-      <StarField count={96} />
+      <SaudiFlagWave />
       <div className="absolute inset-0 z-[1] pointer-events-none">
         <div
           className="absolute top-1/2 left-1/2 h-[60vmin] w-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.10] blur-3xl"
