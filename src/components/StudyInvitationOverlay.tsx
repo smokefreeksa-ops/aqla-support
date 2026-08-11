@@ -269,9 +269,10 @@ export function StudyInvitationOverlay() {
           </h2>
 
           {/* Prize subtitle */}
-          <p className="text-center text-[13.5px] font-bold text-[#a8862f] sm:text-[15px]">
+          <p className="text-center text-[13.5px] font-bold text-[#b8952f] sm:text-[15px]">
             {t.prizeSubtitle}
           </p>
+
 
           {/* Actions */}
           <div className="flex flex-col gap-2.5">
