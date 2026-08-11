@@ -56,7 +56,6 @@ export function ResearchBanner() {
             }}
             className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-[10px] font-bold text-red-700 ring-1 ring-white/60 transition-colors hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:text-[11px]"
           >
-            <Zap className="h-3 w-3" aria-hidden="true" />
             ابدأ خطة الإقلاع السريعة مع د. مالك
           </button>
 
