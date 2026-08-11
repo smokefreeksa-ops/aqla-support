@@ -247,7 +247,6 @@ export function AqlaWelcomeGate() {
               href="/try#kys-1"
               className="group flex flex-col items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-4 text-center transition hover:border-[#c9a84c]/60 hover:bg-white/10 active:scale-[0.98]"
             >
-              <span className="text-2xl" aria-hidden>🧲</span>
               <span className="text-[12px] font-semibold leading-tight text-[#f4f0e1]">
                 اختبر اعتمادك على النيكوتين
               </span>
@@ -257,7 +256,6 @@ export function AqlaWelcomeGate() {
               href="/try#kys-0"
               className="group flex flex-col items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-4 text-center transition hover:border-[#c9a84c]/60 hover:bg-white/10 active:scale-[0.98]"
             >
-              <span className="text-2xl" aria-hidden>💸</span>
               <span className="text-[12px] font-semibold leading-tight text-[#f4f0e1]">
                 كم تنفق على التدخين؟
               </span>
@@ -268,7 +266,6 @@ export function AqlaWelcomeGate() {
               className="group relative flex flex-col items-center gap-1.5 overflow-hidden rounded-xl border border-white/10 bg-white/5 px-3 py-4 text-center transition hover:border-[#c9a84c]/60 hover:bg-white/10 active:scale-[0.98]"
             >
               <HexAnim />
-              <span className="relative text-2xl" aria-hidden>🎯</span>
               <span className="relative text-[12px] font-semibold leading-tight text-[#f4f0e1]">
                 تحدي كسر عادة التدخين
               </span>
