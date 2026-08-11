@@ -546,33 +546,68 @@ body {
 }
 
 /* ==========================================================
-   ULTRA-BRIGHT FACETED DIAMOND / CRYSTAL PANEL
-   (study invitation modal shell only)
+   LUMINOUS CRYSTAL PANEL IN A DEEP SAUDI-GREEN ENVIRONMENT
+   (study invitation modal only)
    ========================================================== */
+:root {
+  --study-emerald: #0b3a25;
+  --study-forest: #2d5a45;
+  --study-gold: #c9a84c;
+  --study-sage: #5a7a6a;
+}
+
+/* Deep Saudi-green field: dark at the edges, richer at the centre */
+.study-environment {
+  background: radial-gradient(
+    circle at 50% 48%,
+    #0a6b53 0%,
+    #005b45 28%,
+    #003b2f 58%,
+    #012d23 100%
+  );
+}
+
+/* Soft emerald aura immediately behind the crystal */
+.study-aura {
+  position: absolute;
+  inset: -110px -120px;
+  z-index: -4;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 168, 107, 0.32) 0%,
+    rgba(0, 123, 82, 0.18) 35%,
+    rgba(0, 80, 55, 0.08) 58%,
+    transparent 72%
+  );
+  filter: blur(38px);
+}
+
 .crystal-shell {
   position: relative;
   width: 100%;
   isolation: isolate;
+  /* White illumination stays tight on the crystal — no page-wide bleach */
   filter:
-    drop-shadow(0 30px 55px rgba(0, 0, 0, 0.45))
-    drop-shadow(0 0 20px rgba(255, 255, 255, 0.75))
-    drop-shadow(0 0 55px rgba(255, 255, 255, 0.45));
+    drop-shadow(0 26px 60px rgba(0, 26, 17, 0.5))
+    drop-shadow(0 0 6px rgba(255, 255, 255, 0.55))
+    drop-shadow(0 0 18px rgba(190, 255, 220, 0.3));
 }
 
+/* Small, contained backlight — mint/emerald rather than broad white */
 .crystal-backlight {
   position: absolute;
-  inset: -80px -90px;
+  inset: -26px -30px;
   z-index: -5;
   pointer-events: none;
   background: radial-gradient(
     ellipse at 50% 45%,
-    rgba(255, 255, 255, 0.55) 0%,
-    rgba(255, 255, 255, 0.32) 22%,
-    rgba(255, 255, 255, 0.16) 44%,
-    rgba(255, 255, 255, 0.06) 62%,
-    transparent 76%
+    rgba(226, 255, 240, 0.3) 0%,
+    rgba(0, 168, 107, 0.18) 34%,
+    rgba(0, 90, 62, 0.08) 56%,
+    transparent 72%
   );
-  filter: blur(46px);
+  filter: blur(28px);
 }
 
 .crystal-panel {
@@ -593,44 +628,44 @@ body {
     0 9%,
     3% 3%
   );
-  border: 2px solid rgba(255, 255, 255, 1);
+  border: 2px solid rgba(255, 255, 255, 0.95);
   background:
     radial-gradient(
       ellipse at 50% 34%,
-      rgba(255, 255, 255, 0.42) 0%,
-      rgba(255, 255, 255, 0.18) 40%,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(240, 255, 248, 0.24) 40%,
       transparent 70%
     ),
     linear-gradient(
       128deg,
-      rgba(255, 255, 255, 0.55) 0%,
-      rgba(255, 255, 255, 0.22) 8%,
+      rgba(255, 255, 255, 0.6) 0%,
+      rgba(238, 255, 247, 0.26) 8%,
       transparent 22%
     ),
     linear-gradient(
       310deg,
-      rgba(255, 255, 255, 0.45) 0%,
-      rgba(255, 255, 255, 0.18) 11%,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(236, 255, 246, 0.22) 11%,
       transparent 27%
     ),
     linear-gradient(
       145deg,
-      rgba(255, 255, 255, 0.34) 0%,
-      rgba(255, 255, 255, 0.2) 24%,
-      rgba(255, 255, 255, 0.12) 50%,
-      rgba(255, 255, 255, 0.2) 74%,
-      rgba(255, 255, 255, 0.36) 100%
+      rgba(245, 255, 250, 0.44) 0%,
+      rgba(245, 255, 250, 0.3) 24%,
+      rgba(245, 255, 250, 0.22) 50%,
+      rgba(245, 255, 250, 0.3) 74%,
+      rgba(245, 255, 250, 0.46) 100%
     );
-  backdrop-filter: blur(18px) saturate(20%) brightness(1.45) contrast(1.05);
+  backdrop-filter: blur(20px) saturate(120%) brightness(1.5) contrast(1.04);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.95),
-    inset 0 0 16px rgba(255, 255, 255, 0.95),
-    inset 0 0 60px rgba(255, 255, 255, 0.4),
+    inset 0 0 16px rgba(255, 255, 255, 0.9),
+    inset 0 0 60px rgba(232, 255, 244, 0.42),
     inset 0 -45px 90px rgba(255, 255, 255, 0.12),
-    0 0 12px rgba(255, 255, 255, 1),
-    0 0 30px rgba(255, 255, 255, 0.85),
-    0 0 70px rgba(255, 255, 255, 0.5),
-    0 0 130px rgba(255, 255, 255, 0.28);
+    0 0 8px rgba(255, 255, 255, 0.75),
+    0 0 24px rgba(190, 255, 220, 0.45),
+    0 0 55px rgba(0, 168, 107, 0.28),
+    0 35px 80px rgba(0, 30, 20, 0.28);
 }
 
 .crystal-panel::before {
@@ -653,11 +688,11 @@ body {
     0 9%,
     3% 3.4%
   );
-  border: 2px solid rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.78);
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.4), transparent 14%),
-    linear-gradient(315deg, rgba(255, 255, 255, 0.3), transparent 17%);
-  box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.5);
+    linear-gradient(315deg, rgba(232, 255, 244, 0.3), transparent 17%);
+  box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.45);
 }
 
 .crystal-panel::after {
@@ -676,8 +711,8 @@ body {
     0 92%,
     0 8%
   );
-  border: 1px solid rgba(255, 255, 255, 0.42);
-  box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(210, 255, 232, 0.45);
+  box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.18);
 }
 
 .crystal-inner-highlight {
@@ -686,14 +721,16 @@ body {
   z-index: 1;
   pointer-events: none;
   background:
+    /* soft reflection streak across the upper portion */
     linear-gradient(
       167deg,
-      transparent 0 19%,
-      rgba(255, 255, 255, 0.2) 20%,
-      transparent 36%
+      transparent 0 15%,
+      rgba(255, 255, 255, 0.3) 20%,
+      rgba(255, 255, 255, 0.1) 26%,
+      transparent 38%
     ),
     linear-gradient(72deg, rgba(255, 255, 255, 0.22) 0%, transparent 21%),
-    linear-gradient(288deg, rgba(255, 255, 255, 0.2) 0%, transparent 23%),
+    linear-gradient(288deg, rgba(226, 255, 240, 0.2) 0%, transparent 23%),
     radial-gradient(
       ellipse at 50% 32%,
       rgba(255, 255, 255, 0.3),
@@ -706,12 +743,12 @@ body {
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.55;
+  opacity: 0.5;
   background:
-    radial-gradient(ellipse at 14% 18%, rgba(255, 255, 255, 0.35), transparent 12%),
-    radial-gradient(ellipse at 83% 20%, rgba(255, 255, 255, 0.28), transparent 13%),
-    radial-gradient(ellipse at 26% 72%, rgba(255, 255, 255, 0.22), transparent 17%),
-    radial-gradient(ellipse at 75% 64%, rgba(255, 255, 255, 0.24), transparent 15%);
+    radial-gradient(ellipse at 14% 18%, rgba(255, 255, 255, 0.34), transparent 12%),
+    radial-gradient(ellipse at 83% 20%, rgba(232, 255, 244, 0.26), transparent 13%),
+    radial-gradient(ellipse at 26% 72%, rgba(255, 255, 255, 0.2), transparent 17%),
+    radial-gradient(ellipse at 75% 64%, rgba(226, 255, 240, 0.22), transparent 15%);
   filter: blur(7px);
 }
 
@@ -720,7 +757,7 @@ body {
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  opacity: 0.09;
+  opacity: 0.07;
   background-image: repeating-radial-gradient(
     circle at 0 0,
     transparent 0,
@@ -741,12 +778,13 @@ body {
   background:
     linear-gradient(90deg, transparent, rgba(255, 255, 255, 1), transparent)
       top / 84% 2px no-repeat,
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent)
+    linear-gradient(90deg, transparent, rgba(226, 255, 240, 0.9), transparent)
       bottom / 84% 2px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.85), transparent)
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.9), transparent)
       left / 2px 82% no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.85), transparent)
+    linear-gradient(180deg, transparent, rgba(226, 255, 240, 0.85), transparent)
       right / 2px 82% no-repeat;
-  filter: drop-shadow(0 0 8px white) drop-shadow(0 0 16px rgba(255, 255, 255, 0.9));
+  filter: drop-shadow(0 0 6px white) drop-shadow(0 0 12px rgba(190, 255, 220, 0.8));
 }
+
 
