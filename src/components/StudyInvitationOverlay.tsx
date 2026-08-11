@@ -216,7 +216,7 @@ export function StudyInvitationOverlay() {
 
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/40 to-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/50 to-transparent"
         />
 
         {/* Language switch */}
@@ -224,7 +224,7 @@ export function StudyInvitationOverlay() {
           <button
             type="button"
             onClick={() => setLang(lang === "ar" ? "en" : "ar")}
-            className="inline-flex h-8 min-w-[40px] items-center justify-center rounded-full border border-white/12 bg-white/[0.04] px-3 text-[11px] font-medium tracking-wide text-white/75 backdrop-blur transition-colors duration-300 hover:bg-white/[0.09] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
+            className="inline-flex h-8 min-w-[40px] items-center justify-center rounded-full border border-[#0b3a25]/15 bg-[#0b3a25]/[0.04] px-3 text-[11px] font-medium tracking-wide text-[#2d5a45] transition-colors duration-300 hover:bg-[#0b3a25]/[0.09] hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/50"
             aria-label={lang === "ar" ? "Switch to English" : "التبديل إلى العربية"}
           >
             {t.langSwitchOther}
@@ -237,20 +237,20 @@ export function StudyInvitationOverlay() {
             <img
               src={aqlaLogo}
               alt="شعار أقلع — Aqla Logo"
-              className="h-12 w-auto object-contain opacity-95 drop-shadow-[0_3px_16px_rgba(0,0,0,0.35)] sm:h-14"
+              className="h-12 w-auto object-contain drop-shadow-[0_3px_14px_rgba(11,58,37,0.28)] sm:h-14"
             />
           </div>
 
           {/* Eyebrow */}
           <div className="flex flex-col items-center gap-1.5 text-center">
             <div className="flex items-center gap-2">
-              <span aria-hidden className="h-px w-6 bg-[#c9a84c]/50" />
-              <span className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c9a84c]">
+              <span aria-hidden className="h-px w-6 bg-[#c9a84c]/60" />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#c9a84c]">
                 {t.eyebrow}
               </span>
-              <span aria-hidden className="h-px w-6 bg-[#c9a84c]/50" />
+              <span aria-hidden className="h-px w-6 bg-[#c9a84c]/60" />
             </div>
-            <span className="text-[13px] font-medium text-white/70">
+            <span className="text-[13px] font-medium text-[#2d5a45]">
               {t.university}
             </span>
           </div>
@@ -258,7 +258,7 @@ export function StudyInvitationOverlay() {
           {/* Title */}
           <h2
             id="aqla-study-title"
-            className={`text-center font-semibold tracking-tight text-white ${
+            className={`text-center font-bold tracking-tight text-[#0b3a25] ${
               isRTL
                 ? "text-[22px] leading-[1.55] sm:text-[25px]"
                 : "text-[21px] leading-[1.45] sm:text-[24px]"
@@ -268,7 +268,7 @@ export function StudyInvitationOverlay() {
           </h2>
 
           {/* Prize subtitle */}
-          <p className="text-center text-[13.5px] font-semibold text-[#f0d78c] sm:text-[15px]">
+          <p className="text-center text-[13.5px] font-semibold text-[#c9a84c] sm:text-[15px]">
             {t.prizeSubtitle}
           </p>
 
@@ -277,31 +277,35 @@ export function StudyInvitationOverlay() {
             <button
               type="button"
               onClick={participate}
-              className="group relative inline-flex min-h-[50px] w-full items-center justify-center overflow-hidden rounded-2xl bg-[#c9a84c] px-6 text-[15px] font-semibold text-[#0b3a25] shadow-[0_14px_30px_-14px_rgba(201,168,76,0.6)] transition-all duration-300 hover:brightness-[1.05] hover:shadow-[0_18px_40px_-14px_rgba(201,168,76,0.75)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b3a25] motion-reduce:transition-none"
+              style={{
+                backgroundImage:
+                  "linear-gradient(135deg, #d8b753 0%, #c9a84c 50%, #dfc26a 100%)",
+              }}
+              className="group relative inline-flex min-h-[50px] w-full items-center justify-center overflow-hidden rounded-2xl px-6 text-[15px] font-bold text-[#0b3a25] shadow-[0_14px_30px_-14px_rgba(201,168,76,0.6)] transition-all duration-300 hover:brightness-[1.05] hover:shadow-[0_18px_40px_-14px_rgba(201,168,76,0.75)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f5fffa] motion-reduce:transition-none"
             >
               <span
                 aria-hidden
-                className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-[1400ms] ease-out group-hover:translate-x-full"
+                className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-[1400ms] ease-out group-hover:translate-x-full"
               />
               <span className="relative">{t.participate}</span>
             </button>
             <button
               type="button"
               onClick={close}
-              className="inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl border border-white/12 bg-transparent px-6 text-[13.5px] font-medium text-white/70 transition-colors duration-300 hover:border-white/25 hover:bg-white/[0.04] hover:text-white/95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/25 motion-reduce:transition-none"
+              className="inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl border border-[#0b3a25]/15 bg-transparent px-6 text-[13.5px] font-medium text-[#5a7a6a] transition-colors duration-300 hover:border-[#0b3a25]/28 hover:bg-[#0b3a25]/[0.04] hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25 motion-reduce:transition-none"
             >
               {t.skip}
             </button>
           </div>
 
           {/* Details toggle */}
-          <div className="border-t border-white/8 pt-2">
+          <div className="border-t border-[#0b3a25]/12 pt-2">
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="aqla-study-details"
-              className="mx-auto inline-flex min-h-[40px] items-center justify-center gap-1.5 rounded-full px-3 text-[12.5px] font-medium tracking-wide text-white/60 transition-colors duration-300 hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/25"
+              className="mx-auto inline-flex min-h-[40px] items-center justify-center gap-1.5 rounded-full px-3 text-[12.5px] font-medium tracking-wide text-[#5a7a6a] transition-colors duration-300 hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25"
             >
               <span>{t.detailsToggle}</span>
               <IconChevron open={open} />
@@ -318,32 +322,32 @@ export function StudyInvitationOverlay() {
               }}
             >
               <div className="min-h-0 overflow-hidden">
-                <div className="mt-3 max-h-[42vh] overflow-y-auto rounded-2xl border border-white/8 bg-white/[0.03] p-5">
-                  <h3 className="text-[14px] font-semibold text-white/95">
+                <div className="mt-3 max-h-[42vh] overflow-y-auto rounded-2xl border border-[#0b3a25]/12 bg-[#0b3a25]/[0.03] p-5">
+                  <h3 className="text-[14px] font-bold text-[#0b3a25]">
                     {t.detailsTitle}
                   </h3>
-                  <p className="mt-3 text-[13.5px] leading-[1.85] text-white/75">{t.p1}</p>
-                  <p className="mt-2 text-[13.5px] leading-[1.85] text-white/75">{t.p2}</p>
-                  <p className="mt-2 text-[13.5px] leading-[1.85] text-white/75">
-                    {t.p3Prefix} <span className="font-semibold text-[#f0d78c]">{t.p3Amount}</span>.
+                  <p className="mt-3 text-[13.5px] leading-[1.85] text-[#2d5a45]">{t.p1}</p>
+                  <p className="mt-2 text-[13.5px] leading-[1.85] text-[#2d5a45]">{t.p2}</p>
+                  <p className="mt-2 text-[13.5px] leading-[1.85] text-[#2d5a45]">
+                    {t.p3Prefix} <span className="font-bold text-[#a8862f]">{t.p3Amount}</span>.
                   </p>
 
                   <ul className="mt-4 flex flex-wrap gap-1.5">
                     {[t.voluntary, t.confidential, t.anonymous, t.prize].map((label, i) => (
                       <li
                         key={i}
-                        className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[11.5px] text-white/70"
+                        className="rounded-full border border-[#0b3a25]/12 bg-[#0b3a25]/[0.03] px-2.5 py-1 text-[11.5px] text-[#2d5a45]"
                       >
                         {label}
                       </li>
                     ))}
                   </ul>
 
-                  <div className="mt-4 flex items-center gap-2 text-[12.5px] text-white/70">
-                    <span className="text-white/50">{t.contactLabel}</span>
+                  <div className="mt-4 flex items-center gap-2 text-[12.5px] text-[#2d5a45]">
+                    <span className="text-[#5a7a6a]">{t.contactLabel}</span>
                     <a
                       href="mailto:smokefreeksa@gmail.com"
-                      className="min-w-0 truncate font-medium text-[#f0d78c] underline decoration-[#c9a84c]/30 underline-offset-2 transition-colors hover:decoration-[#c9a84c]"
+                      className="min-w-0 truncate font-semibold text-[#a8862f] underline decoration-[#c9a84c]/50 underline-offset-2 transition-colors hover:decoration-[#c9a84c]"
                     >
                       smokefreeksa@gmail.com
                     </a>
@@ -353,6 +357,7 @@ export function StudyInvitationOverlay() {
             </div>
           </div>
         </div>
+
         </div>
 
       </div>
