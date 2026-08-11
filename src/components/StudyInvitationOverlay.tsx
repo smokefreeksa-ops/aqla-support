@@ -223,6 +223,15 @@ export function StudyInvitationOverlay() {
         </div>
 
         <div className="flex flex-col gap-6 px-7 pb-8 pt-12 sm:px-10 sm:pt-14">
+          {/* Logo */}
+          <div className="flex justify-center">
+            <img
+              src={aqlaLogo}
+              alt="شعار أقلع — Aqla Logo"
+              className="h-12 w-auto object-contain opacity-95 drop-shadow-[0_3px_16px_rgba(0,0,0,0.35)] sm:h-14"
+            />
+          </div>
+
           {/* Eyebrow */}
           <div className="flex flex-col items-center gap-1.5 text-center">
             <div className="flex items-center gap-2">
