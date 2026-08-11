@@ -1,126 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ResearchBanner } from "@/components/ResearchBanner";
+import SaudiFlagWave from "@/components/SaudiFlagWave";
 
 
 
 
-// Professional rotating galaxy — subtle spiral of particles on canvas.
-function GalaxyCanvas() {
-  const ref = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    const canvas = ref.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    let width = 0, height = 0;
-
-    // Precompute particles in polar coords along a 3-arm logarithmic spiral.
-    const ARMS = 3;
-    const COUNT = 1400;
-    const particles: {
-      r: number; // normalized radius 0..1
-      a: number; // base angle
-      size: number;
-      alpha: number;
-      hue: number; // 0=gold, 1=white, 2=green tint
-      speed: number;
-    }[] = [];
-    const rand = (i: number, s: number) => {
-      const v = Math.sin(i * 12.9898 + s * 78.233) * 43758.5453;
-      return v - Math.floor(v);
-    };
-    for (let i = 0; i < COUNT; i++) {
-      const arm = i % ARMS;
-      const t = Math.pow(rand(i, 1), 0.7); // bias inward
-      const armAngle = (arm / ARMS) * Math.PI * 2;
-      const twist = t * 3.2; // spiral tightness
-      const jitter = (rand(i, 2) - 0.5) * 0.55 * (1 - t * 0.4);
-      const a = armAngle + twist + jitter;
-      const size = rand(i, 3) < 0.9 ? 0.6 + rand(i, 4) * 0.6 : 1.2 + rand(i, 5) * 0.8;
-      const alpha = 0.15 + (1 - t) * 0.55 + rand(i, 6) * 0.15;
-      const h = rand(i, 7);
-      const hue = h < 0.55 ? 1 : h < 0.9 ? 0 : 2;
-      const speed = 0.9 + (1 - t) * 0.9; // inner rotates faster
-      particles.push({ r: t, a, size, alpha, hue, speed });
-    }
-
-    function resize() {
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      width = rect.width;
-      height = rect.height;
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
-    }
-    resize();
-    window.addEventListener("resize", resize);
-
-    let raf = 0;
-    let start = performance.now();
-
-    const colorFor = (hue: number, alpha: number) => {
-      if (hue === 0) return `rgba(201,168,76,${alpha})`; // gold
-      if (hue === 2) return `rgba(120,190,150,${alpha})`; // green
-      return `rgba(255,255,255,${alpha})`;
-    };
-
-    function frame(now: number) {
-      if (!ctx) return;
-      const elapsed = (now - start) / 1000;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, width, height);
-
-      const cx = width * 0.5;
-      const cy = height * 0.5;
-      const R = Math.hypot(width, height) * 1.6;
-
-      // Soft core glow
-      const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 0.5);
-      core.addColorStop(0, "rgba(201,168,76,0.16)");
-      core.addColorStop(0.35, "rgba(201,168,76,0.05)");
-      core.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = core;
-      ctx.fillRect(0, 0, width, height);
-
-      ctx.globalCompositeOperation = "lighter";
-      const baseRot = reduce ? 0 : elapsed * 0.02; // slow overall rotation
-
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        const angle = p.a + baseRot * p.speed;
-        const rad = p.r * R * 0.75;
-        const x = cx + Math.cos(angle) * rad;
-        const y = cy + Math.sin(angle) * rad * 0.8; // gentle disc flatten
-        ctx.fillStyle = colorFor(p.hue, p.alpha);
-        ctx.beginPath();
-        ctx.arc(x, y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.globalCompositeOperation = "source-over";
-
-      raf = requestAnimationFrame(frame);
-    }
-    raf = requestAnimationFrame(frame);
-
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("resize", resize);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={ref}
-      aria-hidden
-      className="pointer-events-none absolute inset-0 h-full w-full"
-      style={{ mixBlendMode: "screen" }}
-    />
-  );
-}
+// Background now rendered by SaudiFlagWave.
 
 const REDCAP_URL = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM";
 const STORAGE_KEY = "aqla_study_overlay_dismissed";
@@ -210,70 +95,7 @@ function IconChevron({ open }: { open: boolean }) {
   );
 }
 
-// Luxurious, calm starfield — small bright pinpoints on deep night sky.
-function LuxuryStarfield() {
-  const stars = useMemo(() => {
-    const seed = (i: number, s: number) => {
-      const v = Math.sin(i * 12.9898 + s * 78.233) * 43758.5453;
-      return v - Math.floor(v);
-    };
-    const count = 110;
-    return Array.from({ length: count }, (_, i) => {
-      const r = seed(i, 1);
-      const size = r < 0.78 ? 1 : r < 0.94 ? 1.4 : 2;
-      return {
-        id: i,
-        top: seed(i, 2) * 100,
-        left: seed(i, 3) * 100,
-        size,
-        delay: seed(i, 4) * 8,
-        duration: 4 + seed(i, 5) * 6,
-        opacity: 0.25 + seed(i, 6) * 0.55,
-        glow: size >= 2,
-      };
-    });
-  }, []);
-
-  return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 overflow-hidden"
-    >
-      {/* deep sky gradient */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 90% 70% at 50% 40%, #0a1a14 0%, #05100b 55%, #020806 100%)",
-        }}
-      />
-      {/* subtle aurora wash */}
-      <div
-        className="absolute inset-0 opacity-60"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 40% at 20% 20%, rgba(201,168,76,0.06), transparent 60%), radial-gradient(ellipse 50% 40% at 80% 80%, rgba(11,58,37,0.35), transparent 60%)",
-        }}
-      />
-      {stars.map((s) => (
-        <span
-          key={s.id}
-          className="absolute rounded-full bg-white star-twinkle motion-reduce:animate-none"
-          style={{
-            top: `${s.top}%`,
-            left: `${s.left}%`,
-            width: `${s.size}px`,
-            height: `${s.size}px`,
-            opacity: s.opacity,
-            animationDelay: `${s.delay}s`,
-            animationDuration: `${s.duration}s`,
-            boxShadow: s.glow ? "0 0 6px rgba(255,255,255,0.7)" : undefined,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
+// Background now rendered by SaudiFlagWave.
 
 export function StudyInvitationOverlay() {
   const [visible, setVisible] = useState(false);
@@ -346,8 +168,15 @@ export function StudyInvitationOverlay() {
         }}
         role="presentation"
       >
-        <LuxuryStarfield />
-        <GalaxyCanvas />
+        <SaudiFlagWave />
+        {/* Extra scrim so the study modal stays readable over the flag */}
+        <div
+          className="pointer-events-none absolute inset-0 z-[1]"
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 45%, rgba(0,25,12,0.55) 0%, rgba(0,18,9,0.78) 55%, rgba(0,10,5,0.95) 100%)",
+          }}
+        />
 
           <div className="relative z-10 flex h-full flex-col">
            <ResearchBanner />
