@@ -95,70 +95,7 @@ function IconChevron({ open }: { open: boolean }) {
   );
 }
 
-// Luxurious, calm starfield — small bright pinpoints on deep night sky.
-function LuxuryStarfield() {
-  const stars = useMemo(() => {
-    const seed = (i: number, s: number) => {
-      const v = Math.sin(i * 12.9898 + s * 78.233) * 43758.5453;
-      return v - Math.floor(v);
-    };
-    const count = 110;
-    return Array.from({ length: count }, (_, i) => {
-      const r = seed(i, 1);
-      const size = r < 0.78 ? 1 : r < 0.94 ? 1.4 : 2;
-      return {
-        id: i,
-        top: seed(i, 2) * 100,
-        left: seed(i, 3) * 100,
-        size,
-        delay: seed(i, 4) * 8,
-        duration: 4 + seed(i, 5) * 6,
-        opacity: 0.25 + seed(i, 6) * 0.55,
-        glow: size >= 2,
-      };
-    });
-  }, []);
-
-  return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 overflow-hidden"
-    >
-      {/* deep sky gradient */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 90% 70% at 50% 40%, #0a1a14 0%, #05100b 55%, #020806 100%)",
-        }}
-      />
-      {/* subtle aurora wash */}
-      <div
-        className="absolute inset-0 opacity-60"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 40% at 20% 20%, rgba(201,168,76,0.06), transparent 60%), radial-gradient(ellipse 50% 40% at 80% 80%, rgba(11,58,37,0.35), transparent 60%)",
-        }}
-      />
-      {stars.map((s) => (
-        <span
-          key={s.id}
-          className="absolute rounded-full bg-white star-twinkle motion-reduce:animate-none"
-          style={{
-            top: `${s.top}%`,
-            left: `${s.left}%`,
-            width: `${s.size}px`,
-            height: `${s.size}px`,
-            opacity: s.opacity,
-            animationDelay: `${s.delay}s`,
-            animationDuration: `${s.duration}s`,
-            boxShadow: s.glow ? "0 0 6px rgba(255,255,255,0.7)" : undefined,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
+// Background now rendered by SaudiFlagWave.
 
 export function StudyInvitationOverlay() {
   const [visible, setVisible] = useState(false);
