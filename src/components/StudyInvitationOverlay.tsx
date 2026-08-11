@@ -171,19 +171,20 @@ export function StudyInvitationOverlay() {
       >
         {/* Deep Saudi-green environment */}
         <div aria-hidden className="study-environment pointer-events-none absolute inset-0 z-0" />
-        {/* Flag stays, but blended into the green field instead of washing it out */}
-        <div className="pointer-events-none absolute inset-0 z-[1] opacity-25 mix-blend-soft-light">
+        {/* Flag kept only as a subtle texture underneath the green field */}
+        <div className="pointer-events-none absolute inset-0 z-[1] opacity-[0.14] mix-blend-soft-light">
           <SaudiFlagWave />
         </div>
-        {/* Edge vignette keeps the centre richer than the corners */}
+        {/* Green edge vignette keeps the centre richer than the corners */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 z-[2]"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 48%, rgba(0,0,0,0) 30%, rgba(1,25,19,0.35) 70%, rgba(1,20,15,0.62) 100%)",
+              "radial-gradient(ellipse at 50% 48%, rgba(0,90,68,0) 26%, rgba(0,50,39,0.34) 66%, rgba(1,40,31,0.6) 100%)",
           }}
         />
+
 
           <div className="relative z-10 flex h-full flex-col">
            <ResearchBanner />
