@@ -722,31 +722,32 @@ body {
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.85;
+  opacity: 0.9;
   background:
     linear-gradient(
       118deg,
       transparent 0 30%,
-      rgba(255, 255, 255, 0.3) 30% 41%,
-      transparent 41% 58%,
-      rgba(255, 255, 255, 0.2) 58% 64%,
+      rgba(255, 255, 255, 0.85) 30% 41%,
+      rgba(198, 211, 218, 0.22) 41% 58%,
+      rgba(255, 255, 255, 0.6) 58% 64%,
       transparent 64% 100%
     ),
     linear-gradient(
       -104deg,
       transparent 0 22%,
-      rgba(255, 255, 255, 0.22) 22% 33%,
+      rgba(202, 214, 221, 0.2) 22% 33%,
       transparent 33% 71%,
-      rgba(255, 255, 255, 0.26) 71% 79%,
+      rgba(255, 255, 255, 0.7) 71% 79%,
       transparent 79% 100%
     ),
     linear-gradient(
       42deg,
       transparent 0 46%,
-      rgba(255, 255, 255, 0.18) 46% 52%,
+      rgba(200, 212, 219, 0.18) 46% 52%,
       transparent 52% 100%
     );
 }
+
 
 /* ---------- 5. High-luminance specular sweeps ---------- */
 .crystal-specular {
