@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-import { ResearchBanner } from "@/components/ResearchBanner";
 import SaudiFlagWave from "@/components/SaudiFlagWave";
 import aqlaLogo from "@/assets/aqla-logo-transparent.png";
 
@@ -286,7 +285,6 @@ export function StudyInvitationOverlay() {
 
 
           <div className="relative z-10 flex h-full flex-col">
-           <ResearchBanner />
            <div className="flex flex-1 items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6">
 
 
