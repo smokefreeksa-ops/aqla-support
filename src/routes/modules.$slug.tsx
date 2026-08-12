@@ -16,6 +16,7 @@ import {
 } from "@/lib/assessment-runtime";
 import { toast } from "sonner";
 import { CheckCircle2, XCircle, ArrowRight, ArrowLeft, BookOpen, ExternalLink, Award, ShieldAlert } from "lucide-react";
+import { BackButton } from "@/components/BackButton";
 
 export const Route = createFileRoute("/modules/$slug")({
   loader: ({ params }) => {
@@ -153,6 +154,9 @@ function Inner() {
     <div dir={dir} className="min-h-screen bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
+        <div className="mb-5">
+          <BackButton fallback="/academy" labelAr="الأكاديمية" labelEn="Academy" />
+        </div>
         <Link to="/" className="inline-flex items-center gap-1 text-sm text-brand hover:underline mb-4">
           {isAr ? "الرئيسية" : "Home"}
         </Link>

@@ -5,6 +5,7 @@ import { getQuitEngineResult } from "@/lib/aqla-engine/storage";
 import { AqlaEngineResult } from "@/components/aqla-engine/AqlaEngineResult";
 import { AqlaEnginePdf } from "@/components/aqla-engine/AqlaEnginePdf";
 import type { EngineResult } from "@/lib/aqla-engine/types";
+import { BackButton } from "@/components/BackButton";
 
 export const Route = createFileRoute("/aqla-quit-engine/result/$resultId")({
   component: Page,
@@ -27,6 +28,9 @@ function Page() {
   if (isLoading) {
     return (
       <main dir="rtl" className="min-h-screen bg-blue-50 flex items-center justify-center">
+        <div className="mb-5">
+          <BackButton fallback="/aqla-quit-engine" labelAr="أداة أقلع" labelEn="Quit Engine" />
+        </div>
         <p className="text-slate-700">جاري تحميل خطتك...</p>
       </main>
     );

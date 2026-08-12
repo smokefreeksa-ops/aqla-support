@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { verifyAcademyCertificate } from "@/lib/academy-certificate.functions";
 import { BadgeCheck, Download, Share2, Link as LinkIcon, ShieldCheck, XCircle } from "lucide-react";
 import { SITE_URL } from "@/lib/site";
+import { BackButton } from "@/components/BackButton";
 
 export const Route = createFileRoute("/academy-certificate/$code")({
   head: ({ params }) => ({
@@ -55,6 +56,9 @@ function AcademyCertPage() {
         </div>
       </header>
       <main className="mx-auto max-w-4xl px-4 py-8">
+        <div className="mb-5">
+          <BackButton fallback="/certificates" labelAr="الشهادات" labelEn="Certificates" />
+        </div>
         {!found ? (
           <Card className="p-8 text-center">
             <XCircle className="mx-auto h-10 w-10 text-red-500" />

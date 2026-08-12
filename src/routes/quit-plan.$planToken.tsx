@@ -10,6 +10,7 @@ import type { ClinicalPlanJSON } from "@/lib/clinical/types";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import type { QuitPlanJSON } from "@/lib/quit-plan-builder";
+import { BackButton } from "@/components/BackButton";
 
 export const Route = createFileRoute("/quit-plan/$planToken")({
   head: () => ({ meta: [{ title: "خطة أقلع الشخصية" }] }),
@@ -34,6 +35,9 @@ function PlanRouter() {
       <div dir="rtl" className="min-h-screen bg-background">
         <SiteHeader />
         <main className="mx-auto max-w-3xl px-4 py-10 text-center text-sm text-muted-foreground">
+        <div className="mb-5">
+          <BackButton fallback="/quit-plan" labelAr="خطة الإقلاع" labelEn="Quit plan" />
+        </div>
           <Loader2 className="mx-auto h-6 w-6 animate-spin" /> جارٍ تحميل الخطة…
         </main>
         <SiteFooter />
