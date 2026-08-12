@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { ResearchBanner } from "@/components/ResearchBanner";
 import SaudiFlagWave from "@/components/SaudiFlagWave";
-import aqlaLogo from "@/assets/aqla-logo.png";
+import aqlaLogo from "@/assets/aqla-logo-transparent.png";
 
 
 
@@ -91,7 +91,7 @@ function IconChevron({ open }: { open: boolean }) {
       strokeWidth="1.6"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="h-3.5 w-3.5 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+      className="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
       style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
       aria-hidden
     >
@@ -234,7 +234,7 @@ export function StudyInvitationOverlay() {
             lang={lang}
             className="crystal-shell relative flex max-h-[92%] w-full flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
             style={{
-              width: "min(94%, clamp(460px, 56vw, 780px))",
+              width: "min(95%, clamp(500px, 61vw, 860px))",
 
 
               transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
@@ -282,7 +282,7 @@ export function StudyInvitationOverlay() {
             <img
               src={aqlaLogo}
               alt="شعار أقلع — Aqla Logo"
-              className="h-14 w-auto object-contain drop-shadow-[0_3px_14px_rgba(11,58,37,0.28)] sm:h-20"
+              className="h-[68px] w-auto object-contain drop-shadow-[0_1px_6px_rgba(11,58,37,0.14)] sm:h-24"
             />
           </div>
 
@@ -291,12 +291,12 @@ export function StudyInvitationOverlay() {
           <div className="flex flex-col items-center gap-1.5 text-center">
             <div className="flex items-center gap-2">
               <span aria-hidden className="h-px w-6 bg-[#c9a84c]/60" />
-              <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#96751c]">
+              <span className="text-[10.5px] font-semibold uppercase tracking-[0.3em] text-[#a8862f]">
                 {t.eyebrow}
               </span>
               <span aria-hidden className="h-px w-6 bg-[#c9a84c]/60" />
             </div>
-            <span className="text-[13px] font-medium text-[#2d5a45]">
+            <span className="text-[12px] font-normal tracking-wide text-[#3f6555]">
               {t.university}
             </span>
           </div>
@@ -304,17 +304,17 @@ export function StudyInvitationOverlay() {
           {/* Title */}
           <h2
             id="aqla-study-title"
-            className={`text-center font-bold tracking-tight text-[#0b3a25] ${
+            className={`mx-auto max-w-[36ch] text-balance text-center font-bold tracking-tight text-[#08301e] ${
               isRTL
-                ? "text-[22px] leading-[1.55] sm:text-[25px]"
-                : "text-[21px] leading-[1.45] sm:text-[24px]"
+                ? "text-[23px] leading-[1.75] sm:text-[27px] sm:leading-[1.72]"
+                : "text-[22px] leading-[1.55] sm:text-[26px]"
             }`}
           >
             {t.title}
           </h2>
 
           {/* Prize subtitle */}
-          <p className="text-center text-[13.5px] font-bold text-[#8a6a1c] sm:text-[15px]">
+          <p className="text-center text-[12.5px] font-semibold tracking-wide text-[#9a7a26] sm:text-[13.5px]">
             {t.prizeSubtitle}
           </p>
 
@@ -328,9 +328,9 @@ export function StudyInvitationOverlay() {
                 backgroundImage:
                   "linear-gradient(135deg, #0d4a2e 0%, #06381f 52%, #0f5636 100%)",
                 boxShadow:
-                  "inset 0 0 0 1px rgba(201,168,76,0.75), 0 14px 30px -16px rgba(6,56,31,0.65)",
+                  "inset 0 0 0 1px rgba(201,168,76,0.9), inset 0 1px 0 rgba(255,244,214,0.28), inset 0 12px 20px -14px rgba(255,255,255,0.35), 0 12px 26px -14px rgba(6,56,31,0.55), 0 2px 6px -2px rgba(6,56,31,0.35)",
               }}
-              className="group relative inline-flex min-h-[50px] w-full items-center justify-center overflow-hidden rounded-2xl px-6 text-[15px] font-bold text-[#f3e6c0] transition-all duration-300 hover:brightness-[1.1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white motion-reduce:transition-none"
+              className="group relative inline-flex min-h-[50px] w-full items-center justify-center overflow-hidden rounded-2xl px-6 text-[15px] font-bold text-[#faf1d8] transition-all duration-300 hover:-translate-y-px hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white motion-reduce:transition-none"
             >
               <span
                 aria-hidden
@@ -349,7 +349,7 @@ export function StudyInvitationOverlay() {
           </div>
 
           {/* Details toggle */}
-          <div ref={detailsRef} className="border-t border-[#0b3a25]/12 pt-1.5">
+          <div ref={detailsRef} className="mt-1.5 border-t border-[#0b3a25]/10 pt-3">
             <button
               type="button"
               onClick={() => {
@@ -364,7 +364,7 @@ export function StudyInvitationOverlay() {
               }}
               aria-expanded={open}
               aria-controls="aqla-study-details"
-              className="flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-full px-3 text-[12.5px] font-semibold tracking-wide text-[#2d5a45] transition-colors duration-300 hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25"
+              className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full px-4 py-2 text-[13.5px] font-medium tracking-[0.02em] text-[#2d5a45] transition-colors duration-300 hover:bg-[#0b3a25]/[0.04] hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/45"
             >
               <span>{t.detailsToggle}</span>
               <IconChevron open={open} />
