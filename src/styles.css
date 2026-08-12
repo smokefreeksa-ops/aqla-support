@@ -643,44 +643,45 @@ body {
   background:
     conic-gradient(
       from 0deg at 50% 50%,
-      rgba(255, 255, 255, 0.5) 0deg 7deg,
-      transparent 7deg 22deg,
-      rgba(255, 255, 255, 0.34) 22deg 30deg,
-      transparent 30deg 46deg,
-      rgba(255, 255, 255, 0.46) 46deg 53deg,
-      transparent 53deg 74deg,
-      rgba(255, 255, 255, 0.3) 74deg 81deg,
-      transparent 81deg 104deg,
-      rgba(255, 255, 255, 0.44) 104deg 112deg,
-      transparent 112deg 136deg,
-      rgba(255, 255, 255, 0.3) 136deg 143deg,
-      transparent 143deg 168deg,
-      rgba(255, 255, 255, 0.48) 168deg 176deg,
-      transparent 176deg 200deg,
-      rgba(255, 255, 255, 0.32) 200deg 208deg,
-      transparent 208deg 232deg,
-      rgba(255, 255, 255, 0.45) 232deg 240deg,
-      transparent 240deg 266deg,
-      rgba(255, 255, 255, 0.3) 266deg 273deg,
-      transparent 273deg 298deg,
-      rgba(255, 255, 255, 0.47) 298deg 306deg,
-      transparent 306deg 330deg,
-      rgba(255, 255, 255, 0.33) 330deg 338deg,
-      transparent 338deg 360deg
+      rgba(255, 255, 255, 0.9) 0deg 7deg,
+      rgba(196, 209, 216, 0.3) 7deg 22deg,
+      rgba(255, 255, 255, 0.8) 22deg 30deg,
+      rgba(206, 217, 223, 0.22) 30deg 46deg,
+      rgba(255, 255, 255, 0.88) 46deg 53deg,
+      rgba(193, 206, 214, 0.28) 53deg 74deg,
+      rgba(255, 255, 255, 0.72) 74deg 81deg,
+      rgba(205, 216, 222, 0.2) 81deg 104deg,
+      rgba(255, 255, 255, 0.86) 104deg 112deg,
+      rgba(196, 209, 216, 0.3) 112deg 136deg,
+      rgba(255, 255, 255, 0.74) 136deg 143deg,
+      rgba(207, 218, 224, 0.2) 143deg 168deg,
+      rgba(255, 255, 255, 0.9) 168deg 176deg,
+      rgba(195, 208, 215, 0.28) 176deg 200deg,
+      rgba(255, 255, 255, 0.76) 200deg 208deg,
+      rgba(206, 217, 223, 0.22) 208deg 232deg,
+      rgba(255, 255, 255, 0.86) 232deg 240deg,
+      rgba(194, 207, 214, 0.3) 240deg 266deg,
+      rgba(255, 255, 255, 0.72) 266deg 273deg,
+      rgba(207, 218, 224, 0.2) 273deg 298deg,
+      rgba(255, 255, 255, 0.88) 298deg 306deg,
+      rgba(196, 209, 216, 0.26) 306deg 330deg,
+      rgba(255, 255, 255, 0.78) 330deg 338deg,
+      rgba(205, 216, 222, 0.22) 338deg 360deg
     );
   -webkit-mask-image: radial-gradient(
-    ellipse 74% 70% at 50% 50%,
-    transparent 40%,
-    rgba(0, 0, 0, 0.6) 66%,
-    #000 88%
+    ellipse 78% 74% at 50% 50%,
+    transparent 62%,
+    rgba(0, 0, 0, 0.55) 80%,
+    #000 100%
   );
   mask-image: radial-gradient(
-    ellipse 74% 70% at 50% 50%,
-    transparent 40%,
-    rgba(0, 0, 0, 0.6) 66%,
-    #000 88%
+    ellipse 78% 74% at 50% 50%,
+    transparent 62%,
+    rgba(0, 0, 0, 0.55) 80%,
+    #000 100%
   );
 }
+
 
 /* ---------- 3. Multi-step polished bevels ---------- */
 .crystal-panel::before {
