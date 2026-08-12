@@ -72,9 +72,7 @@ function QuitPlanEmailsPage() {
       <header className="border-b bg-card">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/admin"><ArrowLeft className="h-4 w-4 mr-1" /> Admin</Link>
-            </Button>
+            <BackButton fallback="/admin" labelAr="لوحة الإدارة" labelEn="Admin" />
             <div className="flex items-center gap-2 font-semibold">
               <Mail className="h-4 w-4 text-primary" />
               Quit Plan Email Delivery
