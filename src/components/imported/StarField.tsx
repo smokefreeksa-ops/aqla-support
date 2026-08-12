@@ -32,7 +32,7 @@ export default function StarField({ count = 140 }: { count?: number }) {
     <div
       aria-hidden
       className="pointer-events-none absolute inset-0 overflow-hidden"
-      style={{ background: "radial-gradient(ellipse at 50% 40%, #0a1218 0%, #04070a 55%, #000 100%)" }}
+      style={{ background: "radial-gradient(ellipse at 50% 40%, rgba(8,42,26,0.55) 0%, rgba(3,18,11,0.75) 55%, rgba(2,8,4,0.92) 100%)" }}
     >
       {stars.map((s) => (
         <span
