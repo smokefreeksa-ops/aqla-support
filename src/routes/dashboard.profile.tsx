@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,7 @@ export const Route = createFileRoute("/dashboard/profile")({
 function ProfilePage() {
   const { model, data, isPending, isError, refetch } = useLearnerDashboard();
   const { saveProfile } = useLearnerActions();
+  const navigate = useNavigate();
   const [fullName, setFullName] = useState("");
   const [city, setCity] = useState("");
   const [saving, setSaving] = useState(false);
@@ -35,6 +36,7 @@ function ProfilePage() {
     try {
       await saveProfile({ full_name: fullName.trim() || null, city: city.trim() || null });
       toast.success("تم حفظ بيانات ملفك الشخصي");
+      navigate({ to: "/dashboard" });
     } catch {
       toast.error("تعذّر حفظ البيانات، حاول مرة أخرى");
     } finally {
