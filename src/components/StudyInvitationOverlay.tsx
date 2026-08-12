@@ -339,8 +339,9 @@ export function StudyInvitationOverlay() {
                   <p className="mt-3 text-[13.5px] leading-[1.85] text-[#2d5a45]">{t.p1}</p>
                   <p className="mt-2 text-[13.5px] leading-[1.85] text-[#2d5a45]">{t.p2}</p>
                   <p className="mt-2 text-[13.5px] leading-[1.85] text-[#2d5a45]">
-                    {t.p3Prefix} <span className="font-bold text-[#a8862f]">{t.p3Amount}</span>.
+                    {t.ethicsApproval} <span className="font-semibold text-[#0b3a25]">{t.ethicsNumber}</span>
                   </p>
+                  <p className="mt-2 text-[13.5px] leading-[1.85] text-[#2d5a45]">{t.contactInfo}</p>
 
                   <ul className="mt-4 flex flex-wrap gap-1.5">
                     {[t.voluntary, t.confidential, t.anonymous, t.prize].map((label, i) => (
