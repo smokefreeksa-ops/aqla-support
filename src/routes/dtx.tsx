@@ -216,7 +216,7 @@ function PactWizard({ onDone }: { onDone: () => void }) {
             قررت ذلك لأنني أستحق: <b className="text-cyan-300">{form.reason_1}</b> و{" "}
             <b className="text-cyan-300">{form.reason_2}</b>.
           </p>
-          <p className="text-emerald-400 font-bold pt-2">تم التوقيع بنجاح. هذا العقد لا يقبل النقض.</p>
+          <p className="text-accent-green-light font-bold pt-2">تم التوقيع بنجاح. هذا العقد لا يقبل النقض.</p>
         </div>
         <Button onClick={() => setStep("readiness")} className="mt-5 w-full bg-cyan-600 hover:bg-cyan-500">
           متابعة إلى التقييم السريري <ChevronRight className="h-4 w-4 rotate-180" />
@@ -381,11 +381,11 @@ function DtxDashboard({ pact, halt, slips, nrt, onChange }: {
         <DopamineGen />
       </Section>
 
-      <Section title="رادار التعافي (ماذا يحدث لجسدك الآن؟)" icon={<Activity className="h-5 w-5 text-emerald-400" />}>
+      <Section title="رادار التعافي (ماذا يحدث لجسدك الآن؟)" icon={<Activity className="h-5 w-5 text-accent-green-light" />}>
         <RecoveryTimeline days={e.days} />
       </Section>
 
-      <Section title="مجدول البدائل الطبية (NRT)" icon={<CheckCircle2 className="h-5 w-5 text-emerald-400" />}>
+      <Section title="مجدول البدائل الطبية (NRT)" icon={<CheckCircle2 className="h-5 w-5 text-accent-green-light" />}>
         <NrtTracker nrt={nrt} onChange={onChange} />
       </Section>
 
@@ -530,9 +530,9 @@ function RecoveryTimeline({ days }: { days: number }) {
         const past = days > p.range[1];
         return (
           <li key={i} className={`rounded-xl border p-4 flex gap-3 ${
-            active ? "border-cyan-400 bg-cyan-500/10" : past ? "border-emerald-700/40 bg-emerald-500/5 opacity-80" : "border-slate-800 bg-slate-950/40 opacity-60"
+            active ? "border-cyan-400 bg-cyan-500/10" : past ? "border-brand/40 bg-accent-green/5 opacity-80" : "border-slate-800 bg-slate-950/40 opacity-60"
           }`}>
-            <div className={`mt-1 h-3 w-3 rounded-full ${active ? "bg-cyan-400 animate-pulse" : past ? "bg-emerald-500" : "bg-slate-600"}`} />
+            <div className={`mt-1 h-3 w-3 rounded-full ${active ? "bg-cyan-400 animate-pulse" : past ? "bg-accent-green" : "bg-slate-600"}`} />
             <div>
               <div className="font-bold text-sm">{p.title}</div>
               <div className="text-sm text-slate-300 leading-7 mt-1">{p.text}</div>
@@ -572,7 +572,7 @@ function NrtTracker({ nrt, onChange }: { nrt: { log_date: string; taken: boolean
           </label>
           <div className="text-xs text-slate-400">تم تسجيل {takenDays} يوم.</div>
           {takenDays >= 28 && (
-            <div className="rounded-lg border border-emerald-500/40 bg-emerald-500/10 p-3 text-sm text-emerald-100">
+            <div className="rounded-lg border border-accent-green/40 bg-accent-green/10 p-3 text-sm text-surface-soft">
               لقد أتممت 4 أسابيع بنجاح. حان الوقت لاستشارة طبيبك لخفض الجرعة إلى المستوى التالي (Step-down).
             </div>
           )}

@@ -153,12 +153,12 @@ function Inner() {
     <div dir={dir} className="min-h-screen bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
-        <Link to="/" className="inline-flex items-center gap-1 text-sm text-emerald-700 hover:underline mb-4">
+        <Link to="/" className="inline-flex items-center gap-1 text-sm text-brand hover:underline mb-4">
           {isAr ? "الرئيسية" : "Home"}
         </Link>
 
         <div className="mb-6">
-          <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-[11px] font-semibold text-emerald-800">
+          <span className="inline-flex items-center gap-2 rounded-full bg-surface-soft border border-border-soft px-3 py-1 text-[11px] font-semibold text-ink-secondary">
             <BookOpen className="h-3.5 w-3.5" />
             {isAr ? `الوحدة ${mod.num}` : `Module ${mod.num}`}
           </span>
@@ -197,7 +197,7 @@ function Inner() {
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-emerald-700 hover:underline"
+                  className="inline-flex items-center gap-1 text-sm text-brand hover:underline"
                 >
                   {s.label}
                   <ExternalLink className="h-3 w-3" />
@@ -227,7 +227,7 @@ function Inner() {
                 <div
                   key={qq.id}
                   className={`rounded-xl border p-4 bg-white ${
-                    isCorrect ? "border-emerald-400" : isWrong ? "border-red-400" : "border-gray-200"
+                    isCorrect ? "border-accent-green-light" : isWrong ? "border-red-400" : "border-gray-200"
                   }`}
                 >
                   <div className="flex items-start gap-2 mb-3">
@@ -257,16 +257,16 @@ function Inner() {
                           onClick={() => setAnswers((a) => ({ ...a, [qq.id]: opt.key }))}
                           className={`w-full text-start px-3 py-2 rounded-lg border text-sm transition ${
                             showCorrect
-                              ? "bg-emerald-50 border-emerald-400 text-emerald-900"
+                              ? "bg-surface-soft border-accent-green-light text-ink"
                               : showWrong
                               ? "bg-red-50 border-red-400 text-red-900"
                               : active
-                              ? "border-emerald-500 bg-emerald-50/50"
+                              ? "border-accent-green bg-surface-soft/50"
                               : "border-gray-200 hover:border-gray-300"
                           }`}
                         >
                           <span className="inline-flex items-center gap-2">
-                            {showCorrect && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
+                            {showCorrect && <CheckCircle2 className="w-4 h-4 text-digital" />}
                             {showWrong && <XCircle className="w-4 h-4 text-red-600" />}
                             {isAr ? opt.ar : opt.en}
                           </span>
@@ -291,7 +291,7 @@ function Inner() {
               <button
                 onClick={() => setSubmitted(true)}
                 disabled={Object.keys(answers).length < mod.quiz.length}
-                className="px-5 py-2.5 rounded-lg bg-emerald-700 text-white text-sm font-bold hover:bg-emerald-800 disabled:opacity-40"
+                className="px-5 py-2.5 rounded-lg bg-brand text-white text-sm font-bold hover:bg-ink-secondary disabled:opacity-40"
               >
                 {isAr ? "تحقق من الإجابات" : "Check answers"}
               </button>
@@ -338,22 +338,22 @@ function Inner() {
           )}
 
           {passed && (
-            <div className="mt-6 rounded-2xl border-2 border-emerald-500 bg-emerald-50/60 p-5">
+            <div className="mt-6 rounded-2xl border-2 border-accent-green bg-surface-soft/60 p-5">
               <div className="flex items-center gap-2 mb-2">
-                <Award className="w-5 h-5 text-emerald-700" />
+                <Award className="w-5 h-5 text-brand" />
                 <div className="font-bold text-gray-900">
                   {isAr ? `اجتزت التقييم — ${result.percent}%` : `Assessment Passed — ${result.percent}%`}
                 </div>
               </div>
-              <p className="text-sm text-emerald-900">
+              <p className="text-sm text-ink">
                 {isAr
                   ? "قبل إصدار الشهادة، يرجى إدخال اسمك والموافقة على تعهّد المتطوّع أدناه."
                   : "Before we issue the certificate, please enter your name and confirm the volunteer scope statement below."}
               </p>
 
               {/* Scope statement */}
-              <div className="mt-4 rounded-lg border border-emerald-200 bg-white p-3">
-                <div className="text-xs font-bold text-emerald-800 mb-1">
+              <div className="mt-4 rounded-lg border border-border-soft bg-white p-3">
+                <div className="text-xs font-bold text-ink-secondary mb-1">
                   {isAr ? "تعهّد نطاق الدور" : "Scope & conduct statement"}
                 </div>
                 <p className="text-[13px] leading-6 text-gray-700">
@@ -378,7 +378,7 @@ function Inner() {
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder={isAr ? "الاسم الكامل" : "Full name"}
-                  className="w-full rounded-lg border border-emerald-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600"
+                  className="w-full rounded-lg border border-accent-green-light bg-white px-3 py-2 text-sm outline-none focus:border-digital"
                   maxLength={120}
                 />
                 <input
@@ -386,13 +386,13 @@ function Inner() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={isAr ? "البريد الإلكتروني (اختياري — لإرسال الشهادة)" : "Email (optional — to receive certificate)"}
-                  className="w-full rounded-lg border border-emerald-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600"
+                  className="w-full rounded-lg border border-accent-green-light bg-white px-3 py-2 text-sm outline-none focus:border-digital"
                   maxLength={254}
                 />
                 <button
                   onClick={claimCertificate}
                   disabled={issuing || fullName.trim().length < 2 || !scopeAccepted}
-                  className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-emerald-700 text-white text-sm font-bold hover:bg-emerald-800 disabled:opacity-40"
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-brand text-white text-sm font-bold hover:bg-ink-secondary disabled:opacity-40"
                 >
                   {issuing
                     ? (isAr ? "جارٍ الإصدار..." : "Issuing...")
@@ -422,7 +422,7 @@ function Inner() {
             <Link
               to="/modules/$slug"
               params={{ slug: prev.slug }}
-              className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-emerald-700"
+              className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-brand"
             >
               <ArrowRight className="w-4 h-4 rtl:hidden" />
               <ArrowLeft className="w-4 h-4 ltr:hidden" />
@@ -433,7 +433,7 @@ function Inner() {
             <Link
               to="/modules/$slug"
               params={{ slug: next.slug }}
-              className="inline-flex items-center gap-1 text-sm font-bold text-emerald-700 hover:text-emerald-900"
+              className="inline-flex items-center gap-1 text-sm font-bold text-brand hover:text-ink"
             >
               {isAr ? next.title.ar : next.title.en}
               <Arrow className="w-4 h-4" />

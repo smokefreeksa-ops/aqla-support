@@ -59,7 +59,7 @@ function Inner() {
           className="mt-6 block rounded-2xl border border-teal-500/40 bg-gradient-to-br from-teal-950 via-slate-900 to-slate-950 p-5 hover:border-teal-400/80 transition group"
         >
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-teal-400 to-emerald-600 grid place-content-center shrink-0">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-teal-400 to-digital grid place-content-center shrink-0">
               <MessageCircle className="h-5 w-5 text-slate-950" />
             </div>
             <div className="flex-1 min-w-0">

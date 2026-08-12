@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 
 const tools = [
   { badge: "Popular", badgeColor: "bg-orange-100 text-orange-700", icon: Video, iconColor: "bg-blue-600", title: "سيناريوهات الحياة الواقعية", desc: "تجربة مواقف حقيقية مثل التوتر، ضغط الأقران، أو رفض السجائر.", tags: ["#Video", "#Practice"] },
-  { badge: "New", badgeColor: "bg-emerald-100 text-emerald-700", icon: MessageSquare, iconColor: "bg-emerald-600", title: "تمارين رفض التدخين", desc: "تدرب على قول 'لا' من خلال تمارين لعب الأدوار وبناء الثقة.", tags: ["#Communication"] },
+  { badge: "New", badgeColor: "bg-surface-muted text-brand", icon: MessageSquare, iconColor: "bg-digital", title: "تمارين رفض التدخين", desc: "تدرب على قول 'لا' من خلال تمارين لعب الأدوار وبناء الثقة.", tags: ["#Communication"] },
   { badge: "Active", badgeColor: "bg-blue-100 text-blue-700", icon: Target, iconColor: "bg-purple-600", title: "تحديد أهداف الإقلاع", desc: "حدد أهدافك الشخصية وتتبع الأيام الخالية من التدخين.", tags: ["#Goals"] },
   { badge: "Active", badgeColor: "bg-blue-100 text-blue-700", icon: HelpCircle, iconColor: "bg-rose-600", title: "اختبارات تفاعلية", desc: "اختبر معرفتك بمخاطر التدخين واستراتيجيات الإقلاع.", tags: ["#Quiz"] },
 ];
@@ -30,9 +30,9 @@ export default function InteractiveToolsSection() {
               بعد كل وحدة، استخدم هذه الأدوات لممارسة المهارات: تدرب على السيناريوهات،
               حدد الأهداف، واختبر معرفتك.
             </p>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-100 border border-emerald-200">
-              <Target className="w-4 h-4 text-emerald-700" />
-              <span className="text-sm font-medium text-emerald-900">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-muted border border-border-soft">
+              <Target className="w-4 h-4 text-brand" />
+              <span className="text-sm font-medium text-ink">
                 متاح بعد إكمال كل وحدة
               </span>
             </div>

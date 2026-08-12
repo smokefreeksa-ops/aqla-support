@@ -80,7 +80,7 @@ export default function DrMalikCard() {
                 color: "#4ade80",
               }}
             >
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-accent-green-light animate-pulse" />
               متاح الآن
             </div>
           </div>

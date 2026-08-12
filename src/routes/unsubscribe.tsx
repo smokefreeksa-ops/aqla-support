@@ -59,7 +59,7 @@ function UnsubscribePage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-md text-center rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-        <div className="text-lg font-bold text-emerald-800 mb-1">أقلع · Aqla</div>
+        <div className="text-lg font-bold text-ink-secondary mb-1">أقلع · Aqla</div>
         <div className="text-xs text-gray-500 mb-6">Email preferences · إدارة البريد</div>
 
         {state.kind === "loading" && (
@@ -89,7 +89,7 @@ function UnsubscribePage() {
             </p>
             <button
               onClick={confirm}
-              className="mt-6 inline-flex items-center justify-center rounded-full bg-emerald-700 hover:bg-emerald-800 px-6 py-2.5 text-sm font-semibold text-white"
+              className="mt-6 inline-flex items-center justify-center rounded-full bg-brand hover:bg-ink-secondary px-6 py-2.5 text-sm font-semibold text-white"
             >
               Confirm unsubscribe · تأكيد
             </button>
@@ -97,7 +97,7 @@ function UnsubscribePage() {
         )}
         {state.kind === "success" && (
           <>
-            <h1 className="text-xl font-bold text-emerald-800">You've been unsubscribed</h1>
+            <h1 className="text-xl font-bold text-ink-secondary">You've been unsubscribed</h1>
             <p className="mt-2 text-sm text-gray-600" dir="rtl">
               تم إلغاء اشتراكك بنجاح. لن تصلك رسائل أخرى.
             </p>

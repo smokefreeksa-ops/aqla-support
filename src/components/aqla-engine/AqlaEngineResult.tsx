@@ -65,7 +65,7 @@ export function AqlaEngineResult({ result, resultId, userName, supportPersonName
       </Card>
 
       <Card title="4. أول خطوة خلال 24 ساعة">
-        <p className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-emerald-900">{result.first_24h_step}</p>
+        <p className="bg-surface-soft border border-border-soft rounded-lg p-3 text-ink">{result.first_24h_step}</p>
       </Card>
 
       <Card title="5. خطتك خلال 7 أيام">
@@ -107,7 +107,7 @@ export function AqlaEngineResult({ result, resultId, userName, supportPersonName
       </Card>
 
       <Card title="8. هل تحتاج إحالة؟">
-        <p className={result.referral_needed ? "text-amber-900" : "text-emerald-900"}>{result.referral_message}</p>
+        <p className={result.referral_needed ? "text-amber-900" : "text-ink"}>{result.referral_message}</p>
       </Card>
 
       {(supportPersonName || result.support_message_template) && (
@@ -135,7 +135,7 @@ export function AqlaEngineResult({ result, resultId, userName, supportPersonName
         <p className="text-slate-700 mb-3">{result.share_text}</p>
         <div className="flex gap-2 flex-wrap">
           <Button onClick={copyShare} className="bg-blue-900 hover:bg-blue-800 text-white">نسخ نص المشاركة</Button>
-          <Button onClick={() => window.print()} className="bg-emerald-700 hover:bg-emerald-800 text-white">
+          <Button onClick={() => window.print()} className="bg-brand hover:bg-ink-secondary text-white">
             تحميل / طباعة PDF
           </Button>
         </div>

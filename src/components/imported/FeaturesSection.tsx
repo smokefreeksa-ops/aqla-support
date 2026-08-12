@@ -11,7 +11,7 @@ const features = [
     icon: RefreshCw,
     title: "مستدام",
     desc: "برنامج مستدام ذاتياً يضمن المشاركة المستمرة ويحافظ على فعاليته.",
-    color: "bg-emerald-600",
+    color: "bg-digital",
   },
   {
     icon: TrendingUp,

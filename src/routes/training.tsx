@@ -140,7 +140,7 @@ function TrainingPage() {
               </div>
 
               {certificate ? (
-                <div className="flex flex-wrap items-center gap-3 rounded-md border border-green-200 bg-green-50 p-3 text-green-900">
+                <div className="flex flex-wrap items-center gap-3 rounded-md border border-border-soft bg-surface-soft p-3 text-ink">
                   <Trophy className="h-5 w-5" />
                   <div className="text-sm">
                     <div className="font-semibold">{lang === "ar" ? "تم إصدار شهادتك" : "Your certificate is issued"}</div>
@@ -177,7 +177,7 @@ function TrainingPage() {
                       className="w-full flex items-center justify-between gap-3 text-start"
                     >
                       <div className="flex items-center gap-3">
-                        {done ? <CheckCircle2 className="h-5 w-5 text-green-600" /> : <BookOpen className="h-5 w-5 text-primary" />}
+                        {done ? <CheckCircle2 className="h-5 w-5 text-digital" /> : <BookOpen className="h-5 w-5 text-primary" />}
                         <div>
                           <div className="font-semibold">
                             {m.number}. {lang === "ar" ? m.title_ar : m.title_en}
@@ -426,7 +426,7 @@ function ModulePanel({
                       className={`text-start text-sm rounded border px-3 py-2 transition ${
                         show
                           ? isCorrect
-                            ? "border-green-500 bg-green-50"
+                            ? "border-accent-green bg-surface-soft"
                             : picked
                               ? "border-red-400 bg-red-50"
                               : "opacity-70"

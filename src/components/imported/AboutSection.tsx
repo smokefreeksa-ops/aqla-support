@@ -20,7 +20,7 @@ function useCountUp(target: number, duration = 2000, start = false) {
 
 const stats = [
   { icon: Award, label: "الخبرة", value: 10, suffix: "+", color: "bg-blue-500" },
-  { icon: GraduationCap, label: "البحث", value: 15, suffix: "+", color: "bg-emerald-500" },
+  { icon: GraduationCap, label: "البحث", value: 15, suffix: "+", color: "bg-accent-green" },
   { icon: TrendingUp, label: "معدل النجاح", value: 85, suffix: "%", color: "bg-purple-500" },
   { icon: Users, label: "المرضى المساعدون", value: 500, suffix: "+", color: "bg-orange-500" },
 ];

@@ -426,7 +426,7 @@ function BreathChallenge({ isAr }: { isAr: boolean }) {
 
   const band = (s: number) =>
     s <= 10 ? { ar: "بداية بسيطة — ركّز على التنفس الهادئ ولا تضغط على نفسك.", en: "A gentle start — focus on calm breathing and do not push yourself.", cls: "text-sky-700" } :
-    s <= 25 ? { ar: "وعي جيد بالتنفس — يمكنك تجربة تمارين تنفس هادئة.", en: "Good breath awareness — you can try calm breathing exercises.", cls: "text-emerald-700" } :
+    s <= 25 ? { ar: "وعي جيد بالتنفس — يمكنك تجربة تمارين تنفس هادئة.", en: "Good breath awareness — you can try calm breathing exercises.", cls: "text-brand" } :
     s <= 45 ? { ar: "تحكم جيد اليوم — تذكر أن هذا ليس اختبارًا طبيًا.", en: "Good control today — remember this is not a medical test.", cls: "text-teal-700" } :
               { ar: "تحكم عالٍ اليوم — لا تعتمد على هذا كمقياس لصحة الرئة.", en: "Strong control today — do not use this as a measure of lung health.", cls: "text-teal-800" };
 
@@ -453,7 +453,7 @@ function BreathChallenge({ isAr }: { isAr: boolean }) {
         </Button>
       ) : (
         <>
-          <div className="mt-5 grid place-items-center rounded-2xl bg-gradient-to-br from-sky-100 via-teal-50 to-emerald-100 p-6">
+          <div className="mt-5 grid place-items-center rounded-2xl bg-gradient-to-br from-sky-100 via-teal-50 to-surface-muted p-6">
             <div className="text-5xl font-bold tabular-nums text-teal-700">{running ? seconds : (final ?? 0)}s</div>
             <p className="mt-1 text-xs text-muted-foreground">{t("الحد الأقصى 60 ثانية للسلامة", "Max 60 seconds for safety")}</p>
             <div className="mt-4 flex gap-2">
@@ -769,7 +769,7 @@ function ReadinessMeter({ isAr }: { isAr: boolean }) {
     : val <= 6
     ? { ar: "أنت في مرحلة التفكير. هذه خطوة مهمة، ويمكن لأقلع مساعدتك على ترتيب الخطوة التالية.",
         en: "You are in the thinking stage. That is an important step, and Aqla can help you plan what comes next.",
-        cls: "text-emerald-700" }
+        cls: "text-brand" }
     : { ar: "يبدو أنك قريب من بداية حقيقية. لنضع لك مسارًا أوضح من خلال تقييم أقلع.",
         en: "You may be close to a real start. Complete the Aqla assessment to get a clearer pathway.",
         cls: "text-teal-700" };
