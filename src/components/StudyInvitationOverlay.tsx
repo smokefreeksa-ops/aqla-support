@@ -370,8 +370,9 @@ export function StudyInvitationOverlay() {
             className="crystal-shell aqla-launch-panel relative flex max-h-[92%] w-full flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
             style={{
               width: "min(95%, clamp(500px, 61vw, 860px))",
-
-
+              ...(step === "invite"
+                ? { background: "transparent", border: "none", boxShadow: "none", padding: 0 }
+                : {}),
               transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
               transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
             }}
