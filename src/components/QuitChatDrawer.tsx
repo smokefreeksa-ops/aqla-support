@@ -8,10 +8,45 @@ import { QuitChatConversation } from "@/components/clinical/QuitChatConversation
  */
 export function QuitChatDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [mounted, setMounted] = useState(false);
+  // Tracks whether this drawer currently owns the top history entry.
+  const ownsHistory = useRef(false);
 
   useEffect(() => {
     if (open) setMounted(true);
   }, [open]);
+
+  // History-aware modal: opening pushes exactly one temporary entry so the
+  // browser/system Back button closes the drawer instead of leaving the site.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (open && !ownsHistory.current) {
+      ownsHistory.current = true;
+      window.history.pushState(
+        { ...(window.history.state ?? {}), aqlaQuitChatDrawer: true },
+        "",
+        window.location.href,
+      );
+    }
+
+    if (!open && ownsHistory.current) {
+      // Closed by UI (button / Escape / backdrop): pop our own entry back off.
+      ownsHistory.current = false;
+      if (window.history.state?.aqlaQuitChatDrawer) window.history.back();
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onPop = () => {
+      if (ownsHistory.current) {
+        ownsHistory.current = false;
+        onClose();
+      }
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, [onClose]);
 
   useEffect(() => {
     if (!open) return;
