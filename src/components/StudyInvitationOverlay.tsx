@@ -326,6 +326,18 @@ export function StudyInvitationOverlay() {
         <div className="pointer-events-none absolute inset-0 z-[1] opacity-[0.14] mix-blend-soft-light">
           <SaudiFlagWave />
         </div>
+        {/* Launch light streaks */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-[5] overflow-hidden">
+          {launching &&
+            [18, 34, 50, 66, 82].map((left, i) => (
+              <span
+                key={left}
+                className="aqla-launch-streak"
+                style={{ left: `${left}%`, animationDelay: `${i * 55}ms` }}
+              />
+            ))}
+        </div>
+
         {/* Backdrop click closes */}
         <button
           type="button"
@@ -422,6 +434,8 @@ export function StudyInvitationOverlay() {
             </span>
           </div>
 
+          {step === "invite" ? (
+          <div key="invite" className="flex flex-col gap-3.5 sm:gap-4 animate-fade-in">
           {/* Title */}
           <h2
             id="aqla-study-title"
@@ -538,6 +552,51 @@ export function StudyInvitationOverlay() {
               </div>
             </div>
           </div>
+          </div>
+          ) : (
+          <div key="confirm" dir={t.dir} className="flex flex-col gap-4 animate-fade-in">
+            <p className={`mx-auto max-w-[34ch] text-balance text-center font-semibold text-[#08301e] ${
+              isRTL ? "text-[17px] leading-[1.9] sm:text-[19px]" : "text-[16.5px] leading-[1.6] sm:text-[18px]"
+            }`}>
+              {t.confirmMessage}
+            </p>
+
+            <div className="flex flex-col gap-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  trackEvent("study_skip_join_study");
+                  participate();
+                }}
+                style={{
+                  backgroundImage:
+                    "linear-gradient(135deg, #0d4a2e 0%, #06381f 52%, #0f5636 100%)",
+                  boxShadow:
+                    "inset 0 0 0 1px rgba(201,168,76,0.9), inset 0 1px 0 rgba(255,244,214,0.28), 0 12px 26px -14px rgba(6,56,31,0.55)",
+                }}
+                className="group relative inline-flex min-h-[52px] w-full items-center justify-center overflow-hidden rounded-2xl px-6 text-[15px] font-bold text-[#faf1d8] transition-all duration-300 hover:-translate-y-px hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 motion-reduce:transition-none"
+              >
+                {t.confirmJoin}
+              </button>
+
+              <button
+                type="button"
+                onClick={continueToSite}
+                className="inline-flex min-h-[48px] w-full items-center justify-center rounded-2xl border border-[#0b3a25]/25 bg-[#0b3a25]/[0.04] px-6 text-[14px] font-semibold text-[#0b3a25] transition-colors duration-300 hover:bg-[#0b3a25]/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25 motion-reduce:transition-none"
+              >
+                {t.confirmContinue}
+              </button>
+
+              <button
+                type="button"
+                onClick={goBackToPreviousPage}
+                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full px-6 text-[13px] font-medium text-[#5a7a6a] underline-offset-4 transition-colors duration-300 hover:text-[#0b3a25] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/20 motion-reduce:transition-none"
+              >
+                {t.confirmBack}
+              </button>
+            </div>
+          </div>
+          )}
         </div>
 
         </div>
