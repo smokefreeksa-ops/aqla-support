@@ -178,6 +178,14 @@ export function StudyInvitationOverlay() {
         <div className="pointer-events-none absolute inset-0 z-[1] opacity-[0.14] mix-blend-soft-light">
           <SaudiFlagWave />
         </div>
+        {/* Backdrop click closes */}
+        <button
+          type="button"
+          aria-label={isRTL ? "إغلاق" : "Close"}
+          onClick={close}
+          className="absolute inset-0 z-[2] cursor-default"
+        />
+
 
 
           <div className="relative z-10 flex h-full flex-col">
@@ -224,6 +232,18 @@ export function StudyInvitationOverlay() {
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/50 to-transparent"
         />
 
+        {/* Close */}
+        <div className={`absolute top-3 ${isRTL ? "right-3" : "left-3"} z-30`}>
+          <button
+            type="button"
+            onClick={close}
+            aria-label={isRTL ? "إغلاق" : "Close"}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#0b3a25]/15 bg-[#0b3a25]/[0.04] text-[#2d5a45] transition-colors duration-300 hover:bg-[#0b3a25]/[0.09] hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/50"
+          >
+            <X className="h-4 w-4" aria-hidden="true" />
+          </button>
+        </div>
+
         {/* Language switch */}
         <div className={`absolute top-3 ${isRTL ? "left-3" : "right-3"} z-30`}>
           <button
@@ -232,6 +252,7 @@ export function StudyInvitationOverlay() {
             className="inline-flex h-8 min-w-[40px] items-center justify-center rounded-full border border-[#0b3a25]/15 bg-[#0b3a25]/[0.04] px-3 text-[11px] font-medium tracking-wide text-[#2d5a45] transition-colors duration-300 hover:bg-[#0b3a25]/[0.09] hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/50"
             aria-label={lang === "ar" ? "Switch to English" : "التبديل إلى العربية"}
           >
+
             {t.langSwitchOther}
           </button>
         </div>
