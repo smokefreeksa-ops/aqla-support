@@ -952,7 +952,7 @@ body {
   mask-image: radial-gradient(ellipse 82% 76% at 50% 50%, transparent 0 60%, #000 82%);
 }
 
-/* ---------- 7. 4 razor-sharp four-point star glints at facet intersections ---------- */
+/* ---------- 7. 5 razor-sharp four-point star glints at facet intersections ---------- */
 .crystal-flares {
   position: absolute;
   inset: 0;
@@ -967,21 +967,24 @@ body {
     linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent) 5% 72% / 22px 1px no-repeat,
     linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.8), transparent) 5% 72% / 1px 16px no-repeat,
     linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent) 95% 90% / 24px 1px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.85), transparent) 95% 90% / 1px 17px no-repeat;
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.85), transparent) 95% 90% / 1px 17px no-repeat,
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent) 50% 4% / 20px 1px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.75), transparent) 50% 4% / 1px 14px no-repeat;
 }
 
-/* ---------- 8. 4 tiny spectral dispersion flashes at edge facets only ---------- */
+/* ---------- 8. 5 tiny spectral dispersion flashes at edge facets only ---------- */
 .crystal-dispersion {
   position: absolute;
   inset: 0;
   z-index: 6;
   pointer-events: none;
-  opacity: 0.3;
+  opacity: 0.34;
   background:
     radial-gradient(circle 6px at 4% 13%, rgba(90, 170, 255, 0.55), transparent 70%),
     radial-gradient(circle 6px at 96% 27%, rgba(255, 190, 90, 0.5), transparent 70%),
     radial-gradient(circle 5px at 6% 88%, rgba(255, 110, 110, 0.45), transparent 70%),
-    radial-gradient(circle 5px at 94% 79%, rgba(255, 235, 120, 0.45), transparent 70%);
+    radial-gradient(circle 5px at 94% 79%, rgba(255, 235, 120, 0.45), transparent 70%),
+    radial-gradient(circle 5px at 62% 3%, rgba(255, 150, 80, 0.42), transparent 70%);
   filter: blur(1px);
 }
 
