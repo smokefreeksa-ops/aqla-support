@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { X } from "lucide-react";
 
 import { ResearchBanner } from "@/components/ResearchBanner";
 import SaudiFlagWave from "@/components/SaudiFlagWave";
@@ -233,7 +232,7 @@ export function StudyInvitationOverlay() {
             tabIndex={-1}
             dir={t.dir}
             lang={lang}
-            className="crystal-shell relative flex max-h-[86%] w-full flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
+            className="crystal-shell relative flex max-h-[92%] w-full flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
             style={{
               width: "min(94%, clamp(460px, 56vw, 780px))",
 
@@ -283,7 +282,7 @@ export function StudyInvitationOverlay() {
             <img
               src={aqlaLogo}
               alt="شعار أقلع — Aqla Logo"
-              className="h-20 w-auto object-contain drop-shadow-[0_3px_14px_rgba(11,58,37,0.28)] sm:h-24"
+              className="h-14 w-auto object-contain drop-shadow-[0_3px_14px_rgba(11,58,37,0.28)] sm:h-20"
             />
           </div>
 
