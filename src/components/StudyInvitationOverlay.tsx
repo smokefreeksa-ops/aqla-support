@@ -191,17 +191,25 @@ export function StudyInvitationOverlay() {
             tabIndex={-1}
             dir={t.dir}
             lang={lang}
-            className="crystal-shell relative flex max-h-[92%] w-full max-w-[520px] flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
+            className="crystal-shell relative flex max-h-[92%] w-full flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
             style={{
+              width: "min(100%, clamp(420px, 50vw, 680px))",
               transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
               transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
             }}
           >
             <div className="crystal-panel flex max-h-full min-h-0 flex-col">
-              <div aria-hidden className="crystal-edge-light" />
+              <div aria-hidden className="crystal-facets-outer" />
               <div aria-hidden className="crystal-inner-highlight" />
+              <div aria-hidden className="crystal-bevel-3" />
+              <div aria-hidden className="crystal-specular" />
+              <div aria-hidden className="crystal-corner-brilliance" />
+              <div aria-hidden className="crystal-dispersion" />
+              <div aria-hidden className="crystal-flares" />
+              <div aria-hidden className="crystal-edge-light" />
               <div aria-hidden className="glass-frost" />
               <div aria-hidden className="glass-noise" />
+
 
 
         <div
