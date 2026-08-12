@@ -1,0 +1,6 @@
+ALTER FUNCTION public.read_email_batch(text, integer, integer) SET search_path = public, pgmq, pg_temp;
+ALTER FUNCTION public.enqueue_email(text, jsonb) SET search_path = public, pgmq, pg_temp;
+ALTER FUNCTION public.delete_email(text, bigint) SET search_path = public, pgmq, pg_temp;
+ALTER FUNCTION public.move_to_dlq(text, text, bigint, jsonb) SET search_path = public, pgmq, pg_temp;
+
+DROP POLICY IF EXISTS sos_sessions_anon_update ON public.sos_sessions;
