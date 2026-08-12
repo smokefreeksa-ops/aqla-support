@@ -121,7 +121,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Aqla — أقلع" },
       { name: "description", content: "A free physician-led digital pathway for smoking and nicotine cessation support, dependence assessment, volunteer training, and community awareness." },
-      { name: "author", content: "Lovable" },
+      { name: "author", content: "أقلع — Aqla" },
       { property: "og:title", content: "Aqla — أقلع" },
       { property: "og:description", content: "A free physician-led digital pathway for smoking and nicotine cessation support, dependence assessment, volunteer training, and community awareness." },
       { property: "og:type", content: "website" },
