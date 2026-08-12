@@ -374,6 +374,7 @@ export function StudyInvitationOverlay() {
               transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
             }}
           >
+            <div aria-hidden className="crystal-stars" />
             <div className="crystal-panel flex max-h-full min-h-0 flex-col">
               <div aria-hidden className="crystal-striations" />
               <div aria-hidden className="crystal-column" />
