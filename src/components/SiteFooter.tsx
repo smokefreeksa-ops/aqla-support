@@ -88,6 +88,11 @@ export function SiteFooter() {
                 © {new Date().getFullYear()} {isAr ? "أقلع — Aqla" : "Aqla — أقلع"}
               </div>
               <div>{isAr ? "منصة مجانية للتوعية والدعم — ليست خدمة طوارئ" : "Free awareness & support platform — not emergency service"}</div>
+              <div>
+                {isAr
+                  ? "بالانتساب إلى جامعة الملك عبدالعزيز — جدة، المملكة العربية السعودية"
+                  : "In affiliation with King Abdulaziz University — Jeddah, Saudi Arabia"}
+              </div>
             </div>
           </div>
 
