@@ -621,13 +621,19 @@ body {
   overflow: hidden;
   clip-path: var(--gem-cut);
   background:
+    radial-gradient(
+      ellipse 76% 72% at 50% 50%,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0.62) 58%,
+      rgba(255, 255, 255, 0.8) 100%
+    ),
     linear-gradient(
       150deg,
-      rgba(255, 255, 255, 0.8) 0%,
-      rgba(248, 250, 252, 0.66) 26%,
-      rgba(255, 255, 255, 0.7) 50%,
-      rgba(244, 247, 250, 0.64) 74%,
-      rgba(255, 255, 255, 0.82) 100%
+      rgba(255, 255, 255, 0.36) 0%,
+      rgba(248, 250, 252, 0.2) 26%,
+      rgba(255, 255, 255, 0.24) 50%,
+      rgba(244, 247, 250, 0.2) 74%,
+      rgba(255, 255, 255, 0.38) 100%
     );
   backdrop-filter: blur(22px) grayscale(1) brightness(2.05) contrast(0.9);
   box-shadow:
@@ -786,7 +792,7 @@ body {
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.9;
+  opacity: 0.95;
   background:
     conic-gradient(
       from 18deg at 40% 42%,
@@ -808,43 +814,65 @@ body {
       rgba(255, 255, 255, 0.12) 186deg 241deg,
       rgba(191, 205, 215, 0.05) 241deg 300deg,
       rgba(255, 255, 255, 0.09) 300deg 360deg
+    ),
+    /* extra crisp triangular planes so the centre is unmistakably cut */
+    conic-gradient(
+      from 322deg at 52% 34%,
+      rgba(255, 255, 255, 0.1) 0deg 21deg,
+      rgba(186, 200, 211, 0.05) 21deg 47deg,
+      rgba(255, 255, 255, 0.08) 47deg 74deg,
+      rgba(255, 255, 255, 0) 74deg 360deg
+    ),
+    conic-gradient(
+      from 128deg at 46% 76%,
+      rgba(255, 255, 255, 0.09) 0deg 24deg,
+      rgba(190, 204, 214, 0.05) 24deg 52deg,
+      rgba(255, 255, 255, 0.07) 52deg 81deg,
+      rgba(255, 255, 255, 0) 81deg 360deg
     );
-  -webkit-mask-image: radial-gradient(ellipse 78% 74% at 50% 50%, #000 0 62%, rgba(0, 0, 0, 0.5) 76%, transparent 96%);
-  mask-image: radial-gradient(ellipse 78% 74% at 50% 50%, #000 0 62%, rgba(0, 0, 0, 0.5) 76%, transparent 96%);
+  -webkit-mask-image: radial-gradient(ellipse 84% 80% at 50% 50%, #000 0 72%, rgba(0, 0, 0, 0.6) 84%, transparent 99%);
+  mask-image: radial-gradient(ellipse 84% 80% at 50% 50%, #000 0 72%, rgba(0, 0, 0, 0.6) 84%, transparent 99%);
 }
 
-/* ---------- 4b. Internal reflection planes (optical depth, hard edges) ---------- */
+/* ---------- 4b. Internal reflection planes — facet-bounded wedges,
+   no continuous bands crossing the panel ---------- */
 .crystal-planes {
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
   mix-blend-mode: plus-lighter;
-  opacity: 0.5;
+  opacity: 0.55;
   background:
-    linear-gradient(
-      118deg,
-      rgba(255, 255, 255, 0) 0 34%,
-      rgba(255, 255, 255, 0.1) 34% 41%,
-      rgba(255, 255, 255, 0) 41% 100%
+    conic-gradient(
+      from 28deg at 24% 30%,
+      rgba(255, 255, 255, 0) 0deg 8deg,
+      rgba(255, 255, 255, 0.11) 8deg 26deg,
+      rgba(255, 255, 255, 0) 26deg 360deg
     ),
-    linear-gradient(
-      -142deg,
-      rgba(255, 255, 255, 0) 0 52%,
-      rgba(255, 255, 255, 0.08) 52% 57%,
-      rgba(255, 255, 255, 0) 57% 100%
+    conic-gradient(
+      from 156deg at 74% 26%,
+      rgba(255, 255, 255, 0) 0deg 6deg,
+      rgba(255, 255, 255, 0.09) 6deg 22deg,
+      rgba(255, 255, 255, 0) 22deg 360deg
     ),
-    linear-gradient(
-      64deg,
-      rgba(255, 255, 255, 0) 0 61%,
-      rgba(214, 224, 232, 0.09) 61% 68%,
-      rgba(255, 255, 255, 0) 68% 100%
+    conic-gradient(
+      from 292deg at 68% 74%,
+      rgba(255, 255, 255, 0) 0deg 9deg,
+      rgba(226, 233, 239, 0.1) 9deg 28deg,
+      rgba(255, 255, 255, 0) 28deg 360deg
     ),
-    linear-gradient(
-      -22deg,
-      rgba(255, 255, 255, 0) 0 20%,
-      rgba(255, 255, 255, 0.07) 20% 25%,
-      rgba(255, 255, 255, 0) 25% 100%
+    conic-gradient(
+      from 214deg at 30% 72%,
+      rgba(255, 255, 255, 0) 0deg 7deg,
+      rgba(255, 255, 255, 0.08) 7deg 24deg,
+      rgba(255, 255, 255, 0) 24deg 360deg
+    ),
+    conic-gradient(
+      from 84deg at 50% 52%,
+      rgba(255, 255, 255, 0) 0deg 5deg,
+      rgba(255, 255, 255, 0.06) 5deg 17deg,
+      rgba(255, 255, 255, 0) 17deg 360deg
     );
 }
 
@@ -924,7 +952,7 @@ body {
   mask-image: radial-gradient(ellipse 82% 76% at 50% 50%, transparent 0 60%, #000 82%);
 }
 
-/* ---------- 7. 4 razor-sharp four-point star glints at facet intersections ---------- */
+/* ---------- 7. 5 razor-sharp four-point star glints at facet intersections ---------- */
 .crystal-flares {
   position: absolute;
   inset: 0;
@@ -939,21 +967,24 @@ body {
     linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent) 5% 72% / 22px 1px no-repeat,
     linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.8), transparent) 5% 72% / 1px 16px no-repeat,
     linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent) 95% 90% / 24px 1px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.85), transparent) 95% 90% / 1px 17px no-repeat;
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.85), transparent) 95% 90% / 1px 17px no-repeat,
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent) 50% 4% / 20px 1px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.75), transparent) 50% 4% / 1px 14px no-repeat;
 }
 
-/* ---------- 8. 4 tiny spectral dispersion flashes at edge facets only ---------- */
+/* ---------- 8. 5 tiny spectral dispersion flashes at edge facets only ---------- */
 .crystal-dispersion {
   position: absolute;
   inset: 0;
   z-index: 6;
   pointer-events: none;
-  opacity: 0.3;
+  opacity: 0.34;
   background:
     radial-gradient(circle 6px at 4% 13%, rgba(90, 170, 255, 0.55), transparent 70%),
     radial-gradient(circle 6px at 96% 27%, rgba(255, 190, 90, 0.5), transparent 70%),
     radial-gradient(circle 5px at 6% 88%, rgba(255, 110, 110, 0.45), transparent 70%),
-    radial-gradient(circle 5px at 94% 79%, rgba(255, 235, 120, 0.45), transparent 70%);
+    radial-gradient(circle 5px at 94% 79%, rgba(255, 235, 120, 0.45), transparent 70%),
+    radial-gradient(circle 5px at 62% 3%, rgba(255, 150, 80, 0.42), transparent 70%);
   filter: blur(1px);
 }
 
@@ -988,7 +1019,7 @@ body {
   mix-blend-mode: screen;
 }
 
-/* Brilliant polished rim — contained inside the gem */
+/* Polished rim — segmented into facet-length reflections, not one glow line */
 .crystal-edge-light {
   position: absolute;
   inset: 0;
@@ -997,10 +1028,34 @@ body {
   clip-path: var(--gem-cut);
   mix-blend-mode: plus-lighter;
   background:
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 1), transparent) top / 94% 2px no-repeat,
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.88), transparent) bottom / 94% 2px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.95), transparent) left / 2px 92% no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.95), transparent) right / 2px 92% no-repeat;
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.98) 0 34px,
+      rgba(255, 255, 255, 0.28) 34px 40px,
+      rgba(255, 255, 255, 0.72) 40px 66px,
+      rgba(255, 255, 255, 0.2) 66px 72px
+    ) top / 94% 2px no-repeat,
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.82) 0 30px,
+      rgba(255, 255, 255, 0.22) 30px 36px,
+      rgba(255, 255, 255, 0.62) 36px 60px,
+      rgba(255, 255, 255, 0.18) 60px 66px
+    ) bottom / 94% 2px no-repeat,
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.9) 0 26px,
+      rgba(255, 255, 255, 0.24) 26px 32px,
+      rgba(255, 255, 255, 0.66) 32px 54px,
+      rgba(255, 255, 255, 0.18) 54px 60px
+    ) left / 2px 92% no-repeat,
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.9) 0 28px,
+      rgba(255, 255, 255, 0.24) 28px 34px,
+      rgba(255, 255, 255, 0.66) 34px 56px,
+      rgba(255, 255, 255, 0.18) 56px 62px
+    ) right / 2px 92% no-repeat;
 }
 
 /* Mobile: fewer layers, lighter blur */
