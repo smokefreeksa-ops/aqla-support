@@ -820,15 +820,16 @@ body {
   inset: 0;
   z-index: 6;
   pointer-events: none;
-  opacity: 0.42;
+  opacity: 0.26;
   background:
-    radial-gradient(circle 22px at 8% 20%, rgba(120, 200, 255, 0.55), transparent 70%),
-    radial-gradient(circle 20px at 12% 19%, rgba(255, 170, 210, 0.5), transparent 70%),
-    radial-gradient(circle 20px at 90% 34%, rgba(255, 215, 140, 0.5), transparent 70%),
-    radial-gradient(circle 18px at 87% 36%, rgba(150, 255, 220, 0.42), transparent 70%),
-    radial-gradient(circle 18px at 22% 93%, rgba(180, 170, 255, 0.45), transparent 70%),
-    radial-gradient(circle 18px at 74% 95%, rgba(255, 190, 160, 0.42), transparent 70%);
+    radial-gradient(circle 16px at 4.5% 12%, rgba(120, 200, 255, 0.5), transparent 70%),
+    radial-gradient(circle 14px at 7% 11%, rgba(255, 170, 210, 0.45), transparent 70%),
+    radial-gradient(circle 14px at 95% 24%, rgba(255, 215, 140, 0.45), transparent 70%),
+    radial-gradient(circle 13px at 93% 26%, rgba(150, 255, 220, 0.38), transparent 70%),
+    radial-gradient(circle 13px at 6% 92%, rgba(180, 170, 255, 0.4), transparent 70%),
+    radial-gradient(circle 13px at 94% 94%, rgba(255, 190, 160, 0.38), transparent 70%);
   filter: blur(2px);
+
 }
 
 /* Legacy layers reduced to faint internal texture */
