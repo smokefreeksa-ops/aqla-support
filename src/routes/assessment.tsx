@@ -945,9 +945,9 @@ function ResultView({
     color: #0f172a; background: #fff; font-size: 12px; line-height: 1.55;
   }
   .wrap { max-width: 780px; margin: 0 auto; padding: 8px; }
-  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 3px solid #0f766e; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 3px solid #007A5A; }
   header img { height: 44px; width: auto; object-fit: contain; }
-  .brand { font-size: 20px; font-weight: 700; color: #0f766e; letter-spacing: .3px; }
+  .brand { font-size: 20px; font-weight: 700; color: #007A5A; letter-spacing: .3px; }
   .meta { text-align: ${isAr ? "left" : "right"}; font-size: 11px; color: #475569; }
   h1 { font-size: 22px; margin: 20px 0 4px; color: #0f172a; }
   .subtitle { color: #64748b; font-size: 12px; margin-bottom: 18px; }
@@ -961,23 +961,23 @@ function ResultView({
   .card .label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 4px; font-weight: 600; }
   .card .value { font-size: 13px; font-weight: 600; color: #0f172a; }
   section { margin-top: 22px; page-break-inside: avoid; }
-  section h2 { font-size: 14px; margin: 0 0 10px; color: #0f766e; padding-bottom: 6px; border-bottom: 1px solid #e2e8f0; }
+  section h2 { font-size: 14px; margin: 0 0 10px; color: #007A5A; padding-bottom: 6px; border-bottom: 1px solid #e2e8f0; }
   .score-row { display: flex; align-items: center; gap: 14px; margin: 10px 0; }
-  .score-num { font-size: 28px; font-weight: 800; color: #0f766e; min-width: 76px; text-align: center; }
+  .score-num { font-size: 28px; font-weight: 800; color: #007A5A; min-width: 76px; text-align: center; }
   .score-num small { font-size: 12px; color: #94a3b8; font-weight: 500; }
   .bar { flex: 1; height: 12px; background: #e2e8f0; border-radius: 999px; overflow: hidden; position: relative; }
-  .bar > span { display: block; height: 100%; background: linear-gradient(90deg, #10b981, #0f766e); border-radius: 999px; }
+  .bar > span { display: block; height: 100%; background: linear-gradient(90deg, #10b981, #007A5A); border-radius: 999px; }
   [dir="rtl"] .bar > span { margin-${isAr ? "right" : "left"}: 0; }
   .score-cat { font-size: 11px; color: #475569; margin-top: 4px; }
   .cohort-box { padding: 14px; border-radius: 10px; background: linear-gradient(135deg, #ecfdf5, #f0fdfa); border: 1px solid #a7f3d0; }
-  .cohort-letter { display: inline-block; width: 40px; height: 40px; line-height: 40px; text-align: center; font-size: 20px; font-weight: 800; background: #0f766e; color: #fff; border-radius: 50%; }
+  .cohort-letter { display: inline-block; width: 40px; height: 40px; line-height: 40px; text-align: center; font-size: 20px; font-weight: 800; background: #007A5A; color: #fff; border-radius: 50%; }
   .flag { padding: 12px 14px; border-radius: 10px; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; margin-top: 10px; }
   ol.steps { padding-${isAr ? "right" : "left"}: 18px; margin: 8px 0 0; }
   ol.steps li { margin: 6px 0; }
   .disclaimer { margin-top: 24px; padding: 12px 14px; border-radius: 8px; background: #fffbeb; border: 1px solid #fde68a; color: #78350f; font-size: 11px; }
   footer { margin-top: 26px; padding-top: 14px; border-top: 1px solid #e2e8f0; font-size: 10px; color: #64748b; display: flex; justify-content: space-between; gap: 12px; }
   @media print { .noprint { display: none !important; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
-  .print-btn { position: fixed; top: 16px; ${isAr ? "left" : "right"}: 16px; background: #0f766e; color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(15,118,110,.3); }
+  .print-btn { position: fixed; top: 16px; ${isAr ? "left" : "right"}: 16px; background: #007A5A; color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(15,118,110,.3); }
 </style>
 </head>
 <body>

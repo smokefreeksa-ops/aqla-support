@@ -74,4 +74,4 @@ const button = {
   textDecoration: "none",
 };
 const hr = { borderColor: "#e6ece8", margin: "26px 0 14px" };
-const small = { fontSize: "11px", color: "#7a8a82", textAlign: "center" as const };
+const small = { fontSize: "11px", color: "#5A7A6A", textAlign: "center" as const };

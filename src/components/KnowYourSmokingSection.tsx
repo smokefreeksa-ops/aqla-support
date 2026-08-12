@@ -14,8 +14,8 @@ const tokens = {
   bg: "#EAF3F0",
   card: "#FFFFFF",
   border: "#D5E3DD",
-  ink: "#10352F",
-  primary: "#1B6E5F",
+  ink: "#0B3A25",
+  primary: "#007A5A",
   ember: "#E08A2E",
   warn: "#C4452F",
   softTeal: "#DFF0EA",
@@ -2412,7 +2412,7 @@ function Stat({
       style={{
         background: ember
           ? "linear-gradient(135deg,#E08A2E,#C4452F)"
-          : "linear-gradient(135deg,#10352F,#1B6E5F)",
+          : "linear-gradient(135deg,#0B3A25,#007A5A)",
       }}
     >
       <div className="text-xl font-bold leading-tight">{value}</div>
@@ -2605,14 +2605,14 @@ function ShareScore({
     "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition active:scale-95 disabled:opacity-60";
   const primary =
     tone === "dark"
-      ? { background: "#fff", color: "#10352F" }
+      ? { background: "#fff", color: "#0B3A25" }
       : tone === "ember"
       ? { background: "#C4452F", color: "#fff" }
-      : { background: "#1B6E5F", color: "#fff" };
+      : { background: "#007A5A", color: "#fff" };
   const ghost =
     tone === "dark"
       ? { background: "rgba(255,255,255,0.15)", color: "#fff", border: "1px solid rgba(255,255,255,0.35)" }
-      : { background: "#fff", color: "#10352F", border: "1px solid #D5E3DD" };
+      : { background: "#fff", color: "#0B3A25", border: "1px solid #D5E3DD" };
 
   return (
     <div className="mt-3 flex flex-wrap items-center gap-2">
