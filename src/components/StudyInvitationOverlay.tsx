@@ -263,18 +263,6 @@ export function StudyInvitationOverlay() {
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/50 to-transparent"
         />
 
-        {/* Close */}
-        <div className={`absolute top-3 ${isRTL ? "right-3" : "left-3"} z-30`}>
-          <button
-            type="button"
-            onClick={close}
-            aria-label={isRTL ? "إغلاق" : "Close"}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#0b3a25]/15 bg-[#0b3a25]/[0.04] text-[#2d5a45] transition-colors duration-300 hover:bg-[#0b3a25]/[0.09] hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/50"
-          >
-            <X className="h-4 w-4" aria-hidden="true" />
-          </button>
-        </div>
-
         {/* Language switch */}
         <div className={`absolute top-3 ${isRTL ? "left-3" : "right-3"} z-30`}>
           <button
@@ -288,7 +276,8 @@ export function StudyInvitationOverlay() {
           </button>
         </div>
 
-        <div className="relative z-20 flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-7 pb-8 pt-12 sm:px-10 sm:pt-14">
+        <div className="relative z-20 flex min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-7 pb-6 pt-11 sm:gap-4 sm:px-10 sm:pt-12">
+
           {/* Logo */}
           <div className="flex justify-center">
             <img
