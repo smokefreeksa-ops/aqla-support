@@ -656,25 +656,44 @@ body {
   isolation: isolate;
 }
 
+/* Delicate atmospheric backlight behind the gem (not a shadow, not a glow) */
+.crystal-shell::before {
+  content: "";
+  position: absolute;
+  inset: -6% -5%;
+  z-index: -2;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse 62% 56% at 50% 48%,
+    rgba(232, 246, 238, 0.16) 0%,
+    rgba(150, 210, 178, 0.09) 42%,
+    rgba(20, 70, 46, 0.04) 68%,
+    transparent 82%
+  );
+  filter: blur(38px);
+}
+
 /* Narrow reflected-light pool under the gem (jewellery photography) */
 .crystal-shell::after {
   content: "";
   position: absolute;
-  left: 16%;
-  right: 16%;
-  bottom: -13px;
-  height: 20px;
+  left: 18%;
+  right: 18%;
+  bottom: -12px;
+  height: 18px;
   z-index: -1;
   pointer-events: none;
   border-radius: 50%;
   background: radial-gradient(
     ellipse at 50% 0%,
-    rgba(255, 255, 255, 0.45),
-    rgba(255, 255, 255, 0.14) 42%,
+    rgba(255, 255, 255, 0.34),
+    rgba(255, 255, 255, 0.1) 42%,
     transparent 72%
   );
-  filter: blur(9px);
+  filter: blur(10px);
 }
+
 
 /* ---------- 1. Crystal body: colourless refracting slab ----------
    grayscale() on the backdrop removes ALL green/turquoise from the
