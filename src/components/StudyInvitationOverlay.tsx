@@ -62,6 +62,10 @@ const COPY: Record<Lang, {
     anonymous: "مجهولة الهوية",
     prize: "سحب على ٥٠٠ ريال سعودي",
     langSwitchOther: "English",
+    confirmMessage: "قبل أن تتابع، نأمل أن تفكر في المشاركة في الدراسة — مشاركتك تهمنا.",
+    confirmJoin: "شارك في الدراسة",
+    confirmContinue: "متابعة إلى الموقع",
+    confirmBack: "العودة للصفحة السابقة",
   },
   en: {
     dir: "ltr",
@@ -84,6 +88,10 @@ const COPY: Record<Lang, {
     anonymous: "Anonymous responses",
     prize: "SAR 500 prize draw",
     langSwitchOther: "العربية",
+    confirmMessage: "Before you continue, please consider taking part in the study — your participation matters.",
+    confirmJoin: "Join the study",
+    confirmContinue: "Continue to website",
+    confirmBack: "Go back",
   },
 };
 
