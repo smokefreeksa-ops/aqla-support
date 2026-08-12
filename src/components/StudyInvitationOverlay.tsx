@@ -5,6 +5,7 @@ import { ResearchBanner } from "@/components/ResearchBanner";
 import { trackEvent } from "@/lib/track-event";
 import aqlaLogo from "@/assets/aqla-logo-transparent.png";
 import saudiCrystalMap from "@/assets/saudi-crystal-map.png.asset.json";
+import studyPanelArt from "@/assets/saudi-study-panel.png.asset.json";
 
 
 
