@@ -201,7 +201,9 @@ export function StudyInvitationOverlay() {
           >
             <div className="crystal-panel flex max-h-full min-h-0 flex-col">
               <div aria-hidden className="crystal-facets-outer" />
+              <div aria-hidden className="crystal-facets-perimeter" />
               <div aria-hidden className="crystal-inner-highlight" />
+              <div aria-hidden className="crystal-planes" />
               <div aria-hidden className="crystal-bevel-3" />
               <div aria-hidden className="crystal-specular" />
               <div aria-hidden className="crystal-corner-brilliance" />
