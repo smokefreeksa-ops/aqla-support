@@ -102,7 +102,7 @@ export function StudyInvitationOverlay() {
   const [visible, setVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [lang, setLang] = useState<Lang>("ar");
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const t = COPY[lang];
 
