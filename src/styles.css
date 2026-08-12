@@ -1131,3 +1131,34 @@ body {
     display: none;
   }
 }
+
+/* ==========================================================
+   AQLA GREEN FIELD — shared welcome-gate environment
+   Deep near-black Saudi green with a soft central glow.
+   Used by the welcome/login gate and the homepage so the
+   whole experience shares one continuous background.
+   ========================================================== */
+.aqla-green-field {
+  background-color: #020806;
+  background-image:
+    radial-gradient(
+      ellipse 90% 70% at 50% 35%,
+      rgba(10, 58, 34, 0.95) 0%,
+      rgba(6, 38, 22, 0.85) 38%,
+      rgba(3, 20, 12, 0.9) 70%,
+      rgba(2, 8, 4, 0.98) 100%
+    );
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Matching scrim used over the flag texture inside the gate */
+.aqla-green-scrim {
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    rgba(0, 20, 10, 0.45) 0%,
+    rgba(0, 15, 8, 0.72) 55%,
+    rgba(0, 8, 4, 0.92) 100%
+  );
+}
