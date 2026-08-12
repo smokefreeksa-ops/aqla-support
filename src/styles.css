@@ -632,14 +632,18 @@ body {
 
 /* Deep Saudi-green field behind the gem — untouched by panel light */
 .study-environment {
-  background: radial-gradient(
-    ellipse at 50% 48%,
-    #0a8f6b 0%,
-    #007a5a 26%,
-    #00523f 55%,
-    #012d23 100%
+  background-color: #020806;
+  background-image: radial-gradient(
+    ellipse 90% 70% at 50% 40%,
+    rgba(10, 58, 34, 0.95) 0%,
+    rgba(6, 38, 22, 0.85) 38%,
+    rgba(3, 20, 12, 0.9) 70%,
+    rgba(2, 8, 4, 0.98) 100%
   );
+  background-repeat: no-repeat;
+  background-size: cover;
 }
+
 
 .study-aura,
 .crystal-backlight {
