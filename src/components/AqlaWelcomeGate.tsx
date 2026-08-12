@@ -196,18 +196,12 @@ export function AqlaWelcomeGate() {
     <div
       dir="rtl"
       lang="ar"
-      className="fixed inset-0 z-[100] flex flex-col items-center overflow-y-auto text-[#f4f0e1]"
-      style={{ unicodeBidi: "plaintext", background: "#020806" }}
+      className="aqla-green-field fixed inset-0 z-[100] flex flex-col items-center overflow-y-auto text-[#f4f0e1]"
+      style={{ unicodeBidi: "plaintext" }}
     >
       <SaudiFlagWave />
       {/* Dark scrim so the flag does not overpower the login card */}
-      <div
-        className="pointer-events-none absolute inset-0 z-[1]"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 40%, rgba(0,20,10,0.45) 0%, rgba(0,15,8,0.72) 55%, rgba(0,8,4,0.92) 100%)",
-        }}
-      />
+      <div className="aqla-green-scrim pointer-events-none absolute inset-0 z-[1]" />
       <div className="sticky top-0 z-[110] w-full">
         <ResearchBanner />
       </div>
