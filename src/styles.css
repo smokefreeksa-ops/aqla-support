@@ -615,16 +615,28 @@ body {
   --study-gold: #c9a84c;
   --study-sage: #5a7a6a;
   --gem-frame: 20px;
+  /* Stylised Saudi Arabia silhouette (percentages so it scales) */
   --gem-cut: polygon(
-    7% 0,
-    93% 0,
-    100% 11%,
-    100% 89%,
-    93% 100%,
-    7% 100%,
-    0 89%,
-    0 11%
+    14% 10%,
+    46% 2%,
+    66% 12%,
+    72% 22%,
+    78% 30%,
+    86% 36%,
+    80% 50%,
+    74% 60%,
+    66% 72%,
+    50% 88%,
+    36% 92%,
+    18% 72%,
+    10% 54%,
+    4% 36%,
+    8% 22%
   );
+  /* Outer/inner band masks for the map-shaped frame and rim light */
+  --gem-frame-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path fill-rule='evenodd' fill='%23000' d='M14 10 L46 2 L66 12 L72 22 L78 30 L86 36 L80 50 L74 60 L66 72 L50 88 L36 92 L18 72 L10 54 L4 36 L8 22 Z M17.6 14 L46.4 6.8 L64.4 16.8 L69.8 25.8 L75.2 33 L82.4 38.4 L77 51 L71.6 59 L64.4 69.8 L50 84.2 L37.4 87.8 L21.2 69.8 L14 53.6 L8.6 37.4 L12.2 24.8 Z'/></svg>");
+  --gem-rim-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path fill-rule='evenodd' fill='%23000' d='M14 10 L46 2 L66 12 L72 22 L78 30 L86 36 L80 50 L74 60 L66 72 L50 88 L36 92 L18 72 L10 54 L4 36 L8 22 Z M14.7 11.6 L46.1 3.6 L65.7 13 L71.6 22.7 L77.4 30.4 L85.3 36.6 L79.4 50.2 L73.5 60 L65.7 71.6 L50 86.8 L36.3 90.7 L18.7 71.6 L10.9 54.2 L5.1 36.7 L8.9 23 Z'/></svg>");
+
 }
 
 /* Deep Saudi-green field behind the gem — untouched by panel light */
@@ -722,15 +734,13 @@ body {
     inset 0 0 90px rgba(120, 190, 165, 0.2);
 }
 
-/* ---------- 2. Thick mitred frame ----------
-   Its own layer with constant width and chamfered corner blocks. */
+/* ---------- 2. Map-shaped frame band ----------
+   Follows the Saudi outline via an even-odd SVG mask. */
 .crystal-frame {
   position: absolute;
   inset: 0;
   z-index: 6;
   pointer-events: none;
-  clip-path: var(--gem-cut);
-  padding: var(--gem-frame, 20px);
   background:
     linear-gradient(
       160deg,
@@ -740,22 +750,17 @@ body {
       rgba(206, 240, 226, 0.8) 66%,
       rgba(255, 255, 255, 0.98) 100%
     );
-  mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
-  mask-clip: content-box, border-box;
-  mask-composite: exclude;
+  mask-image: var(--gem-frame-mask);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
   filter: drop-shadow(0 0 10px rgba(210, 252, 236, 0.5));
 }
 
-/* Frame thickness / depth shading so it reads as a solid block */
+/* Frame depth shading so it reads as a solid block */
 .crystal-frame::before {
   content: "";
   position: absolute;
   inset: 0;
-  clip-path: var(--gem-cut);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 1),
-    inset 0 0 0 calc(var(--gem-frame, 20px) - 1px) rgba(255, 255, 255, 0.001),
-    inset 0 0 14px rgba(255, 255, 255, 0.55);
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.5) 0%,
@@ -766,18 +771,21 @@ body {
   mix-blend-mode: screen;
 }
 
-/* ---------- 3. Inner border hairline, inset from the frame ---------- */
+/* ---------- 3. Inner hairline following the outline ---------- */
 .crystal-inner-line {
   position: absolute;
-  inset: calc(var(--gem-frame, 16px) + 12px);
+  inset: 0;
   z-index: 5;
   pointer-events: none;
-  border: 1px solid rgba(255, 255, 255, 0.78);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.22),
-    0 0 10px rgba(214, 252, 236, 0.32),
-    0 0 0 1px rgba(22, 82, 62, 0.16);
+  background: rgba(255, 255, 255, 0.55);
+  mask-image: var(--gem-frame-mask);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  transform: scale(0.9);
+  transform-origin: 50% 50%;
+  opacity: 0.5;
 }
+
 
 /* ---------- 4. Cloud striations inside the body ---------- */
 .crystal-striations {
@@ -810,7 +818,7 @@ body {
   filter: blur(14px);
 }
 
-/* ---------- 5. Corner starbursts on the mitred blocks ----------
+/* ---------- 5. Starbursts at the map extremities ----------
    Rendered at shell level so they glow into the dark green field. */
 .crystal-stars {
   position: absolute;
@@ -819,18 +827,18 @@ body {
   pointer-events: none;
   mix-blend-mode: plus-lighter;
   background:
-    radial-gradient(circle 34px at 6% 7%, rgba(255, 255, 255, 0.75), rgba(214, 255, 240, 0.22) 42%, transparent 72%),
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent) 6% 7% / 150px 2px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.95), transparent) 6% 7% / 2px 96px no-repeat,
-    radial-gradient(circle 34px at 94% 7%, rgba(255, 255, 255, 0.75), rgba(214, 255, 240, 0.22) 42%, transparent 72%),
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent) 94% 7% / 150px 2px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.95), transparent) 94% 7% / 2px 96px no-repeat,
-    radial-gradient(circle 30px at 6% 93%, rgba(255, 255, 255, 0.68), rgba(214, 255, 240, 0.2) 42%, transparent 72%),
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent) 6% 93% / 136px 2px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.9), transparent) 6% 93% / 2px 88px no-repeat,
-    radial-gradient(circle 30px at 94% 93%, rgba(255, 255, 255, 0.68), rgba(214, 255, 240, 0.2) 42%, transparent 72%),
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent) 94% 93% / 136px 2px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.9), transparent) 94% 93% / 2px 88px no-repeat;
+    radial-gradient(circle 30px at 46% 4%, rgba(255, 255, 255, 0.75), rgba(214, 255, 240, 0.22) 42%, transparent 72%),
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent) 46% 4% / 140px 2px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.95), transparent) 46% 4% / 2px 88px no-repeat,
+    radial-gradient(circle 30px at 84% 36%, rgba(255, 255, 255, 0.7), rgba(214, 255, 240, 0.2) 42%, transparent 72%),
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent) 84% 36% / 132px 2px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.9), transparent) 84% 36% / 2px 84px no-repeat,
+    radial-gradient(circle 26px at 8% 24%, rgba(255, 255, 255, 0.62), rgba(214, 255, 240, 0.18) 42%, transparent 72%),
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent) 8% 24% / 116px 2px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.85), transparent) 8% 24% / 2px 74px no-repeat,
+    radial-gradient(circle 28px at 44% 90%, rgba(255, 255, 255, 0.66), rgba(214, 255, 240, 0.2) 42%, transparent 72%),
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent) 44% 90% / 124px 2px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.9), transparent) 44% 90% / 2px 80px no-repeat;
 }
 
 /* Inner facet sparkle kept subtle inside the glass */
@@ -839,14 +847,32 @@ body {
   inset: 0;
   z-index: 8;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.45;
   mix-blend-mode: plus-lighter;
   background:
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent) 10% 9% / 70px 1px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.9), transparent) 10% 9% / 1px 44px no-repeat,
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent) 90% 91% / 60px 1px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.8), transparent) 90% 91% / 1px 38px no-repeat;
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent) 30% 18% / 70px 1px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.9), transparent) 30% 18% / 1px 44px no-repeat,
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent) 66% 76% / 60px 1px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.8), transparent) 66% 76% / 1px 38px no-repeat;
 }
+
+/* Content safe column so Arabic copy never touches the diagonal borders */
+.crystal-content {
+  width: 56%;
+  margin-left: 12%;
+  margin-right: auto;
+}
+
+@media (max-width: 900px) {
+  .crystal-content {
+    width: 66%;
+    margin-left: 10%;
+    margin-right: auto;
+  }
+}
+
+
+
 
 /* Small spectral flashes on the frame only */
 .crystal-dispersion {
@@ -881,19 +907,20 @@ body {
   mix-blend-mode: screen;
 }
 
-/* ---------- 6. Continuous rim light along the whole perimeter ---------- */
+/* ---------- 6. Continuous rim light along the map outline ---------- */
 .crystal-edge-light {
   position: absolute;
   inset: 0;
   z-index: 9;
   pointer-events: none;
-  clip-path: var(--gem-cut);
   mix-blend-mode: plus-lighter;
-  box-shadow:
-    inset 0 0 0 2px rgba(255, 255, 255, 0.85),
-    inset 0 0 12px rgba(226, 255, 244, 0.55),
-    inset 0 0 26px rgba(150, 230, 200, 0.28);
+  background: rgba(255, 255, 255, 0.92);
+  mask-image: var(--gem-rim-mask);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  filter: drop-shadow(0 0 6px rgba(226, 255, 244, 0.6));
 }
+
 
 @media (prefers-reduced-motion: reduce) {
   .crystal-stars {
@@ -920,7 +947,38 @@ body {
     inset: -14px;
     opacity: 0.7;
   }
+  /* Narrow screens: fall back to the rounded slab so Arabic copy is never clipped */
+  .crystal-shell {
+    --gem-cut: polygon(
+      6% 0,
+      94% 0,
+      100% 6%,
+      100% 94%,
+      94% 100%,
+      6% 100%,
+      0 94%,
+      0 6%
+    );
+    --gem-frame-mask: none;
+    --gem-rim-mask: none;
+  }
+  .crystal-frame,
+  .crystal-inner-line {
+    display: none;
+  }
+  .crystal-edge-light {
+    background: none;
+    box-shadow:
+      inset 0 0 0 2px rgba(255, 255, 255, 0.85),
+      inset 0 0 12px rgba(226, 255, 244, 0.5);
+    clip-path: var(--gem-cut);
+    filter: none;
+  }
+  .crystal-content {
+    width: 100%;
+  }
 }
+
 
 /* ==========================================================
    AQLA GREEN FIELD — shared welcome-gate environment
