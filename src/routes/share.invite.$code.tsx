@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
+import { BackButton } from "@/components/BackButton";
 import { SiteFooter } from "@/components/SiteFooter";
 import { LangContext, useLang, useLangState } from "@/lib/i18n";
 import { Card } from "@/components/ui/card";
@@ -48,6 +49,9 @@ function Inner() {
     <div dir={dir} className="min-h-screen bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-2xl px-4 py-16 sm:py-24">
+        <div className="mb-5">
+          <BackButton fallback="/" labelAr="الرئيسية" labelEn="Home" />
+        </div>
         <Card className={`rounded-3xl p-8 text-center ${isAr ? "" : ""}`}>
           <p className="text-xs font-semibold uppercase tracking-wider text-primary">
             {isAr ? "دعوة شخصية" : "Personal invitation"}

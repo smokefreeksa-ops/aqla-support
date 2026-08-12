@@ -5,6 +5,7 @@ import { AqlaLogoBadge } from "@/components/AqlaLogoBadge";
 import { ShareButtons } from "@/components/ShareButtons";
 import { getShareCard } from "@/lib/share.functions";
 import { ArrowLeft } from "lucide-react";
+import { BackButton } from "@/components/BackButton";
 import { SITE_URL as SITE } from "@/lib/site";
 
 export const Route = createFileRoute("/share/$type/$id")({
@@ -90,9 +91,9 @@ function SharePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-stone-50 to-teal-50">
       <div className="mx-auto max-w-2xl px-4 py-8 sm:py-12">
-        <Link to="/" className="inline-flex items-center text-sm text-emerald-700 hover:underline mb-4">
-          <ArrowLeft className="h-4 w-4 me-1" /> الرئيسية · Home
-        </Link>
+        <div className="mb-4">
+          <BackButton fallback="/" labelAr="الرئيسية" labelEn="Home" />
+        </div>
 
         <Card className="overflow-hidden border-emerald-700/20 shadow-lg">
           {/* Header band */}

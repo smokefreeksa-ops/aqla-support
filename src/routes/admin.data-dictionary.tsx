@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DATA_DICTIONARY } from "@/lib/data-dictionary";
+import { BackButton } from "@/components/BackButton";
 import { ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/admin/data-dictionary")({
@@ -40,9 +41,7 @@ function DataDictionaryPage() {
       <header className="border-b bg-card">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <Link to="/admin" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1">
-              <ArrowLeft className="h-4 w-4" /> Admin
-            </Link>
+            <BackButton fallback="/admin" labelAr="لوحة الإدارة" labelEn="Admin" />
             <span className="font-semibold">Data Dictionary</span>
           </div>
         </div>

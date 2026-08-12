@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import KnowYourSmokingSection from "@/components/KnowYourSmokingSection";
 import aqlaLogo from "@/assets/aqla-logo.png";
+import { BackButton } from "@/components/BackButton";
 
 export const Route = createFileRoute("/try/shoot")({
   head: () => ({
@@ -46,6 +47,9 @@ function ShootPage() {
       </header>
 
       <main>
+        <div className="mb-5">
+          <BackButton fallback="/try" labelAr="التجربة" labelEn="Try Aqla" />
+        </div>
         <KnowYourSmokingSection standaloneTool={4} />
       </main>
     </div>

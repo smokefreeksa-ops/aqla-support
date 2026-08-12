@@ -18,6 +18,7 @@ import { SOSButton } from "@/features/sos/components/SOSButton";
 import { StudyInvitationOverlay } from "@/components/StudyInvitationOverlay";
 import { CommandPalette } from "@/components/CommandPalette";
 import { QuickPlanDock } from "@/components/QuickPlanDock";
+import { BackButton } from "@/components/BackButton";
 
 
 function NotFoundComponent() {
@@ -39,6 +40,7 @@ function NotFoundComponent() {
           This page isn't ready yet. We're working on it — check back soon.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <BackButton fallback="/" labelAr="الرئيسية" labelEn="Home" textAr="العودة" textEn="Go back" />
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md"
@@ -86,6 +88,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           We couldn't load this page. Please try again in a moment.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <BackButton fallback="/" labelAr="الرئيسية" labelEn="Home" textAr="العودة" textEn="Go back" />
           <button
             onClick={() => {
               router.invalidate();
