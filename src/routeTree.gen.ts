@@ -68,11 +68,15 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TryIndexRouteImport } from './routes/try.index'
 import { Route as QuitPlanIndexRouteImport } from './routes/quit-plan.index'
+import { Route as EnIndexRouteImport } from './routes/en.index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
 import { Route as TryShootRouteImport } from './routes/try.shoot'
 import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planToken'
 import { Route as ModulesSlugRouteImport } from './routes/modules.$slug'
+import { Route as EnLaTattenRouteImport } from './routes/en.la-tatten'
+import { Route as EnArticlesRouteImport } from './routes/en.articles'
+import { Route as EnAboutRouteImport } from './routes/en.about'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as DashboardSessionsRouteImport } from './routes/dashboard.sessions'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
@@ -397,6 +401,11 @@ const QuitPlanIndexRoute = QuitPlanIndexRouteImport.update({
   path: '/',
   getParentRoute: () => QuitPlanRoute,
 } as any)
+const EnIndexRoute = EnIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EnRoute,
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -421,6 +430,21 @@ const ModulesSlugRoute = ModulesSlugRouteImport.update({
   id: '/modules/$slug',
   path: '/modules/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const EnLaTattenRoute = EnLaTattenRouteImport.update({
+  id: '/la-tatten',
+  path: '/la-tatten',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnArticlesRoute = EnArticlesRouteImport.update({
+  id: '/articles',
+  path: '/articles',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnAboutRoute = EnAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => EnRoute,
 } as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
@@ -590,7 +614,7 @@ export interface FileRoutesByFullPath {
   '/craving-coach': typeof CravingCoachRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/dtx': typeof DtxRoute
-  '/en': typeof EnRoute
+  '/en': typeof EnRouteWithChildren
   '/faq': typeof FaqRoute
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
@@ -647,11 +671,15 @@ export interface FileRoutesByFullPath {
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/sessions': typeof DashboardSessionsRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/en/about': typeof EnAboutRoute
+  '/en/articles': typeof EnArticlesRoute
+  '/en/la-tatten': typeof EnLaTattenRoute
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
   '/articles/': typeof ArticlesIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/en/': typeof EnIndexRoute
   '/quit-plan/': typeof QuitPlanIndexRoute
   '/try/': typeof TryIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -682,7 +710,6 @@ export interface FileRoutesByTo {
   '/cookies': typeof CookiesRoute
   '/craving-coach': typeof CravingCoachRoute
   '/dtx': typeof DtxRoute
-  '/en': typeof EnRoute
   '/faq': typeof FaqRoute
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
@@ -737,11 +764,15 @@ export interface FileRoutesByTo {
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/sessions': typeof DashboardSessionsRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/en/about': typeof EnAboutRoute
+  '/en/articles': typeof EnArticlesRoute
+  '/en/la-tatten': typeof EnLaTattenRoute
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
   '/articles': typeof ArticlesIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/en': typeof EnIndexRoute
   '/quit-plan': typeof QuitPlanIndexRoute
   '/try': typeof TryIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -775,7 +806,7 @@ export interface FileRoutesById {
   '/craving-coach': typeof CravingCoachRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/dtx': typeof DtxRoute
-  '/en': typeof EnRoute
+  '/en': typeof EnRouteWithChildren
   '/faq': typeof FaqRoute
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
@@ -832,11 +863,15 @@ export interface FileRoutesById {
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/sessions': typeof DashboardSessionsRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/en/about': typeof EnAboutRoute
+  '/en/articles': typeof EnArticlesRoute
+  '/en/la-tatten': typeof EnLaTattenRoute
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
   '/articles/': typeof ArticlesIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/en/': typeof EnIndexRoute
   '/quit-plan/': typeof QuitPlanIndexRoute
   '/try/': typeof TryIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -928,11 +963,15 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/sessions'
     | '/email/unsubscribe'
+    | '/en/about'
+    | '/en/articles'
+    | '/en/la-tatten'
     | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
     | '/articles/'
     | '/dashboard/'
+    | '/en/'
     | '/quit-plan/'
     | '/try/'
     | '/.lovable/oauth/consent'
@@ -963,7 +1002,6 @@ export interface FileRouteTypes {
     | '/cookies'
     | '/craving-coach'
     | '/dtx'
-    | '/en'
     | '/faq'
     | '/help-pathway'
     | '/impact'
@@ -1018,11 +1056,15 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/sessions'
     | '/email/unsubscribe'
+    | '/en/about'
+    | '/en/articles'
+    | '/en/la-tatten'
     | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
     | '/articles'
     | '/dashboard'
+    | '/en'
     | '/quit-plan'
     | '/try'
     | '/.lovable/oauth/consent'
@@ -1112,11 +1154,15 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/sessions'
     | '/email/unsubscribe'
+    | '/en/about'
+    | '/en/articles'
+    | '/en/la-tatten'
     | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
     | '/articles/'
     | '/dashboard/'
+    | '/en/'
     | '/quit-plan/'
     | '/try/'
     | '/.lovable/oauth/consent'
@@ -1150,7 +1196,7 @@ export interface RootRouteChildren {
   CravingCoachRoute: typeof CravingCoachRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   DtxRoute: typeof DtxRoute
-  EnRoute: typeof EnRoute
+  EnRoute: typeof EnRouteWithChildren
   FaqRoute: typeof FaqRoute
   HelpPathwayRoute: typeof HelpPathwayRoute
   ImpactRoute: typeof ImpactRoute
@@ -1619,6 +1665,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuitPlanIndexRouteImport
       parentRoute: typeof QuitPlanRoute
     }
+    '/en/': {
+      id: '/en/'
+      path: '/'
+      fullPath: '/en/'
+      preLoaderRoute: typeof EnIndexRouteImport
+      parentRoute: typeof EnRoute
+    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/'
@@ -1653,6 +1706,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/modules/$slug'
       preLoaderRoute: typeof ModulesSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/en/la-tatten': {
+      id: '/en/la-tatten'
+      path: '/la-tatten'
+      fullPath: '/en/la-tatten'
+      preLoaderRoute: typeof EnLaTattenRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/articles': {
+      id: '/en/articles'
+      path: '/articles'
+      fullPath: '/en/articles'
+      preLoaderRoute: typeof EnArticlesRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/about': {
+      id: '/en/about'
+      path: '/about'
+      fullPath: '/en/about'
+      preLoaderRoute: typeof EnAboutRouteImport
+      parentRoute: typeof EnRoute
     }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
@@ -1925,6 +1999,22 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
   DashboardRouteChildren,
 )
 
+interface EnRouteChildren {
+  EnAboutRoute: typeof EnAboutRoute
+  EnArticlesRoute: typeof EnArticlesRoute
+  EnLaTattenRoute: typeof EnLaTattenRoute
+  EnIndexRoute: typeof EnIndexRoute
+}
+
+const EnRouteChildren: EnRouteChildren = {
+  EnAboutRoute: EnAboutRoute,
+  EnArticlesRoute: EnArticlesRoute,
+  EnLaTattenRoute: EnLaTattenRoute,
+  EnIndexRoute: EnIndexRoute,
+}
+
+const EnRouteWithChildren = EnRoute._addFileChildren(EnRouteChildren)
+
 interface QuitPlanRouteChildren {
   QuitPlanPlanTokenRoute: typeof QuitPlanPlanTokenRoute
   QuitPlanIndexRoute: typeof QuitPlanIndexRoute
@@ -1971,7 +2061,7 @@ const rootRouteChildren: RootRouteChildren = {
   CravingCoachRoute: CravingCoachRoute,
   DashboardRoute: DashboardRouteWithChildren,
   DtxRoute: DtxRoute,
-  EnRoute: EnRoute,
+  EnRoute: EnRouteWithChildren,
   FaqRoute: FaqRoute,
   HelpPathwayRoute: HelpPathwayRoute,
   ImpactRoute: ImpactRoute,
