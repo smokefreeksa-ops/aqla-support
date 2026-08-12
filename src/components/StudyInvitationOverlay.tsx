@@ -107,8 +107,10 @@ export function StudyInvitationOverlay() {
   const [visible, setVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [lang, setLang] = useState<Lang>("ar");
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const dialogRef = useRef<HTMLDivElement | null>(null);
+  const detailsRef = useRef<HTMLDivElement | null>(null);
+  const pushedRef = useRef(false);
   const t = COPY[lang];
 
   useEffect(() => {
@@ -129,15 +131,37 @@ export function StudyInvitationOverlay() {
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const id = window.setTimeout(() => dialogRef.current?.focus(), 40);
+
+    // Push a single history entry so browser/device Back closes the overlay
+    // instead of leaving the site.
+    if (!pushedRef.current) {
+      pushedRef.current = true;
+      try {
+        window.history.pushState(
+          { ...(window.history.state ?? {}), aqlaStudyOverlay: true },
+          "",
+          window.location.href,
+        );
+      } catch { /* ignore */ }
+    }
+
+    const onPop = () => {
+      // Back was pressed while the overlay entry was active: just close.
+      pushedRef.current = false;
+      persist();
+      setVisible(false);
+    };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
     };
     const onDismiss = () => close();
+    window.addEventListener("popstate", onPop);
     window.addEventListener("keydown", onKey);
     window.addEventListener("aqla:dismiss-study-overlay", onDismiss);
     return () => {
       cancelAnimationFrame(r);
       document.body.style.overflow = prevOverflow;
+      window.removeEventListener("popstate", onPop);
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("aqla:dismiss-study-overlay", onDismiss);
       window.clearTimeout(id);
@@ -153,12 +177,17 @@ export function StudyInvitationOverlay() {
   function close() {
     persist();
     setVisible(false);
+    if (pushedRef.current) {
+      pushedRef.current = false;
+      // Pop the overlay's own history entry so Back doesn't reopen/loop.
+      try { window.history.back(); } catch { /* ignore */ }
+    }
   }
   function participate() {
-    persist();
     window.open(REDCAP_URL, "_blank", "noopener,noreferrer");
-    setVisible(false);
+    close();
   }
+
 
   if (!visible) return null;
 
