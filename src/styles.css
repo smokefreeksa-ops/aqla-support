@@ -786,7 +786,7 @@ body {
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.9;
+  opacity: 0.95;
   background:
     conic-gradient(
       from 18deg at 40% 42%,
@@ -808,9 +808,24 @@ body {
       rgba(255, 255, 255, 0.12) 186deg 241deg,
       rgba(191, 205, 215, 0.05) 241deg 300deg,
       rgba(255, 255, 255, 0.09) 300deg 360deg
+    ),
+    /* extra crisp triangular planes so the centre is unmistakably cut */
+    conic-gradient(
+      from 322deg at 52% 34%,
+      rgba(255, 255, 255, 0.1) 0deg 21deg,
+      rgba(186, 200, 211, 0.05) 21deg 47deg,
+      rgba(255, 255, 255, 0.08) 47deg 74deg,
+      rgba(255, 255, 255, 0) 74deg 360deg
+    ),
+    conic-gradient(
+      from 128deg at 46% 76%,
+      rgba(255, 255, 255, 0.09) 0deg 24deg,
+      rgba(190, 204, 214, 0.05) 24deg 52deg,
+      rgba(255, 255, 255, 0.07) 52deg 81deg,
+      rgba(255, 255, 255, 0) 81deg 360deg
     );
-  -webkit-mask-image: radial-gradient(ellipse 78% 74% at 50% 50%, #000 0 62%, rgba(0, 0, 0, 0.5) 76%, transparent 96%);
-  mask-image: radial-gradient(ellipse 78% 74% at 50% 50%, #000 0 62%, rgba(0, 0, 0, 0.5) 76%, transparent 96%);
+  -webkit-mask-image: radial-gradient(ellipse 84% 80% at 50% 50%, #000 0 72%, rgba(0, 0, 0, 0.6) 84%, transparent 99%);
+  mask-image: radial-gradient(ellipse 84% 80% at 50% 50%, #000 0 72%, rgba(0, 0, 0, 0.6) 84%, transparent 99%);
 }
 
 /* ---------- 4b. Internal reflection planes — facet-bounded wedges,
