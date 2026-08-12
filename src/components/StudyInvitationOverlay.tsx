@@ -25,8 +25,9 @@ const COPY: Record<Lang, {
   detailsTitle: string;
   p1: string;
   p2: string;
-  p3Prefix: string;
-  p3Amount: string;
+  ethicsApproval: string;
+  ethicsNumber: string;
+  contactInfo: string;
   contactLabel: string;
   voluntary: string;
   confidential: string;
@@ -43,12 +44,13 @@ const COPY: Record<Lang, {
     participate: "شارك في الدراسة",
     skip: "تخطي",
     detailsToggle: "تفاصيل الدراسة",
-    detailsTitle: "دور منتجات النيكوتين الخالية من التبغ في الحد من أضرار التدخين",
-    p1: "ندعوك للمشاركة في استبيان قصير حول منتجات النيكوتين الخالية من التبغ، وبخاصة أظرف النيكوتين الفموية.",
-    p2: "رأيك مهم سواء كنت تستخدم هذه المنتجات أم لا. المشاركة تطوعية، وجميع الإجابات سرية ومجهولة الهوية.",
-    p3Prefix: "بعد إكمال الاستبيان، يمكنك الدخول في سحب للفوز بجائزة نقدية قيمتها",
-    p3Amount: "٥٠٠ ريال سعودي",
-    contactLabel: "للاستفسارات:",
+    detailsTitle: "تفاصيل الدراسة",
+    p1: "هذه دراسة بحثية من جامعة الملك عبدالعزيز تهدف إلى فهم آراء وتجارب البالغين حول استخدام منتجات النيكوتين الخالية من التبغ ودورها المحتمل في الحد من أضرار التدخين.",
+    p2: "المشاركة طوعية، وستُعامل إجاباتك بسرية وتُستخدم لأغراض البحث العلمي فقط.",
+    ethicsApproval: "تمت الموافقة على الدراسة من لجنة أخلاقيات البحث بجامعة الملك عبدالعزيز",
+    ethicsNumber: "رقم الموافقة: 26-162",
+    contactInfo: "للمزيد من المعلومات أو الاستفسارات حول الدراسة:",
+    contactLabel: "البريد الإلكتروني:",
     voluntary: "المشاركة تطوعية",
     confidential: "إجابات سرية",
     anonymous: "مجهولة الهوية",
@@ -64,12 +66,13 @@ const COPY: Record<Lang, {
     participate: "Take part in the study",
     skip: "Skip",
     detailsToggle: "Study details",
-    detailsTitle: "The role of tobacco-free nicotine products in reducing smoking harm",
-    p1: "You are invited to take part in a short survey about tobacco-free nicotine products, particularly oral nicotine pouches.",
-    p2: "Your view matters whether you use these products or not. Participation is voluntary, and all answers are confidential and anonymous.",
-    p3Prefix: "After completing the survey, you can enter a draw to win a cash prize of",
-    p3Amount: "SAR 500",
-    contactLabel: "For questions:",
+    detailsTitle: "Study details",
+    p1: "This is a research study by King Abdulaziz University aimed at understanding the opinions and experiences of adults regarding the use of tobacco-free nicotine products and their potential role in reducing the harms of smoking.",
+    p2: "Participation is voluntary, your answers will be treated confidentially, and will be used for research purposes only.",
+    ethicsApproval: "The study was approved by the Research Ethics Committee of King Abdulaziz University",
+    ethicsNumber: "Approval number: 26-162",
+    contactInfo: "For more information or inquiries about the study:",
+    contactLabel: "Email:",
     voluntary: "Voluntary participation",
     confidential: "Confidential answers",
     anonymous: "Anonymous responses",
