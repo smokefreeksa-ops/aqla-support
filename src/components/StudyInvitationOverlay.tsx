@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
 import SaudiFlagWave from "@/components/SaudiFlagWave";
+import { ResearchBanner } from "@/components/ResearchBanner";
 import aqlaLogo from "@/assets/aqla-logo-transparent.png";
+
 
 
 
