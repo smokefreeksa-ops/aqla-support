@@ -60,13 +60,7 @@ export function ResearchBanner() {
           </button>
 
           <Link
-            to="/poster-studio"
-            onClick={(e) => {
-              e.preventDefault();
-              try { sessionStorage.setItem("aqla_study_overlay_dismissed", "1"); } catch { /* ignore */ }
-              window.dispatchEvent(new CustomEvent("aqla:dismiss-study-overlay"));
-              void navigate({ to: "/poster-studio" });
-            }}
+            to="/challenge-pathway"
             className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-semibold text-white ring-1 ring-white/25 transition-colors hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 sm:text-[11px]"
           >
             أنشئ بطاقة إنجازك
