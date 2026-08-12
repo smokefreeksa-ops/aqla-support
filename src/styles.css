@@ -1314,3 +1314,25 @@ summary:focus-visible,
   }
   .aqla-launching .aqla-launch-streak { animation: none; opacity: 0; }
 }
+
+/* ---------------------------------------------
+   Mobile performance: lighten expensive effects
+   so scrolling and tapping stay smooth on phones
+   --------------------------------------------- */
+@media (max-width: 767px) {
+  .glass-card,
+  [class*="backdrop-blur"] {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .card-neumorphic {
+    box-shadow: 0 6px 18px -12px rgba(15, 23, 42, 0.35);
+  }
+}
+
+/* Smooth in-page anchor scrolling without fighting reduced-motion */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
