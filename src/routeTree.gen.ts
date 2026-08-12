@@ -41,6 +41,7 @@ import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LearnTrainRouteImport } from './routes/learn-train'
 import { Route as LearnRouteImport } from './routes/learn'
+import { Route as LaTattenRouteImport } from './routes/la-tatten'
 import { Route as InviteFriendsRouteImport } from './routes/invite-friends'
 import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as HelpPathwayRouteImport } from './routes/help-pathway'
@@ -253,6 +254,11 @@ const LearnTrainRoute = LearnTrainRouteImport.update({
 const LearnRoute = LearnRouteImport.update({
   id: '/learn',
   path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LaTattenRoute = LaTattenRouteImport.update({
+  id: '/la-tatten',
+  path: '/la-tatten',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InviteFriendsRoute = InviteFriendsRouteImport.update({
@@ -552,6 +558,7 @@ export interface FileRoutesByFullPath {
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
   '/invite-friends': typeof InviteFriendsRoute
+  '/la-tatten': typeof LaTattenRoute
   '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
   '/login': typeof LoginRoute
@@ -638,6 +645,7 @@ export interface FileRoutesByTo {
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
   '/invite-friends': typeof InviteFriendsRoute
+  '/la-tatten': typeof LaTattenRoute
   '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
   '/login': typeof LoginRoute
@@ -724,6 +732,7 @@ export interface FileRoutesById {
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
   '/invite-friends': typeof InviteFriendsRoute
+  '/la-tatten': typeof LaTattenRoute
   '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
   '/login': typeof LoginRoute
@@ -813,6 +822,7 @@ export interface FileRouteTypes {
     | '/help-pathway'
     | '/impact'
     | '/invite-friends'
+    | '/la-tatten'
     | '/learn'
     | '/learn-train'
     | '/login'
@@ -899,6 +909,7 @@ export interface FileRouteTypes {
     | '/help-pathway'
     | '/impact'
     | '/invite-friends'
+    | '/la-tatten'
     | '/learn'
     | '/learn-train'
     | '/login'
@@ -984,6 +995,7 @@ export interface FileRouteTypes {
     | '/help-pathway'
     | '/impact'
     | '/invite-friends'
+    | '/la-tatten'
     | '/learn'
     | '/learn-train'
     | '/login'
@@ -1072,6 +1084,7 @@ export interface RootRouteChildren {
   HelpPathwayRoute: typeof HelpPathwayRoute
   ImpactRoute: typeof ImpactRoute
   InviteFriendsRoute: typeof InviteFriendsRoute
+  LaTattenRoute: typeof LaTattenRoute
   LearnRoute: typeof LearnRoute
   LearnTrainRoute: typeof LearnTrainRoute
   LoginRoute: typeof LoginRoute
@@ -1344,6 +1357,13 @@ declare module '@tanstack/react-router' {
       path: '/learn'
       fullPath: '/learn'
       preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/la-tatten': {
+      id: '/la-tatten'
+      path: '/la-tatten'
+      fullPath: '/la-tatten'
+      preLoaderRoute: typeof LaTattenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/invite-friends': {
@@ -1822,6 +1842,7 @@ const rootRouteChildren: RootRouteChildren = {
   HelpPathwayRoute: HelpPathwayRoute,
   ImpactRoute: ImpactRoute,
   InviteFriendsRoute: InviteFriendsRoute,
+  LaTattenRoute: LaTattenRoute,
   LearnRoute: LearnRoute,
   LearnTrainRoute: LearnTrainRoute,
   LoginRoute: LoginRoute,
