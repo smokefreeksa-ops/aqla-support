@@ -186,6 +186,10 @@ function Inner() {
                     : "Dr. Malik Abdulmalik Althobiani"}
                 </h3>
                 <p className="mt-1 text-center text-sm text-muted-foreground sm:text-start">
+                  د. مالك الذبياني — Dr. Malik A. Althobiani, Assistant Professor at King Abdulaziz
+                  University, PhD UCL
+                </p>
+                <p className="mt-1 text-center text-sm text-muted-foreground sm:text-start">
                   {isAr
                     ? "باحث وممارس في الرعاية التنفسية والصحة الرقمية"
                     : "Respiratory-care & digital-health researcher"}
