@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getPublicImpactStats } from "@/lib/impact.functions";
 import { QuitChatDrawer } from "@/components/QuitChatDrawer";
@@ -21,7 +21,6 @@ export function ResearchBanner() {
   });
   const visits = data?.total_visits ?? 0;
   const [chatOpen, setChatOpen] = useState(false);
-  const navigate = useNavigate();
 
   return (
     <>

@@ -10,6 +10,7 @@ import {
   MousePointerClick,
   Eye,
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { useTypewriter } from "@/hooks/useTypewriter";
 import { getPublicImpactStats } from "@/lib/impact.functions";
 import { trackEvent } from "@/lib/track-event";
@@ -323,8 +324,8 @@ export default function HeroSection() {
           ))}
 
           <div className="mb-6 flex justify-center" style={spotlightStyle(0, spotlight)}>
-            <a
-              href="/quit-pathway"
+            <Link
+              to="/quit-pathway"
               onClick={() => track("survey_click")}
               className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full study-banner-flash cursor-pointer select-none"
             >
@@ -338,8 +339,7 @@ export default function HeroSection() {
               >
                 ابدأ رحلتك في مركز الإقلاع الافتراضي
               </span>
-              <ExternalLink className="w-3.5 h-3.5 text-white/70 flex-shrink-0" />
-            </a>
+            </Link>
           </div>
 
           <div className="mb-5 flex justify-center">
@@ -362,8 +362,8 @@ export default function HeroSection() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-5">
             <div style={spotlightStyle(1, spotlight)}>
-              <a
-                href="/quit-pathway"
+              <Link
+                to="/quit-pathway"
                 onClick={() => track("quit_intent")}
                 className="flex items-center justify-center font-bold rounded-xl text-white transition-colors duration-200 active:scale-95"
                 style={{
@@ -380,12 +380,12 @@ export default function HeroSection() {
                 }}
               >
                 أريد أن أتوقف عن التدخين
-              </a>
+              </Link>
             </div>
 
             <div style={spotlightStyle(2, spotlight)}>
-              <a
-                href="/learn-train"
+              <Link
+                to="/learn-train"
                 onClick={() => track("training_click")}
                 className="flex items-center justify-center font-bold rounded-xl transition-colors duration-200 active:scale-95"
                 style={{
@@ -406,7 +406,7 @@ export default function HeroSection() {
                 }}
               >
                 شهادات ودورات الأخصائي المعتمد
-              </a>
+              </Link>
             </div>
           </div>
 
