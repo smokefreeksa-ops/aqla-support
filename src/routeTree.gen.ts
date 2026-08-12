@@ -69,6 +69,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TryIndexRouteImport } from './routes/try.index'
 import { Route as QuitPlanIndexRouteImport } from './routes/quit-plan.index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
 import { Route as TryShootRouteImport } from './routes/try.shoot'
 import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planToken'
 import { Route as ModulesSlugRouteImport } from './routes/modules.$slug'
@@ -81,6 +82,10 @@ import { Route as DashboardHistoryRouteImport } from './routes/dashboard.history
 import { Route as DashboardCertificatesRouteImport } from './routes/dashboard.certificates'
 import { Route as DashboardCatalogueRouteImport } from './routes/dashboard.catalogue'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
+import { Route as ArticlesWithdrawalRouteImport } from './routes/articles.withdrawal'
+import { Route as ArticlesShishaRouteImport } from './routes/articles.shisha'
+import { Route as ArticlesNicotinePouchesRouteImport } from './routes/articles.nicotine-pouches'
+import { Route as ArticlesFirstWeekRouteImport } from './routes/articles.first-week'
 import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
 import { Route as AdminAqlaQuitEngineRouteImport } from './routes/admin.aqla-quit-engine'
@@ -397,6 +402,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRoute,
 } as any)
+const ArticlesIndexRoute = ArticlesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ArticlesRoute,
+} as any)
 const TryShootRoute = TryShootRouteImport.update({
   id: '/shoot',
   path: '/shoot',
@@ -456,6 +466,26 @@ const CertificateCodeRoute = CertificateCodeRouteImport.update({
   id: '/certificate/$code',
   path: '/certificate/$code',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ArticlesWithdrawalRoute = ArticlesWithdrawalRouteImport.update({
+  id: '/withdrawal',
+  path: '/withdrawal',
+  getParentRoute: () => ArticlesRoute,
+} as any)
+const ArticlesShishaRoute = ArticlesShishaRouteImport.update({
+  id: '/shisha',
+  path: '/shisha',
+  getParentRoute: () => ArticlesRoute,
+} as any)
+const ArticlesNicotinePouchesRoute = ArticlesNicotinePouchesRouteImport.update({
+  id: '/nicotine-pouches',
+  path: '/nicotine-pouches',
+  getParentRoute: () => ArticlesRoute,
+} as any)
+const ArticlesFirstWeekRoute = ArticlesFirstWeekRouteImport.update({
+  id: '/first-week',
+  path: '/first-week',
+  getParentRoute: () => ArticlesRoute,
 } as any)
 const AdminQuitPlanEmailsRoute = AdminQuitPlanEmailsRouteImport.update({
   id: '/quit-plan-emails',
@@ -547,7 +577,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/aqla-quit-engine': typeof AqlaQuitEngineRouteWithChildren
   '/aqla-voice-chat': typeof AqlaVoiceChatRoute
-  '/articles': typeof ArticlesRoute
+  '/articles': typeof ArticlesRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
   '/certificates': typeof CertificatesRoute
@@ -604,6 +634,10 @@ export interface FileRoutesByFullPath {
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
+  '/articles/first-week': typeof ArticlesFirstWeekRoute
+  '/articles/nicotine-pouches': typeof ArticlesNicotinePouchesRoute
+  '/articles/shisha': typeof ArticlesShishaRoute
+  '/articles/withdrawal': typeof ArticlesWithdrawalRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/dashboard/catalogue': typeof DashboardCatalogueRoute
   '/dashboard/certificates': typeof DashboardCertificatesRoute
@@ -616,6 +650,7 @@ export interface FileRoutesByFullPath {
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
+  '/articles/': typeof ArticlesIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/quit-plan/': typeof QuitPlanIndexRoute
   '/try/': typeof TryIndexRoute
@@ -636,7 +671,6 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteWithChildren
   '/aqla-quit-engine': typeof AqlaQuitEngineRouteWithChildren
   '/aqla-voice-chat': typeof AqlaVoiceChatRoute
-  '/articles': typeof ArticlesRoute
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
   '/certificates': typeof CertificatesRoute
@@ -690,6 +724,10 @@ export interface FileRoutesByTo {
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
+  '/articles/first-week': typeof ArticlesFirstWeekRoute
+  '/articles/nicotine-pouches': typeof ArticlesNicotinePouchesRoute
+  '/articles/shisha': typeof ArticlesShishaRoute
+  '/articles/withdrawal': typeof ArticlesWithdrawalRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/dashboard/catalogue': typeof DashboardCatalogueRoute
   '/dashboard/certificates': typeof DashboardCertificatesRoute
@@ -702,6 +740,7 @@ export interface FileRoutesByTo {
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
+  '/articles': typeof ArticlesIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/quit-plan': typeof QuitPlanIndexRoute
   '/try': typeof TryIndexRoute
@@ -723,7 +762,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/aqla-quit-engine': typeof AqlaQuitEngineRouteWithChildren
   '/aqla-voice-chat': typeof AqlaVoiceChatRoute
-  '/articles': typeof ArticlesRoute
+  '/articles': typeof ArticlesRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
   '/certificates': typeof CertificatesRoute
@@ -780,6 +819,10 @@ export interface FileRoutesById {
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
+  '/articles/first-week': typeof ArticlesFirstWeekRoute
+  '/articles/nicotine-pouches': typeof ArticlesNicotinePouchesRoute
+  '/articles/shisha': typeof ArticlesShishaRoute
+  '/articles/withdrawal': typeof ArticlesWithdrawalRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/dashboard/catalogue': typeof DashboardCatalogueRoute
   '/dashboard/certificates': typeof DashboardCertificatesRoute
@@ -792,6 +835,7 @@ export interface FileRoutesById {
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
+  '/articles/': typeof ArticlesIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/quit-plan/': typeof QuitPlanIndexRoute
   '/try/': typeof TryIndexRoute
@@ -871,6 +915,10 @@ export interface FileRouteTypes {
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
+    | '/articles/first-week'
+    | '/articles/nicotine-pouches'
+    | '/articles/shisha'
+    | '/articles/withdrawal'
     | '/certificate/$code'
     | '/dashboard/catalogue'
     | '/dashboard/certificates'
@@ -883,6 +931,7 @@ export interface FileRouteTypes {
     | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
+    | '/articles/'
     | '/dashboard/'
     | '/quit-plan/'
     | '/try/'
@@ -903,7 +952,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/aqla-quit-engine'
     | '/aqla-voice-chat'
-    | '/articles'
     | '/assessment'
     | '/auth'
     | '/certificates'
@@ -957,6 +1005,10 @@ export interface FileRouteTypes {
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
+    | '/articles/first-week'
+    | '/articles/nicotine-pouches'
+    | '/articles/shisha'
+    | '/articles/withdrawal'
     | '/certificate/$code'
     | '/dashboard/catalogue'
     | '/dashboard/certificates'
@@ -969,6 +1021,7 @@ export interface FileRouteTypes {
     | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
+    | '/articles'
     | '/dashboard'
     | '/quit-plan'
     | '/try'
@@ -1046,6 +1099,10 @@ export interface FileRouteTypes {
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
+    | '/articles/first-week'
+    | '/articles/nicotine-pouches'
+    | '/articles/shisha'
+    | '/articles/withdrawal'
     | '/certificate/$code'
     | '/dashboard/catalogue'
     | '/dashboard/certificates'
@@ -1058,6 +1115,7 @@ export interface FileRouteTypes {
     | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
+    | '/articles/'
     | '/dashboard/'
     | '/quit-plan/'
     | '/try/'
@@ -1079,7 +1137,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   AqlaQuitEngineRoute: typeof AqlaQuitEngineRouteWithChildren
   AqlaVoiceChatRoute: typeof AqlaVoiceChatRoute
-  ArticlesRoute: typeof ArticlesRoute
+  ArticlesRoute: typeof ArticlesRouteWithChildren
   AssessmentRoute: typeof AssessmentRoute
   AuthRoute: typeof AuthRoute
   CertificatesRoute: typeof CertificatesRoute
@@ -1568,6 +1626,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/articles/': {
+      id: '/articles/'
+      path: '/'
+      fullPath: '/articles/'
+      preLoaderRoute: typeof ArticlesIndexRouteImport
+      parentRoute: typeof ArticlesRoute
+    }
     '/try/shoot': {
       id: '/try/shoot'
       path: '/shoot'
@@ -1651,6 +1716,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/certificate/$code'
       preLoaderRoute: typeof CertificateCodeRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/articles/withdrawal': {
+      id: '/articles/withdrawal'
+      path: '/withdrawal'
+      fullPath: '/articles/withdrawal'
+      preLoaderRoute: typeof ArticlesWithdrawalRouteImport
+      parentRoute: typeof ArticlesRoute
+    }
+    '/articles/shisha': {
+      id: '/articles/shisha'
+      path: '/shisha'
+      fullPath: '/articles/shisha'
+      preLoaderRoute: typeof ArticlesShishaRouteImport
+      parentRoute: typeof ArticlesRoute
+    }
+    '/articles/nicotine-pouches': {
+      id: '/articles/nicotine-pouches'
+      path: '/nicotine-pouches'
+      fullPath: '/articles/nicotine-pouches'
+      preLoaderRoute: typeof ArticlesNicotinePouchesRouteImport
+      parentRoute: typeof ArticlesRoute
+    }
+    '/articles/first-week': {
+      id: '/articles/first-week'
+      path: '/first-week'
+      fullPath: '/articles/first-week'
+      preLoaderRoute: typeof ArticlesFirstWeekRouteImport
+      parentRoute: typeof ArticlesRoute
     }
     '/admin/quit-plan-emails': {
       id: '/admin/quit-plan-emails'
@@ -1786,6 +1879,26 @@ const AqlaQuitEngineRouteWithChildren = AqlaQuitEngineRoute._addFileChildren(
   AqlaQuitEngineRouteChildren,
 )
 
+interface ArticlesRouteChildren {
+  ArticlesFirstWeekRoute: typeof ArticlesFirstWeekRoute
+  ArticlesNicotinePouchesRoute: typeof ArticlesNicotinePouchesRoute
+  ArticlesShishaRoute: typeof ArticlesShishaRoute
+  ArticlesWithdrawalRoute: typeof ArticlesWithdrawalRoute
+  ArticlesIndexRoute: typeof ArticlesIndexRoute
+}
+
+const ArticlesRouteChildren: ArticlesRouteChildren = {
+  ArticlesFirstWeekRoute: ArticlesFirstWeekRoute,
+  ArticlesNicotinePouchesRoute: ArticlesNicotinePouchesRoute,
+  ArticlesShishaRoute: ArticlesShishaRoute,
+  ArticlesWithdrawalRoute: ArticlesWithdrawalRoute,
+  ArticlesIndexRoute: ArticlesIndexRoute,
+}
+
+const ArticlesRouteWithChildren = ArticlesRoute._addFileChildren(
+  ArticlesRouteChildren,
+)
+
 interface DashboardRouteChildren {
   DashboardCatalogueRoute: typeof DashboardCatalogueRoute
   DashboardCertificatesRoute: typeof DashboardCertificatesRoute
@@ -1845,7 +1958,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   AqlaQuitEngineRoute: AqlaQuitEngineRouteWithChildren,
   AqlaVoiceChatRoute: AqlaVoiceChatRoute,
-  ArticlesRoute: ArticlesRoute,
+  ArticlesRoute: ArticlesRouteWithChildren,
   AssessmentRoute: AssessmentRoute,
   AuthRoute: AuthRoute,
   CertificatesRoute: CertificatesRoute,
