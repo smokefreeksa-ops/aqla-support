@@ -1161,3 +1161,32 @@ summary:focus-visible,
     scroll-behavior: smooth;
   }
 }
+
+/* Study panel rendered from the crystal Saudi map artwork */
+.crystal-panel--map {
+  clip-path: none !important;
+  background: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none;
+  box-shadow: none !important;
+  border: 0 !important;
+  overflow: visible;
+}
+.crystal-panel--map::before,
+.crystal-panel--map::after {
+  display: none !important;
+}
+.crystal-panel--map .crystal-content {
+  width: 54%;
+  margin-left: 21%;
+  margin-right: auto;
+}
+@media (max-width: 900px) {
+  .crystal-panel--map {
+    aspect-ratio: auto;
+  }
+  .crystal-panel--map .crystal-content {
+    width: 74%;
+    margin-inline: auto;
+  }
+}

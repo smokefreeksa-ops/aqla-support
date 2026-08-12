@@ -4,6 +4,7 @@ import SaudiFlagWave from "@/components/SaudiFlagWave";
 import { ResearchBanner } from "@/components/ResearchBanner";
 import { trackEvent } from "@/lib/track-event";
 import aqlaLogo from "@/assets/aqla-logo-transparent.png";
+import saudiCrystalMap from "@/assets/saudi-crystal-map.png.asset.json";
 
 
 
@@ -374,16 +375,14 @@ export function StudyInvitationOverlay() {
               transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
             }}
           >
-            <div aria-hidden className="crystal-stars" />
-            <div className="crystal-panel flex max-h-full min-h-0 flex-col">
-              <div aria-hidden className="crystal-striations" />
-              <div aria-hidden className="crystal-column" />
-              <div aria-hidden className="glass-noise" />
-              <div aria-hidden className="crystal-inner-line" />
-              <div aria-hidden className="crystal-frame" />
-              <div aria-hidden className="crystal-dispersion" />
-              <div aria-hidden className="crystal-flares" />
-              <div aria-hidden className="crystal-edge-light" />
+            <div className="crystal-panel crystal-panel--map flex max-h-full min-h-0 flex-col">
+              <img
+                aria-hidden
+                src={saudiCrystalMap.url}
+                alt=""
+                className="pointer-events-none absolute inset-0 z-0 h-full w-full select-none object-fill"
+              />
+
 
 
 
