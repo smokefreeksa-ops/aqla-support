@@ -19,9 +19,9 @@ export const Route = createFileRoute("/en/articles")({
     ],
     links: [
       { rel: "canonical", href: "https://aqla1.com/en/articles" },
-      { rel: "alternate", hrefLang: "ar", href: "https://aqla1.com/articles" },
-      { rel: "alternate", hrefLang: "en", href: "https://aqla1.com/en/articles" },
-      { rel: "alternate", hrefLang: "x-default", href: "https://aqla1.com/articles" },
+      { rel: "alternate", hreflang: "ar", href: "https://aqla1.com/articles" },
+      { rel: "alternate", hreflang: "en", href: "https://aqla1.com/en/articles" },
+      { rel: "alternate", hreflang: "x-default", href: "https://aqla1.com/articles" },
     ],
   }),
   component: EnArticles,

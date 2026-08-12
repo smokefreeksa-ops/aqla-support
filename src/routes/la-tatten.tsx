@@ -21,9 +21,9 @@ export const Route = createFileRoute("/la-tatten")({
     ],
     links: [
       { rel: "canonical", href: "https://aqla1.com/la-tatten" },
-      { rel: "alternate", hrefLang: "ar", href: "https://aqla1.com/la-tatten" },
-      { rel: "alternate", hrefLang: "en", href: "https://aqla1.com/en/la-tatten" },
-      { rel: "alternate", hrefLang: "x-default", href: "https://aqla1.com/la-tatten" },
+      { rel: "alternate", hreflang: "ar", href: "https://aqla1.com/la-tatten" },
+      { rel: "alternate", hreflang: "en", href: "https://aqla1.com/en/la-tatten" },
+      { rel: "alternate", hreflang: "x-default", href: "https://aqla1.com/la-tatten" },
     ],
   }),
   component: LaTattenPage,
