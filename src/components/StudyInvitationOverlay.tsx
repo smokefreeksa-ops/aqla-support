@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { X } from "lucide-react";
 
 import { ResearchBanner } from "@/components/ResearchBanner";
 import SaudiFlagWave from "@/components/SaudiFlagWave";
@@ -107,8 +106,10 @@ export function StudyInvitationOverlay() {
   const [visible, setVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [lang, setLang] = useState<Lang>("ar");
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const dialogRef = useRef<HTMLDivElement | null>(null);
+  const detailsRef = useRef<HTMLDivElement | null>(null);
+  const pushedRef = useRef(false);
   const t = COPY[lang];
 
   useEffect(() => {
@@ -129,15 +130,37 @@ export function StudyInvitationOverlay() {
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const id = window.setTimeout(() => dialogRef.current?.focus(), 40);
+
+    // Push a single history entry so browser/device Back closes the overlay
+    // instead of leaving the site.
+    if (!pushedRef.current) {
+      pushedRef.current = true;
+      try {
+        window.history.pushState(
+          { ...(window.history.state ?? {}), aqlaStudyOverlay: true },
+          "",
+          window.location.href,
+        );
+      } catch { /* ignore */ }
+    }
+
+    const onPop = () => {
+      // Back was pressed while the overlay entry was active: just close.
+      pushedRef.current = false;
+      persist();
+      setVisible(false);
+    };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
     };
     const onDismiss = () => close();
+    window.addEventListener("popstate", onPop);
     window.addEventListener("keydown", onKey);
     window.addEventListener("aqla:dismiss-study-overlay", onDismiss);
     return () => {
       cancelAnimationFrame(r);
       document.body.style.overflow = prevOverflow;
+      window.removeEventListener("popstate", onPop);
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("aqla:dismiss-study-overlay", onDismiss);
       window.clearTimeout(id);
@@ -153,12 +176,17 @@ export function StudyInvitationOverlay() {
   function close() {
     persist();
     setVisible(false);
+    if (pushedRef.current) {
+      pushedRef.current = false;
+      // Pop the overlay's own history entry so Back doesn't reopen/loop.
+      try { window.history.back(); } catch { /* ignore */ }
+    }
   }
   function participate() {
-    persist();
     window.open(REDCAP_URL, "_blank", "noopener,noreferrer");
-    setVisible(false);
+    close();
   }
+
 
   if (!visible) return null;
 
@@ -204,7 +232,7 @@ export function StudyInvitationOverlay() {
             tabIndex={-1}
             dir={t.dir}
             lang={lang}
-            className="crystal-shell relative flex max-h-[86%] w-full flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
+            className="crystal-shell relative flex max-h-[92%] w-full flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
             style={{
               width: "min(94%, clamp(460px, 56vw, 780px))",
 
@@ -234,18 +262,6 @@ export function StudyInvitationOverlay() {
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/50 to-transparent"
         />
 
-        {/* Close */}
-        <div className={`absolute top-3 ${isRTL ? "right-3" : "left-3"} z-30`}>
-          <button
-            type="button"
-            onClick={close}
-            aria-label={isRTL ? "إغلاق" : "Close"}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#0b3a25]/15 bg-[#0b3a25]/[0.04] text-[#2d5a45] transition-colors duration-300 hover:bg-[#0b3a25]/[0.09] hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/50"
-          >
-            <X className="h-4 w-4" aria-hidden="true" />
-          </button>
-        </div>
-
         {/* Language switch */}
         <div className={`absolute top-3 ${isRTL ? "left-3" : "right-3"} z-30`}>
           <button
@@ -259,13 +275,14 @@ export function StudyInvitationOverlay() {
           </button>
         </div>
 
-        <div className="relative z-20 flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-7 pb-8 pt-12 sm:px-10 sm:pt-14">
+        <div className="relative z-20 flex min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-7 pb-6 pt-11 sm:gap-4 sm:px-10 sm:pt-12">
+
           {/* Logo */}
           <div className="flex justify-center">
             <img
               src={aqlaLogo}
               alt="شعار أقلع — Aqla Logo"
-              className="h-20 w-auto object-contain drop-shadow-[0_3px_14px_rgba(11,58,37,0.28)] sm:h-24"
+              className="h-14 w-auto object-contain drop-shadow-[0_3px_14px_rgba(11,58,37,0.28)] sm:h-20"
             />
           </div>
 
@@ -332,17 +349,27 @@ export function StudyInvitationOverlay() {
           </div>
 
           {/* Details toggle */}
-          <div className="border-t border-[#0b3a25]/12 pt-2">
+          <div ref={detailsRef} className="border-t border-[#0b3a25]/12 pt-1.5">
             <button
               type="button"
-              onClick={() => setOpen((v) => !v)}
+              onClick={() => {
+                const next = !open;
+                setOpen(next);
+                if (next) {
+                  window.setTimeout(
+                    () => detailsRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }),
+                    260,
+                  );
+                }
+              }}
               aria-expanded={open}
               aria-controls="aqla-study-details"
-              className="mx-auto inline-flex min-h-[40px] items-center justify-center gap-1.5 rounded-full px-3 text-[12.5px] font-medium tracking-wide text-[#5a7a6a] transition-colors duration-300 hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25"
+              className="flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-full px-3 text-[12.5px] font-semibold tracking-wide text-[#2d5a45] transition-colors duration-300 hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25"
             >
               <span>{t.detailsToggle}</span>
               <IconChevron open={open} />
             </button>
+
 
             <div
               id="aqla-study-details"
