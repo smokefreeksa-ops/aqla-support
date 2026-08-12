@@ -59,6 +59,7 @@ import { Route as ChallengePathwayRouteImport } from './routes/challenge-pathway
 import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AssessmentRouteImport } from './routes/assessment'
+import { Route as ArticlesRouteImport } from './routes/articles'
 import { Route as AqlaVoiceChatRouteImport } from './routes/aqla-voice-chat'
 import { Route as AqlaQuitEngineRouteImport } from './routes/aqla-quit-engine'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -346,6 +347,11 @@ const AssessmentRoute = AssessmentRouteImport.update({
   path: '/assessment',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ArticlesRoute = ArticlesRouteImport.update({
+  id: '/articles',
+  path: '/articles',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AqlaVoiceChatRoute = AqlaVoiceChatRouteImport.update({
   id: '/aqla-voice-chat',
   path: '/aqla-voice-chat',
@@ -541,6 +547,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/aqla-quit-engine': typeof AqlaQuitEngineRouteWithChildren
   '/aqla-voice-chat': typeof AqlaVoiceChatRoute
+  '/articles': typeof ArticlesRoute
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
   '/certificates': typeof CertificatesRoute
@@ -629,6 +636,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteWithChildren
   '/aqla-quit-engine': typeof AqlaQuitEngineRouteWithChildren
   '/aqla-voice-chat': typeof AqlaVoiceChatRoute
+  '/articles': typeof ArticlesRoute
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
   '/certificates': typeof CertificatesRoute
@@ -715,6 +723,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/aqla-quit-engine': typeof AqlaQuitEngineRouteWithChildren
   '/aqla-voice-chat': typeof AqlaVoiceChatRoute
+  '/articles': typeof ArticlesRoute
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
   '/certificates': typeof CertificatesRoute
@@ -805,6 +814,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/aqla-quit-engine'
     | '/aqla-voice-chat'
+    | '/articles'
     | '/assessment'
     | '/auth'
     | '/certificates'
@@ -893,6 +903,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/aqla-quit-engine'
     | '/aqla-voice-chat'
+    | '/articles'
     | '/assessment'
     | '/auth'
     | '/certificates'
@@ -978,6 +989,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/aqla-quit-engine'
     | '/aqla-voice-chat'
+    | '/articles'
     | '/assessment'
     | '/auth'
     | '/certificates'
@@ -1067,6 +1079,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   AqlaQuitEngineRoute: typeof AqlaQuitEngineRouteWithChildren
   AqlaVoiceChatRoute: typeof AqlaVoiceChatRoute
+  ArticlesRoute: typeof ArticlesRoute
   AssessmentRoute: typeof AssessmentRoute
   AuthRoute: typeof AuthRoute
   CertificatesRoute: typeof CertificatesRoute
@@ -1485,6 +1498,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessmentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/articles': {
+      id: '/articles'
+      path: '/articles'
+      fullPath: '/articles'
+      preLoaderRoute: typeof ArticlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/aqla-voice-chat': {
       id: '/aqla-voice-chat'
       path: '/aqla-voice-chat'
@@ -1825,6 +1845,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   AqlaQuitEngineRoute: AqlaQuitEngineRouteWithChildren,
   AqlaVoiceChatRoute: AqlaVoiceChatRoute,
+  ArticlesRoute: ArticlesRoute,
   AssessmentRoute: AssessmentRoute,
   AuthRoute: AuthRoute,
   CertificatesRoute: CertificatesRoute,
