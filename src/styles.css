@@ -810,26 +810,42 @@ body {
   filter: blur(14px);
 }
 
-/* ---------- 5. Corner starbursts on the mitred blocks ---------- */
+/* ---------- 5. Corner starbursts on the mitred blocks ----------
+   Rendered at shell level so they glow into the dark green field. */
+.crystal-stars {
+  position: absolute;
+  inset: -28px;
+  z-index: 10;
+  pointer-events: none;
+  mix-blend-mode: plus-lighter;
+  background:
+    radial-gradient(circle 34px at 6% 7%, rgba(255, 255, 255, 0.75), rgba(214, 255, 240, 0.22) 42%, transparent 72%),
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent) 6% 7% / 150px 2px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.95), transparent) 6% 7% / 2px 96px no-repeat,
+    radial-gradient(circle 34px at 94% 7%, rgba(255, 255, 255, 0.75), rgba(214, 255, 240, 0.22) 42%, transparent 72%),
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent) 94% 7% / 150px 2px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.95), transparent) 94% 7% / 2px 96px no-repeat,
+    radial-gradient(circle 30px at 6% 93%, rgba(255, 255, 255, 0.68), rgba(214, 255, 240, 0.2) 42%, transparent 72%),
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent) 6% 93% / 136px 2px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.9), transparent) 6% 93% / 2px 88px no-repeat,
+    radial-gradient(circle 30px at 94% 93%, rgba(255, 255, 255, 0.68), rgba(214, 255, 240, 0.2) 42%, transparent 72%),
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent) 94% 93% / 136px 2px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.9), transparent) 94% 93% / 2px 88px no-repeat;
+}
+
+/* Inner facet sparkle kept subtle inside the glass */
 .crystal-flares {
   position: absolute;
   inset: 0;
   z-index: 8;
   pointer-events: none;
+  opacity: 0.5;
   mix-blend-mode: plus-lighter;
   background:
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 1), transparent) 3% 4% / 120px 2px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 1), transparent) 3% 4% / 2px 74px no-repeat,
-    radial-gradient(circle 26px at 3% 4%, rgba(255, 255, 255, 0.55), transparent 70%),
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 1), transparent) 97% 4% / 120px 2px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 1), transparent) 97% 4% / 2px 74px no-repeat,
-    radial-gradient(circle 26px at 97% 4%, rgba(255, 255, 255, 0.55), transparent 70%),
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent) 3% 96% / 110px 2px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.95), transparent) 3% 96% / 2px 68px no-repeat,
-    radial-gradient(circle 24px at 3% 96%, rgba(255, 255, 255, 0.5), transparent 70%),
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent) 97% 96% / 110px 2px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.95), transparent) 97% 96% / 2px 68px no-repeat,
-    radial-gradient(circle 24px at 97% 96%, rgba(255, 255, 255, 0.5), transparent 70%);
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent) 10% 9% / 70px 1px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.9), transparent) 10% 9% / 1px 44px no-repeat,
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent) 90% 91% / 60px 1px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.8), transparent) 90% 91% / 1px 38px no-repeat;
 }
 
 /* Small spectral flashes on the frame only */
@@ -880,8 +896,8 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .crystal-flares {
-    opacity: 0.75;
+  .crystal-stars {
+    opacity: 0.85;
   }
 }
 
@@ -898,12 +914,11 @@ body {
     display: none;
   }
   .crystal-flares {
-    opacity: 0.6;
-    background-size:
-      70px 2px, 2px 44px, 100% 100%,
-      70px 2px, 2px 44px, 100% 100%,
-      64px 2px, 2px 40px, 100% 100%,
-      64px 2px, 2px 40px, 100% 100%;
+    opacity: 0.4;
+  }
+  .crystal-stars {
+    inset: -14px;
+    opacity: 0.7;
   }
 }
 
