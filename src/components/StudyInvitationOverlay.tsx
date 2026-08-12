@@ -374,19 +374,16 @@ export function StudyInvitationOverlay() {
               transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
             }}
           >
+            <div aria-hidden className="crystal-stars" />
             <div className="crystal-panel flex max-h-full min-h-0 flex-col">
-              <div aria-hidden className="crystal-facets-outer" />
-              <div aria-hidden className="crystal-facets-perimeter" />
-              <div aria-hidden className="crystal-inner-highlight" />
-              <div aria-hidden className="crystal-planes" />
-              <div aria-hidden className="crystal-bevel-3" />
-              <div aria-hidden className="crystal-specular" />
-              <div aria-hidden className="crystal-corner-brilliance" />
+              <div aria-hidden className="crystal-striations" />
+              <div aria-hidden className="crystal-column" />
+              <div aria-hidden className="glass-noise" />
+              <div aria-hidden className="crystal-inner-line" />
+              <div aria-hidden className="crystal-frame" />
               <div aria-hidden className="crystal-dispersion" />
               <div aria-hidden className="crystal-flares" />
               <div aria-hidden className="crystal-edge-light" />
-              <div aria-hidden className="glass-frost" />
-              <div aria-hidden className="glass-noise" />
 
 
 
