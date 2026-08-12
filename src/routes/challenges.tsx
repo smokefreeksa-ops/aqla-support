@@ -17,7 +17,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { getChallengePublicStats } from "@/lib/challenges.functions";
 
-const TABS = ["all", "tools", "challenges", "cities", "points", "learn", "posters", "volunteers"] as const;
+export const TABS = ["all", "tools", "challenges", "cities", "points", "learn", "posters", "volunteers"] as const;
 type TabKey = (typeof TABS)[number];
 
 export const Route = createFileRoute("/challenges")({

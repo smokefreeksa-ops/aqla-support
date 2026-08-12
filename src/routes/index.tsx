@@ -7,6 +7,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ImpactSection } from "@/components/ImpactSection";
 import { VisitTracker } from "@/components/VisitTracker";
+import { StarfieldCanvas } from "@/components/StarfieldCanvas";
 import HeroSection from "@/components/imported/HeroSection";
 import AboutSection from "@/components/imported/AboutSection";
 import DrMalikCard from "@/components/imported/DrMalikCard";
@@ -112,8 +113,9 @@ function Inner() {
   return (
     <div
       dir={dir}
-      className="aqla-green-field min-h-screen text-[#f4f0e1]"
+      className="aqla-green-field relative min-h-screen text-[#f4f0e1]"
     >
+      <StarfieldCanvas />
       <DesktopCursor />
       <SiteHeader />
 
