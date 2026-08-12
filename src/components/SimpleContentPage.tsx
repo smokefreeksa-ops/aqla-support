@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { LangContext, useLang, useLangState } from "@/lib/i18n";
 import { Card } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
+import { BackButton } from "@/components/BackButton";
 
 type Section = { heading: string; body: ReactNode };
 
@@ -17,6 +18,10 @@ export interface SimpleContentPageProps {
   sectionsEn?: Section[];
   ctaAr?: { label: string; to: string };
   ctaEn?: { label: string; to: string };
+  /** Parent route used when there is no in-app history. */
+  backTo?: string;
+  backLabelAr?: string;
+  backLabelEn?: string;
 }
 
 export function SimpleContentPage(props: SimpleContentPageProps) {
@@ -37,6 +42,9 @@ function SimplePageInner({
   sectionsEn,
   ctaAr,
   ctaEn,
+  backTo = "/",
+  backLabelAr = "الرئيسية",
+  backLabelEn = "Home",
 }: SimpleContentPageProps) {
   const { lang, dir } = useLang();
   const isAr = lang === "ar";
@@ -49,6 +57,9 @@ function SimplePageInner({
     <div dir={dir} className="min-h-screen bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
+        <div className={`mb-6 flex ${isAr ? "justify-end" : "justify-start"}`}>
+          <BackButton fallback={backTo} labelAr={backLabelAr} labelEn={backLabelEn} />
+        </div>
         <h1 className={`text-3xl font-bold tracking-tight sm:text-4xl ${isAr ? "text-right" : ""}`}>{title}</h1>
         {intro && (
           <p className={`mt-4 text-[14.5px] leading-7 text-foreground/75 ${isAr ? "text-right" : ""}`}>{intro}</p>
