@@ -266,7 +266,7 @@ export function StudyInvitationOverlay() {
           </h2>
 
           {/* Prize subtitle */}
-          <p className="text-center text-[13.5px] font-bold text-[#b8952f] sm:text-[15px]">
+          <p className="text-center text-[13.5px] font-bold text-[#8a6a1c] sm:text-[15px]">
             {t.prizeSubtitle}
           </p>
 
@@ -278,16 +278,19 @@ export function StudyInvitationOverlay() {
               onClick={participate}
               style={{
                 backgroundImage:
-                  "linear-gradient(135deg, #d8b753 0%, #c9a84c 50%, #dfc26a 100%)",
+                  "linear-gradient(135deg, #0d4a2e 0%, #06381f 52%, #0f5636 100%)",
+                boxShadow:
+                  "inset 0 0 0 1px rgba(201,168,76,0.75), 0 14px 30px -16px rgba(6,56,31,0.65)",
               }}
-              className="group relative inline-flex min-h-[50px] w-full items-center justify-center overflow-hidden rounded-2xl px-6 text-[15px] font-bold text-[#0b3a25] shadow-[0_14px_30px_-14px_rgba(201,168,76,0.6)] transition-all duration-300 hover:brightness-[1.05] hover:shadow-[0_18px_40px_-14px_rgba(201,168,76,0.75)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f5fffa] motion-reduce:transition-none"
+              className="group relative inline-flex min-h-[50px] w-full items-center justify-center overflow-hidden rounded-2xl px-6 text-[15px] font-bold text-[#f3e6c0] transition-all duration-300 hover:brightness-[1.1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white motion-reduce:transition-none"
             >
               <span
                 aria-hidden
-                className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-[1400ms] ease-out group-hover:translate-x-full"
+                className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-[1400ms] ease-out group-hover:translate-x-full"
               />
               <span className="relative">{t.participate}</span>
             </button>
+
             <button
               type="button"
               onClick={close}
