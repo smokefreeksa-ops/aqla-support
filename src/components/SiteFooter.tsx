@@ -12,8 +12,10 @@ const COLUMNS: Col[] = [
   {
     title: { ar: "أقلع", en: "Aqla" },
     links: [
-      { ar: "عن أقلع", en: "About", to: appRoutes.about },
-      { ar: "لماذا أقلع؟", en: "Why Aqla?", to: appRoutes.about, hash: "why" },
+      { ar: "من نحن", en: "About", to: appRoutes.about },
+      { ar: "لا تتن أصبحت أقلع", en: "La-Tatten is now Aqla", to: "/la-tatten" },
+      { ar: "مقالات", en: "Articles", to: "/articles" },
+      { ar: "English", en: "English site", to: "/en" },
       { ar: "أثر أقلع", en: "Impact", to: appRoutes.impact },
       { ar: "الأسئلة الشائعة", en: "FAQ", to: appRoutes.faq },
       { ar: "تواصل معنا", en: "Contact", to: appRoutes.contact },
@@ -86,6 +88,11 @@ export function SiteFooter() {
                 © {new Date().getFullYear()} {isAr ? "أقلع — Aqla" : "Aqla — أقلع"}
               </div>
               <div>{isAr ? "منصة مجانية للتوعية والدعم — ليست خدمة طوارئ" : "Free awareness & support platform — not emergency service"}</div>
+              <div>
+                {isAr
+                  ? "بالانتساب إلى جامعة الملك عبدالعزيز — جدة، المملكة العربية السعودية"
+                  : "In affiliation with King Abdulaziz University — Jeddah, Saudi Arabia"}
+              </div>
             </div>
           </div>
 

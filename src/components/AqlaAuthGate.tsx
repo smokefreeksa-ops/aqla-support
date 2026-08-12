@@ -4,8 +4,22 @@ import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { AqlaWelcomeGate } from "@/components/AqlaWelcomeGate";
 
-// Routes that remain accessible without authentication.
+// Routes that remain accessible without authentication (also crawlable).
 const PUBLIC_EXACT = new Set<string>([
+  "/",
+  "/about",
+  "/la-tatten",
+  "/articles",
+  "/articles/first-week",
+  "/articles/withdrawal",
+  "/articles/shisha",
+  "/articles/nicotine-pouches",
+  "/en",
+  "/en/about",
+  "/en/la-tatten",
+  "/en/articles",
+  "/faq",
+  "/impact",
   "/privacy",
   "/terms",
   "/medical-disclaimer",
@@ -18,11 +32,12 @@ const PUBLIC_EXACT = new Set<string>([
 ]);
 
 // Public prefixes (dynamic routes)
-const PUBLIC_PREFIXES = ["/certificate/", "/share/", "/quit-plan/"];
+const PUBLIC_PREFIXES = ["/certificate/", "/share/", "/quit-plan/", "/articles/", "/en/"];
 
 function isPublicPath(pathname: string): boolean {
-  if (PUBLIC_EXACT.has(pathname)) return true;
-  return PUBLIC_PREFIXES.some((p) => pathname.startsWith(p));
+  const clean = pathname.length > 1 && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
+  if (PUBLIC_EXACT.has(clean)) return true;
+  return PUBLIC_PREFIXES.some((p) => clean.startsWith(p));
 }
 
 // Preview-only auth bypass. NEVER active on the published production domain.
@@ -119,7 +134,8 @@ export function AqlaAuthGate({ children }: { children: React.ReactNode }) {
   const publicRoute = isPublicPath(location.pathname);
 
   // Wait for initial session check to avoid flashing the gate for logged-in users.
-  if (!ready) {
+  // Public (crawlable) routes render immediately so SSR ships real HTML.
+  if (!ready && !publicRoute) {
     return (
       <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0b3a25]" />
     );

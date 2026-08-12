@@ -11,17 +11,52 @@ import { VisitTracker } from "@/components/VisitTracker";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About Aqla — عن أقلع" },
+      { title: "من نحن — أقلع ود. مالك الذبياني | About Aqla" },
       {
         name: "description",
         content:
-          "About Aqla — a free digital support platform for understanding nicotine dependence and accessing the right support pathway. Founded by Dr. Malik Abdulmalik Althobiani.",
+          "قصة أقلع ومؤسسها د. مالك الذبياني — Dr. Malik A. Althobiani، أستاذ مساعد في جامعة الملك عبدالعزيز، دكتوراه من University College London.",
       },
-      { property: "og:title", content: "About Aqla — عن أقلع" },
+      { property: "og:title", content: "من نحن — أقلع | About Aqla" },
       {
         property: "og:description",
         content:
-          "Aqla is a free community initiative that combines digital assessment, support routing, and structured follow-up.",
+          "أقلع مبادرة مجتمعية مجانية تجمع التقييم الرقمي وتوجيه الدعم والمتابعة المنظمة — بقيادة د. مالك الذبياني.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://aqla1.com/about" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://aqla1.com/about" },
+      { rel: "alternate", hreflang: "ar", href: "https://aqla1.com/about" },
+      { rel: "alternate", hreflang: "en", href: "https://aqla1.com/en/about" },
+      { rel: "alternate", hreflang: "x-default", href: "https://aqla1.com/about" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "Malik A. Althobiani",
+          alternateName: ["د. مالك الذبياني", "مالك الذبياني"],
+          jobTitle: "Assistant Professor",
+          affiliation: { "@type": "CollegeOrUniversity", name: "King Abdulaziz University" },
+          alumniOf: [
+            { "@type": "CollegeOrUniversity", name: "University College London" },
+            { "@type": "CollegeOrUniversity", name: "Georgia State University" },
+            { "@type": "CollegeOrUniversity", name: "University of Toledo" },
+          ],
+          url: "https://althobiani.com",
+          sameAs: [
+            "https://orcid.org/0000-0002-2760-6929",
+            "https://scholar.google.com/citations?user=Malik-Althobiani",
+            "https://www.linkedin.com/in/malik-althobiani",
+            "https://althobiani.com",
+          ],
+          worksFor: { "@type": "Organization", name: "أقلع", url: "https://aqla1.com" },
+        }),
       },
     ],
   }),
@@ -150,6 +185,10 @@ function Inner() {
                     ? "د. مالك عبدالملك الذبياني"
                     : "Dr. Malik Abdulmalik Althobiani"}
                 </h3>
+                <p className="mt-1 text-center text-sm text-muted-foreground sm:text-start">
+                  د. مالك الذبياني — Dr. Malik A. Althobiani, Assistant Professor at King Abdulaziz
+                  University, PhD UCL
+                </p>
                 <p className="mt-1 text-center text-sm text-muted-foreground sm:text-start">
                   {isAr
                     ? "باحث وممارس في الرعاية التنفسية والصحة الرقمية"

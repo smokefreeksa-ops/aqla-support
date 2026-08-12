@@ -21,6 +21,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SupportInviteRouteImport } from './routes/support-invite'
 import { Route as StartRouteImport } from './routes/start'
 import { Route as SosRouteImport } from './routes/sos'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SharingPolicyRouteImport } from './routes/sharing-policy'
 import { Route as SafetyGuidanceRouteImport } from './routes/safety-guidance'
@@ -40,6 +41,7 @@ import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LearnTrainRouteImport } from './routes/learn-train'
 import { Route as LearnRouteImport } from './routes/learn'
+import { Route as LaTattenRouteImport } from './routes/la-tatten'
 import { Route as InviteFriendsRouteImport } from './routes/invite-friends'
 import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as HelpPathwayRouteImport } from './routes/help-pathway'
@@ -57,6 +59,7 @@ import { Route as ChallengePathwayRouteImport } from './routes/challenge-pathway
 import { Route as CertificatesRouteImport } from './routes/certificates'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AssessmentRouteImport } from './routes/assessment'
+import { Route as ArticlesRouteImport } from './routes/articles'
 import { Route as AqlaVoiceChatRouteImport } from './routes/aqla-voice-chat'
 import { Route as AqlaQuitEngineRouteImport } from './routes/aqla-quit-engine'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -65,10 +68,15 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TryIndexRouteImport } from './routes/try.index'
 import { Route as QuitPlanIndexRouteImport } from './routes/quit-plan.index'
+import { Route as EnIndexRouteImport } from './routes/en.index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
 import { Route as TryShootRouteImport } from './routes/try.shoot'
 import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planToken'
 import { Route as ModulesSlugRouteImport } from './routes/modules.$slug'
+import { Route as EnLaTattenRouteImport } from './routes/en.la-tatten'
+import { Route as EnArticlesRouteImport } from './routes/en.articles'
+import { Route as EnAboutRouteImport } from './routes/en.about'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as DashboardSessionsRouteImport } from './routes/dashboard.sessions'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
@@ -78,6 +86,10 @@ import { Route as DashboardHistoryRouteImport } from './routes/dashboard.history
 import { Route as DashboardCertificatesRouteImport } from './routes/dashboard.certificates'
 import { Route as DashboardCatalogueRouteImport } from './routes/dashboard.catalogue'
 import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
+import { Route as ArticlesWithdrawalRouteImport } from './routes/articles.withdrawal'
+import { Route as ArticlesShishaRouteImport } from './routes/articles.shisha'
+import { Route as ArticlesNicotinePouchesRouteImport } from './routes/articles.nicotine-pouches'
+import { Route as ArticlesFirstWeekRouteImport } from './routes/articles.first-week'
 import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
 import { Route as AdminAqlaQuitEngineRouteImport } from './routes/admin.aqla-quit-engine'
@@ -152,6 +164,11 @@ const StartRoute = StartRouteImport.update({
 const SosRoute = SosRouteImport.update({
   id: '/sos',
   path: '/sos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShopRoute = ShopRouteImport.update({
@@ -249,6 +266,11 @@ const LearnRoute = LearnRouteImport.update({
   path: '/learn',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LaTattenRoute = LaTattenRouteImport.update({
+  id: '/la-tatten',
+  path: '/la-tatten',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InviteFriendsRoute = InviteFriendsRouteImport.update({
   id: '/invite-friends',
   path: '/invite-friends',
@@ -334,6 +356,11 @@ const AssessmentRoute = AssessmentRouteImport.update({
   path: '/assessment',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ArticlesRoute = ArticlesRouteImport.update({
+  id: '/articles',
+  path: '/articles',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AqlaVoiceChatRoute = AqlaVoiceChatRouteImport.update({
   id: '/aqla-voice-chat',
   path: '/aqla-voice-chat',
@@ -374,10 +401,20 @@ const QuitPlanIndexRoute = QuitPlanIndexRouteImport.update({
   path: '/',
   getParentRoute: () => QuitPlanRoute,
 } as any)
+const EnIndexRoute = EnIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EnRoute,
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DashboardRoute,
+} as any)
+const ArticlesIndexRoute = ArticlesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ArticlesRoute,
 } as any)
 const TryShootRoute = TryShootRouteImport.update({
   id: '/shoot',
@@ -393,6 +430,21 @@ const ModulesSlugRoute = ModulesSlugRouteImport.update({
   id: '/modules/$slug',
   path: '/modules/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const EnLaTattenRoute = EnLaTattenRouteImport.update({
+  id: '/la-tatten',
+  path: '/la-tatten',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnArticlesRoute = EnArticlesRouteImport.update({
+  id: '/articles',
+  path: '/articles',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnAboutRoute = EnAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => EnRoute,
 } as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
@@ -438,6 +490,26 @@ const CertificateCodeRoute = CertificateCodeRouteImport.update({
   id: '/certificate/$code',
   path: '/certificate/$code',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ArticlesWithdrawalRoute = ArticlesWithdrawalRouteImport.update({
+  id: '/withdrawal',
+  path: '/withdrawal',
+  getParentRoute: () => ArticlesRoute,
+} as any)
+const ArticlesShishaRoute = ArticlesShishaRouteImport.update({
+  id: '/shisha',
+  path: '/shisha',
+  getParentRoute: () => ArticlesRoute,
+} as any)
+const ArticlesNicotinePouchesRoute = ArticlesNicotinePouchesRouteImport.update({
+  id: '/nicotine-pouches',
+  path: '/nicotine-pouches',
+  getParentRoute: () => ArticlesRoute,
+} as any)
+const ArticlesFirstWeekRoute = ArticlesFirstWeekRouteImport.update({
+  id: '/first-week',
+  path: '/first-week',
+  getParentRoute: () => ArticlesRoute,
 } as any)
 const AdminQuitPlanEmailsRoute = AdminQuitPlanEmailsRouteImport.update({
   id: '/quit-plan-emails',
@@ -529,6 +601,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/aqla-quit-engine': typeof AqlaQuitEngineRouteWithChildren
   '/aqla-voice-chat': typeof AqlaVoiceChatRoute
+  '/articles': typeof ArticlesRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
   '/certificates': typeof CertificatesRoute
@@ -541,11 +614,12 @@ export interface FileRoutesByFullPath {
   '/craving-coach': typeof CravingCoachRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/dtx': typeof DtxRoute
-  '/en': typeof EnRoute
+  '/en': typeof EnRouteWithChildren
   '/faq': typeof FaqRoute
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
   '/invite-friends': typeof InviteFriendsRoute
+  '/la-tatten': typeof LaTattenRoute
   '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
   '/login': typeof LoginRoute
@@ -565,6 +639,7 @@ export interface FileRoutesByFullPath {
   '/safety-guidance': typeof SafetyGuidanceRoute
   '/sharing-policy': typeof SharingPolicyRoute
   '/shop': typeof ShopRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sos': typeof SosRoute
   '/start': typeof StartRoute
   '/support-invite': typeof SupportInviteRoute
@@ -583,6 +658,10 @@ export interface FileRoutesByFullPath {
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
+  '/articles/first-week': typeof ArticlesFirstWeekRoute
+  '/articles/nicotine-pouches': typeof ArticlesNicotinePouchesRoute
+  '/articles/shisha': typeof ArticlesShishaRoute
+  '/articles/withdrawal': typeof ArticlesWithdrawalRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/dashboard/catalogue': typeof DashboardCatalogueRoute
   '/dashboard/certificates': typeof DashboardCertificatesRoute
@@ -592,10 +671,15 @@ export interface FileRoutesByFullPath {
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/sessions': typeof DashboardSessionsRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/en/about': typeof EnAboutRoute
+  '/en/articles': typeof EnArticlesRoute
+  '/en/la-tatten': typeof EnLaTattenRoute
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
+  '/articles/': typeof ArticlesIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/en/': typeof EnIndexRoute
   '/quit-plan/': typeof QuitPlanIndexRoute
   '/try/': typeof TryIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -626,11 +710,11 @@ export interface FileRoutesByTo {
   '/cookies': typeof CookiesRoute
   '/craving-coach': typeof CravingCoachRoute
   '/dtx': typeof DtxRoute
-  '/en': typeof EnRoute
   '/faq': typeof FaqRoute
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
   '/invite-friends': typeof InviteFriendsRoute
+  '/la-tatten': typeof LaTattenRoute
   '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
   '/login': typeof LoginRoute
@@ -649,6 +733,7 @@ export interface FileRoutesByTo {
   '/safety-guidance': typeof SafetyGuidanceRoute
   '/sharing-policy': typeof SharingPolicyRoute
   '/shop': typeof ShopRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sos': typeof SosRoute
   '/start': typeof StartRoute
   '/support-invite': typeof SupportInviteRoute
@@ -666,6 +751,10 @@ export interface FileRoutesByTo {
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
+  '/articles/first-week': typeof ArticlesFirstWeekRoute
+  '/articles/nicotine-pouches': typeof ArticlesNicotinePouchesRoute
+  '/articles/shisha': typeof ArticlesShishaRoute
+  '/articles/withdrawal': typeof ArticlesWithdrawalRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/dashboard/catalogue': typeof DashboardCatalogueRoute
   '/dashboard/certificates': typeof DashboardCertificatesRoute
@@ -675,10 +764,15 @@ export interface FileRoutesByTo {
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/sessions': typeof DashboardSessionsRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/en/about': typeof EnAboutRoute
+  '/en/articles': typeof EnArticlesRoute
+  '/en/la-tatten': typeof EnLaTattenRoute
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
+  '/articles': typeof ArticlesIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/en': typeof EnIndexRoute
   '/quit-plan': typeof QuitPlanIndexRoute
   '/try': typeof TryIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -699,6 +793,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/aqla-quit-engine': typeof AqlaQuitEngineRouteWithChildren
   '/aqla-voice-chat': typeof AqlaVoiceChatRoute
+  '/articles': typeof ArticlesRouteWithChildren
   '/assessment': typeof AssessmentRoute
   '/auth': typeof AuthRoute
   '/certificates': typeof CertificatesRoute
@@ -711,11 +806,12 @@ export interface FileRoutesById {
   '/craving-coach': typeof CravingCoachRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/dtx': typeof DtxRoute
-  '/en': typeof EnRoute
+  '/en': typeof EnRouteWithChildren
   '/faq': typeof FaqRoute
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
   '/invite-friends': typeof InviteFriendsRoute
+  '/la-tatten': typeof LaTattenRoute
   '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
   '/login': typeof LoginRoute
@@ -735,6 +831,7 @@ export interface FileRoutesById {
   '/safety-guidance': typeof SafetyGuidanceRoute
   '/sharing-policy': typeof SharingPolicyRoute
   '/shop': typeof ShopRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sos': typeof SosRoute
   '/start': typeof StartRoute
   '/support-invite': typeof SupportInviteRoute
@@ -753,6 +850,10 @@ export interface FileRoutesById {
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
+  '/articles/first-week': typeof ArticlesFirstWeekRoute
+  '/articles/nicotine-pouches': typeof ArticlesNicotinePouchesRoute
+  '/articles/shisha': typeof ArticlesShishaRoute
+  '/articles/withdrawal': typeof ArticlesWithdrawalRoute
   '/certificate/$code': typeof CertificateCodeRoute
   '/dashboard/catalogue': typeof DashboardCatalogueRoute
   '/dashboard/certificates': typeof DashboardCertificatesRoute
@@ -762,10 +863,15 @@ export interface FileRoutesById {
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/sessions': typeof DashboardSessionsRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/en/about': typeof EnAboutRoute
+  '/en/articles': typeof EnArticlesRoute
+  '/en/la-tatten': typeof EnLaTattenRoute
   '/modules/$slug': typeof ModulesSlugRoute
   '/quit-plan/$planToken': typeof QuitPlanPlanTokenRoute
   '/try/shoot': typeof TryShootRoute
+  '/articles/': typeof ArticlesIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/en/': typeof EnIndexRoute
   '/quit-plan/': typeof QuitPlanIndexRoute
   '/try/': typeof TryIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -787,6 +893,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/aqla-quit-engine'
     | '/aqla-voice-chat'
+    | '/articles'
     | '/assessment'
     | '/auth'
     | '/certificates'
@@ -804,6 +911,7 @@ export interface FileRouteTypes {
     | '/help-pathway'
     | '/impact'
     | '/invite-friends'
+    | '/la-tatten'
     | '/learn'
     | '/learn-train'
     | '/login'
@@ -823,6 +931,7 @@ export interface FileRouteTypes {
     | '/safety-guidance'
     | '/sharing-policy'
     | '/shop'
+    | '/sitemap.xml'
     | '/sos'
     | '/start'
     | '/support-invite'
@@ -841,6 +950,10 @@ export interface FileRouteTypes {
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
+    | '/articles/first-week'
+    | '/articles/nicotine-pouches'
+    | '/articles/shisha'
+    | '/articles/withdrawal'
     | '/certificate/$code'
     | '/dashboard/catalogue'
     | '/dashboard/certificates'
@@ -850,10 +963,15 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/sessions'
     | '/email/unsubscribe'
+    | '/en/about'
+    | '/en/articles'
+    | '/en/la-tatten'
     | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
+    | '/articles/'
     | '/dashboard/'
+    | '/en/'
     | '/quit-plan/'
     | '/try/'
     | '/.lovable/oauth/consent'
@@ -884,11 +1002,11 @@ export interface FileRouteTypes {
     | '/cookies'
     | '/craving-coach'
     | '/dtx'
-    | '/en'
     | '/faq'
     | '/help-pathway'
     | '/impact'
     | '/invite-friends'
+    | '/la-tatten'
     | '/learn'
     | '/learn-train'
     | '/login'
@@ -907,6 +1025,7 @@ export interface FileRouteTypes {
     | '/safety-guidance'
     | '/sharing-policy'
     | '/shop'
+    | '/sitemap.xml'
     | '/sos'
     | '/start'
     | '/support-invite'
@@ -924,6 +1043,10 @@ export interface FileRouteTypes {
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
+    | '/articles/first-week'
+    | '/articles/nicotine-pouches'
+    | '/articles/shisha'
+    | '/articles/withdrawal'
     | '/certificate/$code'
     | '/dashboard/catalogue'
     | '/dashboard/certificates'
@@ -933,10 +1056,15 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/sessions'
     | '/email/unsubscribe'
+    | '/en/about'
+    | '/en/articles'
+    | '/en/la-tatten'
     | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
+    | '/articles'
     | '/dashboard'
+    | '/en'
     | '/quit-plan'
     | '/try'
     | '/.lovable/oauth/consent'
@@ -956,6 +1084,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/aqla-quit-engine'
     | '/aqla-voice-chat'
+    | '/articles'
     | '/assessment'
     | '/auth'
     | '/certificates'
@@ -973,6 +1102,7 @@ export interface FileRouteTypes {
     | '/help-pathway'
     | '/impact'
     | '/invite-friends'
+    | '/la-tatten'
     | '/learn'
     | '/learn-train'
     | '/login'
@@ -992,6 +1122,7 @@ export interface FileRouteTypes {
     | '/safety-guidance'
     | '/sharing-policy'
     | '/shop'
+    | '/sitemap.xml'
     | '/sos'
     | '/start'
     | '/support-invite'
@@ -1010,6 +1141,10 @@ export interface FileRouteTypes {
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
+    | '/articles/first-week'
+    | '/articles/nicotine-pouches'
+    | '/articles/shisha'
+    | '/articles/withdrawal'
     | '/certificate/$code'
     | '/dashboard/catalogue'
     | '/dashboard/certificates'
@@ -1019,10 +1154,15 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/sessions'
     | '/email/unsubscribe'
+    | '/en/about'
+    | '/en/articles'
+    | '/en/la-tatten'
     | '/modules/$slug'
     | '/quit-plan/$planToken'
     | '/try/shoot'
+    | '/articles/'
     | '/dashboard/'
+    | '/en/'
     | '/quit-plan/'
     | '/try/'
     | '/.lovable/oauth/consent'
@@ -1043,6 +1183,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   AqlaQuitEngineRoute: typeof AqlaQuitEngineRouteWithChildren
   AqlaVoiceChatRoute: typeof AqlaVoiceChatRoute
+  ArticlesRoute: typeof ArticlesRouteWithChildren
   AssessmentRoute: typeof AssessmentRoute
   AuthRoute: typeof AuthRoute
   CertificatesRoute: typeof CertificatesRoute
@@ -1055,11 +1196,12 @@ export interface RootRouteChildren {
   CravingCoachRoute: typeof CravingCoachRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   DtxRoute: typeof DtxRoute
-  EnRoute: typeof EnRoute
+  EnRoute: typeof EnRouteWithChildren
   FaqRoute: typeof FaqRoute
   HelpPathwayRoute: typeof HelpPathwayRoute
   ImpactRoute: typeof ImpactRoute
   InviteFriendsRoute: typeof InviteFriendsRoute
+  LaTattenRoute: typeof LaTattenRoute
   LearnRoute: typeof LearnRoute
   LearnTrainRoute: typeof LearnTrainRoute
   LoginRoute: typeof LoginRoute
@@ -1079,6 +1221,7 @@ export interface RootRouteChildren {
   SafetyGuidanceRoute: typeof SafetyGuidanceRoute
   SharingPolicyRoute: typeof SharingPolicyRoute
   ShopRoute: typeof ShopRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SosRoute: typeof SosRoute
   StartRoute: typeof StartRoute
   SupportInviteRoute: typeof SupportInviteRoute
@@ -1191,6 +1334,13 @@ declare module '@tanstack/react-router' {
       path: '/sos'
       fullPath: '/sos'
       preLoaderRoute: typeof SosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shop': {
@@ -1326,6 +1476,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearnRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/la-tatten': {
+      id: '/la-tatten'
+      path: '/la-tatten'
+      fullPath: '/la-tatten'
+      preLoaderRoute: typeof LaTattenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/invite-friends': {
       id: '/invite-friends'
       path: '/invite-friends'
@@ -1445,6 +1602,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessmentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/articles': {
+      id: '/articles'
+      path: '/articles'
+      fullPath: '/articles'
+      preLoaderRoute: typeof ArticlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/aqla-voice-chat': {
       id: '/aqla-voice-chat'
       path: '/aqla-voice-chat'
@@ -1501,12 +1665,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuitPlanIndexRouteImport
       parentRoute: typeof QuitPlanRoute
     }
+    '/en/': {
+      id: '/en/'
+      path: '/'
+      fullPath: '/en/'
+      preLoaderRoute: typeof EnIndexRouteImport
+      parentRoute: typeof EnRoute
+    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/'
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
+    }
+    '/articles/': {
+      id: '/articles/'
+      path: '/'
+      fullPath: '/articles/'
+      preLoaderRoute: typeof ArticlesIndexRouteImport
+      parentRoute: typeof ArticlesRoute
     }
     '/try/shoot': {
       id: '/try/shoot'
@@ -1528,6 +1706,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/modules/$slug'
       preLoaderRoute: typeof ModulesSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/en/la-tatten': {
+      id: '/en/la-tatten'
+      path: '/la-tatten'
+      fullPath: '/en/la-tatten'
+      preLoaderRoute: typeof EnLaTattenRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/articles': {
+      id: '/en/articles'
+      path: '/articles'
+      fullPath: '/en/articles'
+      preLoaderRoute: typeof EnArticlesRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/about': {
+      id: '/en/about'
+      path: '/about'
+      fullPath: '/en/about'
+      preLoaderRoute: typeof EnAboutRouteImport
+      parentRoute: typeof EnRoute
     }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
@@ -1591,6 +1790,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/certificate/$code'
       preLoaderRoute: typeof CertificateCodeRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/articles/withdrawal': {
+      id: '/articles/withdrawal'
+      path: '/withdrawal'
+      fullPath: '/articles/withdrawal'
+      preLoaderRoute: typeof ArticlesWithdrawalRouteImport
+      parentRoute: typeof ArticlesRoute
+    }
+    '/articles/shisha': {
+      id: '/articles/shisha'
+      path: '/shisha'
+      fullPath: '/articles/shisha'
+      preLoaderRoute: typeof ArticlesShishaRouteImport
+      parentRoute: typeof ArticlesRoute
+    }
+    '/articles/nicotine-pouches': {
+      id: '/articles/nicotine-pouches'
+      path: '/nicotine-pouches'
+      fullPath: '/articles/nicotine-pouches'
+      preLoaderRoute: typeof ArticlesNicotinePouchesRouteImport
+      parentRoute: typeof ArticlesRoute
+    }
+    '/articles/first-week': {
+      id: '/articles/first-week'
+      path: '/first-week'
+      fullPath: '/articles/first-week'
+      preLoaderRoute: typeof ArticlesFirstWeekRouteImport
+      parentRoute: typeof ArticlesRoute
     }
     '/admin/quit-plan-emails': {
       id: '/admin/quit-plan-emails'
@@ -1726,6 +1953,26 @@ const AqlaQuitEngineRouteWithChildren = AqlaQuitEngineRoute._addFileChildren(
   AqlaQuitEngineRouteChildren,
 )
 
+interface ArticlesRouteChildren {
+  ArticlesFirstWeekRoute: typeof ArticlesFirstWeekRoute
+  ArticlesNicotinePouchesRoute: typeof ArticlesNicotinePouchesRoute
+  ArticlesShishaRoute: typeof ArticlesShishaRoute
+  ArticlesWithdrawalRoute: typeof ArticlesWithdrawalRoute
+  ArticlesIndexRoute: typeof ArticlesIndexRoute
+}
+
+const ArticlesRouteChildren: ArticlesRouteChildren = {
+  ArticlesFirstWeekRoute: ArticlesFirstWeekRoute,
+  ArticlesNicotinePouchesRoute: ArticlesNicotinePouchesRoute,
+  ArticlesShishaRoute: ArticlesShishaRoute,
+  ArticlesWithdrawalRoute: ArticlesWithdrawalRoute,
+  ArticlesIndexRoute: ArticlesIndexRoute,
+}
+
+const ArticlesRouteWithChildren = ArticlesRoute._addFileChildren(
+  ArticlesRouteChildren,
+)
+
 interface DashboardRouteChildren {
   DashboardCatalogueRoute: typeof DashboardCatalogueRoute
   DashboardCertificatesRoute: typeof DashboardCertificatesRoute
@@ -1751,6 +1998,22 @@ const DashboardRouteChildren: DashboardRouteChildren = {
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
   DashboardRouteChildren,
 )
+
+interface EnRouteChildren {
+  EnAboutRoute: typeof EnAboutRoute
+  EnArticlesRoute: typeof EnArticlesRoute
+  EnLaTattenRoute: typeof EnLaTattenRoute
+  EnIndexRoute: typeof EnIndexRoute
+}
+
+const EnRouteChildren: EnRouteChildren = {
+  EnAboutRoute: EnAboutRoute,
+  EnArticlesRoute: EnArticlesRoute,
+  EnLaTattenRoute: EnLaTattenRoute,
+  EnIndexRoute: EnIndexRoute,
+}
+
+const EnRouteWithChildren = EnRoute._addFileChildren(EnRouteChildren)
 
 interface QuitPlanRouteChildren {
   QuitPlanPlanTokenRoute: typeof QuitPlanPlanTokenRoute
@@ -1785,6 +2048,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   AqlaQuitEngineRoute: AqlaQuitEngineRouteWithChildren,
   AqlaVoiceChatRoute: AqlaVoiceChatRoute,
+  ArticlesRoute: ArticlesRouteWithChildren,
   AssessmentRoute: AssessmentRoute,
   AuthRoute: AuthRoute,
   CertificatesRoute: CertificatesRoute,
@@ -1797,11 +2061,12 @@ const rootRouteChildren: RootRouteChildren = {
   CravingCoachRoute: CravingCoachRoute,
   DashboardRoute: DashboardRouteWithChildren,
   DtxRoute: DtxRoute,
-  EnRoute: EnRoute,
+  EnRoute: EnRouteWithChildren,
   FaqRoute: FaqRoute,
   HelpPathwayRoute: HelpPathwayRoute,
   ImpactRoute: ImpactRoute,
   InviteFriendsRoute: InviteFriendsRoute,
+  LaTattenRoute: LaTattenRoute,
   LearnRoute: LearnRoute,
   LearnTrainRoute: LearnTrainRoute,
   LoginRoute: LoginRoute,
@@ -1821,6 +2086,7 @@ const rootRouteChildren: RootRouteChildren = {
   SafetyGuidanceRoute: SafetyGuidanceRoute,
   SharingPolicyRoute: SharingPolicyRoute,
   ShopRoute: ShopRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SosRoute: SosRoute,
   StartRoute: StartRoute,
   SupportInviteRoute: SupportInviteRoute,
