@@ -23,22 +23,29 @@ import KnowYourSmokingSection from "@/components/KnowYourSmokingSection";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Aqla — أقلع | Smoking & Nicotine Cessation Support" },
+      { title: "أقلع — منصة الإقلاع عن التدخين | Aqla" },
       {
         name: "description",
         content:
-          "أقلع: مركز الإقلاع الافتراضي، أكاديمية التدريب والشهادات، مسار مساعدة شخص يهمك، ومجتمع التحديات.",
+          "أقلع (Aqla): منصة سعودية مجانية للإقلاع عن التدخين والنيكوتين — تقييم الاعتماد، خطة إقلاع شخصية، متابعة، أكاديمية تدريب وشهادات، ومجتمع التحديات.",
       },
-      { property: "og:title", content: "Aqla — أقلع" },
+      { property: "og:title", content: "أقلع — منصة الإقلاع عن التدخين | Aqla" },
       { property: "og:description", content: "أقلع — أربعة مسارات: الإقلاع، الأكاديمية، المساعدة، التحديات." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://aqla1.com/" },
       { property: "og:image", content: "https://aqla1.com/og-aqla-v5.jpg" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Aqla — أقلع" },
+      { name: "twitter:title", content: "أقلع — منصة الإقلاع عن التدخين | Aqla" },
       { name: "twitter:description", content: "أقلع — أربعة مسارات: الإقلاع، الأكاديمية، المساعدة، التحديات." },
       { name: "twitter:image", content: "https://aqla1.com/og-aqla-v5.jpg" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://aqla1.com/" },
+      { rel: "alternate", hrefLang: "ar", href: "https://aqla1.com/" },
+      { rel: "alternate", hrefLang: "en", href: "https://aqla1.com/en" },
+      { rel: "alternate", hrefLang: "x-default", href: "https://aqla1.com/" },
     ],
   }),
   component: LandingPage,
