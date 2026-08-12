@@ -21,6 +21,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SupportInviteRouteImport } from './routes/support-invite'
 import { Route as StartRouteImport } from './routes/start'
 import { Route as SosRouteImport } from './routes/sos'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SharingPolicyRouteImport } from './routes/sharing-policy'
 import { Route as SafetyGuidanceRouteImport } from './routes/safety-guidance'
@@ -152,6 +153,11 @@ const StartRoute = StartRouteImport.update({
 const SosRoute = SosRouteImport.update({
   id: '/sos',
   path: '/sos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShopRoute = ShopRouteImport.update({
@@ -565,6 +571,7 @@ export interface FileRoutesByFullPath {
   '/safety-guidance': typeof SafetyGuidanceRoute
   '/sharing-policy': typeof SharingPolicyRoute
   '/shop': typeof ShopRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sos': typeof SosRoute
   '/start': typeof StartRoute
   '/support-invite': typeof SupportInviteRoute
@@ -649,6 +656,7 @@ export interface FileRoutesByTo {
   '/safety-guidance': typeof SafetyGuidanceRoute
   '/sharing-policy': typeof SharingPolicyRoute
   '/shop': typeof ShopRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sos': typeof SosRoute
   '/start': typeof StartRoute
   '/support-invite': typeof SupportInviteRoute
@@ -735,6 +743,7 @@ export interface FileRoutesById {
   '/safety-guidance': typeof SafetyGuidanceRoute
   '/sharing-policy': typeof SharingPolicyRoute
   '/shop': typeof ShopRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sos': typeof SosRoute
   '/start': typeof StartRoute
   '/support-invite': typeof SupportInviteRoute
@@ -823,6 +832,7 @@ export interface FileRouteTypes {
     | '/safety-guidance'
     | '/sharing-policy'
     | '/shop'
+    | '/sitemap.xml'
     | '/sos'
     | '/start'
     | '/support-invite'
@@ -907,6 +917,7 @@ export interface FileRouteTypes {
     | '/safety-guidance'
     | '/sharing-policy'
     | '/shop'
+    | '/sitemap.xml'
     | '/sos'
     | '/start'
     | '/support-invite'
@@ -992,6 +1003,7 @@ export interface FileRouteTypes {
     | '/safety-guidance'
     | '/sharing-policy'
     | '/shop'
+    | '/sitemap.xml'
     | '/sos'
     | '/start'
     | '/support-invite'
@@ -1079,6 +1091,7 @@ export interface RootRouteChildren {
   SafetyGuidanceRoute: typeof SafetyGuidanceRoute
   SharingPolicyRoute: typeof SharingPolicyRoute
   ShopRoute: typeof ShopRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SosRoute: typeof SosRoute
   StartRoute: typeof StartRoute
   SupportInviteRoute: typeof SupportInviteRoute
@@ -1191,6 +1204,13 @@ declare module '@tanstack/react-router' {
       path: '/sos'
       fullPath: '/sos'
       preLoaderRoute: typeof SosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shop': {
@@ -1821,6 +1841,7 @@ const rootRouteChildren: RootRouteChildren = {
   SafetyGuidanceRoute: SafetyGuidanceRoute,
   SharingPolicyRoute: SharingPolicyRoute,
   ShopRoute: ShopRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SosRoute: SosRoute,
   StartRoute: StartRoute,
   SupportInviteRoute: SupportInviteRoute,
