@@ -1169,7 +1169,6 @@ summary:focus-visible,
   border-radius: 26px;
   background:
     radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.96), rgba(240, 250, 246, 0.9) 60%, rgba(228, 244, 238, 0.92)) !important;
-  border: 1px solid rgba(201, 168, 76, 0.35) !important;
   box-shadow: 0 24px 70px rgba(4, 32, 22, 0.35) !important;
 }
 .crystal-panel--map::before,
