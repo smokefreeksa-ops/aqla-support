@@ -86,66 +86,103 @@
 
 :root {
   --radius: 1.125rem;
-  /* Warm ivory background */
+
+  /* =====================================================================
+     AQla master palette — one source of truth.
+     Every value is the OKLCH equivalent of the approved brand HEX.
+     ===================================================================== */
+
+  /* Brand — Saudi Green #006C35 : identity / action */
+  --brand: oklch(0.4654 0.122 152.15);
+  --brand-foreground: oklch(1 0 0);
+  --brand-hover: oklch(0.3644 0.0749 159.68);   /* #0E4A30 */
+  --brand-soft: oklch(0.9565 0.0103 174.27);    /* #EAF3F0 */
+
+  /* Typography / authority */
+  --ink: oklch(0.311 0.0626 159.5);             /* #0B3A25 */
+  --ink-secondary: oklch(0.4287 0.0615 162.01); /* #2D5A45 */
+  --ink-muted: oklch(0.5499 0.0444 162.81);     /* #5A7A6A */
+  --emerald-black: oklch(0.2654 0.05 173.16);   /* #012D23 */
+
+  /* Premium digital / technology teal family */
+  --digital: oklch(0.5142 0.1056 166.79);       /* #007A5A */
+  --digital-deep: oklch(0.3902 0.0769 170.42);  /* #00523F */
+  --digital-glow: oklch(0.5778 0.1164 167.05);  /* #0A8F6B */
+
+  /* Energetic accents */
+  --accent-green: oklch(0.6361 0.1619 153.56);       /* #00A65A */
+  --accent-green-light: oklch(0.7729 0.1535 163.22); /* #34D399 */
+  --accent-green-foreground: var(--ink);
+
+  /* Surfaces */
+  --surface: oklch(1 0 0);
+  --surface-soft: oklch(0.9735 0.0082 157.09);  /* #F2F8F4 */
+  --surface-muted: oklch(0.9565 0.0103 174.27); /* #EAF3F0 */
+  --border-soft: oklch(0.9145 0.0192 162.9);    /* #D8E7DF */
+  --border-strong: oklch(0.9036 0.017 168.46);  /* #D5E3DD */
+
+  /* ---- Shadcn semantic mapping onto the AQla palette ---- */
   --background: oklch(0.987 0.006 95);
-  /* Deep ink */
-  --foreground: oklch(0.235 0.025 230);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.235 0.025 230);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.235 0.025 230);
-  /* Deep emerald — premium medical */
-  --primary: oklch(0.44 0.115 156);
-  --primary-foreground: oklch(0.99 0.005 150);
-  --primary-soft: oklch(0.955 0.04 162);
-  /* Deep teal */
-  --secondary: oklch(0.48 0.085 195);
-  --secondary-foreground: oklch(0.99 0.005 180);
-  --muted: oklch(0.965 0.012 200);
-  --muted-foreground: oklch(0.5 0.022 240);
-  --accent: oklch(0.955 0.04 162);
-  --accent-foreground: oklch(0.3 0.08 165);
-  /* Subtle gold accent */
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-foreground);
+  --primary-soft: var(--brand-soft);
+  --secondary: var(--digital);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: var(--surface-soft);
+  --muted-foreground: var(--ink-muted);
+  --accent: var(--surface-muted);
+  --accent-foreground: var(--ink);
+  /* Gold — rare, exceptional moments only */
   --gold: oklch(0.78 0.11 85);
   --gold-soft: oklch(0.93 0.06 88);
   /* Coral reserved for urgent safety */
   --destructive: oklch(0.62 0.19 22);
   --destructive-foreground: oklch(0.99 0.005 0);
+  /* Success stays a distinct semantic state, not the brand colour */
   --success: oklch(0.55 0.13 152);
   --warning: oklch(0.78 0.16 75);
-  --border: oklch(0.92 0.006 220);
-  --input: oklch(0.93 0.006 230);
-  --ring: oklch(0.44 0.115 156);
-  --chart-1: oklch(0.44 0.115 156);
-  --chart-2: oklch(0.48 0.085 195);
-  --chart-3: oklch(0.78 0.11 85);
-  --chart-4: oklch(0.62 0.19 22);
-  --chart-5: oklch(0.6 0.13 230);
-  /* Premium gradients */
+  --border: var(--border-soft);
+  --input: var(--border-strong);
+  --ring: var(--brand);
+  --chart-1: var(--brand);
+  --chart-2: var(--digital);
+  --chart-3: var(--gold);
+  --chart-4: var(--destructive);
+  --chart-5: var(--accent-green-light);
+  /* Premium gradients — three controlled families */
   --gradient-hero: radial-gradient(1100px 600px at 85% -10%, oklch(0.955 0.04 162 / 0.7), transparent 60%),
                    radial-gradient(900px 500px at 5% 10%, oklch(0.93 0.06 88 / 0.32), transparent 55%),
                    linear-gradient(180deg, oklch(0.99 0.006 95) 0%, oklch(0.97 0.012 195) 100%);
   --gradient-card: linear-gradient(180deg, oklch(1 0 0), oklch(0.985 0.006 95));
-  --gradient-emerald: linear-gradient(135deg, oklch(0.44 0.115 156) 0%, oklch(0.48 0.085 195) 100%);
-  --gradient-emerald-soft: linear-gradient(135deg, oklch(0.955 0.04 162) 0%, oklch(0.96 0.025 195) 100%);
+  /* 1. Brand CTA */
+  --gradient-brand: linear-gradient(135deg, var(--brand) 0%, var(--brand-hover) 100%);
+  /* 2. Premium digital emerald (technology / AI / study environments) */
+  --gradient-emerald: linear-gradient(135deg, var(--digital-deep) 0%, var(--digital) 55%, var(--digital-glow) 100%);
+  /* 3. Soft emerald surface */
+  --gradient-emerald-soft: linear-gradient(135deg, var(--surface-soft) 0%, var(--surface-muted) 100%);
   --gradient-gold: linear-gradient(135deg, oklch(0.82 0.11 85) 0%, oklch(0.7 0.13 70) 100%);
-  --gradient-quit: linear-gradient(135deg, oklch(0.44 0.115 156) 0%, oklch(0.48 0.085 195) 100%);
-  --gradient-quit-soft: linear-gradient(135deg, oklch(0.955 0.04 162) 0%, oklch(0.96 0.025 195) 100%);
-  --gradient-volunteer: linear-gradient(135deg, oklch(0.44 0.115 156) 0%, oklch(0.48 0.085 195) 100%);
-  --gradient-volunteer-soft: linear-gradient(135deg, oklch(0.955 0.04 162) 0%, oklch(0.96 0.025 200) 100%);
+  --gradient-quit: var(--gradient-emerald);
+  --gradient-quit-soft: var(--gradient-emerald-soft);
+  --gradient-volunteer: var(--gradient-brand);
+  --gradient-volunteer-soft: var(--gradient-emerald-soft);
   --gradient-ivory: linear-gradient(180deg, oklch(0.99 0.006 95), oklch(0.965 0.012 200));
-  --shadow-card: 0 1px 2px oklch(0.235 0.025 230 / 0.04), 0 8px 24px -12px oklch(0.44 0.115 156 / 0.18);
-  --shadow-elegant: 0 1px 3px oklch(0.235 0.025 230 / 0.05), 0 30px 60px -28px oklch(0.235 0.025 230 / 0.22);
-  --shadow-glow: 0 0 0 1px oklch(0.44 0.115 156 / 0.08), 0 20px 50px -20px oklch(0.44 0.115 156 / 0.35);
+  --shadow-card: 0 1px 2px oklch(0.235 0.025 230 / 0.04), 0 8px 24px -12px oklch(0.4654 0.122 152.15 / 0.18);
+  --shadow-elegant: 0 1px 3px oklch(0.235 0.025 230 / 0.05), 0 30px 60px -28px oklch(0.2654 0.05 173.16 / 0.22);
+  --shadow-glow: 0 0 0 1px oklch(0.4654 0.122 152.15 / 0.08), 0 20px 50px -20px oklch(0.4654 0.122 152.15 / 0.35);
   --shadow-gold: 0 10px 30px -12px oklch(0.78 0.11 85 / 0.45);
   --sidebar: oklch(0.99 0.004 100);
-  --sidebar-foreground: oklch(0.235 0.025 230);
-  --sidebar-primary: oklch(0.44 0.115 156);
-  --sidebar-primary-foreground: oklch(0.99 0.005 150);
-  --sidebar-accent: oklch(0.955 0.04 162);
-  --sidebar-accent-foreground: oklch(0.235 0.025 230);
-  --sidebar-border: oklch(0.92 0.006 220);
-  --sidebar-ring: oklch(0.44 0.115 156);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--brand-foreground);
+  --sidebar-accent: var(--surface-muted);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--border-soft);
+  --sidebar-ring: var(--brand);
 }
 
 
