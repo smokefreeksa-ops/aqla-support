@@ -36,6 +36,10 @@ const COPY: Record<Lang, {
   anonymous: string;
   prize: string;
   langSwitchOther: string;
+  confirmMessage: string;
+  confirmJoin: string;
+  confirmContinue: string;
+  confirmBack: string;
 }> = {
   ar: {
     dir: "rtl",
