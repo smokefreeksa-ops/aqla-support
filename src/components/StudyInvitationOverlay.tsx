@@ -377,7 +377,7 @@ export function StudyInvitationOverlay() {
               transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
             }}
           >
-            <div className="crystal-panel crystal-panel--map flex max-h-full min-h-0 flex-col">
+            <div className={`crystal-panel ${step === "invite" ? "crystal-panel--art" : "crystal-panel--map"} flex max-h-full min-h-0 flex-col`}>
               {step === "invite" ? (
                 <div className="relative z-10 w-full">
                   <img
