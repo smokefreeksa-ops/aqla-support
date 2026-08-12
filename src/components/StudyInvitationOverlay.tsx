@@ -380,8 +380,9 @@ export function StudyInvitationOverlay() {
                 aria-hidden
                 src={saudiCrystalMap.url}
                 alt=""
-                className="pointer-events-none absolute inset-0 z-0 h-full w-full select-none object-fill"
+                className="crystal-map-art pointer-events-none absolute inset-0 z-0 h-full w-full select-none object-contain p-4"
               />
+
 
 
 
