@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import SaudiFlagWave from "@/components/SaudiFlagWave";
 import { ResearchBanner } from "@/components/ResearchBanner";
+import { trackEvent } from "@/lib/track-event";
 import aqlaLogo from "@/assets/aqla-logo-transparent.png";
 
 
@@ -120,6 +121,8 @@ export function StudyInvitationOverlay() {
   const [mounted, setMounted] = useState(false);
   const [lang, setLang] = useState<Lang>("ar");
   const [open, setOpen] = useState(false);
+  const [step, setStep] = useState<"invite" | "confirm">("invite");
+  const [launching, setLaunching] = useState(false);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const detailsRef = useRef<HTMLDivElement | null>(null);
   const pushedRef = useRef(false);
@@ -267,6 +270,41 @@ export function StudyInvitationOverlay() {
     close();
   }
 
+  function prefersReducedMotion() {
+    try {
+      return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    } catch {
+      return false;
+    }
+  }
+
+  function openSkipConfirm() {
+    trackEvent("study_skip_clicked");
+    setStep("confirm");
+  }
+
+  function continueToSite() {
+    trackEvent("study_skip_continue_site");
+    if (launching) return;
+    persist();
+    setLaunching(true);
+    window.setTimeout(close, prefersReducedMotion() ? 200 : 820);
+  }
+
+  function goBackToPreviousPage() {
+    trackEvent("study_skip_go_back");
+    persist();
+    dismissingRef.current = true;
+    try {
+      // Step past our temporary overlay entry to the real previous page.
+      window.history.go(pushedRef.current ? -2 : -1);
+      return;
+    } catch {
+      dismissingRef.current = false;
+    }
+    close();
+  }
+
 
   if (!visible) return null;
 
@@ -275,7 +313,7 @@ export function StudyInvitationOverlay() {
   return (
     <>
       <div
-        className="fixed inset-0 z-[300] flex flex-col"
+        className={`fixed inset-0 z-[300] flex flex-col${launching ? " aqla-launching" : ""}`}
         style={{
           opacity: mounted ? 1 : 0,
           transition: "opacity 500ms ease-out",
@@ -283,7 +321,7 @@ export function StudyInvitationOverlay() {
         role="presentation"
       >
         {/* Deep Saudi-green environment */}
-        <div aria-hidden className="study-environment pointer-events-none absolute inset-0 z-0" />
+        <div aria-hidden className="study-environment aqla-launch-fade pointer-events-none absolute inset-0 z-0" />
         {/* Flag kept only as a subtle texture underneath the green field */}
         <div className="pointer-events-none absolute inset-0 z-[1] opacity-[0.14] mix-blend-soft-light">
           <SaudiFlagWave />
@@ -302,7 +340,7 @@ export function StudyInvitationOverlay() {
             <div className="relative z-20">
               <ResearchBanner />
             </div>
-            <div className="flex flex-1 items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6">
+            <div className="flex flex-1 items-center justify-center overflow-y-auto px-4 py-4 sm:px-6 sm:py-6">
 
 
 
@@ -315,7 +353,7 @@ export function StudyInvitationOverlay() {
             tabIndex={-1}
             dir={t.dir}
             lang={lang}
-            className="crystal-shell relative flex max-h-[92%] w-full flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
+            className="crystal-shell aqla-launch-panel relative flex max-h-[92%] w-full flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
             style={{
               width: "min(95%, clamp(500px, 61vw, 860px))",
 
@@ -424,7 +462,7 @@ export function StudyInvitationOverlay() {
 
             <button
               type="button"
-              onClick={close}
+              onClick={openSkipConfirm}
               className="inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl border border-[#0b3a25]/15 bg-transparent px-6 text-[13.5px] font-medium text-[#5a7a6a] transition-colors duration-300 hover:border-[#0b3a25]/28 hover:bg-[#0b3a25]/[0.04] hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25 motion-reduce:transition-none"
             >
               {t.skip}
