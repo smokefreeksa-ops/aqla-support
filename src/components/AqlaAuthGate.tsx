@@ -134,7 +134,8 @@ export function AqlaAuthGate({ children }: { children: React.ReactNode }) {
   const publicRoute = isPublicPath(location.pathname);
 
   // Wait for initial session check to avoid flashing the gate for logged-in users.
-  if (!ready) {
+  // Public (crawlable) routes render immediately so SSR ships real HTML.
+  if (!ready && !publicRoute) {
     return (
       <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0b3a25]" />
     );
