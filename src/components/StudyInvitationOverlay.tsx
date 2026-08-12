@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import SaudiFlagWave from "@/components/SaudiFlagWave";
 import { ResearchBanner } from "@/components/ResearchBanner";
+import { trackEvent } from "@/lib/track-event";
 import aqlaLogo from "@/assets/aqla-logo-transparent.png";
 
 
@@ -36,6 +37,10 @@ const COPY: Record<Lang, {
   anonymous: string;
   prize: string;
   langSwitchOther: string;
+  confirmMessage: string;
+  confirmJoin: string;
+  confirmContinue: string;
+  confirmBack: string;
 }> = {
   ar: {
     dir: "rtl",
@@ -58,6 +63,10 @@ const COPY: Record<Lang, {
     anonymous: "مجهولة الهوية",
     prize: "سحب على ٥٠٠ ريال سعودي",
     langSwitchOther: "English",
+    confirmMessage: "قبل أن تتابع، نأمل أن تفكر في المشاركة في الدراسة — مشاركتك تهمنا.",
+    confirmJoin: "شارك في الدراسة",
+    confirmContinue: "متابعة إلى الموقع",
+    confirmBack: "العودة للصفحة السابقة",
   },
   en: {
     dir: "ltr",
@@ -80,6 +89,10 @@ const COPY: Record<Lang, {
     anonymous: "Anonymous responses",
     prize: "SAR 500 prize draw",
     langSwitchOther: "العربية",
+    confirmMessage: "Before you continue, please consider taking part in the study — your participation matters.",
+    confirmJoin: "Join the study",
+    confirmContinue: "Continue to website",
+    confirmBack: "Go back",
   },
 };
 
@@ -108,6 +121,8 @@ export function StudyInvitationOverlay() {
   const [mounted, setMounted] = useState(false);
   const [lang, setLang] = useState<Lang>("ar");
   const [open, setOpen] = useState(false);
+  const [step, setStep] = useState<"invite" | "confirm">("invite");
+  const [launching, setLaunching] = useState(false);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const detailsRef = useRef<HTMLDivElement | null>(null);
   const pushedRef = useRef(false);
@@ -255,6 +270,41 @@ export function StudyInvitationOverlay() {
     close();
   }
 
+  function prefersReducedMotion() {
+    try {
+      return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    } catch {
+      return false;
+    }
+  }
+
+  function openSkipConfirm() {
+    trackEvent("study_skip_clicked");
+    setStep("confirm");
+  }
+
+  function continueToSite() {
+    trackEvent("study_skip_continue_site");
+    if (launching) return;
+    persist();
+    setLaunching(true);
+    window.setTimeout(close, prefersReducedMotion() ? 200 : 820);
+  }
+
+  function goBackToPreviousPage() {
+    trackEvent("study_skip_go_back");
+    persist();
+    dismissingRef.current = true;
+    try {
+      // Step past our temporary overlay entry to the real previous page.
+      window.history.go(pushedRef.current ? -2 : -1);
+      return;
+    } catch {
+      dismissingRef.current = false;
+    }
+    close();
+  }
+
 
   if (!visible) return null;
 
@@ -263,7 +313,7 @@ export function StudyInvitationOverlay() {
   return (
     <>
       <div
-        className="fixed inset-0 z-[300] flex flex-col"
+        className={`fixed inset-0 z-[300] flex flex-col${launching ? " aqla-launching" : ""}`}
         style={{
           opacity: mounted ? 1 : 0,
           transition: "opacity 500ms ease-out",
@@ -271,11 +321,23 @@ export function StudyInvitationOverlay() {
         role="presentation"
       >
         {/* Deep Saudi-green environment */}
-        <div aria-hidden className="study-environment pointer-events-none absolute inset-0 z-0" />
+        <div aria-hidden className="study-environment aqla-launch-fade pointer-events-none absolute inset-0 z-0" />
         {/* Flag kept only as a subtle texture underneath the green field */}
         <div className="pointer-events-none absolute inset-0 z-[1] opacity-[0.14] mix-blend-soft-light">
           <SaudiFlagWave />
         </div>
+        {/* Launch light streaks */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-[5] overflow-hidden">
+          {launching &&
+            [18, 34, 50, 66, 82].map((left, i) => (
+              <span
+                key={left}
+                className="aqla-launch-streak"
+                style={{ left: `${left}%`, animationDelay: `${i * 55}ms` }}
+              />
+            ))}
+        </div>
+
         {/* Backdrop click closes */}
         <button
           type="button"
@@ -290,7 +352,7 @@ export function StudyInvitationOverlay() {
             <div className="relative z-20">
               <ResearchBanner />
             </div>
-            <div className="flex flex-1 items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6">
+            <div className="flex flex-1 items-center justify-center overflow-y-auto px-4 py-4 sm:px-6 sm:py-6">
 
 
 
@@ -303,7 +365,7 @@ export function StudyInvitationOverlay() {
             tabIndex={-1}
             dir={t.dir}
             lang={lang}
-            className="crystal-shell relative flex max-h-[92%] w-full flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
+            className="crystal-shell aqla-launch-panel relative flex max-h-[92%] w-full flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
             style={{
               width: "min(95%, clamp(500px, 61vw, 860px))",
 
@@ -372,6 +434,8 @@ export function StudyInvitationOverlay() {
             </span>
           </div>
 
+          {step === "invite" ? (
+          <div key="invite" className="flex flex-col gap-3.5 sm:gap-4 animate-fade-in">
           {/* Title */}
           <h2
             id="aqla-study-title"
@@ -412,7 +476,7 @@ export function StudyInvitationOverlay() {
 
             <button
               type="button"
-              onClick={close}
+              onClick={openSkipConfirm}
               className="inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl border border-[#0b3a25]/15 bg-transparent px-6 text-[13.5px] font-medium text-[#5a7a6a] transition-colors duration-300 hover:border-[#0b3a25]/28 hover:bg-[#0b3a25]/[0.04] hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25 motion-reduce:transition-none"
             >
               {t.skip}
@@ -488,6 +552,51 @@ export function StudyInvitationOverlay() {
               </div>
             </div>
           </div>
+          </div>
+          ) : (
+          <div key="confirm" dir={t.dir} className="flex flex-col gap-4 animate-fade-in">
+            <p className={`mx-auto max-w-[34ch] text-balance text-center font-semibold text-[#08301e] ${
+              isRTL ? "text-[17px] leading-[1.9] sm:text-[19px]" : "text-[16.5px] leading-[1.6] sm:text-[18px]"
+            }`}>
+              {t.confirmMessage}
+            </p>
+
+            <div className="flex flex-col gap-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  trackEvent("study_skip_join_study");
+                  participate();
+                }}
+                style={{
+                  backgroundImage:
+                    "linear-gradient(135deg, #0d4a2e 0%, #06381f 52%, #0f5636 100%)",
+                  boxShadow:
+                    "inset 0 0 0 1px rgba(201,168,76,0.9), inset 0 1px 0 rgba(255,244,214,0.28), 0 12px 26px -14px rgba(6,56,31,0.55)",
+                }}
+                className="group relative inline-flex min-h-[52px] w-full items-center justify-center overflow-hidden rounded-2xl px-6 text-[15px] font-bold text-[#faf1d8] transition-all duration-300 hover:-translate-y-px hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 motion-reduce:transition-none"
+              >
+                {t.confirmJoin}
+              </button>
+
+              <button
+                type="button"
+                onClick={continueToSite}
+                className="inline-flex min-h-[48px] w-full items-center justify-center rounded-2xl border border-[#0b3a25]/25 bg-[#0b3a25]/[0.04] px-6 text-[14px] font-semibold text-[#0b3a25] transition-colors duration-300 hover:bg-[#0b3a25]/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25 motion-reduce:transition-none"
+              >
+                {t.confirmContinue}
+              </button>
+
+              <button
+                type="button"
+                onClick={goBackToPreviousPage}
+                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full px-6 text-[13px] font-medium text-[#5a7a6a] underline-offset-4 transition-colors duration-300 hover:text-[#0b3a25] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/20 motion-reduce:transition-none"
+              >
+                {t.confirmBack}
+              </button>
+            </div>
+          </div>
+          )}
         </div>
 
         </div>
