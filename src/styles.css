@@ -1209,10 +1209,26 @@ button:not(:disabled),
 [role="button"]:not([aria-disabled="true"]),
 .clickable-card,
 [data-clickable] {
+  /* Kill the ~300ms mobile tap delay and the grey flash on Android/iOS */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition:
-    transform 150ms ease,
-    box-shadow 150ms ease,
-    border-color 150ms ease;
+    transform 110ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 110ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 110ms ease,
+    background-color 110ms ease,
+    opacity 110ms ease;
+  will-change: transform;
+}
+
+/* Immediate physical feedback on press (mouse + touch) */
+a[href]:active,
+button:not(:disabled):active,
+[role="button"]:not([aria-disabled="true"]):active,
+.clickable-card:active,
+[data-clickable]:active {
+  transform: translateY(0) scale(0.985);
+  transition-duration: 60ms;
 }
 
 @media (hover: hover) {
@@ -1225,6 +1241,7 @@ button:not(:disabled),
     box-shadow: 0 0 0 1px var(--gold), 0 4px 14px -8px var(--gold);
   }
 }
+
 
 a[href]:focus-visible,
 button:focus-visible,
