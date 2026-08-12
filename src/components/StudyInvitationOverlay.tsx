@@ -229,7 +229,7 @@ export function StudyInvitationOverlay() {
           </button>
         </div>
 
-        <div className="flex flex-col gap-6 px-7 pb-8 pt-12 sm:px-10 sm:pt-14">
+        <div className="relative z-10 flex flex-col gap-6 px-7 pb-8 pt-12 sm:px-10 sm:pt-14">
           {/* Logo */}
           <div className="flex justify-center">
             <img
