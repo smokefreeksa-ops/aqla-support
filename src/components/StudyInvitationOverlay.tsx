@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { X } from "lucide-react";
+
 import { ResearchBanner } from "@/components/ResearchBanner";
 import SaudiFlagWave from "@/components/SaudiFlagWave";
 import aqlaLogo from "@/assets/aqla-logo.png";
