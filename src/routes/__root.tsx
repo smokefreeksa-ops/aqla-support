@@ -144,6 +144,56 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap",
       },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "أقلع",
+          alternateName: ["Aqla", "اقلع", "منصة أقلع", "Aqla Platform", "لا تتن", "La-Tatten"],
+          url: "https://aqla1.com",
+          logo: "https://aqla1.com/aqla-logo.png",
+          image: "https://aqla1.com/og-aqla-v5.jpg",
+          description:
+            "أقلع — منصة سعودية مجانية للإقلاع عن التدخين والنيكوتين: تقييم الاعتماد، خطة إقلاع، متابعة، وتدريب.",
+          sameAs: [
+            "https://x.com/SmokeOffKSA",
+            "https://althobiani.com",
+            "https://la-tatten.com",
+          ],
+          founder: {
+            "@type": "Person",
+            name: "Malik A. Althobiani",
+            alternateName: ["د. مالك الذبياني", "مالك الذبياني"],
+            jobTitle: "Assistant Professor",
+            affiliation: {
+              "@type": "CollegeOrUniversity",
+              name: "King Abdulaziz University",
+            },
+            url: "https://althobiani.com",
+            sameAs: [
+              "https://orcid.org/0000-0002-2760-6929",
+              "https://scholar.google.com/citations?user=Malik-Althobiani",
+              "https://www.linkedin.com/in/malik-althobiani",
+              "https://althobiani.com",
+            ],
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "أقلع",
+          alternateName: ["Aqla", "اقلع", "منصة أقلع", "Aqla Platform", "لا تتن", "La-Tatten"],
+          url: "https://aqla1.com",
+          inLanguage: ["ar", "en"],
+          publisher: { "@type": "Organization", name: "أقلع" },
+        }),
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
