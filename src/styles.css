@@ -621,13 +621,19 @@ body {
   overflow: hidden;
   clip-path: var(--gem-cut);
   background:
+    radial-gradient(
+      ellipse 76% 72% at 50% 50%,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0.62) 58%,
+      rgba(255, 255, 255, 0.8) 100%
+    ),
     linear-gradient(
       150deg,
-      rgba(255, 255, 255, 0.8) 0%,
-      rgba(248, 250, 252, 0.66) 26%,
-      rgba(255, 255, 255, 0.7) 50%,
-      rgba(244, 247, 250, 0.64) 74%,
-      rgba(255, 255, 255, 0.82) 100%
+      rgba(255, 255, 255, 0.36) 0%,
+      rgba(248, 250, 252, 0.2) 26%,
+      rgba(255, 255, 255, 0.24) 50%,
+      rgba(244, 247, 250, 0.2) 74%,
+      rgba(255, 255, 255, 0.38) 100%
     );
   backdrop-filter: blur(22px) grayscale(1) brightness(2.05) contrast(0.9);
   box-shadow:
