@@ -243,7 +243,7 @@ export function StudyInvitationOverlay() {
           <div className="flex flex-col items-center gap-1.5 text-center">
             <div className="flex items-center gap-2">
               <span aria-hidden className="h-px w-6 bg-[#c9a84c]/60" />
-              <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#c9a84c]">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#96751c]">
                 {t.eyebrow}
               </span>
               <span aria-hidden className="h-px w-6 bg-[#c9a84c]/60" />
