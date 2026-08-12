@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
 import SaudiFlagWave from "@/components/SaudiFlagWave";
+import { ResearchBanner } from "@/components/ResearchBanner";
 import aqlaLogo from "@/assets/aqla-logo-transparent.png";
+
 
 
 
@@ -285,7 +287,11 @@ export function StudyInvitationOverlay() {
 
 
           <div className="relative z-10 flex h-full flex-col">
-           <div className="flex flex-1 items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6">
+            <div className="relative z-20">
+              <ResearchBanner />
+            </div>
+            <div className="flex flex-1 items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6">
+
 
 
           {/* Modal */}
