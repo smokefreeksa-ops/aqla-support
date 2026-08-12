@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { BackButton } from "@/components/BackButton";
 import { ArrowLeft, RefreshCw, Mail, CheckCircle2, XCircle, Clock, ChevronDown, ChevronRight } from "lucide-react";
 import { listQuitPlanEmails, type QuitPlanGroup } from "@/lib/quit-plan-emails.functions";
 

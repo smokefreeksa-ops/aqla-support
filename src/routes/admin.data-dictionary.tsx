@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DATA_DICTIONARY } from "@/lib/data-dictionary";
+import { BackButton } from "@/components/BackButton";
 import { ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/admin/data-dictionary")({
