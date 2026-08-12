@@ -546,17 +546,30 @@ body {
 }
 
 /* ==========================================================
-   LUMINOUS CRYSTAL PANEL IN A DEEP SAUDI-GREEN ENVIRONMENT
-   (study invitation modal only)
+   FLAWLESS D-COLOUR DIAMOND SLAB (study invitation modal only)
    ========================================================== */
 :root {
   --study-emerald: #0b3a25;
   --study-forest: #2d5a45;
   --study-gold: #c9a84c;
   --study-sage: #5a7a6a;
+  --gem-cut: polygon(
+    7% 0,
+    93% 0,
+    97.5% 2.6%,
+    100% 8%,
+    100% 92%,
+    97.5% 97.4%,
+    93% 100%,
+    7% 100%,
+    2.5% 97.4%,
+    0 92%,
+    0 8%,
+    2.5% 2.6%
+  );
 }
 
-/* Deep Saudi-green field: vivid, saturated, and completely untouched by the panel */
+/* Deep Saudi-green field behind the gem — untouched by panel light */
 .study-environment {
   background: radial-gradient(
     ellipse at 50% 48%,
@@ -567,8 +580,8 @@ body {
   );
 }
 
-/* Aura removed so the green background stays untouched */
-.study-aura {
+.study-aura,
+.crystal-backlight {
   display: none;
 }
 
@@ -576,133 +589,261 @@ body {
   position: relative;
   width: 100%;
   isolation: isolate;
-  /* No outward glow — all light stays inside the crystal */
 }
 
-/* Exterior backlight removed so the green background stays untouched */
-.crystal-backlight {
-  display: none;
+/* Narrow, controlled reflected-light pool under the gem (jewellery photography) */
+.crystal-shell::after {
+  content: "";
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  bottom: -14px;
+  height: 22px;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0.16) 42%,
+    transparent 72%
+  );
+  filter: blur(9px);
 }
 
+/* ---------- 1. Crystal body ---------- */
 .crystal-panel {
   position: relative;
   width: 100%;
   overflow: hidden;
-  clip-path: polygon(
-    8% 0,
-    92% 0,
-    97% 3%,
-    100% 9%,
-    100% 91%,
-    97% 97%,
-    92% 100%,
-    8% 100%,
-    3% 97%,
-    0 91%,
-    0 9%,
-    3% 3%
-  );
-  border: 1.5px solid rgba(255, 255, 255, 0.72);
-  /* More translucent glass body so the green environment shows through */
-  background: linear-gradient(
-    145deg,
-    rgba(245, 255, 250, 0.16) 0%,
-    rgba(225, 245, 235, 0.09) 48%,
-    rgba(205, 232, 220, 0.12) 100%
-  );
-  backdrop-filter: blur(22px) saturate(120%) brightness(1.02);
-
-  /* Only inset light — no exterior glow leaks into the green background */
+  clip-path: var(--gem-cut);
+  background:
+    linear-gradient(
+      152deg,
+      rgba(255, 255, 255, 0.94) 0%,
+      rgba(255, 255, 255, 0.86) 22%,
+      rgba(253, 254, 255, 0.9) 46%,
+      rgba(255, 255, 255, 0.84) 68%,
+      rgba(255, 255, 255, 0.93) 100%
+    );
+  backdrop-filter: blur(18px) saturate(15%) brightness(1.45);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.48),
-    inset 0 0 14px rgba(255, 255, 255, 0.22),
-    inset 0 -40px 70px rgba(255, 255, 255, 0.04),
-    inset 0 40px 70px rgba(0, 70, 48, 0.06);
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.95),
+    inset 0 0 22px rgba(255, 255, 255, 0.5),
+    inset 0 0 60px rgba(255, 255, 255, 0.22);
 }
 
-/* Inset crystal line (first facet ring) */
+
+/* ---------- 2. Perimeter facet ring (deep polygonal facets) ---------- */
+.crystal-facets-outer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    conic-gradient(
+      from 0deg at 50% 50%,
+      rgba(255, 255, 255, 0.9) 0deg 7deg,
+      rgba(196, 209, 216, 0.3) 7deg 22deg,
+      rgba(255, 255, 255, 0.8) 22deg 30deg,
+      rgba(206, 217, 223, 0.22) 30deg 46deg,
+      rgba(255, 255, 255, 0.88) 46deg 53deg,
+      rgba(193, 206, 214, 0.28) 53deg 74deg,
+      rgba(255, 255, 255, 0.72) 74deg 81deg,
+      rgba(205, 216, 222, 0.2) 81deg 104deg,
+      rgba(255, 255, 255, 0.86) 104deg 112deg,
+      rgba(196, 209, 216, 0.3) 112deg 136deg,
+      rgba(255, 255, 255, 0.74) 136deg 143deg,
+      rgba(207, 218, 224, 0.2) 143deg 168deg,
+      rgba(255, 255, 255, 0.9) 168deg 176deg,
+      rgba(195, 208, 215, 0.28) 176deg 200deg,
+      rgba(255, 255, 255, 0.76) 200deg 208deg,
+      rgba(206, 217, 223, 0.22) 208deg 232deg,
+      rgba(255, 255, 255, 0.86) 232deg 240deg,
+      rgba(194, 207, 214, 0.3) 240deg 266deg,
+      rgba(255, 255, 255, 0.72) 266deg 273deg,
+      rgba(207, 218, 224, 0.2) 273deg 298deg,
+      rgba(255, 255, 255, 0.88) 298deg 306deg,
+      rgba(196, 209, 216, 0.26) 306deg 330deg,
+      rgba(255, 255, 255, 0.78) 330deg 338deg,
+      rgba(205, 216, 222, 0.22) 338deg 360deg
+    );
+  -webkit-mask-image: radial-gradient(
+    ellipse 78% 74% at 50% 50%,
+    transparent 62%,
+    rgba(0, 0, 0, 0.55) 80%,
+    #000 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 78% 74% at 50% 50%,
+    transparent 62%,
+    rgba(0, 0, 0, 0.55) 80%,
+    #000 100%
+  );
+}
+
+
+/* ---------- 3. Multi-step polished bevels ---------- */
 .crystal-panel::before {
   content: "";
   position: absolute;
-  inset: 7px;
-  z-index: 3;
+  inset: 6px;
+  z-index: 4;
   pointer-events: none;
-  clip-path: polygon(
-    7.4% 0,
-    92.6% 0,
-    97% 3.4%,
-    100% 9%,
-    100% 91%,
-    97% 96.6%,
-    92.6% 100%,
-    7.4% 100%,
-    3% 96.6%,
-    0 91%,
-    0 9%,
-    3% 3.4%
-  );
-  border: 1px solid rgba(255, 255, 255, 0.42);
+  clip-path: var(--gem-cut);
+  border: 1px solid rgba(255, 255, 255, 0.85);
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.16), transparent 10%),
-    linear-gradient(315deg, rgba(226, 255, 240, 0.12), transparent 12%);
+    linear-gradient(145deg, rgba(255, 255, 255, 0.4) 0%, transparent 7%),
+    linear-gradient(325deg, rgba(255, 255, 255, 0.34) 0%, transparent 7%);
 }
 
-/* Second fine inset line */
 .crystal-panel::after {
   content: "";
   position: absolute;
-  inset: 15px;
-  z-index: 3;
+  inset: 13px;
+  z-index: 4;
   pointer-events: none;
-  clip-path: polygon(
-    6.5% 0,
-    93.5% 0,
-    100% 8%,
-    100% 92%,
-    93.5% 100%,
-    6.5% 100%,
-    0 92%,
-    0 8%
-  );
-  border: 1px solid rgba(210, 255, 232, 0.2);
+  clip-path: var(--gem-cut);
+  border: 1px solid rgba(255, 255, 255, 0.55);
 }
 
-/* Corner facets + diagonal reflection sweep */
+.crystal-bevel-3 {
+  position: absolute;
+  inset: 21px;
+  z-index: 4;
+  pointer-events: none;
+  clip-path: var(--gem-cut);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ---------- 4. Calm crystalline centre planes (crisp boundaries) ---------- */
 .crystal-inner-highlight {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
+  opacity: 0.9;
   background:
-    /* soft diagonal reflection streak */
     linear-gradient(
-      165deg,
-      transparent 14%,
-      rgba(255, 255, 255, 0.16) 25%,
-      rgba(255, 255, 255, 0.05) 38%,
-      transparent 50%
+      118deg,
+      transparent 0 30%,
+      rgba(255, 255, 255, 0.85) 30% 41%,
+      rgba(198, 211, 218, 0.22) 41% 58%,
+      rgba(255, 255, 255, 0.6) 58% 64%,
+      transparent 64% 100%
     ),
-    /* corner facet highlights */
-    linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 9%),
-    linear-gradient(225deg, rgba(255, 255, 255, 0.16) 0%, transparent 8%),
-    linear-gradient(45deg, rgba(226, 255, 240, 0.14) 0%, transparent 8%),
-    linear-gradient(315deg, rgba(226, 255, 240, 0.12) 0%, transparent 8%),
-    /* subtle bottom highlight */
-    linear-gradient(0deg, rgba(255, 255, 255, 0.08) 0%, transparent 12%);
+    linear-gradient(
+      -104deg,
+      transparent 0 22%,
+      rgba(202, 214, 221, 0.2) 22% 33%,
+      transparent 33% 71%,
+      rgba(255, 255, 255, 0.7) 71% 79%,
+      transparent 79% 100%
+    ),
+    linear-gradient(
+      42deg,
+      transparent 0 46%,
+      rgba(200, 212, 219, 0.18) 46% 52%,
+      transparent 52% 100%
+    );
 }
 
+
+/* ---------- 5. High-luminance specular sweeps ---------- */
+.crystal-specular {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  mix-blend-mode: plus-lighter;
+  background:
+    linear-gradient(
+      160deg,
+      transparent 0 12%,
+      rgba(255, 255, 255, 0.78) 12% 17%,
+      transparent 17% 24%,
+      rgba(255, 255, 255, 0.34) 24% 27%,
+      transparent 27% 100%
+    ),
+    linear-gradient(
+      -158deg,
+      transparent 0 76%,
+      rgba(255, 255, 255, 0.5) 76% 81%,
+      transparent 81% 88%,
+      rgba(255, 255, 255, 0.24) 88% 91%,
+      transparent 91% 100%
+    );
+}
+
+/* ---------- 6. Corner brilliance ---------- */
+.crystal-corner-brilliance {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  mix-blend-mode: plus-lighter;
+  background:
+    radial-gradient(circle 90px at 3% 3%, rgba(255, 255, 255, 0.85), transparent 62%),
+    radial-gradient(circle 90px at 97% 3%, rgba(255, 255, 255, 0.78), transparent 62%),
+    radial-gradient(circle 80px at 3% 97%, rgba(255, 255, 255, 0.7), transparent 62%),
+    radial-gradient(circle 80px at 97% 97%, rgba(255, 255, 255, 0.72), transparent 62%);
+}
+
+/* ---------- 7. Star flares at facet intersections ---------- */
+.crystal-flares {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  mix-blend-mode: plus-lighter;
+  background:
+    /* flare 1 */
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent) 9% 8% / 88px 1.5px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.95), transparent) 9% 8% / 1.5px 68px no-repeat,
+    /* flare 2 */
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent) 91% 15% / 66px 1.4px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.8), transparent) 91% 15% / 1.4px 52px no-repeat,
+    /* flare 3 */
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.72), transparent) 6% 62% / 54px 1.2px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.72), transparent) 6% 62% / 1.2px 44px no-repeat,
+    /* flare 4 */
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent) 94% 84% / 52px 1.2px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.7), transparent) 94% 84% / 1.2px 42px no-repeat,
+    /* flare 5 */
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.62), transparent) 50% 3% / 44px 1.1px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.62), transparent) 50% 3% / 1.1px 34px no-repeat;
+}
+
+/* ---------- 8. Restrained spectral dispersion at a few edge intersections ---------- */
+.crystal-dispersion {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0.26;
+  background:
+    radial-gradient(circle 16px at 4.5% 12%, rgba(120, 200, 255, 0.5), transparent 70%),
+    radial-gradient(circle 14px at 7% 11%, rgba(255, 170, 210, 0.45), transparent 70%),
+    radial-gradient(circle 14px at 95% 24%, rgba(255, 215, 140, 0.45), transparent 70%),
+    radial-gradient(circle 13px at 93% 26%, rgba(150, 255, 220, 0.38), transparent 70%),
+    radial-gradient(circle 13px at 6% 92%, rgba(180, 170, 255, 0.4), transparent 70%),
+    radial-gradient(circle 13px at 94% 94%, rgba(255, 190, 160, 0.38), transparent 70%);
+  filter: blur(2px);
+
+}
+
+/* Legacy layers reduced to faint internal texture */
 .glass-frost {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.35;
+  opacity: 0.22;
   background:
-    radial-gradient(ellipse at 14% 18%, rgba(255, 255, 255, 0.18), transparent 12%),
-    radial-gradient(ellipse at 83% 20%, rgba(232, 255, 244, 0.14), transparent 13%),
-    radial-gradient(ellipse at 26% 72%, rgba(255, 255, 255, 0.1), transparent 17%),
-    radial-gradient(ellipse at 75% 64%, rgba(226, 255, 240, 0.12), transparent 15%);
-  filter: blur(8px);
+    radial-gradient(ellipse at 16% 20%, rgba(255, 255, 255, 0.4), transparent 14%),
+    radial-gradient(ellipse at 82% 24%, rgba(255, 255, 255, 0.32), transparent 14%),
+    radial-gradient(ellipse at 30% 74%, rgba(255, 255, 255, 0.26), transparent 16%);
+  filter: blur(6px);
 }
 
 .glass-noise {
@@ -710,11 +851,11 @@ body {
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  opacity: 0.05;
+  opacity: 0.04;
   background-image: repeating-radial-gradient(
     circle at 0 0,
     transparent 0,
-    rgba(255, 255, 255, 0.3) 1px,
+    rgba(255, 255, 255, 0.35) 1px,
     transparent 2px,
     transparent 7px
   );
@@ -722,23 +863,35 @@ body {
   mix-blend-mode: screen;
 }
 
-/* Brilliant thin rim along the flat edges — no outward glow */
+/* Brilliant polished rim — contained inside the gem */
 .crystal-edge-light {
   position: absolute;
-  inset: -1px;
+  inset: 0;
   z-index: 8;
   pointer-events: none;
-  clip-path: inherit;
+  clip-path: var(--gem-cut);
+  mix-blend-mode: plus-lighter;
   background:
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95), transparent)
-      top / 84% 1.5px no-repeat,
-    linear-gradient(90deg, transparent, rgba(226, 255, 240, 0.75), transparent)
-      bottom / 84% 1.5px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.8), transparent)
-      left / 1.5px 82% no-repeat,
-    linear-gradient(180deg, transparent, rgba(226, 255, 240, 0.7), transparent)
-      right / 1.5px 82% no-repeat;
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 1), transparent) top / 92% 2px no-repeat,
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent) bottom / 92% 2px no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.95), transparent) left / 2px 90% no-repeat,
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.95), transparent) right / 2px 90% no-repeat;
 }
+
+/* Mobile: fewer layers, lighter blur */
+@media (max-width: 640px) {
+  .crystal-panel {
+    backdrop-filter: blur(10px) saturate(108%) brightness(1.18);
+  }
+  .crystal-dispersion,
+  .crystal-facets-outer {
+    opacity: 0.28;
+  }
+  .crystal-bevel-3 {
+    display: none;
+  }
+}
+
 
 
 

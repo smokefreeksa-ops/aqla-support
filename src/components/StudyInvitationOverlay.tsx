@@ -191,17 +191,25 @@ export function StudyInvitationOverlay() {
             tabIndex={-1}
             dir={t.dir}
             lang={lang}
-            className="crystal-shell relative flex max-h-[92%] w-full max-w-[520px] flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
+            className="crystal-shell relative flex max-h-[92%] w-full flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
             style={{
+              width: "min(100%, clamp(420px, 50vw, 680px))",
               transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
               transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
             }}
           >
             <div className="crystal-panel flex max-h-full min-h-0 flex-col">
-              <div aria-hidden className="crystal-edge-light" />
+              <div aria-hidden className="crystal-facets-outer" />
               <div aria-hidden className="crystal-inner-highlight" />
+              <div aria-hidden className="crystal-bevel-3" />
+              <div aria-hidden className="crystal-specular" />
+              <div aria-hidden className="crystal-corner-brilliance" />
+              <div aria-hidden className="crystal-dispersion" />
+              <div aria-hidden className="crystal-flares" />
+              <div aria-hidden className="crystal-edge-light" />
               <div aria-hidden className="glass-frost" />
               <div aria-hidden className="glass-noise" />
+
 
 
         <div
@@ -221,7 +229,7 @@ export function StudyInvitationOverlay() {
           </button>
         </div>
 
-        <div className="flex flex-col gap-6 px-7 pb-8 pt-12 sm:px-10 sm:pt-14">
+        <div className="relative z-10 flex flex-col gap-6 px-7 pb-8 pt-12 sm:px-10 sm:pt-14">
           {/* Logo */}
           <div className="flex justify-center">
             <img
@@ -235,7 +243,7 @@ export function StudyInvitationOverlay() {
           <div className="flex flex-col items-center gap-1.5 text-center">
             <div className="flex items-center gap-2">
               <span aria-hidden className="h-px w-6 bg-[#c9a84c]/60" />
-              <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#c9a84c]">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#96751c]">
                 {t.eyebrow}
               </span>
               <span aria-hidden className="h-px w-6 bg-[#c9a84c]/60" />
@@ -258,7 +266,7 @@ export function StudyInvitationOverlay() {
           </h2>
 
           {/* Prize subtitle */}
-          <p className="text-center text-[13.5px] font-bold text-[#b8952f] sm:text-[15px]">
+          <p className="text-center text-[13.5px] font-bold text-[#8a6a1c] sm:text-[15px]">
             {t.prizeSubtitle}
           </p>
 
@@ -270,16 +278,19 @@ export function StudyInvitationOverlay() {
               onClick={participate}
               style={{
                 backgroundImage:
-                  "linear-gradient(135deg, #d8b753 0%, #c9a84c 50%, #dfc26a 100%)",
+                  "linear-gradient(135deg, #0d4a2e 0%, #06381f 52%, #0f5636 100%)",
+                boxShadow:
+                  "inset 0 0 0 1px rgba(201,168,76,0.75), 0 14px 30px -16px rgba(6,56,31,0.65)",
               }}
-              className="group relative inline-flex min-h-[50px] w-full items-center justify-center overflow-hidden rounded-2xl px-6 text-[15px] font-bold text-[#0b3a25] shadow-[0_14px_30px_-14px_rgba(201,168,76,0.6)] transition-all duration-300 hover:brightness-[1.05] hover:shadow-[0_18px_40px_-14px_rgba(201,168,76,0.75)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f5fffa] motion-reduce:transition-none"
+              className="group relative inline-flex min-h-[50px] w-full items-center justify-center overflow-hidden rounded-2xl px-6 text-[15px] font-bold text-[#f3e6c0] transition-all duration-300 hover:brightness-[1.1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white motion-reduce:transition-none"
             >
               <span
                 aria-hidden
-                className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-[1400ms] ease-out group-hover:translate-x-full"
+                className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-[1400ms] ease-out group-hover:translate-x-full"
               />
               <span className="relative">{t.participate}</span>
             </button>
+
             <button
               type="button"
               onClick={close}
