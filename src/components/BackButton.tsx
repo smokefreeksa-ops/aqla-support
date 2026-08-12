@@ -11,6 +11,9 @@ export interface BackButtonProps {
   /** Parent label shown in the button, English. */
   labelEn: string;
   className?: string;
+  /** Override the full button text (e.g. plain "Go back"). */
+  textAr?: string;
+  textEn?: string;
 }
 
 /**
@@ -18,7 +21,7 @@ export interface BackButtonProps {
  * Uses in-app history when available, otherwise navigates to the fallback route.
  * Never exits the site.
  */
-export function BackButton({ fallback, labelAr, labelEn, className }: BackButtonProps) {
+export function BackButton({ fallback, labelAr, labelEn, className, textAr, textEn }: BackButtonProps) {
   const navigate = useNavigate();
   const canGoBack = useCanGoBack();
   const locationKey = useRouterState({ select: (s) => s.location.state?.key });
@@ -44,8 +47,11 @@ export function BackButton({ fallback, labelAr, labelEn, className }: BackButton
     >
       <ArrowLeft className="h-4 w-4 rtl:-scale-x-100" aria-hidden="true" />
       <span>
-        {isAr ? "العودة إلى " : "Back to "}
-        {label}
+        {textAr || textEn
+          ? isAr
+            ? textAr ?? textEn
+            : textEn ?? textAr
+          : `${isAr ? "العودة إلى " : "Back to "}${label}`}
       </span>
     </button>
   );
