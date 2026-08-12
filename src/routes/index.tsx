@@ -116,7 +116,6 @@ function Inner() {
       className="aqla-green-field relative min-h-screen text-[#f4f0e1]"
     >
       <StarfieldCanvas />
-      <DesktopCursor />
       <SiteHeader />
 
       <main>
