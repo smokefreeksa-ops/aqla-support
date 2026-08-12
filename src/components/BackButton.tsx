@@ -21,7 +21,14 @@ export interface BackButtonProps {
  * Uses in-app history when available, otherwise navigates to the fallback route.
  * Never exits the site.
  */
-export function BackButton({ fallback, labelAr, labelEn, className, textAr, textEn }: BackButtonProps) {
+export function BackButton({
+  fallback,
+  labelAr,
+  labelEn,
+  className,
+  textAr,
+  textEn,
+}: BackButtonProps) {
   const navigate = useNavigate();
   const canGoBack = useCanGoBack();
   const locationKey = useRouterState({ select: (s) => s.location.state?.key });
@@ -49,8 +56,8 @@ export function BackButton({ fallback, labelAr, labelEn, className, textAr, text
       <span>
         {textAr || textEn
           ? isAr
-            ? textAr ?? textEn
-            : textEn ?? textAr
+            ? (textAr ?? textEn)
+            : (textEn ?? textAr)
           : `${isAr ? "العودة إلى " : "Back to "}${label}`}
       </span>
     </button>
