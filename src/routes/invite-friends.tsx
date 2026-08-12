@@ -169,7 +169,7 @@ function Inner() {
           <h2 className="text-lg font-semibold">{isAr ? "مشاركة" : "Share"}</h2>
           <div className="mt-3 flex flex-wrap gap-2">
             <Button variant="outline" onClick={() => share("whatsapp")} className="gap-2">
-              <MessageCircle className="h-4 w-4 text-emerald-700" />
+              <MessageCircle className="h-4 w-4 text-brand" />
               {isAr ? "واتساب" : "WhatsApp"}
             </Button>
             <Button variant="outline" onClick={() => share("x")} className="gap-2">

@@ -135,7 +135,7 @@ export function ChallengeBanner() {
           </button>
           <Link
             to="/challenge-pathway"
-            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full bg-emerald-500/95 text-white text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-emerald-600 transition shadow-sm"
+            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full bg-accent-green/95 text-white text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-digital transition shadow-sm"
           >
             <Trophy className="h-3.5 w-3.5" />
             مجتمع وتحديات أقلع

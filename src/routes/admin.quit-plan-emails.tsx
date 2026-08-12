@@ -18,7 +18,7 @@ export const Route = createFileRoute("/admin/quit-plan-emails")({
 
 function statusBadge(status: string) {
   const s = status.toLowerCase();
-  if (s === "sent") return <Badge className="bg-emerald-600 hover:bg-emerald-600">{status}</Badge>;
+  if (s === "sent") return <Badge className="bg-digital hover:bg-digital">{status}</Badge>;
   if (["failed", "error", "bounced"].includes(s)) return <Badge variant="destructive">{status}</Badge>;
   return <Badge variant="secondary">{status}</Badge>;
 }
@@ -95,7 +95,7 @@ function QuitPlanEmailsPage() {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
           <Stat label="Plans" value={totals?.plans ?? 0} icon={<Mail className="h-4 w-4" />} />
           <Stat label="Total emails" value={totals?.emails ?? 0} icon={<Mail className="h-4 w-4" />} />
-          <Stat label="Sent" value={totals?.sent ?? 0} icon={<CheckCircle2 className="h-4 w-4 text-emerald-600" />} />
+          <Stat label="Sent" value={totals?.sent ?? 0} icon={<CheckCircle2 className="h-4 w-4 text-digital" />} />
           <Stat label="Failed" value={totals?.failed ?? 0} icon={<XCircle className="h-4 w-4 text-destructive" />} />
           <Stat label="Queued/other" value={totals?.queued ?? 0} icon={<Clock className="h-4 w-4 text-muted-foreground" />} />
         </div>
@@ -197,7 +197,7 @@ function GroupRow({ group, expanded, onToggle }: { group: QuitPlanGroup; expande
         <td className={`px-3 py-2 text-center ${group.failed > 0 ? "text-destructive font-semibold" : ""}`}>{group.failed}</td>
         <td className="px-3 py-2 text-center">{group.queued}</td>
         <td className="px-3 py-2">
-          {overall === "Sent" && <Badge className="bg-emerald-600 hover:bg-emerald-600">Sent</Badge>}
+          {overall === "Sent" && <Badge className="bg-digital hover:bg-digital">Sent</Badge>}
           {overall === "Partial" && <Badge className="bg-amber-500 hover:bg-amber-500">Partial</Badge>}
           {overall === "Failed" && <Badge variant="destructive">Failed</Badge>}
           {overall === "Queued" && <Badge variant="secondary">Queued</Badge>}

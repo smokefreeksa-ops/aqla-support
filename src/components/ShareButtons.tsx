@@ -52,7 +52,7 @@ export function ShareButtons({
         <Twitter className="h-4 w-4" />
         {lang === "ar" ? "شارك على X" : "Share on X"}
       </Button>
-      <Button size="sm" variant="outline" onClick={() => open(waUrl)} className="gap-2 text-emerald-700">
+      <Button size="sm" variant="outline" onClick={() => open(waUrl)} className="gap-2 text-brand">
         <MessageCircle className="h-4 w-4" />
         WhatsApp
       </Button>

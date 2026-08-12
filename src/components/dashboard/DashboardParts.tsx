@@ -59,7 +59,7 @@ function StatTile({ icon: Icon, label, value }: { icon: typeof Award; label: str
 /* --------------------------------------------------------------- Course */
 
 const STATUS_META: Record<CourseView["status"], { label: string; className: string }> = {
-  completed: { label: "مكتملة", className: "bg-emerald-100 text-emerald-800" },
+  completed: { label: "مكتملة", className: "bg-surface-muted text-ink-secondary" },
   in_progress: { label: "قيد التقدم", className: "bg-amber-100 text-amber-900" },
   not_started: { label: "لم تبدأ", className: "bg-muted text-muted-foreground" },
 };
@@ -121,7 +121,7 @@ export function FinalAssessmentCard({ model }: { model: LearnerModel }) {
         </p>
         <ul className="mt-3 space-y-1.5 text-[12.5px]">
           <li className="flex items-center gap-2">
-            {model.remaining === 0 ? <CheckCircle2 className="h-4 w-4 text-emerald-600" /> : <Lock className="h-4 w-4 text-muted-foreground" />}
+            {model.remaining === 0 ? <CheckCircle2 className="h-4 w-4 text-digital" /> : <Lock className="h-4 w-4 text-muted-foreground" />}
             إكمال الوحدات ({model.completedModules}/{model.totalModules})
           </li>
           <li className="flex items-center gap-2">

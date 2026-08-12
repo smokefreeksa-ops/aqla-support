@@ -43,13 +43,13 @@ function TryIndexPage() {
 
       <main>
         <section className="mx-auto max-w-4xl px-4 pb-2 pt-8 text-center">
-          <p className="mx-auto inline-block rounded-full border border-[#1B6E5F]/25 bg-white px-3 py-1 text-[11px] font-semibold text-[#1B6E5F]">
+          <p className="mx-auto inline-block rounded-full border border-[#007A5A]/25 bg-white px-3 py-1 text-[11px] font-semibold text-[#007A5A]">
             مجاناً • بدون تسجيل • خصوصية كاملة
           </p>
-          <h1 className="mt-3 text-2xl font-bold text-[#10352F] sm:text-3xl">
+          <h1 className="mt-3 text-2xl font-bold text-[#0B3A25] sm:text-3xl">
             جرّب أدوات أقلع الآن
           </h1>
-          <p className="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-[#10352F]/75 sm:text-base">
+          <p className="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-[#0B3A25]/75 sm:text-base">
             ثلاث أدوات تفاعلية تكشف علاقتك بالتدخين خلال دقائق — شارك نتيجتك وساعد غيرك يبدأ رحلته.
           </p>
         </section>
@@ -57,14 +57,14 @@ function TryIndexPage() {
         <KnowYourSmokingSection />
 
         <section className="mx-auto max-w-3xl px-4 py-10 text-center">
-          <div className="rounded-3xl border border-[#1B6E5F]/25 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-bold text-[#10352F] sm:text-xl">جاهز للخطوة الفعلية؟</h2>
-            <p className="mt-2 text-sm text-[#10352F]/70">
+          <div className="rounded-3xl border border-[#007A5A]/25 bg-white p-6 shadow-sm">
+            <h2 className="text-lg font-bold text-[#0B3A25] sm:text-xl">جاهز للخطوة الفعلية؟</h2>
+            <p className="mt-2 text-sm text-[#0B3A25]/70">
               ادخل منصة أقلع الكاملة: خطة إقلاع شخصية، دعم فوري، ومجتمع يساندك.
             </p>
             <Link
               to="/"
-              className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#1B6E5F] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0e4a30]"
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#007A5A] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0e4a30]"
             >
               <span>ابدأ رحلتك مع أقلع</span>
               <ArrowRight className="h-4 w-4 rotate-180" />

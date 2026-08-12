@@ -109,13 +109,13 @@ function CalmProtocol({ ar }: { ar: boolean }) {
   const scale = step === "in" ? 1.35 : step === "hold" ? 1.35 : 0.85;
 
   return (
-    <div className="mt-6 rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-6 text-center">
-      <div className="flex items-center justify-center gap-2 text-emerald-400 font-semibold mb-4">
+    <div className="mt-6 rounded-2xl border border-accent-green/30 bg-accent-green/5 p-6 text-center">
+      <div className="flex items-center justify-center gap-2 text-accent-green-light font-semibold mb-4">
         <Wind className="w-5 h-5" />
         {ar ? "بروتوكول التهدئة 4-7-8" : "Calm Protocol 4-7-8"}
       </div>
       <div
-        className="mx-auto flex h-40 w-40 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400/40 to-emerald-700/40 transition-transform duration-1000 ease-in-out"
+        className="mx-auto flex h-40 w-40 items-center justify-center rounded-full bg-gradient-to-br from-accent-green-light/40 to-brand/40 transition-transform duration-1000 ease-in-out"
         style={{ transform: `scale(${scale})` }}
       >
         <div className="text-center">
@@ -177,7 +177,7 @@ function VoiceCravingScan() {
     <div dir={dir} className="min-h-screen bg-[#05090a] text-white">
       <div className="mx-auto max-w-3xl px-4 py-16 md:py-24">
         <div className="mb-8 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-300">
+          <div className="inline-flex items-center gap-2 rounded-full border border-accent-green-light/30 bg-accent-green-light/10 px-3 py-1 text-xs font-semibold text-accent-green-light">
             <ShieldCheck className="h-3.5 w-3.5" />
             {ar ? "معالجة كاملة على جهازك · لا حفظ ولا رفع" : "On-device only · Nothing stored or uploaded"}
           </div>
@@ -200,7 +200,7 @@ function VoiceCravingScan() {
               className="group relative flex h-40 w-40 items-center justify-center rounded-full bg-gradient-to-br from-[#00A65A] to-[#006C35] text-white shadow-[0_0_60px_rgba(0,166,90,0.35)] transition-transform active:scale-95 disabled:opacity-70"
             >
               {phase === "recording" && (
-                <span className="absolute inset-0 rounded-full border-2 border-emerald-300/60 animate-ping" />
+                <span className="absolute inset-0 rounded-full border-2 border-accent-green-light/60 animate-ping" />
               )}
               {phase === "analyzing" ? (
                 <Loader2 className="h-14 w-14 animate-spin" />
@@ -295,7 +295,7 @@ function VoiceCravingScan() {
                 </button>
                 <Link
                   to="/craving-coach"
-                  className="rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-bold text-white hover:bg-emerald-400"
+                  className="rounded-xl bg-accent-green px-5 py-2.5 text-sm font-bold text-white hover:bg-accent-green-light"
                 >
                   {ar ? "أدوات إضافية للحظة الرغبة" : "More craving tools"}
                 </Link>
@@ -317,10 +317,10 @@ function VoiceCravingScan() {
 function Metric({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
     <div
-      className={`rounded-xl border p-3 text-center ${highlight ? "border-emerald-400/40 bg-emerald-400/10" : "border-white/10 bg-white/5"}`}
+      className={`rounded-xl border p-3 text-center ${highlight ? "border-accent-green-light/40 bg-accent-green-light/10" : "border-white/10 bg-white/5"}`}
     >
       <div className="text-[10px] uppercase tracking-widest text-white/50">{label}</div>
-      <div className={`mt-1 text-lg font-extrabold tabular-nums ${highlight ? "text-emerald-300" : "text-white"}`}>
+      <div className={`mt-1 text-lg font-extrabold tabular-nums ${highlight ? "text-accent-green-light" : "text-white"}`}>
         {value}
       </div>
     </div>
@@ -329,7 +329,7 @@ function Metric({ label, value, highlight }: { label: string; value: string; hig
 
 function BandBar({ band, jitter }: { band: Result["band"]; jitter: number }) {
   const pct = Math.round(jitter * 100);
-  const color = band === "surge" ? "bg-red-500" : band === "watch" ? "bg-amber-400" : "bg-emerald-400";
+  const color = band === "surge" ? "bg-red-500" : band === "watch" ? "bg-amber-400" : "bg-accent-green-light";
   return (
     <div>
       <div className="relative h-3 w-full overflow-hidden rounded-full bg-white/5">

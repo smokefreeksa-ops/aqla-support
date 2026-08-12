@@ -188,7 +188,7 @@ function DebugPanel({
     ? PROTOCOLS[machine.selection.protocol]
     : undefined;
   return (
-    <div className="absolute bottom-2 start-2 text-[10px] font-mono bg-black/70 text-green-300 p-2 rounded max-w-[280px] leading-tight">
+    <div className="absolute bottom-2 start-2 text-[10px] font-mono bg-black/70 text-accent-green-light p-2 rounded max-w-[280px] leading-tight">
       <div>state: {machine.state}</div>
       <div>cravingBefore: {String(machine.cravingBefore)}</div>
       <div>cravingAfter: {String(machine.cravingAfter)}</div>

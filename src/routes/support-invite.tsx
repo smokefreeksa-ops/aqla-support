@@ -227,13 +227,13 @@ function SupportInvitePage() {
     : null;
 
   return (
-    <div dir={dir} className="min-h-screen bg-gradient-to-br from-emerald-50 via-stone-50 to-teal-50">
+    <div dir={dir} className="min-h-screen bg-gradient-to-br from-surface-soft via-stone-50 to-teal-50">
       {/* Header */}
-      <header className="border-b border-emerald-700/10 bg-white/70 backdrop-blur">
+      <header className="border-b border-brand/10 bg-white/70 backdrop-blur">
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <AqlaLogoBadge size={36} />
-            <span className="font-semibold text-emerald-900">{isAr ? "أقلع" : "Aqla"}</span>
+            <span className="font-semibold text-ink">{isAr ? "أقلع" : "Aqla"}</span>
           </Link>
           <div className="flex items-center gap-2">
             <Link to="/challenges">
@@ -256,7 +256,7 @@ function SupportInvitePage() {
             <ShieldCheck className="me-1 inline h-3.5 w-3.5" />
             {isAr ? "رسائل دعم محترمة، بدون ضغط" : "Respectful support, no pressure"}
           </Badge>
-          <h1 className="text-3xl sm:text-4xl font-bold text-emerald-900">
+          <h1 className="text-3xl sm:text-4xl font-bold text-ink">
             {isAr ? "أرسل رسالة لشخص يهمك" : "Send a Message to Someone You Care About"}
           </h1>
           <p className="mt-3 text-muted-foreground">
@@ -373,7 +373,7 @@ function SupportInvitePage() {
           <div className="space-y-4">
             <div
               ref={cardRef}
-              className="rounded-2xl border border-emerald-700/20 bg-[#fffdf7] shadow-elegant p-6 sm:p-8"
+              className="rounded-2xl border border-brand/20 bg-[#fffdf7] shadow-elegant p-6 sm:p-8"
               style={{ minHeight: 480 }}
             >
               <div className="flex items-center justify-between">
@@ -385,33 +385,33 @@ function SupportInvitePage() {
                     className="h-12 w-12 object-contain rounded-lg bg-white p-1 shadow-sm"
                   />
                   <div>
-                    <div className="font-bold text-emerald-900 leading-tight">{isAr ? "أقلع" : "Aqla"}</div>
-                    <div className="text-[11px] text-emerald-700">
+                    <div className="font-bold text-ink leading-tight">{isAr ? "أقلع" : "Aqla"}</div>
+                    <div className="text-[11px] text-brand">
                       {isAr ? "رسالة دعم من أقلع" : "A support message from Aqla"}
                     </div>
                   </div>
                 </div>
-                <Badge variant="outline" className="border-emerald-600/40 text-emerald-700 text-[10px]">
+                <Badge variant="outline" className="border-digital/40 text-brand text-[10px]">
                   {SITE_URL.replace(/^https?:\/\//, "")}
                 </Badge>
               </div>
 
-              <div className="mt-6 border-t border-emerald-700/10 pt-4">
-                <div className="text-sm text-emerald-800/80">
-                  {isAr ? "إلى /" : "To /"} <span className="font-semibold text-emerald-900">{recipientDisplay}</span>
+              <div className="mt-6 border-t border-brand/10 pt-4">
+                <div className="text-sm text-ink-secondary/80">
+                  {isAr ? "إلى /" : "To /"} <span className="font-semibold text-ink">{recipientDisplay}</span>
                 </div>
-                <p className="mt-4 text-emerald-950 leading-7 whitespace-pre-line">{message}</p>
-                <div className="mt-6 text-sm text-emerald-800/80">
-                  {isAr ? "من /" : "From /"} <span className="font-semibold text-emerald-900">{inviterDisplay}</span>
+                <p className="mt-4 text-ink leading-7 whitespace-pre-line">{message}</p>
+                <div className="mt-6 text-sm text-ink-secondary/80">
+                  {isAr ? "من /" : "From /"} <span className="font-semibold text-ink">{inviterDisplay}</span>
                 </div>
               </div>
 
-              <div className="mt-6 rounded-xl bg-gradient-to-r from-emerald-700 to-teal-800 text-white p-4 text-center">
+              <div className="mt-6 rounded-xl bg-gradient-to-r from-brand to-teal-800 text-white p-4 text-center">
                 <div className="text-sm">{isAr ? "ابدأ بخطوة بسيطة اليوم" : "Start with one small step today"}</div>
                 <div className="font-bold mt-1">{isAr ? "جرّب أقلع الآن" : "Try Aqla now"}</div>
               </div>
 
-              <div className="mt-4 text-[11px] text-emerald-800/70 text-center">
+              <div className="mt-4 text-[11px] text-ink-secondary/70 text-center">
                 {isAr
                   ? "أقلع — منصة مجانية للجميع، وستبقى مجانية"
                   : "Aqla — free for everyone, and always will be"}
@@ -420,7 +420,7 @@ function SupportInvitePage() {
 
             {shareUrl && (
               <Card className="p-4 space-y-3">
-                <div className="text-sm font-medium text-emerald-900">
+                <div className="text-sm font-medium text-ink">
                   {isAr ? "رابط البطاقة للمشاركة" : "Shareable card link"}
                 </div>
                 <div className="text-xs break-all text-muted-foreground bg-muted p-2 rounded">{shareUrl}</div>
@@ -438,7 +438,7 @@ function SupportInvitePage() {
                   {directWa && (
                     <a href={directWa} target="_blank" rel="noopener noreferrer"
                        onClick={() => trackEvent("support_invite_whatsapp_clicked")}>
-                      <Button size="sm" variant="outline" className="gap-1 text-emerald-700">
+                      <Button size="sm" variant="outline" className="gap-1 text-brand">
                         <MessageCircle className="h-4 w-4" />
                         {isAr ? "إرسال واتساب مباشر" : "Send via WhatsApp"}
                       </Button>
