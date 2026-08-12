@@ -222,7 +222,7 @@ export function StudyInvitationOverlay() {
         />
 
         {/* Language switch */}
-        <div className={`absolute top-3 ${isRTL ? "left-3" : "right-3"} z-10`}>
+        <div className={`absolute top-3 ${isRTL ? "left-3" : "right-3"} z-30`}>
           <button
             type="button"
             onClick={() => setLang(lang === "ar" ? "en" : "ar")}
@@ -233,15 +233,16 @@ export function StudyInvitationOverlay() {
           </button>
         </div>
 
-        <div className="relative z-10 flex flex-col gap-6 px-7 pb-8 pt-12 sm:px-10 sm:pt-14">
+        <div className="relative z-20 flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-7 pb-8 pt-12 sm:px-10 sm:pt-14">
           {/* Logo */}
           <div className="flex justify-center">
             <img
               src={aqlaLogo}
               alt="شعار أقلع — Aqla Logo"
-              className="h-12 w-auto object-contain drop-shadow-[0_3px_14px_rgba(11,58,37,0.28)] sm:h-14"
+              className="h-20 w-auto object-contain drop-shadow-[0_3px_14px_rgba(11,58,37,0.28)] sm:h-24"
             />
           </div>
+
 
           {/* Eyebrow */}
           <div className="flex flex-col items-center gap-1.5 text-center">
