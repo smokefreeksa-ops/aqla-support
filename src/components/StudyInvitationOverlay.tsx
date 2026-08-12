@@ -5,6 +5,7 @@ import { ResearchBanner } from "@/components/ResearchBanner";
 import { trackEvent } from "@/lib/track-event";
 import aqlaLogo from "@/assets/aqla-logo-transparent.png";
 import saudiCrystalMap from "@/assets/saudi-crystal-map.png.asset.json";
+import studyPanelArt from "@/assets/saudi-study-panel.png.asset.json";
 
 
 
@@ -369,19 +370,45 @@ export function StudyInvitationOverlay() {
             className="crystal-shell aqla-launch-panel relative flex max-h-[92%] w-full flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
             style={{
               width: "min(95%, clamp(500px, 61vw, 860px))",
-
-
+              ...(step === "invite"
+                ? { background: "transparent", border: "none", boxShadow: "none", padding: 0 }
+                : {}),
               transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
               transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
             }}
           >
-            <div className="crystal-panel crystal-panel--map flex max-h-full min-h-0 flex-col">
-              <img
-                aria-hidden
-                src={saudiCrystalMap.url}
-                alt=""
-                className="crystal-map-art pointer-events-none absolute inset-0 z-0 h-full w-full select-none object-contain p-4"
-              />
+            <div className={`crystal-panel ${step === "invite" ? "crystal-panel--art" : "crystal-panel--map"} flex max-h-full min-h-0 flex-col`}>
+              {step === "invite" ? (
+                <div className="relative z-10 w-full">
+                  <img
+                    src={studyPanelArt.url}
+                    alt={t.title}
+                    className="block w-full select-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={participate}
+                    aria-label={t.participate}
+                    className="absolute rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/70"
+                    style={{ left: "35%", top: "66%", width: "31%", height: "9.5%" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={openSkipConfirm}
+                    aria-label={t.skip}
+                    className="absolute rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/40"
+                    style={{ left: "44%", top: "76.5%", width: "13%", height: "5.5%" }}
+                  />
+                </div>
+              ) : (
+                <img
+                  aria-hidden
+                  src={saudiCrystalMap.url}
+                  alt=""
+                  className="crystal-map-art pointer-events-none absolute inset-0 z-0 h-full w-full select-none object-contain p-4"
+                />
+              )}
+
 
 
 
@@ -405,7 +432,7 @@ export function StudyInvitationOverlay() {
           </button>
         </div>
 
-        <div className="crystal-content relative z-20 flex min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-4 pb-28 pt-16 sm:gap-4 sm:px-6 sm:pt-20">
+        <div className={`crystal-content relative z-20 min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-4 pb-28 pt-16 sm:gap-4 sm:px-6 sm:pt-20 ${step === "invite" ? "hidden" : "flex"}`}>
 
           {/* Logo */}
           <div className="flex justify-center">
