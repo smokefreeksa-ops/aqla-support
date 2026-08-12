@@ -1016,7 +1016,7 @@ body {
   mix-blend-mode: screen;
 }
 
-/* Brilliant polished rim — contained inside the gem */
+/* Polished rim — segmented into facet-length reflections, not one glow line */
 .crystal-edge-light {
   position: absolute;
   inset: 0;
@@ -1025,10 +1025,34 @@ body {
   clip-path: var(--gem-cut);
   mix-blend-mode: plus-lighter;
   background:
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 1), transparent) top / 94% 2px no-repeat,
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.88), transparent) bottom / 94% 2px no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.95), transparent) left / 2px 92% no-repeat,
-    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.95), transparent) right / 2px 92% no-repeat;
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.98) 0 34px,
+      rgba(255, 255, 255, 0.28) 34px 40px,
+      rgba(255, 255, 255, 0.72) 40px 66px,
+      rgba(255, 255, 255, 0.2) 66px 72px
+    ) top / 94% 2px no-repeat,
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.82) 0 30px,
+      rgba(255, 255, 255, 0.22) 30px 36px,
+      rgba(255, 255, 255, 0.62) 36px 60px,
+      rgba(255, 255, 255, 0.18) 60px 66px
+    ) bottom / 94% 2px no-repeat,
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.9) 0 26px,
+      rgba(255, 255, 255, 0.24) 26px 32px,
+      rgba(255, 255, 255, 0.66) 32px 54px,
+      rgba(255, 255, 255, 0.18) 54px 60px
+    ) left / 2px 92% no-repeat,
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.9) 0 28px,
+      rgba(255, 255, 255, 0.24) 28px 34px,
+      rgba(255, 255, 255, 0.66) 34px 56px,
+      rgba(255, 255, 255, 0.18) 56px 62px
+    ) right / 2px 92% no-repeat;
 }
 
 /* Mobile: fewer layers, lighter blur */
