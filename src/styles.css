@@ -606,27 +606,24 @@ body {
 }
 
 /* ==========================================================
-   FLAWLESS D-COLOUR DIAMOND SLAB (study invitation modal only)
-   Optically neutral: white / silver only. No green in the gem.
+   FRAMED TINTED GLASS SLAB (study invitation modal only)
+   Thick mitred frame + teal-tinted translucent body.
    ========================================================== */
 :root {
   --study-emerald: #0b3a25;
   --study-forest: #2d5a45;
   --study-gold: #c9a84c;
   --study-sage: #5a7a6a;
+  --gem-frame: 16px;
   --gem-cut: polygon(
-    4.2% 0,
-    95.8% 0,
-    98.4% 3.2%,
-    100% 9%,
-    100% 91%,
-    98.4% 96.8%,
-    95.8% 100%,
-    4.2% 100%,
-    1.6% 96.8%,
-    0 91%,
-    0 9%,
-    1.6% 3.2%
+    7% 0,
+    93% 0,
+    100% 11%,
+    100% 89%,
+    93% 100%,
+    7% 100%,
+    0 89%,
+    0 11%
   );
 }
 
