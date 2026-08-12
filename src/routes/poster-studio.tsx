@@ -10,6 +10,7 @@ import { useLangState, LangContext, useLang } from "@/lib/i18n";
 import { recordPosterCreation, recordPosterEvent, isUnsafeMessage } from "@/lib/poster.functions";
 import { createShareCard } from "@/lib/share.functions";
 import { ShareButtons } from "@/components/ShareButtons";
+import { StarfieldCanvas } from "@/components/StarfieldCanvas";
 import { getAnonSessionId } from "@/lib/analytics";
 import { trackEvent } from "@/lib/track-event";
 import { toast } from "sonner";
@@ -284,7 +285,8 @@ function Inner() {
   };
 
   return (
-    <div dir={dir} className="min-h-screen bg-background">
+    <div dir={dir} className="relative min-h-screen bg-background">
+      <StarfieldCanvas />
       <header className="border-b bg-card/70 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <Link to="/" className="flex items-center gap-3">
