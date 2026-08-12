@@ -1166,3 +1166,68 @@ body {
     rgba(0, 8, 4, 0.92) 100%
   );
 }
+
+/* ---------------------------------------------
+   Interaction affordances (native cursors only)
+   --------------------------------------------- */
+a[href],
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary,
+label[for],
+.clickable-card,
+[data-clickable] {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+a[href],
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+.clickable-card,
+[data-clickable] {
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease,
+    border-color 150ms ease;
+}
+
+@media (hover: hover) {
+  a[href]:hover,
+  button:not(:disabled):hover,
+  [role="button"]:not([aria-disabled="true"]):hover,
+  .clickable-card:hover,
+  [data-clickable]:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 1px var(--gold), 0 4px 14px -8px var(--gold);
+  }
+}
+
+a[href]:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible,
+.clickable-card:focus-visible,
+[data-clickable]:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a[href]:hover,
+  button:not(:disabled):hover,
+  [role="button"]:hover,
+  .clickable-card:hover,
+  [data-clickable]:hover {
+    transform: none;
+  }
+}

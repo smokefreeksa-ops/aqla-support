@@ -15,7 +15,7 @@ import FeaturesSection from "@/components/imported/FeaturesSection";
 import ModulesSection from "@/components/imported/ModulesSection";
 import InteractiveToolsSection from "@/components/imported/InteractiveToolsSection";
 import CTASection from "@/components/imported/CTASection";
-import DesktopCursor from "@/components/imported/DesktopCursor";
+
 import KnowYourSmokingSection from "@/components/KnowYourSmokingSection";
 
 
@@ -116,7 +116,6 @@ function Inner() {
       className="aqla-green-field relative min-h-screen text-[#f4f0e1]"
     >
       <StarfieldCanvas />
-      <DesktopCursor />
       <SiteHeader />
 
       <main>
