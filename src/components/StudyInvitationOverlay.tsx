@@ -110,18 +110,86 @@ export function StudyInvitationOverlay() {
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const detailsRef = useRef<HTMLDivElement | null>(null);
   const pushedRef = useRef(false);
+  const visibleRef = useRef(false);
+  const initializedRef = useRef(false);
+  const dismissingRef = useRef(false);
+  const historyEntryIdRef = useRef<string | null>(null);
   const t = COPY[lang];
 
   useEffect(() => {
+    if (initializedRef.current) return;
+    initializedRef.current = true;
+
     // Never cover the personal plan page — it blocks the PDF download button.
     if (typeof window !== "undefined" && window.location.pathname.startsWith("/quit-plan/")) return;
     try {
-      if (sessionStorage.getItem(STORAGE_KEY) !== "1") setVisible(true);
+      if (sessionStorage.getItem(STORAGE_KEY) === "1") return;
     } catch {
-      setVisible(true);
+      // Storage can be unavailable in privacy-restricted browsers. The
+      // invitation still gets one history-aware entry for this mount.
     }
+
+    const entryId =
+      typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+        ? crypto.randomUUID()
+        : `study-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+    try {
+      window.history.pushState(
+        {
+          ...(window.history.state ?? {}),
+          studyInvitationOpen: true,
+          aqlaStudyOverlayId: entryId,
+        },
+        "",
+        window.location.href,
+      );
+      historyEntryIdRef.current = entryId;
+      pushedRef.current = true;
+    } catch {
+      // If History API access fails, retain normal state-only dismissal.
+    }
+
+    visibleRef.current = true;
+    setVisible(true);
   }, []);
 
+  useEffect(() => {
+    const onPop = (event: PopStateEvent) => {
+      const state = event.state as
+        | { studyInvitationOpen?: boolean; aqlaStudyOverlayId?: string }
+        | null;
+      const isOwnedOverlayEntry =
+        state?.studyInvitationOpen === true &&
+        state.aqlaStudyOverlayId === historyEntryIdRef.current;
+
+      dismissingRef.current = false;
+
+      if (isOwnedOverlayEntry) {
+        // An explicit Forward navigation returned to this modal entry.
+        // Reopen it without adding another entry or starting a loop.
+        pushedRef.current = true;
+        visibleRef.current = true;
+        setVisible(true);
+        return;
+      }
+
+      if (pushedRef.current || visibleRef.current) {
+        // Back left the temporary modal entry. The browser has already
+        // restored the exact underlying URL and history state.
+        pushedRef.current = false;
+        visibleRef.current = false;
+        persist();
+        setVisible(false);
+      }
+    };
+
+    // This listener intentionally remains mounted while the app is mounted.
+    // Skip calls history.back() asynchronously, and Forward must also be able
+    // to restore the existing modal entry without creating a new one.
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
 
   useEffect(() => {
     if (!visible) return;
@@ -131,36 +199,15 @@ export function StudyInvitationOverlay() {
     document.body.style.overflow = "hidden";
     const id = window.setTimeout(() => dialogRef.current?.focus(), 40);
 
-    // Push a single history entry so browser/device Back closes the overlay
-    // instead of leaving the site.
-    if (!pushedRef.current) {
-      pushedRef.current = true;
-      try {
-        window.history.pushState(
-          { ...(window.history.state ?? {}), aqlaStudyOverlay: true },
-          "",
-          window.location.href,
-        );
-      } catch { /* ignore */ }
-    }
-
-    const onPop = () => {
-      // Back was pressed while the overlay entry was active: just close.
-      pushedRef.current = false;
-      persist();
-      setVisible(false);
-    };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
     };
     const onDismiss = () => close();
-    window.addEventListener("popstate", onPop);
     window.addEventListener("keydown", onKey);
     window.addEventListener("aqla:dismiss-study-overlay", onDismiss);
     return () => {
       cancelAnimationFrame(r);
       document.body.style.overflow = prevOverflow;
-      window.removeEventListener("popstate", onPop);
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("aqla:dismiss-study-overlay", onDismiss);
       window.clearTimeout(id);
@@ -174,13 +221,33 @@ export function StudyInvitationOverlay() {
     } catch { /* ignore */ }
   }
   function close() {
+    if (dismissingRef.current) return;
     persist();
-    setVisible(false);
-    if (pushedRef.current) {
-      pushedRef.current = false;
-      // Pop the overlay's own history entry so Back doesn't reopen/loop.
-      try { window.history.back(); } catch { /* ignore */ }
+
+    const state = window.history.state as
+      | { studyInvitationOpen?: boolean; aqlaStudyOverlayId?: string }
+      | null;
+    const ownsCurrentEntry =
+      pushedRef.current &&
+      state?.studyInvitationOpen === true &&
+      state.aqlaStudyOverlayId === historyEntryIdRef.current;
+
+    if (ownsCurrentEntry) {
+      // Keep the overlay mounted until popstate confirms that the browser has
+      // restored the underlying entry. This makes Skip, Escape and backdrop
+      // dismissal identical to the browser/system Back action.
+      dismissingRef.current = true;
+      try {
+        window.history.back();
+        return;
+      } catch {
+        dismissingRef.current = false;
+      }
     }
+
+    pushedRef.current = false;
+    visibleRef.current = false;
+    setVisible(false);
   }
   function participate() {
     window.open(REDCAP_URL, "_blank", "noopener,noreferrer");
