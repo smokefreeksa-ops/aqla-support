@@ -376,12 +376,37 @@ export function StudyInvitationOverlay() {
             }}
           >
             <div className="crystal-panel crystal-panel--map flex max-h-full min-h-0 flex-col">
-              <img
-                aria-hidden
-                src={saudiCrystalMap.url}
-                alt=""
-                className="crystal-map-art pointer-events-none absolute inset-0 z-0 h-full w-full select-none object-contain p-4"
-              />
+              {step === "invite" ? (
+                <div className="relative z-10 w-full">
+                  <img
+                    src={studyPanelArt.url}
+                    alt={t.title}
+                    className="block w-full select-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={participate}
+                    aria-label={t.participate}
+                    className="absolute rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/70"
+                    style={{ left: "35%", top: "66%", width: "31%", height: "9.5%" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={openSkipConfirm}
+                    aria-label={t.skip}
+                    className="absolute rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/40"
+                    style={{ left: "44%", top: "76.5%", width: "13%", height: "5.5%" }}
+                  />
+                </div>
+              ) : (
+                <img
+                  aria-hidden
+                  src={saudiCrystalMap.url}
+                  alt=""
+                  className="crystal-map-art pointer-events-none absolute inset-0 z-0 h-full w-full select-none object-contain p-4"
+                />
+              )}
+
 
 
 
