@@ -350,17 +350,27 @@ export function StudyInvitationOverlay() {
           </div>
 
           {/* Details toggle */}
-          <div className="border-t border-[#0b3a25]/12 pt-2">
+          <div ref={detailsRef} className="border-t border-[#0b3a25]/12 pt-1.5">
             <button
               type="button"
-              onClick={() => setOpen((v) => !v)}
+              onClick={() => {
+                const next = !open;
+                setOpen(next);
+                if (next) {
+                  window.setTimeout(
+                    () => detailsRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }),
+                    260,
+                  );
+                }
+              }}
               aria-expanded={open}
               aria-controls="aqla-study-details"
-              className="mx-auto inline-flex min-h-[40px] items-center justify-center gap-1.5 rounded-full px-3 text-[12.5px] font-medium tracking-wide text-[#5a7a6a] transition-colors duration-300 hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25"
+              className="flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-full px-3 text-[12.5px] font-semibold tracking-wide text-[#2d5a45] transition-colors duration-300 hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25"
             >
               <span>{t.detailsToggle}</span>
               <IconChevron open={open} />
             </button>
+
 
             <div
               id="aqla-study-details"
