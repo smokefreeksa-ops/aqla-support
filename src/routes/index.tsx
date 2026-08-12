@@ -15,7 +15,7 @@ import FeaturesSection from "@/components/imported/FeaturesSection";
 import ModulesSection from "@/components/imported/ModulesSection";
 import InteractiveToolsSection from "@/components/imported/InteractiveToolsSection";
 import CTASection from "@/components/imported/CTASection";
-import DesktopCursor from "@/components/imported/DesktopCursor";
+
 import KnowYourSmokingSection from "@/components/KnowYourSmokingSection";
 
 
