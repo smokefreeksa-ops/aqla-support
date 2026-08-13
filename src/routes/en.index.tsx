@@ -17,9 +17,9 @@ export const Route = createFileRoute("/en/")({
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://aqla1.com/en" },
-      { property: "og:image", content: "https://aqla1.com/og-aqla-v5.jpg" },
+      { property: "og:image", content: "https://aqla1.com/og-aqla-v6.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "https://aqla1.com/og-aqla-v5.jpg" },
+      { name: "twitter:image", content: "https://aqla1.com/og-aqla-v6.jpg" },
     ],
     links: [
       { rel: "canonical", href: "https://aqla1.com/en" },
