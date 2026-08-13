@@ -368,7 +368,7 @@ export function StudyInvitationOverlay() {
             tabIndex={-1}
             dir={t.dir}
             lang={lang}
-            className="crystal-shell aqla-launch-panel relative flex max-h-[92%] w-full flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
+            className="crystal-shell aqla-launch-panel relative flex max-h-[92%] w-full flex-col outline-none focus:outline-none focus-visible:outline-none"
             style={{
               width: "min(95%, clamp(500px, 61vw, 860px))",
               transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
@@ -406,11 +406,13 @@ export function StudyInvitationOverlay() {
 
           {/* Logo */}
           <div className="flex justify-center">
+            <span className="inline-flex items-center justify-center rounded-2xl bg-[#f7fdf9]/95 px-6 py-3 shadow-[0_10px_30px_-14px_rgba(0,0,0,0.6)] ring-1 ring-[#c9a84c]/30">
             <img
               src={aqlaLogo}
               alt="شعار أقلع — Aqla Logo"
-              className="h-[56px] w-auto object-contain drop-shadow-[0_6px_18px_rgba(0,0,0,0.45)] sm:h-[72px]"
+              className="h-[52px] w-auto object-contain sm:h-[64px]"
             />
+            </span>
           </div>
 
 
