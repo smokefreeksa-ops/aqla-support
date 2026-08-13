@@ -1167,8 +1167,7 @@ summary:focus-visible,
   clip-path: none !important;
   overflow: hidden;
   border-radius: 26px;
-  background:
-    radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.96), rgba(240, 250, 246, 0.9) 60%, rgba(228, 244, 238, 0.92)) !important;
+  background: transparent !important;
   box-shadow: 0 24px 70px rgba(4, 32, 22, 0.35) !important;
 }
 .crystal-panel--map::before,
@@ -1176,12 +1175,22 @@ summary:focus-visible,
   display: none !important;
 }
 .crystal-panel--map .crystal-map-art {
-  opacity: 0.42;
-  filter: saturate(0.9);
+  opacity: 0.72;
+  filter: saturate(0.95);
 }
 .crystal-panel--map .crystal-content {
   width: 84%;
   margin-inline: auto;
+}
+.crystal-panel--map .crystal-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(120% 110% at 50% 50%, rgba(6, 56, 31, 0.22) 0%, rgba(6, 56, 31, 0.08) 55%, transparent 100%);
+  backdrop-filter: blur(10px) saturate(110%);
+  border-radius: 22px;
 }
 @media (max-width: 900px) {
   .crystal-panel--map {
