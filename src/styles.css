@@ -1162,45 +1162,40 @@ summary:focus-visible,
   }
 }
 
-/* Study panel rendered from the crystal Saudi map artwork */
+/* Study panel — clean deep-green glass card (no map artwork) */
 .crystal-panel--map {
   clip-path: none !important;
   overflow: hidden;
-  border-radius: 26px;
-  background: transparent !important;
-  box-shadow: 0 24px 70px rgba(4, 32, 22, 0.35) !important;
+  border-radius: 24px;
+  border: 1px solid rgba(201, 168, 76, 0.28);
+  background:
+    radial-gradient(120% 100% at 50% 0%, rgba(20, 92, 62, 0.92) 0%, rgba(8, 48, 31, 0.94) 55%, rgba(4, 30, 20, 0.96) 100%) !important;
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 244, 214, 0.12),
+    0 30px 80px -30px rgba(0, 0, 0, 0.65) !important;
 }
 .crystal-panel--map::before,
 .crystal-panel--map::after {
   display: none !important;
 }
-.crystal-panel--map .crystal-map-art {
-  opacity: 0.72;
-  filter: saturate(0.95);
-}
 .crystal-panel--map .crystal-content {
-  width: 84%;
+  width: 100%;
   margin-inline: auto;
 }
 .crystal-panel--map .crystal-content::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(120% 110% at 50% 50%, rgba(6, 56, 31, 0.22) 0%, rgba(6, 56, 31, 0.08) 55%, transparent 100%);
-  backdrop-filter: blur(10px) saturate(110%);
-  border-radius: 22px;
+  content: none;
 }
 @media (max-width: 900px) {
   .crystal-panel--map {
     aspect-ratio: auto;
   }
   .crystal-panel--map .crystal-content {
-    width: 90%;
-    margin-inline: auto;
+    width: 100%;
   }
 }
+
 
 
 /* Baked artwork panel (study invite): image is the whole panel */
