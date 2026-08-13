@@ -402,14 +402,14 @@ export function StudyInvitationOverlay() {
           </button>
         </div>
 
-        <div className="crystal-content relative z-20 min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-4 pb-28 pt-16 sm:gap-4 sm:px-6 sm:pt-20 flex">
+        <div className="crystal-content relative z-20 min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-6 pb-8 pt-7 sm:gap-4 sm:px-10 sm:pb-10 sm:pt-9 flex">
 
           {/* Logo */}
           <div className="flex justify-center">
             <img
               src={aqlaLogo}
               alt="شعار أقلع — Aqla Logo"
-              className="h-[68px] w-auto object-contain drop-shadow-[0_1px_6px_rgba(11,58,37,0.14)] sm:h-24"
+              className="h-[56px] w-auto object-contain drop-shadow-[0_6px_18px_rgba(0,0,0,0.45)] sm:h-[72px]"
             />
           </div>
 
