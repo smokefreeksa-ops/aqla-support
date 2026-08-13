@@ -9,13 +9,23 @@ metadata changes are made until you approve what gets built.
 - Anything unverified is marked **REQUIRES VERIFICATION** and is not proposed for publication.
 - Dr Malik A. Althobiani / د. مالك عبدالملك الذبياني is treated as the professional entity
   associated with AQla; exact public designation (Founder / Director / other), credentials,
-  affiliations and publications are only stated when confirmed from institutional or
-  scholarly sources (e.g. ORCID, Google Scholar, university page, PubMed).
+  affiliations and publications are only stated when confirmed from **primary institutional
+  and scholarly sources first** — university staff pages, ORCID, PubMed, journal pages,
+  official research-group pages. Aggregators (ResearchGate, Scholar profiles, directories,
+  press) are corroboration only, never the sole basis for a published claim.
 - Badael / DZRT: a documented research or collaboration relationship may be described only
   where evidence supports the exact wording. No sponsor, funder, commercial partner, clinical
   partner or endorsement language. No implied endorsement of any nicotine product.
 - ZYN, VELO, Nordic Spirit and others are external entities for landscape/search analysis only.
 - Medical accuracy outranks search opportunity. Marketing claims are never treated as evidence.
+- **No new page is recommended on volume alone.** Every recommendation carries: the query set,
+  volume and difficulty, the observed SERP (who ranks, page type, whether AI Overview / PAA /
+  forum / video dominates), the inferred intent, and an explicit verdict on whether an existing
+  AQla page can satisfy that intent better than a new URL. Default answer is improve, not create.
+- **No application source file is modified in this phase.** The report is written to
+  `docs/research/` (documentation only) and to `/mnt/documents` for download. Nothing under
+  `src/`, `public/`, or config is touched.
+
 
 ## Phase 1 — Codebase truth pass (what AQla actually is)
 
@@ -63,7 +73,8 @@ estimates for what already ranks.
 
 ## Phase 4 — Report
 
-Delivered in chat (and saved as a markdown file in the repo for reference):
+Summarised in chat, written in full to `docs/research/seo-aeo-audit.md` and to
+`/mnt/documents` for download. No application source file is touched.
 
 1. Strongest defendable positioning, with the Arabic and English statements tested against
    verified capability rather than aspiration.
@@ -74,18 +85,31 @@ Delivered in chat (and saved as a markdown file in the repo for reference):
 5. Topical-authority map across the 7 pillars, mapped onto existing routes.
 6. Saudi competitor gap map and the internal capability matrix.
 7. Nicotine-pouch ecosystem and search matrix, with a page-or-not verdict per brand.
-8. Badael/DZRT and founder entity findings, each marked verified or REQUIRES VERIFICATION.
+8. Badael/DZRT and founder entity findings, each marked verified or REQUIRES VERIFICATION,
+   with the primary source cited for every credential or affiliation claim.
 9. Technical SEO problem list: metadata gaps, thin pages, sitemap gaps, hreflang coverage,
    canonical issues, missing schema, heading and alt-text issues, crawl and CWV risks —
    each with a fix, an effort estimate, and a P0/P1/P2/P3 priority.
 10. 90-day plan, sequenced into what is safe to implement immediately versus what needs
     your sign-off (medical copy, URL changes, relationship or credential claims).
 
+Every entry in items 3, 4, 5 and 7 that proposes new content uses one evidence block:
+
+```text
+Query set + volume + difficulty (SA database)
+SERP observed: page types ranking, AI Overview / PAA presence, who owns the result
+Intent: informational / navigational / support-seeking / product
+Existing AQla page that could serve it: <route> — and why it does or does not
+Verdict: IMPROVE <route>  |  NEW PAGE <url> (with the reason improvement is insufficient)
+          |  FAQ / tool / section  |  DO NOT CREATE
+```
+
 ## Technical notes
 
 Read-only phase: file reads and searches, Semrush tools, web verification via the search
-gateway, and an SEO scan of the live site. No source file is modified. The one artefact
-written is the report markdown.
+gateway, and an SEO scan of the live site. Writes are limited to `docs/research/` and
+`/mnt/documents`.
+
 
 ## What comes next
 
