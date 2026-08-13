@@ -424,12 +424,12 @@ export function StudyInvitationOverlay() {
           <div className="flex flex-col items-center gap-1.5 text-center">
             <div className="flex items-center gap-2">
               <span aria-hidden className="h-px w-6 bg-[#c9a84c]/60" />
-              <span className="text-[10.5px] font-semibold uppercase tracking-[0.3em] text-[#a8862f]">
+              <span className="text-[10.5px] font-semibold uppercase tracking-[0.3em] text-[#e6c97a]">
                 {t.eyebrow}
               </span>
               <span aria-hidden className="h-px w-6 bg-[#c9a84c]/60" />
             </div>
-            <span className="text-[12px] font-normal tracking-wide text-[#3f6555]">
+            <span className="text-[12px] font-normal tracking-wide text-[#bcd8c9]">
               {t.university}
             </span>
           </div>
@@ -439,7 +439,7 @@ export function StudyInvitationOverlay() {
           {/* Title */}
           <h2
             id="aqla-study-title"
-            className={`mx-auto max-w-[36ch] text-balance text-center font-bold tracking-tight text-[#08301e] ${
+            className={`mx-auto max-w-[36ch] text-balance text-center font-bold tracking-tight text-[#f4fbf7] ${
               isRTL
                 ? "text-[23px] leading-[1.75] sm:text-[27px] sm:leading-[1.72]"
                 : "text-[22px] leading-[1.55] sm:text-[26px]"
@@ -449,7 +449,7 @@ export function StudyInvitationOverlay() {
           </h2>
 
           {/* Prize subtitle */}
-          <p className="text-center text-[12.5px] font-semibold tracking-wide text-[#9a7a26] sm:text-[13.5px]">
+          <p className="text-center text-[12.5px] font-semibold tracking-wide text-[#f0d98e] sm:text-[13.5px]">
             {t.prizeSubtitle}
           </p>
 
@@ -466,7 +466,7 @@ export function StudyInvitationOverlay() {
                 boxShadow:
                   "inset 0 0 0 1px rgba(201,168,76,0.9), inset 0 1px 0 rgba(255,244,214,0.28), inset 0 12px 20px -14px rgba(255,255,255,0.35), 0 14px 30px -12px rgba(6,56,31,0.55), 0 3px 8px -2px rgba(6,56,31,0.35)",
               }}
-              className="group relative inline-flex min-h-[60px] w-full items-center justify-center overflow-hidden rounded-2xl px-5 text-[18px] font-bold text-[#faf1d8] transition-all duration-300 hover:-translate-y-px hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white motion-reduce:transition-none sm:min-h-[70px] sm:text-[20px]"
+              className="group relative inline-flex min-h-[60px] w-full items-center justify-center overflow-hidden rounded-2xl px-5 text-[18px] font-bold text-[#faf1d8] transition-all duration-300 hover:-translate-y-px hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent motion-reduce:transition-none sm:min-h-[70px] sm:text-[20px]"
             >
               <span
                 aria-hidden
@@ -490,7 +490,7 @@ export function StudyInvitationOverlay() {
               }}
               aria-expanded={open}
               aria-controls="aqla-study-details"
-              className="inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-2xl border border-[#0b3a25]/20 bg-[#0b3a25]/[0.05] px-6 text-[14.5px] font-semibold text-[#0b3a25] transition-all duration-300 hover:border-[#0b3a25]/30 hover:bg-[#0b3a25]/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25 motion-reduce:transition-none"
+              className="inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-2xl border border-[#eaf6ef]/20 bg-[#eaf6ef]/[0.05] px-6 text-[14.5px] font-semibold text-[#eaf6ef] transition-all duration-300 hover:border-[#eaf6ef]/30 hover:bg-[#eaf6ef]/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eaf6ef]/25 motion-reduce:transition-none"
             >
               <span>{t.detailsToggle}</span>
               <IconChevron open={open} />
@@ -498,7 +498,7 @@ export function StudyInvitationOverlay() {
           </div>
 
 
-          <div ref={detailsRef} className="mt-1.5 border-t border-[#0b3a25]/10 pt-3">
+          <div ref={detailsRef} className="mt-1.5 border-t border-[#eaf6ef]/10 pt-3">
             <div
               id="aqla-study-details"
               role="region"
@@ -510,33 +510,33 @@ export function StudyInvitationOverlay() {
               }}
             >
               <div className="min-h-0 overflow-hidden">
-                <div className="mt-3 max-h-[42vh] overflow-y-auto rounded-2xl border border-[#0b3a25]/12 bg-[#0b3a25]/[0.03] p-5">
-                  <h3 className="text-[14px] font-bold text-[#0b3a25]">
+                <div className="mt-3 max-h-[42vh] overflow-y-auto rounded-2xl border border-[#eaf6ef]/12 bg-[#eaf6ef]/[0.03] p-5">
+                  <h3 className="text-[14px] font-bold text-[#eaf6ef]">
                     {t.detailsTitle}
                   </h3>
-                  <p className="mt-3 text-[13.5px] leading-[1.85] text-[#2d5a45]">{t.p1}</p>
-                  <p className="mt-2 text-[13.5px] leading-[1.85] text-[#2d5a45]">{t.p2}</p>
-                  <p className="mt-2 text-[13.5px] leading-[1.85] text-[#2d5a45]">
-                    {t.ethicsApproval} <span className="font-semibold text-[#0b3a25]">{t.ethicsNumber}</span>
+                  <p className="mt-3 text-[13.5px] leading-[1.85] text-[#cfe6da]">{t.p1}</p>
+                  <p className="mt-2 text-[13.5px] leading-[1.85] text-[#cfe6da]">{t.p2}</p>
+                  <p className="mt-2 text-[13.5px] leading-[1.85] text-[#cfe6da]">
+                    {t.ethicsApproval} <span className="font-semibold text-[#eaf6ef]">{t.ethicsNumber}</span>
                   </p>
-                  <p className="mt-2 text-[13.5px] leading-[1.85] text-[#2d5a45]">{t.contactInfo}</p>
+                  <p className="mt-2 text-[13.5px] leading-[1.85] text-[#cfe6da]">{t.contactInfo}</p>
 
                   <ul className="mt-4 flex flex-wrap gap-1.5">
                     {[t.voluntary, t.confidential, t.anonymous, t.prize].map((label, i) => (
                       <li
                         key={i}
-                        className="rounded-full border border-[#0b3a25]/12 bg-[#0b3a25]/[0.03] px-2.5 py-1 text-[11.5px] text-[#2d5a45]"
+                        className="rounded-full border border-[#eaf6ef]/12 bg-[#eaf6ef]/[0.03] px-2.5 py-1 text-[11.5px] text-[#cfe6da]"
                       >
                         {label}
                       </li>
                     ))}
                   </ul>
 
-                  <div className="mt-4 flex items-center gap-2 text-[12.5px] text-[#2d5a45]">
-                    <span className="text-[#5a7a6a]">{t.contactLabel}</span>
+                  <div className="mt-4 flex items-center gap-2 text-[12.5px] text-[#cfe6da]">
+                    <span className="text-[#a8c4b5]">{t.contactLabel}</span>
                     <a
                       href="mailto:smokefreeksa@gmail.com"
-                      className="min-w-0 truncate font-semibold text-[#a8862f] underline decoration-[#c9a84c]/50 underline-offset-2 transition-colors hover:decoration-[#c9a84c]"
+                      className="min-w-0 truncate font-semibold text-[#e6c97a] underline decoration-[#c9a84c]/50 underline-offset-2 transition-colors hover:decoration-[#c9a84c]"
                     >
                       smokefreeksa@gmail.com
                     </a>
@@ -549,7 +549,7 @@ export function StudyInvitationOverlay() {
             <button
               type="button"
               onClick={openSkipConfirm}
-              className="mt-3 inline-flex min-h-[44px] w-full items-center justify-center rounded-full px-6 text-[13.5px] font-medium text-[#5a7a6a] underline-offset-4 transition-colors duration-300 hover:text-[#0b3a25] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/20 motion-reduce:transition-none"
+              className="mt-3 inline-flex min-h-[44px] w-full items-center justify-center rounded-full px-6 text-[13.5px] font-medium text-[#a8c4b5] underline-offset-4 transition-colors duration-300 hover:text-[#eaf6ef] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eaf6ef]/20 motion-reduce:transition-none"
             >
               {t.skip}
             </button>
@@ -558,7 +558,7 @@ export function StudyInvitationOverlay() {
           </div>
           ) : (
           <div key="confirm" dir={t.dir} className="flex flex-col gap-4 animate-fade-in">
-            <p className={`mx-auto max-w-[34ch] text-balance text-center font-semibold text-[#08301e] ${
+            <p className={`mx-auto max-w-[34ch] text-balance text-center font-semibold text-[#f4fbf7] ${
               isRTL ? "text-[17px] leading-[1.9] sm:text-[19px]" : "text-[16.5px] leading-[1.6] sm:text-[18px]"
             }`}>
               {t.confirmMessage}
@@ -585,7 +585,7 @@ export function StudyInvitationOverlay() {
               <button
                 type="button"
                 onClick={continueToSite}
-                className="inline-flex min-h-[48px] w-full items-center justify-center rounded-2xl border border-[#0b3a25]/25 bg-[#0b3a25]/[0.04] px-6 text-[14px] font-semibold text-[#0b3a25] transition-colors duration-300 hover:bg-[#0b3a25]/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25 motion-reduce:transition-none"
+                className="inline-flex min-h-[48px] w-full items-center justify-center rounded-2xl border border-[#eaf6ef]/25 bg-[#eaf6ef]/[0.04] px-6 text-[14px] font-semibold text-[#eaf6ef] transition-colors duration-300 hover:bg-[#eaf6ef]/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eaf6ef]/25 motion-reduce:transition-none"
               >
                 {t.confirmContinue}
               </button>
@@ -593,7 +593,7 @@ export function StudyInvitationOverlay() {
               <button
                 type="button"
                 onClick={goBackToPreviousPage}
-                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full px-6 text-[13px] font-medium text-[#5a7a6a] underline-offset-4 transition-colors duration-300 hover:text-[#0b3a25] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/20 motion-reduce:transition-none"
+                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full px-6 text-[13px] font-medium text-[#a8c4b5] underline-offset-4 transition-colors duration-300 hover:text-[#eaf6ef] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eaf6ef]/20 motion-reduce:transition-none"
               >
                 {t.confirmBack}
               </button>
