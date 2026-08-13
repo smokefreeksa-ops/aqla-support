@@ -311,9 +311,10 @@ export function StudyInvitationOverlay() {
   if (!visible) return null;
 
   const isRTL = t.dir === "rtl";
-  // The invitation artwork has Arabic copy baked in, so English must fall back
-  // to the text-based crystal-map panel for the switch to actually do anything.
-  const useArt = step === "invite" && lang === "ar";
+  // The baked artwork has fixed Arabic copy and buttons, so we always render
+  // the text-based crystal-map panel so the CTA can be resized and real.
+  const useArt = false;
+
 
   return (
     <>
