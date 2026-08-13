@@ -154,7 +154,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           alternateName: ["Aqla", "اقلع", "منصة أقلع", "Aqla Platform", "لا تتن", "La-Tatten"],
           url: "https://aqla1.com",
           logo: "https://aqla1.com/aqla-logo.png",
-          image: "https://aqla1.com/og-aqla-v5.jpg",
+          image: "https://aqla1.com/og-aqla-v6.jpg",
           description:
             "أقلع — منصة سعودية مجانية للإقلاع عن التدخين والنيكوتين: تقييم الاعتماد، خطة إقلاع، متابعة، وتدريب.",
           sameAs: [
