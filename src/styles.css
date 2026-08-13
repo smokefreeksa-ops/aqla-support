@@ -684,8 +684,9 @@ body {
 }
 
 /* Floor reflection — short mirrored pool directly under the slab */
-.crystal-panel--map ~ *,
 .crystal-shell:has(.crystal-panel--map)::after { display: none; }
+[role="dialog"]:focus-visible,
+[role="dialog"]:focus { outline: none !important; }
 .crystal-shell::after {
   content: "";
   position: absolute;
