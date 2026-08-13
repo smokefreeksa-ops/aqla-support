@@ -483,7 +483,8 @@ export function StudyInvitationOverlay() {
 
 
           {/* Actions */}
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-3">
+            {/* Primary CTA — largest button on the panel */}
             <button
               type="button"
               onClick={participate}
@@ -491,9 +492,9 @@ export function StudyInvitationOverlay() {
                 backgroundImage:
                   "linear-gradient(135deg, #0d4a2e 0%, #06381f 52%, #0f5636 100%)",
                 boxShadow:
-                  "inset 0 0 0 1px rgba(201,168,76,0.9), inset 0 1px 0 rgba(255,244,214,0.28), inset 0 12px 20px -14px rgba(255,255,255,0.35), 0 12px 26px -14px rgba(6,56,31,0.55), 0 2px 6px -2px rgba(6,56,31,0.35)",
+                  "inset 0 0 0 1px rgba(201,168,76,0.9), inset 0 1px 0 rgba(255,244,214,0.28), inset 0 12px 20px -14px rgba(255,255,255,0.35), 0 14px 30px -12px rgba(6,56,31,0.55), 0 3px 8px -2px rgba(6,56,31,0.35)",
               }}
-              className="group relative inline-flex min-h-[50px] w-full items-center justify-center overflow-hidden rounded-2xl px-6 text-[15px] font-bold text-[#faf1d8] transition-all duration-300 hover:-translate-y-px hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white motion-reduce:transition-none"
+              className="group relative inline-flex min-h-[58px] w-full items-center justify-center overflow-hidden rounded-2xl px-5 text-[17px] font-bold text-[#faf1d8] transition-all duration-300 hover:-translate-y-px hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white motion-reduce:transition-none sm:min-h-[68px] sm:text-[19px]"
             >
               <span
                 aria-hidden
@@ -502,16 +503,28 @@ export function StudyInvitationOverlay() {
               <span className="relative">{t.participate}</span>
             </button>
 
+            {/* Secondary CTA — Details */}
             <button
               type="button"
-              onClick={openSkipConfirm}
-              className="inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl border border-[#0b3a25]/15 bg-transparent px-6 text-[13.5px] font-medium text-[#5a7a6a] transition-colors duration-300 hover:border-[#0b3a25]/28 hover:bg-[#0b3a25]/[0.04] hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25 motion-reduce:transition-none"
+              onClick={() => {
+                const next = !open;
+                setOpen(next);
+                if (next) {
+                  window.setTimeout(
+                    () => detailsRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }),
+                    260,
+                  );
+                }
+              }}
+              aria-expanded={open}
+              aria-controls="aqla-study-details"
+              className="inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-2xl border border-[#0b3a25]/20 bg-[#0b3a25]/[0.05] px-6 text-[14.5px] font-semibold text-[#0b3a25] transition-all duration-300 hover:border-[#0b3a25]/30 hover:bg-[#0b3a25]/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25 motion-reduce:transition-none"
             >
-              {t.skip}
+              <span>{t.detailsToggle}</span>
+              <IconChevron open={open} />
             </button>
           </div>
 
-          {/* Details toggle */}
           <div ref={detailsRef} className="mt-1.5 border-t border-[#0b3a25]/10 pt-3">
             <button
               type="button"
