@@ -9,13 +9,23 @@ metadata changes are made until you approve what gets built.
 - Anything unverified is marked **REQUIRES VERIFICATION** and is not proposed for publication.
 - Dr Malik A. Althobiani / د. مالك عبدالملك الذبياني is treated as the professional entity
   associated with AQla; exact public designation (Founder / Director / other), credentials,
-  affiliations and publications are only stated when confirmed from institutional or
-  scholarly sources (e.g. ORCID, Google Scholar, university page, PubMed).
+  affiliations and publications are only stated when confirmed from **primary institutional
+  and scholarly sources first** — university staff pages, ORCID, PubMed, journal pages,
+  official research-group pages. Aggregators (ResearchGate, Scholar profiles, directories,
+  press) are corroboration only, never the sole basis for a published claim.
 - Badael / DZRT: a documented research or collaboration relationship may be described only
   where evidence supports the exact wording. No sponsor, funder, commercial partner, clinical
   partner or endorsement language. No implied endorsement of any nicotine product.
 - ZYN, VELO, Nordic Spirit and others are external entities for landscape/search analysis only.
 - Medical accuracy outranks search opportunity. Marketing claims are never treated as evidence.
+- **No new page is recommended on volume alone.** Every recommendation carries: the query set,
+  volume and difficulty, the observed SERP (who ranks, page type, whether AI Overview / PAA /
+  forum / video dominates), the inferred intent, and an explicit verdict on whether an existing
+  AQla page can satisfy that intent better than a new URL. Default answer is improve, not create.
+- **No application source file is modified in this phase.** The report is written to
+  `docs/research/` (documentation only) and to `/mnt/documents` for download. Nothing under
+  `src/`, `public/`, or config is touched.
+
 
 ## Phase 1 — Codebase truth pass (what AQla actually is)
 
