@@ -427,7 +427,7 @@ export function StudyInvitationOverlay() {
           <button
             type="button"
             onClick={() => setLang(lang === "ar" ? "en" : "ar")}
-            className="inline-flex h-8 min-w-[40px] items-center justify-center rounded-full border border-[#0b3a25]/15 bg-[#0b3a25]/[0.04] px-3 text-[11px] font-medium tracking-wide text-[#2d5a45] transition-colors duration-300 hover:bg-[#0b3a25]/[0.09] hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/50"
+            className="inline-flex h-8 min-w-[56px] items-center justify-center rounded-full border border-[#c9a84c]/60 bg-[#06381f] px-3.5 text-[11.5px] font-semibold tracking-wide text-[#faf1d8] shadow-[0_6px_16px_-8px_rgba(6,56,31,0.7)] transition-colors duration-300 hover:bg-[#0d4a2e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/70"
             aria-label={lang === "ar" ? "Switch to English" : "التبديل إلى العربية"}
           >
 
