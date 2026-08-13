@@ -526,27 +526,6 @@ export function StudyInvitationOverlay() {
           </div>
 
           <div ref={detailsRef} className="mt-1.5 border-t border-[#0b3a25]/10 pt-3">
-            <button
-              type="button"
-              onClick={() => {
-                const next = !open;
-                setOpen(next);
-                if (next) {
-                  window.setTimeout(
-                    () => detailsRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }),
-                    260,
-                  );
-                }
-              }}
-              aria-expanded={open}
-              aria-controls="aqla-study-details"
-              className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full px-4 py-2 text-[13.5px] font-medium tracking-[0.02em] text-[#2d5a45] transition-colors duration-300 hover:bg-[#0b3a25]/[0.04] hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/45"
-            >
-              <span>{t.detailsToggle}</span>
-              <IconChevron open={open} />
-            </button>
-
-
             <div
               id="aqla-study-details"
               role="region"
@@ -592,7 +571,17 @@ export function StudyInvitationOverlay() {
                 </div>
               </div>
             </div>
+
+            {/* Weakest action — Skip stays below Details */}
+            <button
+              type="button"
+              onClick={openSkipConfirm}
+              className="mt-3 inline-flex min-h-[44px] w-full items-center justify-center rounded-full px-6 text-[13.5px] font-medium text-[#5a7a6a] underline-offset-4 transition-colors duration-300 hover:text-[#0b3a25] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/20 motion-reduce:transition-none"
+            >
+              {t.skip}
+            </button>
           </div>
+
           </div>
           ) : (
           <div key="confirm" dir={t.dir} className="flex flex-col gap-4 animate-fade-in">
