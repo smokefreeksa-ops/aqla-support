@@ -455,7 +455,7 @@ export function StudyInvitationOverlay() {
 
 
           {/* Actions */}
-          <div className="flex flex-col gap-3">
+          <div className="-mx-3 flex flex-col gap-3 sm:-mx-5">
             {/* Primary CTA — largest button on the panel */}
             <button
               type="button"
@@ -466,7 +466,7 @@ export function StudyInvitationOverlay() {
                 boxShadow:
                   "inset 0 0 0 1px rgba(201,168,76,0.9), inset 0 1px 0 rgba(255,244,214,0.28), inset 0 12px 20px -14px rgba(255,255,255,0.35), 0 14px 30px -12px rgba(6,56,31,0.55), 0 3px 8px -2px rgba(6,56,31,0.35)",
               }}
-              className="group relative inline-flex min-h-[58px] w-full items-center justify-center overflow-hidden rounded-2xl px-5 text-[17px] font-bold text-[#faf1d8] transition-all duration-300 hover:-translate-y-px hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white motion-reduce:transition-none sm:min-h-[68px] sm:text-[19px]"
+              className="group relative inline-flex min-h-[60px] w-full items-center justify-center overflow-hidden rounded-2xl px-5 text-[18px] font-bold text-[#faf1d8] transition-all duration-300 hover:-translate-y-px hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white motion-reduce:transition-none sm:min-h-[70px] sm:text-[20px]"
             >
               <span
                 aria-hidden
@@ -496,6 +496,7 @@ export function StudyInvitationOverlay() {
               <IconChevron open={open} />
             </button>
           </div>
+
 
           <div ref={detailsRef} className="mt-1.5 border-t border-[#0b3a25]/10 pt-3">
             <div
