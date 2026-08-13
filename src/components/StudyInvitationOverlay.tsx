@@ -377,12 +377,7 @@ export function StudyInvitationOverlay() {
             }}
           >
             <div className="crystal-panel crystal-panel--map flex max-h-full min-h-0 flex-col">
-              <img
-                aria-hidden
-                src={saudiCrystalMap.url}
-                alt=""
-                className="crystal-map-art pointer-events-none absolute inset-0 z-0 h-full w-full select-none object-contain p-4"
-              />
+
 
 
 
