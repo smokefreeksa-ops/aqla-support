@@ -5,7 +5,7 @@ import { ResearchBanner } from "@/components/ResearchBanner";
 import { trackEvent } from "@/lib/track-event";
 import aqlaLogo from "@/assets/aqla-logo-transparent.png";
 import saudiCrystalMap from "@/assets/saudi-crystal-map.png.asset.json";
-import studyPanelArt from "@/assets/saudi-study-panel.png.asset.json";
+
 
 
 
@@ -311,9 +311,8 @@ export function StudyInvitationOverlay() {
   if (!visible) return null;
 
   const isRTL = t.dir === "rtl";
-  // The invitation artwork has Arabic copy baked in, so English must fall back
-  // to the text-based crystal-map panel for the switch to actually do anything.
-  const useArt = step === "invite" && lang === "ar";
+
+
 
   return (
     <>
@@ -373,44 +372,18 @@ export function StudyInvitationOverlay() {
             className="crystal-shell aqla-launch-panel relative flex max-h-[92%] w-full flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/40"
             style={{
               width: "min(95%, clamp(500px, 61vw, 860px))",
-              ...(useArt
-                ? { background: "transparent", border: "none", boxShadow: "none", padding: 0 }
-                : {}),
               transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
               transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
             }}
           >
-            <div className={`crystal-panel ${useArt ? "crystal-panel--art" : "crystal-panel--map"} flex max-h-full min-h-0 flex-col`}>
-              {useArt ? (
-                <div className="relative z-10 w-full">
-                  <img
-                    src={studyPanelArt.url}
-                    alt={t.title}
-                    className="block w-full select-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={participate}
-                    aria-label={t.participate}
-                    className="absolute rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/70"
-                    style={{ left: "35%", top: "66%", width: "31%", height: "9.5%" }}
-                  />
-                  <button
-                    type="button"
-                    onClick={openSkipConfirm}
-                    aria-label={t.skip}
-                    className="absolute rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/40"
-                    style={{ left: "44%", top: "76.5%", width: "13%", height: "5.5%" }}
-                  />
-                </div>
-              ) : (
-                <img
-                  aria-hidden
-                  src={saudiCrystalMap.url}
-                  alt=""
-                  className="crystal-map-art pointer-events-none absolute inset-0 z-0 h-full w-full select-none object-contain p-4"
-                />
-              )}
+            <div className="crystal-panel crystal-panel--map flex max-h-full min-h-0 flex-col">
+              <img
+                aria-hidden
+                src={saudiCrystalMap.url}
+                alt=""
+                className="crystal-map-art pointer-events-none absolute inset-0 z-0 h-full w-full select-none object-contain p-4"
+              />
+
 
 
 
@@ -435,7 +408,7 @@ export function StudyInvitationOverlay() {
           </button>
         </div>
 
-        <div className={`crystal-content relative z-20 min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-4 pb-28 pt-16 sm:gap-4 sm:px-6 sm:pt-20 ${useArt ? "hidden" : "flex"}`}>
+        <div className="crystal-content relative z-20 min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-4 pb-28 pt-16 sm:gap-4 sm:px-6 sm:pt-20 flex">
 
           {/* Logo */}
           <div className="flex justify-center">
@@ -482,7 +455,8 @@ export function StudyInvitationOverlay() {
 
 
           {/* Actions */}
-          <div className="flex flex-col gap-2.5">
+          <div className="-mx-3 flex flex-col gap-3 sm:-mx-5">
+            {/* Primary CTA — largest button on the panel */}
             <button
               type="button"
               onClick={participate}
@@ -490,9 +464,9 @@ export function StudyInvitationOverlay() {
                 backgroundImage:
                   "linear-gradient(135deg, #0d4a2e 0%, #06381f 52%, #0f5636 100%)",
                 boxShadow:
-                  "inset 0 0 0 1px rgba(201,168,76,0.9), inset 0 1px 0 rgba(255,244,214,0.28), inset 0 12px 20px -14px rgba(255,255,255,0.35), 0 12px 26px -14px rgba(6,56,31,0.55), 0 2px 6px -2px rgba(6,56,31,0.35)",
+                  "inset 0 0 0 1px rgba(201,168,76,0.9), inset 0 1px 0 rgba(255,244,214,0.28), inset 0 12px 20px -14px rgba(255,255,255,0.35), 0 14px 30px -12px rgba(6,56,31,0.55), 0 3px 8px -2px rgba(6,56,31,0.35)",
               }}
-              className="group relative inline-flex min-h-[50px] w-full items-center justify-center overflow-hidden rounded-2xl px-6 text-[15px] font-bold text-[#faf1d8] transition-all duration-300 hover:-translate-y-px hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white motion-reduce:transition-none"
+              className="group relative inline-flex min-h-[60px] w-full items-center justify-center overflow-hidden rounded-2xl px-5 text-[18px] font-bold text-[#faf1d8] transition-all duration-300 hover:-translate-y-px hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white motion-reduce:transition-none sm:min-h-[70px] sm:text-[20px]"
             >
               <span
                 aria-hidden
@@ -501,17 +475,7 @@ export function StudyInvitationOverlay() {
               <span className="relative">{t.participate}</span>
             </button>
 
-            <button
-              type="button"
-              onClick={openSkipConfirm}
-              className="inline-flex min-h-[44px] w-full items-center justify-center rounded-2xl border border-[#0b3a25]/15 bg-transparent px-6 text-[13.5px] font-medium text-[#5a7a6a] transition-colors duration-300 hover:border-[#0b3a25]/28 hover:bg-[#0b3a25]/[0.04] hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25 motion-reduce:transition-none"
-            >
-              {t.skip}
-            </button>
-          </div>
-
-          {/* Details toggle */}
-          <div ref={detailsRef} className="mt-1.5 border-t border-[#0b3a25]/10 pt-3">
+            {/* Secondary CTA — Details */}
             <button
               type="button"
               onClick={() => {
@@ -526,13 +490,15 @@ export function StudyInvitationOverlay() {
               }}
               aria-expanded={open}
               aria-controls="aqla-study-details"
-              className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full px-4 py-2 text-[13.5px] font-medium tracking-[0.02em] text-[#2d5a45] transition-colors duration-300 hover:bg-[#0b3a25]/[0.04] hover:text-[#0b3a25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/45"
+              className="inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-2xl border border-[#0b3a25]/20 bg-[#0b3a25]/[0.05] px-6 text-[14.5px] font-semibold text-[#0b3a25] transition-all duration-300 hover:border-[#0b3a25]/30 hover:bg-[#0b3a25]/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/25 motion-reduce:transition-none"
             >
               <span>{t.detailsToggle}</span>
               <IconChevron open={open} />
             </button>
+          </div>
 
 
+          <div ref={detailsRef} className="mt-1.5 border-t border-[#0b3a25]/10 pt-3">
             <div
               id="aqla-study-details"
               role="region"
@@ -578,7 +544,17 @@ export function StudyInvitationOverlay() {
                 </div>
               </div>
             </div>
+
+            {/* Weakest action — Skip stays below Details */}
+            <button
+              type="button"
+              onClick={openSkipConfirm}
+              className="mt-3 inline-flex min-h-[44px] w-full items-center justify-center rounded-full px-6 text-[13.5px] font-medium text-[#5a7a6a] underline-offset-4 transition-colors duration-300 hover:text-[#0b3a25] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b3a25]/20 motion-reduce:transition-none"
+            >
+              {t.skip}
+            </button>
           </div>
+
           </div>
           ) : (
           <div key="confirm" dir={t.dir} className="flex flex-col gap-4 animate-fade-in">
