@@ -5,7 +5,7 @@ import { ResearchBanner } from "@/components/ResearchBanner";
 import { trackEvent } from "@/lib/track-event";
 import aqlaLogo from "@/assets/aqla-logo-transparent.png";
 import saudiCrystalMap from "@/assets/saudi-crystal-map.png.asset.json";
-import studyPanelArt from "@/assets/saudi-study-panel.png.asset.json";
+
 
 
 
@@ -311,9 +311,7 @@ export function StudyInvitationOverlay() {
   if (!visible) return null;
 
   const isRTL = t.dir === "rtl";
-  // The baked artwork has fixed Arabic copy and buttons, so we always render
-  // the text-based crystal-map panel so the CTA can be resized and real.
-  const useArt = false;
+
 
 
   return (
@@ -410,7 +408,7 @@ export function StudyInvitationOverlay() {
           </button>
         </div>
 
-        <div className={`crystal-content relative z-20 min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-4 pb-28 pt-16 sm:gap-4 sm:px-6 sm:pt-20 ${useArt ? "hidden" : "flex"}`}>
+        <div className="crystal-content relative z-20 min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-4 pb-28 pt-16 sm:gap-4 sm:px-6 sm:pt-20 flex">
 
           {/* Logo */}
           <div className="flex justify-center">
