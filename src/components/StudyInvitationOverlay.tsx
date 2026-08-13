@@ -432,7 +432,7 @@ export function StudyInvitationOverlay() {
           </button>
         </div>
 
-        <div className={`crystal-content relative z-20 min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-4 pb-28 pt-16 sm:gap-4 sm:px-6 sm:pt-20 ${step === "invite" ? "hidden" : "flex"}`}>
+        <div className={`crystal-content relative z-20 min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-4 pb-28 pt-16 sm:gap-4 sm:px-6 sm:pt-20 ${useArt ? "hidden" : "flex"}`}>
 
           {/* Logo */}
           <div className="flex justify-center">
