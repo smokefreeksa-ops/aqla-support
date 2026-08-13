@@ -1182,7 +1182,8 @@ summary:focus-visible,
 }
 .crystal-panel--map .crystal-content {
   width: 100%;
-  margin-inline: auto;
+  margin-left: 0;
+  margin-right: 0;
 }
 .crystal-panel--map .crystal-content::before {
   content: none;
@@ -1193,6 +1194,8 @@ summary:focus-visible,
   }
   .crystal-panel--map .crystal-content {
     width: 100%;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 
