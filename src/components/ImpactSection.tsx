@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { getPublicImpactStats, type ImpactStats } from "@/lib/impact.functions";
+import { type ImpactStats } from "@/lib/impact.functions";
+import { usePublicImpactStats } from "@/lib/use-impact-stats";
 import { ClipboardCheck, Stethoscope, Users, MapPin, Eye, Share2 } from "lucide-react";
 
 const EMPTY: ImpactStats = {
@@ -60,12 +61,7 @@ function CountFlash({ value, suffix, animate = true }: { value: number; suffix?:
 }
 
 export function ImpactSection({ isAr }: { isAr: boolean }) {
-  const statsFn = useServerFn(getPublicImpactStats);
-  const { data } = useQuery<ImpactStats>({
-    queryKey: ["public-impact-stats"],
-    queryFn: () => statsFn(),
-    staleTime: 60_000,
-  });
+  const { data } = usePublicImpactStats();
   const s: ImpactStats = data ?? EMPTY;
   const scrollStableMotion = useScrollStableMotion();
 

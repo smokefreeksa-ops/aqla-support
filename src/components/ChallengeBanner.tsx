@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { getPublicImpactStats } from "@/lib/impact.functions";
+import { usePublicImpactStats } from "@/lib/use-impact-stats";
 
 const STORAGE = "aqla.challenge.banner.v1";
 const OWNER_EMAIL = "prof.maliking@gmail.com";
@@ -29,13 +29,7 @@ export function ChallengeBanner() {
   const [deltas, setDeltas] = useState<Stats>(loadLocalDeltas);
   const [sending, setSending] = useState(false);
 
-  const statsFn = useServerFn(getPublicImpactStats);
-  const { data: live } = useQuery({
-    queryKey: ["public-impact-stats", "banner"],
-    queryFn: () => statsFn(),
-    refetchInterval: 30_000,
-    staleTime: 15_000,
-  });
+  const { data: live } = usePublicImpactStats();
 
   useEffect(() => {
     // count a visit once per tab session (local delta only; canonical count comes from backend)

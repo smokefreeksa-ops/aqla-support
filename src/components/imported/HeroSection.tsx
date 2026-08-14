@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useTypewriter } from "@/hooks/useTypewriter";
-import { getPublicImpactStats } from "@/lib/impact.functions";
+import { usePublicImpactStats } from "@/lib/use-impact-stats";
 import { trackEvent } from "@/lib/track-event";
 import SaudiFlagWave from "@/components/SaudiFlagWave";
 import aqlaLogo from "@/assets/aqla-logo.png";
@@ -94,12 +94,7 @@ function PublicationCarousel({ onPublicationClick }: { onPublicationClick: () =>
 }
 
 export function LiveStatsBar({ compact = false }: { compact?: boolean }) {
-  const { data: stats } = useQuery({
-    queryKey: ["impact-stats-hero"],
-    queryFn: () => getPublicImpactStats(),
-    refetchInterval: 30_000,
-    staleTime: 15_000,
-  });
+  const { data: stats } = usePublicImpactStats();
 
   const items = [
     { icon: Users, label: "زيارة", value: stats?.total_visits ?? 0, color: "#0ea5e9" },
