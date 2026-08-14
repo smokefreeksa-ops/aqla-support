@@ -12,6 +12,28 @@ import type { ClinicalPlanJSON } from "@/lib/clinical/types";
 export function ClinicalPlanPage({ plan, planToken }: { plan: ClinicalPlanJSON; planToken: string }) {
   const [downloading, setDownloading] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
+  const [showEmail, setShowEmail] = useState(false);
+  const [email, setEmail] = useState("");
+  const [sending, setSending] = useState(false);
+  const sendPlanEmail = useServerFn(emailClinicalPlan);
+
+  async function sendByEmail() {
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
+      setMsg("يرجى إدخال بريد إلكتروني صحيح.");
+      return;
+    }
+    setSending(true);
+    setMsg(null);
+    try {
+      const res = await sendPlanEmail({ data: { planToken, email: email.trim(), consent: true } });
+      setMsg(res.message);
+      if (res.ok) setShowEmail(false);
+    } catch {
+      setMsg("تعذر إرسال البريد الآن، حاول لاحقًا.");
+    } finally {
+      setSending(false);
+    }
+  }
 
   async function downloadPdf() {
     setDownloading(true);
