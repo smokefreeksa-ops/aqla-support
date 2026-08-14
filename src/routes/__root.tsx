@@ -19,6 +19,7 @@ import { StudyInvitationOverlay } from "@/components/StudyInvitationOverlay";
 import { CommandPalette } from "@/components/CommandPalette";
 import { QuickPlanDock } from "@/components/QuickPlanDock";
 import { BackButton } from "@/components/BackButton";
+import { GlobalBackBar } from "@/components/GlobalBackBar";
 
 
 function NotFoundComponent() {
