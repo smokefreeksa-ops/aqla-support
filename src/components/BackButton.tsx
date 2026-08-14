@@ -40,6 +40,7 @@ export function BackButton({
   return (
     <button
       type="button"
+      data-aqla-back=""
       onClick={() => {
         if (hasHistory) {
           window.history.back();
