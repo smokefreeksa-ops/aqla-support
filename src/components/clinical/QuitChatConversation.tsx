@@ -36,7 +36,18 @@ function anonId(): string {
   return v;
 }
 
-export function QuitChatConversation({ onPlan }: { onPlan: (p: ClinicalPlanJSON) => void }) {
+export function QuitChatConversation({
+  onPlan,
+  onBeforeNavigate,
+}: {
+  onPlan: (p: ClinicalPlanJSON) => void;
+  /** Called right before any in-app navigation (lets a host drawer/modal close first). */
+  onBeforeNavigate?: () => void;
+}) {
+  const go = (fn: () => void) => {
+    onBeforeNavigate?.();
+    fn();
+  };
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Msg[]>([]);
   const [answers, setAnswers] = useState<ClinicalAnswers>({});
@@ -134,12 +145,12 @@ export function QuitChatConversation({ onPlan }: { onPlan: (p: ClinicalPlanJSON)
           actions: [
             {
               label: "تحميل خطتي PDF",
-              onClick: () => navigate({ to: "/quit-plan/$planToken", params: { planToken: res.planToken } }),
+              onClick: () => go(() => navigate({ to: "/quit-plan/$planToken", params: { planToken: res.planToken } })),
               icon: "print",
             },
             {
               label: "الذهاب للوحة التحكم",
-              onClick: () => navigate({ to: "/dashboard" }),
+              onClick: () => go(() => navigate({ to: "/dashboard" })),
               variant: "secondary",
               icon: "dashboard",
             },
@@ -175,7 +186,7 @@ export function QuitChatConversation({ onPlan }: { onPlan: (p: ClinicalPlanJSON)
         actions: [
           {
             label: "العودة إلى أقلع",
-            onClick: () => navigate({ to: "/" }),
+            onClick: () => go(() => navigate({ to: "/" })),
             variant: "secondary",
           },
         ],
