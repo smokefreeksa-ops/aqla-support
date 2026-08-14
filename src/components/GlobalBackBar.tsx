@@ -31,7 +31,7 @@ export function GlobalBackBar() {
   const canGoBack = useCanGoBack();
   const navigate = useNavigate();
   const { lang } = useLang();
-  const isAr = lang === "ar";
+  const isAr = lang === "ar" && !(pathname === "/en" || pathname.startsWith("/en/"));
 
   const [top, setTop] = useState(76);
   const [duplicate, setDuplicate] = useState(false);
