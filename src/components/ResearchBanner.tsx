@@ -11,7 +11,7 @@ function formatCount(n: number): string {
   return new Intl.NumberFormat("ar-EG").format(n);
 }
 
-export function ResearchBanner() {
+export function ResearchBanner({ onNavigate }: { onNavigate?: () => void } = {}) {
   const { data } = usePublicImpactStats();
   const visits = data?.total_visits ?? 0;
   const [chatOpen, setChatOpen] = useState(false);
