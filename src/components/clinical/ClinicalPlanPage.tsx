@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Download, Loader2, Copy } from "lucide-react";
+import { Download, Loader2, Copy, Mail } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import { ClinicalPlanView } from "@/components/clinical/ClinicalPlanView";
+import { emailClinicalPlan } from "@/lib/clinical/clinical-plan.functions";
 import type { ClinicalPlanJSON } from "@/lib/clinical/types";
 
 /**
