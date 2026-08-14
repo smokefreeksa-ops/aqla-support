@@ -226,6 +226,9 @@ function RootComponent() {
       <AqlaAuthGate>
         <Outlet />
 
+        <GlobalBackBar />
+
+
         <FloatingWhatsAppButton />
         <AqlaAssistant />
         <SOSButton hidden={onSosRoute} />
