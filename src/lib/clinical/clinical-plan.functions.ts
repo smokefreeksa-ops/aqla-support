@@ -74,3 +74,19 @@ export const claimClinicalPlan = createServerFn({ method: "POST" })
     const { claimClinicalPlanForUser } = await import("./clinical-plan.server");
     return claimClinicalPlanForUser(data.planToken, context.userId);
   });
+
+/** Sends the stored plan to an email address (holder of the plan token). */
+export const emailClinicalPlan = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        planToken: z.string().min(8).max(80),
+        email: z.string().email().max(254),
+        consent: z.literal(true),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }) => {
+    const { resendClinicalPlanEmail } = await import("./clinical-plan.server");
+    return resendClinicalPlanEmail(data.planToken, data.email);
+  });

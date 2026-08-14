@@ -404,3 +404,62 @@ export async function claimClinicalPlanForUser(planToken: string, userId: string
   if (error) throw new Error(error.message);
   return { ok: true };
 }
+
+/**
+ * Re-sends (or first-time sends) the stored immutable plan to an email address
+ * chosen by the plan holder. Requires the secret plan token, explicit consent,
+ * and a plan that is not under a clinical safety hold.
+ */
+export async function resendClinicalPlanEmail(planToken: string, email: string) {
+  const normalized = email.trim().toLowerCase();
+  const { data: row, error } = await supabaseAdmin
+    .from("quit_plans")
+    .select("id, plan, plan_version, status")
+    .eq("plan_token", planToken)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!row) return { ok: false, message: "لم يتم العثور على الخطة." };
+  if (row.status === "safety_hold") {
+    return { ok: false, message: "لا يمكن إرسال هذه الخطة بالبريد لأسباب تتعلق بالسلامة. يرجى التواصل مع الدعم." };
+  }
+
+  const planVersion = (row.plan_version as number) ?? 1;
+  const { data: versionRow } = await supabaseAdmin
+    .from("quit_plan_versions")
+    .select("plan_json")
+    .eq("quit_plan_id", row.id as string)
+    .eq("plan_version", planVersion)
+    .maybeSingle();
+
+  const planJson = (versionRow?.plan_json ?? row.plan) as ClinicalPlanJSON | null;
+  if (!planJson) return { ok: false, message: "الخطة غير جاهزة للإرسال بعد." };
+
+  const result = await sendPlanEmailViaQueue(
+    normalized,
+    planJson,
+    clinicalPlanUrl(planToken),
+    `clinical-plan-${row.id}-v${planVersion}-resend-${Date.now()}`,
+  );
+
+  await supabaseAdmin
+    .from("quit_plans")
+    .update({
+      email: normalized,
+      plan_email_consent: true,
+      plan_email_consent_at: new Date().toISOString(),
+      plan_email_consent_version: PLAN_EMAIL_CONSENT_VERSION,
+      email_status: result.status,
+      email_sent_at: result.status === "sent" ? new Date().toISOString() : null,
+    })
+    .eq("id", row.id as string);
+
+  if (result.status !== "sent") {
+    return {
+      ok: false,
+      message: result.error === "email_suppressed"
+        ? "هذا البريد مُلغى الاشتراك من رسائلنا."
+        : "تعذر إرسال البريد الآن، حاول لاحقًا.",
+    };
+  }
+  return { ok: true, message: "تم إرسال خطتك إلى بريدك الإلكتروني." };
+}
