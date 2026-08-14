@@ -1046,7 +1046,6 @@ button:not(:disabled),
     border-color 110ms ease,
     background-color 110ms ease,
     opacity 110ms ease;
-  will-change: transform;
 }
 
 /* Immediate physical feedback on press (mouse + touch) */
@@ -1057,6 +1056,7 @@ button:not(:disabled):active,
 [data-clickable]:active {
   transform: translateY(0) scale(0.985);
   transition-duration: 60ms;
+  will-change: transform;
 }
 
 @media (hover: hover) {
@@ -1067,6 +1067,7 @@ button:not(:disabled):active,
   [data-clickable]:hover {
     transform: translateY(-1px);
     box-shadow: 0 0 0 1px var(--gold), 0 4px 14px -8px var(--gold);
+    will-change: transform;
   }
 }
 
@@ -1095,6 +1096,7 @@ summary:focus-visible,
     transform: none;
   }
 }
+
 
 /* ---- AQla premium launch transition (study invitation only) ---- */
 @keyframes aqla-launch-panel {
