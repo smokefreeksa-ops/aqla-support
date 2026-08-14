@@ -98,7 +98,15 @@ export function QuitChatDrawer({ open, onClose }: { open: boolean; onClose: () =
           </button>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto p-3">
-          <QuitChatConversation onPlan={() => {}} />
+          <QuitChatConversation
+            onPlan={() => {}}
+            onBeforeNavigate={() => {
+              // Release the drawer's history entry so closing does not undo the
+              // navigation, then close so the destination page is visible.
+              ownsHistory.current = false;
+              onClose();
+            }}
+          />
         </div>
       </div>
     </div>
