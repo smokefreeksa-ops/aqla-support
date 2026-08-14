@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
 import { type ImpactStats } from "@/lib/impact.functions";
 import { usePublicImpactStats } from "@/lib/use-impact-stats";
 import { ClipboardCheck, Stethoscope, Users, MapPin, Eye, Share2 } from "lucide-react";

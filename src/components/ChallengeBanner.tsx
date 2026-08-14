@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { Linkedin, Twitter, Trophy, Crosshair, ArrowLeft } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { usePublicImpactStats } from "@/lib/use-impact-stats";
 

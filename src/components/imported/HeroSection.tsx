@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
 import {
   Play,
   ChevronDown,
