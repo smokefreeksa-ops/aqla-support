@@ -29,6 +29,7 @@ const PUBLIC_EXACT = new Set<string>([
   "/try",
   "/quit-chat",
   "/try/shoot",
+  "/poster-studio",
 ]);
 
 // Public prefixes (dynamic routes)
