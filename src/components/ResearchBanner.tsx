@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { getPublicImpactStats } from "@/lib/impact.functions";
+import { usePublicImpactStats } from "@/lib/use-impact-stats";
 import { QuitChatDrawer } from "@/components/QuitChatDrawer";
 
 import { track } from "@/lib/events";
@@ -13,12 +12,7 @@ function formatCount(n: number): string {
 }
 
 export function ResearchBanner() {
-  const { data } = useQuery({
-    queryKey: ["public-impact-stats-banner"],
-    queryFn: () => getPublicImpactStats(),
-    refetchInterval: 30_000,
-    staleTime: 15_000,
-  });
+  const { data } = usePublicImpactStats();
   const visits = data?.total_visits ?? 0;
   const [chatOpen, setChatOpen] = useState(false);
 
