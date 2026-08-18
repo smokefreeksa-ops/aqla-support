@@ -8,6 +8,8 @@ import {
 
 export const runtime = 'nodejs'
 
+const RETURN_TO_COOKIE = 'aqla_auth_return_to'
+
 type TokenResponse = {
   access_token: string
   id_token: string
@@ -20,13 +22,16 @@ function callbackFailureReason(error: unknown) {
   if (!(error instanceof Error)) return 'unknown'
 
   const message = error.message.toLowerCase()
-
   if (message.includes('unsupported secrets manager format')) return 'secret_format'
   if (message.includes('client secret is empty')) return 'secret_empty'
   if (message.includes('jwks') || message.includes('jwt') || message.includes('claim')) return 'token_verify'
   if (message.includes('fetch') || message.includes('network')) return 'network'
-
   return 'unknown'
+}
+
+function safeReturnTo(value: string | undefined) {
+  if (!value || !value.startsWith('/aqla') || value.startsWith('//')) return '/aqla'
+  return value.slice(0, 500)
 }
 
 export async function GET(request: NextRequest) {
@@ -43,6 +48,7 @@ export async function GET(request: NextRequest) {
   const expectedState = request.cookies.get(authCookies.state)?.value
   const expectedNonce = request.cookies.get(authCookies.nonce)?.value
   const verifier = request.cookies.get(authCookies.verifier)?.value
+  const returnTo = safeReturnTo(request.cookies.get(RETURN_TO_COOKIE)?.value)
 
   if (!expectedState || state !== expectedState || !expectedNonce || !verifier) {
     return NextResponse.redirect(new URL('/?auth=invalid_state', appUrl))
@@ -79,7 +85,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL('/?auth=invalid_nonce', appUrl))
     }
 
-    const response = NextResponse.redirect(new URL('/auth/success', appUrl))
+    const response = NextResponse.redirect(new URL(returnTo, appUrl))
     const authCookie = {
       httpOnly: true,
       secure: true,
@@ -105,14 +111,12 @@ export async function GET(request: NextRequest) {
     response.cookies.delete(authCookies.state)
     response.cookies.delete(authCookies.nonce)
     response.cookies.delete(authCookies.verifier)
+    response.cookies.delete(RETURN_TO_COOKIE)
 
     return response
   } catch (callbackError) {
     const reason = callbackFailureReason(callbackError)
-    console.error(
-      'Cognito callback failed',
-      callbackError instanceof Error ? callbackError.message : 'Unknown error',
-    )
+    console.error('Cognito callback failed', callbackError instanceof Error ? callbackError.message : 'Unknown error')
     return NextResponse.redirect(new URL(`/?auth=callback_failed&reason=${reason}`, appUrl))
   }
 }
