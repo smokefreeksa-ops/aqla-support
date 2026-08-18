@@ -1,13 +1,12 @@
-import { NextResponse } from 'next/server'
-import { authCookies, getCognitoConfig } from '@/lib/cognito'
+import { NextRequest, NextResponse } from 'next/server'
+import { authCookies, cognitoConfig } from '@/lib/cognito'
 
 export const runtime = 'nodejs'
 
-export async function GET() {
-  const { clientId, domain, appUrl } = getCognitoConfig()
-  const logoutUrl = new URL(`${domain}/logout`)
-  logoutUrl.searchParams.set('client_id', clientId)
-  logoutUrl.searchParams.set('logout_uri', `${appUrl}/`)
+export async function GET(request: NextRequest) {
+  const logoutUrl = new URL(`${cognitoConfig.domain}/logout`)
+  logoutUrl.searchParams.set('client_id', cognitoConfig.clientId)
+  logoutUrl.searchParams.set('logout_uri', `${request.nextUrl.origin}/`)
 
   const response = NextResponse.redirect(logoutUrl)
   Object.values(authCookies).forEach((name) => response.cookies.delete(name))
