@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import {
   authCookies,
   cognitoConfig,
@@ -8,12 +8,20 @@ import {
 
 export const runtime = 'nodejs'
 
-export async function GET() {
+const RETURN_TO_COOKIE = 'aqla_auth_return_to'
+
+function safeReturnTo(value: string | null) {
+  if (!value || !value.startsWith('/aqla') || value.startsWith('//')) return '/aqla'
+  return value.slice(0, 500)
+}
+
+export async function GET(request: NextRequest) {
   const state = randomBase64Url()
   const nonce = randomBase64Url()
   const verifier = randomBase64Url(48)
   const challenge = createPkceChallenge(verifier)
   const redirectUri = `${cognitoConfig.appUrl}/auth/callback`
+  const returnTo = safeReturnTo(new URL(request.url).searchParams.get('returnTo'))
 
   const authorizeUrl = new URL(`${cognitoConfig.domain}/oauth2/authorize`)
   authorizeUrl.searchParams.set('client_id', cognitoConfig.clientId)
@@ -37,6 +45,7 @@ export async function GET() {
   response.cookies.set(authCookies.state, state, temporaryCookie)
   response.cookies.set(authCookies.nonce, nonce, temporaryCookie)
   response.cookies.set(authCookies.verifier, verifier, temporaryCookie)
+  response.cookies.set(RETURN_TO_COOKIE, returnTo, temporaryCookie)
 
   return response
 }
