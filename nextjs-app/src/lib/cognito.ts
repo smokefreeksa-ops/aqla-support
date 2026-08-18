@@ -7,6 +7,7 @@ export const cognitoConfig = {
   clientId: '7m1po5aph23iv3d9btms8n3udb',
   issuer: 'https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_xYZywGOuy',
   domain: 'https://eu-west-2xyzywgouy.auth.eu-west-2.amazoncognito.com',
+  appUrl: 'https://agent-nextjs-aws-migration.d8ytpzrqdre19.amplifyapp.com',
   clientSecretId: 'aqla/v2/staging/cognito-client',
 } as const
 
