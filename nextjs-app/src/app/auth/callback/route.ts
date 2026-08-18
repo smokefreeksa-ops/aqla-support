@@ -17,7 +17,7 @@ type TokenResponse = {
 }
 
 export async function GET(request: NextRequest) {
-  const appUrl = request.nextUrl.origin
+  const appUrl = cognitoConfig.appUrl
   const url = new URL(request.url)
   const code = url.searchParams.get('code')
   const state = url.searchParams.get('state')
