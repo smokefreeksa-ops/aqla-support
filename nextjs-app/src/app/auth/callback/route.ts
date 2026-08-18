@@ -16,6 +16,19 @@ type TokenResponse = {
   token_type?: string
 }
 
+function callbackFailureReason(error: unknown) {
+  if (!(error instanceof Error)) return 'unknown'
+
+  const message = error.message.toLowerCase()
+
+  if (message.includes('unsupported secrets manager format')) return 'secret_format'
+  if (message.includes('client secret is empty')) return 'secret_empty'
+  if (message.includes('jwks') || message.includes('jwt') || message.includes('claim')) return 'token_verify'
+  if (message.includes('fetch') || message.includes('network')) return 'network'
+
+  return 'unknown'
+}
+
 export async function GET(request: NextRequest) {
   const appUrl = cognitoConfig.appUrl
   const url = new URL(request.url)
@@ -56,7 +69,7 @@ export async function GET(request: NextRequest) {
 
     if (!tokenResponse.ok) {
       console.error('Cognito token exchange failed', tokenResponse.status)
-      return NextResponse.redirect(new URL('/?auth=token_exchange_failed', appUrl))
+      return NextResponse.redirect(new URL(`/?auth=token_exchange_failed&status=${tokenResponse.status}`, appUrl))
     }
 
     const tokens = (await tokenResponse.json()) as TokenResponse
@@ -95,10 +108,11 @@ export async function GET(request: NextRequest) {
 
     return response
   } catch (callbackError) {
+    const reason = callbackFailureReason(callbackError)
     console.error(
       'Cognito callback failed',
       callbackError instanceof Error ? callbackError.message : 'Unknown error',
     )
-    return NextResponse.redirect(new URL('/?auth=callback_failed', appUrl))
+    return NextResponse.redirect(new URL(`/?auth=callback_failed&reason=${reason}`, appUrl))
   }
 }
