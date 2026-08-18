@@ -1,40 +1,11 @@
-import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager'
 import { NextRequest, NextResponse } from 'next/server'
+import { AQla_OPENAI_MODEL, openAIStructuredResponse } from '@/lib/openai.server'
 
 export const dynamic = 'force-dynamic'
 
-const secrets = new SecretsManagerClient({ region: 'eu-west-2' })
-const SECRET_ID = 'aqla/v2/staging/openai'
-const MODEL = 'gpt-5.6-terra'
-
-let cachedKey: Promise<string> | undefined
-
-function getApiKey() {
-  if (!cachedKey) {
-    cachedKey = secrets.send(new GetSecretValueCommand({ SecretId: SECRET_ID })).then((result) => {
-      const raw = result.SecretString?.trim()
-      if (!raw) throw new Error('openai_secret_empty')
-      try {
-        const parsed = JSON.parse(raw) as Record<string, unknown>
-        if (typeof parsed.apiKey === 'string' && parsed.apiKey.trim()) return parsed.apiKey.trim()
-      } catch {
-        if (raw.startsWith('sk-')) return raw
-      }
-      throw new Error('openai_secret_format')
-    })
-  }
-  return cachedKey.catch((error) => {
-    cachedKey = undefined
-    throw error
-  })
-}
-
 type Message = { role: 'user' | 'assistant'; content: string }
-
-type AssistantBody = {
-  lang?: 'ar' | 'en'
-  messages?: Message[]
-}
+type AssistantBody = { lang?: 'ar' | 'en'; messages?: Message[] }
+type AssistantOutput = { reply: string; suggested_pathway: 'quit_now' | 'prepare' | 'reduce' | 'not_ready' | 'training' | 'help_someone' | null }
 
 const emergencyPattern = /(chest pain|severe shortness of breath|coughing blood|suicid|kill myself|ألم شديد في الصدر|ضيق شديد في التنفس|نفث الدم|انتحار|أريد أن أموت)/i
 const medicationPattern = /(dose|dosage|\bmg\b|prescribe|prescription|nicotine patch dose|varenicline|bupropion|جرعة|ملغ|وصفة طبية|فارينيكلين|بوبروبيون)/i
@@ -53,23 +24,17 @@ function safeOverride(text: string, lang: 'ar' | 'en') {
   return null
 }
 
-function extractOutputText(json: unknown): string {
-  if (!json || typeof json !== 'object') return ''
-  const object = json as Record<string, unknown>
-  if (typeof object.output_text === 'string') return object.output_text
-  const output = Array.isArray(object.output) ? object.output : []
-  for (const item of output) {
-    if (!item || typeof item !== 'object') continue
-    const content = Array.isArray((item as Record<string, unknown>).content)
-      ? (item as Record<string, unknown>).content as unknown[]
-      : []
-    for (const part of content) {
-      if (!part || typeof part !== 'object') continue
-      const p = part as Record<string, unknown>
-      if (p.type === 'output_text' && typeof p.text === 'string') return p.text
-    }
-  }
-  return ''
+const schema = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    reply: { type: 'string' },
+    suggested_pathway: {
+      type: ['string', 'null'],
+      enum: ['quit_now', 'prepare', 'reduce', 'not_ready', 'training', 'help_someone', null],
+    },
+  },
+  required: ['reply', 'suggested_pathway'],
 }
 
 const instructions = `You are "Aqla Assistant" for AQla (أقلع), a Saudi smoking and nicotine cessation support platform.
@@ -91,73 +56,33 @@ export async function POST(request: NextRequest) {
   }
 
   const lang = body.lang === 'en' ? 'en' : 'ar'
-  const messages = Array.isArray(body.messages) ? body.messages.slice(-12) : []
-  const clean = messages
-    .filter((m): m is Message => Boolean(m) && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
-    .map((m) => ({ ...m, content: m.content.trim().slice(0, 4000) }))
-    .filter((m) => m.content.length > 0)
+  const clean = (Array.isArray(body.messages) ? body.messages.slice(-12) : [])
+    .filter((message): message is Message => Boolean(message) && (message.role === 'user' || message.role === 'assistant') && typeof message.content === 'string')
+    .map((message) => ({ ...message, content: message.content.trim().slice(0, 4000) }))
+    .filter((message) => message.content.length > 0)
 
-  const lastUser = [...clean].reverse().find((m) => m.role === 'user')
+  const lastUser = [...clean].reverse().find((message) => message.role === 'user')
   if (!lastUser) return NextResponse.json({ error: 'message_required' }, { status: 400 })
 
   const override = safeOverride(lastUser.content, lang)
   if (override) return NextResponse.json({ reply: override, safety: true, model: 'deterministic' })
 
   try {
-    const apiKey = await getApiKey()
-    const res = await fetch('https://api.openai.com/v1/responses', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        reasoning: { effort: 'low' },
-        max_output_tokens: 500,
-        instructions: `${instructions}\nApplication reply language: ${lang === 'ar' ? 'Arabic' : 'English'}.`,
-        input: clean.map((m) => ({
-          role: m.role,
-          content: [{ type: 'input_text', text: m.content }],
-        })),
-        text: {
-          verbosity: 'low',
-          format: {
-            type: 'json_schema',
-            name: 'aqla_assistant_response',
-            strict: true,
-            schema: {
-              type: 'object',
-              additionalProperties: false,
-              properties: {
-                reply: { type: 'string' },
-                suggested_pathway: {
-                  type: ['string', 'null'],
-                  enum: ['quit_now', 'prepare', 'reduce', 'not_ready', 'training', 'help_someone', null],
-                },
-              },
-              required: ['reply', 'suggested_pathway'],
-            },
-          },
-        },
-      }),
+    const response = await openAIStructuredResponse<AssistantOutput>({
+      instructions: `${instructions}\nApplication reply language: ${lang === 'ar' ? 'Arabic' : 'English'}.`,
+      input: JSON.stringify(clean),
+      schemaName: 'aqla_assistant_response',
+      schema,
+      maxOutputTokens: 500,
     })
 
-    if (!res.ok) {
-      const requestId = res.headers.get('x-request-id')
-      console.error('OpenAI Responses API failed', res.status, requestId ?? '')
-      return NextResponse.json({ error: 'assistant_unavailable' }, { status: 502 })
-    }
-
-    const json = await res.json() as unknown
-    const raw = extractOutputText(json)
-    const parsed = JSON.parse(raw) as { reply?: unknown; suggested_pathway?: unknown }
-    if (typeof parsed.reply !== 'string' || !parsed.reply.trim()) throw new Error('openai_output_invalid')
+    const reply = response.data.reply?.trim()
+    if (!reply) throw new Error('openai_output_invalid')
 
     return NextResponse.json({
-      reply: parsed.reply.trim(),
-      suggested_pathway: typeof parsed.suggested_pathway === 'string' ? parsed.suggested_pathway : null,
-      model: MODEL,
+      reply,
+      suggested_pathway: response.data.suggested_pathway ?? null,
+      model: AQla_OPENAI_MODEL,
     })
   } catch (error) {
     console.error('AQla assistant error', error instanceof Error ? error.message : 'unknown')
