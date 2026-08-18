@@ -1,0 +1,133 @@
+'use client'
+
+import { useState } from 'react'
+
+const REDCAP_URL = 'https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM'
+const LOGO_URL = 'https://aqla1.com/aqla-logo.png'
+
+const copy = {
+  ar: {
+    dir: 'rtl' as const,
+    lang: 'ar',
+    switch: 'English',
+    banner: 'تجربتك تهمنا وتساهم في البحث العلمي',
+    joinNow: 'شارك الآن في الدراسة',
+    quickPlan: 'ابدأ خطة الإقلاع السريعة مع د. مالك',
+    achievement: 'أنشئ بطاقة إنجازك',
+    visits: '٥٧٢ زيارة',
+    eyebrow: 'دراسة علمية',
+    university: 'جامعة الملك عبدالعزيز',
+    title: 'شارك برأيك حول دور منتجات النيكوتين الخالية من التبغ في الحد من أضرار التدخين',
+    prize: 'شارك في الاستبيان وادخل السحب للفوز بـ ٥٠٠ ريال سعودي',
+    participate: 'شارك في الدراسة',
+    details: 'تفاصيل الدراسة',
+    p1: 'هذه دراسة بحثية من جامعة الملك عبدالعزيز تهدف إلى فهم آراء وتجارب البالغين حول استخدام منتجات النيكوتين الخالية من التبغ ودورها المحتمل في الحد من أضرار التدخين.',
+    p2: 'المشاركة طوعية، وستُعامل إجاباتك بسرية وتُستخدم لأغراض البحث العلمي فقط.',
+    ethics: 'تمت الموافقة على الدراسة من لجنة أخلاقيات البحث بجامعة الملك عبدالعزيز. رقم الموافقة: 26-162',
+    contact: 'للمزيد من المعلومات: smokefreeksa@gmail.com',
+    tags: ['المشاركة تطوعية', 'إجابات سرية', 'مجهولة الهوية', 'سحب على ٥٠٠ ريال سعودي'],
+    skip: 'تخطي',
+    confirm: 'قبل أن تتابع، نأمل أن تفكر في المشاركة في الدراسة — مشاركتك تهمنا.',
+    continue: 'متابعة إلى الموقع',
+    back: 'العودة للدراسة',
+  },
+  en: {
+    dir: 'ltr' as const,
+    lang: 'en',
+    switch: 'العربية',
+    banner: 'Your experience matters and contributes to scientific research',
+    joinNow: 'Take part in the study',
+    quickPlan: 'Start a quick quit plan with Dr. Malik',
+    achievement: 'Create your achievement card',
+    visits: '572 visits',
+    eyebrow: 'Scientific study',
+    university: 'King Abdulaziz University',
+    title: 'Share your view on the role of tobacco-free nicotine products in reducing smoking harm',
+    prize: 'Take the survey and enter the draw to win SAR 500',
+    participate: 'Take part in the study',
+    details: 'Study details',
+    p1: 'This King Abdulaziz University research study aims to understand adults’ opinions and experiences regarding tobacco-free nicotine products and their potential role in reducing smoking harm.',
+    p2: 'Participation is voluntary. Your responses will be treated confidentially and used for research purposes only.',
+    ethics: 'Approved by the Research Ethics Committee at King Abdulaziz University. Approval number: 26-162',
+    contact: 'For more information: smokefreeksa@gmail.com',
+    tags: ['Voluntary participation', 'Confidential responses', 'Anonymous responses', 'SAR 500 prize draw'],
+    skip: 'Skip',
+    confirm: 'Before you continue, please consider taking part in the study — your participation matters.',
+    continue: 'Continue to AQla',
+    back: 'Return to study',
+  },
+}
+
+export default function StudyInvitation() {
+  const [lang, setLang] = useState<'ar' | 'en'>('ar')
+  const [confirming, setConfirming] = useState(false)
+  const t = copy[lang]
+
+  return (
+    <main className="study-screen" dir={t.dir} lang={t.lang}>
+      <div className="research-strip">
+        <div className="research-strip-inner">
+          <span className="research-strip-copy">{t.banner}</span>
+          <a className="research-strip-primary" href={REDCAP_URL} target="_blank" rel="noreferrer">{t.joinNow}</a>
+          <a className="research-strip-secondary" href="/aqla#assistant">{t.quickPlan}</a>
+          <a className="research-strip-secondary" href="/aqla#achievement">{t.achievement}</a>
+          <span className="research-strip-count"><span className="live-dot" />{t.visits}</span>
+        </div>
+      </div>
+
+      <div className="study-environment" aria-hidden="true" />
+      <div className="study-flag-texture" aria-hidden="true" />
+
+      <button className="study-language" type="button" onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}>
+        {t.switch}
+      </button>
+
+      <section className="study-stage">
+        <div className="study-card">
+          <div className="study-card-shine" aria-hidden="true" />
+          <div className="study-content">
+            <div className="study-logo-box">
+              <img src={LOGO_URL} alt="Aqla — أقلع" className="study-logo" />
+            </div>
+
+            <div className="study-eyebrow"><span />{t.eyebrow}<span /></div>
+            <div className="study-university">{t.university}</div>
+
+            {!confirming ? (
+              <>
+                <h1 className="study-title">{t.title}</h1>
+                <p className="study-prize">{t.prize}</p>
+
+                <a className="study-primary-button" href={REDCAP_URL} target="_blank" rel="noreferrer">
+                  {t.participate}
+                </a>
+
+                <details className="study-details">
+                  <summary>{t.details}<span>⌄</span></summary>
+                  <div className="study-details-body">
+                    <p>{t.p1}</p>
+                    <p>{t.p2}</p>
+                    <p className="study-details-strong">{t.ethics}</p>
+                    <p>{t.contact}</p>
+                    <div className="study-tags">
+                      {t.tags.map((tag) => <span key={tag}>{tag}</span>)}
+                    </div>
+                  </div>
+                </details>
+
+                <button className="study-skip" type="button" onClick={() => setConfirming(true)}>{t.skip}</button>
+              </>
+            ) : (
+              <div className="study-confirm">
+                <p>{t.confirm}</p>
+                <a className="study-primary-button" href={REDCAP_URL} target="_blank" rel="noreferrer">{t.participate}</a>
+                <a className="study-secondary-button" href="/aqla">{t.continue}</a>
+                <button className="study-skip" type="button" onClick={() => setConfirming(false)}>{t.back}</button>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    </main>
+  )
+}
