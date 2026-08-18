@@ -5,6 +5,8 @@ import AqlaAssistant from '@/components/AqlaAssistant'
 
 const LOGO_URL = 'https://aqla1.com/aqla-logo.png'
 const REDCAP_URL = 'https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM'
+const ASSESSMENT_URL = '/aqla/assessment'
+const ASSESSMENT_LOGIN_URL = `/auth/login?returnTo=${encodeURIComponent(ASSESSMENT_URL)}`
 
 export default function AqlaHome({ signedIn, email }: { signedIn: boolean; email?: string }) {
   const [lang, setLang] = useState<'ar' | 'en'>('ar')
@@ -32,21 +34,21 @@ export default function AqlaHome({ signedIn, email }: { signedIn: boolean; email
           </a>
           <nav className="aqla-nav">
             <a href="/aqla">{ar ? 'الرئيسية' : 'Home'}</a>
-            <a href="#pathways">{ar ? 'مسار الإقلاع' : 'Quit Pathway'}</a>
+            <a href={ASSESSMENT_URL}>{ar ? 'مسار الإقلاع' : 'Quit Pathway'}</a>
             <a href="#pathways">{ar ? 'مسار المساعدة' : 'Help Someone'}</a>
             <a href="#pathways">{ar ? 'التحديات والأنشطة' : 'Challenges'}</a>
             <a href="#assistant">{ar ? 'المساعد الذكي' : 'AI Assistant'}</a>
           </nav>
           <div className="aqla-header-actions">
             <button className="aqla-header-button" type="button" onClick={() => setLang(ar ? 'en' : 'ar')}>{ar ? 'EN' : 'ع'}</button>
-            {signedIn ? <a className="aqla-header-button" href="/auth/logout">{ar ? 'تسجيل الخروج' : 'Sign out'}</a> : <a className="aqla-header-button" href="/auth/login">{ar ? 'ابدأ الآن' : 'Start now'}</a>}
+            {signedIn ? <><a className="aqla-header-button" href={ASSESSMENT_URL}>{ar ? 'ابدأ خطتي' : 'My plan'}</a><a className="aqla-header-button" href="/auth/logout">{ar ? 'تسجيل الخروج' : 'Sign out'}</a></> : <a className="aqla-header-button" href={ASSESSMENT_LOGIN_URL}>{ar ? 'ابدأ الآن' : 'Start now'}</a>}
           </div>
         </div>
         <div className="research-strip">
           <div className="research-strip-inner">
             <span className="research-strip-copy">{ar ? 'تجربتك تهمنا وتساهم في البحث العلمي' : 'Your experience matters and contributes to scientific research'}</span>
             <a className="research-strip-primary" href={REDCAP_URL} target="_blank" rel="noreferrer">{ar ? 'شارك الآن في الدراسة' : 'Take part in the study'}</a>
-            <a className="research-strip-secondary" href="#assistant">{ar ? 'ابدأ خطة الإقلاع السريعة مع د. مالك' : 'Start a quick quit plan with Dr. Malik'}</a>
+            <a className="research-strip-secondary" href={ASSESSMENT_URL}>{ar ? 'ابدأ خطة الإقلاع الشخصية' : 'Start your personal quit plan'}</a>
             <span className="research-strip-count"><span className="live-dot" />{ar ? '٥٧٢ زيارة' : '572 visits'}</span>
           </div>
         </div>
@@ -55,12 +57,12 @@ export default function AqlaHome({ signedIn, email }: { signedIn: boolean; email
       <main>
         <section className="aqla-hero">
           <div className="aqla-hero-panel">
-            <a href="#pathways" className="hero-study-chip">{ar ? 'ابدأ رحلتك في مركز الإقلاع الافتراضي' : 'Start your journey in the virtual quit center'}</a>
+            <a href={ASSESSMENT_URL} className="hero-study-chip">{ar ? 'ابدأ رحلتك في مركز الإقلاع الافتراضي' : 'Start your journey in the virtual quit center'}</a>
             <img src={LOGO_URL} alt="Aqla — أقلع" className="hero-logo" />
             <h1 className="hero-title"><span className="gradient">{ar ? 'أقلع' : 'Aqla'}</span> {ar ? 'عن التدخين' : 'from smoking'}</h1>
             <p className="hero-lead">{ar ? 'منصة علمية متكاملة لدعم الإقلاع عن التدخين — مبنية على أحدث الأدلة السريرية وتجمع بين التقنية والرعاية الشخصية لتحقيق نتائج مستدامة.' : 'An integrated scientific platform for smoking and nicotine cessation support, combining evidence, technology and personalised care.'}</p>
             <div className="hero-actions">
-              <a href={signedIn ? '#pathways' : '/auth/login'} className="hero-primary">{ar ? 'أريد أن أتوقف عن التدخين' : 'I want to quit smoking'}</a>
+              <a href={signedIn ? ASSESSMENT_URL : ASSESSMENT_LOGIN_URL} className="hero-primary">{ar ? 'أريد أن أتوقف عن التدخين' : 'I want to quit smoking'}</a>
               <a href="#pathways" className="hero-secondary">{ar ? 'شهادات ودورات الأخصائي المعتمد' : 'Training & certificates'}</a>
             </div>
             <p className="hero-free">{ar ? 'مجاناً تماماً • مدعوم بالأدلة العلمية • ابدأ الآن' : 'Completely free • Evidence-based • Start now'}</p>
@@ -82,7 +84,7 @@ export default function AqlaHome({ signedIn, email }: { signedIn: boolean; email
               {pathways.map(([title, desc, cta], i) => (
                 <article className="pathway-card" key={title}>
                   <h3>{title}</h3><p>{desc}</p>
-                  <a href={i === 0 ? (signedIn ? '#assistant' : '/auth/login') : '#assistant'}>{cta}</a>
+                  <a href={i === 0 ? (signedIn ? ASSESSMENT_URL : ASSESSMENT_LOGIN_URL) : '#assistant'}>{cta}</a>
                 </article>
               ))}
             </div>
@@ -94,7 +96,7 @@ export default function AqlaHome({ signedIn, email }: { signedIn: boolean; email
             <div className="ai-card">
               <div>
                 <h2>{ar ? 'مساعد أقلع الذكي' : 'AQla Smart Assistant'}</h2>
-                <p>{ar ? 'المساعد يعمل الآن من داخل AWS باستخدام مفتاح OpenAI الخاص ببيئة AQla AWS Staging. يحافظ أقلع على قواعد السلامة والمنطق السريري بينما يستخدم النموذج لتخصيص الحوار والمحتوى.' : 'The assistant now runs from AWS using the dedicated AQla AWS Staging OpenAI project. AQla controls safety and clinical logic while the model personalises the conversation.'}</p>
+                <p>{ar ? 'المساعد يعمل من داخل AWS باستخدام مشروع OpenAI الخاص ببيئة AQla staging. يحافظ أقلع على قواعد السلامة والمنطق السريري بينما يستخدم النموذج لتخصيص الحوار والمحتوى.' : 'The assistant runs from AWS using the dedicated AQla staging OpenAI project. AQla controls safety and clinical logic while the model personalises the conversation.'}</p>
                 {signedIn && email ? <p style={{fontSize:12,opacity:.7}}>{ar ? `تم تسجيل الدخول باسم ${email}` : `Signed in as ${email}`}</p> : null}
               </div>
               <div><button type="button" onClick={() => window.dispatchEvent(new Event('aqla:open-assistant'))}>{ar ? 'تحدث مع مساعد أقلع' : 'Talk to AQla Assistant'}</button></div>
