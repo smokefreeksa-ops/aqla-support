@@ -23,19 +23,47 @@ export const authCookies = {
 const secretsClient = new SecretsManagerClient({ region: cognitoConfig.region })
 let cachedSecret: Promise<string> | undefined
 
+function extractSecretValue(secretString: string): string {
+  const raw = secretString.trim()
+  if (!raw) throw new Error('Cognito client secret is empty')
+
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(raw)
+  } catch {
+    return raw
+  }
+
+  if (typeof parsed === 'string' && parsed.trim()) return parsed.trim()
+
+  if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+    const entries = Object.entries(parsed as Record<string, unknown>)
+    const normalized = new Map(
+      entries.map(([key, value]) => [key.replace(/[^a-z0-9]/gi, '').toLowerCase(), value]),
+    )
+
+    for (const key of ['clientsecret', 'cognitoclientsecret', 'secret', 'value']) {
+      const value = normalized.get(key)
+      if (typeof value === 'string' && value.trim()) return value.trim()
+    }
+
+    const stringValues = entries
+      .map(([, value]) => value)
+      .filter((value): value is string => typeof value === 'string' && value.trim().length > 0)
+
+    if (stringValues.length === 1) return stringValues[0].trim()
+  }
+
+  throw new Error('Cognito client secret has an unsupported Secrets Manager format')
+}
+
 export async function getCognitoClientSecret() {
   if (!cachedSecret) {
     cachedSecret = secretsClient
       .send(new GetSecretValueCommand({ SecretId: cognitoConfig.clientSecretId }))
       .then((result) => {
         if (!result.SecretString) throw new Error('Cognito client secret is empty')
-        try {
-          const parsed = JSON.parse(result.SecretString) as { clientSecret?: string }
-          if (parsed.clientSecret) return parsed.clientSecret
-        } catch {
-          return result.SecretString
-        }
-        throw new Error('Cognito client secret is missing clientSecret')
+        return extractSecretValue(result.SecretString)
       })
   }
 
