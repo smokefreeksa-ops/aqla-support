@@ -1,0 +1,42 @@
+name: Next.js migration CI
+
+on:
+  push:
+    branches:
+      - "agent/nextjs-aws-migration"
+    paths:
+      - "nextjs-app/**"
+      - ".github/workflows/nextjs-migration-ci.yml"
+  pull_request:
+    paths:
+      - "nextjs-app/**"
+      - ".github/workflows/nextjs-migration-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nextjs-app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: nextjs-app/package.json
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
