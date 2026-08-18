@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import './quit-engine.css'
 
 export const metadata: Metadata = {
   title: 'أقلع — AQla',
