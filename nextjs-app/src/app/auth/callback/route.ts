@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { authCookies, getCognitoConfig, verifyCognitoIdToken } from '@/lib/cognito'
+import {
+  authCookies,
+  cognitoConfig,
+  getCognitoClientSecret,
+  verifyCognitoIdToken,
+} from '@/lib/cognito'
 
 export const runtime = 'nodejs'
 
@@ -12,7 +17,7 @@ type TokenResponse = {
 }
 
 export async function GET(request: NextRequest) {
-  const { clientId, clientSecret, domain, appUrl } = getCognitoConfig()
+  const appUrl = request.nextUrl.origin
   const url = new URL(request.url)
   const code = url.searchParams.get('code')
   const state = url.searchParams.get('state')
@@ -30,16 +35,17 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL('/?auth=invalid_state', appUrl))
   }
 
+  const clientSecret = await getCognitoClientSecret()
   const redirectUri = `${appUrl}/auth/callback`
-  const tokenResponse = await fetch(`${domain}/oauth2/token`, {
+  const tokenResponse = await fetch(`${cognitoConfig.domain}/oauth2/token`, {
     method: 'POST',
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
-      authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
+      authorization: `Basic ${Buffer.from(`${cognitoConfig.clientId}:${clientSecret}`).toString('base64')}`,
     },
     body: new URLSearchParams({
       grant_type: 'authorization_code',
-      client_id: clientId,
+      client_id: cognitoConfig.clientId,
       code,
       redirect_uri: redirectUri,
       code_verifier: verifier,
