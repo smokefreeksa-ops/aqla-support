@@ -23,11 +23,90 @@ export const authCookies = {
 const secretsClient = new SecretsManagerClient({ region: cognitoConfig.region })
 let cachedSecret: Promise<string> | undefined
 
+const preferredKeys = new Set([
+  'clientsecret',
+  'cognitoclientsecret',
+  'secret',
+  'secretvalue',
+  'value',
+])
+
+function normalizeKey(key: string) {
+  return key.replace(/[^a-z0-9]/gi, '').toLowerCase()
+}
+
+function collectStringLeaves(value: unknown, depth = 0): string[] {
+  if (depth > 5 || value == null) return []
+
+  if (typeof value === 'string') {
+    const trimmed = value.trim()
+    if (!trimmed) return []
+
+    if ((trimmed.startsWith('{') && trimmed.endsWith('}')) || (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+      try {
+        return collectStringLeaves(JSON.parse(trimmed), depth + 1)
+      } catch {
+        // Not nested JSON; treat as a plain string below.
+      }
+    }
+
+    return [trimmed]
+  }
+
+  if (Array.isArray(value)) {
+    return value.flatMap((item) => collectStringLeaves(item, depth + 1))
+  }
+
+  if (typeof value === 'object') {
+    return Object.values(value as Record<string, unknown>).flatMap((item) =>
+      collectStringLeaves(item, depth + 1),
+    )
+  }
+
+  return []
+}
+
+function extractPreferredObjectValue(value: unknown, depth = 0): string | undefined {
+  if (depth > 5 || !value || typeof value !== 'object') return undefined
+
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const nested = extractPreferredObjectValue(item, depth + 1)
+      if (nested) return nested
+    }
+    return undefined
+  }
+
+  const object = value as Record<string, unknown>
+  const entries = Object.entries(object)
+
+  for (const [key, entryValue] of entries) {
+    if (preferredKeys.has(normalizeKey(key))) {
+      const values = collectStringLeaves(entryValue, depth + 1)
+      if (values.length > 0) return values[0]
+    }
+  }
+
+  const keyLabel = entries.find(([key]) => ['key', 'name'].includes(normalizeKey(key)))?.[1]
+  const pairedValue = entries.find(([key]) => ['value', 'secretvalue'].includes(normalizeKey(key)))?.[1]
+  if (typeof keyLabel === 'string' && normalizeKey(keyLabel).includes('clientsecret') && pairedValue != null) {
+    const values = collectStringLeaves(pairedValue, depth + 1)
+    if (values.length > 0) return values[0]
+  }
+
+  for (const [, entryValue] of entries) {
+    const nested = extractPreferredObjectValue(entryValue, depth + 1)
+    if (nested) return nested
+  }
+
+  return undefined
+}
+
 function extractSecretValue(secretString: string): string {
   const raw = secretString.trim()
   if (!raw) throw new Error('Cognito client secret is empty')
 
-  let parsed: unknown
+  let parsed: unknown = raw
   try {
     parsed = JSON.parse(raw)
   } catch {
@@ -36,25 +115,26 @@ function extractSecretValue(secretString: string): string {
 
   if (typeof parsed === 'string' && parsed.trim()) return parsed.trim()
 
-  if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-    const entries = Object.entries(parsed as Record<string, unknown>)
-    const normalized = new Map(
-      entries.map(([key, value]) => [key.replace(/[^a-z0-9]/gi, '').toLowerCase(), value]),
-    )
+  const preferred = extractPreferredObjectValue(parsed)
+  if (preferred) return preferred
 
-    for (const key of ['clientsecret', 'cognitoclientsecret', 'secret', 'value']) {
-      const value = normalized.get(key)
-      if (typeof value === 'string' && value.trim()) return value.trim()
-    }
+  const leaves = collectStringLeaves(parsed)
+    .filter((value) => !['clientsecret', 'cognitoclientsecret', 'secret', 'secretvalue', 'value'].includes(normalizeKey(value)))
 
-    const stringValues = entries
-      .map(([, value]) => value)
-      .filter((value): value is string => typeof value === 'string' && value.trim().length > 0)
+  if (leaves.length === 1) return leaves[0]
 
-    if (stringValues.length === 1) return stringValues[0].trim()
-  }
+  const tokenLike = leaves
+    .filter((value) => value.length >= 20 && /^[A-Za-z0-9+/=_-]+$/.test(value))
+    .sort((a, b) => b.length - a.length)
 
-  throw new Error('Cognito client secret has an unsupported Secrets Manager format')
+  if (tokenLike.length > 0) return tokenLike[0]
+
+  const topLevelKeys =
+    parsed && typeof parsed === 'object' && !Array.isArray(parsed)
+      ? Object.keys(parsed as Record<string, unknown>).join(',')
+      : typeof parsed
+
+  throw new Error(`Cognito client secret has an unsupported Secrets Manager format (${topLevelKeys})`)
 }
 
 export async function getCognitoClientSecret() {
