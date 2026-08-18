@@ -1,5 +1,14 @@
 import { createHash, randomBytes } from 'node:crypto'
+import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager'
 import { createRemoteJWKSet, jwtVerify, type JWTPayload } from 'jose'
+
+export const cognitoConfig = {
+  region: 'eu-west-2',
+  clientId: '7m1po5aph23iv3d9btms8n3udb',
+  issuer: 'https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_xYZywGOuy',
+  domain: 'https://eu-west-2xyzywgouy.auth.eu-west-2.amazoncognito.com',
+  clientSecretId: 'aqla/v2/staging/cognito-client',
+} as const
 
 export const authCookies = {
   state: 'aqla_oauth_state',
@@ -10,31 +19,30 @@ export const authCookies = {
   refreshToken: 'aqla_refresh_token',
 } as const
 
-export function getCognitoConfig() {
-  const clientId = process.env.COGNITO_CLIENT_ID
-  const clientSecret = process.env.COGNITO_CLIENT_SECRET
-  const issuer = process.env.COGNITO_ISSUER
-  const domain = process.env.COGNITO_DOMAIN
-  const appUrl = process.env.APP_URL
+const secretsClient = new SecretsManagerClient({ region: cognitoConfig.region })
+let cachedSecret: Promise<string> | undefined
 
-  const missing = [
-    ['COGNITO_CLIENT_ID', clientId],
-    ['COGNITO_CLIENT_SECRET', clientSecret],
-    ['COGNITO_ISSUER', issuer],
-    ['COGNITO_DOMAIN', domain],
-    ['APP_URL', appUrl],
-  ].filter(([, value]) => !value)
-
-  if (missing.length > 0) {
-    throw new Error(`Missing server environment variables: ${missing.map(([name]) => name).join(', ')}`)
+export async function getCognitoClientSecret() {
+  if (!cachedSecret) {
+    cachedSecret = secretsClient
+      .send(new GetSecretValueCommand({ SecretId: cognitoConfig.clientSecretId }))
+      .then((result) => {
+        if (!result.SecretString) throw new Error('Cognito client secret is empty')
+        try {
+          const parsed = JSON.parse(result.SecretString) as { clientSecret?: string }
+          if (parsed.clientSecret) return parsed.clientSecret
+        } catch {
+          return result.SecretString
+        }
+        throw new Error('Cognito client secret is missing clientSecret')
+      })
   }
 
-  return {
-    clientId: clientId!,
-    clientSecret: clientSecret!,
-    issuer: issuer!.replace(/\/$/, ''),
-    domain: domain!.replace(/\/$/, ''),
-    appUrl: appUrl!.replace(/\/$/, ''),
+  try {
+    return await cachedSecret
+  } catch (error) {
+    cachedSecret = undefined
+    throw error
   }
 }
 
@@ -47,11 +55,10 @@ export function createPkceChallenge(verifier: string) {
 }
 
 export async function verifyCognitoIdToken(idToken: string): Promise<JWTPayload> {
-  const { issuer, clientId } = getCognitoConfig()
-  const jwks = createRemoteJWKSet(new URL(`${issuer}/.well-known/jwks.json`))
+  const jwks = createRemoteJWKSet(new URL(`${cognitoConfig.issuer}/.well-known/jwks.json`))
   const { payload } = await jwtVerify(idToken, jwks, {
-    issuer,
-    audience: clientId,
+    issuer: cognitoConfig.issuer,
+    audience: cognitoConfig.clientId,
   })
   return payload
 }
