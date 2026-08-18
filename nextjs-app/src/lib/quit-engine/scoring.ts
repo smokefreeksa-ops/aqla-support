@@ -2,16 +2,16 @@ import type { DependenceCategory, EngineAnswers, ReadinessCategory, SafetyFlag, 
 
 export function computeHSI(a: EngineAnswers): number | undefined {
   if (!a.product_types.includes('cigarettes')) return undefined
-  if (!a.cigarettes_per_day || a.cigarettes_per_day === 'غير يومي' || a.cigarettes_per_day === 'Not daily') return undefined
+  if (!a.cigarettes_per_day || a.cigarettes_per_day === 'not_daily') return undefined
 
   const time = a.first_use_after_waking === 'lt_5' ? 3
     : a.first_use_after_waking === '6_30' ? 2
       : a.first_use_after_waking === '31_60' ? 1
         : 0
 
-  const cpd = a.cigarettes_per_day === '11–20' ? 1
-    : a.cigarettes_per_day === '21–30' ? 2
-      : a.cigarettes_per_day === 'أكثر من 30' || a.cigarettes_per_day === 'More than 30' ? 3
+  const cpd = a.cigarettes_per_day === '11_20' ? 1
+    : a.cigarettes_per_day === '21_30' ? 2
+      : a.cigarettes_per_day === 'gt_30' ? 3
         : 0
 
   return time + cpd
@@ -19,8 +19,8 @@ export function computeHSI(a: EngineAnswers): number | undefined {
 
 /**
  * AQla support-intensity heuristic.
- * This is deliberately NOT presented as a validated dependence instrument.
- * It helps the application select how much behavioural support to surface.
+ * This is deliberately NOT a validated dependence instrument.
+ * It only helps AQla choose how much behavioural support to surface.
  */
 export function computeAqlaSupportIntensity(a: EngineAnswers): number {
   let score = 0
@@ -29,26 +29,19 @@ export function computeAqlaSupportIntensity(a: EngineAnswers): number {
   if (a.first_use_after_waking === 'lt_5' || a.first_use_after_waking === '6_30') score += 1
 
   const highFrequency =
-    a.cigarettes_per_day === '21–30' ||
-    a.cigarettes_per_day === 'أكثر من 30' ||
-    a.cigarettes_per_day === 'More than 30' ||
-    a.shisha_sessions_per_week === 'يوميًا أو شبه يومي' ||
-    a.shisha_sessions_per_week === 'Daily or almost daily' ||
-    a.vape_pattern === 'طوال اليوم تقريبًا' ||
-    a.vape_pattern === 'Almost continuously through the day' ||
-    a.vape_pattern === 'أول شيء بعد الاستيقاظ' ||
-    a.vape_pattern === 'One of the first things after waking' ||
-    a.nicotine_pouch_frequency === 'أكثر من 8' ||
-    a.nicotine_pouch_frequency === 'More than 8 a day'
+    a.cigarettes_per_day === '21_30' ||
+    a.cigarettes_per_day === 'gt_30' ||
+    a.shisha_sessions_per_week === 'daily' ||
+    a.vape_pattern === 'all_day' ||
+    a.vape_pattern === 'morning_first' ||
+    a.nicotine_pouch_frequency === 'gt_8'
   if (highFrequency) score += 2
 
   if (realProducts.length > 1 || a.mixed_use) score += 2
   if (a.triggers.includes('stress') || a.triggers.includes('anxiety')) score += 1
-
-  if (a.previous_quit_attempts && !['لا', 'No', 'نعم، أكثر من 3 أشهر ثم عدت', 'Yes, more than 3 months before returning'].includes(a.previous_quit_attempts)) score += 1
-
-  if (a.previous_quit_attempts === 'نعم، أقل من 24 ساعة' || a.previous_quit_attempts === 'Yes, less than 24 hours') score += 1
-  if (a.relapse_causes.some((cause) => ['رغبة شديدة', 'Strong cravings', 'عصبية أو توتر', 'Irritability or stress'].includes(cause))) score += 1
+  if (a.previous_quit_attempts && !['none', 'gt_3m_relapse'].includes(a.previous_quit_attempts)) score += 1
+  if (a.previous_quit_attempts === 'lt_24h') score += 1
+  if (a.relapse_causes.includes('craving') || a.relapse_causes.includes('stress')) score += 1
   if (a.safety_flags.includes('high_mixed_use') || a.safety_flags.includes('repeated_failure')) score += 1
 
   return Math.min(10, score)
