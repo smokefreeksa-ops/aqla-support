@@ -1,23 +1,22 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import {
   authCookies,
+  cognitoConfig,
   createPkceChallenge,
-  getCognitoConfig,
   randomBase64Url,
 } from '@/lib/cognito'
 
 export const runtime = 'nodejs'
 
-export async function GET() {
-  const { clientId, domain, appUrl } = getCognitoConfig()
+export async function GET(request: NextRequest) {
   const state = randomBase64Url()
   const nonce = randomBase64Url()
   const verifier = randomBase64Url(48)
   const challenge = createPkceChallenge(verifier)
-  const redirectUri = `${appUrl}/auth/callback`
+  const redirectUri = `${request.nextUrl.origin}/auth/callback`
 
-  const authorizeUrl = new URL(`${domain}/oauth2/authorize`)
-  authorizeUrl.searchParams.set('client_id', clientId)
+  const authorizeUrl = new URL(`${cognitoConfig.domain}/oauth2/authorize`)
+  authorizeUrl.searchParams.set('client_id', cognitoConfig.clientId)
   authorizeUrl.searchParams.set('response_type', 'code')
   authorizeUrl.searchParams.set('scope', 'openid email phone')
   authorizeUrl.searchParams.set('redirect_uri', redirectUri)
