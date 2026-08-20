@@ -12,11 +12,11 @@ import { validateEngineAnswers } from '@/lib/quit-engine/validation'
 
 export const dynamic = 'force-dynamic'
 
+const PRIVATE_HEADERS = { 'Cache-Control': 'no-store, private' }
+
 type Body = { lang?: 'ar' | 'en'; answers?: unknown }
 type Personalisation = { personal_summary: string; micro_challenge: string }
 type CurrentUser = { sub: string; email?: string; emailVerified: boolean }
-type EmailStatus = 'sent' | 'failed' | 'skipped_unverified' | 'skipped_plan_not_persisted'
-type FollowupSchedulingStatus = 'scheduled' | 'partial' | 'failed' | 'skipped_unverified' | 'skipped_plan_not_persisted'
 
 const schema = {
   type: 'object',
@@ -26,6 +26,10 @@ const schema = {
     micro_challenge: { type: 'string' },
   },
   required: ['personal_summary', 'micro_challenge'],
+}
+
+function json(body: unknown, status = 200) {
+  return NextResponse.json(body, { status, headers: PRIVATE_HEADERS })
 }
 
 async function currentUser(): Promise<CurrentUser | null> {
@@ -48,13 +52,13 @@ async function currentUser(): Promise<CurrentUser | null> {
 
 export async function POST(request: NextRequest) {
   const user = await currentUser()
-  if (!user) return NextResponse.json({ error: 'not_authenticated' }, { status: 401 })
+  if (!user) return json({ error: 'not_authenticated' }, 401)
 
   let body: Body
   try {
     body = await request.json() as Body
   } catch {
-    return NextResponse.json({ error: 'invalid_json' }, { status: 400 })
+    return json({ error: 'invalid_json' }, 400)
   }
 
   const lang = body.lang === 'en' ? 'en' : 'ar'
@@ -63,7 +67,7 @@ export async function POST(request: NextRequest) {
     answers = validateEngineAnswers(body.answers)
   } catch (error) {
     console.warn('Aqla quit engine validation failed', error instanceof Error ? error.message : 'unknown')
-    return NextResponse.json({ error: 'invalid_answers' }, { status: 400 })
+    return json({ error: 'invalid_answers' }, 400)
   }
 
   const result = buildPlan(answers, lang)
@@ -122,10 +126,6 @@ export async function POST(request: NextRequest) {
   }
 
   const verifiedEmail = user.email && user.emailVerified ? user.email : undefined
-  let emailStatus: EmailStatus = 'skipped_plan_not_persisted'
-  let emailMessageId: string | undefined
-  let followupSchedulingStatus: FollowupSchedulingStatus = 'skipped_plan_not_persisted'
-  let followupScheduleResults: Awaited<ReturnType<typeof schedulePlanFollowups>>['results'] = []
 
   try {
     await persistQuitPlan({
@@ -140,39 +140,28 @@ export async function POST(request: NextRequest) {
 
     if (verifiedEmail) {
       const scheduling = await schedulePlanFollowups({ userSub: user.sub, plan })
-      followupSchedulingStatus = scheduling.status
-      followupScheduleResults = scheduling.results
 
       try {
-        const sent = await sendPlanReadyEmail({
+        await sendPlanReadyEmail({
           to: verifiedEmail,
           planId: plan.plan_id,
           lang,
           followupsScheduled: scheduling.status === 'scheduled',
         })
-        emailStatus = 'sent'
-        emailMessageId = sent.messageId
       } catch (error) {
         // Email delivery failure must never remove or invalidate a successfully saved plan.
-        emailStatus = 'failed'
         console.error('Aqla SES plan-ready email unavailable', error instanceof Error ? error.message : 'unknown')
       }
     } else {
-      followupSchedulingStatus = 'skipped_unverified'
-      emailStatus = 'skipped_unverified'
       console.warn('Aqla email and automated follow-ups skipped because the authenticated Cognito email is not verified')
     }
   } catch (error) {
-    // The plan remains usable and is saved locally by the browser if staging
-    // DynamoDB is temporarily unavailable. We deliberately do not send an email
-    // that claims the plan is saved when persistence has failed.
+    // The plan remains usable in this browser session if staging persistence is
+    // temporarily unavailable. No email is sent claiming that it was saved.
     console.error('Aqla DynamoDB persistence unavailable', error instanceof Error ? error.message : 'unknown')
   }
 
-  return NextResponse.json({
-    plan,
-    model: model ?? 'deterministic',
-    email: { status: emailStatus, message_id: emailMessageId },
-    followups: { status: followupSchedulingStatus, schedules: followupScheduleResults },
-  })
+  // Participant-facing responses contain only the plan. Internal model names,
+  // SES identifiers and scheduler details stay in server-side logs and storage.
+  return json({ plan })
 }
