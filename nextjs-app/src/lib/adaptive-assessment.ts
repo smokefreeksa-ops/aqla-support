@@ -5,6 +5,7 @@ import type { PersonalPlanV2Answers } from '@/lib/personal-plan-v2'
 
 export type VapeDeviceType = 'disposable' | 'pod' | 'refillable' | 'other' | 'not_sure'
 export type VapeUrgeStrength = 'none_or_slight' | 'moderate_or_strong' | 'very_or_extremely_strong'
+type RealProduct = Exclude<ProductType, 'relapse_prevention'>
 
 export interface VapeAdaptiveAnswers {
   device_type?: VapeDeviceType
@@ -267,9 +268,10 @@ function scoreBand(value: number): 'high' | 'moderate' | 'low' {
 }
 
 export function buildAdaptiveTriage(base: EngineAnswers, v2: PersonalPlanV2Answers, adaptive: AdaptiveAssessmentAnswers): AdaptiveTriageProfile {
-  const realProducts = base.product_types.filter((item) => item !== 'relapse_prevention')
-  const primary = adaptive.dominant_product && realProducts.includes(adaptive.dominant_product)
-    ? adaptive.dominant_product
+  const realProducts = base.product_types.filter((item): item is RealProduct => item !== 'relapse_prevention')
+  const dominantProduct = adaptive.dominant_product
+  const primary: ProductType = dominantProduct && dominantProduct !== 'relapse_prevention' && realProducts.includes(dominantProduct)
+    ? dominantProduct
     : base.primary_product ?? realProducts[0] ?? 'relapse_prevention'
 
   const measures = [
