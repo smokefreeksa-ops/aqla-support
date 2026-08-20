@@ -23,13 +23,14 @@ export interface PersonalTwinState {
   confidence_score?: number
   readiness_score?: number
   personal_reasons?: string[]
-  previous_quit_attempts?: string | number | null
+  previous_quit_attempts?: string | null
   relapse_causes?: string[]
   dependence_category?: string
   readiness_category?: string
-  support_intensity?: string
+  support_intensity?: number
+  support_intensity_label?: string
   referral_needed?: boolean
-  safety_immediate?: boolean
+  safety_message?: string
   first_24h_step?: string
   followups?: Record<string, {
     outcome: string
@@ -64,13 +65,14 @@ export async function getPersonalTwin(userSub: string): Promise<PersonalTwinStat
     confidence_score: typeof item.confidence_score === 'number' ? item.confidence_score : undefined,
     readiness_score: typeof item.readiness_score === 'number' ? item.readiness_score : undefined,
     personal_reasons: Array.isArray(item.personal_reasons) ? item.personal_reasons.map(String) : undefined,
-    previous_quit_attempts: typeof item.previous_quit_attempts === 'number' || typeof item.previous_quit_attempts === 'string' ? item.previous_quit_attempts : null,
+    previous_quit_attempts: typeof item.previous_quit_attempts === 'string' ? item.previous_quit_attempts : null,
     relapse_causes: Array.isArray(item.relapse_causes) ? item.relapse_causes.map(String) : undefined,
     dependence_category: typeof item.dependence_category === 'string' ? item.dependence_category : undefined,
     readiness_category: typeof item.readiness_category === 'string' ? item.readiness_category : undefined,
-    support_intensity: typeof item.support_intensity === 'string' ? item.support_intensity : undefined,
+    support_intensity: typeof item.support_intensity === 'number' ? item.support_intensity : undefined,
+    support_intensity_label: typeof item.support_intensity_label === 'string' ? item.support_intensity_label : undefined,
     referral_needed: typeof item.referral_needed === 'boolean' ? item.referral_needed : undefined,
-    safety_immediate: typeof item.safety_immediate === 'boolean' ? item.safety_immediate : undefined,
+    safety_message: typeof item.safety_message === 'string' ? item.safety_message : undefined,
     first_24h_step: typeof item.first_24h_step === 'string' ? item.first_24h_step : undefined,
     followups: item.followups && typeof item.followups === 'object' ? item.followups as PersonalTwinState['followups'] : undefined,
   }
@@ -109,8 +111,9 @@ export async function updatePersonalTwinFromPlan({
     dependence_category: r.dependence_category,
     readiness_category: r.readiness_category,
     support_intensity: r.aqla_support_intensity,
+    support_intensity_label: r.aqla_support_intensity_label,
     referral_needed: r.referral_needed,
-    safety_immediate: r.safety_immediate,
+    safety_message: r.safety_immediate,
     first_24h_step: r.first_24h_step,
   }
 
@@ -183,6 +186,7 @@ export function personalTwinForAI(twin: PersonalTwinState | null) {
     dependence_category: twin.dependence_category,
     readiness_category: twin.readiness_category,
     support_intensity: twin.support_intensity,
+    support_intensity_label: twin.support_intensity_label,
     referral_needed: twin.referral_needed,
     first_24h_step: twin.first_24h_step,
     followups: twin.followups,
