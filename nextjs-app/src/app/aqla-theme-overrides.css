@@ -97,3 +97,7 @@ html[data-aqla-theme='light'] .os-sidebar {
   outline: 3px solid var(--aq-gold);
   outline-offset: 2px;
 }
+
+@media (max-width: 1080px) {
+  .aqla-mobile-nav .aqla-theme-control { display: inline-flex; }
+}
