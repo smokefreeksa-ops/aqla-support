@@ -14,6 +14,7 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 - **MIGRATE** — valuable AQla1 capability still needs to be ported.
 - **MERGE** — capability exists in both; combine best logic into one AWS implementation.
 - **CORRECTED** — old implementation contained a clinical/technical issue that must not be copied unchanged.
+- **CODED** — implementation exists on staging branch but still requires deployment/runtime/end-to-end verification.
 - **HOLD** — do not prioritise until governance/validation decision.
 - **DROP** — intentionally do not recreate as a separate system.
 
@@ -55,12 +56,12 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 | Capability | Status | Notes |
 |---|---|---|
 | HSI | KEEP-AWS | Already deterministic |
-| FTND six-item | MIGRATE | New verified scoring module added; UI/protocol activation remains |
-| PSECDI | CORRECTED | AWS scoring module uses published 0–20 Penn State scoring; do not copy simplified AQla1 scorer |
-| LWDS-11 | CORRECTED | 11 items × 0–3; threshold 10 retained; no invented severity bands |
-| HONC-style | MIGRATE with label | Current AQla wording is adapted; explicitly non-validated unless exact validated version adopted |
-| Oral nicotine/pouch adapted screen | MIGRATE with label | Explicitly non-validated |
-| Research Data Dictionary | IN PROGRESS | AWS dictionary v1 + admin page added |
+| FTND six-item | CODED | Verified scorer exists; participant/research protocol activation remains |
+| PSECDI | CORRECTED/CODED | AWS scorer uses published 0–20 Penn State scoring; old simplified scorer not copied |
+| LWDS-11 | CORRECTED/CODED | 11 items × 0–3; threshold 10 retained; no invented severity bands |
+| HONC-style | CODED with label | Explicitly non-validated adapted wording unless exact validated version adopted |
+| Oral nicotine/pouch adapted screen | CODED with label | Explicitly non-validated |
+| Research Data Dictionary | CODED | AWS dictionary v1 + protected admin page |
 | Full AQla1 research extension | MIGRATE | Demographics/exposure/access/social context only when protocol requires |
 | Cohort A–H | MERGE | Preserve as derived research/admin variable if needed; do not expose as participant architecture |
 
@@ -83,7 +84,7 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 | Flexible long-term cadence | MIGRATE | Day 14/28/60/90/6m/12m per policy/protocol |
 | SES plan-ready email | KEEP-AWS | Privacy-preserving |
 | SES scheduled follow-up | KEEP-AWS | EventBridge/Lambda |
-| Safety-hold communication gate | MIGRATE | Explicit gate before production |
+| Safety-hold communication gate | CODED | Immediate safety state now suppresses routine plan email and routine scheduled follow-ups |
 | Unsubscribe | MIGRATE | Needed before bulk communications |
 | Suppression list | MIGRATE | Needed before bulk communications |
 | Bounce/complaint receipts | MIGRATE | SES event destinations/SNS/EventBridge |
@@ -97,12 +98,19 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 | AWS KPI Command Centre | KEEP-AWS | Real counters only; unavailable ≠ zero |
 | Cognito admin role | KEEP-AWS | Server-side |
 | Cognito clinician role | KEEP-AWS | Server-side |
-| Full participant CRM | MIGRATE | Search, follow-up, appointment, notes, escalation |
-| Receptionist workflow | MIGRATE | Role-limited view |
-| Clinician longitudinal view | MIGRATE | Structured Twin/clinical summary; avoid raw-chat overload |
-| Clinical audit trail | MIGRATE | Application-level immutable audit events |
+| Cognito receptionist role | CODED | Dedicated least-privilege staff role support added |
+| Full participant CRM | CODED MVP | Dedicated DynamoDB partitions; paginated list, email/account lookup, workflow/contact/appointment/escalation |
+| Receptionist workflow | CODED MVP | Contact operations available; clinical plan/Twin/safety details hidden server-side |
+| Clinician longitudinal view | CODED MVP | Structured latest-plan + Personal Twin summary; no raw-chat overload |
+| Clinical audit trail | CODED MVP | Immutable DynamoDB audit events for staff CRM changes |
 | Research exports | MIGRATE | Full/anonymised/protocol exports |
 | De-identification rules | MIGRATE | Explicit PII/sensitive stripping |
+
+### CRM scale rule
+
+Operational participant listing must query dedicated `CRM#...` DynamoDB partitions. It must never use a full DynamoDB `Scan` as a normal user-facing listing strategy. Status and escalation views are separately indexed by partition key, and email/account lookup uses a dedicated lookup partition.
+
+Existing staging records created before the CRM index was introduced may require a one-time controlled backfill; that is a migration operation, not the runtime listing architecture.
 
 ## Academy and training
 
@@ -162,16 +170,16 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 
 ## Data architecture decision
 
-Use DynamoDB for high-scale participant journey state, conversations, current Twin, plans and follow-up.
+Use DynamoDB for high-scale participant journey state, conversations, current Twin, plans, follow-up and compact operational CRM indexes.
 
-Evaluate Aurora PostgreSQL for relational research/clinical/admin datasets that need complex joins, cohort filtering and research exports. Do not force all historic Supabase relational workloads into DynamoDB if PostgreSQL remains the better data model.
+Evaluate Aurora PostgreSQL for relational research datasets and future complex clinical/reporting workloads that need joins, cohort filtering and export-heavy SQL. Do not force every historic Supabase relational workload into DynamoDB if PostgreSQL remains the better data model.
 
 ## Migration order
 
-1. Research/validated scoring + AWS data dictionary — **started**.
-2. Clinical/admin participant CRM.
-3. Proper server-side PDF + explicit version lineage.
-4. Communication governance: safety hold, unsubscribe, suppression, bounce/complaint events.
+1. Research/validated scoring + AWS data dictionary — **CODED; deployment/runtime verification pending**.
+2. Clinical/admin participant CRM — **CODED MVP; deployment/runtime verification pending**.
+3. Proper server-side PDF + explicit version lineage — **NEXT**.
+4. Communication governance: unsubscribe, suppression, bounce/complaint events.
 5. Academy/training/certificate system.
 6. Help Someone + interactive tools + privacy-safe sharing.
 7. Challenges/city/movement/passport.
