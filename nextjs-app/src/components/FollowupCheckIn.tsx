@@ -21,7 +21,7 @@ type FollowupState = {
   plan_id: string
   followup_type: FollowupType
   scheduled_at: string
-  status: string
+  available: boolean
   response?: StoredResponse
   previous_response?: StoredResponse
 }
@@ -123,6 +123,7 @@ export default function FollowupCheckIn({
   useEffect(() => {
     let cancelled = false
     setLoading(true)
+    setError('')
     fetch(`/api/quit-engine/followup/${encodeURIComponent(planId)}/${followupType}`, { cache: 'no-store' })
       .then(async (response) => {
         if (response.status === 401) {
@@ -149,9 +150,26 @@ export default function FollowupCheckIn({
 
   const completed = Boolean(state?.response) && !editing
   const nextSupport = useMemo(() => outcome ? supportMessage(outcome, craving, confidence, lang) : null, [confidence, craving, lang, outcome])
+  const availableAt = useMemo(() => {
+    if (!state?.scheduled_at) return ''
+    const date = new Date(state.scheduled_at)
+    if (Number.isNaN(date.getTime())) return ''
+    try {
+      return new Intl.DateTimeFormat(lang === 'ar' ? 'ar-SA' : 'en-GB', { dateStyle: 'long', timeStyle: 'short' }).format(date)
+    } catch {
+      return date.toLocaleString()
+    }
+  }, [lang, state?.scheduled_at])
 
   function prepareSignOut() {
     try {
+      for (let index = sessionStorage.length - 1; index >= 0; index -= 1) {
+        const key = sessionStorage.key(index)
+        if (key?.startsWith('aqla_quit_plan:')) sessionStorage.removeItem(key)
+      }
+      sessionStorage.removeItem('aqla_quit_engine_draft_v1')
+
+      // Remove any legacy staging data left by earlier builds.
       for (let index = localStorage.length - 1; index >= 0; index -= 1) {
         const key = localStorage.key(index)
         if (key?.startsWith('aqla_quit_plan:')) localStorage.removeItem(key)
@@ -162,8 +180,18 @@ export default function FollowupCheckIn({
     }
   }
 
+  function cancelEditing() {
+    if (state?.response) {
+      setOutcome(state.response.outcome)
+      setCraving(state.response.craving_score)
+      setConfidence(state.response.confidence_score)
+    }
+    setError('')
+    setEditing(false)
+  }
+
   async function submit() {
-    if (!outcome || saving) return
+    if (!outcome || saving || !state?.available) return
     setSaving(true)
     setError('')
     try {
@@ -176,9 +204,17 @@ export default function FollowupCheckIn({
         window.location.href = `/auth/login?returnTo=${encodeURIComponent(`/aqla/followup/${planId}/${followupType}?lang=${lang}`)}`
         return
       }
+      if (response.status === 409) {
+        setState((previous) => previous ? { ...previous, available: false } : previous)
+        setError(ar ? 'هذه المتابعة لم يحن موعدها بعد. ستفتح تلقائيًا عند موعدها.' : 'This check-in is not due yet. It will become available at the scheduled time.')
+        return
+      }
       if (!response.ok) throw new Error(`save_${response.status}`)
       const data = await response.json() as { response: StoredResponse }
-      setState((previous) => previous ? { ...previous, status: 'responded', response: data.response } : previous)
+      setState((previous) => previous ? { ...previous, response: data.response } : previous)
+      setOutcome(data.response.outcome)
+      setCraving(data.response.craving_score)
+      setConfidence(data.response.confidence_score)
       setEditing(false)
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch {
@@ -189,7 +225,7 @@ export default function FollowupCheckIn({
   }
 
   if (loading) {
-    return <main className="fu-page" dir={ar ? 'rtl' : 'ltr'} lang={lang}><div className="fu-loading">{ar ? 'جاري فتح متابعتك بأمان…' : 'Opening your secure check-in…'}</div></main>
+    return <main className="fu-page" dir={ar ? 'rtl' : 'ltr'} lang={lang}><div className="fu-loading" role="status">{ar ? 'جاري فتح متابعتك بأمان…' : 'Opening your secure check-in…'}</div></main>
   }
 
   if (!state) {
@@ -223,7 +259,21 @@ export default function FollowupCheckIn({
           {state.previous_response ? <div className="fu-continuity">{ar ? 'سنأخذ آخر متابعة لك في الاعتبار عند تقديم الخطوة التالية.' : 'Your previous check-in will be taken into account when we present the next step.'}</div> : null}
         </section>
 
-        {completed && state.response ? (
+        {!state.available && !state.response ? (
+          <section className="fu-success" aria-live="polite">
+            <div className="fu-success-mark" aria-hidden="true">◷</div>
+            <div>
+              <span>{ar ? 'المتابعة محفوظة لوقتها المناسب' : 'Your check-in is scheduled'}</span>
+              <h2>{ar ? 'لم يحن موعد هذه المتابعة بعد' : 'This check-in is not due yet'}</h2>
+              <p>{availableAt
+                ? (ar ? `ستصبح هذه المتابعة متاحة في ${availableAt}.` : `This check-in will become available on ${availableAt}.`)
+                : (ar ? 'ارجع في الموعد المحدد في رسالة أقلع.' : 'Return at the time shown in your Aqla message.')}</p>
+            </div>
+            <div className="fu-success-actions">
+              <a href={`/aqla/plan/${encodeURIComponent(planId)}?lang=${lang}`} className="fu-primary">{ar ? 'العودة إلى خطتي' : 'Back to my plan'}</a>
+            </div>
+          </section>
+        ) : completed && state.response ? (
           <section className="fu-success" aria-live="polite">
             <div className="fu-success-mark">✓</div>
             <div>
@@ -260,13 +310,13 @@ export default function FollowupCheckIn({
             <div className="fu-score-grid">
               <label className="fu-score-card">
                 <span className="fu-score-heading"><strong>{ar ? 'أقوى رغبة خلال آخر 24 ساعة' : 'Strongest craving in the last 24 hours'}</strong><b>{craving}/10</b></span>
-                <input type="range" min="0" max="10" step="1" value={craving} onChange={(event) => setCraving(Number(event.target.value))} />
+                <input aria-label={ar ? 'درجة أقوى رغبة خلال آخر 24 ساعة' : 'Strongest craving score in the last 24 hours'} type="range" min="0" max="10" step="1" value={craving} onChange={(event) => setCraving(Number(event.target.value))} />
                 <span className="fu-range-ends"><span>{ar ? 'لا توجد' : 'None'}</span><span>{ar ? 'شديدة جدًا' : 'Very strong'}</span></span>
               </label>
 
               <label className="fu-score-card">
                 <span className="fu-score-heading"><strong>{ar ? 'ثقتك في خطوتك القادمة' : 'Confidence in your next step'}</strong><b>{confidence}/10</b></span>
-                <input type="range" min="0" max="10" step="1" value={confidence} onChange={(event) => setConfidence(Number(event.target.value))} />
+                <input aria-label={ar ? 'درجة الثقة في الخطوة القادمة' : 'Confidence score for your next step'} type="range" min="0" max="10" step="1" value={confidence} onChange={(event) => setConfidence(Number(event.target.value))} />
                 <span className="fu-range-ends"><span>{ar ? 'منخفضة' : 'Low'}</span><span>{ar ? 'مرتفعة' : 'High'}</span></span>
               </label>
             </div>
@@ -275,8 +325,8 @@ export default function FollowupCheckIn({
             {error ? <div className="fu-error" role="alert">{error}</div> : null}
 
             <div className="fu-submit-row">
-              <button type="button" className="fu-primary" disabled={!outcome || saving} onClick={() => void submit()}>{saving ? (ar ? 'جاري الحفظ…' : 'Saving…') : (ar ? 'احفظ متابعتي' : 'Save my check-in')}</button>
-              {editing ? <button type="button" className="fu-secondary" onClick={() => setEditing(false)}>{ar ? 'إلغاء' : 'Cancel'}</button> : null}
+              <button type="button" className="fu-primary" disabled={!outcome || saving || !state.available} onClick={() => void submit()}>{saving ? (ar ? 'جاري الحفظ…' : 'Saving…') : (ar ? 'احفظ متابعتي' : 'Save my check-in')}</button>
+              {editing ? <button type="button" className="fu-secondary" onClick={cancelEditing}>{ar ? 'إلغاء' : 'Cancel'}</button> : null}
             </div>
             <p className="fu-privacy">{ar ? 'تفاصيل هذه المتابعة محفوظة داخل حسابك ولا نضعها في عنوان البريد الإلكتروني أو معاينته.' : 'Your check-in details stay inside your account and are not placed in the email subject or preview.'}</p>
           </section>
