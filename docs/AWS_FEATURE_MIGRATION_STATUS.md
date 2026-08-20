@@ -72,23 +72,24 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 | Saved quit plan | KEEP-AWS | DynamoDB + Cognito ownership |
 | Latest-plan pointer | KEEP-AWS | `PLAN#LATEST` |
 | AI bounded coaching | KEEP-AWS | Stronger than legacy approach |
-| Client PDF | KEEP-AWS temporarily | Works as staging fallback |
-| Proper text PDF | MIGRATE | Port server-side Arabic PDF renderer to AWS Lambda/Node runtime |
-| Formal plan version lineage | MIGRATE | Restore explicit plan/rule/schema version governance |
+| Client PDF | KEEP-AWS fallback | Browser PDF retained as fallback during staging |
+| Proper text PDF | CODED | Server-side React PDF endpoint with Arabic DejaVu font and account ownership |
+| Formal plan version lineage | CODED | Plan/assessment/clinical/scoring/follow-up/AI prompt provenance stored with new plans |
 
 ## Follow-up and communications
 
 | Capability | Status | Notes |
 |---|---|---|
-| Day 3 / 7 / 30 | KEEP-AWS | Existing MVP scaffold |
-| Flexible long-term cadence | MIGRATE | Day 14/28/60/90/6m/12m per policy/protocol |
+| Longitudinal cadence | KEEP-AWS | Day 1/3/7/14/21/30/60/90/6m/12m policy scaffold |
 | SES plan-ready email | KEEP-AWS | Privacy-preserving |
 | SES scheduled follow-up | KEEP-AWS | EventBridge/Lambda |
-| Safety-hold communication gate | CODED | Immediate safety state now suppresses routine plan email and routine scheduled follow-ups |
-| Unsubscribe | MIGRATE | Needed before bulk communications |
-| Suppression list | MIGRATE | Needed before bulk communications |
-| Bounce/complaint receipts | MIGRATE | SES event destinations/SNS/EventBridge |
-| Bulk 100k email queue | MIGRATE | SQS + controlled Lambda workers + SES |
+| Safety-hold communication gate | CODED | Immediate safety state suppresses routine plan email and routine scheduled follow-ups |
+| Unsubscribe | CODED | Opaque-token, privacy-safe unsubscribe workflow |
+| Suppression list | CODED | Hashed recipient suppression; reason/scope separated |
+| Bounce/complaint receipts | CODED | SES event destination → SNS → Lambda → DynamoDB + DLQ |
+| Send-time suppression enforcement | CODED | Follow-up worker rechecks preferences immediately before SES send |
+| Delivery/reputation counters | CODED | Delivery, bounce, complaint, reject and delay events available to operational analytics |
+| Bulk 100k email queue | MIGRATE | SQS + controlled Lambda workers + SES after governance/runtime verification |
 | WhatsApp API | MIGRATE | Official provider only; opt-in/template/policy governed |
 
 ## Clinical/admin operations
@@ -103,8 +104,8 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 | Receptionist workflow | CODED MVP | Contact operations available; clinical plan/Twin/safety details hidden server-side |
 | Clinician longitudinal view | CODED MVP | Structured latest-plan + Personal Twin summary; no raw-chat overload |
 | Clinical audit trail | CODED MVP | Immutable DynamoDB audit events for staff CRM changes |
-| Research exports | MIGRATE | Full/anonymised/protocol exports |
-| De-identification rules | MIGRATE | Explicit PII/sensitive stripping |
+| Research exports | CODED/GATED | Pseudonymised latest-plan CSV; admin-only and deny-by-default until deployment governance flag is enabled |
+| De-identification rules | CODED v1 | Direct identifiers, staff notes, safety flags, suppression data and internal support score excluded from default export |
 
 ### CRM scale rule
 
@@ -118,12 +119,11 @@ Existing staging records created before the CRM index was introduced may require
 |---|---|---|
 | Basic AWS Academy content | KEEP-AWS | Six educational modules |
 | Conversational learning | KEEP-AWS/EXPAND | Same Aqla OS shell |
-| Quiz engine | MIGRATE | Port validated question/answer logic |
-| Seven-module training | MIGRATE | Preserve best-score/attempt logic |
-| Pass threshold | MIGRATE | Server authoritative |
-| Safety-critical exam gate | MIGRATE | High score cannot compensate for critical safety failure |
-| Certificate issuance | MIGRATE | Unique code/hash |
-| Certificate verification | MIGRATE | Public verification route |
+| Seven-module source content | CODED FOUNDATION | Existing 7 modules / 49 questions / 10 cases prepared as shared build content |
+| Server-authoritative quiz grading | CODED FOUNDATION | AWS scorer grades submitted answers; old client-supplied score model not copied |
+| Pass threshold | CODED FOUNDATION | Module and overall thresholds retained server-side |
+| Safety-critical exam gate | CODED FOUNDATION | Critical cases cannot be compensated for by high non-safety scores |
+| Certificate issuance/verification | CODED FOUNDATION | Backend model started; full learner UI/end-to-end flow still pending |
 | Learner dashboard | MIGRATE | Progress, attempts, sessions, certificates |
 | Multi-tenant org/programme scope | MIGRATE | Preserve future capability |
 
@@ -131,28 +131,35 @@ Existing staging records created before the CRM index was introduced may require
 
 | Capability | Status | Notes |
 |---|---|---|
-| Help Someone | MIGRATE HIGH | Strong distinctive feature |
-| Safe support-message generator | MIGRATE HIGH | Preserve anti-shaming/false-claim rules |
-| Cost calculator | MIGRATE HIGH | Easy/high-value tool |
-| Trigger map | MIGRATE HIGH | Feed Twin where consent allows |
-| Readiness meter | MIGRATE HIGH | Do not conflict with validated measures |
-| Quit timeline | MIGRATE | Educational |
-| Breath challenge | MIGRATE | Non-diagnostic |
-| Share cards | MIGRATE | Rebuild on S3 with strict privacy sanitiser |
-| Invite friends/QR | MIGRATE | Privacy-safe referral design |
-| Challenges | MIGRATE | Twin-aware, non-shaming |
-| City challenge | MIGRATE | Aggregate only; protect small cells |
-| Movement | MIGRATE | Public impact layer |
-| Passport/stamps | MIGRATE | Mature non-manipulative gamification |
-| Points/medals standalone page | DROP/ABSORB | Fold into challenge/passport system |
+| Help Someone | CODED | 8 relationship types, Arabic/English, privacy-first local generation |
+| Safe support-message generator | CODED | 6 tones + anti-shaming/medical-claim/false-affiliation filter |
+| Cost calculator | CODED | Client-side estimate with no savings guarantee |
+| Trigger map | CODED | Client-side; not silently written into Twin |
+| Readiness meter | CODED | Educational and clearly non-diagnostic |
+| Quit timeline | CODED | Educational timeline with variability disclaimer |
+| Breath challenge/reset | CODED | Non-diagnostic two-minute reset with safety note |
+| Privacy-safe share cards | CODED | Generic progress cards only; no plan URL/health fields; native/WhatsApp/X/PNG |
+| Invite friends/QR | MIGRATE | Referral/QR system still to be rebuilt if retained |
+| Poster Studio | CODED | 7 poster types, 7 themes, 10 messages, 5 export sizes; personal content remains local by default |
+| Challenges | CODED MVP | 6 non-shaming challenges with authenticated progress and participation points |
+| Challenge integrity | CODED | 28-day completion time-gated; knowledge challenge must be awarded from Academy evidence |
+| City challenge/community view | CODED MVP | Aggregate-only city engagement; minimum public cell size raised to 10 |
+| Community points | CODED MVP | Reward learning/support/awareness participation, never quit outcome or speed |
+| Community route | CODED | `/aqla/community` and `/aqla/city-challenge` route into the privacy-safe Challenge Hub |
+| Movement | MERGE/PENDING | Public impact concepts should use the new aggregate community layer instead of a separate duplicate system |
+| Passport/stamps | MIGRATE | Mature non-manipulative gamification can be layered on the challenge state later |
+| Points/medals standalone page | DROP/ABSORB | Folded into challenge/community architecture |
 | Updates page | DROP/ABSORB | Use proper content/updates system later |
 
 ## Volunteer, professional and fulfilment
 
 | Capability | Status | Notes |
 |---|---|---|
-| Volunteer application/workflow | MIGRATE | Full status/history/training/admin flow |
-| Poster Studio | MIGRATE | Keep safety-filtered content generation |
+| Volunteer application | CODED | AWS DynamoDB application + unique volunteer code + required boundary screening |
+| Volunteer workflow | CODED MVP | submitted → screening → training → approved → active/paused/declined |
+| Volunteer admin | CODED MVP | Admin pipeline and status control; applications kept separate from participant clinical records |
+| Volunteer community aggregation | CODED | Only aggregate counts/city engagement enter public community metrics |
+| Poster Studio | CODED | Privacy-first local poster generation; no Supabase share-card dependency |
 | Professional Library | MIGRATE selectively | Only evidence-based maintained content |
 | NRT/shop request workflow | HOLD | Regulatory, clinical and fulfilment governance first |
 
@@ -170,22 +177,22 @@ Existing staging records created before the CRM index was introduced may require
 
 ## Data architecture decision
 
-Use DynamoDB for high-scale participant journey state, conversations, current Twin, plans, follow-up and compact operational CRM indexes.
+Use DynamoDB for high-scale participant journey state, conversations, current Twin, plans, follow-up, compact operational CRM indexes, volunteer workflow, challenge progress and privacy-safe aggregate community counters.
 
 Evaluate Aurora PostgreSQL for relational research datasets and future complex clinical/reporting workloads that need joins, cohort filtering and export-heavy SQL. Do not force every historic Supabase relational workload into DynamoDB if PostgreSQL remains the better data model.
 
-## Migration order
+## Current migration order / checkpoint
 
-1. Research/validated scoring + AWS data dictionary — **CODED; deployment/runtime verification pending**.
-2. Clinical/admin participant CRM — **CODED MVP; deployment/runtime verification pending**.
-3. Proper server-side PDF + explicit version lineage — **NEXT**.
-4. Communication governance: unsubscribe, suppression, bounce/complaint events.
-5. Academy/training/certificate system.
-6. Help Someone + interactive tools + privacy-safe sharing.
-7. Challenges/city/movement/passport.
-8. Volunteer workflow + Poster Studio.
-9. Research exports/de-identification and any Aurora relational layer.
-10. 100k bulk communications + WhatsApp after policy/consent controls are complete.
+1. Research/validated scoring + AWS data dictionary — **CODED; runtime verification pending**.
+2. Clinical/admin participant CRM — **CODED MVP; runtime verification pending**.
+3. Proper server-side PDF + explicit version lineage — **CODED; runtime verification pending**.
+4. Communication governance — **CODED; AWS resource deployment/event verification pending**.
+5. Help Someone + tools + privacy-safe sharing — **CODED; CI/runtime verification pending**.
+6. Research export/de-identification — **CODED and deny-by-default; governance enablement + runtime verification pending**.
+7. Volunteer workflow + Poster Studio — **CODED MVP; CI/runtime verification pending**.
+8. Challenges/community/city layer — **CODED MVP; CI/runtime verification pending**.
+9. Academy learner UI/certificate end-to-end flow — **NEXT after verification checkpoint**.
+10. 100k bulk communications + WhatsApp — only after policy/consent controls and current migration are end-to-end verified.
 
 ## Production cutover rule
 
