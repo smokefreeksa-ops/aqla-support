@@ -89,7 +89,7 @@ export default async function ParticipantCrmDetailPage({
                 <div><span>Referral</span><strong>{participant.referral_needed ? 'Yes' : 'No'}</strong></div>
               </div>
               {plan?.result.referral_message ? <p className="admin-definition">{plan.result.referral_message}</p> : null}
-              {participant.latest_plan_id ? <div className="admin-actions"><a href={`/aqla/plan/${encodeURIComponent(participant.latest_plan_id)}?lang=${participant.language ?? 'ar'}`}>Open participant plan</a></div> : null}
+              {plan?.result.first_24h_step ? <p className="admin-definition"><strong>First 24h step:</strong> {plan.result.first_24h_step}</p> : null}
             </article>
 
             <article className="admin-panel">
