@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { followupDefinition, type FollowupType } from '@/lib/followup-policy'
 
 type Lang = 'ar' | 'en'
-type FollowupType = 'day_3' | 'day_7' | 'day_30'
 type FollowupOutcome = 'quit' | 'reduced' | 'continued' | 'slipped' | 'relapsed' | 'needs_support'
 type AdaptationKey = 'maintain_quit' | 'build_on_reduction' | 'small_step' | 'recover_from_slip' | 'restart_without_shame' | 'professional_support'
 
@@ -28,18 +28,19 @@ type FollowupState = {
 
 const LOGO_URL = '/aqla-logo.png'
 
-const followupLabels = {
-  ar: {
-    day_3: { eyebrow: 'متابعة اليوم الثالث', title: 'كيف تسير الأمور منذ خطتك؟', subtitle: 'هذه المتابعة تساعد أقلع على فهم ما تغيّر وتقديم الخطوة التالية بشكل أنسب لك.' },
-    day_7: { eyebrow: 'متابعة الأسبوع الأول', title: 'أكملت أسبوعك الأول مع أقلع', subtitle: 'سجّل وضعك الحالي حتى تكون الخطوة التالية مبنية على ما حدث فعليًا خلال الأسبوع.' },
-    day_30: { eyebrow: 'متابعة الشهر الأول', title: 'مرّ شهر على بداية خطتك', subtitle: 'هذه نقطة مراجعة مهمة لفهم التقدم، التعثرات، ونوع الدعم الذي يفيدك الآن.' },
-  },
-  en: {
-    day_3: { eyebrow: 'Day 3 check-in', title: 'How are things going since your plan?', subtitle: 'This check-in helps Aqla understand what has changed and make the next step more useful for you.' },
-    day_7: { eyebrow: 'Week 1 check-in', title: 'You have reached your first week with Aqla', subtitle: 'Record where things stand now so your next step reflects what actually happened this week.' },
-    day_30: { eyebrow: 'Month 1 check-in', title: 'It has been one month since your plan began', subtitle: 'This is a useful point to review progress, setbacks and what kind of support may help now.' },
-  },
-} as const
+function followupCopy(type: FollowupType, lang: Lang) {
+  const definition = followupDefinition(type)
+  const ar = lang === 'ar'
+  return {
+    eyebrow: ar ? definition.label_ar : definition.label_en,
+    title: definition.kind === 'outcome'
+      ? (ar ? 'نراجع تقدمك ونحدّث الخطوة التالية' : 'Review your progress and update the next step')
+      : (ar ? 'كيف تسير الأمور منذ آخر خطوة؟' : 'How are things going since your last step?'),
+    subtitle: definition.kind === 'outcome'
+      ? (ar ? 'هذه نقطة متابعة أطول مدى تساعد أقلع على فهم وضعك الحالي وتكييف الدعم مع ما حدث فعليًا.' : 'This longer-term checkpoint helps Aqla understand your current position and adapt support to what has actually happened.')
+      : (ar ? 'متابعة قصيرة تساعد أقلع على فهم ما تغيّر وتقديم الخطوة التالية بشكل أنسب لك.' : 'A short check-in helps Aqla understand what changed and make the next step more useful for you.'),
+  }
+}
 
 const outcomeOptions: Record<Lang, { value: FollowupOutcome; title: string; description: string }[]> = {
   ar: [
@@ -118,7 +119,7 @@ export default function FollowupCheckIn({
   const [editing, setEditing] = useState(false)
   const [error, setError] = useState('')
   const ar = lang === 'ar'
-  const copy = followupLabels[lang][followupType]
+  const copy = followupCopy(followupType, lang)
 
   useEffect(() => {
     let cancelled = false
