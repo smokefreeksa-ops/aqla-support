@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import AdaptiveTriagePlanCard from '@/components/AdaptiveTriagePlanCard'
 import PersonalPlanV2Extras from '@/components/PersonalPlanV2Extras'
 import QuitPlanResult from '@/components/QuitPlanResult'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
@@ -46,6 +47,7 @@ export default async function PlanPage({ params, searchParams }: { params: Promi
         </a>
       </div>
       <QuitPlanResult planId={planId} initialLang={lang} />
+      <AdaptiveTriagePlanCard planId={planId} lang={lang} />
       <PersonalPlanV2Extras planId={planId} lang={lang} />
     </>
   )
