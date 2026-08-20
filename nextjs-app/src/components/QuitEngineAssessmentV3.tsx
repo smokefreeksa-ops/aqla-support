@@ -155,7 +155,8 @@ export default function QuitEngineAssessmentV3({ signedIn }: { signedIn: boolean
     const current = answers.product_types.filter((item) => item !== 'relapse_prevention')
     const next = current.includes(value) ? current.filter((item) => item !== value) : [...current, value]
     update({ product_types: next, primary_product: next[0], mixed_use: next.length > 1, relapse_prevention_mode: false, first_use_after_waking: answers.first_use_after_waking === 'not_daily' ? undefined : answers.first_use_after_waking })
-    if (adaptive.dominant_product && !next.includes(adaptive.dominant_product)) setAdaptive((previous) => ({ ...previous, dominant_product: undefined }))
+    const dominantProduct = adaptive.dominant_product
+    if (dominantProduct && (dominantProduct === 'relapse_prevention' || !next.includes(dominantProduct))) setAdaptive((previous) => ({ ...previous, dominant_product: undefined }))
     if (v2.change_goal_type === 'maintain_abstinence') updateV2({ change_goal_type: 'explore' })
   }
 
