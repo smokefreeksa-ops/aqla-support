@@ -42,12 +42,12 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 |---|---|---|
 | Research-first gateway | KEEP-AWS | Preserve approved visual/research separation |
 | Eight-stage participant assessment | KEEP-AWS | Participant journey stays bounded and understandable |
-| Adaptive product branching v3 | CODED | Cigarette, vape, nicotine-pouch and mixed-use branches; relapse-prevention pathway retained |
-| Deterministic multidimensional triage v3 | CODED | Exposure, behavioural pattern, mixed-product complexity, readiness, confidence, relapse vulnerability, support need, safety track and follow-up focus |
+| Adaptive product branching v3 | CI VERIFIED | Cigarette, vape, nicotine-pouch and mixed-use branches; relapse-prevention pathway retained |
+| Deterministic multidimensional triage v3 | CI VERIFIED | Exposure, behavioural pattern, mixed-product complexity, readiness, confidence, relapse vulnerability, support need, safety track and follow-up focus |
 | Single deterministic quit engine | KEEP-AWS | Do not recreate multiple legacy engines |
 | AI plan personalisation | KEEP-AWS/EXPANDED | OpenAI receives minimised structured product profile + deterministic triage; cannot override scoring/safety/referral |
 | Personal Digital Twin | KEEP-AWS/EXPANDED | Adaptive assessment + triage stored separately as `TWIN#ADAPTIVE_TRIAGE` |
-| Secure adaptive follow-up | CODED | SES email stays generic/privacy-safe; authenticated check-in reads saved triage focus |
+| Secure adaptive follow-up | CI VERIFIED | SES email stays generic/privacy-safe; authenticated check-in reads saved triage focus |
 | Saved conversations | KEEP-AWS | Bounded recent context + structured Twin |
 | SOS/craving support | MERGE | Keep simple AWS UX; selectively port proven SOS protocols |
 | Relapse support | MERGE | Fold into OS/SOS/Twin rather than separate duplicated engine |
@@ -61,11 +61,11 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 |---|---|---|
 | Cigarette exact quantity + HSI | CODED | Exact day/week quantity collected; HSI band derived server-side; HSI remains deterministic |
 | FTND six-item | CODED FOUNDATION | Verified scorer exists; full FTND is not inferred from simplified assessment |
-| Vape product branch | CODED v3 | Device type, use frequency, exact minutes after waking, night use, cravings and autonomy/withdrawal items |
-| PSECDI | CODED v3 | Full Penn State score is calculated only when all required PSECDI items are collected; deterministic 0–20 scoring |
-| Nicotine-pouch product branch | CODED v3 | Daily pouch count, optional strength/brand, multiple-at-once, strength switching, night use, cravings and difficulty cutting down |
-| Oral nicotine/pouch adapted screen | CODED v3 / NON-VALIDATED | Six-item Aqla internal adapted screen; must never be represented as validated |
-| Mixed-product prioritisation | CODED v3 | Asks which selected product would be hardest to go without and whether users substitute another nicotine product |
+| Vape product branch | CI VERIFIED v3 | Device type, use frequency, exact minutes after waking, night use, cravings and autonomy/withdrawal items |
+| PSECDI | CI VERIFIED v3 | Full Penn State score is calculated only when all required PSECDI items are collected; deterministic 0–20 scoring |
+| Nicotine-pouch product branch | CI VERIFIED v3 | Daily pouch count, optional strength/brand, multiple-at-once, strength switching, night use, cravings and difficulty cutting down |
+| Oral nicotine/pouch adapted screen | CI VERIFIED v3 / NON-VALIDATED | Six-item Aqla internal adapted screen; must never be represented as validated |
+| Mixed-product prioritisation | CI VERIFIED v3 | Asks which selected product would be hardest to go without and whether users substitute another nicotine product |
 | Shisha basic branch | KEEP-AWS | Session frequency and duration; LWDS-11 remains protocol/research-grade rather than silently inferred |
 | LWDS-11 | CODED FOUNDATION | 11 items × 0–3; threshold 10 retained; no invented severity bands |
 | HONC-style | CODED with label | Explicitly non-validated adapted wording unless exact validated version adopted |
@@ -84,7 +84,7 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 | Preferred support channels | CODED | Aqla/clinician/pharmacist/family/peer/self-guided etc. |
 | Separate plan email consent | CODED | Plan-link email is not bundled with follow-up consent |
 | Separate follow-up email consent | CODED | Ongoing supportive email requires its own opt-in |
-| Adaptive triage displayed in plan | CODED v3 | Priority product, support need and product-specific measure information shown with validation labels |
+| Adaptive triage displayed in plan | CI VERIFIED v3 | Priority product, support need and product-specific measure information shown with validation labels |
 
 ## Plan and document generation
 
@@ -105,7 +105,7 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 | Longitudinal cadence | KEEP-AWS | Day 1/3/7/14/21/30/60/90/6m/12m policy scaffold |
 | SES plan-ready email | RUNTIME VERIFIED | Real staging email delivered from `noreply@smokefreeksa.com` to a verified Cognito/Gmail account on 20 Aug 2026 |
 | SES scheduled follow-up | KEEP-AWS | EventBridge/Lambda; runtime delivery of a scheduled future check-in remains to verify |
-| Adaptive follow-up focus | CODED v3 | Authenticated follow-up page reads Twin focus: maintain, mixed use, cravings, triggers, confidence, reduction or general |
+| Adaptive follow-up focus | CI VERIFIED v3 | Authenticated follow-up page reads Twin focus: maintain, mixed use, cravings, triggers, confidence, reduction or general |
 | Email privacy boundary | KEEP-AWS | Email does not contain sensitive plan/triage detail; secure link reveals adaptive focus after login |
 | Safety-hold communication gate | CODED | Immediate safety state suppresses routine plan email and routine scheduled follow-ups |
 | Unsubscribe | CODED | Opaque-token, privacy-safe unsubscribe workflow |
@@ -209,7 +209,7 @@ Evaluate Aurora PostgreSQL for relational research datasets and future complex c
 ## Current verification checkpoint
 
 1. Personal Quit Plan v2 + SES plan-ready email — **CODED, CI VERIFIED at prior checkpoint, real staging email delivered**.
-2. Adaptive Assessment/Triage v3 — **CODED; fresh CI and runtime verification required**.
+2. Adaptive Assessment/Triage v3 — **CODED + CI VERIFIED in run #559 (`32413149325`); deployment/runtime verification pending**.
 3. Scheduled Day-1 follow-up email — **next runtime test after v3 deployment**.
 4. Core CRM/Twin/admin visibility — runtime verification after v3 plan submission.
 5. Academy learner UI/certificate flow — resume after adaptive core verification.
