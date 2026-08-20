@@ -39,7 +39,7 @@ export default function AdminCommandCentre({
     <main className="admin-page" dir="ltr" lang="en">
       <header className="admin-topbar">
         <a href="/aqla/os" className="admin-brand"><img src={LOGO_URL} alt="Aqla — أقلع" /><span><strong>Aqla Command Centre</strong><small>Admin analytics · staging</small></span></a>
-        <div className="admin-actions"><a href="/aqla/os">Aqla OS</a><a href="/auth/logout">Sign out</a></div>
+        <div className="admin-actions"><a href="/aqla/admin/participants">Participant CRM</a><a href="/aqla/os">Aqla OS</a><a href="/auth/logout">Sign out</a></div>
       </header>
 
       <section className="admin-shell">
