@@ -207,7 +207,7 @@ export function AqlaWelcomeGate() {
       </div>
       <div className="relative z-10 flex w-full flex-1 flex-col items-center justify-center px-5 py-10">
 
-      <div className="relative z-10 w-full max-w-xl rounded-3xl border border-[#c9a84c]/30 bg-black/20 px-6 py-9 text-center shadow-2xl backdrop-blur-sm sm:px-10 sm:py-12">
+      <div className="relative z-10 w-full max-w-xl rounded-3xl border border-[#c9a84c]/30 bg-black/20 px-6 py-9 text-center shadow-2xl sm:px-10 sm:py-12">
         <img
           src={aqlaLogo}
           alt="شعار أقلع — Aqla Logo"
@@ -297,7 +297,7 @@ export function AqlaWelcomeGate() {
                   <span>الدخول برقم الجوال</span>
                 </button>
                 <span
-                  className="pointer-events-none absolute -top-2 end-2 rounded-full border border-[#c9a84c]/50 bg-black/70 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[#f6e7b8] backdrop-blur-sm"
+                  className="pointer-events-none absolute -top-2 end-2 rounded-full border border-[#c9a84c]/50 bg-black/70 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[#f6e7b8]"
                   style={{ unicodeBidi: "plaintext" }}
                 >
                   قريبًا
@@ -524,9 +524,9 @@ function HexAnim() {
           0%, 100% { transform: translate(0, 0) rotate(30deg); }
           50% { transform: translate(3px, 5px) rotate(210deg); }
         }
-        .aqla-hex { animation: aqlaHexFloat 5s ease-in-out infinite; }
-        .aqla-hex-2 { animation: aqlaHexFloat2 6.5s ease-in-out infinite; }
-        .aqla-hex-3 { animation: aqlaHexFloat3 7.5s ease-in-out infinite; }
+        /* Idle hex drift removed for scroll/paint performance. */
+        .aqla-hex, .aqla-hex-2, .aqla-hex-3 { animation: none; }
+        .aqla-hex-3 { transform: rotate(30deg); }
         @media (prefers-reduced-motion: reduce) {
           .aqla-hex, .aqla-hex-2, .aqla-hex-3 { animation: none; }
         }

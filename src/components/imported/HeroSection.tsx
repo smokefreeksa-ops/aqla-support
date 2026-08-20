@@ -229,7 +229,6 @@ function spotlightStyle(idx: number, active: number | null): React.CSSProperties
         ? "scale(1) translateZ(0)"
         : "scale(0.92) translateZ(0)",
     opacity: isActive ? 1 : isIdle ? 1 : 0.5,
-    filter: isActive ? "none" : isIdle ? "none" : "blur(0.6px)",
     zIndex: isActive ? 50 : 1,
     position: "relative",
     boxShadow: isActive
@@ -263,7 +262,9 @@ export default function HeroSection() {
     track("page_visit");
   }, [track]);
 
-  const spotlight = useSpotlight(3, 5000);
+  // Spotlight cycling removed: it continuously animated scale/blur/shadow on
+  // large hero cards, repainting during scroll. Cards now render statically.
+  const spotlight: number | null = null;
 
   return (
     <section
@@ -274,8 +275,8 @@ export default function HeroSection() {
       <SaudiFlagWave />
       <div className="absolute inset-0 z-[1] pointer-events-none">
         <div
-          className="absolute top-1/2 left-1/2 h-[60vmin] w-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.10] blur-3xl"
-          style={{ background: "#c9a84c" }}
+          className="absolute top-1/2 left-1/2 h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.05) 45%, transparent 70%)" }}
         />
         <div
           className="absolute inset-x-0 top-0 h-px"
@@ -474,7 +475,7 @@ export default function HeroSection() {
           else window.scrollBy({ top: window.innerHeight, behavior: "smooth" });
         }}
         aria-label="مرر لأسفل"
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 animate-bounce z-10 cursor-pointer hover:text-white/70 transition-colors"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-10 cursor-pointer hover:text-white/70 transition-colors"
         style={{ color: "rgba(255,255,255,0.35)", background: "transparent", border: "none" }}
       >
         <span className="text-xs">مرر لأسفل</span>

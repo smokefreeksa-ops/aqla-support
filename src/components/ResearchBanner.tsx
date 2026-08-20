@@ -64,7 +64,7 @@ export function ResearchBanner({ onNavigate }: { onNavigate?: () => void } = {})
             title="إجمالي الزيارات"
             className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-white ring-1 ring-white/20 sm:text-[11px]"
           >
-            <span aria-hidden className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-white" />
             {formatCount(visits)} زيارة
           </span>
         </div>

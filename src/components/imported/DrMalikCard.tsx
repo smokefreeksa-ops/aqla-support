@@ -63,7 +63,7 @@ export default function DrMalikCard() {
               }}
             >
               <div
-                className="absolute inset-0 rounded-full animate-ping"
+                className="absolute inset-0 rounded-full "
                 style={{
                   border: "1px solid rgba(0,166,90,0.25)",
                   animationDuration: "2.5s",
@@ -80,7 +80,7 @@ export default function DrMalikCard() {
                 color: "#4ade80",
               }}
             >
-              <span className="w-2 h-2 rounded-full bg-accent-green-light animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-accent-green-light" />
               متاح الآن
             </div>
           </div>
