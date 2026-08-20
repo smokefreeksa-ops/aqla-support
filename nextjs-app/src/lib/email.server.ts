@@ -1,4 +1,5 @@
 import { SESv2Client, SendEmailCommand } from '@aws-sdk/client-sesv2'
+import { getOrCreateEmailPreference, unsubscribeUrl } from '@/lib/communication-preferences.server'
 
 const region = process.env.AWS_REGION || 'eu-west-2'
 const ses = new SESv2Client({ region })
@@ -19,13 +20,19 @@ export async function sendPlanReadyEmail({
   lang: 'ar' | 'en'
   followupsScheduled?: boolean
 }): Promise<{ messageId?: string }> {
+  const preference = await getOrCreateEmailPreference(to)
+  if (preference.global_suppressed) throw new Error(`email_suppressed_${preference.suppression_reason || 'global'}`)
+
   const planUrl = `${APP_URL}/aqla/plan/${encodeURIComponent(planId)}?lang=${lang}`
+  const preferencesUrl = preference.unsubscribe_token
+    ? unsubscribeUrl(preference.unsubscribe_token, 'followup')
+    : `${APP_URL}/aqla`
   const subject = lang === 'ar' ? 'خطتك مع أقلع جاهزة' : 'Your Aqla plan is ready'
   const followupArabic = followupsScheduled
-    ? 'تم أيضًا جدولة متابعات أقلع الآمنة بعد 3 و7 و30 يومًا.'
+    ? 'تم أيضًا جدولة نقاط متابعة آمنة وفق سياسة المتابعة الحالية في أقلع.'
     : 'ستبقى خطتك متاحة بأمان داخل حسابك في أقلع.'
   const followupEnglish = followupsScheduled
-    ? 'Your secure Aqla check-ins are also scheduled for days 3, 7 and 30.'
+    ? 'Secure Aqla check-ins have also been scheduled under the current follow-up policy.'
     : 'Your plan remains securely available inside your Aqla account.'
 
   const text = [
@@ -37,6 +44,7 @@ export async function sendPlanReadyEmail({
     planUrl,
     '',
     followupArabic,
+    `إدارة رسائل المتابعة: ${preferencesUrl}`,
     'يمكنك الرد على هذا البريد للاستفسارات غير العاجلة.',
     '',
     '— أقلع | Aqla | SmokefreeKSA',
@@ -45,6 +53,7 @@ export async function sendPlanReadyEmail({
     'For privacy, plan details are not included in this email.',
     `Open your plan securely: ${planUrl}`,
     followupEnglish,
+    `Manage follow-up email: ${preferencesUrl}`,
   ].join('\n')
 
   const html = `<!doctype html>
@@ -96,6 +105,7 @@ export async function sendPlanReadyEmail({
             <tr>
               <td dir="rtl" align="right" style="direction:rtl;text-align:right;padding:18px 30px 26px 30px;font-size:14px;line-height:1.9;color:#5b7169;">
                 <p dir="rtl" align="right" style="margin:0 0 7px 0;text-align:right;direction:rtl;">${followupArabic}</p>
+                <p dir="rtl" align="right" style="margin:0 0 7px 0;text-align:right;direction:rtl;"><a href="${preferencesUrl}" style="color:#0f5a3a;">إدارة رسائل المتابعة</a></p>
                 <p dir="rtl" align="right" style="margin:0;text-align:right;direction:rtl;">للاستفسارات غير العاجلة، يمكنك الرد مباشرة على هذا البريد.</p>
               </td>
             </tr>
@@ -110,7 +120,8 @@ export async function sendPlanReadyEmail({
               <td dir="ltr" align="left" style="direction:ltr;text-align:left;padding:24px 30px 12px 30px;color:#506a61;font-family:Arial,sans-serif;">
                 <p style="margin:0 0 8px 0;font-size:15px;line-height:1.6;font-weight:700;color:#274c40;text-align:left;">Your Aqla plan is ready.</p>
                 <p style="margin:0 0 8px 0;font-size:14px;line-height:1.7;text-align:left;">For privacy, your plan details are not included in this email. Use the secure button above to return to your saved plan.</p>
-                <p style="margin:0;font-size:14px;line-height:1.7;text-align:left;">${followupEnglish}</p>
+                <p style="margin:0 0 8px 0;font-size:14px;line-height:1.7;text-align:left;">${followupEnglish}</p>
+                <p style="margin:0;font-size:13px;line-height:1.7;text-align:left;"><a href="${preferencesUrl}" style="color:#0f5a3a;">Manage follow-up email</a></p>
               </td>
             </tr>
 
