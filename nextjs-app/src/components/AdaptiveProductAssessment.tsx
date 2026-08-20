@@ -11,6 +11,7 @@ import {
 } from '@/lib/adaptive-assessment'
 
 type Lang = 'ar' | 'en'
+type RealProduct = Exclude<ProductType, 'relapse_prevention'>
 
 type Props = {
   lang: Lang
@@ -57,12 +58,12 @@ export default function AdaptiveProductAssessment({ lang, base, value, onChange 
   const patch = (next: Partial<AdaptiveAssessmentAnswers>) => onChange({ ...value, ...next })
   const patchVape = (next: Partial<NonNullable<AdaptiveAssessmentAnswers['vape']>>) => patch({ vape: { ...(value.vape ?? {}), ...next } })
   const patchPouch = (next: Partial<NonNullable<AdaptiveAssessmentAnswers['pouches']>>) => patch({ pouches: { ...(value.pouches ?? {}), ...next } })
-  const realProducts = base.product_types.filter((item) => item !== 'relapse_prevention')
+  const realProducts = base.product_types.filter((item): item is RealProduct => item !== 'relapse_prevention')
 
   return <div className="qe-stack">
     {base.mixed_use ? <>
       <Question title={ar ? 'أي منتج سيكون الأصعب عليك لو لم يكن متاحًا؟' : 'Which product would be hardest to go without?'} hint={ar ? 'هذا لا يعني أنه المنتج الوحيد المهم؛ يساعد أقلع على ترتيب الأولوية.' : 'This does not make the other products unimportant; it helps Aqla prioritise.'}>
-        <div className="qe-option-grid">{DOMINANT_PRODUCT_OPTIONS.filter((option) => realProducts.includes(option.value as ProductType)).map((option) => <Chip key={option.value} active={value.dominant_product === option.value} onClick={() => patch({ dominant_product: option.value as ProductType })}>{option[lang]}</Chip>)}</div>
+        <div className="qe-option-grid">{DOMINANT_PRODUCT_OPTIONS.filter((option) => realProducts.includes(option.value as RealProduct)).map((option) => <Chip key={option.value} active={value.dominant_product === option.value} onClick={() => patch({ dominant_product: option.value as RealProduct })}>{option[lang]}</Chip>)}</div>
       </Question>
       <Question title={ar ? 'إذا لم تستطع استخدام أحد المنتجات، هل تستبدله عادةً بمنتج نيكوتين آخر؟' : 'If you cannot use one product, do you usually substitute another nicotine product?'}>
         <BooleanPick value={value.substitutes_between_products} lang={lang} onChange={(next) => patch({ substitutes_between_products: next })} />
