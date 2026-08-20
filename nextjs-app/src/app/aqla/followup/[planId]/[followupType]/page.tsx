@@ -23,6 +23,7 @@ export default async function FollowupPage({
     redirect('/aqla')
   }
 
+  const returnTo = `/aqla/followup/${encodeURIComponent(raw.planId)}/${raw.followupType}?lang=${lang}`
   const cookieStore = await cookies()
   const token = cookieStore.get(authCookies.idToken)?.value
   let authenticated = false
@@ -36,8 +37,12 @@ export default async function FollowupPage({
     }
   }
 
-  const returnTo = `/aqla/followup/${encodeURIComponent(raw.planId)}/${raw.followupType}?lang=${lang}`
-  if (!authenticated) redirect(`/auth/login?returnTo=${encodeURIComponent(returnTo)}`)
+  if (!authenticated) {
+    const refreshToken = cookieStore.get(authCookies.refreshToken)?.value
+    redirect(refreshToken
+      ? `/auth/refresh?returnTo=${encodeURIComponent(returnTo)}`
+      : `/auth/login?returnTo=${encodeURIComponent(returnTo)}`)
+  }
 
   return <FollowupCheckIn planId={raw.planId} followupType={raw.followupType as FollowupType} initialLang={lang} />
 }
