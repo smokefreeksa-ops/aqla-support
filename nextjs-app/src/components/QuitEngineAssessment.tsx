@@ -20,6 +20,7 @@ import type { EngineAnswers, FirstUseAfterWaking, ProductType, SafetyFlag, Store
 
 const LOGO_URL = 'https://aqla1.com/aqla-logo.png'
 const DRAFT_KEY = 'aqla_quit_engine_draft_v1'
+const ASSESSMENT_LOGIN_URL = `/auth/login?returnTo=${encodeURIComponent('/aqla/assessment')}`
 
 const EMPTY: EngineAnswers = {
   product_types: [],
@@ -41,6 +42,8 @@ const text = {
     title: 'اختبار أقلع وبناء خطتك الشخصية',
     subtitle: 'ثماني خطوات قصيرة لفهم نمط استخدامك، محفزاتك، واستعدادك الحالي. النتيجة ليست تشخيصًا طبيًا.',
     backHome: 'العودة لأقلع',
+    signIn: 'تسجيل الدخول',
+    signOut: 'تسجيل الخروج',
     step: 'الخطوة',
     of: 'من',
     previous: 'السابق',
@@ -54,9 +57,11 @@ const text = {
     stages: ['المنتج', 'أول استخدام', 'الكمية', 'المحفزات', 'الاستعداد', 'المحاولات السابقة', 'السلامة', 'أسبابك'],
   },
   en: {
-    title: 'AQla assessment and personal plan',
+    title: 'Aqla assessment and personal plan',
     subtitle: 'Eight short steps to understand your nicotine pattern, triggers and current readiness. The result is not a medical diagnosis.',
-    backHome: 'Back to AQla',
+    backHome: 'Back to Aqla',
+    signIn: 'Sign in',
+    signOut: 'Sign out',
     step: 'Step',
     of: 'of',
     previous: 'Previous',
@@ -188,12 +193,24 @@ export default function QuitEngineAssessment({ signedIn }: { signedIn: boolean }
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  function prepareSignOut() {
+    try {
+      for (let index = localStorage.length - 1; index >= 0; index -= 1) {
+        const key = localStorage.key(index)
+        if (key?.startsWith('aqla_quit_plan:')) localStorage.removeItem(key)
+      }
+      localStorage.removeItem(DRAFT_KEY)
+    } catch {
+      // Cookie/session sign-out still proceeds if browser storage is unavailable.
+    }
+  }
+
   async function submit() {
     if (!canNext || submitting) { setShowRequired(true); return }
     setError('')
 
     if (!signedIn) {
-      window.location.href = `/auth/login?returnTo=${encodeURIComponent('/aqla/assessment')}`
+      window.location.href = ASSESSMENT_LOGIN_URL
       return
     }
 
@@ -206,7 +223,7 @@ export default function QuitEngineAssessment({ signedIn }: { signedIn: boolean }
       })
 
       if (response.status === 401) {
-        window.location.href = `/auth/login?returnTo=${encodeURIComponent('/aqla/assessment')}`
+        window.location.href = ASSESSMENT_LOGIN_URL
         return
       }
       if (!response.ok) throw new Error(`plan_${response.status}`)
@@ -230,12 +247,34 @@ export default function QuitEngineAssessment({ signedIn }: { signedIn: boolean }
     <main className="qe-page" dir={ar ? 'rtl' : 'ltr'} lang={lang}>
       <header className="qe-topbar">
         <a href="/aqla" className="qe-brand"><img src={LOGO_URL} alt="Aqla — أقلع" /><span>{t.backHome}</span></a>
-        <button type="button" className="qe-lang" onClick={() => setLang(ar ? 'en' : 'ar')}>{ar ? 'EN' : 'ع'}</button>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8, flexWrap: 'wrap' }}>
+          <button type="button" className="qe-lang" aria-label={ar ? 'Switch to English' : 'التبديل إلى العربية'} onClick={() => setLang(ar ? 'en' : 'ar')}>{ar ? 'EN' : 'ع'}</button>
+          {signedIn ? (
+            <a
+              href="/auth/logout"
+              className="qe-lang"
+              onClick={prepareSignOut}
+              style={{ width: 'auto', minWidth: 0, paddingInline: 14, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', whiteSpace: 'nowrap' }}
+              aria-label={ar ? 'تسجيل الخروج من حساب أقلع' : 'Sign out of your Aqla account'}
+            >
+              {t.signOut}
+            </a>
+          ) : (
+            <a
+              href={ASSESSMENT_LOGIN_URL}
+              className="qe-lang"
+              style={{ width: 'auto', minWidth: 0, paddingInline: 14, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', whiteSpace: 'nowrap' }}
+              aria-label={ar ? 'تسجيل الدخول إلى أقلع' : 'Sign in to Aqla'}
+            >
+              {t.signIn}
+            </a>
+          )}
+        </div>
       </header>
 
       <div className="qe-shell">
         <section className="qe-intro">
-          <span className="qe-kicker">AQla Personal Quit Engine</span>
+          <span className="qe-kicker">Aqla Personal Quit Engine</span>
           <h1>{t.title}</h1>
           <p>{t.subtitle}</p>
         </section>
@@ -253,7 +292,7 @@ export default function QuitEngineAssessment({ signedIn }: { signedIn: boolean }
           {step === 1 && <>
             <h2>{ar ? 'بعد الاستيقاظ، متى تستخدم أول نيكوتين؟' : 'After waking, when do you first use nicotine?'}</h2>
             {relapseOnly ? <div className="qe-note success">{ar ? 'أنت في وضع منع الانتكاسة، لذلك لا نحتاج هذا السؤال الآن. اضغط متابعة.' : 'You are in relapse-prevention mode, so this question is not needed. Continue to the next step.'}</div> : <SinglePick options={FIRST_USE_OPTIONS} value={answers.first_use_after_waking} lang={lang} onChange={(value: FirstUseAfterWaking) => update({ first_use_after_waking: value })} />}
-            {!relapseOnly && (answers.first_use_after_waking === 'lt_5' || answers.first_use_after_waking === '6_30') ? <div className="qe-note">{ar ? 'الاستخدام المبكر بعد الاستيقاظ قد يعني أنك تحتاج دعمًا أقوى في الصباح. سنأخذ ذلك في الاعتبار داخل الخطة.' : 'Early use after waking can mean mornings need stronger support. AQla will account for that in your plan.'}</div> : null}
+            {!relapseOnly && (answers.first_use_after_waking === 'lt_5' || answers.first_use_after_waking === '6_30') ? <div className="qe-note">{ar ? 'الاستخدام المبكر بعد الاستيقاظ قد يعني أنك تحتاج دعمًا أقوى في الصباح. سنأخذ ذلك في الاعتبار داخل الخطة.' : 'Early use after waking can mean mornings need stronger support. Aqla will account for that in your plan.'}</div> : null}
           </>}
 
           {step === 2 && <div className="qe-stack">
@@ -263,12 +302,12 @@ export default function QuitEngineAssessment({ signedIn }: { signedIn: boolean }
             {answers.product_types.includes('shisha') && <><QuestionBlock title={ar ? 'كم جلسة شيشة في الأسبوع؟' : 'How many shisha sessions a week?'}><SinglePick options={SHISHA_SESSIONS} value={answers.shisha_sessions_per_week} lang={lang} onChange={(value) => update({ shisha_sessions_per_week: value })} /></QuestionBlock><QuestionBlock title={ar ? 'كم تستمر الجلسة غالبًا؟' : 'How long does a session usually last?'}><SinglePick options={SHISHA_DURATION} value={answers.shisha_session_duration} lang={lang} onChange={(value) => update({ shisha_session_duration: value })} /></QuestionBlock></>}
             {answers.product_types.includes('vape') && <QuestionBlock title={ar ? 'كيف تصف استخدامك للفيب؟' : 'How would you describe your vaping?'}><SinglePick options={VAPE_PATTERNS} value={answers.vape_pattern} lang={lang} onChange={(value) => update({ vape_pattern: value })} /></QuestionBlock>}
             {answers.product_types.includes('pouches') && <QuestionBlock title={ar ? 'كم مرة تستخدم أكياس النيكوتين يوميًا؟' : 'How often do you use nicotine pouches each day?'}><SinglePick options={POUCH_FREQ} value={answers.nicotine_pouch_frequency} lang={lang} onChange={(value) => update({ nicotine_pouch_frequency: value })} /></QuestionBlock>}
-            {!relapseOnly && !answers.product_types.some((p) => ['cigarettes', 'shisha', 'vape', 'pouches'].includes(p)) ? <div className="qe-note success">{ar ? 'لا توجد أسئلة كمية إضافية لهذا المنتج في النسخة الحالية. سنعتمد على نمط الاستخدام والمحفزات.' : 'There are no additional quantity questions for this product in the current version. AQla will use your pattern and triggers.'}</div> : null}
+            {!relapseOnly && !answers.product_types.some((p) => ['cigarettes', 'shisha', 'vape', 'pouches'].includes(p)) ? <div className="qe-note success">{ar ? 'لا توجد أسئلة كمية إضافية لهذا المنتج في النسخة الحالية. سنعتمد على نمط الاستخدام والمحفزات.' : 'There are no additional quantity questions for this product in the current version. Aqla will use your pattern and triggers.'}</div> : null}
           </div>}
 
           {step === 3 && <>
             <h2>{ar ? 'متى تكون الرغبة أو احتمالية الرجوع أقوى؟' : 'When are cravings or relapse risk strongest?'}</h2>
-            <p>{ar ? 'اختر كل ما ينطبق. هذا الجزء يبني خطط المحفزات.' : 'Select everything that applies. AQla uses this to build trigger-specific actions.'}</p>
+            <p>{ar ? 'اختر كل ما ينطبق. هذا الجزء يبني خطط المحفزات.' : 'Select everything that applies. Aqla uses this to build trigger-specific actions.'}</p>
             <MultiPick options={TRIGGER_OPTIONS} values={answers.triggers} lang={lang} onToggle={toggleTrigger} />
           </>}
 
@@ -282,12 +321,12 @@ export default function QuitEngineAssessment({ signedIn }: { signedIn: boolean }
           {step === 5 && <div className="qe-stack">
             <QuestionBlock title={ar ? 'هل حاولت الإقلاع من قبل؟' : 'Have you tried to quit before?'}><SinglePick options={PREV_ATTEMPTS} value={answers.previous_quit_attempts} lang={lang} onChange={(value) => update({ previous_quit_attempts: value, longest_abstinence: value })} /></QuestionBlock>
             {answers.previous_quit_attempts && answers.previous_quit_attempts !== 'none' ? <QuestionBlock title={ar ? 'ما الذي أعادك غالبًا؟' : 'What most often brought you back?'}><MultiPick options={RELAPSE_CAUSES} values={answers.relapse_causes} lang={lang} onToggle={toggleRelapseCause} /></QuestionBlock> : null}
-            <div className="qe-note success">{ar ? 'المحاولة السابقة ليست فشلًا. هي معلومات تساعد أقلع على ألا يكرر نفس الخطة.' : 'A previous attempt is not a failure. It gives AQla information so the next plan does not simply repeat the same approach.'}</div>
+            <div className="qe-note success">{ar ? 'المحاولة السابقة ليست فشلًا. هي معلومات تساعد أقلع على ألا يكرر نفس الخطة.' : 'A previous attempt is not a failure. It gives Aqla information so the next plan does not simply repeat the same approach.'}</div>
           </div>}
 
           {step === 6 && <>
             <h2>{ar ? 'فحص السلامة' : 'Safety check'}</h2>
-            <p>{ar ? 'اختر كل ما ينطبق. هذه المعلومات تستخدم لتحديد متى يجب أن يكون الدعم المهني جزءًا من الخطة.' : 'Select everything that applies. AQla uses this to decide when professional support should be part of the plan.'}</p>
+            <p>{ar ? 'اختر كل ما ينطبق. هذه المعلومات تستخدم لتحديد متى يجب أن يكون الدعم المهني جزءًا من الخطة.' : 'Select everything that applies. Aqla uses this to decide when professional support should be part of the plan.'}</p>
             <MultiPick options={SAFETY_OPTIONS} values={answers.safety_flags} lang={lang} onToggle={toggleSafety} />
             {answers.safety_flags.includes('suicidal_ideation') ? <div className="qe-note danger"><strong>{ar ? 'سلامتك أولًا.' : 'Your safety comes first.'}</strong> {ar ? 'إذا كنت تشعر أنك قد تؤذي نفسك أو أنك في خطر، اطلب مساعدة طبية عاجلة الآن أو تواصل فورًا مع شخص موثوق قريب منك. خطة الإقلاع يمكن أن تنتظر حتى تكون بأمان.' : 'If you feel you may harm yourself or are in danger, seek urgent medical help now or immediately contact a trusted person near you. The quit plan can wait until you are safe.'}</div> : null}
           </>}
@@ -295,10 +334,10 @@ export default function QuitEngineAssessment({ signedIn }: { signedIn: boolean }
           {step === 7 && <div className="qe-stack">
             <QuestionBlock title={ar ? 'ما أهم أسبابك للتغيير؟ اختر حتى 3.' : 'What are your strongest reasons for change? Choose up to 3.'}><MultiPick options={PERSONAL_REASONS} values={answers.personal_reasons} lang={lang} onToggle={toggleReason} /></QuestionBlock>
             <div className="qe-input-grid">
-              <label><span>{ar ? 'الاسم الذي تريد أن تخاطبك به أقلع (اختياري)' : 'Name you want AQla to use (optional)'}</span><input maxLength={120} value={answers.user_name ?? ''} onChange={(event) => update({ user_name: event.target.value })} placeholder={ar ? 'مثال: أبو خالد' : 'Example: Khalid'} /></label>
+              <label><span>{ar ? 'الاسم الذي تريد أن تخاطبك به أقلع (اختياري)' : 'Name you want Aqla to use (optional)'}</span><input maxLength={120} value={answers.user_name ?? ''} onChange={(event) => update({ user_name: event.target.value })} placeholder={ar ? 'مثال: أبو خالد' : 'Example: Khalid'} /></label>
               <label><span>{ar ? 'شخص دعم واحد (اختياري)' : 'One support person (optional)'}</span><input maxLength={120} value={answers.support_person_name ?? ''} onChange={(event) => update({ support_person_name: event.target.value })} placeholder={ar ? 'اسم صديق أو قريب' : 'Friend or family member'} /></label>
             </div>
-            <div className="qe-note success">{ar ? 'أقلع يحسب النتيجة وقواعد السلامة داخل النظام. OpenAI يُستخدم فقط لتخصيص لغة الدعم ولا يقرر التشخيص أو الجرعات.' : 'AQla calculates the result and safety rules inside the application. OpenAI is used only to personalise supportive wording; it does not decide diagnoses or medication doses.'}</div>
+            <div className="qe-note success">{ar ? 'أقلع يحسب النتيجة وقواعد السلامة داخل النظام. OpenAI يُستخدم فقط لتخصيص لغة الدعم ولا يقرر التشخيص أو الجرعات.' : 'Aqla calculates the result and safety rules inside the application. OpenAI is used only to personalise supportive wording; it does not decide diagnoses or medication doses.'}</div>
           </div>}
         </section>
 
