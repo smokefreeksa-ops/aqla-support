@@ -81,7 +81,7 @@ Resources:
         Variables:
           TABLE_NAME: !Ref TableName
           APP_URL: !Ref AppUrl
-          FROM_EMAIL: !Sub Aqla <${FromEmail}>
+          FROM_EMAIL: !Sub 'Aqla <${FromEmail}>'
           REPLY_TO_EMAIL: !Ref ReplyToEmail
           CONFIGURATION_SET: !Ref ConfigurationSetName
       Code:
@@ -180,18 +180,18 @@ Resources:
             const status = item.status?.S || '';
             if (['sent', 'responded', 'completed'].includes(status)) return { skipped: status };
             if (status === 'sending') return { skipped: 'already_sending' };
-            if (!['scheduled', 'send_failed'].includes(status)) return { skipped: `state_${status || 'unknown'}` };
+            if (!['scheduled', 'schedule_failed', 'send_failed'].includes(status)) return { skipped: `state_${status || 'unknown'}` };
 
             try {
               await ddb.send(new UpdateItemCommand({
                 TableName: table,
                 Key: { PK: { S: pk }, SK: { S: sk } },
                 UpdateExpression: 'SET #status = :sending, send_started_at = :now, updated_at = :now ADD attempt_count :one',
-                ConditionExpression: '#status = :scheduled OR #status = :failed',
+                ConditionExpression: '#status = :scheduled OR #status = :scheduleFailed OR #status = :failed',
                 ExpressionAttributeNames: { '#status': 'status' },
                 ExpressionAttributeValues: {
                   ':sending': { S: 'sending' }, ':now': { S: new Date().toISOString() }, ':one': { N: '1' },
-                  ':scheduled': { S: 'scheduled' }, ':failed': { S: 'send_failed' },
+                  ':scheduled': { S: 'scheduled' }, ':scheduleFailed': { S: 'schedule_failed' }, ':failed': { S: 'send_failed' },
                 },
               }));
             } catch (error) {
