@@ -65,6 +65,31 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 | Full AQla1 research extension | MIGRATE | Demographics/exposure/access/social context only when protocol requires |
 | Cohort A–H | MERGE | Preserve as derived research/admin variable if needed; do not expose as participant architecture |
 
+## Personal Quit Plan v2
+
+| Capability | Status | Notes |
+|---|---|---|
+| NHS functional benchmark audit | CODED/CI VERIFIED | 20 supplied NHS question/input concepts explicitly classified; no NHS wording, visuals, videos or branded services copied |
+| Enhanced 8-step assessment | CODED/CI VERIFIED | Keeps eight-step UX using conditional branching rather than turning the pathway into a long survey |
+| Exact cigarette quantity | CODED/CI VERIFIED | Number + day/week period; legacy HSI quantity band is derived server-side rather than asked twice |
+| Cigarette form | CODED/CI VERIFIED | Manufactured / roll-your-own / both / other for cigarette users |
+| Integrated savings estimate | CODED/CI VERIFIED | Optional participant-reported total nicotine spend in SAR; no invented default Saudi price; reduction pathway scales savings |
+| Previous quit-support methods | CODED/CI VERIFIED | Conditional on previous attempts; supports non-shaming previous-attempt learning |
+| Cessation-support knowledge | CODED/CI VERIFIED | Adjusts educational depth; does not replace confidence/readiness |
+| Treatment-information interests | CODED/CI VERIFIED | Educational preferences only; not medication prescribing or dosing |
+| Preferred support channels | CODED/CI VERIFIED | Aqla/clinician/pharmacist/phone-video/family-peer/self-guided options localised rather than copying NHS services |
+| Additional triggers | CODED/CI VERIFIED | Adds alcohol, hunger, visual cues, being offered nicotine, morning waking, living with a user and work/study break while preserving Saudi-specific triggers |
+| Additional motivations | CODED/CI VERIFIED | Adds breathing, role modelling, appearance, clinician advice, illness-risk, control and no-longer-enjoying while preserving Aqla-specific motivations |
+| Quit/change goal | CODED/CI VERIFIED | Quit / reduce / maintain abstinence / explore |
+| Quit/change date | CODED/CI VERIFIED | Today / within seven days / validated specific date / not ready; no date pressure for relapse-prevention or exploratory pathways |
+| Separate plan-email consent | CORRECTED/CODED/CI VERIFIED | Plan persists regardless; plan-link email is explicit opt-in |
+| Separate follow-up-email consent | CORRECTED/CODED/CI VERIFIED | Follow-up scheduling/recipient persistence occurs only when opted in; safety hold remains authoritative |
+| Supplemental Personal Twin context | CODED/CI VERIFIED | Versioned DynamoDB `TWIN#PERSONAL_PLAN_V2` context preserves goal/support/preferences without destabilising base Twin schema |
+| Personal Plan v2 Data Dictionary | CODED/CI VERIFIED | Financial/free-text/third-party/communication fields explicitly classified and protected from default research export |
+| Enriched plan display | CODED/CI VERIFIED | Goal/date, savings, motivations, trigger coaching, previous-attempt learning, treatment-learning interests and support-network sections appended to existing stronger Aqla plan |
+| Personal Plan v2 PDF | CODED/CI VERIFIED | Server React-PDF output uses central Aqla logo, DejaVu Arabic font and v2 enrichment sections |
+| Runtime/E2E staging validation | NEXT | Deploy/confirm branch in Amplify and test representative personas end-to-end before production cutover |
+
 ## Plan and document generation
 
 | Capability | Status | Notes |
@@ -191,8 +216,9 @@ Evaluate Aurora PostgreSQL for relational research datasets and future complex c
 6. Research export/de-identification — **CODED and deny-by-default; governance enablement + runtime verification pending**.
 7. Volunteer workflow + Poster Studio — **CODED MVP; CI/runtime verification pending**.
 8. Challenges/community/city layer — **CODED MVP; CI/runtime verification pending**.
-9. Academy learner UI/certificate end-to-end flow — **NEXT after verification checkpoint**.
-10. 100k bulk communications + WhatsApp — only after policy/consent controls and current migration are end-to-end verified.
+9. Personal Quit Plan v2 NHS-benchmark enhancement — **CODED + CI VERIFIED; deployment/runtime/E2E verification pending**.
+10. Academy learner UI/certificate end-to-end flow — **NEXT after verification checkpoint**.
+11. 100k bulk communications + WhatsApp — only after policy/consent controls and current migration are end-to-end verified.
 
 ## Production cutover rule
 
