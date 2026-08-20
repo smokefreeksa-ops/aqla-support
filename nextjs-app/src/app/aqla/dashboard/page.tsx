@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import AqlaSignOutLink from '@/components/AqlaSignOutLink'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
 import { followupDefinition, isFollowupType, type FollowupType } from '@/lib/followup-policy'
 import {
@@ -194,7 +195,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
         <section className="ax-quick-grid">
           <a className="ax-quick-card" href="/aqla/os"><strong>{ar ? 'محادثة أقلع' : 'Aqla OS'}</strong><span>{ar ? 'اطلب الخطة أو التحدي أو المساعدة بطريقتك.' : 'Ask for a plan, challenge or support in your own words.'}</span></a>
           <a className="ax-quick-card" href={`/info/faq?lang=${lang}`}><strong>{ar ? 'الأسئلة الشائعة' : 'FAQ'}</strong><span>{ar ? 'إجابات سريعة عن الخطط والمتابعة والخصوصية.' : 'Quick answers about plans, follow-up and privacy.'}</span></a>
-          <a className="ax-quick-card" href="/auth/logout"><strong>{ar ? 'تسجيل الخروج' : 'Sign out'}</strong><span>{ar ? 'إنهاء الجلسة على هذا الجهاز.' : 'End your session on this device.'}</span></a>
+          <AqlaSignOutLink className="ax-quick-card"><strong>{ar ? 'تسجيل الخروج' : 'Sign out'}</strong><span>{ar ? 'إنهاء الجلسة على هذا الجهاز.' : 'End your session on this device.'}</span></AqlaSignOutLink>
         </section>
       </div>
     </main>
