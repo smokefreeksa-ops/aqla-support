@@ -17,6 +17,20 @@ const readinessLabel = {
   en: { ready_now: 'Ready to begin', wants_but_low_confidence: 'Change matters, but confidence/readiness needs support', low_importance_high_confidence: 'Good confidence; motivation needs clarity', not_ready: 'Not ready for a major commitment yet' },
 } as const
 
+function clearPrivateStorage() {
+  for (const storage of [window.localStorage, window.sessionStorage]) {
+    try {
+      for (let index = storage.length - 1; index >= 0; index -= 1) {
+        const key = storage.key(index)
+        if (key?.startsWith('aqla_quit_plan:')) storage.removeItem(key)
+      }
+      storage.removeItem('aqla_quit_engine_draft_v1')
+    } catch {
+      // Session sign-out still proceeds if browser storage is unavailable.
+    }
+  }
+}
+
 export default function QuitPlanResult({ planId, initialLang }: { planId: string; initialLang: Lang }) {
   const [lang, setLang] = useState<Lang>(initialLang)
   const [plan, setPlan] = useState<StoredQuitPlan | null>(null)
@@ -26,23 +40,38 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
 
   useEffect(() => {
     let cancelled = false
-    const localKey = `aqla_quit_plan:${planId}`
+    const sessionKey = `aqla_quit_plan:${planId}`
 
     async function loadPlan() {
       try {
         const response = await fetch(`/api/quit-engine/plan/${encodeURIComponent(planId)}`, { cache: 'no-store' })
+        if (response.status === 401) {
+          const returnTo = `/aqla/plan/${encodeURIComponent(planId)}?lang=${lang}`
+          window.location.href = `/auth/refresh?returnTo=${encodeURIComponent(returnTo)}`
+          return
+        }
+
         if (response.ok) {
           const { plan: remote } = await response.json() as { plan: StoredQuitPlan }
           if (cancelled) return
           setPlan(remote)
-          try { localStorage.setItem(localKey, JSON.stringify(remote)) } catch { /* no-op */ }
+          try {
+            sessionStorage.setItem(sessionKey, JSON.stringify(remote))
+            localStorage.removeItem(sessionKey)
+          } catch { /* no-op */ }
           return
         }
 
         if (response.status === 503) {
           try {
-            const raw = localStorage.getItem(localKey)
-            if (raw && !cancelled) setPlan(JSON.parse(raw) as StoredQuitPlan)
+            const sessionValue = sessionStorage.getItem(sessionKey)
+            const legacyValue = localStorage.getItem(sessionKey)
+            const raw = sessionValue ?? legacyValue
+            if (raw && !cancelled) {
+              setPlan(JSON.parse(raw) as StoredQuitPlan)
+              sessionStorage.setItem(sessionKey, raw)
+            }
+            localStorage.removeItem(sessionKey)
           } catch {
             if (!cancelled) setPlan(null)
           }
@@ -59,7 +88,7 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
 
     void loadPlan()
     return () => { cancelled = true }
-  }, [planId])
+  }, [lang, planId])
 
   const result = plan?.result
   const followupLabels = useMemo(() => result?.follow_up_schedule.map((item) => lang === 'ar' ? item.label_ar : item.label_en) ?? [], [lang, result])
@@ -74,24 +103,13 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
     }
   }
 
-  function prepareSignOut() {
-    try {
-      for (let index = localStorage.length - 1; index >= 0; index -= 1) {
-        const key = localStorage.key(index)
-        if (key?.startsWith('aqla_quit_plan:')) localStorage.removeItem(key)
-      }
-      localStorage.removeItem('aqla_quit_engine_draft_v1')
-    } catch {
-      // Cookie/session sign-out still proceeds if browser storage is unavailable.
-    }
-  }
-
   async function shareAchievement() {
     if (!result) return
     const text = result.share_text
+    const publicUrl = `${window.location.origin}/aqla`
     try {
-      if (navigator.share) await navigator.share({ title: ar ? 'خطتي مع أقلع' : 'My Aqla plan', text, url: 'https://staging.smokefreeksa.com/aqla' })
-      else await copyText(`${text}\nhttps://staging.smokefreeksa.com/aqla`, 'share')
+      if (navigator.share) await navigator.share({ title: ar ? 'بدأت رحلتي مع أقلع' : 'I started with Aqla', text, url: publicUrl })
+      else await copyText(`${text}\n${publicUrl}`, 'share')
     } catch {
       // User cancelled sharing.
     }
@@ -103,12 +121,15 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
 
   if (!plan || !result) {
     return (
-      <main className="qp-page" dir={ar ? 'rtl' : 'ltr'}>
+      <main className="qp-page" dir={ar ? 'rtl' : 'ltr'} lang={lang}>
         <div className="qp-empty">
           <img src={LOGO_URL} alt="Aqla — أقلع" />
           <h1>{ar ? 'لم نتمكن من العثور على هذه الخطة' : 'We could not find this plan'}</h1>
           <p>{ar ? 'قد تكون الخطة غير متاحة لهذا الحساب أو تعذر تحميلها الآن. يمكنك العودة إلى أقلع أو إنشاء تقييم جديد.' : 'This plan may not be available to this account or could not be loaded. You can return to Aqla or create a new assessment.'}</p>
-          <a href="/aqla/assessment">{ar ? 'ابدأ تقييمًا جديدًا' : 'Start a new assessment'}</a>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
+            <a href="/aqla">{ar ? 'العودة إلى أقلع' : 'Back to Aqla'}</a>
+            <a href="/aqla/assessment">{ar ? 'ابدأ تقييمًا جديدًا' : 'Start a new assessment'}</a>
+          </div>
         </div>
       </main>
     )
@@ -123,7 +144,7 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
           <a
             href="/auth/logout"
             className="qe-lang"
-            onClick={prepareSignOut}
+            onClick={clearPrivateStorage}
             style={{ width: 'auto', minWidth: 0, paddingInline: 14, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', whiteSpace: 'nowrap' }}
             aria-label={ar ? 'تسجيل الخروج من حساب أقلع' : 'Sign out of your Aqla account'}
           >
@@ -133,16 +154,16 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
       </header>
 
       <div className="qp-shell">
-        {!plan.persisted ? <div className="qp-sync-warning">{ar ? 'الخطة متاحة مؤقتًا على هذا الجهاز لأن مزامنة الحساب غير متاحة الآن. أعد المحاولة لاحقًا للتأكد من حفظها في حسابك.' : 'This plan is temporarily available on this device because account sync is unavailable. Try again later to ensure it is saved to your account.'}</div> : <div className="qp-sync-ok">{ar ? '✓ محفوظة بأمان في حسابك' : '✓ Securely saved to your account'}</div>}
+        {!plan.persisted ? <div className="qp-sync-warning">{ar ? 'الخطة متاحة مؤقتًا في جلسة المتصفح لأن مزامنة الحساب غير متاحة الآن. أعد المحاولة لاحقًا للتأكد من حفظها في حسابك.' : 'This plan is temporarily available in this browser session because account sync is unavailable. Try again later to ensure it is saved to your account.'}</div> : <div className="qp-sync-ok">{ar ? '✓ محفوظة بأمان في حسابك' : '✓ Securely saved to your account'}</div>}
 
         {result.safety_immediate ? <section className="qp-safety"><strong>{ar ? 'سلامتك أولًا' : 'Safety first'}</strong><p>{result.safety_immediate}</p></section> : null}
 
         <section className="qp-hero-card">
-          <span className="qp-kicker">Aqla Personal Quit Engine</span>
+          <span className="qp-kicker">{ar ? 'خطة أقلع الشخصية' : 'Your Aqla personal plan'}</span>
           <h1>{result.result_title}</h1>
           <p>{result.human_explanation}</p>
           {result.ai_personal_summary ? <div className="qp-ai-summary"><span>{ar ? 'رسالة أقلع لك' : 'Aqla message for you'}</span><p>{result.ai_personal_summary}</p></div> : null}
-          {result.ai_micro_challenge ? <div className="qp-challenge"><span>{ar ? 'تحدي الـ 24 ساعة' : '24-hour micro-challenge'}</span><strong>{result.ai_micro_challenge}</strong></div> : null}
+          {result.ai_micro_challenge ? <div className="qp-challenge"><span>{ar ? 'تحدي الـ 24 ساعة' : '24-hour challenge'}</span><strong>{result.ai_micro_challenge}</strong></div> : null}
         </section>
 
         <div className="qp-grid-two">
@@ -179,21 +200,21 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
 
         <PlanCard title={ar ? 'بطاقة الرغبة السريعة' : 'Quick craving card'}>
           <div className="qp-craving-card strong">{result.craving_card}</div>
-          <button type="button" className="qp-small-button" onClick={() => void copyText(result.craving_card, 'craving')}>{copied === 'craving' ? (ar ? 'تم النسخ ✓' : 'Copied ✓') : (ar ? 'نسخ البطاقة' : 'Copy card')}</button>
+          <button type="button" className="qp-small-button screen-only" onClick={() => void copyText(result.craving_card, 'craving')}>{copied === 'craving' ? (ar ? 'تم النسخ ✓' : 'Copied ✓') : (ar ? 'نسخ البطاقة' : 'Copy card')}</button>
         </PlanCard>
 
         <PlanCard title={ar ? 'السلامة والدعم المهني' : 'Safety and professional support'}>
           <p>{result.referral_message}</p>
         </PlanCard>
 
-        {result.support_message_template ? <PlanCard title={ar ? 'رسالة جاهزة لشخص الدعم' : 'Message for your support person'}><div className="qp-support-message">{result.support_message_template}</div><button type="button" className="qp-small-button" onClick={() => void copyText(result.support_message_template ?? '', 'support')}>{copied === 'support' ? (ar ? 'تم النسخ ✓' : 'Copied ✓') : (ar ? 'نسخ الرسالة' : 'Copy message')}</button></PlanCard> : null}
+        {result.support_message_template ? <PlanCard title={ar ? 'رسالة جاهزة لشخص الدعم' : 'Message for your support person'}><div className="qp-support-message">{result.support_message_template}</div><button type="button" className="qp-small-button screen-only" onClick={() => void copyText(result.support_message_template ?? '', 'support')}>{copied === 'support' ? (ar ? 'تم النسخ ✓' : 'Copied ✓') : (ar ? 'نسخ الرسالة' : 'Copy message')}</button></PlanCard> : null}
 
         <PlanCard title={ar ? 'المتابعة المخططة' : 'Planned follow-up'}>
           <div className="qp-followups">{followupLabels.map((label) => <span key={label}>{label}</span>)}</div>
           <p className="qp-muted">{ar ? 'هذه نقاط متابعة محفوظة في رحلتك مع أقلع لمراجعة التقدم وتحديد الخطوة التالية.' : 'These check-ins are part of your Aqla journey to review progress and decide the next useful step.'}</p>
         </PlanCard>
 
-        <section className="qp-actions">
+        <section className="qp-actions screen-only">
           <button type="button" className="qe-button primary" onClick={() => void shareAchievement()}>{ar ? 'شارك أنني بدأت مع أقلع' : 'Share that I started with Aqla'}</button>
           <a className="qe-button secondary" href="/aqla/assessment">{ar ? 'أعد التقييم' : 'Repeat assessment'}</a>
           <button type="button" className="qe-button secondary" onClick={() => window.print()}>{ar ? 'طباعة / حفظ PDF' : 'Print / save as PDF'}</button>
