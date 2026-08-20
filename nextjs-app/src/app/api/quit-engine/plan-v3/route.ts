@@ -13,7 +13,7 @@ import { openAIStructuredResponse } from '@/lib/openai.server'
 import { updatePersonalTwinFromPlan } from '@/lib/personal-twin.server'
 import { buildPersonalPlanV2Enrichment, deriveCigaretteBand, validatePersonalPlanV2Answers, type PersonalPlanV2Answers, type PersonalPlanV2Enrichment } from '@/lib/personal-plan-v2'
 import { savePersonalPlanV2TwinContext } from '@/lib/personal-plan-v2.server'
-import { markPlanEmailState } from '@/lib/plan-communications.server'
+import { markPlanEmailState, markPlanFollowupsSafetyHold } from '@/lib/plan-communications.server'
 import { buildPlan } from '@/lib/quit-engine/plan-builder'
 import { persistQuitPlan } from '@/lib/quit-engine/store.server'
 import type { EngineAnswers, EngineResult, StoredQuitPlan } from '@/lib/quit-engine/types'
@@ -239,6 +239,12 @@ export async function POST(request: NextRequest) {
   }
   try { await upsertParticipantCrmFromPlan({ userSub: user.sub, email: verifiedEmail, emailVerified: user.emailVerified, plan, lang }) } catch (error) {
     console.error('Aqla CRM indexing unavailable', error instanceof Error ? error.message : 'unknown')
+  }
+
+  if (result.safety_immediate) {
+    try { await markPlanFollowupsSafetyHold(user.sub, plan.plan_id) } catch (error) {
+      console.error('Aqla follow-up safety-hold state unavailable', error instanceof Error ? error.message : 'unknown')
+    }
   }
 
   let followupsScheduled = false
