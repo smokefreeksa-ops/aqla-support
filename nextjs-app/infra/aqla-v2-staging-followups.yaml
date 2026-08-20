@@ -88,7 +88,6 @@ Resources:
       Role: !GetAtt FollowupWorkerRole.Arn
       Timeout: 20
       MemorySize: 256
-      ReservedConcurrentExecutions: 5
       Environment:
         Variables:
           TABLE_NAME: !Ref TableName
@@ -219,7 +218,7 @@ Resources:
             }
 
             const url = `${appUrl}/aqla/followup/${encodeURIComponent(planId)}/${followupType}?lang=${lang}`;
-            const content = emailContent(followupType, lang, url);
+            const email = emailContent(followupType, lang, url);
 
             try {
               const sent = await ses.send(new SendEmailCommand({
@@ -228,8 +227,8 @@ Resources:
                 Destination: { ToAddresses: [to] },
                 ConfigurationSetName: configurationSet,
                 Content: { Simple: {
-                  Subject: { Data: content.subject, Charset: 'UTF-8' },
-                  Body: { Text: { Data: content.text, Charset: 'UTF-8' }, Html: { Data: content.html, Charset: 'UTF-8' } },
+                  Subject: { Data: email.subject, Charset: 'UTF-8' },
+                  Body: { Text: { Data: email.text, Charset: 'UTF-8' }, Html: { Data: email.html, Charset: 'UTF-8' } },
                 } },
               }));
               await setState(pk, sk, 'sent', { sent_at: new Date().toISOString(), ses_message_id: sent.MessageId || '' }, ['send_started_at', 'last_error']);
