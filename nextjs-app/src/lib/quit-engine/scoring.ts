@@ -18,9 +18,9 @@ export function computeHSI(a: EngineAnswers): number | undefined {
 }
 
 /**
- * AQla support-intensity heuristic.
+ * Aqla support-intensity heuristic.
  * This is deliberately NOT a validated dependence instrument.
- * It only helps AQla choose how much behavioural support to surface.
+ * It only helps Aqla choose how much behavioural support to surface.
  */
 export function computeAqlaSupportIntensity(a: EngineAnswers): number {
   let score = 0
@@ -101,18 +101,21 @@ export const TRIGGER_PATTERN_LABEL_EN: Record<TriggerKey, string> = {
 
 export function topTriggerPatterns(a: EngineAnswers, lang: 'ar' | 'en' = 'ar'): string[] {
   const labels = lang === 'ar' ? TRIGGER_PATTERN_LABEL_AR : TRIGGER_PATTERN_LABEL_EN
-  const counts = new Map<string, number>()
-  for (const trigger of a.triggers) {
-    const label = labels[trigger]
-    counts.set(label, (counts.get(label) ?? 0) + 1)
-  }
-  return Array.from(counts.entries())
-    .sort((x, y) => y[1] - x[1])
-    .map(([label]) => label)
+  return a.triggers.map((trigger) => labels[trigger])
 }
 
 export function requiresReferral(a: EngineAnswers): boolean {
-  const refer: SafetyFlag[] = ['pregnancy', 'under_18', 'cardiac', 'respiratory', 'medications', 'mental_health', 'seizures']
+  const refer: SafetyFlag[] = [
+    'pregnancy',
+    'under_18',
+    'cardiac',
+    'respiratory',
+    'medications',
+    'mental_health',
+    'seizures',
+    'high_mixed_use',
+    'repeated_failure',
+  ]
   return a.safety_flags.some((flag) => refer.includes(flag))
 }
 
