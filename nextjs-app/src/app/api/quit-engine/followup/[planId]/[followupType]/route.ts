@@ -2,6 +2,7 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import { incrementAnalyticsMetric } from '@/lib/analytics.server'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
+import { isFollowupType } from '@/lib/followup-policy'
 import { validateMutationRequest } from '@/lib/http-security.server'
 import { updatePersonalTwinFromFollowup } from '@/lib/personal-twin.server'
 import {
@@ -15,7 +16,6 @@ import {
 export const dynamic = 'force-dynamic'
 
 const PRIVATE_HEADERS = { 'Cache-Control': 'no-store, private' }
-const followupTypes = new Set<FollowupType>(['day_3', 'day_7', 'day_30'])
 const outcomes = new Set<FollowupOutcome>(['quit', 'reduced', 'continued', 'slipped', 'relapsed', 'needs_support'])
 
 type Body = {
@@ -62,8 +62,8 @@ async function currentUserSub(): Promise<string | null> {
 
 function parseParams(planId: string, followupType: string) {
   if (!/^[0-9a-f-]{36}$/i.test(planId)) return null
-  if (!followupTypes.has(followupType as FollowupType)) return null
-  return { planId, followupType: followupType as FollowupType }
+  if (!isFollowupType(followupType)) return null
+  return { planId, followupType }
 }
 
 function score(value: unknown): number | null {
