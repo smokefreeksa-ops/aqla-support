@@ -1,6 +1,9 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient, GetCommand, TransactWriteCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb'
+import { previousFollowupTypes, type FollowupType } from '@/lib/followup-policy'
 import type { StoredQuitPlan } from './types'
+
+export type { FollowupType } from '@/lib/followup-policy'
 
 const region = process.env.AWS_REGION || 'eu-west-2'
 export const QUIT_PLAN_TABLE = process.env.AQLA_DYNAMODB_TABLE || 'aqla-v2-staging'
@@ -9,7 +12,6 @@ const documentClient = DynamoDBDocumentClient.from(new DynamoDBClient({ region }
   marshallOptions: { removeUndefinedValues: true },
 })
 
-export type FollowupType = 'day_3' | 'day_7' | 'day_30'
 export type FollowupOutcome = 'quit' | 'reduced' | 'continued' | 'slipped' | 'relapsed' | 'needs_support'
 export type FollowupAdaptation =
   | 'maintain_quit'
@@ -102,12 +104,11 @@ async function getStoredFollowupResponse(userSub: string, planId: string, follow
 }
 
 async function getPreviousResponse(userSub: string, planId: string, followupType: FollowupType): Promise<StoredFollowupResponse | null> {
-  if (followupType === 'day_3') return null
-  if (followupType === 'day_7') return getStoredFollowupResponse(userSub, planId, 'day_3')
-
-  const day7 = await getStoredFollowupResponse(userSub, planId, 'day_7')
-  if (day7) return day7
-  return getStoredFollowupResponse(userSub, planId, 'day_3')
+  for (const previousType of previousFollowupTypes(followupType)) {
+    const response = await getStoredFollowupResponse(userSub, planId, previousType)
+    if (response) return response
+  }
+  return null
 }
 
 export async function persistQuitPlan({
@@ -129,7 +130,7 @@ export async function persistQuitPlan({
   const scheduledAt = (offsetDays: number) => new Date(new Date(plan.created_at).getTime() + offsetDays * 86400000).toISOString()
 
   const followups = plan.result.follow_up_schedule.flatMap((followup) => {
-    const type = followup.type as FollowupType
+    const type = followup.type
     const at = scheduledAt(followup.offset_days)
     const followupSk = `FOLLOWUP#${at}#${plan.plan_id}#${type}`
     const status = recipientEmail ? 'pending_schedule' : 'no_verified_email'
@@ -144,6 +145,7 @@ export async function persistQuitPlan({
             entity_type: 'quit_followup',
             plan_id: plan.plan_id,
             followup_type: type,
+            followup_kind: followup.kind ?? 'support',
             scheduled_at: at,
             status,
             recipient_email: recipientEmail,
@@ -162,6 +164,7 @@ export async function persistQuitPlan({
             entity_type: 'quit_followup_reference',
             plan_id: plan.plan_id,
             followup_type: type,
+            followup_kind: followup.kind ?? 'support',
             scheduled_at: at,
             followup_sk: followupSk,
             created_at: plan.created_at,
