@@ -2,11 +2,10 @@ import { randomUUID } from 'node:crypto'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import {
   DynamoDBDocumentClient,
-  DeleteCommand,
   GetCommand,
-  PutCommand,
   QueryCommand,
   TransactWriteCommand,
+  type TransactWriteCommandInput,
 } from '@aws-sdk/lib-dynamodb'
 import { QUIT_PLAN_TABLE } from '@/lib/quit-engine/store.server'
 import type { StoredQuitPlan } from '@/lib/quit-engine/types'
@@ -201,9 +200,7 @@ async function getMaster(userSub: string) {
 
 /**
  * Creates/refreshes a compact operational CRM index whenever a plan is persisted.
- *
- * Important scaling property: staff listing queries a dedicated CRM partition;
- * it never scans the 100k-user journey table.
+ * Staff listing queries dedicated CRM partitions and never scans the journey table.
  */
 export async function upsertParticipantCrmFromPlan({
   userSub,
@@ -290,70 +287,40 @@ export async function upsertParticipantCrmFromPlan({
     values[':email'] = record.email
   }
 
-  const items: Parameters<typeof documentClient.send>[0] extends never ? never[] : Array<Record<string, unknown>> = []
-  void items
+  const tx: NonNullable<TransactWriteCommandInput['TransactItems']> = [
+    { Put: { TableName: QUIT_PLAN_TABLE, Item: summaryItem(record, MASTER_PK) } },
+    {
+      Update: {
+        TableName: QUIT_PLAN_TABLE,
+        Key: profileKey(userSub),
+        UpdateExpression: `SET ${profileUpdateParts.join(', ')}`,
+        ExpressionAttributeNames: { '#language': 'language' },
+        ExpressionAttributeValues: values,
+      },
+    },
+    { Put: { TableName: QUIT_PLAN_TABLE, Item: summaryItem(record, statusPk(workflowStatus)) } },
+    { Put: { TableName: QUIT_PLAN_TABLE, Item: summaryItem(record, escalationPk(escalationLevel)) } },
+    {
+      Put: {
+        TableName: QUIT_PLAN_TABLE,
+        Item: { PK: LOOKUP_PK, SK: `USER#${userSub}`, entity_type: 'participant_crm_lookup', user_sub: userSub, updated_at: now },
+      },
+    },
+  ]
 
-  await documentClient.send(new TransactWriteCommand({
-    TransactItems: [
-      {
-        Put: {
-          TableName: QUIT_PLAN_TABLE,
-          Item: summaryItem(record, MASTER_PK),
-        },
+  if (record.email) {
+    tx.push({
+      Put: {
+        TableName: QUIT_PLAN_TABLE,
+        Item: { PK: LOOKUP_PK, SK: `EMAIL#${record.email}#USER#${userSub}`, entity_type: 'participant_crm_lookup', user_sub: userSub, updated_at: now },
       },
-      {
-        Update: {
-          TableName: QUIT_PLAN_TABLE,
-          Key: profileKey(userSub),
-          UpdateExpression: `SET ${profileUpdateParts.join(', ')}`,
-          ExpressionAttributeNames: { '#language': 'language' },
-          ExpressionAttributeValues: values,
-        },
-      },
-      {
-        Put: {
-          TableName: QUIT_PLAN_TABLE,
-          Item: summaryItem(record, statusPk(workflowStatus)),
-        },
-      },
-      {
-        Put: {
-          TableName: QUIT_PLAN_TABLE,
-          Item: summaryItem(record, escalationPk(escalationLevel)),
-        },
-      },
-      {
-        Put: {
-          TableName: QUIT_PLAN_TABLE,
-          Item: {
-            PK: LOOKUP_PK,
-            SK: `USER#${userSub}`,
-            entity_type: 'participant_crm_lookup',
-            user_sub: userSub,
-            updated_at: now,
-          },
-        },
-      },
-      ...(record.email ? [{
-        Put: {
-          TableName: QUIT_PLAN_TABLE,
-          Item: {
-            PK: LOOKUP_PK,
-            SK: `EMAIL#${record.email}#USER#${userSub}`,
-            entity_type: 'participant_crm_lookup',
-            user_sub: userSub,
-            updated_at: now,
-          },
-        },
-      }] : []),
-      ...(existing && existing.escalation_level !== escalationLevel ? [{
-        Delete: {
-          TableName: QUIT_PLAN_TABLE,
-          Key: { PK: escalationPk(existing.escalation_level), SK: participantSk(userSub) },
-        },
-      }] : []),
-    ],
-  }))
+    })
+  }
+  if (existing && existing.escalation_level !== escalationLevel) {
+    tx.push({ Delete: { TableName: QUIT_PLAN_TABLE, Key: { PK: escalationPk(existing.escalation_level), SK: participantSk(userSub) } } })
+  }
+
+  await documentClient.send(new TransactWriteCommand({ TransactItems: tx }))
 }
 
 export async function listParticipants({
@@ -391,19 +358,17 @@ async function lookupUsers(prefix: string, limit = 20) {
     ExpressionAttributeValues: { ':pk': LOOKUP_PK, ':prefix': prefix },
     Limit: Math.max(1, Math.min(50, limit)),
   }))
-  return (response.Items ?? [])
-    .map((item) => typeof item.user_sub === 'string' ? item.user_sub : '')
-    .filter(Boolean)
+  return (response.Items ?? []).map((item) => typeof item.user_sub === 'string' ? item.user_sub : '').filter(Boolean)
 }
 
 export async function searchParticipants(query: string, limit = 20): Promise<ParticipantIndexRecord[]> {
   const clean = query.trim().slice(0, 320)
   if (!clean) return []
-
-  const userLookups = await lookupUsers(`USER#${clean}`, limit)
-  const emailLookups = await lookupUsers(`EMAIL#${clean.toLowerCase()}`, limit)
+  const [userLookups, emailLookups] = await Promise.all([
+    lookupUsers(`USER#${clean}`, limit),
+    lookupUsers(`EMAIL#${clean.toLowerCase()}`, limit),
+  ])
   const userSubs = Array.from(new Set([...userLookups, ...emailLookups])).slice(0, limit)
-
   const records = await Promise.all(userSubs.map((userSub) => getMaster(userSub)))
   return records.filter((record): record is ParticipantIndexRecord => Boolean(record))
 }
@@ -467,6 +432,8 @@ export async function updateParticipantCrm({
   const current = await getParticipantProfile(userSub)
   if (!current) throw new Error('participant_not_found')
 
+  const now = new Date().toISOString()
+  const contactChanged = Boolean(patch.contact_status && patch.contact_status !== current.contact_status)
   const next: ParticipantProfile = {
     ...current,
     workflow_status: patch.workflow_status ?? current.workflow_status,
@@ -476,7 +443,9 @@ export async function updateParticipantCrm({
     receptionist_notes: patch.receptionist_notes === null ? undefined : cleanText(patch.receptionist_notes, 4000) ?? current.receptionist_notes,
     clinician_notes: patch.clinician_notes === null ? undefined : cleanText(patch.clinician_notes, 6000) ?? current.clinician_notes,
     assigned_clinician: patch.assigned_clinician === null ? undefined : cleanText(patch.assigned_clinician, 200) ?? current.assigned_clinician,
-    updated_at: new Date().toISOString(),
+    last_contact_at: contactChanged ? now : current.last_contact_at,
+    last_contact_by: contactChanged ? actorSub : current.last_contact_by,
+    updated_at: now,
   }
 
   const changedFields = (Object.keys(patch) as Array<keyof ParticipantUpdateInput>).filter((key) => {
@@ -488,10 +457,7 @@ export async function updateParticipantCrm({
 
   const changes: ParticipantAuditEvent['changes'] = {}
   for (const field of changedFields) {
-    changes[field] = {
-      from: current[field as keyof ParticipantProfile],
-      to: next[field as keyof ParticipantProfile],
-    }
+    changes[field] = { from: current[field as keyof ParticipantProfile], to: next[field as keyof ParticipantProfile] }
   }
 
   const indexRecord: ParticipantIndexRecord = {
@@ -523,56 +489,35 @@ export async function updateParticipantCrm({
     event_type: 'crm_updated',
     changed_fields: changedFields,
     changes,
-    created_at: next.updated_at,
+    created_at: now,
   }
 
-  const profileItem = {
-    PK: `USER#${userSub}`,
-    SK: 'CRM#PROFILE',
-    entity_type: 'participant_crm_profile',
-    schema_version: CRM_SCHEMA_VERSION,
-    ...next,
-  }
-
-  const tx = [
+  const tx: NonNullable<TransactWriteCommandInput['TransactItems']> = [
     { Put: { TableName: QUIT_PLAN_TABLE, Item: summaryItem(indexRecord, MASTER_PK) } },
-    { Put: { TableName: QUIT_PLAN_TABLE, Item: profileItem } },
+    {
+      Put: {
+        TableName: QUIT_PLAN_TABLE,
+        Item: { PK: `USER#${userSub}`, SK: 'CRM#PROFILE', entity_type: 'participant_crm_profile', schema_version: CRM_SCHEMA_VERSION, ...next },
+      },
+    },
     { Put: { TableName: QUIT_PLAN_TABLE, Item: summaryItem(indexRecord, statusPk(next.workflow_status)) } },
     { Put: { TableName: QUIT_PLAN_TABLE, Item: summaryItem(indexRecord, escalationPk(next.escalation_level)) } },
     {
       Put: {
         TableName: QUIT_PLAN_TABLE,
-        Item: {
-          PK: `AUDIT#CRM#${userSub}`,
-          SK: `${audit.created_at}#${auditId}`,
-          entity_type: 'participant_crm_audit',
-          ...audit,
-        },
+        Item: { PK: `AUDIT#CRM#${userSub}`, SK: `${now}#${auditId}`, entity_type: 'participant_crm_audit', ...audit },
         ConditionExpression: 'attribute_not_exists(PK) AND attribute_not_exists(SK)',
       },
     },
-    ...(current.workflow_status !== next.workflow_status ? [{
-      Delete: { TableName: QUIT_PLAN_TABLE, Key: { PK: statusPk(current.workflow_status), SK: participantSk(userSub) } },
-    }] : []),
-    ...(current.escalation_level !== next.escalation_level ? [{
-      Delete: { TableName: QUIT_PLAN_TABLE, Key: { PK: escalationPk(current.escalation_level), SK: participantSk(userSub) } },
-    }] : []),
   ]
+
+  if (current.workflow_status !== next.workflow_status) {
+    tx.push({ Delete: { TableName: QUIT_PLAN_TABLE, Key: { PK: statusPk(current.workflow_status), SK: participantSk(userSub) } } })
+  }
+  if (current.escalation_level !== next.escalation_level) {
+    tx.push({ Delete: { TableName: QUIT_PLAN_TABLE, Key: { PK: escalationPk(current.escalation_level), SK: participantSk(userSub) } } })
+  }
 
   await documentClient.send(new TransactWriteCommand({ TransactItems: tx }))
   return next
-}
-
-export async function removeStaleLookup({ kind, value, userSub }: { kind: 'EMAIL'; value: string; userSub: string }) {
-  await documentClient.send(new DeleteCommand({
-    TableName: QUIT_PLAN_TABLE,
-    Key: { PK: LOOKUP_PK, SK: `${kind}#${normaliseEmail(value)}#USER#${userSub}` },
-  }))
-}
-
-export async function ensureUserLookup(userSub: string) {
-  await documentClient.send(new PutCommand({
-    TableName: QUIT_PLAN_TABLE,
-    Item: { PK: LOOKUP_PK, SK: `USER#${userSub}`, entity_type: 'participant_crm_lookup', user_sub: userSub, updated_at: new Date().toISOString() },
-  }))
 }
