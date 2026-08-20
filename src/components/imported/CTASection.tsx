@@ -72,7 +72,7 @@ export default function CTASection() {
             </p>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+          <div className="bg-white/15 rounded-2xl p-8 border border-white/20">
             <h3 className="text-xl font-bold text-white text-center mb-6">
               لماذا تختار برنامج أقلع؟
             </h3>
