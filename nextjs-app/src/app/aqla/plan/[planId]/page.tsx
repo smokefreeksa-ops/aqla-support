@@ -9,6 +9,9 @@ export default async function PlanPage({ params, searchParams }: { params: Promi
   const { planId } = await params
   const query = await searchParams
   const lang = query.lang === 'en' ? 'en' : 'ar'
+  const returnTo = `/aqla/plan/${encodeURIComponent(planId)}?lang=${lang}`
+
+  if (!/^[0-9a-f-]{36}$/i.test(planId)) redirect('/aqla')
 
   const cookieStore = await cookies()
   const token = cookieStore.get(authCookies.idToken)?.value
@@ -24,8 +27,10 @@ export default async function PlanPage({ params, searchParams }: { params: Promi
   }
 
   if (!authenticated) {
-    const returnTo = `/aqla/plan/${encodeURIComponent(planId)}?lang=${lang}`
-    redirect(`/auth/login?returnTo=${encodeURIComponent(returnTo)}`)
+    const refreshToken = cookieStore.get(authCookies.refreshToken)?.value
+    redirect(refreshToken
+      ? `/auth/refresh?returnTo=${encodeURIComponent(returnTo)}`
+      : `/auth/login?returnTo=${encodeURIComponent(returnTo)}`)
   }
 
   return <QuitPlanResult planId={planId} initialLang={lang} />
