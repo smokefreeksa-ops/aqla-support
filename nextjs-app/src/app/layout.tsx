@@ -6,6 +6,16 @@ import './followup.css'
 export const metadata: Metadata = {
   title: 'أقلع — Aqla',
   description: 'منصة أقلع لدعم الإقلاع عن التدخين والنيكوتين',
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+    },
+  },
   icons: {
     icon: '/aqla-logo.png',
     apple: '/aqla-logo.png',
