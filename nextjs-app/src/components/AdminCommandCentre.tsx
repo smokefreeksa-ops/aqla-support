@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 type MetricMap = Record<string, number | undefined>
 type DailyRow = { date: string; metrics: MetricMap; updated_at?: string }
 
@@ -41,15 +43,15 @@ export default function AdminCommandCentre({
   return (
     <main className="admin-page" dir="ltr" lang="en">
       <header className="admin-topbar">
-        <a href="/aqla/os" className="admin-brand"><img src={LOGO_URL} alt="Aqla — أقلع" /><span><strong>Aqla Command Centre</strong><small>Admin analytics · staging</small></span></a>
-        <div className="admin-actions"><a href="/aqla/admin/participants">Participant CRM</a><a href="/aqla/os">Aqla OS</a><a href="/auth/logout">Sign out</a></div>
+        <Link href="/aqla/os" className="admin-brand"><img src={LOGO_URL} alt="Aqla — أقلع" /><span><strong>Aqla Command Centre</strong><small>Admin analytics · staging</small></span></Link>
+        <div className="admin-actions"><Link href="/aqla/admin/participants">Participant CRM</Link><Link href="/aqla/admin/volunteers">Volunteers</Link><Link href="/aqla/admin/research-exports">Research exports</Link><Link href="/aqla/os">Aqla OS</Link><a href="/auth/logout">Sign out</a></div>
       </header>
 
       <section className="admin-shell">
         <div className="admin-heading">
           <div><span className="admin-eyebrow">AQLA OS / ADMIN</span><h1>Operational command centre</h1><p>Real first-party counters only. Uninstrumented metrics are explicitly marked as unavailable.</p></div>
           <div className="admin-range" aria-label="Analytics date range">
-            {[7, 30, 90].map((range) => <a key={range} className={range === days ? 'active' : ''} href={`/aqla/admin?days=${range}`}>{range} days</a>)}
+            {[7, 30, 90].map((range) => <Link key={range} className={range === days ? 'active' : ''} href={`/aqla/admin?days=${range}`}>{range} days</Link>)}
           </div>
         </div>
 
