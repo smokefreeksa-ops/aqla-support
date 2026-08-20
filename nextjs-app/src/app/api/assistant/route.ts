@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
+import { validateMutationRequest } from '@/lib/http-security.server'
 import { openAIStructuredResponse } from '@/lib/openai.server'
 
 export const dynamic = 'force-dynamic'
@@ -63,6 +64,9 @@ Keep replies short and practical, usually 1-5 sentences.
 Return only the structured response requested by the schema.`
 
 export async function POST(request: NextRequest) {
+  const mutationError = validateMutationRequest(request, 32 * 1024)
+  if (mutationError) return json({ error: mutationError.error }, mutationError.status)
+
   if (!(await authenticated())) return json({ error: 'not_authenticated' }, 401)
 
   let body: AssistantBody
