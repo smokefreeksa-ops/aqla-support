@@ -1,4 +1,5 @@
 import type { FollowupKind, FollowupType } from '@/lib/followup-policy'
+import type { PlanProvenance } from '@/lib/quit-engine/versioning'
 
 export type ProductType =
   | 'cigarettes'
@@ -120,6 +121,7 @@ export interface StoredQuitPlan {
   created_at: string
   version: 1
   persisted: boolean
+  provenance?: PlanProvenance
   answers: EngineAnswers
   result: EngineResult
 }
