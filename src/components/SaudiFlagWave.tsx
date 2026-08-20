@@ -1,29 +1,9 @@
-import { useEffect, useId, useState } from "react";
-
 /**
- * Full-viewport animated Saudi flag background.
- *
- * Uses an inline SVG with an SMIL-animated feTurbulence displacement map
- * to create a gentle, continuous waving effect. A dark gradient scrim is
- * layered on top so hero text remains readable.
- *
- * Respects prefers-reduced-motion: the wave animation is paused and the
- * flag is shown as a static image for users who request reduced motion.
+ * Full-viewport Saudi green field background with readability scrims.
+ * Painted directly (no live SVG filter) so scrolling stays smooth.
  */
 export default function SaudiFlagWave() {
-  const id = useId().replace(/:/g, "");
-  const filterId = `saudi-wave-${id}`;
-  const turbulenceId = `saudi-turb-${id}`;
 
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
 
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
