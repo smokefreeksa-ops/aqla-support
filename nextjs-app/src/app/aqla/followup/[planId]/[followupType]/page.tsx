@@ -2,11 +2,9 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import FollowupCheckIn from '@/components/FollowupCheckIn'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
-import type { FollowupType } from '@/lib/quit-engine/store.server'
+import { isFollowupType } from '@/lib/followup-policy'
 
 export const dynamic = 'force-dynamic'
-
-const followupTypes = new Set<FollowupType>(['day_3', 'day_7', 'day_30'])
 
 export default async function FollowupPage({
   params,
@@ -19,7 +17,7 @@ export default async function FollowupPage({
   const query = await searchParams
   const lang = query.lang === 'en' ? 'en' : 'ar'
 
-  if (!/^[0-9a-f-]{36}$/i.test(raw.planId) || !followupTypes.has(raw.followupType as FollowupType)) {
+  if (!/^[0-9a-f-]{36}$/i.test(raw.planId) || !isFollowupType(raw.followupType)) {
     redirect('/aqla')
   }
 
@@ -44,5 +42,5 @@ export default async function FollowupPage({
       : `/auth/login?returnTo=${encodeURIComponent(returnTo)}`)
   }
 
-  return <FollowupCheckIn planId={raw.planId} followupType={raw.followupType as FollowupType} initialLang={lang} />
+  return <FollowupCheckIn planId={raw.planId} followupType={raw.followupType} initialLang={lang} />
 }
