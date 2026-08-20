@@ -97,9 +97,9 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
 
       <style>{`
         @keyframes aqlaFlashIn {
-          0% { opacity: 0; transform: translateY(8px) scale(.92); filter: blur(8px); }
-          40% { opacity: 1; filter: blur(0); }
-          100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+          0% { opacity: 0; transform: translateY(8px) scale(.96); }
+          40% { opacity: 1; }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
         }
       `}</style>
 
