@@ -43,3 +43,9 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Install CloudFormation linter
+        run: python3 -m pip install --disable-pip-version-check cfn-lint
+
+      - name: Validate AWS CloudFormation
+        run: cfn-lint infra/*.yaml
