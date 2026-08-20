@@ -10,6 +10,7 @@ import {
 
 export const dynamic = 'force-dynamic'
 
+const PRIVATE_HEADERS = { 'Cache-Control': 'no-store, private' }
 const followupTypes = new Set<FollowupType>(['day_3', 'day_7', 'day_30'])
 const outcomes = new Set<FollowupOutcome>(['quit', 'reduced', 'continued', 'slipped', 'relapsed', 'needs_support'])
 
@@ -17,6 +18,10 @@ type Body = {
   outcome?: unknown
   craving_score?: unknown
   confidence_score?: unknown
+}
+
+function json(body: unknown, status = 200) {
+  return NextResponse.json(body, { status, headers: PRIVATE_HEADERS })
 }
 
 async function currentUserSub(): Promise<string | null> {
@@ -45,50 +50,50 @@ function score(value: unknown): number | null {
 
 export async function GET(_request: NextRequest, context: { params: Promise<{ planId: string; followupType: string }> }) {
   const userSub = await currentUserSub()
-  if (!userSub) return NextResponse.json({ error: 'not_authenticated' }, { status: 401 })
+  if (!userSub) return json({ error: 'not_authenticated' }, 401)
 
   const raw = await context.params
   const params = parseParams(raw.planId, raw.followupType)
-  if (!params) return NextResponse.json({ error: 'invalid_followup' }, { status: 400 })
+  if (!params) return json({ error: 'invalid_followup' }, 400)
 
   try {
     const followup = await getFollowupState(userSub, params.planId, params.followupType)
-    if (!followup) return NextResponse.json({ error: 'not_found' }, { status: 404 })
-    return NextResponse.json({ followup })
+    if (!followup) return json({ error: 'not_found' }, 404)
+    return json({ followup })
   } catch (error) {
     console.error('Aqla follow-up retrieval unavailable', error instanceof Error ? error.message : 'unknown')
-    return NextResponse.json({ error: 'followup_unavailable' }, { status: 503 })
+    return json({ error: 'followup_unavailable' }, 503)
   }
 }
 
 export async function POST(request: NextRequest, context: { params: Promise<{ planId: string; followupType: string }> }) {
   const userSub = await currentUserSub()
-  if (!userSub) return NextResponse.json({ error: 'not_authenticated' }, { status: 401 })
+  if (!userSub) return json({ error: 'not_authenticated' }, 401)
 
   const raw = await context.params
   const params = parseParams(raw.planId, raw.followupType)
-  if (!params) return NextResponse.json({ error: 'invalid_followup' }, { status: 400 })
+  if (!params) return json({ error: 'invalid_followup' }, 400)
 
   let body: Body
   try {
     body = await request.json() as Body
   } catch {
-    return NextResponse.json({ error: 'invalid_json' }, { status: 400 })
+    return json({ error: 'invalid_json' }, 400)
   }
 
   if (typeof body.outcome !== 'string' || !outcomes.has(body.outcome as FollowupOutcome)) {
-    return NextResponse.json({ error: 'invalid_outcome' }, { status: 400 })
+    return json({ error: 'invalid_outcome' }, 400)
   }
 
   const cravingScore = score(body.craving_score)
   const confidenceScore = score(body.confidence_score)
   if (cravingScore === null || confidenceScore === null) {
-    return NextResponse.json({ error: 'invalid_score' }, { status: 400 })
+    return json({ error: 'invalid_score' }, 400)
   }
 
   try {
     const current = await getFollowupState(userSub, params.planId, params.followupType)
-    if (!current) return NextResponse.json({ error: 'not_found' }, { status: 404 })
+    if (!current) return json({ error: 'not_found' }, 404)
 
     const saved = await saveFollowupResponse({
       userSub,
@@ -101,9 +106,9 @@ export async function POST(request: NextRequest, context: { params: Promise<{ pl
       },
     })
 
-    return NextResponse.json({ response: saved })
+    return json({ response: saved })
   } catch (error) {
     console.error('Aqla follow-up response persistence unavailable', error instanceof Error ? error.message : 'unknown')
-    return NextResponse.json({ error: 'save_unavailable' }, { status: 503 })
+    return json({ error: 'save_unavailable' }, 503)
   }
 }
