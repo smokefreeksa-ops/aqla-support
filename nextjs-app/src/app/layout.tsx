@@ -8,6 +8,8 @@ import './experience.css'
 import './os.css'
 import './admin.css'
 import './engagement.css'
+import './aqla-institutional.css'
+import './aqla-theme-overrides.css'
 
 export const metadata: Metadata = {
   title: 'أقلع — Aqla',
@@ -28,10 +30,13 @@ export const metadata: Metadata = {
   },
 }
 
+const displayModeScript = `(function(){try{var mode=localStorage.getItem('aqla_display_mode');document.documentElement.dataset.aqlaTheme=(mode==='light'||mode==='dim'||mode==='night')?mode:'night';}catch(e){document.documentElement.dataset.aqlaTheme='night';}})();`
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="ar" dir="rtl" data-aqla-theme="night" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: displayModeScript }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
