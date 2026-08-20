@@ -20,7 +20,9 @@ import type { EngineAnswers, FirstUseAfterWaking, ProductType, SafetyFlag, Store
 
 const LOGO_URL = '/aqla-logo.png'
 const DRAFT_KEY = 'aqla_quit_engine_draft_v1'
-const ASSESSMENT_LOGIN_URL = `/auth/login?returnTo=${encodeURIComponent('/aqla/assessment')}`
+const ASSESSMENT_PATH = '/aqla/assessment'
+const ASSESSMENT_LOGIN_URL = `/auth/login?returnTo=${encodeURIComponent(ASSESSMENT_PATH)}`
+const ASSESSMENT_REFRESH_URL = `/auth/refresh?returnTo=${encodeURIComponent(ASSESSMENT_PATH)}`
 
 const EMPTY: EngineAnswers = {
   product_types: [],
@@ -51,7 +53,7 @@ const text = {
     submit: 'أنشئ خطتي الشخصية',
     submitting: 'جاري بناء خطتك…',
     loginSubmit: 'سجّل الدخول واحفظ خطتك',
-    savedDraft: 'سنحفظ إجاباتك على هذا الجهاز أثناء تسجيل الدخول.',
+    savedDraft: 'ستبقى إجاباتك محفوظة مؤقتًا في جلسة المتصفح أثناء تسجيل الدخول.',
     error: 'تعذر إنشاء الخطة الآن. حاول مرة أخرى.',
     required: 'أكمل هذا الجزء قبل المتابعة.',
     stages: ['المنتج', 'أول استخدام', 'الكمية', 'المحفزات', 'الاستعداد', 'المحاولات السابقة', 'السلامة', 'أسبابك'],
@@ -69,7 +71,7 @@ const text = {
     submit: 'Build my personal plan',
     submitting: 'Building your plan…',
     loginSubmit: 'Sign in and save my plan',
-    savedDraft: 'Your answers will stay saved on this device while you sign in.',
+    savedDraft: 'Your answers will stay temporarily in this browser session while you sign in.',
     error: 'We could not build your plan right now. Please try again.',
     required: 'Complete this section before continuing.',
     stages: ['Product', 'First use', 'Amount', 'Triggers', 'Readiness', 'Past attempts', 'Safety', 'Your reasons'],
@@ -102,6 +104,20 @@ function RangeQuestion({ label: qLabel, value, lang, onChange }: { label: string
   )
 }
 
+function clearPrivateStorage() {
+  for (const storage of [window.localStorage, window.sessionStorage]) {
+    try {
+      for (let index = storage.length - 1; index >= 0; index -= 1) {
+        const key = storage.key(index)
+        if (key?.startsWith('aqla_quit_plan:')) storage.removeItem(key)
+      }
+      storage.removeItem(DRAFT_KEY)
+    } catch {
+      // Session sign-out still proceeds if browser storage is unavailable.
+    }
+  }
+}
+
 export default function QuitEngineAssessment({ signedIn }: { signedIn: boolean }) {
   const [lang, setLang] = useState<Lang>('ar')
   const [step, setStep] = useState(0)
@@ -114,15 +130,21 @@ export default function QuitEngineAssessment({ signedIn }: { signedIn: boolean }
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(DRAFT_KEY)
-      if (raw) setAnswers({ ...EMPTY, ...JSON.parse(raw) as EngineAnswers })
+      const sessionDraft = sessionStorage.getItem(DRAFT_KEY)
+      const legacyDraft = localStorage.getItem(DRAFT_KEY)
+      const raw = sessionDraft ?? legacyDraft
+      if (raw) {
+        setAnswers({ ...EMPTY, ...JSON.parse(raw) as EngineAnswers })
+        sessionStorage.setItem(DRAFT_KEY, raw)
+      }
+      localStorage.removeItem(DRAFT_KEY)
     } catch {
-      // Ignore an invalid local draft.
+      // Ignore an invalid or unavailable browser-session draft.
     }
   }, [])
 
   useEffect(() => {
-    try { localStorage.setItem(DRAFT_KEY, JSON.stringify(answers)) } catch { /* no-op */ }
+    try { sessionStorage.setItem(DRAFT_KEY, JSON.stringify(answers)) } catch { /* no-op */ }
   }, [answers])
 
   const update = (patch: Partial<EngineAnswers>) => setAnswers((previous) => ({ ...previous, ...patch }))
@@ -193,18 +215,6 @@ export default function QuitEngineAssessment({ signedIn }: { signedIn: boolean }
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  function prepareSignOut() {
-    try {
-      for (let index = localStorage.length - 1; index >= 0; index -= 1) {
-        const key = localStorage.key(index)
-        if (key?.startsWith('aqla_quit_plan:')) localStorage.removeItem(key)
-      }
-      localStorage.removeItem(DRAFT_KEY)
-    } catch {
-      // Cookie/session sign-out still proceeds if browser storage is unavailable.
-    }
-  }
-
   async function submit() {
     if (!canNext || submitting) { setShowRequired(true); return }
     setError('')
@@ -223,15 +233,17 @@ export default function QuitEngineAssessment({ signedIn }: { signedIn: boolean }
       })
 
       if (response.status === 401) {
-        window.location.href = ASSESSMENT_LOGIN_URL
+        window.location.href = ASSESSMENT_REFRESH_URL
         return
       }
       if (!response.ok) throw new Error(`plan_${response.status}`)
 
       const json = await response.json() as { plan: StoredQuitPlan }
       const plan = json.plan
-      localStorage.setItem(`aqla_quit_plan:${plan.plan_id}`, JSON.stringify(plan))
+      sessionStorage.setItem(`aqla_quit_plan:${plan.plan_id}`, JSON.stringify(plan))
+      sessionStorage.removeItem(DRAFT_KEY)
       localStorage.removeItem(DRAFT_KEY)
+      localStorage.removeItem(`aqla_quit_plan:${plan.plan_id}`)
       window.location.href = `/aqla/plan/${plan.plan_id}?lang=${lang}`
     } catch (cause) {
       console.error(cause)
@@ -253,7 +265,7 @@ export default function QuitEngineAssessment({ signedIn }: { signedIn: boolean }
             <a
               href="/auth/logout"
               className="qe-lang"
-              onClick={prepareSignOut}
+              onClick={clearPrivateStorage}
               style={{ width: 'auto', minWidth: 0, paddingInline: 14, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', whiteSpace: 'nowrap' }}
               aria-label={ar ? 'تسجيل الخروج من حساب أقلع' : 'Sign out of your Aqla account'}
             >
@@ -274,7 +286,7 @@ export default function QuitEngineAssessment({ signedIn }: { signedIn: boolean }
 
       <div className="qe-shell">
         <section className="qe-intro">
-          <span className="qe-kicker">Aqla Personal Quit Engine</span>
+          <span className="qe-kicker">{ar ? 'تقييم أقلع وبناء الخطة الشخصية' : 'Aqla personal quit plan'}</span>
           <h1>{t.title}</h1>
           <p>{t.subtitle}</p>
         </section>
@@ -337,7 +349,7 @@ export default function QuitEngineAssessment({ signedIn }: { signedIn: boolean }
               <label><span>{ar ? 'الاسم الذي تريد أن تخاطبك به أقلع (اختياري)' : 'Name you want Aqla to use (optional)'}</span><input maxLength={120} value={answers.user_name ?? ''} onChange={(event) => update({ user_name: event.target.value })} placeholder={ar ? 'مثال: أبو خالد' : 'Example: Khalid'} /></label>
               <label><span>{ar ? 'شخص دعم واحد (اختياري)' : 'One support person (optional)'}</span><input maxLength={120} value={answers.support_person_name ?? ''} onChange={(event) => update({ support_person_name: event.target.value })} placeholder={ar ? 'اسم صديق أو قريب' : 'Friend or family member'} /></label>
             </div>
-            <div className="qe-note success">{ar ? 'أقلع يحسب النتيجة وقواعد السلامة داخل النظام. OpenAI يُستخدم فقط لتخصيص لغة الدعم ولا يقرر التشخيص أو الجرعات.' : 'Aqla calculates the result and safety rules inside the application. OpenAI is used only to personalise supportive wording; it does not decide diagnoses or medication doses.'}</div>
+            <div className="qe-note success">{ar ? 'تُستخدم إجاباتك لبناء خطوات الدعم المناسبة لك. قواعد السلامة وقرارات المسار تبقى تحت منطق أقلع المحدد مسبقًا.' : 'Your answers are used to build support steps that fit your situation. Safety rules and pathway decisions remain controlled by Aqla’s predefined logic.'}</div>
           </div>}
         </section>
 
