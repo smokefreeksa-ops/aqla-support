@@ -70,9 +70,6 @@ export default function ParticipantCrmEditor({
   const allowedWorkflow = receptionist
     ? WORKFLOW_STATUSES.filter((status) => !['completed', 'closed'].includes(status))
     : WORKFLOW_STATUSES
-  const allowedEscalation = receptionist
-    ? ESCALATION_LEVELS.filter((level) => level === 'routine' || level === 'priority')
-    : ESCALATION_LEVELS
 
   async function submit(event: FormEvent) {
     event.preventDefault()
@@ -83,9 +80,9 @@ export default function ParticipantCrmEditor({
     const payload: Record<string, unknown> = {
       workflow_status: workflow,
       contact_status: contact,
-      escalation_level: escalation,
       appointment_at: appointment ? new Date(appointment).toISOString() : null,
     }
+    if (!receptionist) payload.escalation_level = escalation
     if (!clinician) payload.receptionist_notes = receptionistNotes
     if (!receptionist) {
       payload.clinician_notes = clinicianNotes
@@ -126,12 +123,16 @@ export default function ParticipantCrmEditor({
             {CONTACT_STATUSES.map((status) => <option value={status} key={status}>{contactLabels[status]}</option>)}
           </select>
         </label>
-        <label>
-          <span>Escalation</span>
-          <select value={allowedEscalation.includes(escalation) ? escalation : allowedEscalation[0]} onChange={(event) => setEscalation(event.target.value as EscalationLevel)}>
-            {allowedEscalation.map((level) => <option value={level} key={level}>{escalationLabels[level]}</option>)}
-          </select>
-        </label>
+        {receptionist ? (
+          <label><span>Escalation</span><input readOnly value={escalationLabels[participant.escalation_level]} /></label>
+        ) : (
+          <label>
+            <span>Escalation</span>
+            <select value={escalation} onChange={(event) => setEscalation(event.target.value as EscalationLevel)}>
+              {ESCALATION_LEVELS.map((level) => <option value={level} key={level}>{escalationLabels[level]}</option>)}
+            </select>
+          </label>
+        )}
         <label>
           <span>Appointment</span>
           <input type="datetime-local" value={appointment} onChange={(event) => setAppointment(event.target.value)} />
