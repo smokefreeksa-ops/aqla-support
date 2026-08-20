@@ -1,7 +1,7 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
-import type { UnsubscribeScope } from '@/lib/communication-preferences.server'
+import type { UnsubscribeScope } from '@/lib/communication-preferences.types'
 
 export default function EmailUnsubscribeForm({
   token,
