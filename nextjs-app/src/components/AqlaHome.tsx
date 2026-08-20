@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import AqlaAssistant from '@/components/AqlaAssistant'
 
-const LOGO_URL = 'https://aqla1.com/aqla-logo.png'
+const LOGO_URL = '/aqla-logo.png'
 const REDCAP_URL = 'https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM'
 const ASSESSMENT_URL = '/aqla/assessment'
 const ASSESSMENT_LOGIN_URL = `/auth/login?returnTo=${encodeURIComponent(ASSESSMENT_URL)}`
