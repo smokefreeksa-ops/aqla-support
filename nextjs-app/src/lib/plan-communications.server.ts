@@ -64,6 +64,27 @@ export async function markPlanEmailState({
   }))
 }
 
+export async function markPlanFollowupsSafetyHold(userSub: string, planId: string) {
+  const now = new Date().toISOString()
+  await Promise.all(FOLLOWUP_TYPES.map(async (type) => {
+    const reference = await documentClient.send(new GetCommand({
+      TableName: QUIT_PLAN_TABLE,
+      Key: { PK: `USER#${userSub}`, SK: `FOLLOWUPREF#${planId}#${type}` },
+      ConsistentRead: true,
+      ProjectionExpression: 'followup_sk',
+    }))
+    const followupSk = typeof reference.Item?.followup_sk === 'string' ? reference.Item.followup_sk : undefined
+    if (!followupSk) return
+    await documentClient.send(new UpdateCommand({
+      TableName: QUIT_PLAN_TABLE,
+      Key: { PK: `USER#${userSub}`, SK: followupSk },
+      UpdateExpression: 'SET #status = :status, updated_at = :now REMOVE recipient_email, scheduler_name, schedule_error',
+      ExpressionAttributeNames: { '#status': 'status' },
+      ExpressionAttributeValues: { ':status': 'safety_hold', ':now': now },
+    }))
+  }))
+}
+
 export async function getPlanCommunicationState(userSub: string, planId: string): Promise<PlanCommunicationState | null> {
   const response = await documentClient.send(new GetCommand({
     TableName: QUIT_PLAN_TABLE,
