@@ -13,6 +13,7 @@ import { buildPlan } from '@/lib/quit-engine/plan-builder'
 import { persistQuitPlan } from '@/lib/quit-engine/store.server'
 import type { StoredQuitPlan } from '@/lib/quit-engine/types'
 import { validateEngineAnswers } from '@/lib/quit-engine/validation'
+import { currentPlanProvenance } from '@/lib/quit-engine/versioning'
 
 export const dynamic = 'force-dynamic'
 
@@ -105,6 +106,10 @@ export async function POST(request: NextRequest) {
   // cadence informed by cessation guidance, not a claim that every listed day is
   // itself a universally mandated clinical standard.
   result.follow_up_schedule = FOLLOWUP_DEFINITIONS.map((item) => ({ ...item }))
+  const provenance = currentPlanProvenance()
+  // Store provenance with the immutable result so historical plans remain
+  // interpretable even after clinical/scoring/prompt policies evolve.
+  result.provenance = provenance
 
   let model: string | undefined
   let aiRequestId: string | undefined
@@ -180,6 +185,7 @@ export async function POST(request: NextRequest) {
     created_at: new Date().toISOString(),
     version: 1,
     persisted: false,
+    provenance,
     answers,
     result,
   }
