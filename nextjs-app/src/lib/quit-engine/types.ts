@@ -103,6 +103,12 @@ export interface EngineResult {
   follow_up_schedule: { type: string; offset_days: number; label_ar: string; label_en: string }[]
   share_text: string
   ai_personal_summary?: string
+  ai_pattern_explanation?: string
+  ai_first_24h_coaching?: string
+  ai_seventy_two_hour_coaching?: string[]
+  ai_trigger_coaching?: string[]
+  ai_relapse_recovery?: string
+  ai_support_person_message?: string
   ai_micro_challenge?: string
   ai_used?: boolean
 }
