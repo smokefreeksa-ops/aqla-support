@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
-import { DynamoDBDocumentClient, PutCommand, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb'
+import { DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb'
 import { QUIT_PLAN_TABLE } from '@/lib/quit-engine/store.server'
 
 const region = process.env.AWS_REGION || 'eu-west-2'
@@ -9,6 +9,23 @@ const documentClient = DynamoDBDocumentClient.from(new DynamoDBClient({ region }
 })
 
 export const ANALYTICS_SCHEMA_VERSION = 1
+
+/**
+ * Public visit counter migration baseline.
+ *
+ * The legacy Aqla homepage displayed 1,852 visits at the point the AWS
+ * homepage counter was migrated on 20 Aug 2026. This value is used only
+ * when the persistent DynamoDB all-time counter does not yet exist. The
+ * first AWS homepage visit therefore atomically becomes 1,853, then 1,854,
+ * and so on. A deployment can override the seed once, before first use,
+ * with AQLA_PUBLIC_VISIT_SEED if a newer legacy total is confirmed.
+ */
+const configuredPublicVisitSeed = Number.parseInt(process.env.AQLA_PUBLIC_VISIT_SEED || '1852', 10)
+export const PUBLIC_VISIT_SEED = Number.isFinite(configuredPublicVisitSeed) && configuredPublicVisitSeed >= 0
+  ? configuredPublicVisitSeed
+  : 1852
+
+const PUBLIC_COUNTER_KEY = { PK: 'ANALYTICS#PUBLIC', SK: 'VISITS#TOTAL' } as const
 
 export type AnalyticsMetric =
   | 'visits'
@@ -89,11 +106,46 @@ export async function incrementAnalyticsMetric(metric: AnalyticsMetric, amount =
   }))
 }
 
-export async function recordVisit(visitorId: string) {
+export async function getPublicVisitTotal(): Promise<number> {
+  const result = await documentClient.send(new GetCommand({
+    TableName: QUIT_PLAN_TABLE,
+    Key: PUBLIC_COUNTER_KEY,
+    ProjectionExpression: '#count',
+    ExpressionAttributeNames: { '#count': 'count' },
+  }))
+  const count = result.Item?.count
+  return typeof count === 'number' && Number.isFinite(count) && count >= 0 ? count : PUBLIC_VISIT_SEED
+}
+
+async function incrementPublicVisitTotal(): Promise<number> {
+  const now = new Date().toISOString()
+  const result = await documentClient.send(new UpdateCommand({
+    TableName: QUIT_PLAN_TABLE,
+    Key: PUBLIC_COUNTER_KEY,
+    UpdateExpression: 'SET entity_type = :entity, schema_version = :version, updated_at = :now, #count = if_not_exists(#count, :seed) + :one',
+    ExpressionAttributeNames: { '#count': 'count' },
+    ExpressionAttributeValues: {
+      ':entity': 'analytics_public_visit_counter',
+      ':version': ANALYTICS_SCHEMA_VERSION,
+      ':now': now,
+      ':seed': PUBLIC_VISIT_SEED,
+      ':one': 1,
+    },
+    ReturnValues: 'ALL_NEW',
+  }))
+  const count = result.Attributes?.count
+  if (typeof count !== 'number' || !Number.isFinite(count) || count < 0) {
+    throw new Error('public_visit_counter_invalid')
+  }
+  return count
+}
+
+export async function recordVisit(visitorId: string): Promise<number> {
   const cleanVisitorId = visitorId.trim().slice(0, 200)
-  if (!cleanVisitorId) return
+  if (!cleanVisitorId) return getPublicVisitTotal()
 
   await incrementAnalyticsMetric('visits')
+  const publicVisitTotal = await incrementPublicVisitTotal()
 
   const day = utcDay()
   const hash = createHash('sha256').update(cleanVisitorId).digest('hex')
@@ -115,8 +167,12 @@ export async function recordVisit(visitorId: string) {
     await incrementAnalyticsMetric('unique_visitors')
   } catch (error) {
     const name = error instanceof Error ? error.name : ''
-    if (name !== 'ConditionalCheckFailedException') throw error
+    if (name !== 'ConditionalCheckFailedException') {
+      console.error('Aqla unique-visitor analytics unavailable', error instanceof Error ? error.message : 'unknown')
+    }
   }
+
+  return publicVisitTotal
 }
 
 export async function getDailyAnalytics(days = 30): Promise<DailyAnalyticsRow[]> {
