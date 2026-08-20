@@ -42,7 +42,7 @@ export default function ModulesSection() {
               key={mod.slug}
               to="/modules/$slug"
               params={{ slug: mod.slug }}
-              className={`group relative p-5 rounded-xl overflow-hidden transition-all duration-300 will-change-transform ${
+              className={`group relative p-5 rounded-xl overflow-hidden transition-all duration-300 ${
                 mod.featured
                   ? "bg-gradient-to-br from-brand to-ink-secondary text-white shadow-xl shadow-emerald-700/30 hover:shadow-2xl hover:-translate-y-1"
                   : "glass-card"
