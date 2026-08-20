@@ -92,6 +92,16 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
 
   const result = plan?.result
   const followupLabels = useMemo(() => result?.follow_up_schedule.map((item) => lang === 'ar' ? item.label_ar : item.label_en) ?? [], [lang, result])
+  const createdLabel = useMemo(() => {
+    if (!plan?.created_at) return ''
+    const date = new Date(plan.created_at)
+    if (Number.isNaN(date.getTime())) return ''
+    try {
+      return new Intl.DateTimeFormat(lang === 'ar' ? 'ar-SA' : 'en-GB', { dateStyle: 'long' }).format(date)
+    } catch {
+      return date.toLocaleDateString()
+    }
+  }, [lang, plan?.created_at])
 
   async function copyText(value: string, kind: string) {
     try {
@@ -116,7 +126,7 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
   }
 
   if (loading && !plan) {
-    return <main className="qp-page" dir={ar ? 'rtl' : 'ltr'}><div className="qp-loading">{ar ? 'جاري تحميل خطتك…' : 'Loading your plan…'}</div></main>
+    return <main className="qp-page" dir={ar ? 'rtl' : 'ltr'}><div className="qp-loading" role="status">{ar ? 'جاري تحميل خطتك…' : 'Loading your plan…'}</div></main>
   }
 
   if (!plan || !result) {
@@ -139,7 +149,7 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
     <main className="qp-page" dir={ar ? 'rtl' : 'ltr'} lang={lang}>
       <header className="qp-topbar">
         <a href="/aqla" className="qp-brand"><img src={LOGO_URL} alt="Aqla — أقلع" /><span>{ar ? 'أقلع' : 'Aqla'}</span></a>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8, flexWrap: 'wrap' }}>
+        <div className="screen-only" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8, flexWrap: 'wrap' }}>
           <button type="button" className="qe-lang" aria-label={ar ? 'Switch to English' : 'التبديل إلى العربية'} onClick={() => setLang(ar ? 'en' : 'ar')}>{ar ? 'EN' : 'ع'}</button>
           <a
             href="/auth/logout"
@@ -152,6 +162,15 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
           </a>
         </div>
       </header>
+
+      <section className="qp-print-header" aria-hidden="true">
+        <img src={LOGO_URL} alt="" />
+        <div>
+          <strong>{ar ? 'خطة أقلع الشخصية' : 'Aqla Personal Quit Plan'}</strong>
+          <span>{createdLabel ? (ar ? `أُنشئت في ${createdLabel}` : `Created ${createdLabel}`) : ''}</span>
+        </div>
+        <small>{ar ? `الإصدار ${plan.version}` : `Version ${plan.version}`}</small>
+      </section>
 
       <div className="qp-shell">
         {!plan.persisted ? <div className="qp-sync-warning">{ar ? 'الخطة متاحة مؤقتًا في جلسة المتصفح لأن مزامنة الحساب غير متاحة الآن. أعد المحاولة لاحقًا للتأكد من حفظها في حسابك.' : 'This plan is temporarily available in this browser session because account sync is unavailable. Try again later to ensure it is saved to your account.'}</div> : <div className="qp-sync-ok">{ar ? '✓ محفوظة بأمان في حسابك' : '✓ Securely saved to your account'}</div>}
@@ -219,6 +238,11 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
           <a className="qe-button secondary" href="/aqla/assessment">{ar ? 'أعد التقييم' : 'Repeat assessment'}</a>
           <button type="button" className="qe-button secondary" onClick={() => window.print()}>{ar ? 'طباعة / حفظ PDF' : 'Print / save as PDF'}</button>
         </section>
+
+        <footer className="qp-print-footer" aria-hidden="true">
+          <span>{ar ? 'هذه الخطة أداة دعم وتعليم وليست تشخيصًا طبيًا أو وصفة علاجية.' : 'This plan is supportive educational guidance, not a medical diagnosis or prescription.'}</span>
+          <strong>Aqla — أقلع</strong>
+        </footer>
       </div>
     </main>
   )
