@@ -3,11 +3,11 @@ import './globals.css'
 import './quit-engine.css'
 
 export const metadata: Metadata = {
-  title: 'أقلع — AQla',
+  title: 'أقلع — Aqla',
   description: 'منصة أقلع لدعم الإقلاع عن التدخين والنيكوتين',
   icons: {
-    icon: 'https://aqla1.com/aqla-logo.png',
-    apple: 'https://aqla1.com/aqla-logo.png',
+    icon: '/aqla-logo.png',
+    apple: '/aqla-logo.png',
   },
 }
 
