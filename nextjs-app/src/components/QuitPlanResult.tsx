@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { StoredQuitPlan } from '@/lib/quit-engine/types'
 
-const LOGO_URL = 'https://aqla1.com/aqla-logo.png'
+const LOGO_URL = '/aqla-logo.png'
 
 type Lang = 'ar' | 'en'
 
