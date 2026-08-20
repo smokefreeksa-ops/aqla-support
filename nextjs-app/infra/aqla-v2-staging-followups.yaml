@@ -32,6 +32,18 @@ Resources:
         - Key: Environment
           Value: staging
 
+  FollowupDeadLetterQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: aqla-v2-staging-followup-dlq
+      MessageRetentionPeriod: 1209600
+      SqsManagedSseEnabled: true
+      Tags:
+        - Key: Application
+          Value: Aqla
+        - Key: Environment
+          Value: staging
+
   FollowupWorkerRole:
     Type: AWS::IAM::Role
     Properties:
@@ -255,6 +267,9 @@ Resources:
               - Effect: Allow
                 Action: lambda:InvokeFunction
                 Resource: !GetAtt FollowupWorker.Arn
+              - Effect: Allow
+                Action: sqs:SendMessage
+                Resource: !GetAtt FollowupDeadLetterQueue.Arn
 
   AmplifySchedulerPolicy:
     Type: AWS::IAM::Policy
@@ -285,5 +300,7 @@ Outputs:
     Value: !GetAtt SchedulerInvokeRole.Arn
   SchedulerGroupName:
     Value: !Ref FollowupScheduleGroup
+  DeadLetterQueueArn:
+    Value: !GetAtt FollowupDeadLetterQueue.Arn
   ExistingAmplifyRoleUpdated:
     Value: !Ref AmplifyRuntimeRoleName
