@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
+import { validateMutationRequest } from '@/lib/http-security.server'
 import {
   getFollowupState,
   saveFollowupResponse,
@@ -79,6 +80,9 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ pl
 }
 
 export async function POST(request: NextRequest, context: { params: Promise<{ planId: string; followupType: string }> }) {
+  const mutationError = validateMutationRequest(request, 8 * 1024)
+  if (mutationError) return json({ error: mutationError.error }, mutationError.status)
+
   const userSub = await currentUserSub()
   if (!userSub) return json({ error: 'not_authenticated' }, 401)
 
