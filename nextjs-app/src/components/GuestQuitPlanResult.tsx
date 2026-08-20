@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import type { AdaptiveAssessmentAnswers, AdaptiveTriageProfile } from '@/lib/adaptive-assessment'
 import type { PersonalPlanV2Answers, PersonalPlanV2Enrichment } from '@/lib/personal-plan-v2'
@@ -62,7 +63,7 @@ export default function GuestQuitPlanResult({ planId, initialLang }: { planId: s
 
   if (!loaded) return <main className="qp-page" dir={ar ? 'rtl' : 'ltr'}><div className="qp-loading">{ar ? 'جاري تجهيز خطتك…' : 'Preparing your plan…'}</div></main>
 
-  if (!plan) return <main className="qp-page" dir={ar ? 'rtl' : 'ltr'} lang={lang}><div className="qp-empty"><img src={LOGO_URL} alt="Aqla — أقلع" /><h1>{ar ? 'انتهت جلسة خطة الضيف' : 'This guest-plan session has ended'}</h1><p>{ar ? 'خطط الضيف لا تُحفظ على خوادم أقلع. ابدأ تقييمًا جديدًا، أو سجّل الدخول قبل إنشاء الخطة إذا أردت الحفظ والمتابعة.' : 'Guest plans are not stored on Aqla servers. Start a new assessment, or sign in before generating a plan if you want saving and follow-up.'}</p><div className="eng-actions"><a className="eng-btn primary" href="/aqla/assessment">{ar ? 'ابدأ تقييمًا جديدًا' : 'Start a new assessment'}</a><a className="eng-btn" href="/auth/login?returnTo=%2Faqla%2Fassessment">{ar ? 'تسجيل الدخول' : 'Sign in'}</a></div></div></main>
+  if (!plan) return <main className="qp-page" dir={ar ? 'rtl' : 'ltr'} lang={lang}><div className="qp-empty"><img src={LOGO_URL} alt="Aqla — أقلع" /><h1>{ar ? 'انتهت جلسة خطة الضيف' : 'This guest-plan session has ended'}</h1><p>{ar ? 'خطط الضيف لا تُحفظ على خوادم أقلع. ابدأ تقييمًا جديدًا، أو سجّل الدخول قبل إنشاء الخطة إذا أردت الحفظ والمتابعة.' : 'Guest plans are not stored on Aqla servers. Start a new assessment, or sign in before generating a plan if you want saving and follow-up.'}</p><div className="eng-actions"><Link className="eng-btn primary" href="/aqla/assessment">{ar ? 'ابدأ تقييمًا جديدًا' : 'Start a new assessment'}</Link><Link className="eng-btn" href="/auth/login?returnTo=%2Faqla%2Fassessment">{ar ? 'تسجيل الدخول' : 'Sign in'}</Link></div></div></main>
 
   const result = plan.result
   const extra = result.personal_plan_v2
@@ -71,9 +72,9 @@ export default function GuestQuitPlanResult({ planId, initialLang }: { planId: s
 
   return <main className="qp-page" dir={ar ? 'rtl' : 'ltr'} lang={lang}>
     <header className="qp-topbar">
-      <a href="/" className="qp-brand"><img src={LOGO_URL} alt="Aqla — أقلع" /><span>{ar ? 'أقلع' : 'Aqla'}</span></a>
+      <Link href="/" className="qp-brand"><img src={LOGO_URL} alt="Aqla — أقلع" /><span>{ar ? 'أقلع' : 'Aqla'}</span></Link>
       <div className="screen-only" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-        <a className="qe-lang" style={{ width: 'auto', paddingInline: 14 }} href="/auth/login?returnTo=%2Faqla%2Fassessment">{ar ? 'دخول / إنشاء حساب' : 'Sign in / Create account'}</a>
+        <Link className="qe-lang" style={{ width: 'auto', paddingInline: 14 }} href="/auth/login?returnTo=%2Faqla%2Fassessment">{ar ? 'دخول / إنشاء حساب' : 'Sign in / Create account'}</Link>
         <button type="button" className="qe-lang" onClick={() => setLang(ar ? 'en' : 'ar')}>{ar ? 'EN' : 'ع'}</button>
       </div>
     </header>
@@ -130,9 +131,9 @@ export default function GuestQuitPlanResult({ planId, initialLang }: { planId: s
       <div className="screen-only" style={{ display: 'flex', justifyContent: 'center', gap: 10, flexWrap: 'wrap', paddingBottom: 30 }}>
         <button type="button" className="qe-button primary" onClick={() => window.print()}>{ar ? 'طباعة / حفظ PDF' : 'Print / Save PDF'}</button>
         <button type="button" className="qe-button secondary" onClick={() => void share()}>{ar ? 'مشاركة التقدم' : 'Share progress'}</button>
-        <a className="qe-button secondary" href="/aqla/share">{ar ? 'أنشئ بطاقة إنجاز' : 'Create achievement card'}</a>
-        <a className="qe-button secondary" href="/aqla/challenges">{ar ? 'الألعاب والتحديات' : 'Games & challenges'}</a>
-        <a className="qe-button secondary" href="/aqla/assessment">{ar ? 'تقييم جديد' : 'New assessment'}</a>
+        <Link className="qe-button secondary" href="/aqla/share">{ar ? 'أنشئ بطاقة إنجاز' : 'Create achievement card'}</Link>
+        <Link className="qe-button secondary" href="/aqla/challenges">{ar ? 'الألعاب والتحديات' : 'Games & challenges'}</Link>
+        <Link className="qe-button secondary" href="/aqla/assessment">{ar ? 'تقييم جديد' : 'New assessment'}</Link>
       </div>
     </div>
   </main>
