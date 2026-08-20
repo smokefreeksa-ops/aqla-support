@@ -1,7 +1,9 @@
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
+import { incrementAnalyticsMetric } from '@/lib/analytics.server'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
 import { validateMutationRequest } from '@/lib/http-security.server'
+import { updatePersonalTwinFromFollowup } from '@/lib/personal-twin.server'
 import {
   getFollowupState,
   saveFollowupResponse,
@@ -24,6 +26,14 @@ type Body = {
 
 function json(body: unknown, status = 200) {
   return NextResponse.json(body, { status, headers: PRIVATE_HEADERS })
+}
+
+async function track(metric: Parameters<typeof incrementAnalyticsMetric>[0]) {
+  try {
+    await incrementAnalyticsMetric(metric)
+  } catch (error) {
+    console.error('Aqla follow-up analytics unavailable', metric, error instanceof Error ? error.message : 'unknown')
+  }
 }
 
 function participantFollowup(followup: FollowupState) {
@@ -122,6 +132,16 @@ export async function POST(request: NextRequest, context: { params: Promise<{ pl
         confidence_score: confidenceScore,
       },
     })
+
+    await track('followup_completed')
+    if (saved.outcome === 'slipped') await track('slip_recovery_sessions')
+    if (saved.outcome === 'relapsed') await track('relapse_recovery_sessions')
+
+    try {
+      await updatePersonalTwinFromFollowup({ userSub, response: saved })
+    } catch (error) {
+      console.error('Aqla Personal Twin follow-up update unavailable', error instanceof Error ? error.message : 'unknown')
+    }
 
     return json({ response: saved })
   } catch (error) {
