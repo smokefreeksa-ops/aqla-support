@@ -6,11 +6,13 @@
     "node": ">=22"
   },
   "scripts": {
+    "predev": "node scripts/prepare-assets.mjs",
     "dev": "next dev",
+    "prelint": "node scripts/prepare-assets.mjs",
+    "lint": "eslint .",
     "prebuild": "node scripts/prepare-assets.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
     "check:routes": "node scripts/check-internal-routes.mjs"
   },
   "dependencies": {
