@@ -36,6 +36,7 @@ export interface FollowupState {
   plan_id: string
   followup_type: FollowupType
   scheduled_at: string
+  available: boolean
   status: string
   sent_at?: string
   responded_at?: string
@@ -47,8 +48,17 @@ function responseSk(planId: string, followupType: FollowupType) {
   return `FOLLOWUP_RESPONSE#${planId}#${followupType}`
 }
 
+function responseHistorySk(planId: string, followupType: FollowupType, respondedAt: string) {
+  return `FOLLOWUP_RESPONSE_HISTORY#${planId}#${followupType}#${respondedAt}`
+}
+
 function referenceSk(planId: string, followupType: FollowupType) {
   return `FOLLOWUPREF#${planId}#${followupType}`
+}
+
+export function isFollowupAvailable(scheduledAt: string, now = Date.now()) {
+  const scheduled = Date.parse(scheduledAt)
+  return Number.isFinite(scheduled) && now >= scheduled
 }
 
 export function deriveFollowupAdaptation(outcome: FollowupOutcome): FollowupAdaptation {
@@ -258,6 +268,7 @@ export async function getFollowupState(userSub: string, planId: string, followup
     plan_id: planId,
     followup_type: followupType,
     scheduled_at: reference.scheduledAt,
+    available: isFollowupAvailable(reference.scheduledAt),
     status: String(followupResult.Item.status ?? 'unknown'),
     sent_at: typeof followupResult.Item.sent_at === 'string' ? followupResult.Item.sent_at : undefined,
     responded_at: typeof followupResult.Item.responded_at === 'string' ? followupResult.Item.responded_at : undefined,
@@ -279,6 +290,7 @@ export async function saveFollowupResponse({
 }): Promise<StoredFollowupResponse> {
   const reference = await getFollowupReference(userSub, planId, followupType)
   if (!reference) throw new Error('followup_reference_not_found')
+  if (!isFollowupAvailable(reference.scheduledAt)) throw new Error('followup_not_due')
 
   const respondedAt = new Date().toISOString()
   const adaptationKey = deriveFollowupAdaptation(response.outcome)
@@ -289,6 +301,7 @@ export async function saveFollowupResponse({
     adaptation_key: adaptationKey,
     responded_at: respondedAt,
   }
+  const pk = `USER#${userSub}`
 
   await documentClient.send(new TransactWriteCommand({
     TransactItems: [
@@ -296,7 +309,20 @@ export async function saveFollowupResponse({
         Put: {
           TableName: QUIT_PLAN_TABLE,
           Item: {
-            PK: `USER#${userSub}`,
+            PK: pk,
+            SK: responseHistorySk(planId, followupType, respondedAt),
+            entity_type: 'quit_followup_response_history',
+            ...stored,
+            created_at: respondedAt,
+          },
+          ConditionExpression: 'attribute_not_exists(PK) AND attribute_not_exists(SK)',
+        },
+      },
+      {
+        Put: {
+          TableName: QUIT_PLAN_TABLE,
+          Item: {
+            PK: pk,
             SK: responseSk(planId, followupType),
             entity_type: 'quit_followup_response',
             ...stored,
@@ -307,7 +333,7 @@ export async function saveFollowupResponse({
       {
         Update: {
           TableName: QUIT_PLAN_TABLE,
-          Key: { PK: `USER#${userSub}`, SK: reference.followupSk },
+          Key: { PK: pk, SK: reference.followupSk },
           UpdateExpression: 'SET #status = :responded, responded_at = :now, response_outcome = :outcome, adaptation_key = :adaptation, updated_at = :now',
           ExpressionAttributeNames: { '#status': 'status' },
           ExpressionAttributeValues: {
