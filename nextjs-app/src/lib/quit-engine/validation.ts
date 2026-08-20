@@ -31,6 +31,10 @@ function filtered<T extends string>(value: unknown, allowed: Set<T>, max: number
   return unique.slice(0, max)
 }
 
+function allowedString<T extends string>(value: unknown, allowed: Set<T>): T | undefined {
+  return typeof value === 'string' && allowed.has(value as T) ? value as T : undefined
+}
+
 export function validateEngineAnswers(input: unknown): EngineAnswers {
   if (!input || typeof input !== 'object') throw new Error('invalid_answers')
   const raw = input as Record<string, unknown>
@@ -42,11 +46,39 @@ export function validateEngineAnswers(input: unknown): EngineAnswers {
   if (relapseOnly) products = ['relapse_prevention']
   const realProducts = products.filter((p) => p !== 'relapse_prevention')
 
-  const waking = typeof raw.first_use_after_waking === 'string' && wakingValues.has(raw.first_use_after_waking as FirstUseAfterWaking)
-    ? raw.first_use_after_waking as FirstUseAfterWaking
-    : undefined
-
+  const waking = allowedString(raw.first_use_after_waking, wakingValues)
   if (!relapseOnly && !waking) throw new Error('first_use_required')
+
+  const triggers = filtered(raw.triggers, triggerValues, 14) as TriggerKey[]
+  if (!triggers.length) throw new Error('trigger_required')
+
+  const previousQuitAttempts = allowedString(raw.previous_quit_attempts, previousAttempts)
+  if (!previousQuitAttempts) throw new Error('previous_attempt_required')
+
+  const reasons = filtered(raw.personal_reasons, personalReasons, 3)
+  if (!reasons.length) throw new Error('personal_reason_required')
+
+  const safetyFlags = filtered(raw.safety_flags, safetyValues, 11) as SafetyFlag[]
+  if (!safetyFlags.length) throw new Error('safety_required')
+  const sanitisedSafety = safetyFlags.includes('none') && safetyFlags.length > 1
+    ? safetyFlags.filter((flag) => flag !== 'none')
+    : safetyFlags
+
+  const usesCigarettes = products.includes('cigarettes')
+  const usesShisha = products.includes('shisha')
+  const usesVape = products.includes('vape')
+  const usesPouches = products.includes('pouches')
+
+  const cigarettesPerDay = usesCigarettes ? allowedString(raw.cigarettes_per_day, cigs) : undefined
+  const shishaSessionsPerWeek = usesShisha ? allowedString(raw.shisha_sessions_per_week, shishaSessions) : undefined
+  const shishaSessionDuration = usesShisha ? allowedString(raw.shisha_session_duration, shishaDuration) : undefined
+  const vapePattern = usesVape ? allowedString(raw.vape_pattern, vapePatterns) : undefined
+  const nicotinePouchFrequency = usesPouches ? allowedString(raw.nicotine_pouch_frequency, pouchFrequency) : undefined
+
+  if (usesCigarettes && !cigarettesPerDay) throw new Error('cigarettes_quantity_required')
+  if (usesShisha && (!shishaSessionsPerWeek || !shishaSessionDuration)) throw new Error('shisha_quantity_required')
+  if (usesVape && !vapePattern) throw new Error('vape_pattern_required')
+  if (usesPouches && !nicotinePouchFrequency) throw new Error('pouch_frequency_required')
 
   const answers: EngineAnswers = {
     user_name: asString(raw.user_name),
@@ -56,29 +88,21 @@ export function validateEngineAnswers(input: unknown): EngineAnswers {
     mixed_use: realProducts.length > 1,
     relapse_prevention_mode: relapseOnly,
     first_use_after_waking: relapseOnly ? 'not_daily' : waking,
-    cigarettes_per_day: typeof raw.cigarettes_per_day === 'string' && cigs.has(raw.cigarettes_per_day) ? raw.cigarettes_per_day : undefined,
-    shisha_sessions_per_week: typeof raw.shisha_sessions_per_week === 'string' && shishaSessions.has(raw.shisha_sessions_per_week) ? raw.shisha_sessions_per_week : undefined,
-    shisha_session_duration: typeof raw.shisha_session_duration === 'string' && shishaDuration.has(raw.shisha_session_duration) ? raw.shisha_session_duration : undefined,
-    vape_pattern: typeof raw.vape_pattern === 'string' && vapePatterns.has(raw.vape_pattern) ? raw.vape_pattern : undefined,
-    nicotine_pouch_frequency: typeof raw.nicotine_pouch_frequency === 'string' && pouchFrequency.has(raw.nicotine_pouch_frequency) ? raw.nicotine_pouch_frequency : undefined,
-    triggers: filtered(raw.triggers, triggerValues, 14) as TriggerKey[],
+    cigarettes_per_day: cigarettesPerDay,
+    shisha_sessions_per_week: shishaSessionsPerWeek,
+    shisha_session_duration: shishaSessionDuration,
+    vape_pattern: vapePattern,
+    nicotine_pouch_frequency: nicotinePouchFrequency,
+    triggers,
     importance_score: score(raw.importance_score),
     confidence_score: score(raw.confidence_score),
     readiness_score: score(raw.readiness_score),
-    previous_quit_attempts: typeof raw.previous_quit_attempts === 'string' && previousAttempts.has(raw.previous_quit_attempts) ? raw.previous_quit_attempts : undefined,
-    longest_abstinence: typeof raw.longest_abstinence === 'string' && previousAttempts.has(raw.longest_abstinence) ? raw.longest_abstinence : undefined,
-    relapse_causes: filtered(raw.relapse_causes, relapseCauses, 12),
-    safety_flags: filtered(raw.safety_flags, safetyValues, 11) as SafetyFlag[],
-    personal_reasons: filtered(raw.personal_reasons, personalReasons, 3),
+    previous_quit_attempts: previousQuitAttempts,
+    longest_abstinence: previousQuitAttempts,
+    relapse_causes: previousQuitAttempts === 'none' ? [] : filtered(raw.relapse_causes, relapseCauses, 12),
+    safety_flags: sanitisedSafety,
+    personal_reasons: reasons,
   }
-
-  if (!answers.safety_flags.length) throw new Error('safety_required')
-  if (answers.safety_flags.includes('none') && answers.safety_flags.length > 1) answers.safety_flags = answers.safety_flags.filter((f) => f !== 'none')
-
-  if (answers.product_types.includes('cigarettes') && !answers.cigarettes_per_day) throw new Error('cigarettes_quantity_required')
-  if (answers.product_types.includes('shisha') && (!answers.shisha_sessions_per_week || !answers.shisha_session_duration)) throw new Error('shisha_quantity_required')
-  if (answers.product_types.includes('vape') && !answers.vape_pattern) throw new Error('vape_pattern_required')
-  if (answers.product_types.includes('pouches') && !answers.nicotine_pouch_frequency) throw new Error('pouch_frequency_required')
 
   return answers
 }
