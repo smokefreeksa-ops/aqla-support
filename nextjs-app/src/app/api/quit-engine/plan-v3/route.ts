@@ -13,6 +13,7 @@ import { openAIStructuredResponse } from '@/lib/openai.server'
 import { updatePersonalTwinFromPlan } from '@/lib/personal-twin.server'
 import { buildPersonalPlanV2Enrichment, deriveCigaretteBand, validatePersonalPlanV2Answers, type PersonalPlanV2Answers, type PersonalPlanV2Enrichment } from '@/lib/personal-plan-v2'
 import { savePersonalPlanV2TwinContext } from '@/lib/personal-plan-v2.server'
+import { markPlanEmailState } from '@/lib/plan-communications.server'
 import { buildPlan } from '@/lib/quit-engine/plan-builder'
 import { persistQuitPlan } from '@/lib/quit-engine/store.server'
 import type { EngineAnswers, EngineResult, StoredQuitPlan } from '@/lib/quit-engine/types'
@@ -217,45 +218,71 @@ export async function POST(request: NextRequest) {
       plan,
       model,
       aiRequestId,
-      recipientEmail: v2Answers.followup_email_opt_in ? verifiedEmail : undefined,
+      recipientEmail: !result.safety_immediate && v2Answers.followup_email_opt_in ? verifiedEmail : undefined,
       lang,
     })
     plan.persisted = true
     await track('plan_persisted')
+  } catch (error) {
+    console.error('Aqla v3 DynamoDB persistence unavailable', error instanceof Error ? error.message : 'unknown')
+    return json({ error: 'persistence_unavailable' }, 503)
+  }
 
-    try { await updatePersonalTwinFromPlan({ userSub: user.sub, plan, lang }) } catch (error) {
-      console.error('Aqla Personal Twin base update unavailable', error instanceof Error ? error.message : 'unknown')
-    }
-    try { await savePersonalPlanV2TwinContext({ userSub: user.sub, planId: plan.plan_id, answers: v2Answers, enrichment: result.personal_plan_v2 }) } catch (error) {
-      console.error('Aqla Personal Plan v2 Twin context unavailable', error instanceof Error ? error.message : 'unknown')
-    }
-    try { await saveAdaptiveTriageContext({ userSub: user.sub, planId: plan.plan_id, assessment: adaptive, triage }) } catch (error) {
-      console.error('Aqla adaptive triage Twin update unavailable', error instanceof Error ? error.message : 'unknown')
-    }
-    try { await upsertParticipantCrmFromPlan({ userSub: user.sub, email: verifiedEmail, emailVerified: user.emailVerified, plan, lang }) } catch (error) {
-      console.error('Aqla CRM indexing unavailable', error instanceof Error ? error.message : 'unknown')
-    }
+  try { await updatePersonalTwinFromPlan({ userSub: user.sub, plan, lang }) } catch (error) {
+    console.error('Aqla Personal Twin base update unavailable', error instanceof Error ? error.message : 'unknown')
+  }
+  try { await savePersonalPlanV2TwinContext({ userSub: user.sub, planId: plan.plan_id, answers: v2Answers, enrichment: result.personal_plan_v2 }) } catch (error) {
+    console.error('Aqla Personal Plan v2 Twin context unavailable', error instanceof Error ? error.message : 'unknown')
+  }
+  try { await saveAdaptiveTriageContext({ userSub: user.sub, planId: plan.plan_id, assessment: adaptive, triage }) } catch (error) {
+    console.error('Aqla adaptive triage Twin update unavailable', error instanceof Error ? error.message : 'unknown')
+  }
+  try { await upsertParticipantCrmFromPlan({ userSub: user.sub, email: verifiedEmail, emailVerified: user.emailVerified, plan, lang }) } catch (error) {
+    console.error('Aqla CRM indexing unavailable', error instanceof Error ? error.message : 'unknown')
+  }
 
-    if (result.safety_immediate) {
-      console.warn('Aqla routine communications held because the saved plan has an immediate safety flag')
-    } else if (verifiedEmail) {
-      let followupsScheduled = false
-      if (v2Answers.followup_email_opt_in) {
-        const scheduling = await schedulePlanFollowups({ userSub: user.sub, plan })
-        followupsScheduled = scheduling.status === 'scheduled'
-      }
-      if (v2Answers.plan_email_opt_in) {
-        try {
-          await sendPlanReadyEmail({ to: verifiedEmail, planId: plan.plan_id, lang, followupsScheduled })
-          await track('plan_email_sent')
-        } catch (error) {
-          await track('plan_email_failed')
-          console.error('Aqla SES plan-ready email unavailable', error instanceof Error ? error.message : 'unknown')
-        }
+  let followupsScheduled = false
+  if (!result.safety_immediate && verifiedEmail && v2Answers.followup_email_opt_in) {
+    try {
+      const scheduling = await schedulePlanFollowups({ userSub: user.sub, plan })
+      followupsScheduled = scheduling.status === 'scheduled'
+    } catch (error) {
+      console.error('Aqla follow-up scheduling unavailable', error instanceof Error ? error.message : 'unknown')
+    }
+  }
+
+  try {
+    if (!v2Answers.plan_email_opt_in) {
+      await markPlanEmailState({ userSub: user.sub, planId: plan.plan_id, status: 'not_requested' })
+    } else if (result.safety_immediate) {
+      await markPlanEmailState({ userSub: user.sub, planId: plan.plan_id, status: 'safety_hold' })
+    } else if (!verifiedEmail) {
+      await markPlanEmailState({ userSub: user.sub, planId: plan.plan_id, status: 'no_verified_email' })
+    } else {
+      await markPlanEmailState({ userSub: user.sub, planId: plan.plan_id, status: 'pending' })
+      try {
+        const delivery = await sendPlanReadyEmail({ to: verifiedEmail, planId: plan.plan_id, lang, followupsScheduled })
+        await markPlanEmailState({
+          userSub: user.sub,
+          planId: plan.plan_id,
+          status: 'sent',
+          messageId: delivery.messageId,
+        })
+        await track('plan_email_sent')
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'unknown_email_error'
+        const status = message.startsWith('email_suppressed_') ? 'suppressed' : 'failed'
+        await markPlanEmailState({ userSub: user.sub, planId: plan.plan_id, status, errorMessage: message })
+        await track('plan_email_failed')
+        console.error('Aqla SES plan-ready email unavailable', message)
       }
     }
   } catch (error) {
-    console.error('Aqla v3 DynamoDB persistence unavailable', error instanceof Error ? error.message : 'unknown')
+    console.error('Aqla plan-email diagnostics unavailable', error instanceof Error ? error.message : 'unknown')
+  }
+
+  if (result.safety_immediate) {
+    console.warn('Aqla routine communications held because the saved plan has an immediate safety flag')
   }
 
   return json({ plan })
