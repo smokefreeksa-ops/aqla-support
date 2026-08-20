@@ -102,7 +102,7 @@ export interface EngineResult {
   safety_immediate?: string
   personal_reasons: string[]
   support_message_template?: string
-  follow_up_schedule: { type: FollowupType; offset_days: number; kind: FollowupKind; label_ar: string; label_en: string }[]
+  follow_up_schedule: { type: FollowupType; offset_days: number; kind?: FollowupKind; label_ar: string; label_en: string }[]
   share_text: string
   ai_personal_summary?: string
   ai_pattern_explanation?: string
