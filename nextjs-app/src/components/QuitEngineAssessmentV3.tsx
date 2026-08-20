@@ -132,11 +132,11 @@ export default function QuitEngineAssessmentV3({ signedIn }: { signedIn: boolean
       if (raw) {
         const draft = JSON.parse(raw) as Draft
         setAnswers({ ...EMPTY_ANSWERS, ...draft.answers })
-        setV2({ ...EMPTY_V2, ...draft.v2 })
+        setV2({ ...EMPTY_V2, ...draft.v2, ...(signedIn ? {} : { plan_email_opt_in: false, followup_email_opt_in: false }) })
         setAdaptive({ ...EMPTY_ADAPTIVE, ...draft.adaptive })
       }
     } catch { /* ignore invalid draft */ }
-  }, [])
+  }, [signedIn])
   useEffect(() => {
     try { sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ answers, v2, adaptive } satisfies Draft)) } catch { /* no-op */ }
   }, [adaptive, answers, v2])
@@ -203,21 +203,22 @@ export default function QuitEngineAssessmentV3({ signedIn }: { signedIn: boolean
 
   async function submit() {
     if (!canNext || submitting) { setShowRequired(true); return }
-    if (!signedIn) { window.location.href = LOGIN_URL; return }
     setSubmitting(true)
     setError('')
     try {
-      const response = await fetch('/api/quit-engine/plan-v3', {
+      const guest = !signedIn
+      const personalPlan = guest ? { ...v2, plan_email_opt_in: false, followup_email_opt_in: false } : v2
+      const response = await fetch(guest ? '/api/quit-engine/guest-plan-v3' : '/api/quit-engine/plan-v3', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ lang, answers, personal_plan_v2: v2, adaptive_assessment: adaptive }),
+        body: JSON.stringify({ lang, answers, personal_plan_v2: personalPlan, adaptive_assessment: adaptive }),
       })
-      if (response.status === 401) { window.location.href = REFRESH_URL; return }
+      if (response.status === 401 && signedIn) { window.location.href = REFRESH_URL; return }
       if (!response.ok) throw new Error(`plan_v3_${response.status}`)
       const { plan } = await response.json() as { plan: StoredQuitPlan }
       sessionStorage.setItem(`aqla_quit_plan:${plan.plan_id}`, JSON.stringify(plan))
       sessionStorage.removeItem(DRAFT_KEY)
-      window.location.href = `/aqla/plan/${plan.plan_id}?lang=${lang}`
+      window.location.href = guest ? `/aqla/guest-plan/${plan.plan_id}?lang=${lang}` : `/aqla/plan/${plan.plan_id}?lang=${lang}`
     } catch (cause) {
       console.error(cause)
       setError(ar ? 'تعذر إنشاء الخطة الذكية الآن. راجع الإجابات وحاول مرة أخرى.' : 'We could not build the adaptive plan. Check your answers and try again.')
@@ -228,7 +229,7 @@ export default function QuitEngineAssessmentV3({ signedIn }: { signedIn: boolean
   return <main className="qe-page" dir={ar ? 'rtl' : 'ltr'} lang={lang}>
     <header className="qe-topbar"><a href="/aqla" className="qe-brand"><img src={LOGO_URL} alt="Aqla — أقلع" /><span>{ar ? 'العودة لأقلع' : 'Back to Aqla'}</span></a><div style={{ display: 'flex', gap: 8 }}><button type="button" className="qe-lang" onClick={() => setLang(ar ? 'en' : 'ar')}>{ar ? 'EN' : 'ع'}</button>{!signedIn ? <a className="qe-lang" style={{ width: 'auto', paddingInline: 14 }} href={LOGIN_URL}>{ar ? 'تسجيل الدخول' : 'Sign in'}</a> : null}</div></header>
     <div className="qe-shell">
-      <section className="qe-intro"><span className="qe-kicker">{ar ? 'أقلع — التقييم التكيفي الذكي' : 'Aqla — adaptive intelligent assessment'}</span><h1>{ar ? 'خطة تفهم نوع النيكوتين الذي تستخدمه' : 'A plan that understands the nicotine products you use'}</h1><p>{ar ? 'يبقى المسار 8 خطوات، لكن الأسئلة داخلها تتغير حسب السجائر أو الفيب أو أكياس النيكوتين أو الاستخدام المختلط.' : 'The journey stays at eight stages, while questions branch for cigarettes, vaping, nicotine pouches and mixed use.'}</p></section>
+      <section className="qe-intro"><span className="qe-kicker">{ar ? 'أقلع — التقييم التكيفي الذكي' : 'Aqla — adaptive intelligent assessment'}</span><h1>{ar ? 'خطة تفهم نوع النيكوتين الذي تستخدمه' : 'A plan that understands the nicotine products you use'}</h1><p>{ar ? 'يبقى المسار 8 خطوات، لكن الأسئلة داخلها تتغير حسب السجائر أو الفيب أو أكياس النيكوتين أو الاستخدام المختلط.' : 'The journey stays at eight stages, while questions branch for cigarettes, vaping, nicotine pouches and mixed use.'}</p>{!signedIn ? <div className="qe-note success">{ar ? 'يمكنك إكمال الخطة كضيف دون تسجيل. أنشئ حسابًا فقط إذا أردت حفظها على المدى الطويل أو استلام البريد والمتابعة.' : 'You can complete the plan as a guest without registering. Create an account only if you want long-term saving, email and follow-up.'}</div> : null}</section>
       <div className="qe-progress-meta"><span>{ar ? 'الخطوة' : 'Step'} {step + 1} {ar ? 'من' : 'of'} 8</span><strong>{stages[lang][step]}</strong></div><div className="qe-progress"><span style={{ width: `${progress}%` }} /></div>
       <section className="qe-card">
         {step === 0 && <><h2>{ar ? 'ما الذي تستخدمه حاليًا؟' : 'What do you currently use?'}</h2><p>{ar ? 'اختر كل ما ينطبق. سيبني أقلع الأسئلة التالية بناءً على اختيارك.' : 'Select everything that applies. Aqla will build the next questions around your selection.'}</p><MultiPick options={PRODUCT_OPTIONS} values={answers.product_types} lang={lang} onToggle={toggleProduct} /></>}
@@ -255,13 +256,12 @@ export default function QuitEngineAssessmentV3({ signedIn }: { signedIn: boolean
         {step === 7 && <div className="qe-stack"><h2>{ar ? 'هدفك والمتابعة الذكية' : 'Your goal and smart follow-up'}</h2><Question title={ar ? 'ما أهم أسبابك؟ اختر حتى 3.' : 'What are your strongest reasons? Choose up to 3.'}><MultiPick options={PERSONAL_REASONS} values={answers.personal_reasons} lang={lang} onToggle={toggleReason} /></Question><Question title={ar ? 'أسباب إضافية' : 'Additional reasons'}><MultiPick options={ADDITIONAL_MOTIVATION_OPTIONS} values={v2.additional_motivations} lang={lang} onToggle={(value: AdditionalMotivation) => updateV2({ additional_motivations: toggle(v2.additional_motivations, value) })} /></Question>{v2.additional_motivations.includes('other') ? <label><span>{ar ? 'سبب آخر' : 'Another reason'}</span><input maxLength={160} value={v2.other_motivation_text ?? ''} onChange={(event) => updateV2({ other_motivation_text: event.target.value })} /></label> : null}
           {!relapseOnly ? <><Question title={ar ? 'ما هدفك الآن؟' : 'What is your goal now?'}><SinglePick options={goalOptions} value={v2.change_goal_type} lang={lang} onChange={(value: ChangeGoalType) => updateV2({ change_goal_type: value, quit_date_choice: value === 'explore' ? 'not_ready' : v2.quit_date_choice })} /></Question>{v2.change_goal_type === 'reduce' ? <Question title={ar ? 'ما مقدار التقليل الذي تريد البدء به؟' : 'What reduction target would you like to start with?'}><div className="qe-option-grid">{([25, 50, 75] as const).map((value) => <Chip key={value} active={v2.reduction_target_percent === value} onClick={() => updateV2({ reduction_target_percent: value })}>{value}%</Chip>)}</div></Question> : null}{v2.change_goal_type !== 'explore' ? <Question title={ar ? 'متى تريد بدء الإقلاع أو التغيير؟' : 'When would you like to start quitting or changing?'}><SinglePick options={dateOptions} value={v2.quit_date_choice} lang={lang} onChange={(value: QuitDateChoice) => updateV2({ quit_date_choice: value, target_quit_date: value === 'specific' ? v2.target_quit_date : undefined })} /></Question> : null}{v2.quit_date_choice === 'specific' ? <label><span>{ar ? 'التاريخ' : 'Date'}</span><input type="date" value={v2.target_quit_date ?? ''} onChange={(event) => updateV2({ target_quit_date: event.target.value || undefined })} /></label> : null}</> : null}
           <div className="qe-input-grid"><label><span>{ar ? 'الاسم الذي تريد أن يخاطبك به أقلع (اختياري)' : 'Preferred name for Aqla to use (optional)'}</span><input maxLength={120} value={answers.user_name ?? ''} onChange={(event) => update({ user_name: event.target.value })} /></label><label><span>{ar ? 'شخص دعم واحد (اختياري)' : 'One support person (optional)'}</span><input maxLength={120} value={answers.support_person_name ?? ''} onChange={(event) => update({ support_person_name: event.target.value })} /></label><label><span>{ar ? 'صلة شخص الدعم (اختياري)' : 'Support-person relationship (optional)'}</span><input maxLength={80} value={v2.support_person_relationship ?? ''} onChange={(event) => updateV2({ support_person_relationship: event.target.value })} /></label></div>
-          <div className="qe-question-block"><h3>{ar ? 'البريد والمتابعة' : 'Email and follow-up'}</h3><label style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}><input type="checkbox" checked={v2.plan_email_opt_in} onChange={(event) => updateV2({ plan_email_opt_in: event.target.checked })} /><span>{ar ? 'أرسل لي رابط خطتي عبر البريد الإلكتروني.' : 'Email me a link to my saved plan.'}</span></label><label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginTop: 12 }}><input type="checkbox" checked={v2.followup_email_opt_in} onChange={(event) => updateV2({ followup_email_opt_in: event.target.checked })} /><span>{ar ? 'أوافق على رسائل المتابعة الداعمة عبر البريد. كل رسالة تقود إلى متابعة آمنة داخل حسابي ويمكنني إيقافها لاحقًا.' : 'I opt in to supportive follow-up emails. Each email links to a secure check-in inside my account and I can stop them later.'}</span></label></div>
-          <div className="qe-note success">{ar ? 'سيستخدم أقلع ملف التقييم لتحديد محور المتابعة داخل حسابك. لن نضع تفاصيل صحية حساسة في نص البريد نفسه.' : 'Aqla will use your assessment profile to focus the secure check-in. Sensitive health details will not be placed in the email itself.'}</div>
+          {signedIn ? <><div className="qe-question-block"><h3>{ar ? 'البريد والمتابعة' : 'Email and follow-up'}</h3><label style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}><input type="checkbox" checked={v2.plan_email_opt_in} onChange={(event) => updateV2({ plan_email_opt_in: event.target.checked })} /><span>{ar ? 'أرسل لي رابط خطتي عبر البريد الإلكتروني.' : 'Email me a link to my saved plan.'}</span></label><label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginTop: 12 }}><input type="checkbox" checked={v2.followup_email_opt_in} onChange={(event) => updateV2({ followup_email_opt_in: event.target.checked })} /><span>{ar ? 'أوافق على رسائل المتابعة الداعمة عبر البريد. كل رسالة تقود إلى متابعة آمنة داخل حسابي ويمكنني إيقافها لاحقًا.' : 'I opt in to supportive follow-up emails. Each email links to a secure check-in inside my account and I can stop them later.'}</span></label></div><div className="qe-note success">{ar ? 'سيستخدم أقلع ملف التقييم لتحديد محور المتابعة داخل حسابك. لن نضع تفاصيل صحية حساسة في نص البريد نفسه.' : 'Aqla will use your assessment profile to focus the secure check-in. Sensitive health details will not be placed in the email itself.'}</div></> : <div className="qe-note success"><strong>{ar ? 'أنت تكمل كضيف.' : 'You are continuing as a guest.'}</strong> {ar ? 'ستحصل على الخطة كاملة في هذه الجلسة. الحفظ الدائم، رابط الخطة عبر البريد ورسائل المتابعة تحتاج حسابًا موثقًا.' : 'You will receive the full plan in this browser session. Long-term saving, plan-link email and follow-up emails require a verified account.'} <a href={LOGIN_URL}>{ar ? 'تسجيل الدخول / إنشاء حساب' : 'Sign in / Create account'}</a></div>}
         </div>}
 
         {showRequired && !canNext ? <div className="qe-note danger">{ar ? 'أكمل الأسئلة المطلوبة في هذه الخطوة قبل المتابعة.' : 'Complete the required questions in this stage before continuing.'}</div> : null}
         {error ? <div className="qe-note danger">{error}</div> : null}
-        <div className="qe-actions">{step > 0 ? <button type="button" className="qe-button secondary" onClick={() => { setShowRequired(false); setStep((value) => Math.max(0, value - 1)) }}>{ar ? 'السابق' : 'Previous'}</button> : <span />}{step < 7 ? <button type="button" className="qe-button primary" onClick={next}>{ar ? 'متابعة' : 'Continue'}</button> : <button type="button" className="qe-button primary" disabled={submitting} onClick={submit}>{submitting ? (ar ? 'جاري بناء خطتك…' : 'Building your plan…') : signedIn ? (ar ? 'أنشئ خطتي الذكية' : 'Build my adaptive plan') : (ar ? 'سجّل الدخول واحفظ خطتي' : 'Sign in and save my plan')}</button>}</div>
+        <div className="qe-actions">{step > 0 ? <button type="button" className="qe-button secondary" onClick={() => { setShowRequired(false); setStep((value) => Math.max(0, value - 1)) }}>{ar ? 'السابق' : 'Previous'}</button> : <span />}{step < 7 ? <button type="button" className="qe-button primary" onClick={next}>{ar ? 'متابعة' : 'Continue'}</button> : <button type="button" className="qe-button primary" disabled={submitting} onClick={submit}>{submitting ? (ar ? 'جاري بناء خطتك…' : 'Building your plan…') : signedIn ? (ar ? 'أنشئ خطتي الذكية' : 'Build my adaptive plan') : (ar ? 'أنشئ خطتي كضيف' : 'Build my guest plan')}</button>}</div>
       </section>
     </div>
   </main>
