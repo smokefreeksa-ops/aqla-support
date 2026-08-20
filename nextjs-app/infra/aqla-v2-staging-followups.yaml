@@ -109,6 +109,7 @@ Resources:
           const replyTo = process.env.REPLY_TO_EMAIL || 'smokefreeksa@gmail.com';
           const configurationSet = process.env.CONFIGURATION_SET || 'aqla-transactional';
           const allowedTypes = new Set(['day_3', 'day_7', 'day_30']);
+          const sendLeaseMs = 20000;
 
           function label(type, lang) {
             const labels = {
@@ -130,7 +131,7 @@ Resources:
             const html = `<!doctype html>
           <html lang="${ar ? 'ar' : 'en'}" dir="${ar ? 'rtl' : 'ltr'}">
             <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="x-apple-disable-message-reformatting"><title>${subject}</title></head>
-            <body style="margin:0;padding:0;background:#f3f6f4;color:#173b31;font-family:Arial,Tahoma,sans-serif;">
+            <body style="margin:0;padding:0;background:#f3f6f4;color:#173b31;font-family:Arial,Tahoma,sans-serif;direction:${ar ? 'rtl' : 'ltr'};">
               <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${ar ? 'متابعة قصيرة وآمنة جاهزة داخل حساب أقلع.' : 'A short secure Aqla check-in is ready in your account.'}</div>
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#f3f6f4" style="width:100%;border-collapse:collapse;background:#f3f6f4;">
                 <tr><td align="center" style="padding:28px 12px;">
@@ -175,12 +176,35 @@ Resources:
             }));
           }
 
+          async function claimSend(pk, sk) {
+            const now = new Date();
+            const staleBefore = new Date(now.getTime() - sendLeaseMs).toISOString();
+            await ddb.send(new UpdateItemCommand({
+              TableName: table,
+              Key: { PK: { S: pk }, SK: { S: sk } },
+              UpdateExpression: 'SET #status = :sending, send_started_at = :now, updated_at = :now ADD attempt_count :one',
+              ConditionExpression: '#status = :scheduled OR #status = :scheduleFailed OR #status = :failed OR (#status = :sending AND (attribute_not_exists(send_started_at) OR send_started_at <= :staleBefore))',
+              ExpressionAttributeNames: { '#status': 'status' },
+              ExpressionAttributeValues: {
+                ':sending': { S: 'sending' },
+                ':now': { S: now.toISOString() },
+                ':staleBefore': { S: staleBefore },
+                ':one': { N: '1' },
+                ':scheduled': { S: 'scheduled' },
+                ':scheduleFailed': { S: 'schedule_failed' },
+                ':failed': { S: 'send_failed' },
+              },
+            }));
+          }
+
           exports.handler = async (event) => {
             const userSub = typeof event?.userSub === 'string' ? event.userSub : '';
             const planId = typeof event?.planId === 'string' ? event.planId : '';
             const followupType = typeof event?.followupType === 'string' ? event.followupType : '';
             const scheduledAt = typeof event?.scheduledAt === 'string' ? event.scheduledAt : '';
-            if (!userSub || !/^[0-9a-f-]{36}$/i.test(planId) || !allowedTypes.has(followupType) || !scheduledAt) throw new Error('invalid_followup_event');
+            if (!userSub || !/^[0-9a-f-]{36}$/i.test(planId) || !allowedTypes.has(followupType) || !scheduledAt || Number.isNaN(Date.parse(scheduledAt))) {
+              throw new Error('invalid_followup_event');
+            }
 
             const pk = `USER#${userSub}`;
             const sk = `FOLLOWUP#${scheduledAt}#${planId}#${followupType}`;
@@ -190,38 +214,36 @@ Resources:
 
             const status = item.status?.S || '';
             if (['sent', 'responded', 'completed'].includes(status)) return { skipped: status };
-            if (status === 'sending') return { skipped: 'already_sending' };
-            if (!['scheduled', 'schedule_failed', 'send_failed'].includes(status)) return { skipped: `state_${status || 'unknown'}` };
+            if (status === 'no_verified_email') return { skipped: status };
+            if (status === 'sending') {
+              const startedAt = Date.parse(item.send_started_at?.S || '');
+              if (Number.isFinite(startedAt) && Date.now() - startedAt < sendLeaseMs) {
+                throw new Error('followup_send_in_progress');
+              }
+            } else if (!['scheduled', 'schedule_failed', 'send_failed'].includes(status)) {
+              return { skipped: `state_${status || 'unknown'}` };
+            }
 
             try {
-              await ddb.send(new UpdateItemCommand({
-                TableName: table,
-                Key: { PK: { S: pk }, SK: { S: sk } },
-                UpdateExpression: 'SET #status = :sending, send_started_at = :now, updated_at = :now ADD attempt_count :one',
-                ConditionExpression: '#status = :scheduled OR #status = :scheduleFailed OR #status = :failed',
-                ExpressionAttributeNames: { '#status': 'status' },
-                ExpressionAttributeValues: {
-                  ':sending': { S: 'sending' }, ':now': { S: new Date().toISOString() }, ':one': { N: '1' },
-                  ':scheduled': { S: 'scheduled' }, ':scheduleFailed': { S: 'schedule_failed' }, ':failed': { S: 'send_failed' },
-                },
-              }));
+              await claimSend(pk, sk);
             } catch (error) {
-              if (error?.name === 'ConditionalCheckFailedException') return { skipped: 'duplicate_invocation' };
+              if (error?.name === 'ConditionalCheckFailedException') throw new Error('followup_claim_conflict');
               throw error;
             }
 
             const to = item.recipient_email?.S;
             const lang = item.lang?.S === 'en' ? 'en' : 'ar';
             if (!to) {
-              await setState(pk, sk, 'no_verified_email');
+              await setState(pk, sk, 'no_verified_email', {}, ['send_started_at']);
               return { skipped: 'no_verified_email' };
             }
 
             const url = `${appUrl}/aqla/followup/${encodeURIComponent(planId)}/${followupType}?lang=${lang}`;
             const email = emailContent(followupType, lang, url);
+            let sent;
 
             try {
-              const sent = await ses.send(new SendEmailCommand({
+              sent = await ses.send(new SendEmailCommand({
                 FromEmailAddress: fromEmail,
                 ReplyToAddresses: [replyTo],
                 Destination: { ToAddresses: [to] },
@@ -231,12 +253,25 @@ Resources:
                   Body: { Text: { Data: email.text, Charset: 'UTF-8' }, Html: { Data: email.html, Charset: 'UTF-8' } },
                 } },
               }));
-              await setState(pk, sk, 'sent', { sent_at: new Date().toISOString(), ses_message_id: sent.MessageId || '' }, ['send_started_at', 'last_error']);
-              return { sent: true, messageId: sent.MessageId };
             } catch (error) {
               const message = error instanceof Error ? error.message : 'unknown_send_error';
-              await setState(pk, sk, 'send_failed', { last_error: message }, ['send_started_at']);
+              try {
+                await setState(pk, sk, 'send_failed', { last_error: message }, ['send_started_at']);
+              } catch (stateError) {
+                console.error('Aqla follow-up send failure state unavailable', stateError instanceof Error ? stateError.message : 'unknown');
+              }
               throw error;
+            }
+
+            // SES accepted the message. Never intentionally send it again merely because
+            // recording the final DynamoDB state has a transient failure: that can create
+            // duplicate participant emails. Operational reconciliation can repair state.
+            try {
+              await setState(pk, sk, 'sent', { sent_at: new Date().toISOString(), ses_message_id: sent.MessageId || '' }, ['send_started_at', 'last_error']);
+              return { sent: true, stateRecorded: true };
+            } catch (stateError) {
+              console.error('Aqla follow-up email accepted by SES but final state could not be recorded', stateError instanceof Error ? stateError.message : 'unknown');
+              return { sent: true, stateRecorded: false };
             }
           };
 
