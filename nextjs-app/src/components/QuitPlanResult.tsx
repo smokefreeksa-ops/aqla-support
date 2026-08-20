@@ -36,6 +36,8 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
   const [plan, setPlan] = useState<StoredQuitPlan | null>(null)
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState('')
+  const [downloadingPdf, setDownloadingPdf] = useState(false)
+  const [pdfError, setPdfError] = useState(false)
   const ar = lang === 'ar'
 
   useEffect(() => {
@@ -125,6 +127,50 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
     }
   }
 
+  async function downloadPdf() {
+    const target = document.querySelector<HTMLElement>('.qp-shell')
+    if (!target || downloadingPdf) return
+
+    setDownloadingPdf(true)
+    setPdfError(false)
+    try {
+      const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+        import('html2canvas'),
+        import('jspdf'),
+      ])
+      const canvas = await html2canvas(target, {
+        backgroundColor: '#ffffff',
+        scale: Math.min(2, Math.max(1.4, window.devicePixelRatio || 1.4)),
+        useCORS: true,
+        logging: false,
+        ignoreElements: (element) => element.classList.contains('screen-only'),
+      })
+      const image = canvas.toDataURL('image/jpeg', 0.94)
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true })
+      const pageWidth = pdf.internal.pageSize.getWidth()
+      const pageHeight = pdf.internal.pageSize.getHeight()
+      const imageHeight = (canvas.height * pageWidth) / canvas.width
+      let remainingHeight = imageHeight
+      let position = 0
+
+      pdf.addImage(image, 'JPEG', 0, position, pageWidth, imageHeight, undefined, 'FAST')
+      remainingHeight -= pageHeight
+
+      while (remainingHeight > 0) {
+        position = remainingHeight - imageHeight
+        pdf.addPage()
+        pdf.addImage(image, 'JPEG', 0, position, pageWidth, imageHeight, undefined, 'FAST')
+        remainingHeight -= pageHeight
+      }
+
+      pdf.save(ar ? 'Aqla-personal-plan-ar.pdf' : 'Aqla-personal-plan.pdf')
+    } catch {
+      setPdfError(true)
+    } finally {
+      setDownloadingPdf(false)
+    }
+  }
+
   if (loading && !plan) {
     return <main className="qp-page" dir={ar ? 'rtl' : 'ltr'}><div className="qp-loading" role="status">{ar ? 'جاري تحميل خطتك…' : 'Loading your plan…'}</div></main>
   }
@@ -150,6 +196,8 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
       <header className="qp-topbar">
         <a href="/aqla" className="qp-brand"><img src={LOGO_URL} alt="Aqla — أقلع" /><span>{ar ? 'أقلع' : 'Aqla'}</span></a>
         <div className="screen-only" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8, flexWrap: 'wrap' }}>
+          <a href={`/aqla/dashboard?lang=${lang}`} className="qe-lang" style={{ width: 'auto', minWidth: 0, paddingInline: 14, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', whiteSpace: 'nowrap' }}>{ar ? 'لوحتي' : 'My Aqla'}</a>
+          <a href={`/aqla/sos?lang=${lang}`} className="qe-lang" style={{ width: 'auto', minWidth: 0, paddingInline: 14, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', whiteSpace: 'nowrap' }}>{ar ? 'مساعدة سريعة' : 'Quick help'}</a>
           <button type="button" className="qe-lang" aria-label={ar ? 'Switch to English' : 'التبديل إلى العربية'} onClick={() => setLang(ar ? 'en' : 'ar')}>{ar ? 'EN' : 'ع'}</button>
           <a
             href="/auth/logout"
@@ -234,10 +282,14 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
         </PlanCard>
 
         <section className="qp-actions screen-only">
-          <button type="button" className="qe-button primary" onClick={() => void shareAchievement()}>{ar ? 'شارك أنني بدأت مع أقلع' : 'Share that I started with Aqla'}</button>
+          <a className="qe-button primary" href={`/aqla/dashboard?lang=${lang}`}>{ar ? 'افتح لوحتي' : 'Open My Aqla'}</a>
+          <button type="button" className="qe-button primary" onClick={() => void downloadPdf()} disabled={downloadingPdf}>{downloadingPdf ? (ar ? 'جاري إنشاء PDF…' : 'Creating PDF…') : (ar ? 'تحميل الخطة PDF' : 'Download plan PDF')}</button>
+          <button type="button" className="qe-button secondary" onClick={() => void shareAchievement()}>{ar ? 'شارك أنني بدأت مع أقلع' : 'Share that I started with Aqla'}</button>
           <a className="qe-button secondary" href="/aqla/assessment">{ar ? 'أعد التقييم' : 'Repeat assessment'}</a>
-          <button type="button" className="qe-button secondary" onClick={() => window.print()}>{ar ? 'طباعة / حفظ PDF' : 'Print / save as PDF'}</button>
+          <button type="button" className="qe-button secondary" onClick={() => window.print()}>{ar ? 'طباعة' : 'Print'}</button>
+          <a className="qe-button secondary" href={`/aqla/sos?lang=${lang}`}>{ar ? 'مساعدة سريعة' : 'Quick help'}</a>
         </section>
+        {pdfError ? <p className="qp-muted screen-only" role="alert">{ar ? 'تعذر إنشاء ملف PDF على هذا الجهاز. يمكنك استخدام خيار الطباعة كبديل.' : 'The PDF could not be created on this device. You can use Print as an alternative.'}</p> : null}
 
         <footer className="qp-print-footer" aria-hidden="true">
           <span>{ar ? 'هذه الخطة أداة دعم وتعليم وليست تشخيصًا طبيًا أو وصفة علاجية.' : 'This plan is supportive educational guidance, not a medical diagnosis or prescription.'}</span>
