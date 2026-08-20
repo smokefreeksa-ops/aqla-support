@@ -105,6 +105,7 @@ export interface EngineResult {
   support_message_template?: string
   follow_up_schedule: { type: FollowupType; offset_days: number; kind?: FollowupKind; label_ar: string; label_en: string }[]
   share_text: string
+  provenance?: PlanProvenance
   ai_personal_summary?: string
   ai_pattern_explanation?: string
   ai_first_24h_coaching?: string
