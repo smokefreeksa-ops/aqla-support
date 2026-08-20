@@ -6,6 +6,7 @@ import './plan-print.css'
 import './accessibility.css'
 import './experience.css'
 import './os.css'
+import './admin.css'
 
 export const metadata: Metadata = {
   title: 'أقلع — Aqla',
