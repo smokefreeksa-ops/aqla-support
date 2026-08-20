@@ -143,10 +143,10 @@ export function LiveStatsBar({ compact = false }: { compact?: boolean }) {
     <div
       className="w-full flex flex-wrap items-center justify-center gap-0 rounded-2xl overflow-hidden mb-6"
       style={{
-        background: "rgba(5,9,10,0.70)",
+        background: "rgba(5,9,10,0.82)",
         border: "1px solid rgba(255,255,255,0.08)",
-        backdropFilter: "blur(12px)",
       }}
+
     >
       {items.map((item, i) => {
         const Icon = item.icon;
@@ -296,13 +296,12 @@ export default function HeroSection() {
         <div
           className="aqla-hero-panel relative px-8 py-12 sm:px-12 sm:py-16 md:px-16 md:py-20 w-full text-center rounded-2xl overflow-visible"
           style={{
-            background: "rgba(5, 9, 10, 0.55)",
-            backdropFilter: "blur(24px) saturate(180%)",
-            WebkitBackdropFilter: "blur(24px) saturate(180%)",
+            background: "rgba(5, 9, 10, 0.72)",
             border: "1px solid rgba(180,255,210, 0.12)",
             boxShadow:
               "0 8px 48px rgba(0,166,90, 0.08), 0 1px 0 rgba(180,255,210,0.08) inset",
           }}
+
         >
           {[
             "top-0 left-0 border-t-2 border-l-2",

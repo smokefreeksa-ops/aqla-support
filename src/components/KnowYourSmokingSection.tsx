@@ -1558,6 +1558,7 @@ function Shooter({
     window.addEventListener("resize", sizeShardCanvas);
 
     let raf = 0;
+    let idleCleared = false;
     const loop = () => {
       const c = shardCanvasRef.current;
       if (!c) {
@@ -1569,7 +1570,18 @@ function Shooter({
         raf = requestAnimationFrame(loop);
         return;
       }
+      // Nothing to draw: skip the full-viewport clear/paint entirely.
+      if (flashRef.current.length === 0 && shardsRef.current.length === 0) {
+        if (!idleCleared) {
+          ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+          idleCleared = true;
+        }
+        raf = requestAnimationFrame(loop);
+        return;
+      }
+      idleCleared = false;
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
 
       // radial flashes
       flashRef.current = flashRef.current.filter((f) => f.life < f.max);
@@ -1734,6 +1746,17 @@ function Shooter({
 
   useEffect(() => {
     let raf = 0;
+    let onScreen = true;
+    let observer: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== "undefined") {
+      observer = new IntersectionObserver(
+        (entries) => {
+          onScreen = entries.some((e) => e.isIntersecting);
+        },
+        { rootMargin: "200px" }
+      );
+      if (canvasRef.current) observer.observe(canvasRef.current);
+    }
     const loop = (t: number) => {
       const st = stateRef.current;
       const cvs = canvasRef.current;
@@ -1747,8 +1770,14 @@ function Shooter({
         raf = requestAnimationFrame(loop);
         return;
       }
+      // Off-screen and not mid-round: skip all drawing work.
+      if (!onScreen && !st.running) {
+        raf = requestAnimationFrame(loop);
+        return;
+      }
       const W = cvs.width;
       const H = cvs.height;
+
       ctx.clearRect(0, 0, W, H);
       // background stays transparent — the dark arena shows through
 
@@ -1833,7 +1862,11 @@ function Shooter({
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(raf);
+      observer?.disconnect();
+    };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
