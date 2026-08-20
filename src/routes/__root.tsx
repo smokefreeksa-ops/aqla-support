@@ -136,8 +136,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", type: "image/png", href: "/aqla-logo.png" },
-      { rel: "apple-touch-icon", href: "/aqla-logo.png" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "apple-touch-icon", href: "/favicon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -155,7 +155,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           alternateName: ["Aqla", "اقلع", "منصة أقلع", "Aqla Platform", "لا تتن", "La-Tatten"],
           url: "https://aqla1.com",
           logo: "https://aqla1.com/aqla-logo.png",
-          image: "https://aqla1.com/og-aqla-v6.jpg",
+          image: "https://aqla1.com/og-aqla-v7.jpg",
           description:
             "أقلع — منصة سعودية مجانية للإقلاع عن التدخين والنيكوتين: تقييم الاعتماد، خطة إقلاع، متابعة، وتدريب.",
           sameAs: [
