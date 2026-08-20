@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
 import { sendPlanReadyEmail } from '@/lib/email.server'
 import { schedulePlanFollowups } from '@/lib/followup-scheduler.server'
+import { validateMutationRequest } from '@/lib/http-security.server'
 import { openAIStructuredResponse } from '@/lib/openai.server'
 import { buildPlan } from '@/lib/quit-engine/plan-builder'
 import { persistQuitPlan } from '@/lib/quit-engine/store.server'
@@ -51,6 +52,9 @@ async function currentUser(): Promise<CurrentUser | null> {
 }
 
 export async function POST(request: NextRequest) {
+  const mutationError = validateMutationRequest(request, 32 * 1024)
+  if (mutationError) return json({ error: mutationError.error }, mutationError.status)
+
   const user = await currentUser()
   if (!user) return json({ error: 'not_authenticated' }, 401)
 
