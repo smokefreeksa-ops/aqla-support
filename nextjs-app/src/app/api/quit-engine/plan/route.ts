@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import { incrementAnalyticsMetric } from '@/lib/analytics.server'
+import { upsertParticipantCrmFromPlan } from '@/lib/crm/participant.server'
 import { getCurrentAqlaUser } from '@/lib/current-user.server'
 import { sendPlanReadyEmail } from '@/lib/email.server'
 import { FOLLOWUP_DEFINITIONS } from '@/lib/followup-policy'
@@ -205,7 +206,26 @@ export async function POST(request: NextRequest) {
       console.error('Aqla Personal Twin plan update unavailable', error instanceof Error ? error.message : 'unknown')
     }
 
-    if (verifiedEmail) {
+    try {
+      await upsertParticipantCrmFromPlan({
+        userSub: user.sub,
+        email: verifiedEmail,
+        emailVerified: user.emailVerified,
+        plan,
+        lang,
+      })
+    } catch (error) {
+      // CRM indexing is operational metadata and must never invalidate a saved
+      // participant plan. Staff are shown unavailable data rather than fabricated rows.
+      console.error('Aqla CRM indexing unavailable', error instanceof Error ? error.message : 'unknown')
+    }
+
+    // Explicit safety hold: do not send a routine plan-ready email or create
+    // routine automated follow-up schedules when the deterministic engine has
+    // identified an immediate safety pathway. The saved plan remains available.
+    if (result.safety_immediate) {
+      console.warn('Aqla routine communications held because the saved plan has an immediate safety flag')
+    } else if (verifiedEmail) {
       const scheduling = await schedulePlanFollowups({ userSub: user.sub, plan })
 
       try {
