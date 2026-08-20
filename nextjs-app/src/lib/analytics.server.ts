@@ -22,6 +22,11 @@ export type AnalyticsMetric =
   | 'plan_persisted'
   | 'plan_email_sent'
   | 'plan_email_failed'
+  | 'email_delivered'
+  | 'email_bounced'
+  | 'email_complained'
+  | 'email_rejected'
+  | 'email_delivery_delayed'
   | 'followup_completed'
   | 'challenge_started'
   | 'challenge_completed'
@@ -48,6 +53,11 @@ const METRICS: AnalyticsMetric[] = [
   'plan_persisted',
   'plan_email_sent',
   'plan_email_failed',
+  'email_delivered',
+  'email_bounced',
+  'email_complained',
+  'email_rejected',
+  'email_delivery_delayed',
   'followup_completed',
   'challenge_started',
   'challenge_completed',
