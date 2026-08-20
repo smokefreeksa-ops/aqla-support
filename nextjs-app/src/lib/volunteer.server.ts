@@ -1,6 +1,6 @@
 import { randomBytes, randomUUID } from 'node:crypto'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
-import { DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb'
+import { DynamoDBDocumentClient, GetCommand, QueryCommand, TransactWriteCommand, UpdateCommand, type TransactWriteCommandInput } from '@aws-sdk/lib-dynamodb'
 import { QUIT_PLAN_TABLE } from '@/lib/quit-engine/store.server'
 
 const region=process.env.AWS_REGION||'eu-west-2'
@@ -19,6 +19,7 @@ export interface VolunteerApplicationInput{
 export interface VolunteerRecord extends VolunteerApplicationInput{application_id:string;volunteer_code:string;status:VolunteerStatus;created_at:string;updated_at:string}
 
 function cleanText(value:unknown,max:number){return typeof value==='string'?value.trim().slice(0,max):''}
+function normaliseCity(value?:string){return value?.trim().toLowerCase().replace(/\s+/g,' ').slice(0,80)||undefined}
 function code(){return `AQ-V-${new Date().getUTCFullYear()}-${randomBytes(4).toString('hex').toUpperCase()}`}
 
 export function validateVolunteerInput(raw:unknown):VolunteerApplicationInput{
@@ -37,9 +38,14 @@ export function validateVolunteerInput(raw:unknown):VolunteerApplicationInput{
 }
 
 export async function createVolunteerApplication(input:VolunteerApplicationInput){
- const now=new Date().toISOString(),application_id=randomUUID(),volunteer_code=code();const record:VolunteerRecord={...input,application_id,volunteer_code,status:'submitted',created_at:now,updated_at:now}
- await ddb.send(new PutCommand({TableName:QUIT_PLAN_TABLE,Item:{PK:'VOLUNTEER#APPLICATIONS',SK:`${now}#${application_id}`,entity_type:'volunteer_application',schema_version:VOLUNTEER_SCHEMA_VERSION,...record},ConditionExpression:'attribute_not_exists(PK) AND attribute_not_exists(SK)'}))
- await ddb.send(new PutCommand({TableName:QUIT_PLAN_TABLE,Item:{PK:'VOLUNTEER#LOOKUP',SK:`CODE#${volunteer_code}`,entity_type:'volunteer_lookup',application_pk:'VOLUNTEER#APPLICATIONS',application_sk:`${now}#${application_id}`,created_at:now}}))
+ const now=new Date().toISOString(),application_id=randomUUID(),volunteer_code=code();const record:VolunteerRecord={...input,application_id,volunteer_code,status:'submitted',created_at:now,updated_at:now};const applicationSk=`${now}#${application_id}`;const cityKey=normaliseCity(input.city)
+ const tx:NonNullable<TransactWriteCommandInput['TransactItems']>=[
+  {Put:{TableName:QUIT_PLAN_TABLE,Item:{PK:'VOLUNTEER#APPLICATIONS',SK:applicationSk,entity_type:'volunteer_application',schema_version:VOLUNTEER_SCHEMA_VERSION,...record},ConditionExpression:'attribute_not_exists(PK) AND attribute_not_exists(SK)'}},
+  {Put:{TableName:QUIT_PLAN_TABLE,Item:{PK:'VOLUNTEER#LOOKUP',SK:`CODE#${volunteer_code}`,entity_type:'volunteer_lookup',application_pk:'VOLUNTEER#APPLICATIONS',application_sk:applicationSk,created_at:now},ConditionExpression:'attribute_not_exists(PK) AND attribute_not_exists(SK)'}},
+  {Update:{TableName:QUIT_PLAN_TABLE,Key:{PK:'COMMUNITY#TOTALS',SK:'CHALLENGES'},UpdateExpression:'SET updated_at=:now ADD volunteer_applications :one',ExpressionAttributeValues:{':now':now,':one':1}}},
+ ]
+ if(cityKey)tx.push({Update:{TableName:QUIT_PLAN_TABLE,Key:{PK:'COMMUNITY#CITIES',SK:`CITY#${cityKey}`},UpdateExpression:'SET city=:city, updated_at=:now ADD engagement_count :one, volunteer_applications :one',ExpressionAttributeValues:{':city':cityKey,':now':now,':one':1}}})
+ await ddb.send(new TransactWriteCommand({TransactItems:tx}))
  return {application_id,volunteer_code,status:'submitted' as const}
 }
 
