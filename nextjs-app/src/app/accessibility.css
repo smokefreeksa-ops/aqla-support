@@ -1,0 +1,32 @@
+/* Shared interaction and motion-accessibility rules for Aqla. */
+:where(a, button, input, textarea, select, summary):focus-visible {
+  outline: 3px solid #f0d98e;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(0, 108, 53, .42);
+}
+
+:where(button, input, textarea, select) {
+  font: inherit;
+}
+
+:where(button, a, input, textarea, select, summary) {
+  touch-action: manipulation;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  :where(a, button, input, textarea, select, summary):focus-visible {
+    outline: 2px solid CanvasText;
+    box-shadow: none;
+  }
+}
