@@ -51,8 +51,24 @@ export function StarfieldCanvas() {
     };
     window.addEventListener("resize", onResize);
 
+    let onScreen = true;
+    let observer: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== "undefined") {
+      observer = new IntersectionObserver(
+        (entries) => {
+          onScreen = entries.some((e) => e.isIntersecting);
+        },
+        { rootMargin: "120px" }
+      );
+      observer.observe(canvas);
+    }
+
     let raf = 0;
     const render = () => {
+      if (!onScreen || document.hidden) {
+        raf = requestAnimationFrame(render);
+        return;
+      }
       ctx.clearRect(0, 0, w, h);
       for (const st of stars) {
         st.tw += 0.03;
@@ -77,9 +93,11 @@ export function StarfieldCanvas() {
 
     return () => {
       cancelAnimationFrame(raf);
+      observer?.disconnect();
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("resize", onResize);
     };
+
   }, []);
 
   return (

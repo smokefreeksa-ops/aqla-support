@@ -54,21 +54,31 @@ export function GlobalBackBar() {
   // Sit just below whatever header the page renders.
   useEffect(() => {
     if (hidden || duplicate) return;
+    let frame = 0;
     const measure = () => {
+      frame = 0;
       const header = document.querySelector("header");
       const bottom = header ? header.getBoundingClientRect().bottom : 0;
-      setTop(Math.max(12, Math.min(bottom + 12, 160)));
+      const next = Math.max(12, Math.min(bottom + 12, 160));
+      setTop((prev) => (Math.abs(prev - next) < 1 ? prev : next));
+    };
+    // Throttle to one measurement per frame so scrolling stays smooth.
+    const schedule = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(measure);
     };
     measure();
-    window.addEventListener("scroll", measure, { passive: true });
-    window.addEventListener("resize", measure);
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
     const t = window.setTimeout(measure, 300);
     return () => {
-      window.removeEventListener("scroll", measure);
-      window.removeEventListener("resize", measure);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
       window.clearTimeout(t);
+      if (frame) window.cancelAnimationFrame(frame);
     };
   }, [pathname, hidden, duplicate]);
+
 
   if (hidden || duplicate) return null;
 

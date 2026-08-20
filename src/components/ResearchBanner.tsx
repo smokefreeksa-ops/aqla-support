@@ -20,7 +20,7 @@ export function ResearchBanner({ onNavigate }: { onNavigate?: () => void } = {})
     <>
       <div
         dir="rtl"
-        className="relative block w-full overflow-hidden border-b border-red-500/30 px-3 py-1.5 backdrop-blur-sm"
+        className="relative block w-full overflow-hidden border-b border-red-500/30 px-3 py-1.5"
         style={{
           backgroundImage:
             "linear-gradient(90deg, rgba(127,29,29,0.55) 0%, rgba(185,28,28,0.6) 25%, rgba(239,68,68,0.6) 50%, rgba(185,28,28,0.6) 75%, rgba(127,29,29,0.55) 100%)",

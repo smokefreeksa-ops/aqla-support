@@ -45,12 +45,12 @@ export default function DrMalikCard() {
         <div
           className="rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-10 md:gap-14"
           style={{
-            background: "rgba(255,255,255,0.03)",
+            background: "rgba(255,255,255,0.05)",
             border: "1px solid rgba(0,166,90,0.18)",
-            backdropFilter: "blur(20px)",
             boxShadow:
               "0 0 60px rgba(0,166,90,0.06), inset 0 1px 0 rgba(255,255,255,0.06)",
           }}
+
         >
           <div className="flex-shrink-0 flex flex-col items-center gap-4">
             <div
