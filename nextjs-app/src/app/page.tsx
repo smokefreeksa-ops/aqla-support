@@ -4,7 +4,6 @@ import StudyInvitation from '@/components/StudyInvitation'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
 import { getPublicVisitTotal, PUBLIC_VISIT_SEED } from '@/lib/analytics.server'
 import { getLatestQuitPlanId } from '@/lib/quit-engine/store.server'
-import './aqla-institutional.css'
 
 export const dynamic = 'force-dynamic'
 
