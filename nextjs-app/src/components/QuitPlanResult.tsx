@@ -39,8 +39,6 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
           return
         }
 
-        // Only use the device copy during a genuine AWS persistence outage.
-        // A 404 must never fall back to another user's cached plan on a shared browser.
         if (response.status === 503) {
           try {
             const raw = localStorage.getItem(localKey)
@@ -53,7 +51,6 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
 
         if (!cancelled) setPlan(null)
       } catch {
-        // A network failure is not proof of ownership, so do not reveal a cached plan.
         if (!cancelled) setPlan(null)
       } finally {
         if (!cancelled) setLoading(false)
@@ -136,7 +133,7 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
       </header>
 
       <div className="qp-shell">
-        {!plan.persisted ? <div className="qp-sync-warning">{ar ? 'الخطة متاحة مؤقتًا على هذا الجهاز بسبب تعذر مزامنة AWS. أعد المحاولة لاحقًا للتأكد من حفظها في حسابك.' : 'This plan is temporarily available on this device because AWS sync is unavailable. Try again later to ensure it is saved to your account.'}</div> : <div className="qp-sync-ok">{ar ? '✓ محفوظة بأمان في حسابك' : '✓ Securely saved to your account'}</div>}
+        {!plan.persisted ? <div className="qp-sync-warning">{ar ? 'الخطة متاحة مؤقتًا على هذا الجهاز لأن مزامنة الحساب غير متاحة الآن. أعد المحاولة لاحقًا للتأكد من حفظها في حسابك.' : 'This plan is temporarily available on this device because account sync is unavailable. Try again later to ensure it is saved to your account.'}</div> : <div className="qp-sync-ok">{ar ? '✓ محفوظة بأمان في حسابك' : '✓ Securely saved to your account'}</div>}
 
         {result.safety_immediate ? <section className="qp-safety"><strong>{ar ? 'سلامتك أولًا' : 'Safety first'}</strong><p>{result.safety_immediate}</p></section> : null}
 
@@ -193,7 +190,7 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
 
         <PlanCard title={ar ? 'المتابعة المخططة' : 'Planned follow-up'}>
           <div className="qp-followups">{followupLabels.map((label) => <span key={label}>{label}</span>)}</div>
-          <p className="qp-muted">{ar ? 'سيتم ربط هذه المواعيد بالتنبيهات الآلية بعد تفعيل خدمة المتابعة في AWS.' : 'These checkpoints will connect to automated notifications when the AWS follow-up service is enabled.'}</p>
+          <p className="qp-muted">{ar ? 'هذه نقاط متابعة محفوظة في رحلتك مع أقلع لمراجعة التقدم وتحديد الخطوة التالية.' : 'These check-ins are part of your Aqla journey to review progress and decide the next useful step.'}</p>
         </PlanCard>
 
         <section className="qp-actions">
