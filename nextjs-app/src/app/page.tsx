@@ -1,10 +1,10 @@
 import { cookies } from 'next/headers'
-import AqlaPublicLandingV2 from '@/components/AqlaPublicLandingV2'
+import AqlaPublicLandingInstitutional from '@/components/AqlaPublicLandingInstitutional'
 import StudyInvitation from '@/components/StudyInvitation'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
 import { getPublicVisitTotal, PUBLIC_VISIT_SEED } from '@/lib/analytics.server'
 import { getLatestQuitPlanId } from '@/lib/quit-engine/store.server'
-import './first-page.css'
+import './aqla-institutional.css'
 
 export const dynamic = 'force-dynamic'
 
@@ -39,9 +39,7 @@ export default async function HomePage() {
   }
 
   return <>
-    <div className="aqla-first-page">
-      <AqlaPublicLandingV2 signedIn={signedIn} latestPlanId={latestPlanId} initialVisitCount={initialVisitCount} />
-    </div>
+    <AqlaPublicLandingInstitutional signedIn={signedIn} latestPlanId={latestPlanId} initialVisitCount={initialVisitCount} />
     <StudyInvitation overlay />
   </>
 }
