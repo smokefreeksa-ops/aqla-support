@@ -1,40 +1,62 @@
-import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
-import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
+import { incrementAnalyticsMetric } from '@/lib/analytics.server'
+import { appendConversationMessage, ensureConversation, type AqlaMode } from '@/lib/conversation-store.server'
+import { getCurrentAqlaUser, hasAqlaRole } from '@/lib/current-user.server'
+import { sendPlanReadyEmail } from '@/lib/email.server'
 import { validateMutationRequest } from '@/lib/http-security.server'
 import { openAIStructuredResponse } from '@/lib/openai.server'
+import { getPersonalTwin, personalTwinForAI } from '@/lib/personal-twin.server'
+import { getLatestQuitPlanId } from '@/lib/quit-engine/store.server'
 
 export const dynamic = 'force-dynamic'
 
 type Message = { role: 'user' | 'assistant'; content: string }
-type AssistantBody = { lang?: 'ar' | 'en'; messages?: Message[] }
-type AssistantOutput = { reply: string }
+type AssistantAction =
+  | 'none'
+  | 'start_assessment'
+  | 'open_craving_support'
+  | 'open_latest_plan'
+  | 'open_progress'
+  | 'open_academy'
+  | 'email_latest_plan'
 
-const emergencyPattern = /(chest pain|severe shortness of breath|coughing blood|suicid|kill myself|ألم شديد في الصدر|ضيق شديد في التنفس|نفث الدم|انتحار|أريد أن أموت)/i
+type AssistantBody = {
+  lang?: 'ar' | 'en'
+  mode?: AqlaMode
+  conversation_id?: string
+  messages?: Message[]
+}
+type AssistantOutput = { reply: string; action: AssistantAction }
+
+const emergencyPattern = /(chest pain|severe shortness of breath|coughing blood|suicid|kill myself|harm myself|ألم شديد في الصدر|ضيق شديد في التنفس|نفث الدم|انتحار|أريد أن أموت|إيذاء نفسي)/i
 const medicationPattern = /(dose|dosage|\bmg\b|prescribe|prescription|nicotine patch dose|varenicline|bupropion|جرعة|ملغ|وصفة طبية|فارينيكلين|بوبروبيون)/i
+const explicitEmailPattern = /(email|e-mail|send.*plan.*mail|mail.*plan|أرسل.*البريد|ارسل.*البريد|إيميل|ايميل|البريد الإلكتروني|البريد الالكتروني)/i
 const PRIVATE_HEADERS = { 'Cache-Control': 'no-store, private' }
 
 function json(body: unknown, status = 200) {
   return NextResponse.json(body, { status, headers: PRIVATE_HEADERS })
 }
 
-async function authenticated() {
-  const cookieStore = await cookies()
-  const token = cookieStore.get(authCookies.idToken)?.value
-  if (!token) return false
+async function track(metric: Parameters<typeof incrementAnalyticsMetric>[0]) {
   try {
-    const payload = await verifyCognitoIdToken(token)
-    return typeof payload.sub === 'string'
-  } catch {
-    return false
+    await incrementAnalyticsMetric(metric)
+  } catch (error) {
+    console.error('Aqla analytics metric unavailable', metric, error instanceof Error ? error.message : 'unknown')
   }
+}
+
+function modeAllowed(mode: AqlaMode, groups: string[]) {
+  const user = { sub: '', emailVerified: false, groups }
+  if (mode === 'admin') return hasAqlaRole(user, 'admin')
+  if (mode === 'clinician') return hasAqlaRole(user, 'clinician') || hasAqlaRole(user, 'admin')
+  return true
 }
 
 function safeOverride(text: string, lang: 'ar' | 'en') {
   if (emergencyPattern.test(text)) {
     return lang === 'ar'
-      ? 'إذا كانت لديك أعراض طارئة أو أفكار لإيذاء نفسك، اطلب الرعاية الطبية العاجلة فورًا أو تواصل مع خدمات الطوارئ المحلية. أقلع دعم تثقيفي ولا يغني عن الرعاية الطبية.'
-      : 'If you have urgent symptoms or thoughts of harming yourself, seek urgent medical care now or contact your local emergency services. Aqla provides educational support and does not replace medical care.'
+      ? 'إذا كانت لديك أعراض طارئة أو أفكار لإيذاء نفسك، اطلب الرعاية الطبية العاجلة فورًا أو تواصل مع خدمات الطوارئ المحلية. أقلع ليس خدمة طوارئ ولا يغني عن الرعاية الطبية.'
+      : 'If you have urgent symptoms or thoughts of harming yourself, seek urgent medical care now or contact your local emergency services. Aqla is not an emergency service and does not replace medical care.'
   }
   if (medicationPattern.test(text)) {
     return lang === 'ar'
@@ -49,25 +71,36 @@ const schema = {
   additionalProperties: false,
   properties: {
     reply: { type: 'string' },
+    action: {
+      type: 'string',
+      enum: ['none', 'start_assessment', 'open_craving_support', 'open_latest_plan', 'open_progress', 'open_academy', 'email_latest_plan'],
+    },
   },
-  required: ['reply'],
+  required: ['reply', 'action'],
 }
 
-const instructions = `You are "Aqla Assistant" for Aqla (أقلع), a Saudi smoking and nicotine cessation support platform.
-Arabic is the primary language. Reply in the language requested by the application.
-You provide concise, respectful, evidence-aligned EDUCATIONAL SUPPORT only.
-Do not diagnose, prescribe, choose medication doses, or claim access to medical records.
-Do not calculate clinical dependence scores. Aqla's application logic handles assessment and scoring.
-Support users whether they want to quit now, are thinking about quitting, want to reduce first, or are not ready yet. Never shame or pressure them.
-For urgent medical symptoms or self-harm concerns, direct the user to urgent local medical help.
-Keep replies short and practical, usually 1-5 sentences.
-Return only the structured response requested by the schema.`
+const baseInstructions = `You are Aqla (أقلع), the conversational operating layer for a Saudi smoking and nicotine cessation platform.
+Arabic is primary. Reply in the application language.
+Aqla has a deterministic clinical/safety engine and structured Personal Twin. Never recalculate validated scores, override safety/referral decisions, diagnose, prescribe or choose medication doses.
+Use the Personal Twin only as supplied. Never claim to remember facts that are not present in the supplied context.
+Support quitting now, preparing, reducing first and relapse prevention without shame or pressure.
+The available action field is a suggestion for a trusted Aqla tool. Choose only one action and only when it directly helps the user's latest request.
+Use start_assessment when the user wants a new quit plan or assessment.
+Use open_craving_support for a current craving or immediate urge to use nicotine.
+Use open_latest_plan when the user asks to view their existing plan.
+Use open_progress when the user asks about progress or follow-up.
+Use open_academy for an educational/learning request that would benefit from Academy.
+Use email_latest_plan only when the user explicitly asks to email/send their existing plan by email. Never choose it proactively.
+Do not claim an email, reminder, WhatsApp message or other external action happened unless the server reports that it happened.
+Keep normal replies concise and practical, usually 1-6 sentences.
+Return only the requested structured response.`
 
 export async function POST(request: NextRequest) {
-  const mutationError = validateMutationRequest(request, 32 * 1024)
+  const mutationError = validateMutationRequest(request, 40 * 1024)
   if (mutationError) return json({ error: mutationError.error }, mutationError.status)
 
-  if (!(await authenticated())) return json({ error: 'not_authenticated' }, 401)
+  const user = await getCurrentAqlaUser()
+  if (!user) return json({ error: 'not_authenticated' }, 401)
 
   let body: AssistantBody
   try {
@@ -77,35 +110,124 @@ export async function POST(request: NextRequest) {
   }
 
   const lang = body.lang === 'en' ? 'en' : 'ar'
-  const clean = (Array.isArray(body.messages) ? body.messages.slice(-12) : [])
+  const mode: AqlaMode = body.mode === 'academy' || body.mode === 'clinician' || body.mode === 'admin' ? body.mode : 'quit'
+  if (!modeAllowed(mode, user.groups)) return json({ error: 'mode_not_authorised' }, 403)
+
+  const clean = (Array.isArray(body.messages) ? body.messages.slice(-14) : [])
     .filter((message): message is Message => Boolean(message) && (message.role === 'user' || message.role === 'assistant') && typeof message.content === 'string')
-    .map((message) => ({ ...message, content: message.content.trim().slice(0, 2000) }))
+    .map((message) => ({ ...message, content: message.content.trim().slice(0, 2400) }))
     .filter((message) => message.content.length > 0)
 
   const totalCharacters = clean.reduce((sum, message) => sum + message.content.length, 0)
-  if (totalCharacters > 12000) return json({ error: 'conversation_too_large' }, 413)
+  if (totalCharacters > 16000) return json({ error: 'conversation_too_large' }, 413)
 
   const lastUser = [...clean].reverse().find((message) => message.role === 'user')
   if (!lastUser) return json({ error: 'message_required' }, 400)
 
+  let conversationId = body.conversation_id?.trim().slice(0, 100)
+  try {
+    const ensured = await ensureConversation({
+      userSub: user.sub,
+      conversationId,
+      mode,
+      firstUserMessage: lastUser.content,
+      fallbackTitle: lang === 'ar' ? 'محادثة أقلع' : 'Aqla conversation',
+    })
+    conversationId = ensured.conversationId
+    if (ensured.created) await track('conversations_created')
+    await appendConversationMessage({ userSub: user.sub, conversationId, role: 'user', content: lastUser.content })
+  } catch (error) {
+    console.error('Aqla conversation persistence unavailable', error instanceof Error ? error.message : 'unknown')
+  }
+
+  await track('assistant_messages')
+
   const override = safeOverride(lastUser.content, lang)
-  if (override) return json({ reply: override })
+  if (override) {
+    await track('safety_escalations')
+    if (conversationId) {
+      try { await appendConversationMessage({ userSub: user.sub, conversationId, role: 'assistant', content: override }) } catch { /* best effort */ }
+    }
+    return json({ reply: override, action: 'none', conversation_id: conversationId })
+  }
+
+  let twinContext: ReturnType<typeof personalTwinForAI> = null
+  try {
+    twinContext = personalTwinForAI(await getPersonalTwin(user.sub))
+  } catch (error) {
+    console.error('Aqla Personal Twin context unavailable', error instanceof Error ? error.message : 'unknown')
+  }
 
   try {
     const response = await openAIStructuredResponse<AssistantOutput>({
-      instructions: `${instructions}\nApplication reply language: ${lang === 'ar' ? 'Arabic' : 'English'}.`,
-      input: JSON.stringify(clean),
-      schemaName: 'aqla_assistant_response',
+      instructions: `${baseInstructions}\nCurrent Aqla mode: ${mode}.\nApplication reply language: ${lang === 'ar' ? 'Arabic' : 'English'}.`,
+      input: JSON.stringify({
+        personal_twin: twinContext,
+        recent_conversation: clean,
+      }),
+      schemaName: 'aqla_os_response',
       schema,
-      maxOutputTokens: 500,
+      maxOutputTokens: 650,
     })
 
-    const reply = response.data.reply?.trim()
+    let reply = response.data.reply?.trim()
+    let action = response.data.action
     if (!reply) throw new Error('openai_output_invalid')
 
-    return json({ reply })
+    if (action === 'email_latest_plan') {
+      if (!explicitEmailPattern.test(lastUser.content)) {
+        action = 'none'
+      } else if (!user.email || !user.emailVerified) {
+        reply = lang === 'ar'
+          ? 'أستطيع إرسال خطتك إلى البريد المرتبط بحسابك بعد التحقق من البريد الإلكتروني.'
+          : 'I can email your plan once the email address linked to your account is verified.'
+        action = 'none'
+      } else {
+        const latestPlanId = await getLatestQuitPlanId(user.sub)
+        if (!latestPlanId) {
+          reply = lang === 'ar'
+            ? 'لا توجد خطة محفوظة لإرسالها حتى الآن. يمكنني أن أبدأ معك التقييم لبناء خطة شخصية.'
+            : 'There is no saved plan to email yet. I can start the assessment with you to build one.'
+          action = 'start_assessment'
+        } else {
+          try {
+            await sendPlanReadyEmail({
+              to: user.email,
+              planId: latestPlanId,
+              lang,
+              followupsScheduled: false,
+            })
+            await track('plan_email_sent')
+            reply = lang === 'ar'
+              ? 'تم إرسال رابط خطتك المحفوظة إلى البريد الإلكتروني المتحقق في حسابك.'
+              : 'I sent the link to your saved plan to the verified email address on your account.'
+            action = 'none'
+          } catch (error) {
+            await track('plan_email_failed')
+            console.error('Aqla user-requested plan email unavailable', error instanceof Error ? error.message : 'unknown')
+            reply = lang === 'ar'
+              ? 'تعذّر إرسال البريد الآن. خطتك ما زالت محفوظة ويمكنك فتحها من أقلع.'
+              : 'I could not send the email right now. Your plan is still saved and you can open it in Aqla.'
+            action = 'open_latest_plan'
+          }
+        }
+      }
+    }
+
+    if (action === 'open_craving_support') await track('craving_support_sessions')
+
+    if (conversationId) {
+      try {
+        await appendConversationMessage({ userSub: user.sub, conversationId, role: 'assistant', content: reply, action })
+      } catch (error) {
+        console.error('Aqla assistant response persistence unavailable', error instanceof Error ? error.message : 'unknown')
+      }
+    }
+
+    return json({ reply, action, conversation_id: conversationId })
   } catch (error) {
+    await track('assistant_failures')
     console.error('Aqla assistant error', error instanceof Error ? error.message : 'unknown')
-    return json({ error: 'assistant_unavailable' }, 502)
+    return json({ error: 'assistant_unavailable', conversation_id: conversationId }, 502)
   }
 }
