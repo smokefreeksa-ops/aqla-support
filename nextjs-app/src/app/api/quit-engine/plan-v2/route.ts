@@ -189,7 +189,17 @@ export async function POST(request: NextRequest) {
   const verifiedEmail = user.email && user.emailVerified ? user.email : undefined
 
   try {
-    await persistQuitPlan({ userSub: user.sub, plan, model, aiRequestId, recipientEmail: verifiedEmail, lang })
+    // Only attach a recipient to future follow-up records when the participant
+    // explicitly opted into ongoing follow-up email. Plan-link email consent is
+    // independent and is handled below.
+    await persistQuitPlan({
+      userSub: user.sub,
+      plan,
+      model,
+      aiRequestId,
+      recipientEmail: v2Answers.followup_email_opt_in ? verifiedEmail : undefined,
+      lang,
+    })
     plan.persisted = true
     await track('plan_persisted')
 
