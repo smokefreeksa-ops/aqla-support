@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
 import { sendPlanReadyEmail } from '@/lib/email.server'
+import { schedulePlanFollowups } from '@/lib/followup-scheduler.server'
 import { openAIStructuredResponse } from '@/lib/openai.server'
 import { buildPlan } from '@/lib/quit-engine/plan-builder'
 import { persistQuitPlan } from '@/lib/quit-engine/store.server'
@@ -15,6 +16,7 @@ type Body = { lang?: 'ar' | 'en'; answers?: unknown }
 type Personalisation = { personal_summary: string; micro_challenge: string }
 type CurrentUser = { sub: string; email?: string; emailVerified: boolean }
 type EmailStatus = 'sent' | 'failed' | 'skipped_unverified' | 'skipped_plan_not_persisted'
+type FollowupSchedulingStatus = 'scheduled' | 'partial' | 'failed' | 'skipped_unverified' | 'skipped_plan_not_persisted'
 
 const schema = {
   type: 'object',
@@ -119,16 +121,35 @@ export async function POST(request: NextRequest) {
     result,
   }
 
+  const verifiedEmail = user.email && user.emailVerified ? user.email : undefined
   let emailStatus: EmailStatus = 'skipped_plan_not_persisted'
   let emailMessageId: string | undefined
+  let followupSchedulingStatus: FollowupSchedulingStatus = 'skipped_plan_not_persisted'
+  let followupScheduleResults: Awaited<ReturnType<typeof schedulePlanFollowups>>['results'] = []
 
   try {
-    await persistQuitPlan({ userSub: user.sub, plan, model, aiRequestId })
+    await persistQuitPlan({
+      userSub: user.sub,
+      plan,
+      model,
+      aiRequestId,
+      recipientEmail: verifiedEmail,
+      lang,
+    })
     plan.persisted = true
 
-    if (user.email && user.emailVerified) {
+    if (verifiedEmail) {
+      const scheduling = await schedulePlanFollowups({ userSub: user.sub, plan })
+      followupSchedulingStatus = scheduling.status
+      followupScheduleResults = scheduling.results
+
       try {
-        const sent = await sendPlanReadyEmail({ to: user.email, planId: plan.plan_id, lang })
+        const sent = await sendPlanReadyEmail({
+          to: verifiedEmail,
+          planId: plan.plan_id,
+          lang,
+          followupsScheduled: scheduling.status === 'scheduled',
+        })
         emailStatus = 'sent'
         emailMessageId = sent.messageId
       } catch (error) {
@@ -137,8 +158,9 @@ export async function POST(request: NextRequest) {
         console.error('Aqla SES plan-ready email unavailable', error instanceof Error ? error.message : 'unknown')
       }
     } else {
+      followupSchedulingStatus = 'skipped_unverified'
       emailStatus = 'skipped_unverified'
-      console.warn('Aqla plan-ready email skipped because the authenticated Cognito email is not verified')
+      console.warn('Aqla email and automated follow-ups skipped because the authenticated Cognito email is not verified')
     }
   } catch (error) {
     // The plan remains usable and is saved locally by the browser if staging
@@ -151,5 +173,6 @@ export async function POST(request: NextRequest) {
     plan,
     model: model ?? 'deterministic',
     email: { status: emailStatus, message_id: emailMessageId },
+    followups: { status: followupSchedulingStatus, schedules: followupScheduleResults },
   })
 }
