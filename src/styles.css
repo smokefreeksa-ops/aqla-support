@@ -934,7 +934,7 @@ body {
 /* Mobile: fewer layers, lighter blur, thinner frame */
 @media (max-width: 640px) {
   .crystal-panel {
-    backdrop-filter: blur(12px) saturate(140%) brightness(1.42);
+    backdrop-filter: saturate(140%) brightness(1.42);
   }
   .crystal-shell {
     --gem-frame: 10px;
