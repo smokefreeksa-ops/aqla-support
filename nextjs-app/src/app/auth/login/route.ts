@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
   const authorizeUrl = new URL(`${cognitoConfig.domain}/oauth2/authorize`)
   authorizeUrl.searchParams.set('client_id', cognitoConfig.clientId)
   authorizeUrl.searchParams.set('response_type', 'code')
-  authorizeUrl.searchParams.set('scope', 'openid email phone')
+  authorizeUrl.searchParams.set('scope', 'openid email')
   authorizeUrl.searchParams.set('redirect_uri', redirectUri)
   authorizeUrl.searchParams.set('state', state)
   authorizeUrl.searchParams.set('nonce', nonce)
