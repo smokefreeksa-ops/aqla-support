@@ -71,25 +71,25 @@ function cleanText(value: unknown, max: number) {
 }
 
 function findModule(slug: string): TModule | null {
-  return TRAINING_MODULES.find((module) => module.slug === slug) ?? null
+  return TRAINING_MODULES.find((trainingModule) => trainingModule.slug === slug) ?? null
 }
 
-function moduleScore(module: TModule, answers: ModuleAttemptAnswers) {
-  if (!Array.isArray(answers.questions) || answers.questions.length !== module.questions.length) {
+function moduleScore(trainingModule: TModule, answers: ModuleAttemptAnswers) {
+  if (!Array.isArray(answers.questions) || answers.questions.length !== trainingModule.questions.length) {
     throw new Error('question_answers_incomplete')
   }
-  if (!Array.isArray(answers.cases) || answers.cases.length !== module.cases.length) {
+  if (!Array.isArray(answers.cases) || answers.cases.length !== trainingModule.cases.length) {
     throw new Error('case_answers_incomplete')
   }
   if ([...answers.questions, ...answers.cases].some((answer) => !Number.isInteger(answer) || answer < 0 || answer > 20)) {
     throw new Error('invalid_answer_index')
   }
 
-  const questionCorrect = module.questions.reduce((sum, question, index) => sum + (answers.questions[index] === question.correct ? 1 : 0), 0)
-  const caseCorrect = module.cases.reduce((sum, item, index) => sum + (answers.cases[index] === item.correct ? 1 : 0), 0)
-  const totalItems = module.questions.length + module.cases.length
+  const questionCorrect = trainingModule.questions.reduce((sum, question, index) => sum + (answers.questions[index] === question.correct ? 1 : 0), 0)
+  const caseCorrect = trainingModule.cases.reduce((sum, item, index) => sum + (answers.cases[index] === item.correct ? 1 : 0), 0)
+  const totalItems = trainingModule.questions.length + trainingModule.cases.length
   const score = totalItems ? Math.round(((questionCorrect + caseCorrect) / totalItems) * 100) : 100
-  const requiredCases = module.cases.map((item, index) => ({ item, answer: answers.cases[index] })).filter(({ item }) => item.required)
+  const requiredCases = trainingModule.cases.map((item, index) => ({ item, answer: answers.cases[index] })).filter(({ item }) => item.required)
   const safetyCasesPassed = requiredCases.every(({ item, answer }) => answer === item.correct)
 
   return {
@@ -168,10 +168,10 @@ export async function submitAcademyModuleAttempt({
   const profile = await getAcademyProfile(userSub)
   if (!profile?.training_terms_accepted) throw new Error('academy_profile_required')
 
-  const module = findModule(moduleSlug)
-  if (!module) throw new Error('unknown_module')
-  const grade = moduleScore(module, answers)
-  const key = progressKey(userSub, module.slug)
+  const trainingModule = findModule(moduleSlug)
+  if (!trainingModule) throw new Error('unknown_module')
+  const grade = moduleScore(trainingModule, answers)
+  const key = progressKey(userSub, trainingModule.slug)
   const existingResponse = await documentClient.send(new GetCommand({ TableName: QUIT_PLAN_TABLE, Key: key, ConsistentRead: true }))
   const existing = existingResponse.Item
   const previousBest = typeof existing?.best_score === 'number' ? Number(existing.best_score) : 0
@@ -183,7 +183,7 @@ export async function submitAcademyModuleAttempt({
   const now = new Date().toISOString()
 
   const progress: AcademyModuleProgress = {
-    module_slug: module.slug,
+    module_slug: trainingModule.slug,
     best_score: bestScore,
     attempts,
     completed,
@@ -255,13 +255,13 @@ export async function issueAcademyCertificate(userSub: string): Promise<AcademyC
     if (publicExisting?.is_valid) return publicExisting
   }
 
-  const missing = TRAINING_MODULES.filter((module) => !progress[module.slug]?.completed)
+  const missing = TRAINING_MODULES.filter((trainingModule) => !progress[trainingModule.slug]?.completed)
   if (missing.length) throw new Error('all_modules_required')
-  if (TRAINING_MODULES.some((module) => !progress[module.slug]?.safety_cases_passed)) {
+  if (TRAINING_MODULES.some((trainingModule) => !progress[trainingModule.slug]?.safety_cases_passed)) {
     throw new Error('safety_cases_required')
   }
 
-  const overallScore = Math.round(TRAINING_MODULES.reduce((sum, module) => sum + progress[module.slug].best_score, 0) / TRAINING_MODULES.length)
+  const overallScore = Math.round(TRAINING_MODULES.reduce((sum, trainingModule) => sum + progress[trainingModule.slug].best_score, 0) / TRAINING_MODULES.length)
   if (overallScore < OVERALL_PASS) throw new Error('overall_score_below_threshold')
 
   const certificate: AcademyCertificate = {
@@ -343,42 +343,42 @@ export async function verifyAcademyCertificate(code: string): Promise<AcademyCer
 }
 
 export function publicAcademyModules() {
-  return TRAINING_MODULES.map((module) => ({
-    slug: module.slug,
-    number: module.number,
-    title_ar: module.title_ar,
-    title_en: module.title_en,
-    subtitle_ar: module.subtitle_ar,
-    subtitle_en: module.subtitle_en,
-    objectives_ar: module.objectives_ar,
-    objectives_en: module.objectives_en,
-    lesson_ar: module.lesson_ar,
-    lesson_en: module.lesson_en,
-    key_points_ar: module.key_points_ar,
-    key_points_en: module.key_points_en,
-    mistakes_ar: module.mistakes_ar,
-    mistakes_en: module.mistakes_en,
-    question_count: module.questions.length,
-    case_count: module.cases.length,
+  return TRAINING_MODULES.map((trainingModule) => ({
+    slug: trainingModule.slug,
+    number: trainingModule.number,
+    title_ar: trainingModule.title_ar,
+    title_en: trainingModule.title_en,
+    subtitle_ar: trainingModule.subtitle_ar,
+    subtitle_en: trainingModule.subtitle_en,
+    objectives_ar: trainingModule.objectives_ar,
+    objectives_en: trainingModule.objectives_en,
+    lesson_ar: trainingModule.lesson_ar,
+    lesson_en: trainingModule.lesson_en,
+    key_points_ar: trainingModule.key_points_ar,
+    key_points_en: trainingModule.key_points_en,
+    mistakes_ar: trainingModule.mistakes_ar,
+    mistakes_en: trainingModule.mistakes_en,
+    question_count: trainingModule.questions.length,
+    case_count: trainingModule.cases.length,
   }))
 }
 
 export function academyModuleForAttempt(slug: string, lang: 'ar' | 'en') {
-  const module = findModule(slug)
-  if (!module) return null
+  const trainingModule = findModule(slug)
+  if (!trainingModule) return null
   return {
-    slug: module.slug,
-    number: module.number,
-    title: lang === 'ar' ? module.title_ar : module.title_en,
-    lesson: lang === 'ar' ? module.lesson_ar : module.lesson_en,
-    objectives: lang === 'ar' ? module.objectives_ar : module.objectives_en,
-    key_points: lang === 'ar' ? module.key_points_ar : module.key_points_en,
-    mistakes: lang === 'ar' ? module.mistakes_ar : module.mistakes_en,
-    questions: module.questions.map((question) => ({
+    slug: trainingModule.slug,
+    number: trainingModule.number,
+    title: lang === 'ar' ? trainingModule.title_ar : trainingModule.title_en,
+    lesson: lang === 'ar' ? trainingModule.lesson_ar : trainingModule.lesson_en,
+    objectives: lang === 'ar' ? trainingModule.objectives_ar : trainingModule.objectives_en,
+    key_points: lang === 'ar' ? trainingModule.key_points_ar : trainingModule.key_points_en,
+    mistakes: lang === 'ar' ? trainingModule.mistakes_ar : trainingModule.mistakes_en,
+    questions: trainingModule.questions.map((question) => ({
       prompt: lang === 'ar' ? question.q_ar : question.q_en,
       options: lang === 'ar' ? question.opts_ar : question.opts_en,
     })),
-    cases: module.cases.map((item) => ({
+    cases: trainingModule.cases.map((item) => ({
       id: item.id,
       title: lang === 'ar' ? item.title_ar : item.title_en,
       text: lang === 'ar' ? item.text_ar : item.text_en,
