@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers'
-import AqlaPublicLanding from '@/components/AqlaPublicLanding'
+import AqlaPublicLandingV2 from '@/components/AqlaPublicLandingV2'
 import StudyInvitation from '@/components/StudyInvitation'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
 import { getPublicVisitTotal, PUBLIC_VISIT_SEED } from '@/lib/analytics.server'
@@ -38,7 +38,7 @@ export default async function HomePage() {
   }
 
   return <>
-    <AqlaPublicLanding signedIn={signedIn} latestPlanId={latestPlanId} initialVisitCount={initialVisitCount} />
+    <AqlaPublicLandingV2 signedIn={signedIn} latestPlanId={latestPlanId} initialVisitCount={initialVisitCount} />
     <StudyInvitation overlay />
   </>
 }
