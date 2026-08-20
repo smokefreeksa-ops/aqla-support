@@ -1,6 +1,8 @@
 import { cookies } from 'next/headers'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
 
+export type AqlaStaffRole = 'admin' | 'clinician' | 'receptionist'
+
 export interface CurrentAqlaUser {
   sub: string
   email?: string
@@ -32,9 +34,18 @@ export async function getCurrentAqlaUser(): Promise<CurrentAqlaUser | null> {
   }
 }
 
-export function hasAqlaRole(user: CurrentAqlaUser, role: 'admin' | 'clinician') {
-  const accepted = role === 'admin'
-    ? ['admin', 'aqla-admin', 'aqla_admin']
-    : ['clinician', 'aqla-clinician', 'aqla_clinician']
-  return user.groups.some((group) => accepted.includes(group))
+export function hasAqlaRole(user: CurrentAqlaUser, role: AqlaStaffRole) {
+  const accepted: Record<AqlaStaffRole, string[]> = {
+    admin: ['admin', 'aqla-admin', 'aqla_admin'],
+    clinician: ['clinician', 'aqla-clinician', 'aqla_clinician'],
+    receptionist: ['receptionist', 'aqla-receptionist', 'aqla_receptionist'],
+  }
+  return user.groups.some((group) => accepted[role].includes(group))
+}
+
+export function getAqlaStaffRole(user: CurrentAqlaUser): AqlaStaffRole | null {
+  if (hasAqlaRole(user, 'admin')) return 'admin'
+  if (hasAqlaRole(user, 'clinician')) return 'clinician'
+  if (hasAqlaRole(user, 'receptionist')) return 'receptionist'
+  return null
 }
