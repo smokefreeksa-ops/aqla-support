@@ -19,6 +19,7 @@
     "@aws-sdk/client-secrets-manager": "^3.1101.0",
     "@aws-sdk/client-sesv2": "^3.1101.0",
     "@aws-sdk/lib-dynamodb": "^3.1101.0",
+    "@react-pdf/renderer": "^4.5.1",
     "html2canvas": "^1.4.1",
     "jose": "^6.1.0",
     "jspdf": "^3.0.2",
