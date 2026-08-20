@@ -69,7 +69,7 @@ function BulletList({ items }: { items: string[] }) {
 function PlanPdf({ plan, lang }: { plan: StoredQuitPlan; lang: 'ar' | 'en' }) {
   const ar = lang === 'ar'
   const result = plan.result
-  const provenance = plan.provenance
+  const provenance = plan.provenance ?? result.provenance
 
   return (
     <Document title={ar ? 'خطة أقلع الشخصية' : 'Aqla Personal Quit Plan'} author="Aqla — أقلع">
