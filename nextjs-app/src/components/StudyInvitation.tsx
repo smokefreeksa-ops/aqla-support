@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 const REDCAP_URL = 'https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM'
-const LOGO_URL = 'https://aqla1.com/aqla-logo.png'
+const LOGO_URL = '/aqla-logo.png'
 
 const copy = {
   ar: {
@@ -53,7 +53,7 @@ const copy = {
     tags: ['Voluntary participation', 'Confidential responses', 'Anonymous responses', 'SAR 500 prize draw'],
     skip: 'Skip',
     confirm: 'Before you continue, please consider taking part in the study — your participation matters.',
-    continue: 'Continue to AQla',
+    continue: 'Continue to Aqla',
     back: 'Return to study',
   },
 }
