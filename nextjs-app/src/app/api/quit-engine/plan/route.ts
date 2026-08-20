@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { incrementAnalyticsMetric } from '@/lib/analytics.server'
 import { getCurrentAqlaUser } from '@/lib/current-user.server'
 import { sendPlanReadyEmail } from '@/lib/email.server'
+import { FOLLOWUP_DEFINITIONS } from '@/lib/followup-policy'
 import { schedulePlanFollowups } from '@/lib/followup-scheduler.server'
 import { validateMutationRequest } from '@/lib/http-security.server'
 import { openAIStructuredResponse } from '@/lib/openai.server'
@@ -98,6 +99,12 @@ export async function POST(request: NextRequest) {
   }
 
   const result = buildPlan(answers, lang)
+  // Versioned longitudinal policy: early support is intentionally denser, while
+  // later points include formal outcome checkpoints. This is an Aqla operational
+  // cadence informed by cessation guidance, not a claim that every listed day is
+  // itself a universally mandated clinical standard.
+  result.follow_up_schedule = FOLLOWUP_DEFINITIONS.map((item) => ({ ...item }))
+
   let model: string | undefined
   let aiRequestId: string | undefined
 
