@@ -5,7 +5,6 @@ import AqlaAssistant from '@/components/AqlaAssistant'
 
 const LOGO_URL = '/aqla-logo.png'
 const REDCAP_URL = 'https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM'
-const ASSESSMENT_URL = '/aqla/assessment'
 const OS_URL = '/aqla/os'
 
 export default function AqlaHome({
@@ -63,8 +62,10 @@ export default function AqlaHome({
           <nav className="aqla-nav" aria-label={ar ? 'التنقل الرئيسي' : 'Primary navigation'}>
             <a href="/aqla">{ar ? 'الرئيسية' : 'Home'}</a>
             <a href={OS_URL} onClick={() => track('support_entry_clicks')}>{ar ? 'خطة الإقلاع' : 'Quit plan'}</a>
+            <a href="/aqla/tools">{ar ? 'الأدوات' : 'Tools'}</a>
+            <a href="/aqla/challenges">{ar ? 'المجتمع والتحديات' : 'Community'}</a>
+            <a href="/aqla/help-someone">{ar ? 'ساعد شخصًا' : 'Help someone'}</a>
             {savedPlanUrl ? <a href={savedPlanUrl}>{ar ? 'خطتي المحفوظة' : 'My saved plan'}</a> : null}
-            <a href={OS_URL} onClick={() => track('support_entry_clicks')}>{ar ? 'مساعد أقلع' : 'Aqla Assistant'}</a>
           </nav>
           <div className="aqla-header-actions">
             <button className="aqla-header-button" type="button" aria-label={ar ? 'Switch to English' : 'التبديل إلى العربية'} onClick={() => setLang(ar ? 'en' : 'ar')}>{ar ? 'EN' : 'ع'}</button>
@@ -99,7 +100,7 @@ export default function AqlaHome({
               {savedPlanUrl ? (
                 <a href={savedPlanUrl} className="hero-secondary">{ar ? 'افتح خطتي المحفوظة' : 'Open my saved plan'}</a>
               ) : (
-                <a href={OS_URL} className="hero-secondary" onClick={() => track('support_entry_clicks')}>{ar ? 'اسأل مساعد أقلع' : 'Ask Aqla Assistant'}</a>
+                <a href="/aqla/tools" className="hero-secondary">{ar ? 'جرّب أدوات أقلع' : 'Try Aqla tools'}</a>
               )}
             </div>
             <p className="hero-free">{ar ? 'مجانًا • خصوصيتك مهمة • يمكنك البدء قبل تسجيل الدخول' : 'Free to use • Privacy-conscious • You can begin before signing in'}</p>
@@ -115,7 +116,7 @@ export default function AqlaHome({
         <section id="pathways" className="aqla-section">
           <div className="aqla-section-inner">
             <h2 className="aqla-section-title">{ar ? 'ما الذي يمكنك استخدامه الآن؟' : 'What can you use now?'}</h2>
-            <p className="aqla-section-lead">{ar ? 'نعرض هنا فقط الخدمات المتاحة فعليًا في نسخة أقلع الحالية.' : 'Only services that are actually available in the current Aqla experience are shown here.'}</p>
+            <p className="aqla-section-lead">{ar ? 'هذه الخدمات متاحة في نسخة أقلع الحالية على AWS.' : 'These services are available in the current AWS Aqla experience.'}</p>
             <div className="pathway-grid">
               <article className="pathway-card">
                 <h3>{ar ? 'التقييم وخطة الإقلاع الشخصية' : 'Assessment and personal quit plan'}</h3>
@@ -128,6 +129,26 @@ export default function AqlaHome({
                   ? (ar ? 'افتح خطتك المحفوظة وراجع الخطوات وبطاقة التعامل مع الرغبة.' : 'Open your saved plan and review your steps and craving card.')
                   : (ar ? 'اطرح أسئلة عامة عن الإقلاع، المحفزات والاستعداد للخطوة التالية. لا يقدّم تشخيصًا أو وصفات دوائية.' : 'Ask general questions about quitting, triggers and preparing for the next step. It does not diagnose or prescribe.')}</p>
                 <a href={savedPlanUrl ?? (signedIn ? OS_URL : assistantLoginUrl)} onClick={() => { if (!savedPlanUrl) track('support_entry_clicks') }}>{savedPlanUrl ? (ar ? 'افتح خطتي' : 'Open my plan') : (signedIn ? (ar ? 'تحدث مع المساعد' : 'Talk to the assistant') : (ar ? 'سجّل الدخول لاستخدام المساعد' : 'Sign in to use the assistant'))}</a>
+              </article>
+              <article className="pathway-card">
+                <h3>{ar ? 'ساعد شخصًا يهمك' : 'Help someone you care about'}</h3>
+                <p>{ar ? 'أنشئ رسالة دعم محترمة أو بطاقة قابلة للمشاركة دون ضغط، لوم أو مشاركة بيانات صحية.' : 'Create a respectful support message or share card without pressure, blame or health-data disclosure.'}</p>
+                <a href="/aqla/help-someone">{ar ? 'أنشئ رسالة دعم' : 'Create a support message'}</a>
+              </article>
+              <article className="pathway-card">
+                <h3>{ar ? 'أدوات أقلع' : 'Aqla tools'}</h3>
+                <p>{ar ? 'حاسبة التكلفة، مقياس الاستعداد، خريطة المحفزات، تنفس هادئ، وخط زمني تثقيفي.' : 'Cost calculator, readiness meter, trigger map, breathing reset and an educational quit timeline.'}</p>
+                <a href="/aqla/tools">{ar ? 'افتح الأدوات' : 'Open tools'}</a>
+              </article>
+              <article className="pathway-card">
+                <h3>{ar ? 'التحديات والمجتمع' : 'Challenges & community'}</h3>
+                <p>{ar ? 'تحديات غير حكمية ونقاط للمشاركة والوعي، مع مؤشرات مجمعة وحماية خصوصية المدن الصغيرة.' : 'Non-judgmental challenges and participation points, with aggregate metrics and small-cell city privacy.'}</p>
+                <a href="/aqla/challenges">{ar ? 'افتح مركز التحديات' : 'Open Challenge Hub'}</a>
+              </article>
+              <article className="pathway-card">
+                <h3>{ar ? 'التطوع واستوديو التوعية' : 'Volunteer & awareness studio'}</h3>
+                <p>{ar ? 'قدّم طلب التطوع أو صمّم ملصقات وبطاقات توعوية محلية الإنشاء وآمنة للمشاركة.' : 'Apply to volunteer or create locally generated, privacy-safe awareness posters and cards.'}</p>
+                <div style={{display:'flex',gap:12,flexWrap:'wrap'}}><a href="/aqla/volunteer">{ar ? 'التطوع' : 'Volunteer'}</a><a href="/aqla/poster-studio">{ar ? 'استوديو الملصقات' : 'Poster Studio'}</a></div>
               </article>
             </div>
           </div>
