@@ -1,0 +1,9 @@
+/* Public claims safety: never render placeholder outcome/impact metrics as real Aqla claims. */
+#about-founder .aqla-stat-row {
+  display: none;
+}
+
+/* Hide the provisional impact block until its values are backed by validated analytics. */
+.aqla-section:has(.aqla-research-card) {
+  display: none;
+}
