@@ -71,7 +71,7 @@ export default function HelpSomeonePage(){
         </div>
         <div className="eng-field"><label>{ar?'تخصيص الرسالة — اختياري':'Custom message — optional'}</label><textarea maxLength={ar?280:360} value={custom} onChange={e=>{setCustom(e.target.value);validate(e.target.value)}} placeholder={base}/></div>
         {unsafe?<div className="eng-note eng-alert eng-danger">{ar?'عدّل الرسالة لتكون داعمة ومحترمة ومن دون ضغط، إهانة، تشخيص أو ادعاء رسمي/طبي.':'Please remove pressure, shaming, diagnosis, or unsupported official/medical claims.'}</div>:null}
-        <div className="eng-actions"><button className="eng-btn primary" onClick={()=>void share()}>{ar?'مشاركة':'Share'}</button><button className="eng-btn" onClick={whatsapp}>WhatsApp</button><button className="eng-btn" onClick={()=>void copy()}>{copied?(ar?'تم النسخ ✓':'Copied ✓'):(ar?'نسخ الرسالة':'Copy message')}</button><button className="eng-btn" onClick={()=>void download()}>{ar?'تحميل البطاقة PNG':'Download card PNG'}</button></div>
+        <div className="eng-actions"><button className="eng-btn primary" onClick={()=>void share()}>{ar?'مشاركة':'Share'}</button><button className="eng-btn" onClick={whatsapp}>WhatsApp</button><button className="eng-btn" onClick={()=>void copy()}>{copied?(ar?'تم النسخ':'Copied'):(ar?'نسخ الرسالة':'Copy message')}</button><button className="eng-btn" onClick={()=>void download()}>{ar?'تحميل البطاقة PNG':'Download card PNG'}</button></div>
       </section>
       <footer className="eng-footer">Aqla — أقلع · {ar?'الدعم باحترام واستقلالية الشخص':'Support with respect for autonomy'}</footer>
     </div>
