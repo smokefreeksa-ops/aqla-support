@@ -12,6 +12,18 @@ export default function AqlaHome({ signedIn, email }: { signedIn: boolean; email
   const [lang, setLang] = useState<'ar' | 'en'>('ar')
   const ar = lang === 'ar'
 
+  function prepareSignOut() {
+    try {
+      for (let index = localStorage.length - 1; index >= 0; index -= 1) {
+        const key = localStorage.key(index)
+        if (key?.startsWith('aqla_quit_plan:')) localStorage.removeItem(key)
+      }
+      localStorage.removeItem('aqla_quit_engine_draft_v1')
+    } catch {
+      // Cookie/session sign-out still proceeds if browser storage is unavailable.
+    }
+  }
+
   const pathways = ar ? [
     ['مركز أقلع الافتراضي لدعم الإقلاع','تجربة تفاعلية تقودك من فهم استخدامك للتدخين أو النيكوتين، إلى التقييم، وبناء الخطة، والمتابعة، وطلب الدعم عند الحاجة.','ابدأ مسار الإقلاع'],
     ['أكاديمية أقلع للتدريب والشهادات','مركز تعليمي تفاعلي للتدريب، السيناريوهات، الاختبارات، والشهادات القابلة للتحميل والمشاركة والتحقق.','ادخل الأكاديمية'],
@@ -40,8 +52,8 @@ export default function AqlaHome({ signedIn, email }: { signedIn: boolean; email
             <a href="#assistant">{ar ? 'المساعد الذكي' : 'AI Assistant'}</a>
           </nav>
           <div className="aqla-header-actions">
-            <button className="aqla-header-button" type="button" onClick={() => setLang(ar ? 'en' : 'ar')}>{ar ? 'EN' : 'ع'}</button>
-            {signedIn ? <><a className="aqla-header-button" href={ASSESSMENT_URL}>{ar ? 'ابدأ خطتي' : 'My plan'}</a><a className="aqla-header-button" href="/auth/logout">{ar ? 'تسجيل الخروج' : 'Sign out'}</a></> : <a className="aqla-header-button" href={ASSESSMENT_LOGIN_URL}>{ar ? 'ابدأ الآن' : 'Start now'}</a>}
+            <button className="aqla-header-button" type="button" aria-label={ar ? 'Switch to English' : 'التبديل إلى العربية'} onClick={() => setLang(ar ? 'en' : 'ar')}>{ar ? 'EN' : 'ع'}</button>
+            {signedIn ? <><a className="aqla-header-button" href={ASSESSMENT_URL}>{ar ? 'ابدأ خطتي' : 'My plan'}</a><a className="aqla-header-button" href="/auth/logout" onClick={prepareSignOut}>{ar ? 'تسجيل الخروج' : 'Sign out'}</a></> : <a className="aqla-header-button" href={ASSESSMENT_LOGIN_URL}>{ar ? 'ابدأ الآن' : 'Start now'}</a>}
           </div>
         </div>
         <div className="research-strip">
@@ -78,8 +90,8 @@ export default function AqlaHome({ signedIn, email }: { signedIn: boolean; email
 
         <section id="pathways" className="aqla-section">
           <div className="aqla-section-inner">
-            <h2 className="aqla-section-title">{ar ? 'اختر مسارك في أقلع' : 'Choose your AQla pathway'}</h2>
-            <p className="aqla-section-lead">{ar ? 'أقلع يدعمك سواء كنت جاهزًا للإقلاع الآن، تفكر فيه، تريد التقليل أولًا، أو ترغب في تعلم كيفية دعم الآخرين.' : 'AQla supports you whether you are ready to quit, considering it, reducing first, or learning to support others.'}</p>
+            <h2 className="aqla-section-title">{ar ? 'اختر مسارك في أقلع' : 'Choose your Aqla pathway'}</h2>
+            <p className="aqla-section-lead">{ar ? 'أقلع يدعمك سواء كنت جاهزًا للإقلاع الآن، تفكر فيه، تريد التقليل أولًا، أو ترغب في تعلم كيفية دعم الآخرين.' : 'Aqla supports you whether you are ready to quit, considering it, reducing first, or learning to support others.'}</p>
             <div className="pathway-grid">
               {pathways.map(([title, desc, cta], i) => (
                 <article className="pathway-card" key={title}>
@@ -95,17 +107,17 @@ export default function AqlaHome({ signedIn, email }: { signedIn: boolean; email
           <div className="aqla-section-inner">
             <div className="ai-card">
               <div>
-                <h2>{ar ? 'مساعد أقلع الذكي' : 'AQla Smart Assistant'}</h2>
-                <p>{ar ? 'المساعد يعمل من داخل AWS باستخدام مشروع OpenAI الخاص ببيئة AQla staging. يحافظ أقلع على قواعد السلامة والمنطق السريري بينما يستخدم النموذج لتخصيص الحوار والمحتوى.' : 'The assistant runs from AWS using the dedicated AQla staging OpenAI project. AQla controls safety and clinical logic while the model personalises the conversation.'}</p>
+                <h2>{ar ? 'مساعد أقلع الذكي' : 'Aqla Smart Assistant'}</h2>
+                <p>{ar ? 'المساعد يعمل من داخل AWS باستخدام مشروع OpenAI الخاص ببيئة Aqla staging. يحافظ أقلع على قواعد السلامة والمنطق السريري بينما يستخدم النموذج لتخصيص الحوار والمحتوى.' : 'The assistant runs from AWS using the dedicated Aqla staging OpenAI project. Aqla controls safety and clinical logic while the model personalises the conversation.'}</p>
                 {signedIn && email ? <p style={{fontSize:12,opacity:.7}}>{ar ? `تم تسجيل الدخول باسم ${email}` : `Signed in as ${email}`}</p> : null}
               </div>
-              <div><button type="button" onClick={() => window.dispatchEvent(new Event('aqla:open-assistant'))}>{ar ? 'تحدث مع مساعد أقلع' : 'Talk to AQla Assistant'}</button></div>
+              <div><button type="button" onClick={() => window.dispatchEvent(new Event('aqla:open-assistant'))}>{ar ? 'تحدث مع مساعد أقلع' : 'Talk to Aqla Assistant'}</button></div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="aqla-footer">AQla — أقلع · {ar ? 'دعم الإقلاع عن التدخين والنيكوتين' : 'Smoking and nicotine cessation support'}</footer>
+      <footer className="aqla-footer">Aqla — أقلع · {ar ? 'دعم الإقلاع عن التدخين والنيكوتين' : 'Smoking and nicotine cessation support'}</footer>
       <AqlaAssistant lang={lang} />
     </div>
   )
