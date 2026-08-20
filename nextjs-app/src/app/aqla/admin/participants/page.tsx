@@ -6,6 +6,7 @@ import {
   ESCALATION_LEVELS,
   WORKFLOW_STATUSES,
   type EscalationLevel,
+  type ParticipantIndexRecord,
   type WorkflowStatus,
 } from '@/lib/crm/participant.types'
 
@@ -52,7 +53,7 @@ export default async function ParticipantCrmPage({
   const escalation = status ? undefined : validEscalation(params.escalation)
   const canSeeClinicalSummary = role === 'admin' || role === 'clinician'
 
-  let participants
+  let participants: ParticipantIndexRecord[]
   let nextCursor: string | undefined
   let unavailable = false
   try {
