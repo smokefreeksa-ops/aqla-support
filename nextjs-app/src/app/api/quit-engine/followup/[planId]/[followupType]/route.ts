@@ -5,6 +5,7 @@ import {
   getFollowupState,
   saveFollowupResponse,
   type FollowupOutcome,
+  type FollowupState,
   type FollowupType,
 } from '@/lib/quit-engine/store.server'
 
@@ -22,6 +23,17 @@ type Body = {
 
 function json(body: unknown, status = 200) {
   return NextResponse.json(body, { status, headers: PRIVATE_HEADERS })
+}
+
+function participantFollowup(followup: FollowupState) {
+  return {
+    plan_id: followup.plan_id,
+    followup_type: followup.followup_type,
+    scheduled_at: followup.scheduled_at,
+    available: followup.available,
+    response: followup.response,
+    previous_response: followup.previous_response,
+  }
 }
 
 async function currentUserSub(): Promise<string | null> {
@@ -59,7 +71,7 @@ export async function GET(_request: NextRequest, context: { params: Promise<{ pl
   try {
     const followup = await getFollowupState(userSub, params.planId, params.followupType)
     if (!followup) return json({ error: 'not_found' }, 404)
-    return json({ followup })
+    return json({ followup: participantFollowup(followup) })
   } catch (error) {
     console.error('Aqla follow-up retrieval unavailable', error instanceof Error ? error.message : 'unknown')
     return json({ error: 'followup_unavailable' }, 503)
@@ -94,6 +106,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ pl
   try {
     const current = await getFollowupState(userSub, params.planId, params.followupType)
     if (!current) return json({ error: 'not_found' }, 404)
+    if (!current.available) return json({ error: 'not_due', available_at: current.scheduled_at }, 409)
 
     const saved = await saveFollowupResponse({
       userSub,
@@ -108,7 +121,9 @@ export async function POST(request: NextRequest, context: { params: Promise<{ pl
 
     return json({ response: saved })
   } catch (error) {
-    console.error('Aqla follow-up response persistence unavailable', error instanceof Error ? error.message : 'unknown')
+    const message = error instanceof Error ? error.message : 'unknown'
+    if (message === 'followup_not_due') return json({ error: 'not_due' }, 409)
+    console.error('Aqla follow-up response persistence unavailable', message)
     return json({ error: 'save_unavailable' }, 503)
   }
 }
