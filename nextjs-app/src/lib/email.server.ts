@@ -12,13 +12,21 @@ export async function sendPlanReadyEmail({
   to,
   planId,
   lang,
+  followupsScheduled = false,
 }: {
   to: string
   planId: string
   lang: 'ar' | 'en'
+  followupsScheduled?: boolean
 }): Promise<{ messageId?: string }> {
   const planUrl = `${APP_URL}/aqla/plan/${encodeURIComponent(planId)}?lang=${lang}`
   const subject = lang === 'ar' ? 'خطتك مع أقلع جاهزة' : 'Your Aqla plan is ready'
+  const followupArabic = followupsScheduled
+    ? 'تم أيضًا جدولة متابعات أقلع الآمنة بعد 3 و7 و30 يومًا.'
+    : 'ستبقى خطتك متاحة بأمان داخل حسابك في أقلع.'
+  const followupEnglish = followupsScheduled
+    ? 'Your secure Aqla check-ins are also scheduled for days 3, 7 and 30.'
+    : 'Your plan remains securely available inside your Aqla account.'
 
   const text = [
     'أهلًا بك في أقلع،',
@@ -28,7 +36,7 @@ export async function sendPlanReadyEmail({
     'افتح خطتك بأمان من خلال الرابط التالي، وسجّل الدخول إلى حسابك إذا طُلب منك ذلك:',
     planUrl,
     '',
-    'ستصلك رسائل المتابعة من أقلع وفق رحلة الدعم المخصصة لك.',
+    followupArabic,
     'يمكنك الرد على هذا البريد للاستفسارات غير العاجلة.',
     '',
     '— أقلع | Aqla | SmokefreeKSA',
@@ -36,11 +44,9 @@ export async function sendPlanReadyEmail({
     'Your personalised Aqla plan has been created and saved.',
     'For privacy, plan details are not included in this email.',
     `Open your plan securely: ${planUrl}`,
+    followupEnglish,
   ].join('\n')
 
-  // Email clients do not apply RTL CSS consistently. Use presentation tables plus
-  // explicit direction/alignment on every Arabic content cell so Gmail, Apple Mail
-  // and Outlook-style clients retain a genuinely right-to-left reading experience.
   const html = `<!doctype html>
 <html lang="ar" dir="rtl">
   <head>
@@ -89,7 +95,7 @@ export async function sendPlanReadyEmail({
 
             <tr>
               <td dir="rtl" align="right" style="direction:rtl;text-align:right;padding:18px 30px 26px 30px;font-size:14px;line-height:1.9;color:#5b7169;">
-                <p dir="rtl" align="right" style="margin:0 0 7px 0;text-align:right;direction:rtl;">ستصلك رسائل المتابعة من أقلع وفق رحلة الدعم المخصصة لك.</p>
+                <p dir="rtl" align="right" style="margin:0 0 7px 0;text-align:right;direction:rtl;">${followupArabic}</p>
                 <p dir="rtl" align="right" style="margin:0;text-align:right;direction:rtl;">للاستفسارات غير العاجلة، يمكنك الرد مباشرة على هذا البريد.</p>
               </td>
             </tr>
@@ -103,7 +109,8 @@ export async function sendPlanReadyEmail({
             <tr>
               <td dir="ltr" align="left" style="direction:ltr;text-align:left;padding:24px 30px 12px 30px;color:#506a61;font-family:Arial,sans-serif;">
                 <p style="margin:0 0 8px 0;font-size:15px;line-height:1.6;font-weight:700;color:#274c40;text-align:left;">Your Aqla plan is ready.</p>
-                <p style="margin:0;font-size:14px;line-height:1.7;text-align:left;">For privacy, your plan details are not included in this email. Use the secure button above to return to your saved plan.</p>
+                <p style="margin:0 0 8px 0;font-size:14px;line-height:1.7;text-align:left;">For privacy, your plan details are not included in this email. Use the secure button above to return to your saved plan.</p>
+                <p style="margin:0;font-size:14px;line-height:1.7;text-align:left;">${followupEnglish}</p>
               </td>
             </tr>
 
