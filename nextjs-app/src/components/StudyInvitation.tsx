@@ -130,7 +130,7 @@ export default function StudyInvitation({ overlay = false }: { overlay?: boolean
             {overlay ? <button type="button" className="study-secondary-button" onClick={dismiss}>{t.skip}</button> : <a className="study-secondary-button" href="/aqla">{t.continue}</a>}
 
             <details className="study-details">
-              <summary>{t.details}<span>⌄</span></summary>
+              <summary>{t.details}</summary>
               <div className="study-details-body">
                 <p>{t.p1}</p>
                 <p>{t.p2}</p>
