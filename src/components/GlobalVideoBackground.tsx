@@ -50,7 +50,7 @@ export function GlobalVideoBackground() {
         className="absolute inset-0 h-full w-full object-cover"
       />
       {/* Soft overlay to keep foreground content readable */}
-      <div className="absolute inset-0 bg-background/55 backdrop-blur-[2px]" />
+      <div className="absolute inset-0 bg-background/70" />
     </div>
   );
 }

@@ -96,28 +96,20 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
       </div>
 
       <style>{`
-        @keyframes aqlaHexSpin { to { transform: rotate(360deg); } }
-        @keyframes aqlaHexSpinRev { to { transform: rotate(-360deg); } }
         @keyframes aqlaFlashIn {
-          0% { opacity: 0; transform: translateY(8px) scale(.92); filter: blur(8px); }
-          40% { opacity: 1; filter: blur(0); }
-          100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+          0% { opacity: 0; transform: translateY(8px) scale(.96); }
+          40% { opacity: 1; }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
         }
-        @keyframes aqlaNumPulse {
-          0%, 100% { text-shadow: 0 0 18px currentColor; }
-          50% { text-shadow: 0 0 36px currentColor, 0 0 60px currentColor; }
-        }
-        @keyframes aqlaDotOrbit { to { transform: rotate(360deg); } }
-        @keyframes aqlaBgGlow { 0%,100%{opacity:.55} 50%{opacity:.95} }
       `}</style>
 
       <div className="relative mx-auto mt-8 grid place-items-center" style={{ height: 360 }}>
         {/* cinematic background glow */}
         <div
-          className="absolute inset-0 rounded-full blur-3xl"
+          className="absolute inset-0 rounded-full"
           style={{
-            background: `radial-gradient(circle at 50% 50%, ${active.hue[0]}55, transparent 60%)`,
-            animation: scrollStableMotion ? "none" : "aqlaBgGlow 3s ease-in-out infinite",
+            background: `radial-gradient(circle at 50% 50%, ${active.hue[0]}33, transparent 62%)`,
+            animation: "none",
             transition: "background 1.2s ease",
           }}
         />
@@ -126,7 +118,7 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
         <svg
           viewBox="0 0 200 200"
           className="absolute"
-          style={{ width: 340, height: 340, animation: scrollStableMotion ? "none" : "aqlaHexSpin 28s linear infinite" }}
+          style={{ width: 340, height: 340, animation: "none" }}
         >
           <defs>
             <linearGradient id="hexOuter" x1="0" y1="0" x2="1" y2="1">
@@ -148,7 +140,7 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
         <svg
           viewBox="0 0 200 200"
           className="absolute"
-          style={{ width: 280, height: 280, animation: scrollStableMotion ? "none" : "aqlaHexSpinRev 18s linear infinite" }}
+          style={{ width: 280, height: 280, animation: "none" }}
         >
           <polygon points={hexPoints} fill="none" stroke={active.hue[0]} strokeOpacity="0.45" strokeWidth="0.6" />
         </svg>
@@ -157,7 +149,7 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
         <svg
           viewBox="0 0 200 200"
           className="absolute"
-          style={{ width: 230, height: 230, animation: scrollStableMotion ? "none" : "aqlaHexSpin 12s linear infinite" }}
+          style={{ width: 230, height: 230, animation: "none" }}
         >
           <defs>
             <linearGradient id="hexInner" x1="0" y1="0" x2="1" y2="1">
@@ -181,7 +173,7 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
         {/* orbiting dots */}
         <div
           className="absolute"
-          style={{ width: 340, height: 340, animation: scrollStableMotion ? "none" : "aqlaDotOrbit 14s linear infinite" }}
+          style={{ width: 340, height: 340, animation: "none" }}
         >
           {slides.map((sl, i) => {
             const angle = (i / slides.length) * Math.PI * 2 - Math.PI / 2;
@@ -212,7 +204,7 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
           style={{ animation: scrollStableMotion ? "none" : "aqlaFlashIn .9s ease-out both" }}
         >
           <div
-            className="grid h-11 w-11 place-items-center rounded-xl backdrop-blur-sm mb-2"
+            className="grid h-11 w-11 place-items-center rounded-xl mb-2"
             style={{
               background: `linear-gradient(135deg, ${active.hue[0]}33, ${active.hue[1]}33)`,
               color: active.hue[0],
@@ -227,7 +219,7 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
               color: active.hue[0],
               fontSize: 56,
               lineHeight: 1,
-              animation: scrollStableMotion ? "none" : "aqlaNumPulse 2s ease-in-out infinite",
+              animation: "none",
             }}
           >
             <CountFlash value={active.value} suffix={active.suffix} animate={!scrollStableMotion} />

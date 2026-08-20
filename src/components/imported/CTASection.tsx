@@ -32,7 +32,7 @@ export default function CTASection() {
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/15 rounded-full border border-white/25 mb-6 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/15 rounded-full border border-white/25 mb-6">
               <img
                 src="/aqla-logo.png"
                 alt="Aqla"
@@ -61,7 +61,7 @@ export default function CTASection() {
 
               <button
                 onClick={() => navigate({ to: "/learn-train" })}
-                className="w-full sm:w-auto group bg-white/15 hover:bg-white/25 text-white border border-white/30 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 backdrop-blur-sm"
+                className="w-full sm:w-auto group bg-white/15 hover:bg-white/25 text-white border border-white/30 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
               >
                 استكشف المحتوى
               </button>
