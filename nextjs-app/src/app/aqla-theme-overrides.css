@@ -84,6 +84,9 @@
 .study-details summary::-webkit-details-marker { display: none; }
 .study-language { background: var(--aq-header-2); color: var(--aq-on-dark); border-color: color-mix(in srgb, var(--aq-gold) 50%, transparent); }
 
+/* Status is communicated with headings and text, not pictograms. */
+.fu-success-mark { display: none !important; }
+
 html[data-aqla-theme='light'] .qe-topbar,
 html[data-aqla-theme='light'] .qp-topbar,
 html[data-aqla-theme='light'] .os-sidebar {
