@@ -2,13 +2,22 @@ import { createHash, randomBytes } from 'node:crypto'
 import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager'
 import { createRemoteJWKSet, jwtVerify, type JWTPayload } from 'jose'
 
+const region = process.env.AQLA_COGNITO_REGION || 'eu-west-2'
+const userPoolId = process.env.AQLA_COGNITO_USER_POOL_ID || 'eu-west-2_xYZywGOuy'
+const clientId = process.env.AQLA_COGNITO_CLIENT_ID || '7m1po5aph23iv3d9btms8n3udb'
+const issuer = process.env.AQLA_COGNITO_ISSUER || `https://cognito-idp.${region}.amazonaws.com/${userPoolId}`
+const domain = (process.env.AQLA_COGNITO_DOMAIN || 'https://eu-west-2xyzywgouy.auth.eu-west-2.amazoncognito.com').replace(/\/$/, '')
+const appUrl = (process.env.AQLA_APP_URL || 'https://staging.smokefreeksa.com').replace(/\/$/, '')
+const clientSecretId = process.env.AQLA_COGNITO_CLIENT_SECRET_ID || 'aqla/v2/staging/cognito-client'
+
 export const cognitoConfig = {
-  region: 'eu-west-2',
-  clientId: '7m1po5aph23iv3d9btms8n3udb',
-  issuer: 'https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_xYZywGOuy',
-  domain: 'https://eu-west-2xyzywgouy.auth.eu-west-2.amazoncognito.com',
-  appUrl: 'https://staging.smokefreeksa.com',
-  clientSecretId: 'aqla/v2/staging/cognito-client',
+  region,
+  userPoolId,
+  clientId,
+  issuer,
+  domain,
+  appUrl,
+  clientSecretId,
 } as const
 
 export const authCookies = {
@@ -22,6 +31,7 @@ export const authCookies = {
 
 const secretsClient = new SecretsManagerClient({ region: cognitoConfig.region })
 let cachedSecret: Promise<string> | undefined
+let cachedJwks: ReturnType<typeof createRemoteJWKSet> | undefined
 
 const preferredKeys = new Set([
   'clientsecret',
@@ -164,10 +174,13 @@ export function createPkceChallenge(verifier: string) {
 }
 
 export async function verifyCognitoIdToken(idToken: string): Promise<JWTPayload> {
-  const jwks = createRemoteJWKSet(new URL(`${cognitoConfig.issuer}/.well-known/jwks.json`))
-  const { payload } = await jwtVerify(idToken, jwks, {
+  if (!cachedJwks) cachedJwks = createRemoteJWKSet(new URL(`${cognitoConfig.issuer}/.well-known/jwks.json`))
+
+  const { payload } = await jwtVerify(idToken, cachedJwks, {
     issuer: cognitoConfig.issuer,
     audience: cognitoConfig.clientId,
   })
+
+  if (payload.token_use !== 'id') throw new Error('Unexpected Cognito token type')
   return payload
 }
