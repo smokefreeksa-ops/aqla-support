@@ -4,6 +4,7 @@ import ParticipantCrmEditor from '@/components/ParticipantCrmEditor'
 import { getAqlaStaffRole, getCurrentAqlaUser } from '@/lib/current-user.server'
 import { getParticipantProfile, listParticipantAuditEvents } from '@/lib/crm/participant.server'
 import { getPersonalTwin } from '@/lib/personal-twin.server'
+import { getPlanCommunicationState } from '@/lib/plan-communications.server'
 import { getQuitPlan } from '@/lib/quit-engine/store.server'
 
 export const dynamic = 'force-dynamic'
@@ -43,13 +44,16 @@ export default async function ParticipantCrmDetailPage({
   const canSeeClinical = role === 'admin' || role === 'clinician'
   let plan = null
   let twin = null
+  let communications = null
   if (canSeeClinical) {
-    const [storedPlan, storedTwin] = await Promise.all([
+    const [storedPlan, storedTwin, storedCommunications] = await Promise.all([
       participant.latest_plan_id ? getQuitPlan(userSub, participant.latest_plan_id).catch(() => null) : Promise.resolve(null),
       getPersonalTwin(userSub).catch(() => null),
+      participant.latest_plan_id ? getPlanCommunicationState(userSub, participant.latest_plan_id).catch(() => null) : Promise.resolve(null),
     ])
     plan = storedPlan
     twin = storedTwin
+    communications = storedCommunications
   }
 
   return (
@@ -79,33 +83,50 @@ export default async function ParticipantCrmDetailPage({
         </section>
 
         {canSeeClinical ? (
-          <section className="admin-grid">
-            <article className="admin-panel">
-              <div className="admin-panel-head"><div><span>Latest plan</span><h2>Structured clinical summary</h2></div><small>{dateLabel(participant.latest_plan_created_at)}</small></div>
-              <div className="admin-status-list">
-                <div><span>Products</span><strong>{show(participant.product_types)}</strong></div>
-                <div><span>Readiness</span><strong>{show(participant.readiness_category)}</strong></div>
-                <div><span>Aqla support intensity</span><strong>{typeof participant.support_intensity === 'number' ? `${participant.support_intensity}/10` : '—'}</strong></div>
-                <div><span>Safety flags</span><strong>{show(participant.latest_safety_flags)}</strong></div>
-                <div><span>Referral</span><strong>{participant.referral_needed ? 'Yes' : 'No'}</strong></div>
-              </div>
-              {plan?.result.referral_message ? <p className="admin-definition">{plan.result.referral_message}</p> : null}
-              {plan?.result.first_24h_step ? <p className="admin-definition"><strong>First 24h step:</strong> {plan.result.first_24h_step}</p> : null}
-            </article>
+          <>
+            <section className="admin-grid">
+              <article className="admin-panel">
+                <div className="admin-panel-head"><div><span>Latest plan</span><h2>Structured clinical summary</h2></div><small>{dateLabel(participant.latest_plan_created_at)}</small></div>
+                <div className="admin-status-list">
+                  <div><span>Products</span><strong>{show(participant.product_types)}</strong></div>
+                  <div><span>Readiness</span><strong>{show(participant.readiness_category)}</strong></div>
+                  <div><span>Aqla support intensity</span><strong>{typeof participant.support_intensity === 'number' ? `${participant.support_intensity}/10` : '—'}</strong></div>
+                  <div><span>Safety flags</span><strong>{show(participant.latest_safety_flags)}</strong></div>
+                  <div><span>Referral</span><strong>{participant.referral_needed ? 'Yes' : 'No'}</strong></div>
+                </div>
+                {plan?.result.referral_message ? <p className="admin-definition">{plan.result.referral_message}</p> : null}
+                {plan?.result.first_24h_step ? <p className="admin-definition"><strong>First 24h step:</strong> {plan.result.first_24h_step}</p> : null}
+              </article>
 
-            <article className="admin-panel">
-              <div className="admin-panel-head"><div><span>Personal Digital Twin</span><h2>Longitudinal state</h2></div><small>{twin?.updated_at ? dateLabel(twin.updated_at) : 'Unavailable'}</small></div>
-              {twin ? <div className="admin-status-list">
-                <div><span>Triggers</span><strong>{show(twin.triggers)}</strong></div>
-                <div><span>Confidence</span><strong>{typeof twin.confidence_score === 'number' ? `${twin.confidence_score}/10` : '—'}</strong></div>
-                <div><span>Readiness</span><strong>{typeof twin.readiness_score === 'number' ? `${twin.readiness_score}/10` : '—'}</strong></div>
-                <div><span>Previous attempts</span><strong>{show(twin.previous_quit_attempts)}</strong></div>
-                <div><span>Follow-up records</span><strong>{twin.followups ? Object.keys(twin.followups).length : 0}</strong></div>
-              </div> : <p>Structured Twin state is not available for this participant.</p>}
-            </article>
-          </section>
+              <article className="admin-panel">
+                <div className="admin-panel-head"><div><span>Personal Digital Twin</span><h2>Longitudinal state</h2></div><small>{twin?.updated_at ? dateLabel(twin.updated_at) : 'Unavailable'}</small></div>
+                {twin ? <div className="admin-status-list">
+                  <div><span>Triggers</span><strong>{show(twin.triggers)}</strong></div>
+                  <div><span>Confidence</span><strong>{typeof twin.confidence_score === 'number' ? `${twin.confidence_score}/10` : '—'}</strong></div>
+                  <div><span>Readiness</span><strong>{typeof twin.readiness_score === 'number' ? `${twin.readiness_score}/10` : '—'}</strong></div>
+                  <div><span>Previous attempts</span><strong>{show(twin.previous_quit_attempts)}</strong></div>
+                  <div><span>Follow-up records</span><strong>{twin.followups ? Object.keys(twin.followups).length : 0}</strong></div>
+                </div> : <p>Structured Twin state is not available for this participant.</p>}
+              </article>
+            </section>
+
+            <section className="admin-panel">
+              <div className="admin-panel-head"><div><span>Communications</span><h2>Plan email and follow-up delivery</h2></div><small>Read-only operational diagnostics</small></div>
+              {communications ? <>
+                <div className="admin-status-list">
+                  <div><span>Plan email</span><strong>{show(communications.plan_email_status)}</strong></div>
+                  <div><span>Email state updated</span><strong>{dateLabel(communications.plan_email_updated_at)}</strong></div>
+                  <div><span>SES message ID</span><strong>{communications.plan_email_message_id ?? '—'}</strong></div>
+                  <div><span>Email error</span><strong>{communications.plan_email_error ?? '—'}</strong></div>
+                </div>
+                <div className="admin-status-list" style={{ marginTop: 18 }}>
+                  {communications.followups.map((item) => <div key={item.followup_type}><span>{show(item.followup_type)} · {dateLabel(item.scheduled_at)}</span><strong>{show(item.status)}{item.sent_at ? ` · sent ${dateLabel(item.sent_at)}` : ''}</strong></div>)}
+                </div>
+              </> : <div className="admin-empty">Communication diagnostics are not available for this plan.</div>}
+            </section>
+          </>
         ) : (
-          <section className="admin-panel"><strong>Receptionist view</strong><p>Clinical plan content, safety details and Personal Digital Twin data are intentionally hidden from this role. Contact workflow information remains available below.</p></section>
+          <section className="admin-panel"><strong>Receptionist view</strong><p>Clinical plan content, safety details, communication diagnostics and Personal Digital Twin data are intentionally hidden from this role. Contact workflow information remains available below.</p></section>
         )}
 
         <ParticipantCrmEditor participant={participant} role={role} />
