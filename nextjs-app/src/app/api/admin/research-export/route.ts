@@ -9,6 +9,15 @@ export async function GET(request: NextRequest) {
   if (!user) return NextResponse.json({ error: 'not_authenticated' }, { status: 401 })
   if (!hasAqlaRole(user, 'admin')) return NextResponse.json({ error: 'forbidden' }, { status: 403 })
 
+  // Research export is intentionally deny-by-default. Deployment must explicitly
+  // enable it only after the applicable protocol/data-use basis is configured.
+  if (process.env.AQLA_RESEARCH_EXPORT_ENABLED !== 'true') {
+    return NextResponse.json(
+      { error: 'research_export_not_enabled', message: 'Research export requires explicit governance configuration.' },
+      { status: 403, headers: { 'Cache-Control': 'no-store, private' } },
+    )
+  }
+
   const { searchParams } = new URL(request.url)
   const cursor = searchParams.get('cursor') || undefined
   const requested = Number(searchParams.get('limit') || '200')
