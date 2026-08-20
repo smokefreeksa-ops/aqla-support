@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
+import { sendPlanReadyEmail } from '@/lib/email.server'
 import { openAIStructuredResponse } from '@/lib/openai.server'
 import { buildPlan } from '@/lib/quit-engine/plan-builder'
 import { persistQuitPlan } from '@/lib/quit-engine/store.server'
@@ -12,6 +13,8 @@ export const dynamic = 'force-dynamic'
 
 type Body = { lang?: 'ar' | 'en'; answers?: unknown }
 type Personalisation = { personal_summary: string; micro_challenge: string }
+type CurrentUser = { sub: string; email?: string; emailVerified: boolean }
+type EmailStatus = 'sent' | 'failed' | 'skipped_unverified' | 'skipped_plan_not_persisted'
 
 const schema = {
   type: 'object',
@@ -23,21 +26,27 @@ const schema = {
   required: ['personal_summary', 'micro_challenge'],
 }
 
-async function currentUserSub(): Promise<string | null> {
+async function currentUser(): Promise<CurrentUser | null> {
   const cookieStore = await cookies()
   const token = cookieStore.get(authCookies.idToken)?.value
   if (!token) return null
+
   try {
     const payload = await verifyCognitoIdToken(token)
-    return typeof payload.sub === 'string' ? payload.sub : null
+    if (typeof payload.sub !== 'string') return null
+
+    const email = typeof payload.email === 'string' ? payload.email.trim() : undefined
+    const emailVerified = payload.email_verified === true || payload.email_verified === 'true'
+
+    return { sub: payload.sub, email, emailVerified }
   } catch {
     return null
   }
 }
 
 export async function POST(request: NextRequest) {
-  const userSub = await currentUserSub()
-  if (!userSub) return NextResponse.json({ error: 'not_authenticated' }, { status: 401 })
+  const user = await currentUser()
+  if (!user) return NextResponse.json({ error: 'not_authenticated' }, { status: 401 })
 
   let body: Body
   try {
@@ -51,7 +60,7 @@ export async function POST(request: NextRequest) {
   try {
     answers = validateEngineAnswers(body.answers)
   } catch (error) {
-    console.warn('AQla quit engine validation failed', error instanceof Error ? error.message : 'unknown')
+    console.warn('Aqla quit engine validation failed', error instanceof Error ? error.message : 'unknown')
     return NextResponse.json({ error: 'invalid_answers' }, { status: 400 })
   }
 
@@ -59,7 +68,7 @@ export async function POST(request: NextRequest) {
   let model: string | undefined
   let aiRequestId: string | undefined
 
-  // The model only personalises language. AQla's deterministic code owns scoring,
+  // The model only personalises language. Aqla's deterministic code owns scoring,
   // safety, referral and pathway logic. Never send names or account identifiers.
   if (!result.safety_immediate) {
     try {
@@ -82,7 +91,7 @@ export async function POST(request: NextRequest) {
         schemaName: 'aqla_quit_plan_personalisation',
         schema,
         maxOutputTokens: 300,
-        instructions: `You personalise two short coaching fields for AQla, a Saudi smoking and nicotine cessation support platform.\nAQla's application has already calculated all scoring, safety, referral and plan logic. Do not recalculate, contradict or reinterpret those decisions.\nDo not diagnose, prescribe, name a medication dose, or promise health outcomes.\nDo not shame the user. Support quitting now, reducing first, preparation, or relapse prevention.\nDo not mention that you are an AI.\nUse ${lang === 'ar' ? 'clear modern Arabic' : 'clear British English'}.\nThe personal_summary must be 1-3 sentences and explain why the first step fits this user's triggers and readiness.\nThe micro_challenge must be one concrete action that can be completed in the next 24 hours.\nReturn only the requested JSON schema.`,
+        instructions: `You personalise two short coaching fields for Aqla, a Saudi smoking and nicotine cessation support platform.\nAqla's application has already calculated all scoring, safety, referral and plan logic. Do not recalculate, contradict or reinterpret those decisions.\nDo not diagnose, prescribe, name a medication dose, or promise health outcomes.\nDo not shame the user. Support quitting now, reducing first, preparation, or relapse prevention.\nDo not mention that you are an AI.\nUse ${lang === 'ar' ? 'clear modern Arabic' : 'clear British English'}.\nThe personal_summary must be 1-3 sentences and explain why the first step fits this user's triggers and readiness.\nThe micro_challenge must be one concrete action that can be completed in the next 24 hours.\nReturn only the requested JSON schema.`,
         input: JSON.stringify(anonymised),
       })
 
@@ -94,7 +103,7 @@ export async function POST(request: NextRequest) {
       model = ai.model
       aiRequestId = ai.requestId
     } catch (error) {
-      console.error('AQla quit-plan personalisation unavailable', error instanceof Error ? error.message : 'unknown')
+      console.error('Aqla quit-plan personalisation unavailable', error instanceof Error ? error.message : 'unknown')
       result.ai_used = false
     }
   } else {
@@ -110,14 +119,37 @@ export async function POST(request: NextRequest) {
     result,
   }
 
+  let emailStatus: EmailStatus = 'skipped_plan_not_persisted'
+  let emailMessageId: string | undefined
+
   try {
-    await persistQuitPlan({ userSub, plan, model, aiRequestId })
+    await persistQuitPlan({ userSub: user.sub, plan, model, aiRequestId })
     plan.persisted = true
+
+    if (user.email && user.emailVerified) {
+      try {
+        const sent = await sendPlanReadyEmail({ to: user.email, planId: plan.plan_id, lang })
+        emailStatus = 'sent'
+        emailMessageId = sent.messageId
+      } catch (error) {
+        // Email delivery failure must never remove or invalidate a successfully saved plan.
+        emailStatus = 'failed'
+        console.error('Aqla SES plan-ready email unavailable', error instanceof Error ? error.message : 'unknown')
+      }
+    } else {
+      emailStatus = 'skipped_unverified'
+      console.warn('Aqla plan-ready email skipped because the authenticated Cognito email is not verified')
+    }
   } catch (error) {
-    // The plan remains usable and is saved locally by the browser until the
-    // staging DynamoDB resource is provisioned/available.
-    console.error('AQla DynamoDB persistence unavailable', error instanceof Error ? error.message : 'unknown')
+    // The plan remains usable and is saved locally by the browser if staging
+    // DynamoDB is temporarily unavailable. We deliberately do not send an email
+    // that claims the plan is saved when persistence has failed.
+    console.error('Aqla DynamoDB persistence unavailable', error instanceof Error ? error.message : 'unknown')
   }
 
-  return NextResponse.json({ plan, model: model ?? 'deterministic' })
+  return NextResponse.json({
+    plan,
+    model: model ?? 'deterministic',
+    email: { status: emailStatus, message_id: emailMessageId },
+  })
 }
