@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useRef, useState } from 'react'
 
-const LOGO_URL = 'https://aqla1.com/aqla-logo.png'
+const LOGO_URL = '/aqla-logo.png'
 
 type Msg = { role: 'user' | 'assistant'; content: string }
 
@@ -24,7 +24,7 @@ export default function AqlaAssistant({ lang }: { lang: 'ar' | 'en' }) {
     if (open && messages.length === 0) {
       setMessages([{ role: 'assistant', content: ar
         ? 'يا هلا 👋 أنا مساعد أقلع الذكي. أقدر أساعدك بمعلومات عامة عن الإقلاع، فهم خياراتك، أو اختيار المسار المناسب. لا أقدّم تشخيصًا أو وصفات أو جرعات دوائية.'
-        : 'Hi 👋 I’m AQla Smart Assistant. I can help with general quit-smoking information, understanding your options, or choosing the right pathway. I do not diagnose, prescribe, or provide medication doses.' }])
+        : 'Hi 👋 I’m Aqla Smart Assistant. I can help with general quit-smoking information, understanding your options, or choosing the right pathway. I do not diagnose, prescribe, or provide medication doses.' }])
     }
   }, [open, ar, messages.length])
 
@@ -55,13 +55,13 @@ export default function AqlaAssistant({ lang }: { lang: 'ar' | 'en' }) {
   }
 
   if (!open) {
-    return <button className="assistant-launcher" type="button" aria-label={ar ? 'مساعد أقلع' : 'AQla Assistant'} onClick={() => setOpen(true)}>◌</button>
+    return <button className="assistant-launcher" type="button" aria-label={ar ? 'مساعد أقلع' : 'Aqla Assistant'} onClick={() => setOpen(true)}>◌</button>
   }
 
   return (
     <aside className="assistant-panel" dir={ar ? 'rtl' : 'ltr'}>
       <div className="assistant-head">
-        <div className="assistant-head-title"><img src={LOGO_URL} alt="AQla" /><span>{ar ? 'مساعد أقلع الذكي' : 'AQla Smart Assistant'}</span></div>
+        <div className="assistant-head-title"><img src={LOGO_URL} alt="Aqla" /><span>{ar ? 'مساعد أقلع الذكي' : 'Aqla Smart Assistant'}</span></div>
         <button className="assistant-close" type="button" onClick={() => setOpen(false)} aria-label={ar ? 'إغلاق' : 'Close'}>×</button>
       </div>
       <div className="assistant-messages">
