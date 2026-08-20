@@ -1,0 +1,289 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Aqla v2 staging Day 3, Day 7 and Day 30 automated follow-up infrastructure
+
+Parameters:
+  TableName:
+    Type: String
+    Default: aqla-v2-staging
+  AmplifyRuntimeRoleName:
+    Type: String
+    Default: aqla-v2-staging-amplify-ssr-role
+  AppUrl:
+    Type: String
+    Default: https://staging.smokefreeksa.com
+  FromEmail:
+    Type: String
+    Default: noreply@smokefreeksa.com
+  ReplyToEmail:
+    Type: String
+    Default: smokefreeksa@gmail.com
+  ConfigurationSetName:
+    Type: String
+    Default: aqla-transactional
+
+Resources:
+  FollowupScheduleGroup:
+    Type: AWS::Scheduler::ScheduleGroup
+    Properties:
+      Name: aqla-v2-staging-followups
+      Tags:
+        - Key: Application
+          Value: Aqla
+        - Key: Environment
+          Value: staging
+
+  FollowupWorkerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: aqla-v2-staging-followup-worker-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: aqla-followup-dynamodb
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:UpdateItem
+                Resource: !Sub arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableName}
+        - PolicyName: aqla-followup-ses
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: ses:SendEmail
+                Resource: '*'
+                Condition:
+                  StringEquals:
+                    ses:FromAddress: !Ref FromEmail
+
+  FollowupWorker:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: aqla-v2-staging-followup-worker
+      Description: Sends privacy-preserving Aqla Day 3, Day 7 and Day 30 follow-up emails and records delivery state.
+      Runtime: nodejs22.x
+      Handler: index.handler
+      Role: !GetAtt FollowupWorkerRole.Arn
+      Timeout: 20
+      MemorySize: 256
+      ReservedConcurrentExecutions: 5
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref TableName
+          APP_URL: !Ref AppUrl
+          FROM_EMAIL: !Sub Aqla <${FromEmail}>
+          REPLY_TO_EMAIL: !Ref ReplyToEmail
+          CONFIGURATION_SET: !Ref ConfigurationSetName
+      Code:
+        ZipFile: |
+          const { DynamoDBClient, GetItemCommand, UpdateItemCommand } = require('@aws-sdk/client-dynamodb');
+          const { SESv2Client, SendEmailCommand } = require('@aws-sdk/client-sesv2');
+
+          const region = process.env.AWS_REGION || 'eu-west-2';
+          const ddb = new DynamoDBClient({ region });
+          const ses = new SESv2Client({ region });
+          const table = process.env.TABLE_NAME;
+          const appUrl = (process.env.APP_URL || 'https://staging.smokefreeksa.com').replace(/\/$/, '');
+          const fromEmail = process.env.FROM_EMAIL || 'Aqla <noreply@smokefreeksa.com>';
+          const replyTo = process.env.REPLY_TO_EMAIL || 'smokefreeksa@gmail.com';
+          const configurationSet = process.env.CONFIGURATION_SET || 'aqla-transactional';
+          const allowedTypes = new Set(['day_3', 'day_7', 'day_30']);
+
+          function label(type, lang) {
+            const labels = {
+              ar: { day_3: 'متابعة اليوم الثالث', day_7: 'متابعة الأسبوع الأول', day_30: 'متابعة الشهر الأول' },
+              en: { day_3: 'Day 3 check-in', day_7: 'Week 1 check-in', day_30: 'Month 1 check-in' },
+            };
+            return labels[lang === 'en' ? 'en' : 'ar'][type];
+          }
+
+          function emailContent(type, lang, url) {
+            const ar = lang !== 'en';
+            const titleAr = label(type, 'ar');
+            const titleEn = label(type, 'en');
+            const subject = ar ? `أقلع — ${titleAr}` : `Aqla — ${titleEn}`;
+            const text = ar
+              ? `لديك ${titleAr} جاهزة داخل حساب أقلع.\n\nحفاظًا على خصوصيتك، لا نضع تفاصيل تقدمك داخل البريد الإلكتروني. افتح المتابعة بأمان وسجّل الدخول إذا طُلب منك ذلك:\n${url}\n\nيمكنك الرد على هذا البريد للاستفسارات غير العاجلة.\n\nأقلع | Aqla | SmokefreeKSA`
+              : `Your ${titleEn.toLowerCase()} is ready inside your Aqla account.\n\nFor privacy, your progress details are not included in this email. Open the secure check-in and sign in if requested:\n${url}\n\nYou can reply to this email for non-urgent queries.\n\nAqla | SmokefreeKSA`;
+
+            const html = `<!doctype html>
+          <html lang="${ar ? 'ar' : 'en'}" dir="${ar ? 'rtl' : 'ltr'}">
+            <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="x-apple-disable-message-reformatting"><title>${subject}</title></head>
+            <body style="margin:0;padding:0;background:#f3f6f4;color:#173b31;font-family:Arial,Tahoma,sans-serif;">
+              <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${ar ? 'متابعة قصيرة وآمنة جاهزة داخل حساب أقلع.' : 'A short secure Aqla check-in is ready in your account.'}</div>
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#f3f6f4" style="width:100%;border-collapse:collapse;background:#f3f6f4;">
+                <tr><td align="center" style="padding:28px 12px;">
+                  <table role="presentation" width="620" cellspacing="0" cellpadding="0" border="0" style="width:100%;max-width:620px;border-collapse:separate;background:#ffffff;border:1px solid #dfe9e4;border-radius:18px;overflow:hidden;">
+                    <tr><td dir="rtl" align="right" style="direction:rtl;text-align:right;padding:30px 30px 8px;"><div style="font-size:27px;font-weight:700;color:#0f5132;">أقلع <span dir="ltr" style="font-size:14px;font-weight:500;color:#62776f;">Aqla</span></div></td></tr>
+                    <tr><td dir="${ar ? 'rtl' : 'ltr'}" align="${ar ? 'right' : 'left'}" style="direction:${ar ? 'rtl' : 'ltr'};text-align:${ar ? 'right' : 'left'};padding:14px 30px 0;">
+                      <h1 style="margin:0;font-size:24px;line-height:1.55;color:#173b31;">${ar ? titleAr : titleEn}</h1>
+                    </td></tr>
+                    <tr><td dir="${ar ? 'rtl' : 'ltr'}" align="${ar ? 'right' : 'left'}" style="direction:${ar ? 'rtl' : 'ltr'};text-align:${ar ? 'right' : 'left'};padding:14px 30px 0;font-size:16px;line-height:1.9;color:#526b62;">
+                      <p style="margin:0;">${ar ? 'لديك متابعة قصيرة جاهزة. حفاظًا على خصوصيتك، لا نعرض تفاصيل تقدمك أو إجاباتك داخل البريد الإلكتروني.' : 'A short check-in is ready. For privacy, your progress and responses are not included in this email.'}</p>
+                    </td></tr>
+                    <tr><td align="${ar ? 'right' : 'left'}" style="padding:24px 30px 8px;">
+                      <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="${ar ? 'right' : 'left'}"><tr><td bgcolor="#0f5a3a" style="border-radius:10px;"><a href="${url}" style="display:inline-block;padding:14px 22px;color:#fff;text-decoration:none;font-size:16px;font-weight:700;">${ar ? 'افتح متابعتي مع أقلع' : 'Open my Aqla check-in'}</a></td></tr></table>
+                    </td></tr>
+                    <tr><td dir="${ar ? 'rtl' : 'ltr'}" align="${ar ? 'right' : 'left'}" style="direction:${ar ? 'rtl' : 'ltr'};text-align:${ar ? 'right' : 'left'};padding:18px 30px 26px;font-size:13px;line-height:1.8;color:#71847d;">${ar ? 'إذا كان لديك استفسار غير عاجل، يمكنك الرد على هذا البريد.' : 'For non-urgent questions, you can reply directly to this email.'}</td></tr>
+                    <tr><td style="padding:0 30px;"><div style="height:1px;background:#e4ece8;">&nbsp;</div></td></tr>
+                    <tr><td dir="ltr" align="left" style="direction:ltr;text-align:left;padding:18px 30px 28px;font-size:12px;line-height:1.7;color:#7a8c85;">Aqla | SmokefreeKSA</td></tr>
+                  </table>
+                </td></tr>
+              </table>
+            </body>
+          </html>`;
+            return { subject, text, html };
+          }
+
+          async function setState(pk, sk, status, values = {}, remove = []) {
+            const names = { '#status': 'status' };
+            const attrs = { ':status': { S: status }, ':now': { S: new Date().toISOString() } };
+            const sets = ['#status = :status', 'updated_at = :now'];
+            for (const [key, value] of Object.entries(values)) {
+              names[`#${key}`] = key;
+              attrs[`:${key}`] = { S: String(value).slice(0, 1000) };
+              sets.push(`#${key} = :${key}`);
+            }
+            const expression = `SET ${sets.join(', ')}${remove.length ? ` REMOVE ${remove.join(', ')}` : ''}`;
+            await ddb.send(new UpdateItemCommand({
+              TableName: table,
+              Key: { PK: { S: pk }, SK: { S: sk } },
+              UpdateExpression: expression,
+              ExpressionAttributeNames: names,
+              ExpressionAttributeValues: attrs,
+            }));
+          }
+
+          exports.handler = async (event) => {
+            const userSub = typeof event?.userSub === 'string' ? event.userSub : '';
+            const planId = typeof event?.planId === 'string' ? event.planId : '';
+            const followupType = typeof event?.followupType === 'string' ? event.followupType : '';
+            const scheduledAt = typeof event?.scheduledAt === 'string' ? event.scheduledAt : '';
+            if (!userSub || !/^[0-9a-f-]{36}$/i.test(planId) || !allowedTypes.has(followupType) || !scheduledAt) throw new Error('invalid_followup_event');
+
+            const pk = `USER#${userSub}`;
+            const sk = `FOLLOWUP#${scheduledAt}#${planId}#${followupType}`;
+            const current = await ddb.send(new GetItemCommand({ TableName: table, Key: { PK: { S: pk }, SK: { S: sk } }, ConsistentRead: true }));
+            const item = current.Item;
+            if (!item) return { skipped: 'not_found' };
+
+            const status = item.status?.S || '';
+            if (['sent', 'responded', 'completed'].includes(status)) return { skipped: status };
+            if (status === 'sending') return { skipped: 'already_sending' };
+            if (!['scheduled', 'send_failed'].includes(status)) return { skipped: `state_${status || 'unknown'}` };
+
+            try {
+              await ddb.send(new UpdateItemCommand({
+                TableName: table,
+                Key: { PK: { S: pk }, SK: { S: sk } },
+                UpdateExpression: 'SET #status = :sending, send_started_at = :now, updated_at = :now ADD attempt_count :one',
+                ConditionExpression: '#status = :scheduled OR #status = :failed',
+                ExpressionAttributeNames: { '#status': 'status' },
+                ExpressionAttributeValues: {
+                  ':sending': { S: 'sending' }, ':now': { S: new Date().toISOString() }, ':one': { N: '1' },
+                  ':scheduled': { S: 'scheduled' }, ':failed': { S: 'send_failed' },
+                },
+              }));
+            } catch (error) {
+              if (error?.name === 'ConditionalCheckFailedException') return { skipped: 'duplicate_invocation' };
+              throw error;
+            }
+
+            const to = item.recipient_email?.S;
+            const lang = item.lang?.S === 'en' ? 'en' : 'ar';
+            if (!to) {
+              await setState(pk, sk, 'no_verified_email');
+              return { skipped: 'no_verified_email' };
+            }
+
+            const url = `${appUrl}/aqla/followup/${encodeURIComponent(planId)}/${followupType}?lang=${lang}`;
+            const content = emailContent(followupType, lang, url);
+
+            try {
+              const sent = await ses.send(new SendEmailCommand({
+                FromEmailAddress: fromEmail,
+                ReplyToAddresses: [replyTo],
+                Destination: { ToAddresses: [to] },
+                ConfigurationSetName: configurationSet,
+                Content: { Simple: {
+                  Subject: { Data: content.subject, Charset: 'UTF-8' },
+                  Body: { Text: { Data: content.text, Charset: 'UTF-8' }, Html: { Data: content.html, Charset: 'UTF-8' } },
+                } },
+              }));
+              await setState(pk, sk, 'sent', { sent_at: new Date().toISOString(), ses_message_id: sent.MessageId || '' }, ['send_started_at', 'last_error']);
+              return { sent: true, messageId: sent.MessageId };
+            } catch (error) {
+              const message = error instanceof Error ? error.message : 'unknown_send_error';
+              await setState(pk, sk, 'send_failed', { last_error: message }, ['send_started_at']);
+              throw error;
+            }
+          };
+
+  FollowupWorkerLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: FollowupWorker
+    Properties:
+      LogGroupName: /aws/lambda/aqla-v2-staging-followup-worker
+      RetentionInDays: 30
+
+  SchedulerInvokeRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: aqla-v2-staging-followup-scheduler-invoke
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: scheduler.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: invoke-aqla-followup-worker
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: lambda:InvokeFunction
+                Resource: !GetAtt FollowupWorker.Arn
+
+  AmplifySchedulerPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: aqla-v2-staging-create-followup-schedules
+      Roles:
+        - !Ref AmplifyRuntimeRoleName
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: CreateAqlaFollowupSchedules
+            Effect: Allow
+            Action:
+              - scheduler:CreateSchedule
+            Resource: !Sub arn:${AWS::Partition}:scheduler:${AWS::Region}:${AWS::AccountId}:schedule/aqla-v2-staging-followups/*
+          - Sid: PassOnlyAqlaSchedulerInvokeRole
+            Effect: Allow
+            Action: iam:PassRole
+            Resource: !GetAtt SchedulerInvokeRole.Arn
+            Condition:
+              StringEquals:
+                iam:PassedToService: scheduler.amazonaws.com
+
+Outputs:
+  FollowupWorkerArn:
+    Value: !GetAtt FollowupWorker.Arn
+  SchedulerInvokeRoleArn:
+    Value: !GetAtt SchedulerInvokeRole.Arn
+  SchedulerGroupName:
+    Value: !Ref FollowupScheduleGroup
+  ExistingAmplifyRoleUpdated:
+    Value: !Ref AmplifyRuntimeRoleName
