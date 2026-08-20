@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { incrementAnalyticsMetric } from '@/lib/analytics.server'
 import { buildAdaptiveTriage, validateAdaptiveAssessment, type AdaptiveAssessmentAnswers, type AdaptiveTriageProfile } from '@/lib/adaptive-assessment'
 import { FOLLOWUP_DEFINITIONS } from '@/lib/followup-policy'
+import { consumeGuestAiQuota } from '@/lib/guest-ai-quota.server'
 import { validateMutationRequest } from '@/lib/http-security.server'
 import { openAIStructuredResponse } from '@/lib/openai.server'
 import { buildPersonalPlanV2Enrichment, deriveCigaretteBand, validatePersonalPlanV2Answers, type PersonalPlanV2Answers, type PersonalPlanV2Enrichment } from '@/lib/personal-plan-v2'
@@ -14,6 +15,7 @@ import { currentPlanProvenance } from '@/lib/quit-engine/versioning'
 export const dynamic = 'force-dynamic'
 
 const PRIVATE_HEADERS = { 'Cache-Control': 'no-store, private' }
+const VISITOR_COOKIE = 'aqla_vid'
 type Body = { lang?: 'ar' | 'en'; answers?: unknown; personal_plan_v2?: unknown; adaptive_assessment?: unknown }
 type GuestAnswers = EngineAnswers & { personal_plan_v2: PersonalPlanV2Answers; adaptive_assessment: AdaptiveAssessmentAnswers }
 type GuestResult = EngineResult & { personal_plan_v2: PersonalPlanV2Enrichment; adaptive_triage: AdaptiveTriageProfile }
@@ -60,6 +62,8 @@ export async function POST(request: NextRequest) {
   let body: Body
   try { body = await request.json() as Body } catch { return json({ error: 'invalid_json' }, 400) }
   const lang = body.lang === 'en' ? 'en' : 'ar'
+  const existingVisitorId = request.cookies.get(VISITOR_COOKIE)?.value?.trim()
+  const visitorId = existingVisitorId || randomUUID()
 
   let rawBase = body.answers
   if (rawBase && typeof rawBase === 'object' && body.personal_plan_v2 && typeof body.personal_plan_v2 === 'object') {
@@ -96,7 +100,8 @@ export async function POST(request: NextRequest) {
   const provenance = currentPlanProvenance()
   result.provenance = provenance
 
-  if (!result.safety_immediate) {
+  const aiQuotaAvailable = !result.safety_immediate && await consumeGuestAiQuota(visitorId)
+  if (aiQuotaAvailable) {
     try {
       const anonymised = {
         products: answers.product_types,
@@ -198,5 +203,15 @@ export async function POST(request: NextRequest) {
   }
 
   await track('plan_generated')
-  return json({ plan, guest: true })
+  const response = json({ plan, guest: true })
+  if (!existingVisitorId) {
+    response.cookies.set(VISITOR_COOKIE, visitorId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 400 * 24 * 60 * 60,
+    })
+  }
+  return response
 }
