@@ -4,4 +4,4 @@ This documentation marker records the current Aqla staging hardening pass on `ag
 
 The candidate includes the institutional Light / Dim / Night design, guest adaptive plans, anonymous OpenAI throttling, suppression of unsupported public placeholder claims, per-plan email and follow-up diagnostics, explicit safety-hold communication states, removal of icon-style success markers, and strict failure when signed-in plan persistence is unavailable.
 
-Purpose: create a fresh push for the existing AWS Amplify staging build without changing production `main`.
+The current head is ready for the final CI QA gate. Production `main` remains unchanged.
