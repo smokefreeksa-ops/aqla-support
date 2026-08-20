@@ -10,6 +10,7 @@ import './admin.css'
 import './engagement.css'
 import './aqla-institutional.css'
 import './aqla-theme-overrides.css'
+import './aqla-public-claims-safety.css'
 
 export const metadata: Metadata = {
   title: 'أقلع — Aqla',
