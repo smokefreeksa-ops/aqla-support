@@ -80,6 +80,8 @@
 .study-university, .study-details-body, .study-tags span, .study-skip { color: var(--aq-text-muted); }
 .study-primary-button { background: var(--aq-primary); color: #fff; border-color: var(--aq-gold); }
 .study-secondary-button, .study-details summary { color: var(--aq-text); border-color: var(--aq-border); background: var(--aq-surface); }
+.study-details summary { list-style: none; }
+.study-details summary::-webkit-details-marker { display: none; }
 .study-language { background: var(--aq-header-2); color: var(--aq-on-dark); border-color: color-mix(in srgb, var(--aq-gold) 50%, transparent); }
 
 html[data-aqla-theme='light'] .qe-topbar,
