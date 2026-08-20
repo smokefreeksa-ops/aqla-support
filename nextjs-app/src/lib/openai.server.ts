@@ -1,9 +1,9 @@
 import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager'
 
 const secrets = new SecretsManagerClient({ region: process.env.AWS_REGION || 'eu-west-2' })
-const SECRET_ID = 'aqla/v2/staging/openai'
-
-export const AQla_OPENAI_MODEL = 'gpt-5.6'
+const SECRET_ID = process.env.AQLA_OPENAI_SECRET_ID || 'aqla/v2/staging/openai'
+export const AQLA_OPENAI_MODEL = process.env.AQLA_OPENAI_MODEL || 'gpt-5.6'
+const OPENAI_TIMEOUT_MS = Number(process.env.AQLA_OPENAI_TIMEOUT_MS || 10000)
 
 let cachedKey: Promise<string> | undefined
 
@@ -61,6 +61,10 @@ export async function openAIStructuredResponse<T>({
   maxOutputTokens?: number
 }): Promise<{ data: T; model: string; requestId?: string }> {
   const apiKey = await getOpenAIApiKey()
+  const timeoutMs = Number.isFinite(OPENAI_TIMEOUT_MS) && OPENAI_TIMEOUT_MS >= 1000 && OPENAI_TIMEOUT_MS <= 30000
+    ? OPENAI_TIMEOUT_MS
+    : 10000
+
   const response = await fetch('https://api.openai.com/v1/responses', {
     method: 'POST',
     headers: {
@@ -68,7 +72,7 @@ export async function openAIStructuredResponse<T>({
       authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: AQla_OPENAI_MODEL,
+      model: AQLA_OPENAI_MODEL,
       store: false,
       reasoning: { effort: 'low' },
       max_output_tokens: maxOutputTokens,
@@ -84,6 +88,7 @@ export async function openAIStructuredResponse<T>({
         },
       },
     }),
+    signal: AbortSignal.timeout(timeoutMs),
   })
 
   const requestId = response.headers.get('x-request-id') || undefined
@@ -98,7 +103,7 @@ export async function openAIStructuredResponse<T>({
 
   return {
     data: JSON.parse(raw) as T,
-    model: AQla_OPENAI_MODEL,
+    model: AQLA_OPENAI_MODEL,
     requestId,
   }
 }
