@@ -1,0 +1,262 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Aqla v2 staging SES delivery, bounce and complaint event pipeline
+
+Parameters:
+  TableName:
+    Type: String
+    Default: aqla-v2-staging
+  ConfigurationSetName:
+    Type: String
+    Default: aqla-transactional
+
+Resources:
+  EmailEventTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: aqla-v2-staging-email-events
+      KmsMasterKeyId: alias/aws/sns
+      Tags:
+        - Key: Application
+          Value: Aqla
+        - Key: Environment
+          Value: staging
+
+  EmailEventDlq:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: aqla-v2-staging-email-events-dlq
+      MessageRetentionPeriod: 1209600
+      SqsManagedSseEnabled: true
+      Tags:
+        - Key: Application
+          Value: Aqla
+        - Key: Environment
+          Value: staging
+
+  EmailEventDlqPolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - !Ref EmailEventDlq
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowSnsRedrive
+            Effect: Allow
+            Principal:
+              Service: sns.amazonaws.com
+            Action: sqs:SendMessage
+            Resource: !GetAtt EmailEventDlq.Arn
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref EmailEventTopic
+
+  EmailEventWorkerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: aqla-v2-staging-email-event-worker-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: aqla-email-event-dynamodb
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:UpdateItem
+                  - dynamodb:PutItem
+                Resource: !Sub arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TableName}
+
+  EmailEventWorker:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: aqla-v2-staging-email-event-worker
+      Description: Records SES delivery events and suppresses permanent bounces/complaints without storing raw recipient email in the suppression index.
+      Runtime: nodejs22.x
+      Handler: index.handler
+      Role: !GetAtt EmailEventWorkerRole.Arn
+      Timeout: 20
+      MemorySize: 256
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref TableName
+      Code:
+        ZipFile: |
+          const crypto = require('node:crypto');
+          const { DynamoDBClient, PutItemCommand, UpdateItemCommand } = require('@aws-sdk/client-dynamodb');
+
+          const ddb = new DynamoDBClient({});
+          const table = process.env.TABLE_NAME;
+
+          function normaliseEmail(value) {
+            return String(value || '').trim().toLowerCase().slice(0, 320);
+          }
+
+          function emailHash(email) {
+            return crypto.createHash('sha256').update(normaliseEmail(email)).digest('hex');
+          }
+
+          function day(value = new Date()) {
+            return value.toISOString().slice(0, 10);
+          }
+
+          async function increment(metric, timestamp) {
+            const when = timestamp && !Number.isNaN(Date.parse(timestamp)) ? new Date(timestamp) : new Date();
+            await ddb.send(new UpdateItemCommand({
+              TableName: table,
+              Key: { PK: { S: 'ANALYTICS#DAILY' }, SK: { S: day(when) } },
+              UpdateExpression: 'SET schema_version = if_not_exists(schema_version, :version), updated_at = :now ADD #metric :one',
+              ExpressionAttributeNames: { '#metric': metric },
+              ExpressionAttributeValues: {
+                ':version': { N: '1' },
+                ':now': { S: new Date().toISOString() },
+                ':one': { N: '1' },
+              },
+            }));
+          }
+
+          async function suppress(email, reason, messageId, timestamp) {
+            const clean = normaliseEmail(email);
+            if (!clean) return;
+            const hash = emailHash(clean);
+            const now = new Date().toISOString();
+            await ddb.send(new UpdateItemCommand({
+              TableName: table,
+              Key: { PK: { S: `COMM#EMAIL#${hash}` }, SK: { S: 'STATE' } },
+              UpdateExpression: 'SET entity_type = :type, schema_version = :version, email_hash = :hash, followup_enabled = if_not_exists(followup_enabled, :true), research_enabled = if_not_exists(research_enabled, :true), global_suppressed = :true, suppression_reason = :reason, suppression_source = :source, suppressed_at = :now, updated_at = :now, created_at = if_not_exists(created_at, :now)',
+              ExpressionAttributeValues: {
+                ':type': { S: 'email_preference' },
+                ':version': { N: '1' },
+                ':hash': { S: hash },
+                ':true': { BOOL: true },
+                ':reason': { S: reason },
+                ':source': { S: 'amazon_ses_event' },
+                ':now': { S: now },
+              },
+            }));
+
+            await ddb.send(new PutItemCommand({
+              TableName: table,
+              Item: {
+                PK: { S: `COMM#EVENT#${day(timestamp && !Number.isNaN(Date.parse(timestamp)) ? new Date(timestamp) : new Date())}` },
+                SK: { S: `${timestamp || now}#${messageId || 'unknown'}#${hash}` },
+                entity_type: { S: 'email_suppression_event' },
+                email_hash: { S: hash },
+                reason: { S: reason },
+                ses_message_id: { S: String(messageId || '').slice(0, 200) },
+                created_at: { S: now },
+              },
+              ConditionExpression: 'attribute_not_exists(PK) AND attribute_not_exists(SK)',
+            })).catch((error) => {
+              if (error?.name !== 'ConditionalCheckFailedException') throw error;
+            });
+          }
+
+          function bounceRecipients(event) {
+            return Array.isArray(event?.bounce?.bouncedRecipients)
+              ? event.bounce.bouncedRecipients.map((item) => item?.emailAddress).filter(Boolean)
+              : [];
+          }
+
+          function complaintRecipients(event) {
+            return Array.isArray(event?.complaint?.complainedRecipients)
+              ? event.complaint.complainedRecipients.map((item) => item?.emailAddress).filter(Boolean)
+              : [];
+          }
+
+          async function processEvent(event) {
+            const type = String(event?.eventType || event?.notificationType || '').toLowerCase();
+            const timestamp = event?.mail?.timestamp || new Date().toISOString();
+            const messageId = event?.mail?.messageId || '';
+
+            if (type === 'delivery') {
+              await increment('email_delivered', timestamp);
+              return;
+            }
+
+            if (type === 'bounce') {
+              await increment('email_bounced', timestamp);
+              const permanent = String(event?.bounce?.bounceType || '').toLowerCase() === 'permanent';
+              if (permanent) {
+                for (const recipient of bounceRecipients(event)) await suppress(recipient, 'hard_bounce', messageId, timestamp);
+              }
+              return;
+            }
+
+            if (type === 'complaint') {
+              await increment('email_complained', timestamp);
+              for (const recipient of complaintRecipients(event)) await suppress(recipient, 'complaint', messageId, timestamp);
+              return;
+            }
+
+            if (type === 'reject') await increment('email_rejected', timestamp);
+            if (type === 'deliverydelay' || type === 'delivery_delay') await increment('email_delivery_delayed', timestamp);
+          }
+
+          exports.handler = async (snsEvent) => {
+            for (const record of snsEvent?.Records || []) {
+              const raw = record?.Sns?.Message;
+              if (!raw) continue;
+              let event;
+              try { event = JSON.parse(raw); } catch { throw new Error('invalid_ses_event_json'); }
+              await processEvent(event);
+            }
+            return { processed: (snsEvent?.Records || []).length };
+          };
+      Tags:
+        - Key: Application
+          Value: Aqla
+        - Key: Environment
+          Value: staging
+
+  EmailEventWorkerInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref EmailEventWorker
+      Action: lambda:InvokeFunction
+      Principal: sns.amazonaws.com
+      SourceArn: !Ref EmailEventTopic
+
+  EmailEventSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref EmailEventTopic
+      Protocol: lambda
+      Endpoint: !GetAtt EmailEventWorker.Arn
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt EmailEventDlq.Arn
+    DependsOn:
+      - EmailEventWorkerInvokePermission
+      - EmailEventDlqPolicy
+
+  SesEventDestination:
+    Type: AWS::SES::ConfigurationSetEventDestination
+    Properties:
+      ConfigurationSetName: !Ref ConfigurationSetName
+      EventDestination:
+        Name: aqla-delivery-events
+        Enabled: true
+        MatchingEventTypes:
+          - DELIVERY
+          - BOUNCE
+          - COMPLAINT
+          - REJECT
+          - DELIVERY_DELAY
+        SnsDestination:
+          TopicARN: !Ref EmailEventTopic
+
+Outputs:
+  EmailEventTopicArn:
+    Value: !Ref EmailEventTopic
+  EmailEventWorkerArn:
+    Value: !GetAtt EmailEventWorker.Arn
+  EmailEventDlqArn:
+    Value: !GetAtt EmailEventDlq.Arn
