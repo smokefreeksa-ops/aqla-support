@@ -27,6 +27,16 @@ function atExpression(iso: string) {
   return `at(${value.toISOString().replace(/\.\d{3}Z$/, '')})`
 }
 
+async function recordScheduled(userSub: string, planId: string, type: FollowupType, name: string) {
+  await markFollowupScheduleState({
+    userSub,
+    planId,
+    followupType: type,
+    status: 'scheduled',
+    scheduleName: name,
+  })
+}
+
 export async function schedulePlanFollowups({
   userSub,
   plan,
@@ -69,15 +79,22 @@ export async function schedulePlanFollowups({
         },
       }))
 
-      await markFollowupScheduleState({
-        userSub,
-        planId: plan.plan_id,
-        followupType: type,
-        status: 'scheduled',
-        scheduleName: name,
-      })
+      await recordScheduled(userSub, plan.plan_id, type, name)
       results.push({ followup_type: type, schedule_name: name, status: 'scheduled' })
     } catch (error) {
+      // CreateSchedule is effectively idempotent for our deterministic name. If AWS
+      // confirms that name already exists, treat it as scheduled rather than turning
+      // a successful earlier creation/network retry into a false failure state.
+      if (error instanceof Error && error.name === 'ConflictException') {
+        try {
+          await recordScheduled(userSub, plan.plan_id, type, name)
+          results.push({ followup_type: type, schedule_name: name, status: 'scheduled' })
+          continue
+        } catch (markError) {
+          console.error('Aqla existing follow-up schedule could not be recorded', markError instanceof Error ? markError.message : 'unknown')
+        }
+      }
+
       const message = error instanceof Error ? error.message : 'unknown_scheduler_error'
       console.error(`Aqla ${type} follow-up scheduling unavailable`, message)
 
