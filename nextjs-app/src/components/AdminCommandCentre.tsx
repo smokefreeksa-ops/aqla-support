@@ -25,7 +25,10 @@ export default function AdminCommandCentre({
     ['Quit plans generated', totals.plan_generated, 'Plans successfully built by the quit engine'],
     ['Quit plans persisted', totals.plan_persisted, 'Plans saved to the participant account'],
     ['Plan emails sent', totals.plan_email_sent, 'Plan-ready or user-requested plan emails accepted by SES'],
-    ['Plan email failures', totals.plan_email_failed, 'Plan email send attempts that failed'],
+    ['Email delivered', totals.email_delivered, 'SES delivery events received from recipient mail servers'],
+    ['Hard/other bounces', totals.email_bounced, 'SES bounce events; permanent bounces enter Aqla suppression'],
+    ['Complaints', totals.email_complained, 'SES complaint events; recipients enter Aqla suppression'],
+    ['Plan email failures', totals.plan_email_failed, 'Plan email send attempts that failed before SES acceptance'],
     ['Follow-ups completed', totals.followup_completed, 'Participant follow-up responses saved'],
     ['Craving support sessions', totals.craving_support_sessions, 'Aqla OS craving-support tool selections'],
     ['Safety escalations', totals.safety_escalations, 'Deterministic urgent-safety overrides in Aqla OS'],
@@ -90,15 +93,18 @@ export default function AdminCommandCentre({
           </article>
 
           <article className="admin-panel">
-            <div className="admin-panel-head"><div><span>Communications</span><h2>Channel status</h2></div></div>
+            <div className="admin-panel-head"><div><span>Communications</span><h2>Email reputation and delivery</h2></div></div>
             <div className="admin-status-list">
-              <div><span>Email sent</span><strong>{valueOrNA(totals.plan_email_sent, locale)}</strong></div>
-              <div><span>Email failures</span><strong>{valueOrNA(totals.plan_email_failed, locale)}</strong></div>
-              <div><span>Email delivered</span><strong className="na">Not available</strong></div>
-              <div><span>WhatsApp sent</span><strong className="na">Not available</strong></div>
+              <div><span>SES accepted</span><strong>{valueOrNA(totals.plan_email_sent, locale)}</strong></div>
+              <div><span>Delivered</span><strong>{valueOrNA(totals.email_delivered, locale)}</strong></div>
+              <div><span>Bounced</span><strong>{valueOrNA(totals.email_bounced, locale)}</strong></div>
+              <div><span>Complaints</span><strong>{valueOrNA(totals.email_complained, locale)}</strong></div>
+              <div><span>Rejected</span><strong>{valueOrNA(totals.email_rejected, locale)}</strong></div>
+              <div><span>Delivery delayed</span><strong>{valueOrNA(totals.email_delivery_delayed, locale)}</strong></div>
+              <div><span>Pre-SES failures</span><strong>{valueOrNA(totals.plan_email_failed, locale)}</strong></div>
               <div><span>WhatsApp delivered/read</span><strong className="na">Not available</strong></div>
             </div>
-            <p className="admin-definition">Delivery/read metrics remain unavailable until provider receipts are integrated. “Sent” is never presented as “delivered”.</p>
+            <p className="admin-definition">SES delivery, bounce and complaint values become available only after the staging SES event destination is deployed. Permanent bounces and complaints are written to the Aqla suppression state.</p>
           </article>
         </section>
       </section>
