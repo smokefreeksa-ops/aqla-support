@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import QuitEngineAssessment from '@/components/QuitEngineAssessment'
+import QuitEngineAssessmentV2 from '@/components/QuitEngineAssessmentV2'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
 
 export const dynamic = 'force-dynamic'
@@ -24,5 +24,5 @@ export default async function AssessmentPage() {
     redirect(`/auth/refresh?returnTo=${encodeURIComponent('/aqla/assessment')}`)
   }
 
-  return <QuitEngineAssessment signedIn={signedIn} />
+  return <QuitEngineAssessmentV2 signedIn={signedIn} />
 }
