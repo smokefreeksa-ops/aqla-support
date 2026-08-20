@@ -1,7 +1,7 @@
-# Staging deployment trigger — 2026-08-20
+# Staging deployment trigger — 2026-08-21
 
-This documentation marker records the current staging deployment checkpoint on `agent/nextjs-aws-migration`, the AWS Amplify staging branch for Aqla.
+This documentation marker records the current Aqla staging hardening pass on `agent/nextjs-aws-migration`, the AWS Amplify staging branch.
 
-The current staging candidate includes the institutional homepage, Light / Dim / Night display system, guest adaptive plans, and a privacy-preserving anonymous OpenAI quota that never blocks the deterministic Aqla plan.
+The candidate includes the institutional Light / Dim / Night design, guest adaptive plans, anonymous OpenAI throttling, suppression of unsupported public placeholder claims, per-plan email and follow-up diagnostics, explicit safety-hold communication states, removal of icon-style success markers, and strict failure when signed-in plan persistence is unavailable.
 
-Production `main` remains unchanged.
+Purpose: create a fresh push for the existing AWS Amplify staging build without changing production `main`.
