@@ -221,7 +221,7 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
       </section>
 
       <div className="qp-shell">
-        {!plan.persisted ? <div className="qp-sync-warning">{ar ? 'الخطة متاحة مؤقتًا في جلسة المتصفح لأن مزامنة الحساب غير متاحة الآن. أعد المحاولة لاحقًا للتأكد من حفظها في حسابك.' : 'This plan is temporarily available in this browser session because account sync is unavailable. Try again later to ensure it is saved to your account.'}</div> : <div className="qp-sync-ok">{ar ? '✓ محفوظة بأمان في حسابك' : '✓ Securely saved to your account'}</div>}
+        {!plan.persisted ? <div className="qp-sync-warning">{ar ? 'الخطة متاحة مؤقتًا في جلسة المتصفح لأن مزامنة الحساب غير متاحة الآن. أعد المحاولة لاحقًا للتأكد من حفظها في حسابك.' : 'This plan is temporarily available in this browser session because account sync is unavailable. Try again later to ensure it is saved to your account.'}</div> : <div className="qp-sync-ok">{ar ? 'محفوظة بأمان في حسابك' : 'Securely saved to your account'}</div>}
 
         {result.safety_immediate ? <section className="qp-safety"><strong>{ar ? 'سلامتك أولًا' : 'Safety first'}</strong><p>{result.safety_immediate}</p></section> : null}
 
@@ -267,14 +267,14 @@ export default function QuitPlanResult({ planId, initialLang }: { planId: string
 
         <PlanCard title={ar ? 'بطاقة الرغبة السريعة' : 'Quick craving card'}>
           <div className="qp-craving-card strong">{result.craving_card}</div>
-          <button type="button" className="qp-small-button screen-only" onClick={() => void copyText(result.craving_card, 'craving')}>{copied === 'craving' ? (ar ? 'تم النسخ ✓' : 'Copied ✓') : (ar ? 'نسخ البطاقة' : 'Copy card')}</button>
+          <button type="button" className="qp-small-button screen-only" onClick={() => void copyText(result.craving_card, 'craving')}>{copied === 'craving' ? (ar ? 'تم النسخ' : 'Copied') : (ar ? 'نسخ البطاقة' : 'Copy card')}</button>
         </PlanCard>
 
         <PlanCard title={ar ? 'السلامة والدعم المهني' : 'Safety and professional support'}>
           <p>{result.referral_message}</p>
         </PlanCard>
 
-        {result.support_message_template ? <PlanCard title={ar ? 'رسالة جاهزة لشخص الدعم' : 'Message for your support person'}><div className="qp-support-message">{result.support_message_template}</div><button type="button" className="qp-small-button screen-only" onClick={() => void copyText(result.support_message_template ?? '', 'support')}>{copied === 'support' ? (ar ? 'تم النسخ ✓' : 'Copied ✓') : (ar ? 'نسخ الرسالة' : 'Copy message')}</button></PlanCard> : null}
+        {result.support_message_template ? <PlanCard title={ar ? 'رسالة جاهزة لشخص الدعم' : 'Message for your support person'}><div className="qp-support-message">{result.support_message_template}</div><button type="button" className="qp-small-button screen-only" onClick={() => void copyText(result.support_message_template ?? '', 'support')}>{copied === 'support' ? (ar ? 'تم النسخ' : 'Copied') : (ar ? 'نسخ الرسالة' : 'Copy message')}</button></PlanCard> : null}
 
         <PlanCard title={ar ? 'المتابعة المخططة' : 'Planned follow-up'}>
           <div className="qp-followups">{followupLabels.map((label) => <span key={label}>{label}</span>)}</div>
