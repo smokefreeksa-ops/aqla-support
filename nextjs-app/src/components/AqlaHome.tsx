@@ -6,9 +6,6 @@ import AqlaAssistant from '@/components/AqlaAssistant'
 const LOGO_URL = '/aqla-logo.png'
 const REDCAP_URL = 'https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM'
 const ASSESSMENT_URL = '/aqla/assessment'
-const DASHBOARD_URL = '/aqla/dashboard'
-const SOS_URL = '/aqla/sos'
-const ACADEMY_URL = '/aqla/academy'
 
 export default function AqlaHome({
   signedIn,
@@ -21,7 +18,6 @@ export default function AqlaHome({
   const ar = lang === 'ar'
   const savedPlanUrl = latestPlanId ? `/aqla/plan/${encodeURIComponent(latestPlanId)}?lang=${lang}` : null
   const assistantLoginUrl = `/auth/login?returnTo=${encodeURIComponent('/aqla#assistant')}`
-  const dashboardUrl = signedIn ? `${DASHBOARD_URL}?lang=${lang}` : `/auth/login?returnTo=${encodeURIComponent(`${DASHBOARD_URL}?lang=${lang}`)}`
 
   function clearPrivateBrowserData() {
     for (const storage of [window.localStorage, window.sessionStorage]) {
@@ -48,16 +44,14 @@ export default function AqlaHome({
           <nav className="aqla-nav" aria-label={ar ? 'التنقل الرئيسي' : 'Primary navigation'}>
             <a href="/aqla">{ar ? 'الرئيسية' : 'Home'}</a>
             <a href={ASSESSMENT_URL}>{ar ? 'خطة الإقلاع' : 'Quit plan'}</a>
-            <a href={dashboardUrl}>{ar ? 'لوحتي' : 'My Aqla'}</a>
-            <a href={`${SOS_URL}?lang=${lang}`}>{ar ? 'مساعدة سريعة' : 'Quick help'}</a>
-            <a href={`${ACADEMY_URL}?lang=${lang}`}>{ar ? 'الأكاديمية' : 'Academy'}</a>
+            {savedPlanUrl ? <a href={savedPlanUrl}>{ar ? 'خطتي المحفوظة' : 'My saved plan'}</a> : null}
             <a href="#assistant">{ar ? 'مساعد أقلع' : 'Aqla Assistant'}</a>
           </nav>
           <div className="aqla-header-actions">
             <button className="aqla-header-button" type="button" aria-label={ar ? 'Switch to English' : 'التبديل إلى العربية'} onClick={() => setLang(ar ? 'en' : 'ar')}>{ar ? 'EN' : 'ع'}</button>
             {signedIn ? (
               <>
-                <a className="aqla-header-button" href={`${DASHBOARD_URL}?lang=${lang}`}>{ar ? 'لوحتي' : 'My Aqla'}</a>
+                <a className="aqla-header-button" href={savedPlanUrl ?? ASSESSMENT_URL}>{savedPlanUrl ? (ar ? 'خطتي' : 'My plan') : (ar ? 'ابدأ خطة' : 'Start a plan')}</a>
                 <a className="aqla-header-button" href="/auth/logout" onClick={clearPrivateBrowserData}>{ar ? 'تسجيل الخروج' : 'Sign out'}</a>
               </>
             ) : (
@@ -83,9 +77,7 @@ export default function AqlaHome({
             <p className="hero-lead">{ar ? 'دعم رقمي عملي يساعدك على فهم نمط استخدامك، بناء خطة شخصية، والعودة لمتابعة تقدمك بخطوات واضحة ومحترمة.' : 'Practical digital support to understand your nicotine use, build a personal plan and return to review your progress with clear, respectful next steps.'}</p>
             <div className="hero-actions">
               <a href={ASSESSMENT_URL} className="hero-primary">{ar ? 'ابدأ خطتي الشخصية' : 'Start my personal plan'}</a>
-              {signedIn ? (
-                <a href={`${DASHBOARD_URL}?lang=${lang}`} className="hero-secondary">{ar ? 'افتح لوحتي' : 'Open My Aqla'}</a>
-              ) : savedPlanUrl ? (
+              {savedPlanUrl ? (
                 <a href={savedPlanUrl} className="hero-secondary">{ar ? 'افتح خطتي المحفوظة' : 'Open my saved plan'}</a>
               ) : (
                 <a href="#assistant" className="hero-secondary">{ar ? 'اسأل مساعد أقلع' : 'Ask Aqla Assistant'}</a>
@@ -110,21 +102,6 @@ export default function AqlaHome({
                 <h3>{ar ? 'التقييم وخطة الإقلاع الشخصية' : 'Assessment and personal quit plan'}</h3>
                 <p>{ar ? 'ثماني خطوات قصيرة لفهم استخدامك ومحفزاتك واستعدادك، ثم حفظ خطة شخصية في حسابك.' : 'Eight short steps to understand your use, triggers and readiness, then save a personal plan to your account.'}</p>
                 <a href={ASSESSMENT_URL}>{ar ? 'ابدأ التقييم' : 'Start assessment'}</a>
-              </article>
-              <article className="pathway-card">
-                <h3>{ar ? 'لوحتي — My Aqla' : 'My Aqla dashboard'}</h3>
-                <p>{ar ? 'مكان واحد لفتح خطتك ومراجعة متابعة اليوم 3 و7 و30 وبطاقة الرغبة ومستوى الدعم.' : 'One place for your saved plan, Day 3/7/30 check-ins, craving card and support level.'}</p>
-                <a href={dashboardUrl}>{signedIn ? (ar ? 'افتح لوحتي' : 'Open dashboard') : (ar ? 'سجّل الدخول لفتح اللوحة' : 'Sign in for dashboard')}</a>
-              </article>
-              <article className="pathway-card">
-                <h3>{ar ? 'مساعدة سريعة وقت الرغبة أو الزلة' : 'Quick help for cravings or slips'}</h3>
-                <p>{ar ? 'خطوات فورية للرغبة الشديدة، الزلة، الانسحاب، الرغبة في شراء النيكوتين، أو الحاجة لدعم أقوى.' : 'Immediate steps for a strong craving, slip, withdrawal, buying urge or need for stronger support.'}</p>
-                <a href={`${SOS_URL}?lang=${lang}`}>{ar ? 'أحتاج مساعدة الآن' : 'I need help now'}</a>
-              </article>
-              <article className="pathway-card">
-                <h3>{ar ? 'أكاديمية أقلع' : 'Aqla Academy'}</h3>
-                <p>{ar ? 'مكتبة بداية عملية لفهم نمط النيكوتين والمحـفزات والرغبة والانسحاب ومنع الانتكاس.' : 'A practical starter library on nicotine patterns, triggers, cravings, withdrawal and relapse prevention.'}</p>
-                <a href={`${ACADEMY_URL}?lang=${lang}`}>{ar ? 'ابدأ التعلم' : 'Start learning'}</a>
               </article>
               <article className="pathway-card">
                 <h3>{savedPlanUrl ? (ar ? 'العودة إلى خطتك' : 'Return to your plan') : (ar ? 'مساعد أقلع التثقيفي' : 'Aqla educational assistant')}</h3>
@@ -157,8 +134,7 @@ export default function AqlaHome({
       </main>
 
       <footer className="aqla-footer">
-        <span>Aqla — أقلع · {ar ? 'دعم الإقلاع عن التدخين والنيكوتين' : 'Smoking and nicotine cessation support'}</span>
-        <span> · <a href={`/info/about?lang=${lang}`}>{ar ? 'عن أقلع' : 'About'}</a> · <a href={`/info/faq?lang=${lang}`}>{ar ? 'الأسئلة الشائعة' : 'FAQ'}</a> · <a href={`/info/privacy?lang=${lang}`}>{ar ? 'الخصوصية' : 'Privacy'}</a> · <a href={`/info/medical-disclaimer?lang=${lang}`}>{ar ? 'التنبيه الطبي' : 'Medical disclaimer'}</a> · <a href={`/info/contact?lang=${lang}`}>{ar ? 'تواصل' : 'Contact'}</a></span>
+        Aqla — أقلع · {ar ? 'دعم الإقلاع عن التدخين والنيكوتين' : 'Smoking and nicotine cessation support'} · <a href="mailto:smokefreeksa@gmail.com">{ar ? 'الدعم' : 'Support'}</a>
       </footer>
       {signedIn ? <AqlaAssistant lang={lang} /> : null}
     </div>
