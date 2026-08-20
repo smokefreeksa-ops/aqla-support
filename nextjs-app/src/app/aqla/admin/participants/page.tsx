@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { getAqlaStaffRole, getCurrentAqlaUser } from '@/lib/current-user.server'
 import { listParticipants, searchParticipants } from '@/lib/crm/participant.server'
@@ -71,8 +72,8 @@ export default async function ParticipantCrmPage({
   return (
     <main className="admin-page" dir="ltr" lang="en">
       <header className="admin-topbar">
-        <a href="/aqla/admin" className="admin-brand"><img src="/aqla-logo.png" alt="Aqla — أقلع" /><span><strong>Aqla Participant CRM</strong><small>{role} workspace · staging</small></span></a>
-        <div className="admin-actions"><a href="/aqla/admin">Command Centre</a><a href="/aqla/os">Aqla OS</a><a href="/auth/logout">Sign out</a></div>
+        <Link href="/aqla/admin" className="admin-brand"><img src="/aqla-logo.png" alt="Aqla — أقلع" /><span><strong>Aqla Participant CRM</strong><small>{role} workspace · staging</small></span></Link>
+        <div className="admin-actions"><Link href="/aqla/admin">Command Centre</Link><Link href="/aqla/os">Aqla OS</Link><a href="/auth/logout">Sign out</a></div>
       </header>
 
       <section className="admin-shell">
@@ -87,7 +88,7 @@ export default async function ParticipantCrmPage({
             <label><span>Escalation</span><select name="escalation" defaultValue={escalation ?? ''}><option value="">All</option>{ESCALATION_LEVELS.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
             <button type="submit">Apply</button>
           </form>
-          <div className="admin-actions" style={{ marginTop: 12 }}><a href="/aqla/admin/participants">Clear filters</a></div>
+          <div className="admin-actions" style={{ marginTop: 12 }}><Link href="/aqla/admin/participants">Clear filters</Link></div>
         </section>
 
         {unavailable ? <section className="admin-panel"><strong>CRM data is temporarily unavailable.</strong><p>No participant data is being shown as zero or empty by assumption.</p></section> : null}
@@ -106,7 +107,7 @@ export default async function ParticipantCrmPage({
                     <td><strong>{participant.escalation_level}</strong>{participant.safety_hold ? <><br /><small>Safety hold</small></> : null}</td>
                     {canSeeClinicalSummary ? <><td>{participant.product_types?.join(', ') || '—'}</td><td>{participant.readiness_category?.replaceAll('_', ' ') || '—'}</td></> : null}
                     <td>{dateLabel(participant.latest_plan_created_at)}</td>
-                    <td><a href={`/aqla/admin/participants/${encodeURIComponent(participant.user_sub)}`}>View</a></td>
+                    <td><Link href={`/aqla/admin/participants/${encodeURIComponent(participant.user_sub)}`}>View</Link></td>
                   </tr>
                 ))}
               </tbody>
@@ -116,7 +117,7 @@ export default async function ParticipantCrmPage({
 
         {!q && nextCursor ? (
           <div className="admin-actions">
-            <a href={buildHref({ status, escalation, cursor: nextCursor })}>Next 50 →</a>
+            <Link href={buildHref({ status, escalation, cursor: nextCursor })}>Next 50 →</Link>
           </div>
         ) : null}
       </section>
