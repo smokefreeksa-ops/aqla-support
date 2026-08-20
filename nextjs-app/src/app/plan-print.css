@@ -1,0 +1,277 @@
+/* Deliberate printable Aqla plan document. Screen presentation remains unchanged. */
+.qp-print-header,
+.qp-print-footer {
+  display: none;
+}
+
+@page {
+  size: A4 portrait;
+  margin: 14mm 13mm 16mm;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #17211c !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  body {
+    font-family: "IBM Plex Sans Arabic", "Tajawal", Arial, sans-serif !important;
+    font-size: 10.5pt;
+    line-height: 1.55;
+  }
+
+  .screen-only,
+  .qp-sync-warning,
+  .qp-sync-ok,
+  .assistant-launcher,
+  .assistant-panel {
+    display: none !important;
+  }
+
+  .qp-page {
+    min-height: 0 !important;
+    background: #fff !important;
+    color: #17211c !important;
+  }
+
+  .qp-topbar {
+    display: none !important;
+  }
+
+  .qp-print-header {
+    display: grid !important;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin: 0 0 8mm;
+    padding: 0 0 4mm;
+    border-bottom: 1.2px solid #1f6b46;
+    color: #163c2c;
+    break-after: avoid-page;
+  }
+
+  [dir='rtl'] .qp-print-header {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .qp-print-header img {
+    display: block;
+    width: auto;
+    height: 14mm;
+    object-fit: contain;
+  }
+
+  .qp-print-header div {
+    display: grid;
+    gap: 2px;
+  }
+
+  .qp-print-header strong {
+    color: #0f5132;
+    font-size: 15pt;
+    line-height: 1.3;
+  }
+
+  .qp-print-header span,
+  .qp-print-header small {
+    color: #617269;
+    font-size: 8.5pt;
+  }
+
+  .qp-shell {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .qp-hero-card,
+  .qp-card,
+  .qp-safety {
+    margin: 0 0 4.2mm !important;
+    border: 1px solid #d6dfda !important;
+    border-radius: 3mm !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    color: #17211c !important;
+  }
+
+  .qp-hero-card {
+    padding: 6mm !important;
+    text-align: start !important;
+    border-top: 2.4px solid #0f5132 !important;
+    break-inside: avoid-page;
+  }
+
+  .qp-hero-card::before,
+  .qp-card::before {
+    display: none !important;
+  }
+
+  .qp-kicker {
+    color: #8c6e21 !important;
+    font-size: 7.8pt !important;
+    letter-spacing: .06em !important;
+  }
+
+  .qp-hero-card h1 {
+    max-width: none !important;
+    margin: 2mm 0 !important;
+    color: #123a29 !important;
+    font-size: 20pt !important;
+    line-height: 1.35 !important;
+  }
+
+  .qp-hero-card > p,
+  .qp-card p,
+  .qp-bullets,
+  .qp-day-list p,
+  .qp-muted {
+    color: #293a32 !important;
+  }
+
+  .qp-ai-summary,
+  .qp-challenge,
+  .qp-first-step,
+  .qp-craving-card,
+  .qp-support-message {
+    border-color: #cbd9d1 !important;
+    background: #f5f8f6 !important;
+    color: #173b2b !important;
+    box-shadow: none !important;
+  }
+
+  .qp-ai-summary span,
+  .qp-challenge span,
+  .qp-highlight {
+    color: #805f13 !important;
+  }
+
+  .qp-ai-summary p,
+  .qp-challenge strong,
+  .qp-first-step,
+  .qp-craving-card,
+  .qp-support-message {
+    color: #173b2b !important;
+  }
+
+  .qp-grid-two {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 4mm !important;
+    break-inside: avoid-page;
+  }
+
+  .qp-card {
+    padding: 4.5mm !important;
+    break-inside: auto;
+  }
+
+  .qp-card h2 {
+    margin: 0 0 2.6mm !important;
+    padding: 0 0 2mm !important;
+    border-bottom: 1px solid #dce5e0 !important;
+    color: #174c34 !important;
+    font-size: 12.5pt !important;
+    line-height: 1.35;
+    break-after: avoid-page;
+  }
+
+  .qp-card h2 + div,
+  .qp-card h2 + * {
+    break-before: avoid-page;
+  }
+
+  .qp-metrics {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 3mm !important;
+  }
+
+  .qp-metrics > div {
+    min-height: 0 !important;
+    border-color: #dce5e0 !important;
+    background: #fafcfb !important;
+    break-inside: avoid-page;
+  }
+
+  .qp-metrics small,
+  .qp-metrics em {
+    color: #62736a !important;
+  }
+
+  .qp-metrics strong {
+    color: #173b2b !important;
+    font-size: 10.5pt !important;
+  }
+
+  .qp-tags span,
+  .qp-followups span {
+    border-color: #cedbd4 !important;
+    background: #f8faf9 !important;
+    color: #294a3b !important;
+  }
+
+  .qp-day-list li,
+  .qp-bullets li,
+  .qp-followups span,
+  .qp-tags span {
+    break-inside: avoid-page;
+  }
+
+  .qp-day-list li {
+    background: #fafcfb !important;
+  }
+
+  .qp-day-list li > span {
+    background: #0f6a43 !important;
+    color: #fff !important;
+  }
+
+  .qp-bullets li::marker {
+    color: #8b6d1d !important;
+  }
+
+  .qp-safety {
+    padding: 4mm !important;
+    border-color: #b65a5a !important;
+    background: #fff8f8 !important;
+    color: #672828 !important;
+    break-inside: avoid-page;
+  }
+
+  .qp-print-footer {
+    display: flex !important;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8mm;
+    margin-top: 7mm;
+    padding-top: 3mm;
+    border-top: 1px solid #d6dfda;
+    color: #65746c;
+    font-size: 7.8pt;
+    line-height: 1.5;
+    break-inside: avoid-page;
+  }
+
+  .qp-print-footer strong {
+    flex: 0 0 auto;
+    color: #174c34;
+  }
+
+  a[href]::after {
+    content: none !important;
+  }
+
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+}
