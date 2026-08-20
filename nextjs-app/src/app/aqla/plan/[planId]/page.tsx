@@ -33,5 +33,18 @@ export default async function PlanPage({ params, searchParams }: { params: Promi
       : `/auth/login?returnTo=${encodeURIComponent(returnTo)}`)
   }
 
-  return <QuitPlanResult planId={planId} initialLang={lang} />
+  return (
+    <>
+      <div className="screen-only" style={{ position: 'fixed', insetInlineEnd: 18, bottom: 18, zIndex: 1200 }}>
+        <a
+          className="qe-button primary"
+          href={`/api/quit-engine/plan/${encodeURIComponent(planId)}/pdf?lang=${lang}`}
+          style={{ boxShadow: '0 10px 30px rgba(0,0,0,.24)' }}
+        >
+          {lang === 'ar' ? 'PDF نصي' : 'Text PDF'}
+        </a>
+      </div>
+      <QuitPlanResult planId={planId} initialLang={lang} />
+    </>
+  )
 }
