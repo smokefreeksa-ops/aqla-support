@@ -129,7 +129,7 @@ function Inner() {
 
 
 
-        <section id="pathways" className="scroll-mt-20 border-t border-[#c9a84c]/20">
+        <section id="pathways" className="cv-section scroll-mt-20 border-t border-[#c9a84c]/20">
           <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {paths.map((p) => (
@@ -140,16 +140,24 @@ function Inner() {
         </section>
 
         {/* DR MALIK AI card */}
-        <DrMalikCard />
+        <div className="cv-section">
+          <DrMalikCard />
+        </div>
 
         {/* ABOUT the founder */}
-        <AboutSection />
+        <div className="cv-section">
+          <AboutSection />
+        </div>
 
         {/* PROGRAM FEATURES */}
-        <FeaturesSection />
+        <div className="cv-section">
+          <FeaturesSection />
+        </div>
 
         {/* LEARNING MODULES */}
-        <ModulesSection />
+        <div className="cv-section">
+          <ModulesSection />
+        </div>
 
         {/* INTERACTIVE TOOLS */}
         <InteractiveToolsSection />
@@ -165,7 +173,7 @@ function Inner() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+        <section className="cv-section mx-auto max-w-6xl px-4 py-12 sm:py-16">
           <ImpactSection isAr={isAr} />
         </section>
 
