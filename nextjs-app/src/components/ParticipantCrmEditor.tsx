@@ -10,7 +10,7 @@ import {
   type ParticipantProfile,
   type StaffRole,
   type WorkflowStatus,
-} from '@/lib/crm/participant.server'
+} from '@/lib/crm/participant.types'
 
 const workflowLabels: Record<WorkflowStatus, string> = {
   new: 'New',
