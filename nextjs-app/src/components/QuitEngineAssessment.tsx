@@ -18,7 +18,7 @@ import {
 } from '@/lib/quit-engine/questions'
 import type { EngineAnswers, FirstUseAfterWaking, ProductType, SafetyFlag, StoredQuitPlan, TriggerKey } from '@/lib/quit-engine/types'
 
-const LOGO_URL = 'https://aqla1.com/aqla-logo.png'
+const LOGO_URL = '/aqla-logo.png'
 const DRAFT_KEY = 'aqla_quit_engine_draft_v1'
 const ASSESSMENT_LOGIN_URL = `/auth/login?returnTo=${encodeURIComponent('/aqla/assessment')}`
 
