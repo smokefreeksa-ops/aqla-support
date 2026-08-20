@@ -9,6 +9,7 @@ const accountId = process.env.AQLA_AWS_ACCOUNT_ID || '150252718453'
 const groupName = process.env.AQLA_FOLLOWUP_SCHEDULER_GROUP || 'aqla-v2-staging-followups'
 const workerArn = process.env.AQLA_FOLLOWUP_LAMBDA_ARN || `arn:aws:lambda:${region}:${accountId}:function:aqla-v2-staging-followup-worker`
 const schedulerRoleArn = process.env.AQLA_FOLLOWUP_SCHEDULER_ROLE_ARN || `arn:aws:iam::${accountId}:role/aqla-v2-staging-followup-scheduler-invoke`
+const deadLetterQueueArn = process.env.AQLA_FOLLOWUP_DLQ_ARN || `arn:aws:sqs:${region}:${accountId}:aqla-v2-staging-followup-dlq`
 
 type ScheduleResult = {
   followup_type: FollowupType
@@ -54,6 +55,7 @@ export async function schedulePlanFollowups({
         Target: {
           Arn: workerArn,
           RoleArn: schedulerRoleArn,
+          DeadLetterConfig: { Arn: deadLetterQueueArn },
           Input: JSON.stringify({
             userSub,
             planId: plan.plan_id,
