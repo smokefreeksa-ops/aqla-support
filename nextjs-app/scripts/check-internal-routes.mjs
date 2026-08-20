@@ -66,10 +66,12 @@ for (const file of sourceFiles) {
   for (const match of source.matchAll(/href\s*=\s*["']#([^"']+)["']/g)) hashReferences.push({ file: relative, target: match[1] })
   for (const match of source.matchAll(/href\s*=\s*["'](https?:\/\/[^"']+)["']/g)) externalLinks.push({ file: relative, url: match[1] })
 
-  for (const match of source.matchAll(/["'](\/(?:aqla|auth|api)(?:[^"']*))["']/g)) {
+  // Only treat aqla/auth/api as route namespaces when followed by /, ?, #, or end-of-string.
+  // This deliberately excludes static assets such as /aqla-logo.png.
+  for (const match of source.matchAll(/["'](\/(?:aqla|auth|api)(?=\/|\?|#|["'])[^"']*)["']/g)) {
     references.push({ file: relative, raw: match[1] })
   }
-  for (const match of source.matchAll(/`(\/(?:aqla|auth|api)[^`]*)`/g)) {
+  for (const match of source.matchAll(/`(\/(?:aqla|auth|api)(?=\/|\?|#|`)[^`]*)`/g)) {
     references.push({ file: relative, raw: match[1] })
   }
 }
