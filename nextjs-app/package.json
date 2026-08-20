@@ -10,7 +10,8 @@
     "prebuild": "node scripts/prepare-assets.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "check:routes": "node scripts/check-internal-routes.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.1101.0",
