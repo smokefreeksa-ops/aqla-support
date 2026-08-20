@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import ParticipantCrmEditor from '@/components/ParticipantCrmEditor'
 import { getAqlaStaffRole, getCurrentAqlaUser } from '@/lib/current-user.server'
@@ -54,8 +55,8 @@ export default async function ParticipantCrmDetailPage({
   return (
     <main className="admin-page" dir="ltr" lang="en">
       <header className="admin-topbar">
-        <a href="/aqla/admin/participants" className="admin-brand"><img src="/aqla-logo.png" alt="Aqla — أقلع" /><span><strong>Participant record</strong><small>{participant.email ?? participant.user_sub}</small></span></a>
-        <div className="admin-actions"><a href="/aqla/admin/participants">Participants</a><a href="/aqla/admin">Command Centre</a><a href="/auth/logout">Sign out</a></div>
+        <Link href="/aqla/admin/participants" className="admin-brand"><img src="/aqla-logo.png" alt="Aqla — أقلع" /><span><strong>Participant record</strong><small>{participant.email ?? participant.user_sub}</small></span></Link>
+        <div className="admin-actions"><Link href="/aqla/admin/participants">Participants</Link><Link href="/aqla/admin">Command Centre</Link><a href="/auth/logout">Sign out</a></div>
       </header>
 
       <section className="admin-shell">
