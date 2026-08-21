@@ -638,9 +638,13 @@ body {
 
 }
 
-/* Deep Saudi-green field behind the gem — untouched by panel light */
+/* Deep Saudi-green field behind the gem — untouched by panel light.
+   A 2px backdrop blur is applied to the page content behind the overlay
+   while keeping the same dark green tint; vendor prefixes are handled by
+   the build (Tailwind/Lightning CSS), so only the standard property is
+   written here. */
 .study-environment {
-  background-color: #020806;
+  background-color: rgba(2, 8, 6, 0.96);
   background-image: radial-gradient(
     ellipse 90% 70% at 50% 40%,
     rgba(10, 58, 34, 0.95) 0%,
@@ -650,7 +654,9 @@ body {
   );
   background-repeat: no-repeat;
   background-size: cover;
+  backdrop-filter: blur(2px);
 }
+
 
 
 .study-aura,
