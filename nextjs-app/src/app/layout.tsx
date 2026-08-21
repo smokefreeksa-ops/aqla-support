@@ -10,7 +10,6 @@ import './admin.css'
 import './engagement.css'
 import './aqla-institutional.css'
 import './aqla-theme-overrides.css'
-import './aqla-public-claims-safety.css'
 
 const appUrl = process.env.AQLA_APP_URL || 'https://staging.smokefreeksa.com'
 const title = 'أقلع — Aqla'
