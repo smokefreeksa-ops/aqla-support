@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { incrementAnalyticsMetric } from '@/lib/analytics.server'
 import { saveAdaptiveTriageContext } from '@/lib/adaptive-assessment.server'
 import { buildAdaptiveTriage, validateAdaptiveAssessment, type AdaptiveAssessmentAnswers, type AdaptiveTriageProfile } from '@/lib/adaptive-assessment'
+import { getOrCreateEmailPreference } from '@/lib/communication-preferences.server'
 import { upsertParticipantCrmFromPlan } from '@/lib/crm/participant.server'
 import { getCurrentAqlaUser } from '@/lib/current-user.server'
 import { sendPlanReadyEmail } from '@/lib/email.server'
@@ -250,6 +251,9 @@ export async function POST(request: NextRequest) {
   let followupsScheduled = false
   if (!result.safety_immediate && verifiedEmail && v2Answers.followup_email_opt_in) {
     try {
+      // Ensure the communication preference/unsubscribe token exists even when the
+      // participant opted into follow-up but declined the immediate plan-link email.
+      await getOrCreateEmailPreference(verifiedEmail)
       const scheduling = await schedulePlanFollowups({ userSub: user.sub, plan })
       followupsScheduled = scheduling.status === 'scheduled'
     } catch (error) {
