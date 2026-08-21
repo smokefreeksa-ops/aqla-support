@@ -14,6 +14,22 @@ export default function SaudiFlagWave() {
         transform: "scale(1.01)",
       }}
     >
+      <style>{`
+        /* Study invitation only: keep the modal sharp while softly blurring
+           and darkening the complete website viewport behind it. */
+        .study-environment {
+          background: rgba(0, 0, 0, 0.15) !important;
+          -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+        }
+
+        /* Remove the previous Saudi-green/flag texture only when this
+           component sits directly behind the study invitation overlay. */
+        .study-environment + div {
+          opacity: 0 !important;
+        }
+      `}</style>
+
       {/*
         The filtered content is a single flat green field, so the animated
         displacement produced no visible difference while costing a
