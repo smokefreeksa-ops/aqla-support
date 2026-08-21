@@ -11,6 +11,7 @@ import './engagement.css'
 import './aqla-institutional.css'
 import './aqla-theme-overrides.css'
 import './assessment-form-clarity.css'
+import './assessment-v4.css'
 
 const appUrl = process.env.AQLA_APP_URL || 'https://staging.smokefreeksa.com'
 const title = 'أقلع — Aqla'
