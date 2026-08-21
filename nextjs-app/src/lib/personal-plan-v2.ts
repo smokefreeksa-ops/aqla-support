@@ -83,6 +83,7 @@ export interface PersonalPlanV2Answers {
   target_quit_date?: string
   reduction_target_percent?: 25 | 50 | 75
   support_person_relationship?: string
+  support_person_email?: string
   plan_email_opt_in: boolean
   followup_email_opt_in: boolean
 }
@@ -206,6 +207,14 @@ function clippedText(value: unknown, max = 160): string | undefined {
   return text || undefined
 }
 
+function optionalEmail(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined
+  const email = value.trim().toLowerCase().slice(0, 320)
+  if (!email) return undefined
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return undefined
+  return email
+}
+
 function list<T extends string>(value: unknown, allowed: Set<T>, max: number): T[] {
   if (!Array.isArray(value)) return []
   return Array.from(new Set(value.filter((item): item is T => typeof item === 'string' && allowed.has(item as T)))).slice(0, max)
@@ -263,6 +272,8 @@ export function validatePersonalPlanV2Answers(input: unknown, base: EngineAnswer
     ? raw.reduction_target_percent
     : undefined
   if (goal === 'reduce' && !reduction) throw new Error('reduction_target_required')
+  const supportPersonEmail = optionalEmail(raw.support_person_email)
+  if (typeof raw.support_person_email === 'string' && raw.support_person_email.trim() && !supportPersonEmail) throw new Error('invalid_support_person_email')
 
   return {
     cigarette_form: base.product_types.includes('cigarettes') ? cigaretteForm : undefined,
@@ -288,6 +299,7 @@ export function validatePersonalPlanV2Answers(input: unknown, base: EngineAnswer
     target_quit_date: goal === 'maintain_abstinence' ? undefined : targetDate,
     reduction_target_percent: goal === 'reduce' ? reduction : undefined,
     support_person_relationship: clippedText(raw.support_person_relationship, 80),
+    support_person_email: supportPersonEmail,
     plan_email_opt_in: raw.plan_email_opt_in === true,
     followup_email_opt_in: raw.followup_email_opt_in === true,
   }
