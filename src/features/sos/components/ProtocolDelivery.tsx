@@ -167,7 +167,7 @@ function StepVisual({
     case "grounding":
       return (
         <div className="grid grid-cols-3 gap-2 opacity-80">
-          {["👣", "👀", "🖐️"].map((e, i) => (
+          {["1", "2", "3"].map((e, i) => (
             <div
               key={i}
               className="grid place-items-center h-16 w-16 rounded-2xl bg-white/5 text-3xl"
@@ -218,7 +218,7 @@ function StepVisual({
               choice === "water" ? "bg-red-600" : "bg-white/10 hover:bg-white/15"
             }`}
           >
-            💧 ماء
+             ماء
           </button>
           <button
             onClick={() => setChoice("walk")}
@@ -226,7 +226,7 @@ function StepVisual({
               choice === "walk" ? "bg-red-600" : "bg-white/10 hover:bg-white/15"
             }`}
           >
-            🚶 ١٠ خطوات
+             ١٠ خطوات
           </button>
         </div>
       );

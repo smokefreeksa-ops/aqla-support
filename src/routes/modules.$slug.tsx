@@ -136,8 +136,8 @@ function Inner() {
       }
       toast.success(
         trimmedEmail
-          ? (isAr ? "تم إصدار شهادتك وأُرسلت إلى بريدك 🎉" : "Certificate issued & emailed 🎉")
-          : (isAr ? "تم إصدار شهادتك 🎉" : "Certificate issued 🎉"),
+          ? (isAr ? "تم إصدار شهادتك وأُرسلت إلى بريدك" : "Certificate issued & emailed ")
+          : (isAr ? "تم إصدار شهادتك" : "Certificate issued "),
       );
       navigate({ to: "/academy-certificate/$code", params: { code: res.certificate_code } });
     } catch (e) {
@@ -280,7 +280,7 @@ function Inner() {
                   </div>
                   {submitted && (
                     <div className="mt-3 text-xs text-gray-600 border-t border-gray-100 pt-2">
-                      <span className="font-bold">{isAr ? "المرجع: " : "Reference: "}</span>
+                      <span className="font-bold">{isAr ? "المرجع:" : "Reference: "}</span>
                       {isAr ? qq.explanation.ar : qq.explanation.en}
                       <span className="ms-2 text-gray-400">· {qq.source}</span>
                     </div>

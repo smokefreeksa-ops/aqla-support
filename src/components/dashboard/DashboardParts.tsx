@@ -25,7 +25,7 @@ export function WelcomeHeader({ model }: { model: LearnerModel }) {
   return (
     <section className="rounded-3xl bg-gradient-to-l from-[#0A1A0E] via-[#0e4a30] to-[#006C35] p-6 text-white shadow-lg sm:p-8">
       <p className="text-[13px] text-white/70">{model.orgNameAr}</p>
-      <h1 className="mt-1 text-2xl font-bold sm:text-3xl">أهلاً {model.displayName} 👋</h1>
+      <h1 className="mt-1 text-2xl font-bold sm:text-3xl">أهلاً {model.displayName} </h1>
       <p className="mt-2 max-w-xl text-[13.5px] leading-7 text-white/80">
         تابع رحلتك التدريبية، أكمل وحداتك، واحصل على شهاداتك المعتمدة.
       </p>
@@ -78,7 +78,7 @@ export function CourseCard({ course, onStart }: { course: CourseView; onStart?: 
       <CardContent className="flex flex-1 flex-col pt-0">
         <p className="line-clamp-3 text-[13px] leading-6 text-muted-foreground">{course.summaryAr}</p>
         <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] text-muted-foreground">
-          <span>⏱ {course.durationAr}</span>
+          <span> {course.durationAr}</span>
           <span>· {course.level}</span>
           {course.score != null && <span>· النتيجة {course.score}%</span>}
         </div>
@@ -127,7 +127,7 @@ export function FinalAssessmentCard({ model }: { model: LearnerModel }) {
           <li className="flex items-center gap-2">
             <FileText className="h-4 w-4 text-muted-foreground" />
             المحاولات السابقة: {model.examAttempts}
-            {model.latestExamScore != null && ` · آخر نتيجة ${model.latestExamScore}%`}
+            {model.latestExamScore != null && `· آخر نتيجة ${model.latestExamScore}%`}
           </li>
         </ul>
         <div className="mt-4">
@@ -163,7 +163,7 @@ export function CertificateCard({ cert }: { cert: LearnerModel["certificates"][n
             <h3 className="mt-1 text-[15px] font-semibold">{cert.module_slug ?? "برنامج أكاديمية أقلع"}</h3>
             <p className="mt-1 text-[12px] text-muted-foreground">
               صدرت في {formatDate(cert.issued_at)} · رقم {cert.certificate_code}
-              {cert.overall_score != null && ` · النتيجة ${cert.overall_score}%`}
+              {cert.overall_score != null && `· النتيجة ${cert.overall_score}%`}
             </p>
           </div>
           <Award className={cert.is_valid ? "h-6 w-6 text-[#006C35]" : "h-6 w-6 text-muted-foreground"} />

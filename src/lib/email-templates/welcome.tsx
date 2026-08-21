@@ -28,7 +28,7 @@ const WelcomeEmail = ({
     <Body style={main}>
       <Container style={container}>
         <Text style={brand}>أقلع · Aqla</Text>
-        <Heading style={h1}>أهلاً بك يا {fullName} 👋</Heading>
+        <Heading style={h1}>أهلاً بك يا {fullName} </Heading>
         <Text style={p}>
           سعداء بانضمامك إلى منصة أقلع. من لوحتك الشخصية يمكنك متابعة الوحدات التدريبية،
           إجراء التقييم النهائي، والحصول على شهادتك المعتمدة.

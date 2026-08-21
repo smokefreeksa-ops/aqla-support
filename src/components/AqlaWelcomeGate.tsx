@@ -15,20 +15,20 @@ type PhoneStep = "enter" | "verify";
 type EmailStep = "enter" | "sent";
 
 const COUNTRY_CODES: Array<{ code: string; label: string }> = [
-  { code: "+966", label: "🇸🇦 +966" },
-  { code: "+971", label: "🇦🇪 +971" },
-  { code: "+965", label: "🇰🇼 +965" },
-  { code: "+973", label: "🇧🇭 +973" },
-  { code: "+974", label: "🇶🇦 +974" },
-  { code: "+968", label: "🇴🇲 +968" },
-  { code: "+20", label: "🇪🇬 +20" },
-  { code: "+962", label: "🇯🇴 +962" },
-  { code: "+90", label: "🇹🇷 +90" },
-  { code: "+62", label: "🇮🇩 +62" },
-  { code: "+60", label: "🇲🇾 +60" },
-  { code: "+92", label: "🇵🇰 +92" },
-  { code: "+44", label: "🇬🇧 +44" },
-  { code: "+1", label: "🇺🇸 +1" },
+  { code: "+966", label: " +966" },
+  { code: "+971", label: " +971" },
+  { code: "+965", label: " +965" },
+  { code: "+973", label: " +973" },
+  { code: "+974", label: " +974" },
+  { code: "+968", label: " +968" },
+  { code: "+20", label: " +20" },
+  { code: "+962", label: " +962" },
+  { code: "+90", label: " +90" },
+  { code: "+62", label: " +62" },
+  { code: "+60", label: " +60" },
+  { code: "+92", label: " +92" },
+  { code: "+44", label: " +44" },
+  { code: "+1", label: " +1" },
 ];
 
 const RESEND_COOLDOWN = 60;

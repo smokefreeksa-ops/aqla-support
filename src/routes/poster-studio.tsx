@@ -634,7 +634,7 @@ const PosterPreview = forwardRef<HTMLDivElement, PreviewProps>(function PosterPr
             border: `3px solid ${template.accent}`, color: template.accent,
             borderRadius: "50%", padding: "8px 10px", fontSize: "clamp(10px, 2.2vw, 14px)", fontWeight: 700,
           }}>
-            ★
+            
           </div>
         )}
       </div>

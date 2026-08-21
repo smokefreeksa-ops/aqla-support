@@ -509,7 +509,7 @@ function DopamineGen() {
       </Button>
       {task && (
         <div key={task} className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-amber-100 animate-in fade-in slide-in-from-bottom-2 duration-500">
-          ✨ {task}
+           {task}
         </div>
       )}
     </div>
@@ -703,7 +703,7 @@ function HaltFab({ onLogged }: { onLogged: () => void }) {
     <>
       <button onClick={() => setOpen(true)}
         className="fixed bottom-5 left-5 z-40 rounded-full bg-gradient-to-br from-cyan-400 to-teal-600 px-5 py-3 text-sm font-bold text-slate-950 shadow-2xl shadow-cyan-500/30 hover:scale-105 transition">
-        ⚡ أواجه رغبة الآن!
+         أواجه رغبة الآن!
       </button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent dir="rtl" className="bg-slate-900 border-slate-700 text-slate-100">
