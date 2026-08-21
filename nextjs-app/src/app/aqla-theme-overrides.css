@@ -73,6 +73,33 @@
 .os-history-label, .os-history > p { color: var(--aq-text-muted); }
 .os-history button:hover, .os-history button.active { background: var(--aq-surface-strong); }
 
+/* AQla OS uses text controls rather than icon glyphs. */
+.os-mobile-menu,
+.os-sidebar-close {
+  width: auto;
+  min-width: 62px;
+  height: 42px;
+  padding-inline: 11px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.os-mic,
+.os-send {
+  width: auto;
+  min-width: 58px;
+  height: 42px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  line-height: 1;
+}
+.os-send { min-width: 66px; font-weight: 700; }
+
 .study-screen, .study-environment { background-color: var(--aq-bg-deep); }
 .study-environment { background-image: radial-gradient(ellipse 90% 70% at 50% 40%, color-mix(in srgb, var(--aq-card-strong) 80%, transparent) 0%, var(--aq-bg-deep) 74%, var(--aq-header) 100%); }
 .study-card { background: linear-gradient(180deg, color-mix(in srgb, var(--aq-card-strong) 92%, transparent), color-mix(in srgb, var(--aq-surface) 96%, transparent)); border-color: color-mix(in srgb, var(--aq-gold) 30%, transparent); }
