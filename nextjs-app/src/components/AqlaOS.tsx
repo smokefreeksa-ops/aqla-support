@@ -249,14 +249,14 @@ export default function AqlaOS({
 
   return (
     <main className="os-page" dir={ar ? 'rtl' : 'ltr'} lang={lang}>
-      <button className="os-mobile-menu" type="button" onClick={() => setSidebarOpen(true)} aria-label={ar ? 'فتح المحادثات' : 'Open conversations'}>☰</button>
+      <button className="os-mobile-menu" type="button" onClick={() => setSidebarOpen(true)} aria-label={ar ? 'فتح المحادثات' : 'Open conversations'}>{ar ? 'القائمة' : 'Menu'}</button>
 
       <aside className={`os-sidebar ${sidebarOpen ? 'is-open' : ''}`}>
         <div className="os-sidebar-brand">
           <a href="/aqla" aria-label={ar ? 'العودة إلى أقلع' : 'Back to Aqla'}><img src={LOGO_URL} alt="Aqla — أقلع" /></a>
-          <button type="button" className="os-sidebar-close" onClick={() => setSidebarOpen(false)} aria-label={ar ? 'إغلاق القائمة' : 'Close menu'}>×</button>
+          <button type="button" className="os-sidebar-close" onClick={() => setSidebarOpen(false)} aria-label={ar ? 'إغلاق القائمة' : 'Close menu'}>{ar ? 'إغلاق' : 'Close'}</button>
         </div>
-        <button className="os-new-chat" type="button" onClick={newConversation}>＋ {ar ? 'محادثة جديدة' : 'New conversation'}</button>
+        <button className="os-new-chat" type="button" onClick={newConversation}>{ar ? 'محادثة جديدة' : 'New conversation'}</button>
 
         <div className="os-history-label">{ar ? 'المحادثات السابقة' : 'Previous conversations'}</div>
         <div className="os-history">
@@ -287,7 +287,7 @@ export default function AqlaOS({
             </select>
             <span className="os-mode-subtitle">{activeModeCopy[1]}</span>
           </div>
-          {twinLine && mode === 'quit' ? <div className="os-twin-pill" title={ar ? 'ملخص من حالة أقلع الشخصية المحفوظة' : 'Summary from your saved Aqla personal state'}><span>◉</span>{twinLine}</div> : null}
+          {twinLine && mode === 'quit' ? <div className="os-twin-pill" title={ar ? 'ملخص من حالة أقلع الشخصية المحفوظة' : 'Summary from your saved Aqla personal state'}>{twinLine}</div> : null}
         </header>
 
         <div className="os-conversation" aria-live="polite">
@@ -349,8 +349,8 @@ export default function AqlaOS({
                 disabled={!availableSpeech}
                 title={availableSpeech ? (ar ? 'إملاء صوتي — لا يحفظ أقلع التسجيل الصوتي' : 'Voice dictation — Aqla does not save the audio recording') : (ar ? 'الإملاء الصوتي غير مدعوم في هذا المتصفح' : 'Voice dictation is not supported in this browser')}
                 aria-label={ar ? 'الإملاء الصوتي' : 'Voice dictation'}
-              >{listening ? '■' : '●'}</button>
-              <button className="os-send" type="submit" disabled={sending || !input.trim()} aria-label={ar ? 'إرسال' : 'Send'}>↑</button>
+              >{listening ? (ar ? 'إيقاف' : 'Stop') : (ar ? 'صوت' : 'Voice')}</button>
+              <button className="os-send" type="submit" disabled={sending || !input.trim()} aria-label={ar ? 'إرسال' : 'Send'}>{ar ? 'إرسال' : 'Send'}</button>
             </div>
           </form>
           <p className="os-composer-note">{ar ? 'أقلع يستخدم الذكاء الاصطناعي للتخصيص، مع بقاء قواعد السلامة والقرارات الحساسة خارج سيطرة النموذج.' : 'Aqla uses AI for personalisation while safety rules and sensitive decisions remain outside model control.'}</p>
