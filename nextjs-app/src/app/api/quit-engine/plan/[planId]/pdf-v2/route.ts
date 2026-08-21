@@ -28,7 +28,7 @@ export async function GET(
 
   try {
     const pdf = await renderQuitPlanPdfV2(plan, lang)
-    const filename = lang === 'ar' ? `aqla-personal-plan-v2-${planId}-ar.pdf` : `aqla-personal-plan-v2-${planId}.pdf`
+    const filename = lang === 'ar' ? `aqla-personal-plan-${planId}-ar.pdf` : `aqla-personal-plan-${planId}.pdf`
     return new NextResponse(new Uint8Array(pdf), {
       status: 200,
       headers: {
@@ -39,7 +39,7 @@ export async function GET(
       },
     })
   } catch (error) {
-    console.error('Aqla Personal Plan v2 PDF generation failed', error instanceof Error ? error.message : 'unknown')
+    console.error('Aqla Personal Plan PDF generation failed', error instanceof Error ? error.message : 'unknown')
     return NextResponse.json({ error: 'pdf_unavailable' }, { status: 500, headers: PRIVATE_HEADERS })
   }
 }
