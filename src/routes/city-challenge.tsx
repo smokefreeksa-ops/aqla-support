@@ -47,12 +47,12 @@ function titleCase(s: string) {
   return s
     .split(/\s+/)
     .map((p) => (p ? p[0].toUpperCase() + p.slice(1) : p))
-    .join("");
+    .join(" ");
 }
 function displayCity(raw: string, isAr: boolean) {
   const key = raw.toLowerCase().trim();
   if (isAr) return ARABIC_CITY[key] ?? raw;
-  return key === "other"? "Other" : titleCase(raw);
+  return key === "other" ? "Other" : titleCase(raw);
 }
 
 function Inner() {
@@ -74,19 +74,19 @@ function Inner() {
     <div dir={dir} className="min-h-screen bg-background">
       <header className="border-b bg-card/70 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <Link to="/"className="flex items-center gap-3">
-            <img src={aqlaLogo} alt="Aqla logo"className="h-[38px] w-auto object-contain sm:h-12" />
+          <Link to="/" className="flex items-center gap-3">
+            <img src={aqlaLogo} alt="Aqla logo" className="h-[38px] w-auto object-contain sm:h-12" />
             <div className="leading-tight">
               <div className="font-semibold tracking-tight">Aqla — أقلع</div>
               <div className="text-[11px] text-muted-foreground">{t("تحدي المدن", "City Challenge")}</div>
             </div>
           </Link>
           <div className="flex items-center gap-2">
-            <Button variant="ghost"size="sm"onClick={() => setLang(isAr ? "en": "ar")} className="gap-1.5">
-              <Languages className="h-4 w-4"/>{isAr ? "English": "العربية"}
+            <Button variant="ghost" size="sm" onClick={() => setLang(isAr ? "en" : "ar")} className="gap-1.5">
+              <Languages className="h-4 w-4" />{isAr ? "English" : "العربية"}
             </Button>
-            <Link to="/request-support"><Button variant="ghost"size="sm">{t("الأدوات", "Tools")}</Button></Link>
-            <Link to="/assessment"><Button size="sm"className="quit-gradient border-0 text-white">{t("ابدأ التقييم", "Start assessment")}</Button></Link>
+            <Link to="/request-support"><Button variant="ghost" size="sm">{t("الأدوات", "Tools")}</Button></Link>
+            <Link to="/assessment"><Button size="sm" className="quit-gradient border-0 text-white">{t("ابدأ التقييم", "Start assessment")}</Button></Link>
           </div>
         </div>
       </header>
@@ -104,7 +104,8 @@ function Inner() {
           </p>
           <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-foreground/80">
             {t(
-              "تحدي مدن أقلع يعرض التفاعل المجتمعي مع المنصة حسب المدن، بطريقة إجمالية وآمنة دون عرض أي بيانات شخصية. الهدف ليس المقارنة السلبية، بل تحفيز المدن على المشاركة في التوعية، دعم الإقلاع، وتدريب المتطوعين.", "The Aqla City Challenge shows community engagement by city using aggregate, privacy-safe data. The goal is not to shame or rank negatively, but to encourage awareness, cessation support, and volunteer participation."
+              "تحدي مدن أقلع يعرض التفاعل المجتمعي مع المنصة حسب المدن، بطريقة إجمالية وآمنة دون عرض أي بيانات شخصية. الهدف ليس المقارنة السلبية، بل تحفيز المدن على المشاركة في التوعية، دعم الإقلاع، وتدريب المتطوعين.",
+              "The Aqla City Challenge shows community engagement by city using aggregate, privacy-safe data. The goal is not to shame or rank negatively, but to encourage awareness, cessation support, and volunteer participation."
             )}
           </p>
         </section>
@@ -126,11 +127,12 @@ function Inner() {
               <div>
                 <div className="text-xs uppercase tracking-wider opacity-90">{t("تحدي هذا الأسبوع", "This week's challenge")}</div>
                 <div className="mt-1 text-lg font-semibold leading-7">
-                  {t("أي مدينة تحقق أكبر عدد من تعهدات الإقلاع؟", "Which city can create the most quit pledges?")}
+                  {t("أي مدينة تحقق أكبر عدد من تعهدات الإقلاع؟",
+                     "Which city can create the most quit pledges?")}
                 </div>
               </div>
-              <Link to="/request-support"onClick={() => trackEvent("city_challenge_pledge_cta_clicked")}>
-                <Button variant="secondary"className="gap-1.5">
+              <Link to="/request-support" onClick={() => trackEvent("city_challenge_pledge_cta_clicked")}>
+                <Button variant="secondary" className="gap-1.5">
                   {t("أنشئ تعهدك", "Create your pledge")}<ArrowRight className="h-4 w-4 rtl:rotate-180" />
                 </Button>
               </Link>
@@ -158,7 +160,8 @@ function Inner() {
             {t("خريطة المدن", "City Map")}
           </h2>
           <p className="mt-1 text-xs text-muted-foreground">
-            {t("تعرض المدن ذات التفاعل الكافي فقط. تُجمع المدن الأقل من 5 تفاعلات تحت \"أخرى\"لحماية الخصوصية.", "Only cities with sufficient engagement are shown. Cities with fewer than 5 engagements are grouped under \"Other\"to protect privacy.")}
+            {t("تعرض المدن ذات التفاعل الكافي فقط. تُجمع المدن الأقل من 5 تفاعلات تحت \"أخرى\" لحماية الخصوصية.",
+               "Only cities with sufficient engagement are shown. Cities with fewer than 5 engagements are grouped under \"Other\" to protect privacy.")}
           </p>
           {isLoading ? (
             <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -177,14 +180,17 @@ function Inner() {
             <h3 className="text-lg font-semibold">{t("شارك التحدي", "Share the challenge")}</h3>
             <p className="mt-2 text-sm text-foreground/80">
               {t(
-                "مدينتي تشارك في تحدي مدن أقلع. لنكن جزءًا من التغيير ودعم الإقلاع عن التدخين والنيكوتين.", "My city is part of the Aqla City Challenge. Let's support smoking and nicotine cessation together."
+                "مدينتي تشارك في تحدي مدن أقلع. لنكن جزءًا من التغيير ودعم الإقلاع عن التدخين والنيكوتين.",
+                "My city is part of the Aqla City Challenge. Let's support smoking and nicotine cessation together."
               )}
             </p>
             <ShareRow isAr={isAr} text={t(
-              "مدينتي تشارك في تحدي مدن أقلع. لنكن جزءًا من التغيير ودعم الإقلاع عن التدخين والنيكوتين.", "My city is part of the Aqla City Challenge. Let's support smoking and nicotine cessation together."
+              "مدينتي تشارك في تحدي مدن أقلع. لنكن جزءًا من التغيير ودعم الإقلاع عن التدخين والنيكوتين.",
+              "My city is part of the Aqla City Challenge. Let's support smoking and nicotine cessation together."
             )} />
             <p className="mt-3 text-[11px] text-muted-foreground/80">
-              {t("تنبيه: لا تشارك معلومات صحية خاصة إذا لم تكن مرتاحًا لذلك.", "Note: Do not share private health information unless you are comfortable doing so.")}
+              {t("تنبيه: لا تشارك معلومات صحية خاصة إذا لم تكن مرتاحًا لذلك.",
+                 "Note: Do not share private health information unless you are comfortable doing so.")}
             </p>
           </Card>
         </section>
@@ -193,7 +199,8 @@ function Inner() {
         <Card className="mt-8 rounded-2xl border-l-4 border-l-primary p-4 card-gradient">
           <p className="text-sm leading-7 text-foreground/85">
             {t(
-              "هذه المؤشرات تساعد في فهم الطلب المجتمعي على دعم الإقلاع وتحديد فرص التوسع والتوعية. لا تعرض أي بيانات شخصية.", "These indicators help demonstrate community demand for cessation support and identify opportunities for expansion and awareness. No personal data is displayed."
+              "هذه المؤشرات تساعد في فهم الطلب المجتمعي على دعم الإقلاع وتحديد فرص التوسع والتوعية. لا تعرض أي بيانات شخصية.",
+              "These indicators help demonstrate community demand for cessation support and identify opportunities for expansion and awareness. No personal data is displayed."
             )}
           </p>
         </Card>
@@ -211,11 +218,11 @@ function Inner() {
 
 function TotalTile({ label, value, highlight }: { label: string; value: number; highlight?: boolean }) {
   return (
-    <Card className={`rounded-2xl border-0 p-4 shadow-sm ${highlight ? "quit-gradient text-white": "card-gradient"}`}>
-      <div className={`text-2xl font-bold tabular-nums ${highlight ? "text-white": "text-primary"}`}>
+    <Card className={`rounded-2xl border-0 p-4 shadow-sm ${highlight ? "quit-gradient text-white" : "card-gradient"}`}>
+      <div className={`text-2xl font-bold tabular-nums ${highlight ? "text-white" : "text-primary"}`}>
         {value.toLocaleString()}
       </div>
-      <div className={`mt-1 text-[11px] leading-4 ${highlight ? "text-white/90": "text-muted-foreground"}`}>{label}</div>
+      <div className={`mt-1 text-[11px] leading-4 ${highlight ? "text-white/90" : "text-muted-foreground"}`}>{label}</div>
     </Card>
   );
 }
@@ -231,7 +238,7 @@ function LeaderCard({ icon: Icon, label, entry, isAr }:
         <div className="min-w-0">
           <div className="text-[11px] uppercase tracking-wide text-muted-foreground">{label}</div>
           <div className="truncate text-base font-semibold">
-            {entry ? displayCity(entry.city, isAr) : (isAr ? "لا بيانات بعد": "No data yet")}
+            {entry ? displayCity(entry.city, isAr) : (isAr ? "لا بيانات بعد" : "No data yet")}
           </div>
         </div>
         <div className="ms-auto text-right">
@@ -251,7 +258,8 @@ function CityGrid({ cities, isAr }: { cities: CityRow[]; isAr: boolean }) {
     return (
       <Card className="mt-4 rounded-2xl border-0 p-6 card-gradient">
         <p className="text-sm text-muted-foreground">
-          {t("لا توجد بيانات كافية بعد لعرض المدن. كن أول من يبدأ في مدينتك بإكمال تقييم أقلع أو تعهد الإقلاع.", "Not enough data yet to display cities. Be the first in your city — complete the Aqla assessment or a quit pledge.")}
+          {t("لا توجد بيانات كافية بعد لعرض المدن. كن أول من يبدأ في مدينتك بإكمال تقييم أقلع أو تعهد الإقلاع.",
+             "Not enough data yet to display cities. Be the first in your city — complete the Aqla assessment or a quit pledge.")}
         </p>
       </Card>
     );
@@ -314,14 +322,16 @@ function ShareRow({ text, isAr }: { text: string; isAr: boolean }) {
   }
   return (
     <div className="mt-3 flex flex-wrap gap-2">
-      <a href={wa} target="_blank"rel="noopener noreferrer"onClick={() => trackEvent("share_whatsapp_clicked", "city_challenge")}>
-        <Button size="sm"variant="outline"className="gap-1.5"><MessageCircle className="h-4 w-4"/>{t("واتساب", "WhatsApp")}</Button>
+      <a href={wa} target="_blank" rel="noopener noreferrer"
+         onClick={() => trackEvent("share_whatsapp_clicked", "city_challenge")}>
+        <Button size="sm" variant="outline" className="gap-1.5"><MessageCircle className="h-4 w-4" />{t("واتساب", "WhatsApp")}</Button>
       </a>
-      <a href={tw} target="_blank"rel="noopener noreferrer"onClick={() => trackEvent("share_x_clicked", "city_challenge")}>
-        <Button size="sm"variant="outline"className="gap-1.5"><Twitter className="h-4 w-4" />X</Button>
+      <a href={tw} target="_blank" rel="noopener noreferrer"
+         onClick={() => trackEvent("share_x_clicked", "city_challenge")}>
+        <Button size="sm" variant="outline" className="gap-1.5"><Twitter className="h-4 w-4" />X</Button>
       </a>
-      <Button size="sm"variant="outline"className="gap-1.5" onClick={copy}>
-        <Copy className="h-4 w-4"/>{t("نسخ النص", "Copy text")}
+      <Button size="sm" variant="outline" className="gap-1.5" onClick={copy}>
+        <Copy className="h-4 w-4" />{t("نسخ النص", "Copy text")}
       </Button>
     </div>
   );

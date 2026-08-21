@@ -42,7 +42,7 @@ export function MyQuitPlansCard() {
                   خطة {p.nickname ?? ""} — الإصدار {p.plan_version ?? 1}
                 </span>
               </div>
-              <Button asChild size="sm"variant="secondary">
+              <Button asChild size="sm" variant="secondary">
                 <Link to="/quit-plan/$planToken" params={{ planToken: p.plan_token as string }}>
                   فتح الخطة
                 </Link>

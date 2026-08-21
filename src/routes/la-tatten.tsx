@@ -55,18 +55,18 @@ function LaTattenPage() {
 
       <h2 className="mt-10 text-xl font-semibold text-primary">ابدأ من هنا</h2>
       <ul className="mt-3 space-y-2 text-[15px] leading-8">
-        <li><Link to="/"className="text-primary underline">الصفحة الرئيسية لمنصة أقلع</Link></li>
-        <li><Link to="/about"className="text-primary underline">من نحن وقصة المؤسس</Link></li>
-        <li><Link to="/quit-pathway"className="text-primary underline">مسار الإقلاع عن التدخين</Link></li>
-        <li><Link to="/help-pathway"className="text-primary underline">مساعدة شخص يهمك</Link></li>
-        <li><Link to="/articles"className="text-primary underline">مقالات أقلع</Link></li>
+        <li><Link to="/" className="text-primary underline">الصفحة الرئيسية لمنصة أقلع</Link></li>
+        <li><Link to="/about" className="text-primary underline">من نحن وقصة المؤسس</Link></li>
+        <li><Link to="/quit-pathway" className="text-primary underline">مسار الإقلاع عن التدخين</Link></li>
+        <li><Link to="/help-pathway" className="text-primary underline">مساعدة شخص يهمك</Link></li>
+        <li><Link to="/articles" className="text-primary underline">مقالات أقلع</Link></li>
       </ul>
 
       <h2 className="mt-10 text-xl font-semibold text-primary">In English</h2>
-      <p className="mt-3 text-[15px] leading-7 text-foreground/85"dir="ltr"lang="en">
+      <p className="mt-3 text-[15px] leading-7 text-foreground/85" dir="ltr" lang="en">
         La-Tatten, the awareness programme launched in 2020, is now Aqla — a free Saudi smoking and
-        nicotine cessation platform. Same programme, new name.{""}
-        <Link to="/en/la-tatten"className="text-primary underline">Read the English page</Link>.
+        nicotine cessation platform. Same programme, new name.{" "}
+        <Link to="/en/la-tatten" className="text-primary underline">Read the English page</Link>.
       </p>
     </SeoPageShell>
   );

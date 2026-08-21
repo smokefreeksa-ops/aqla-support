@@ -6,7 +6,30 @@ import { AqlaWelcomeGate } from "@/components/AqlaWelcomeGate";
 
 // Routes that remain accessible without authentication (also crawlable).
 const PUBLIC_EXACT = new Set<string>([
-  "/", "/about", "/la-tatten", "/articles", "/articles/first-week", "/articles/withdrawal", "/articles/shisha", "/articles/nicotine-pouches", "/en", "/en/about", "/en/la-tatten", "/en/articles", "/faq", "/impact", "/privacy", "/terms", "/medical-disclaimer", "/contact", "/cookies", "/sharing-policy", "/try", "/quit-chat", "/try/shoot", "/poster-studio",
+  "/",
+  "/about",
+  "/la-tatten",
+  "/articles",
+  "/articles/first-week",
+  "/articles/withdrawal",
+  "/articles/shisha",
+  "/articles/nicotine-pouches",
+  "/en",
+  "/en/about",
+  "/en/la-tatten",
+  "/en/articles",
+  "/faq",
+  "/impact",
+  "/privacy",
+  "/terms",
+  "/medical-disclaimer",
+  "/contact",
+  "/cookies",
+  "/sharing-policy",
+  "/try",
+  "/quit-chat",
+  "/try/shoot",
+  "/poster-studio",
 ]);
 
 // Public prefixes (dynamic routes)
@@ -34,7 +57,7 @@ function isPreviewHost(): boolean {
     return true;
   }
   if (host.endsWith(".lovable.dev") || host.endsWith(".sandbox.lovable.dev")) return true;
-  if (host === "localhost"|| host === "127.0.0.1") return true;
+  if (host === "localhost" || host === "127.0.0.1") return true;
   return false;
 }
 
@@ -60,7 +83,9 @@ function readTestAuthBypass(): boolean {
 function TestAuthBanner() {
   return (
     <div
-      dir="rtl"className="fixed top-0 inset-x-0 z-[200] bg-amber-500 text-black text-center text-xs font-semibold py-1.5 px-3 shadow-md"role="status"
+      dir="rtl"
+      className="fixed top-0 inset-x-0 z-[200] bg-amber-500 text-black text-center text-xs font-semibold py-1.5 px-3 shadow-md"
+      role="status"
     >
       وضع اختبار المعاينة مفعل — Preview test mode (no real user data)
     </div>

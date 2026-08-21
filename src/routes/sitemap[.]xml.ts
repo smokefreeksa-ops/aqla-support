@@ -5,7 +5,7 @@ const BASE_URL = "https://aqla1.com";
 
 interface SitemapEntry {
   path: string;
-  changefreq?: "always"| "hourly"| "daily"| "weekly"| "monthly"| "yearly"| "never";
+  changefreq?: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
   priority?: string;
 }
 
@@ -54,7 +54,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         );
 
         const xml = [
-          `<?xml version="1.0"encoding="UTF-8"?>`,
+          `<?xml version="1.0" encoding="UTF-8"?>`,
           `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
           ...urls,
           `</urlset>`,
@@ -62,7 +62,8 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         return new Response(xml, {
           headers: {
-            "Content-Type": "application/xml", "Cache-Control": "public, max-age=3600",
+            "Content-Type": "application/xml",
+            "Cache-Control": "public, max-age=3600",
           },
         });
       },

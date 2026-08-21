@@ -1,21 +1,61 @@
 // Aqla Personal Quit Engine — domain types.
 export type ProductType =
-  | "cigarettes"| "shisha"| "vape"| "heated_tobacco"| "pouches"| "smokeless"| "multiple"| "relapse_prevention";
+  | "cigarettes"
+  | "shisha"
+  | "vape"
+  | "heated_tobacco"
+  | "pouches"
+  | "smokeless"
+  | "multiple"
+  | "relapse_prevention";
 
 export type FirstUseAfterWaking =
-  | "lt_5"| "6_30"| "31_60"| "gt_60"| "not_daily";
+  | "lt_5"
+  | "6_30"
+  | "31_60"
+  | "gt_60"
+  | "not_daily";
 
 export type TriggerKey =
-  | "coffee"| "car"| "after_meal"| "social"| "shisha_session"| "stress"| "anxiety"| "boredom"| "before_sleep"| "study_work"| "phone_games"| "weekend"| "routine_prayer"| "arabic_coffee_majlis";
+  | "coffee"
+  | "car"
+  | "after_meal"
+  | "social"
+  | "shisha_session"
+  | "stress"
+  | "anxiety"
+  | "boredom"
+  | "before_sleep"
+  | "study_work"
+  | "phone_games"
+  | "weekend"
+  | "routine_prayer"
+  | "arabic_coffee_majlis";
 
 export type SafetyFlag =
-  | "pregnancy"| "under_18"| "cardiac"| "respiratory"| "medications"| "mental_health"| "suicidal_ideation"| "seizures"| "high_mixed_use"| "repeated_failure"| "none";
+  | "pregnancy"
+  | "under_18"
+  | "cardiac"
+  | "respiratory"
+  | "medications"
+  | "mental_health"
+  | "suicidal_ideation"
+  | "seizures"
+  | "high_mixed_use"
+  | "repeated_failure"
+  | "none";
 
 export type ReadinessCategory =
-  | "ready_now"| "wants_but_low_confidence"| "low_importance_high_confidence"| "not_ready";
+  | "ready_now"
+  | "wants_but_low_confidence"
+  | "low_importance_high_confidence"
+  | "not_ready";
 
 export type DependenceCategory =
-  | "low_ritual"| "moderate"| "high"| "complex_mixed";
+  | "low_ritual"
+  | "moderate"
+  | "high"
+  | "complex_mixed";
 
 export interface EngineAnswers {
   email?: string;

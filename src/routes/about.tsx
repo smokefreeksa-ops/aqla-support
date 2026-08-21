@@ -37,7 +37,8 @@ export const Route = createFileRoute("/about")({
       {
         type: "application/ld+json",
         children: JSON.stringify({
-          "@context": "https://schema.org", "@type": "Person",
+          "@context": "https://schema.org",
+          "@type": "Person",
           name: "Malik A. Althobiani",
           alternateName: ["د. مالك الذبياني", "مالك الذبياني"],
           jobTitle: "Assistant Professor",
@@ -49,7 +50,10 @@ export const Route = createFileRoute("/about")({
           ],
           url: "https://althobiani.com",
           sameAs: [
-            "https://orcid.org/0000-0002-2760-6929", "https://scholar.google.com/citations?user=Malik-Althobiani", "https://www.linkedin.com/in/malik-althobiani", "https://althobiani.com",
+            "https://orcid.org/0000-0002-2760-6929",
+            "https://scholar.google.com/citations?user=Malik-Althobiani",
+            "https://www.linkedin.com/in/malik-althobiani",
+            "https://althobiani.com",
           ],
           worksFor: { "@type": "Organization", name: "أقلع", url: "https://aqla1.com" },
         }),
@@ -77,28 +81,31 @@ function Inner() {
       <VisitTracker path="/about" />
       <header className="border-b bg-card/70 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <Link to="/"className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
             <img
               src={aqlaLogo}
-              alt="Aqla — أقلع logo"className="h-[38px] w-auto object-contain sm:h-12"
+              alt="Aqla — أقلع logo"
+              className="h-[38px] w-auto object-contain sm:h-12"
             />
             <div className="leading-tight">
-              <div className="font-semibold tracking-tight">{isAr ? "أقلع": "Aqla"}</div>
+              <div className="font-semibold tracking-tight">{isAr ? "أقلع" : "Aqla"}</div>
               <div className="text-[11px] text-muted-foreground">Aqla — أقلع</div>
             </div>
           </Link>
           <div className="flex items-center gap-2">
             <Button
-              variant="ghost"size="sm"onClick={() => setLang(isAr ? "en": "ar")}
+              variant="ghost"
+              size="sm"
+              onClick={() => setLang(isAr ? "en" : "ar")}
               className="gap-1.5"
             >
               <Languages className="h-4 w-4" />
-              {isAr ? "English": "العربية"}
+              {isAr ? "English" : "العربية"}
             </Button>
             <Link to="/">
-              <Button variant="outline"size="sm"className="gap-1.5">
+              <Button variant="outline" size="sm" className="gap-1.5">
                 <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
-                {isAr ? "الرئيسية": "Home"}
+                {isAr ? "الرئيسية" : "Home"}
               </Button>
             </Link>
           </div>
@@ -110,10 +117,11 @@ function Inner() {
         <section className="text-center">
           <img
             src={aqlaLogo}
-            alt="Aqla — أقلع logo"className="mx-auto h-28 w-auto sm:h-36"
+            alt="Aqla — أقلع logo"
+            className="mx-auto h-28 w-auto sm:h-36"
           />
           <h1 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl text-primary">
-            {isAr ? "عن أقلع": "About Aqla"}
+            {isAr ? "عن أقلع" : "About Aqla"}
           </h1>
         </section>
 
@@ -161,19 +169,21 @@ function Inner() {
         {/* Founder section */}
         <section className="mt-12">
           <h2 className="text-center text-2xl font-semibold tracking-tight text-primary">
-            {isAr ? "المؤسس": "Founder"}
+            {isAr ? "المؤسس" : "Founder"}
           </h2>
 
           <Card className="mt-6 overflow-hidden rounded-3xl border-0 bg-white p-6 shadow-elegant sm:p-8">
             <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:gap-8">
               <img
                 src={founderPhoto}
-                alt="Dr. Malik Abdulmalik Althobiani, founder of Aqla"className="h-36 w-36 shrink-0 rounded-full object-cover ring-4 ring-primary/15 shadow-md sm:h-40 sm:w-40"
+                alt="Dr. Malik Abdulmalik Althobiani, founder of Aqla"
+                className="h-36 w-36 shrink-0 rounded-full object-cover ring-4 ring-primary/15 shadow-md sm:h-40 sm:w-40"
               />
               <div className="flex-1">
                 <h3 className="text-center text-lg font-semibold sm:text-start">
                   {isAr
-                    ? "د. مالك عبدالملك الذبياني": "Dr. Malik Abdulmalik Althobiani"}
+                    ? "د. مالك عبدالملك الذبياني"
+                    : "Dr. Malik Abdulmalik Althobiani"}
                 </h3>
                 <p className="mt-1 text-center text-sm text-muted-foreground sm:text-start">
                   د. مالك الذبياني — Dr. Malik A. Althobiani, Assistant Professor at King Abdulaziz
@@ -181,7 +191,8 @@ function Inner() {
                 </p>
                 <p className="mt-1 text-center text-sm text-muted-foreground sm:text-start">
                   {isAr
-                    ? "باحث وممارس في الرعاية التنفسية والصحة الرقمية": "Respiratory-care & digital-health researcher"}
+                    ? "باحث وممارس في الرعاية التنفسية والصحة الرقمية"
+                    : "Respiratory-care & digital-health researcher"}
                 </p>
 
                 {isAr ? (
@@ -241,7 +252,8 @@ function Inner() {
             <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />
             <p className="text-sm leading-7 text-foreground/80">
               {isAr
-                ? "لا تقدم المنصة تشخيصًا طبيًا أو وصفات علاجية تلقائية. الحالات التي تحتاج إلى مراجعة مختص يتم توجيهها للمراجعة المناسبة.": "The platform does not provide medical diagnosis or automatic treatment prescriptions. Cases requiring specialist input are routed for appropriate review."}
+                ? "لا تقدم المنصة تشخيصًا طبيًا أو وصفات علاجية تلقائية. الحالات التي تحتاج إلى مراجعة مختص يتم توجيهها للمراجعة المناسبة."
+                : "The platform does not provide medical diagnosis or automatic treatment prescriptions. Cases requiring specialist input are routed for appropriate review."}
             </p>
           </div>
         </Card>
@@ -249,7 +261,7 @@ function Inner() {
 
       <footer className="mx-auto max-w-6xl px-4 py-8 text-center text-xs text-muted-foreground">
         <SocialLinks />
-        <p className="mt-3">© {isAr ? "أقلع": "Aqla"} — {new Date().getFullYear()}</p>
+        <p className="mt-3">© {isAr ? "أقلع" : "Aqla"} — {new Date().getFullYear()}</p>
       </footer>
     </div>
   );

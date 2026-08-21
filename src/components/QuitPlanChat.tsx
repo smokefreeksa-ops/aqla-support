@@ -5,13 +5,13 @@ import { useNavigate } from "@tanstack/react-router";
 import { startQuitPlan, saveAnswer, finalizeQuitPlan } from "@/lib/quit-plan.functions";
 import type { QuitProduct, QuitGoal, ReadinessStage } from "@/lib/quit-plan-builder";
 
-type Msg = { role: "user"| "assistant"; content: string };
+type Msg = { role: "user" | "assistant"; content: string };
 type Choice = { label: string; value: string };
 
 interface Step {
   key: string;
   prompt: string;
-  type: "text"| "email"| "number"| "choice"| "multi"| "date"| "skip-or-text";
+  type: "text" | "email" | "number" | "choice" | "multi" | "date" | "skip-or-text";
   choices?: Choice[];
   validate?: (v: string) => string | null; // return error msg or null
   optional?: boolean;
@@ -34,7 +34,7 @@ interface State {
   triggers: string[];
   support_name?: string;
   support_relation?: string;
-  followup_preference?: "email"| "whatsapp"| "none";
+  followup_preference?: "email" | "whatsapp" | "none";
   reminder_consent?: boolean;
   assessment_answers: Record<string, unknown>;
   emergency_consent?: boolean;
@@ -66,7 +66,7 @@ const DOSE_PATTERNS = [/كم\s*جرعة/i, /كم\s*حبة/i, /كم\s*ملغ/i, /
 
 function checkSafety(text: string): string | null {
   if (EMERGENCY_PATTERNS.some((r) => r.test(text))) {
-    return "إذا كنت تواجه ألمًا شديدًا في الصدر، أو ضيق تنفس حاد، أو إغماء، أو سعال دم، أو أفكار لإيذاء النفس — توجّه فورًا لأقرب طوارئ أو اتصل بالإسعاف 997. هذه الخطة التوعوية لا تغني عن الرعاية الطارئة.";
+    return " إذا كنت تواجه ألمًا شديدًا في الصدر، أو ضيق تنفس حاد، أو إغماء، أو سعال دم، أو أفكار لإيذاء النفس — توجّه فورًا لأقرب طوارئ أو اتصل بالإسعاف 997. هذه الخطة التوعوية لا تغني عن الرعاية الطارئة.";
   }
   if (DOSE_PATTERNS.some((r) => r.test(text))) {
     return "أقلع لا يحدّد جرعات دوائية. اختيار المنتج أو الجرعة المناسبة يحتاج مراجعة صيدلي أو طبيب. يمكنك سؤال صيدلي الحي أو طبيبك مباشرة.";
@@ -87,28 +87,28 @@ const FTND_QS: Step[] = [
       { label: "أكثر من 60 دقيقة", value: "0" },
     ],
   },
-  { key: "ftnd_q2", prompt: "هل تجد صعوبة في الامتناع عن التدخين في الأماكن الممنوعة؟", type: "choice", choices: [{ label: "نعم", value: "1"}, { label: "لا", value: "0" }] },
-  { key: "ftnd_q3", prompt: "أي سيجارة يصعب عليك تركها أكثر؟", type: "choice", choices: [{ label: "أول سيجارة في الصباح", value: "1"}, { label: "أي سيجارة أخرى", value: "0" }] },
-  { key: "ftnd_q4", prompt: "كم سيجارة في اليوم؟", type: "choice", choices: [{ label: "10 أو أقل", value: "0"}, { label: "11 – 20", value: "1"}, { label: "21 – 30", value: "2"}, { label: "31 فأكثر", value: "3" }] },
-  { key: "ftnd_q5", prompt: "هل تدخّن في الساعات الأولى أكثر من بقية اليوم؟", type: "choice", choices: [{ label: "نعم", value: "1"}, { label: "لا", value: "0" }] },
-  { key: "ftnd_q6", prompt: "هل تدخّن حتى عندما تكون مريضًا في الفراش؟", type: "choice", choices: [{ label: "نعم", value: "1"}, { label: "لا", value: "0" }] },
+  { key: "ftnd_q2", prompt: "هل تجد صعوبة في الامتناع عن التدخين في الأماكن الممنوعة؟", type: "choice", choices: [{ label: "نعم", value: "1" }, { label: "لا", value: "0" }] },
+  { key: "ftnd_q3", prompt: "أي سيجارة يصعب عليك تركها أكثر؟", type: "choice", choices: [{ label: "أول سيجارة في الصباح", value: "1" }, { label: "أي سيجارة أخرى", value: "0" }] },
+  { key: "ftnd_q4", prompt: "كم سيجارة في اليوم؟", type: "choice", choices: [{ label: "10 أو أقل", value: "0" }, { label: "11 – 20", value: "1" }, { label: "21 – 30", value: "2" }, { label: "31 فأكثر", value: "3" }] },
+  { key: "ftnd_q5", prompt: "هل تدخّن في الساعات الأولى أكثر من بقية اليوم؟", type: "choice", choices: [{ label: "نعم", value: "1" }, { label: "لا", value: "0" }] },
+  { key: "ftnd_q6", prompt: "هل تدخّن حتى عندما تكون مريضًا في الفراش؟", type: "choice", choices: [{ label: "نعم", value: "1" }, { label: "لا", value: "0" }] },
 ];
 
 const PSECDI_QS: Step[] = [
   { key: "ps_q1", prompt: "كم مرة تستخدم الفيب في اليوم؟", type: "choice", choices: [
-    { label: "0", value: "0"}, { label: "1 – 4", value: "0"}, { label: "5 – 9", value: "1"}, { label: "10 – 14", value: "2"}, { label: "15 أو أكثر", value: "3" },
+    { label: "0", value: "0" }, { label: "1 – 4", value: "0" }, { label: "5 – 9", value: "1" }, { label: "10 – 14", value: "2" }, { label: "15 أو أكثر", value: "3" },
   ] },
   { key: "ps_q2", prompt: "بعد كم من الاستيقاظ تستخدم الفيب لأول مرة؟", type: "choice", choices: [
-    { label: "أكثر من 60 دقيقة", value: "0"}, { label: "31 – 60 دقيقة", value: "1"}, { label: "6 – 30 دقيقة", value: "2"}, { label: "خلال 5 دقائق", value: "3" },
+    { label: "أكثر من 60 دقيقة", value: "0" }, { label: "31 – 60 دقيقة", value: "1" }, { label: "6 – 30 دقيقة", value: "2" }, { label: "خلال 5 دقائق", value: "3" },
   ] },
-  { key: "ps_q3", prompt: "هل تستخدم الفيب الآن لأنه يصعب الإقلاع؟", type: "choice", choices: [{ label: "نعم", value: "1"}, { label: "لا", value: "0" }] },
-  { key: "ps_q4", prompt: "هل تشتهي الفيب أحيانًا؟", type: "choice", choices: [{ label: "نعم", value: "1"}, { label: "لا", value: "0" }] },
-  { key: "ps_q5", prompt: "هل تشعر بالحاجة الماسّة للفيب؟", type: "choice", choices: [{ label: "نعم", value: "true"}, { label: "لا", value: "false" }] },
-  { key: "ps_q6", prompt: "هل يصعب عليك الامتناع في الأماكن الممنوعة؟", type: "choice", choices: [{ label: "نعم", value: "true"}, { label: "لا", value: "false" }] },
-  { key: "ps_q7", prompt: "عند الامتناع، هل تصبح أكثر تهيّجًا؟", type: "choice", choices: [{ label: "نعم", value: "true"}, { label: "لا", value: "false" }] },
-  { key: "ps_q8", prompt: "أكثر قلقًا؟", type: "choice", choices: [{ label: "نعم", value: "true"}, { label: "لا", value: "false" }] },
-  { key: "ps_q9", prompt: "أكثر تململًا؟", type: "choice", choices: [{ label: "نعم", value: "true"}, { label: "لا", value: "false" }] },
-  { key: "ps_q10", prompt: "أكثر جوعًا؟", type: "choice", choices: [{ label: "نعم", value: "true"}, { label: "لا", value: "false" }] },
+  { key: "ps_q3", prompt: "هل تستخدم الفيب الآن لأنه يصعب الإقلاع؟", type: "choice", choices: [{ label: "نعم", value: "1" }, { label: "لا", value: "0" }] },
+  { key: "ps_q4", prompt: "هل تشتهي الفيب أحيانًا؟", type: "choice", choices: [{ label: "نعم", value: "1" }, { label: "لا", value: "0" }] },
+  { key: "ps_q5", prompt: "هل تشعر بالحاجة الماسّة للفيب؟", type: "choice", choices: [{ label: "نعم", value: "true" }, { label: "لا", value: "false" }] },
+  { key: "ps_q6", prompt: "هل يصعب عليك الامتناع في الأماكن الممنوعة؟", type: "choice", choices: [{ label: "نعم", value: "true" }, { label: "لا", value: "false" }] },
+  { key: "ps_q7", prompt: "عند الامتناع، هل تصبح أكثر تهيّجًا؟", type: "choice", choices: [{ label: "نعم", value: "true" }, { label: "لا", value: "false" }] },
+  { key: "ps_q8", prompt: "أكثر قلقًا؟", type: "choice", choices: [{ label: "نعم", value: "true" }, { label: "لا", value: "false" }] },
+  { key: "ps_q9", prompt: "أكثر تململًا؟", type: "choice", choices: [{ label: "نعم", value: "true" }, { label: "لا", value: "false" }] },
+  { key: "ps_q10", prompt: "أكثر جوعًا؟", type: "choice", choices: [{ label: "نعم", value: "true" }, { label: "لا", value: "false" }] },
 ];
 
 const LWDS_QS: Step[] = Array.from({ length: 11 }, (_, i) => ({
@@ -124,19 +124,19 @@ const LWDS_QS: Step[] = Array.from({ length: 11 }, (_, i) => ({
 }));
 
 const POUCHES_QS: Step[] = [
-  { key: "op_q1", prompt: "هل تستخدمها يوميًا؟", type: "choice", choices: [{ label: "نعم", value: "true"}, { label: "لا", value: "false" }] },
-  { key: "op_q2", prompt: "هل تستخدمها خلال أول 30 دقيقة بعد الاستيقاظ؟", type: "choice", choices: [{ label: "نعم", value: "true"}, { label: "لا", value: "false" }] },
-  { key: "op_q3", prompt: "هل تشعر بالقلق إذا لم تتوفر؟", type: "choice", choices: [{ label: "نعم", value: "true"}, { label: "لا", value: "false" }] },
-  { key: "op_q4", prompt: "هل حاولت التقليل وفشلت؟", type: "choice", choices: [{ label: "نعم", value: "true"}, { label: "لا", value: "false" }] },
-  { key: "op_q5", prompt: "هل تستخدمها في الأماكن الممنوعة؟", type: "choice", choices: [{ label: "نعم", value: "true"}, { label: "لا", value: "false" }] },
-  { key: "op_q6", prompt: "هل ازداد عدد الأكياس اليومي مع الوقت؟", type: "choice", choices: [{ label: "نعم", value: "true"}, { label: "لا", value: "false" }] },
+  { key: "op_q1", prompt: "هل تستخدمها يوميًا؟", type: "choice", choices: [{ label: "نعم", value: "true" }, { label: "لا", value: "false" }] },
+  { key: "op_q2", prompt: "هل تستخدمها خلال أول 30 دقيقة بعد الاستيقاظ؟", type: "choice", choices: [{ label: "نعم", value: "true" }, { label: "لا", value: "false" }] },
+  { key: "op_q3", prompt: "هل تشعر بالقلق إذا لم تتوفر؟", type: "choice", choices: [{ label: "نعم", value: "true" }, { label: "لا", value: "false" }] },
+  { key: "op_q4", prompt: "هل حاولت التقليل وفشلت؟", type: "choice", choices: [{ label: "نعم", value: "true" }, { label: "لا", value: "false" }] },
+  { key: "op_q5", prompt: "هل تستخدمها في الأماكن الممنوعة؟", type: "choice", choices: [{ label: "نعم", value: "true" }, { label: "لا", value: "false" }] },
+  { key: "op_q6", prompt: "هل ازداد عدد الأكياس اليومي مع الوقت؟", type: "choice", choices: [{ label: "نعم", value: "true" }, { label: "لا", value: "false" }] },
 ];
 
 const HONC_QS: Step[] = Array.from({ length: 10 }, (_, i) => ({
   key: `honc_q${i + 1}`,
   prompt: `سؤال ${i + 1} من 10 — هل شعرت بفقدان السيطرة على الاستخدام؟`,
   type: "choice" as const,
-  choices: [{ label: "نعم", value: "true"}, { label: "لا", value: "false" }],
+  choices: [{ label: "نعم", value: "true" }, { label: "لا", value: "false" }],
 }));
 
 function assessmentSteps(product: QuitProduct, age?: number): Step[] {
@@ -183,7 +183,15 @@ function normalizeAssessment(product: QuitProduct, age: number | undefined, raw:
 }
 
 const TRIGGER_OPTIONS = [
-  "بعد الأكل", "مع القهوة", "السهر", "التوتر", "الفراغ", "الأصدقاء المدخنون", "السيارة", "بعد الصلاة", "العمل",
+  "بعد الأكل",
+  "مع القهوة",
+  "السهر",
+  "التوتر",
+  "الفراغ",
+  "الأصدقاء المدخنون",
+  "السيارة",
+  "بعد الصلاة",
+  "العمل",
 ];
 
 export function QuitPlanChat() {
@@ -415,7 +423,7 @@ export function QuitPlanChat() {
         break;
       case "consent":
         if (value !== "yes") {
-          setMessages((m) => [...m, { role: "user", content: displayLabel ?? "لا"}, { role: "assistant", content: "تمام، لا ضغط. تقدر ترجع متى تجهز " }]);
+          setMessages((m) => [...m, { role: "user", content: displayLabel ?? "لا" }, { role: "assistant", content: "تمام، لا ضغط. تقدر ترجع متى تجهز " }]);
           return;
         }
         break;
@@ -443,7 +451,7 @@ export function QuitPlanChat() {
     }
 
     // If finishing consent, finalize
-    if (current.key === "consent"&& value === "yes") {
+    if (current.key === "consent" && value === "yes") {
       setBusy(true);
       try {
         const id = planId ?? (await ensurePlan(next));
@@ -478,7 +486,8 @@ export function QuitPlanChat() {
           {
             role: "assistant",
             content: res.userEmailSent
-              ? "تم إنشاء خطتك وإرسالها إلى بريدك  تحوّل الآن لعرض الخطة وتحميل PDF.": "تم إنشاء الخطة، لكن تعذر إرسال البريد الإلكتروني حاليًا. يمكنك تحميل الخطة PDF أو نسخ الرابط.",
+              ? "تم إنشاء خطتك وإرسالها إلى بريدك  تحوّل الآن لعرض الخطة وتحميل PDF."
+              : "تم إنشاء الخطة، لكن تعذر إرسال البريد الإلكتروني حاليًا. يمكنك تحميل الخطة PDF أو نسخ الرابط.",
           },
         ]);
         await navigate({ to: "/quit-plan/$planToken", params: { planToken: res.planToken ?? "" } });
@@ -510,16 +519,18 @@ export function QuitPlanChat() {
   }
 
   return (
-    <div dir="rtl"className="rounded-2xl border border-border bg-card shadow-sm">
+    <div dir="rtl" className="rounded-2xl border border-border bg-card shadow-sm">
       <div className="border-b border-border p-3 text-sm font-semibold text-foreground">
         دردشة خطة أقلع الشخصية
       </div>
       <div ref={scrollRef} className="h-[480px] overflow-y-auto p-4 space-y-3 text-sm">
         {messages.map((m, i) => (
-          <div key={i} className={m.role === "user"? "flex justify-start": "flex justify-end"}>
+          <div key={i} className={m.role === "user" ? "flex justify-start" : "flex justify-end"}>
             <div
               className={
-                m.role === "user"? "max-w-[85%] rounded-2xl bg-primary/10 px-3 py-2 text-foreground": "max-w-[85%] rounded-2xl bg-muted px-3 py-2 text-foreground leading-7 whitespace-pre-wrap"
+                m.role === "user"
+                  ? "max-w-[85%] rounded-2xl bg-primary/10 px-3 py-2 text-foreground"
+                  : "max-w-[85%] rounded-2xl bg-muted px-3 py-2 text-foreground leading-7 whitespace-pre-wrap"
               }
             >
               {m.content}
@@ -574,31 +585,32 @@ export function QuitPlanChat() {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="اكتب أو اختر، ثم أرسل…"className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm"
+              placeholder="اكتب أو اختر، ثم أرسل…"
+              className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm"
               disabled={busy}
             />
-            <button type="submit"disabled={busy || !input.trim()} className="rounded-md bg-primary px-3 py-2 text-primary-foreground disabled:opacity-50">
+            <button type="submit" disabled={busy || !input.trim()} className="rounded-md bg-primary px-3 py-2 text-primary-foreground disabled:opacity-50">
               <Send className="h-4 w-4" />
             </button>
           </form>
         </div>
       )}
-      {current && (current.type === "text"|| current.type === "email"|| current.type === "number"|| current.type === "skip-or-text") && (
+      {current && (current.type === "text" || current.type === "email" || current.type === "number" || current.type === "skip-or-text") && (
         <form onSubmit={onSubmit} className="border-t border-border p-3 flex gap-2">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            type={current.type === "number"? "number": current.type === "email"? "email": "text"}
-            placeholder={current.type === "skip-or-text"? "اكتب الإجابة أو 'تخطّي'": "اكتب إجابتك…"}
+            type={current.type === "number" ? "number" : current.type === "email" ? "email" : "text"}
+            placeholder={current.type === "skip-or-text" ? "اكتب الإجابة أو 'تخطّي'" : "اكتب إجابتك…"}
             className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm"
             disabled={busy}
           />
           {current.optional && (
-            <button type="button"onClick={() => advance("تخطّي")} className="rounded-md border border-input bg-background px-3 py-2 text-xs hover:bg-accent" disabled={busy}>
+            <button type="button" onClick={() => advance("تخطّي")} className="rounded-md border border-input bg-background px-3 py-2 text-xs hover:bg-accent" disabled={busy}>
               تخطّي
             </button>
           )}
-          <button type="submit"disabled={busy || !input.trim()} className="rounded-md bg-primary px-3 py-2 text-primary-foreground disabled:opacity-50">
+          <button type="submit" disabled={busy || !input.trim()} className="rounded-md bg-primary px-3 py-2 text-primary-foreground disabled:opacity-50">
             <Send className="h-4 w-4" />
           </button>
         </form>

@@ -47,25 +47,25 @@ function EnHome() {
       <h2 className="mt-10 text-xl font-semibold text-primary">Four pathways</h2>
       <ul className="mt-3 space-y-2 text-[15px] leading-7">
         <li>
-          <Link to="/quit-pathway"className="text-primary underline">Quit Pathway</Link> — assessment, plan, follow-up.
+          <Link to="/quit-pathway" className="text-primary underline">Quit Pathway</Link> — assessment, plan, follow-up.
         </li>
         <li>
-          <Link to="/help-pathway"className="text-primary underline">Help Pathway</Link> — support someone you care about.
+          <Link to="/help-pathway" className="text-primary underline">Help Pathway</Link> — support someone you care about.
         </li>
         <li>
-          <Link to="/learn-train"className="text-primary underline">Learn &amp; Train</Link> — academy modules and certificates.
+          <Link to="/learn-train" className="text-primary underline">Learn &amp; Train</Link> — academy modules and certificates.
         </li>
         <li>
-          <Link to="/challenge-pathway"className="text-primary underline">Challenges</Link> — community activities.
+          <Link to="/challenge-pathway" className="text-primary underline">Challenges</Link> — community activities.
         </li>
       </ul>
 
       <h2 className="mt-10 text-xl font-semibold text-primary">Learn more</h2>
       <ul className="mt-3 space-y-2 text-[15px] leading-7">
-        <li><Link to="/en/about"className="text-primary underline">About Aqla and its founder</Link></li>
-        <li><Link to="/en/la-tatten"className="text-primary underline">La-Tatten is now Aqla</Link></li>
-        <li><Link to="/en/articles"className="text-primary underline">Articles</Link></li>
-        <li><Link to="/"className="text-primary underline">النسخة العربية — Arabic homepage</Link></li>
+        <li><Link to="/en/about" className="text-primary underline">About Aqla and its founder</Link></li>
+        <li><Link to="/en/la-tatten" className="text-primary underline">La-Tatten is now Aqla</Link></li>
+        <li><Link to="/en/articles" className="text-primary underline">Articles</Link></li>
+        <li><Link to="/" className="text-primary underline">النسخة العربية — Arabic homepage</Link></li>
       </ul>
     </SeoPageShell>
   );

@@ -258,10 +258,11 @@ export const issueTrainingCertificate = createServerFn({ method: "POST" })
         const apiKey = process.env.EMAIL_PROVIDER_API_KEY;
         const fromAddr = process.env.EMAIL_FROM_ADDRESS || "Aqla <onboarding@resend.dev>";
         if (apiKey) {
-          const lang = trainee.preferred_language === "en"? "en": "ar";
-          const subject = lang === "ar"? "شهادة تدريب أقلع الخاصة بك": "Your Aqla Training Certificate";
+          const lang = trainee.preferred_language === "en" ? "en" : "ar";
+          const subject = lang === "ar" ? "شهادة تدريب أقلع الخاصة بك" : "Your Aqla Training Certificate";
           const url = `${SITE_URL}/certificate/${certificate_code}`;
-          const body = lang === "ar"? `<p>مبروك! لقد أتممت بنجاح تدريب متطوعي أقلع لدعم الإقلاع عن التدخين والنيكوتين.</p><p>شهادتك متاحة هنا: <a href="${url}">${url}</a></p>`
+          const body = lang === "ar"
+            ? `<p>مبروك! لقد أتممت بنجاح تدريب متطوعي أقلع لدعم الإقلاع عن التدخين والنيكوتين.</p><p>شهادتك متاحة هنا: <a href="${url}">${url}</a></p>`
             : `<p>Congratulations! You have successfully completed the Aqla Volunteer Smoking and Nicotine Cessation Support Training.</p><p>Your certificate is available here: <a href="${url}">${url}</a></p>`;
           await fetch("https://api.resend.com/emails", {
             method: "POST",
@@ -273,7 +274,7 @@ export const issueTrainingCertificate = createServerFn({ method: "POST" })
           event_type: "training_certificate_issued" as never,
           recipient_email: trainee.email,
           subject: "Aqla Training Certificate",
-          sent_status: apiKey ? "sent": "pending_provider_setup",
+          sent_status: apiKey ? "sent" : "pending_provider_setup",
           sent_at: apiKey ? new Date().toISOString() : null,
           volunteer_code: certificate_code,
         } as never);
@@ -334,7 +335,7 @@ export const listTrainees = createServerFn({ method: "GET" })
       role: string | null; created_at: string; preferred_language: string | null;
       certificate_code: string | null; overall_score: number | null; issued_at: string | null; is_valid: boolean | null;
     };
-    const rows: Row[] = ((users as Array<Omit<Row, "certificate_code"| "overall_score"| "issued_at"| "is_valid">> | null) ?? []).map((u) => {
+    const rows: Row[] = ((users as Array<Omit<Row, "certificate_code" | "overall_score" | "issued_at" | "is_valid">> | null) ?? []).map((u) => {
       const c = certByUser.get(u.id);
       return {
         ...u,

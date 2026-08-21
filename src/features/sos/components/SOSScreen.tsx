@@ -40,7 +40,8 @@ export function SOSScreen() {
 
   return (
     <div
-      dir="rtl"className="fixed inset-0 z-[80] flex items-center justify-center px-4"
+      dir="rtl"
+      className="fixed inset-0 z-[80] flex items-center justify-center px-4"
       style={{
         backgroundImage:
           "radial-gradient(ellipse at top,#1a0505 0%,#0a0202 60%,#000 100%)",
@@ -49,7 +50,8 @@ export function SOSScreen() {
       {/* subtle close */}
       <button
         onClick={exit}
-        aria-label="إغلاق"className="absolute top-4 end-4 text-white/40 hover:text-white text-sm"
+        aria-label="إغلاق"
+        className="absolute top-4 end-4 text-white/40 hover:text-white text-sm"
       >
         إغلاق ✕
       </button>
@@ -59,11 +61,13 @@ export function SOSScreen() {
       <div className="w-full grid place-items-center">
         {machine.state === "idle" && (
           <CravingRating
-            titleAr="قوة الرغبة الآن؟"titleEn="How strong is the craving right now?"
+            titleAr="قوة الرغبة الآن؟"
+            titleEn="How strong is the craving right now?"
             value={before}
             onChange={setBefore}
             onConfirm={() => machine.setCravingBefore(before)}
-            confirmAr="ابدأ التدخل"confirmEn="Start intervention"
+            confirmAr="ابدأ التدخل"
+            confirmEn="Start intervention"
           />
         )}
 
@@ -89,7 +93,7 @@ export function SOSScreen() {
 
         {machine.state === "protocol_delivery" && machine.selection && (
           <ProtocolDelivery
-            key={`${machine.selection.protocol}-${machine.isSecondLoop ? "2": "1"}`}
+            key={`${machine.selection.protocol}-${machine.isSecondLoop ? "2" : "1"}`}
             protocolId={machine.selection.protocol}
             onFinished={machine.onProtocolFinished}
           />
@@ -97,7 +101,7 @@ export function SOSScreen() {
 
         {machine.state === "post_craving_check" && (
           <CravingRating
-            titleAr={machine.isSecondLoop ? "والآن بعد الجولة الثانية؟": "والآن؟"}
+            titleAr={machine.isSecondLoop ? "والآن بعد الجولة الثانية؟" : "والآن؟"}
             titleEn="And now?"
             value={after}
             onChange={setAfter}
@@ -105,7 +109,8 @@ export function SOSScreen() {
               machine.setCravingAfter(after);
               void machine.finalize();
             }}
-            confirmAr="تسجيل"confirmEn="Log"
+            confirmAr="تسجيل"
+            confirmEn="Log"
           />
         )}
 
@@ -195,7 +200,7 @@ function DebugPanel({
           <div>rms: {machine.acoustic.rmsEnergy.toFixed(3)}</div>
           <div>zcr: {machine.acoustic.zeroCrossingRate.toFixed(3)}</div>
           <div>
-            centroid:{""}
+            centroid:{" "}
             {machine.acoustic.spectralCentroid?.toFixed(0) ?? "-"}
           </div>
         </>

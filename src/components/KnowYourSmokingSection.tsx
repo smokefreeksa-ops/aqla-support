@@ -7,7 +7,7 @@ import { ArrowRight } from "lucide-react";
    No backend, no storage, no analytics. All state is React-local.
    ===================================================================================== */
 
-type Lang = "en"| "ar";
+type Lang = "en" | "ar";
 const T = (en: string, ar: string, lang: Lang) => (lang === "ar" ? ar : en);
 
 const tokens = {
@@ -25,7 +25,7 @@ const tokens = {
 
 export default function KnowYourSmokingSection({ standaloneTool }: { standaloneTool?: number }) {
   const [lang, setLang] = useState<Lang>("ar");
-  const dir = lang === "ar"? "rtl": "ltr";
+  const dir = lang === "ar" ? "rtl" : "ltr";
   const [open, setOpen] = useState<number | null>(null);
   const [done, setDone] = useState<Record<number, boolean>>({});
 
@@ -77,7 +77,8 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
     {
       name: T("The Money Counter", "عدّاد المال", lang),
       desc: T(
-        "See what smoking really costs you.", "شاهد كم يكلفك التدخين فعلاً.",
+        "See what smoking really costs you.",
+        "شاهد كم يكلفك التدخين فعلاً.",
         lang
       ),
       time: T("~1 min", "≈ دقيقة", lang),
@@ -85,7 +86,8 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
     {
       name: T("The Grip Test", "اختبار القبضة", lang),
       desc: T(
-        "How tight is nicotine's grip on you?", "كم قبضة النيكوتين عليك؟",
+        "How tight is nicotine's grip on you?",
+        "كم قبضة النيكوتين عليك؟",
         lang
       ),
       time: T("~1 min", "≈ دقيقة", lang),
@@ -93,7 +95,8 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
     {
       name: T("The Mirror", "المرآة", lang),
       desc: T(
-        "Which parts of you keep the smoke alive?", "أي جوانبك تبقي التدخين مشتعلاً؟",
+        "Which parts of you keep the smoke alive?",
+        "أي جوانبك تبقي التدخين مشتعلاً؟",
         lang
       ),
       time: T("~1 min", "≈ دقيقة", lang),
@@ -101,7 +104,8 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
     {
       name: T("The Compass", "البوصلة", lang),
       desc: T(
-        "How ready are you to quit — really?", "كم أنت مستعد للإقلاع فعلاً؟",
+        "How ready are you to quit — really?",
+        "كم أنت مستعد للإقلاع فعلاً؟",
         lang
       ),
       time: T("~1 min", "≈ دقيقة", lang),
@@ -109,7 +113,8 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
     {
       name: T("Break the Smoking Habit Challenge", "تحدي كسر عادة التدخين", lang),
       desc: T(
-        "30 seconds. Aim at lit cigarettes. Shatter more than glass.", "٣٠ ثانية. صوّب على السجائر المولّعة. حطّم أكثر من الزجاج.",
+        "30 seconds. Aim at lit cigarettes. Shatter more than glass.",
+        "٣٠ ثانية. صوّب على السجائر المولّعة. حطّم أكثر من الزجاج.",
         lang
       ),
       time: T("30 sec", "٣٠ ثانية", lang),
@@ -132,7 +137,8 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
       >
         <div className="mx-auto max-w-3xl px-4 py-6 sm:py-10">
           <Link
-            to="/try"className="inline-flex items-center gap-1.5 text-sm font-medium opacity-80 hover:opacity-100"
+            to="/try"
+            className="inline-flex items-center gap-1.5 text-sm font-medium opacity-80 hover:opacity-100"
           >
             <ArrowRight className="h-4 w-4 rtl:rotate-180" />
             {T("All tools", "كل الأدوات", lang)}
@@ -179,7 +185,8 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
 
           <p className="mt-6 text-xs opacity-60 max-w-3xl">
             {T(
-              "This tool is educational. The dependence questions are adapted from the Fagerström Test for Cigarette Dependence; the trait items are brief self-reflection prompts. It is not a medical diagnosis.", "هذه الأداة تعليمية. أسئلة الاعتماد مقتبسة من اختبار فاجيرستروم للاعتماد على النيكوتين؛ وعبارات السمات هي دعوات قصيرة للتأمل الذاتي. ليست تشخيصاً طبياً.",
+              "This tool is educational. The dependence questions are adapted from the Fagerström Test for Cigarette Dependence; the trait items are brief self-reflection prompts. It is not a medical diagnosis.",
+              "هذه الأداة تعليمية. أسئلة الاعتماد مقتبسة من اختبار فاجيرستروم للاعتماد على النيكوتين؛ وعبارات السمات هي دعوات قصيرة للتأمل الذاتي. ليست تشخيصاً طبياً.",
               lang
             )}
           </p>
@@ -194,20 +201,25 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
       dir={dir}
       lang={lang}
       style={{ background: "transparent", color: "#f4f0e1" }}
-      className="scroll-mt-24"aria-label="Know Your Smoking Life"
+      className="scroll-mt-24"
+
+      aria-label="Know Your Smoking Life"
     >
       <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
         {/* Language toggle (scoped to this section only) */}
         <div className="flex items-center justify-end mb-6">
           <div
-            role="group"aria-label="Language"className="inline-flex overflow-hidden rounded-full border"style={{ borderColor: tokens.border, background: "#fff" }}
+            role="group"
+            aria-label="Language"
+            className="inline-flex overflow-hidden rounded-full border"
+            style={{ borderColor: tokens.border, background: "#fff" }}
           >
             <button
               onClick={() => setLang("en")}
               className="px-3 py-1 text-sm"
               style={{
-                background: lang === "en"? tokens.primary : "transparent",
-                color: lang === "en"? "#fff" : tokens.ink,
+                background: lang === "en" ? tokens.primary : "transparent",
+                color: lang === "en" ? "#fff" : tokens.ink,
               }}
             >
               EN
@@ -216,8 +228,8 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
               onClick={() => setLang("ar")}
               className="px-3 py-1 text-sm"
               style={{
-                background: lang === "ar"? tokens.primary : "transparent",
-                color: lang === "ar"? "#fff" : tokens.ink,
+                background: lang === "ar" ? tokens.primary : "transparent",
+                color: lang === "ar" ? "#fff" : tokens.ink,
               }}
             >
               عربي
@@ -227,19 +239,22 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
 
         <h2 className="text-2xl sm:text-3xl font-bold leading-tight">
           {T(
-            "Four quick ways to know your smoking", "أربع طرق سريعة لتعرف حياتك مع التدخين",
+            "Four quick ways to know your smoking",
+            "أربع طرق سريعة لتعرف حياتك مع التدخين",
             lang
           )}
         </h2>
         <p className="mt-2 text-sm sm:text-base opacity-80">
           {T(
-            "Each tool stands on its own, takes about a minute, and gives your answer immediately.", "كل أداة مستقلة، تستغرق دقيقة، وتعطيك إجابتك فوراً.",
+            "Each tool stands on its own, takes about a minute, and gives your answer immediately.",
+            "كل أداة مستقلة، تستغرق دقيقة، وتعطيك إجابتك فوراً.",
             lang
           )}
         </p>
         <p className="mt-1 text-xs opacity-70">
           {T(
-            "Your answers never leave this page.", "إجاباتك لا تغادر هذه الصفحة.",
+            "Your answers never leave this page.",
+            "إجاباتك لا تغادر هذه الصفحة.",
             lang
           )}
         </p>
@@ -263,7 +278,7 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
                   color: tokens.ink,
                 }}
                 className={`border overflow-hidden transition scroll-mt-28 ${
-                  isOpen ? "sm:col-span-2 lg:col-span-3": ""
+                  isOpen ? "sm:col-span-2 lg:col-span-3" : ""
                 }`}
               >
                 <button
@@ -331,7 +346,8 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
 
         <p className="mt-10 text-xs opacity-60 max-w-3xl">
           {T(
-            "This tool is educational. The dependence questions are adapted from the Fagerström Test for Cigarette Dependence; the trait items are brief self-reflection prompts. It is not a medical diagnosis.", "هذه الأداة تعليمية. أسئلة الاعتماد مقتبسة من اختبار فاجيرستروم للاعتماد على النيكوتين؛ وعبارات السمات هي دعوات قصيرة للتأمل الذاتي. ليست تشخيصاً طبياً.",
+            "This tool is educational. The dependence questions are adapted from the Fagerström Test for Cigarette Dependence; the trait items are brief self-reflection prompts. It is not a medical diagnosis.",
+            "هذه الأداة تعليمية. أسئلة الاعتماد مقتبسة من اختبار فاجيرستروم للاعتماد على النيكوتين؛ وعبارات السمات هي دعوات قصيرة للتأمل الذاتي. ليست تشخيصاً طبياً.",
             lang
           )}
         </p>
@@ -347,7 +363,8 @@ function CigaretteBurn({ count, lang }: { count: number; lang: Lang }) {
   return (
     <div className="mt-6">
       <div
-        className="relative w-full max-w-xl h-10 mx-auto"role="img"
+        className="relative w-full max-w-xl h-10 mx-auto"
+        role="img"
         aria-label={T(
           `${count} of 4 tools completed`,
           `${count} من 4 أدوات مكتملة`,
@@ -356,7 +373,8 @@ function CigaretteBurn({ count, lang }: { count: number; lang: Lang }) {
       >
         {/* body */}
         <div
-          className="absolute inset-y-2 left-0 right-10 rounded-l-full overflow-hidden border"style={{ borderColor: "#cfcfcf", background: "#fff" }}
+          className="absolute inset-y-2 left-0 right-10 rounded-l-full overflow-hidden border"
+          style={{ borderColor: "#cfcfcf", background: "#fff" }}
         >
           <div
             className="h-full transition-all duration-700 motion-reduce:transition-none"
@@ -394,11 +412,13 @@ function CigaretteBurn({ count, lang }: { count: number; lang: Lang }) {
       <p className="mt-2 text-center text-xs sm:text-sm opacity-75">
         {all
           ? T(
-              "You burned the whole thing — and learned more than any cigarette ever taught you.", "أحرقتها كاملة — وتعلمت منها أكثر مما علّمتك أي سيجارة.",
+              "You burned the whole thing — and learned more than any cigarette ever taught you.",
+              "أحرقتها كاملة — وتعلمت منها أكثر مما علّمتك أي سيجارة.",
               lang
             )
           : T(
-              "Each tool you finish burns a quarter of this cigarette — your first one to finish, not smoke.", "كل أداة تُكملها تحرق ربع هذه السيجارة — أول سيجارة تنهيها دون أن تدخنها.",
+              "Each tool you finish burns a quarter of this cigarette — your first one to finish, not smoke.",
+              "كل أداة تُكملها تحرق ربع هذه السيجارة — أول سيجارة تنهيها دون أن تدخنها.",
               lang
             )}
       </p>
@@ -418,7 +438,8 @@ function MoneyCounter({
   const [packPrice, setPackPrice] = useState(30);
   const [packSize, setPackSize] = useState(20);
   const [years, setYears] = useState(10);
-  const [currency, setCurrency] = useState<"SAR"| "USD"| "EUR"| "GBP">( "SAR"
+  const [currency, setCurrency] = useState<"SAR" | "USD" | "EUR" | "GBP">(
+    "SAR"
   );
 
   useEffect(() => {
@@ -453,7 +474,8 @@ function MoneyCounter({
             max={60}
             value={cigsPerDay}
             onChange={(e) => setCigsPerDay(+e.target.value)}
-            className="w-full"aria-label="cigarettes per day"
+            className="w-full"
+            aria-label="cigarettes per day"
           />
           <div className="text-sm mt-1">{cigsPerDay}</div>
         </Field>
@@ -531,26 +553,28 @@ function MoneyCounter({
       >
         <div className="font-medium mb-2">
           {T(
-            "Your yearly smoking money could have been…", "ما تنفقه سنوياً كان يمكن أن يكون…",
+            "Your yearly smoking money could have been…",
+            "ما تنفقه سنوياً كان يمكن أن يكون…",
             lang
           )}
         </div>
         <ul className="grid gap-1 sm:grid-cols-3">
           <li>
-             {fmt(flights)}{""}
+             {fmt(flights)}{" "}
             {T("round-trip flights", "رحلة طيران ذهاب وعودة", lang)}
           </li>
           <li>
              {fmt(phones)} {T("new smartphones", "هاتف جديد", lang)}
           </li>
           <li>
-             {fmt(groceries)}{""}
+             {fmt(groceries)}{" "}
             {T("months of family groceries", "شهر من مؤن الأسرة", lang)}
           </li>
         </ul>
         <p className="text-xs opacity-70 mt-2">
           {T(
-            "Approximate typical prices, for perspective only.", "أسعار تقريبية للمقارنة فقط.",
+            "Approximate typical prices, for perspective only.",
+            "أسعار تقريبية للمقارنة فقط.",
             lang
           )}
         </p>
@@ -574,7 +598,8 @@ type GQ = { q: [string, string]; opts: [string, string, number][] };
 const grip = (): GQ[] => [
   {
     q: [
-      "How soon after waking do you smoke your first cigarette?", "متى تدخّن أول سيجارة بعد الاستيقاظ؟",
+      "How soon after waking do you smoke your first cigarette?",
+      "متى تدخّن أول سيجارة بعد الاستيقاظ؟",
     ],
     opts: [
       ["Within 5 min", "خلال 5 دقائق", 3],
@@ -585,7 +610,8 @@ const grip = (): GQ[] => [
   },
   {
     q: [
-      "Difficult not to smoke where forbidden (mosque, hospital, plane)?", "هل يصعب عليك ألا تدخن في الأماكن الممنوعة (مسجد، مستشفى، طائرة)؟",
+      "Difficult not to smoke where forbidden (mosque, hospital, plane)?",
+      "هل يصعب عليك ألا تدخن في الأماكن الممنوعة (مسجد، مستشفى، طائرة)؟",
     ],
     opts: [
       ["Yes", "نعم", 1],
@@ -594,7 +620,8 @@ const grip = (): GQ[] => [
   },
   {
     q: [
-      "Which cigarette would you hate most to give up?", "أي سيجارة يصعب عليك التخلي عنها أكثر؟",
+      "Which cigarette would you hate most to give up?",
+      "أي سيجارة يصعب عليك التخلي عنها أكثر؟",
     ],
     opts: [
       ["First in morning", "أول سيجارة في الصباح", 1],
@@ -612,7 +639,8 @@ const grip = (): GQ[] => [
   },
   {
     q: [
-      "Smoke more in first hours after waking than rest of day?", "هل تدخن في الساعات الأولى بعد الاستيقاظ أكثر من باقي اليوم؟",
+      "Smoke more in first hours after waking than rest of day?",
+      "هل تدخن في الساعات الأولى بعد الاستيقاظ أكثر من باقي اليوم؟",
     ],
     opts: [
       ["Yes", "نعم", 1],
@@ -621,7 +649,8 @@ const grip = (): GQ[] => [
   },
   {
     q: [
-      "Smoke even when ill in bed most of the day?", "هل تدخن حتى حين تكون مريضاً في الفراش معظم اليوم؟",
+      "Smoke even when ill in bed most of the day?",
+      "هل تدخن حتى حين تكون مريضاً في الفراش معظم اليوم؟",
     ],
     opts: [
       ["Yes", "نعم", 1],
@@ -653,7 +682,8 @@ function GripTest({
         color: tokens.primary,
         bg: tokens.softTeal,
         text: T(
-          "Habit and routine are a bigger opponent than nicotine; behaviour change strategies can carry most of the weight.", "العادة والروتين خصم أكبر من النيكوتين؛ استراتيجيات تغيير السلوك تكفي غالباً.",
+          "Habit and routine are a bigger opponent than nicotine; behaviour change strategies can carry most of the weight.",
+          "العادة والروتين خصم أكبر من النيكوتين؛ استراتيجيات تغيير السلوك تكفي غالباً.",
           lang
         ),
       };
@@ -663,7 +693,8 @@ function GripTest({
         color: tokens.ember,
         bg: tokens.softEmber,
         text: T(
-          "A real but manageable hold; a clear plan plus support puts success in reach.", "قبضة حقيقية لكن يمكن إدارتها؛ خطة واضحة مع الدعم تجعل النجاح ممكناً.",
+          "A real but manageable hold; a clear plan plus support puts success in reach.",
+          "قبضة حقيقية لكن يمكن إدارتها؛ خطة واضحة مع الدعم تجعل النجاح ممكناً.",
           lang
         ),
       };
@@ -673,7 +704,8 @@ function GripTest({
         color: tokens.warn,
         bg: tokens.softWarn,
         text: T(
-          "Nicotine replacement or medication roughly doubles quit success at this level; talk to a clinician or cessation service.", "بدائل النيكوتين أو الأدوية تضاعف فرص النجاح تقريباً عند هذا المستوى؛ راجع مختصاً أو خدمة إقلاع.",
+          "Nicotine replacement or medication roughly doubles quit success at this level; talk to a clinician or cessation service.",
+          "بدائل النيكوتين أو الأدوية تضاعف فرص النجاح تقريباً عند هذا المستوى؛ راجع مختصاً أو خدمة إقلاع.",
           lang
         ),
       };
@@ -682,7 +714,8 @@ function GripTest({
       color: tokens.warn,
       bg: tokens.softWarn,
       text: T(
-        "Do not attempt on willpower alone; combined medication plus counselling exists for this level and works.", "لا تعتمد على الإرادة وحدها؛ العلاج الدوائي مع الإرشاد النفسي مصمّم لهذا المستوى وفعّال.",
+        "Do not attempt on willpower alone; combined medication plus counselling exists for this level and works.",
+        "لا تعتمد على الإرادة وحدها؛ العلاج الدوائي مع الإرشاد النفسي مصمّم لهذا المستوى وفعّال.",
         lang
       ),
     };
@@ -693,11 +726,13 @@ function GripTest({
     q1 !== null
       ? q1 >= 2
         ? T(
-            "Time to first cigarette is the strongest single sign of dependence — yours suggests a strong morning need for nicotine.", "الوقت إلى أول سيجارة هو أقوى مؤشر للاعتماد — ويشير جوابك إلى حاجة صباحية قوية للنيكوتين.",
+            "Time to first cigarette is the strongest single sign of dependence — yours suggests a strong morning need for nicotine.",
+            "الوقت إلى أول سيجارة هو أقوى مؤشر للاعتماد — ويشير جوابك إلى حاجة صباحية قوية للنيكوتين.",
             lang
           )
         : T(
-            "Time to first cigarette is the strongest single sign of dependence — nicotine is not the first thing your body demands.", "الوقت إلى أول سيجارة هو أقوى مؤشر للاعتماد — والنيكوتين ليس أول ما يطلبه جسمك.",
+            "Time to first cigarette is the strongest single sign of dependence — nicotine is not the first thing your body demands.",
+            "الوقت إلى أول سيجارة هو أقوى مؤشر للاعتماد — والنيكوتين ليس أول ما يطلبه جسمك.",
             lang
           )
       : "";
@@ -808,10 +843,16 @@ function Gauge({
         fill="none"
         strokeDasharray={c}
         strokeDashoffset={c * (1 - pct)}
-        strokeLinecap="round"transform="rotate(-90 55 55)"style={{ transition: "stroke-dashoffset .8s ease" }}
+        strokeLinecap="round"
+        transform="rotate(-90 55 55)"
+        style={{ transition: "stroke-dashoffset .8s ease" }}
       />
       <text
-        x="55"y="60"textAnchor="middle"fontSize="20"fontWeight="700"
+        x="55"
+        y="60"
+        textAnchor="middle"
+        fontSize="20"
+        fontWeight="700"
         fill={color}
       >
         {score}
@@ -830,19 +871,24 @@ function Mirror({
 }) {
   const items: [string, string][] = [
     [
-      "I get stressed, tense, or anxious easily", "أتوتر وأقلق بسهولة",
+      "I get stressed, tense, or anxious easily",
+      "أتوتر وأقلق بسهولة",
     ],
     [
-      "I am organized and stick to routines and plans", "أنا منظم وألتزم بالروتين والخطط",
+      "I am organized and stick to routines and plans",
+      "أنا منظم وألتزم بالروتين والخطط",
     ],
     [
-      "I am outgoing — most of my smoking happens around people", "أنا اجتماعي ومعظم تدخيني مع الناس",
+      "I am outgoing — most of my smoking happens around people",
+      "أنا اجتماعي ومعظم تدخيني مع الناس",
     ],
     [
-      "I get bored quickly and love new experiences", "أملّ بسرعة وأحب التجارب الجديدة",
+      "I get bored quickly and love new experiences",
+      "أملّ بسرعة وأحب التجارب الجديدة",
     ],
     [
-      "I often light a cigarette without noticing — automatically", "كثيراً ما أشعل سيجارة دون أن أنتبه",
+      "I often light a cigarette without noticing — automatically",
+      "كثيراً ما أشعل سيجارة دون أن أنتبه",
     ],
   ];
   const [vals, setVals] = useState<number[]>([4, 4, 4, 4, 4]);
@@ -873,42 +919,48 @@ function Mirror({
   if (vals[0] >= 5)
     insights.push(
       T(
-        "Stress fuels the smoking; withdrawal itself creates part of the tension. Build stress tools before quit day (breathing, short walks, prayer breaks).", "التوتر يغذي التدخين؛ والانسحاب نفسه يخلق جزءاً من التوتر. جهّز أدوات التوتر قبل يوم الإقلاع (تنفس، مشي قصير، فواصل صلاة).",
+        "Stress fuels the smoking; withdrawal itself creates part of the tension. Build stress tools before quit day (breathing, short walks, prayer breaks).",
+        "التوتر يغذي التدخين؛ والانسحاب نفسه يخلق جزءاً من التوتر. جهّز أدوات التوتر قبل يوم الإقلاع (تنفس، مشي قصير، فواصل صلاة).",
         lang
       )
     );
   if (vals[1] <= 3)
     insights.push(
       T(
-        "Borrow structure — fixed quit date, phone alarms, written two-week plan.", "استعِر البنية — تاريخ إقلاع محدد، تنبيهات هاتف، خطة مكتوبة لأسبوعين.",
+        "Borrow structure — fixed quit date, phone alarms, written two-week plan.",
+        "استعِر البنية — تاريخ إقلاع محدد، تنبيهات هاتف، خطة مكتوبة لأسبوعين.",
         lang
       )
     );
   if (vals[1] >= 6)
     insights.push(
       T(
-        "Planning is a genuine quitting advantage — write the plan.", "التخطيط ميزة حقيقية للإقلاع — اكتب خطتك.",
+        "Planning is a genuine quitting advantage — write the plan.",
+        "التخطيط ميزة حقيقية للإقلاع — اكتب خطتك.",
         lang
       )
     );
   if (vals[2] >= 5)
     insights.push(
       T(
-        "Change the setting for two weeks, tell friends, hold something else, recruit a quit buddy.", "غيّر البيئة لأسبوعين، أخبر أصدقاءك، أمسك شيئاً غير السيجارة، جنّد رفيق إقلاع.",
+        "Change the setting for two weeks, tell friends, hold something else, recruit a quit buddy.",
+        "غيّر البيئة لأسبوعين، أخبر أصدقاءك، أمسك شيئاً غير السيجارة، جنّد رفيق إقلاع.",
         lang
       )
     );
   if (vals[3] >= 5)
     insights.push(
       T(
-        "Replace nicotine's stimulation with a new challenge; boredom is the relapse door.", "استبدل تحفيز النيكوتين بتحدٍّ جديد؛ الملل هو باب الانتكاسة.",
+        "Replace nicotine's stimulation with a new challenge; boredom is the relapse door.",
+        "استبدل تحفيز النيكوتين بتحدٍّ جديد؛ الملل هو باب الانتكاسة.",
         lang
       )
     );
   if (vals[4] >= 5)
     insights.push(
       T(
-        "Break the pairings — change places, switch hands, keep cigarettes far so every smoke requires a decision.", "اكسر الاقترانات — غيّر الأماكن، بدّل اليد، أبعد السجائر ليصبح كل تدخين قراراً.",
+        "Break the pairings — change places, switch hands, keep cigarettes far so every smoke requires a decision.",
+        "اكسر الاقترانات — غيّر الأماكن، بدّل اليد، أبعد السجائر ليصبح كل تدخين قراراً.",
         lang
       )
     );
@@ -927,7 +979,8 @@ function Mirror({
   if (insights.length === 0)
     insights.push(
       T(
-        "Your traits are balanced — focus on a clear practical plan for quit day.", "سماتك متوازنة — ركّز على خطة عملية واضحة ليوم الإقلاع.",
+        "Your traits are balanced — focus on a clear practical plan for quit day.",
+        "سماتك متوازنة — ركّز على خطة عملية واضحة ليوم الإقلاع.",
         lang
       )
     );
@@ -988,7 +1041,8 @@ function Mirror({
 
       <button
         onClick={reveal}
-        className="rounded-full px-4 py-2 text-sm font-medium"style={{ background: tokens.primary, color: "#fff" }}
+        className="rounded-full px-4 py-2 text-sm font-medium"
+        style={{ background: tokens.primary, color: "#fff" }}
       >
         {T("Show me the mirror", "أرني المرآة", lang)}
       </button>
@@ -1021,7 +1075,7 @@ function Compass({
   const [imp, setImp] = useState(5);
   const [conf, setConf] = useState(5);
   const [attempts, setAttempts] = useState<
-    "never"| "once"| "2-4"| "5+" | null
+    "never" | "once" | "2-4" | "5+" | null
   >(null);
   const [shown, setShown] = useState(false);
 
@@ -1035,21 +1089,25 @@ function Compass({
   const main = (() => {
     if (imp >= 7 && conf >= 7)
       return T(
-        "Genuinely ready — set a quit date within 14 days, tell someone, prepare replacements this week.", "جاهز فعلاً — حدّد تاريخ إقلاع خلال 14 يوماً، أخبر شخصاً، وجهّز البدائل هذا الأسبوع.",
+        "Genuinely ready — set a quit date within 14 days, tell someone, prepare replacements this week.",
+        "جاهز فعلاً — حدّد تاريخ إقلاع خلال 14 يوماً، أخبر شخصاً، وجهّز البدائل هذا الأسبوع.",
         lang
       );
     if (imp >= 7 && conf < 7)
       return T(
-        "Confidence is what support fixes — NRT, medication, or a programme can double the odds; willpower alone is not required.", "الدعم يعالج الثقة — بدائل النيكوتين، الأدوية، أو برنامج، تضاعف الفرص؛ الإرادة وحدها ليست ضرورية.",
+        "Confidence is what support fixes — NRT, medication, or a programme can double the odds; willpower alone is not required.",
+        "الدعم يعالج الثقة — بدائل النيكوتين، الأدوية، أو برنامج، تضاعف الفرص؛ الإرادة وحدها ليست ضرورية.",
         lang
       );
     if (imp < 7 && conf >= 7)
       return T(
-        "Try the Money Counter above — those are your numbers, not statistics; revisit in a month.", "جرّب عدّاد المال أعلاه — تلك أرقامك أنت، لا إحصاءات عامة؛ عاود بعد شهر.",
+        "Try the Money Counter above — those are your numbers, not statistics; revisit in a month.",
+        "جرّب عدّاد المال أعلاه — تلك أرقامك أنت، لا إحصاءات عامة؛ عاود بعد شهر.",
         lang
       );
     return T(
-      "Honest starting point, no pressure; keep the numbers in mind and the door open.", "نقطة بداية صادقة دون ضغط؛ احتفظ بالأرقام في ذهنك وأبقِ الباب مفتوحاً.",
+      "Honest starting point, no pressure; keep the numbers in mind and the door open.",
+      "نقطة بداية صادقة دون ضغط؛ احتفظ بالأرقام في ذهنك وأبقِ الباب مفتوحاً.",
       lang
     );
   })();
@@ -1057,22 +1115,26 @@ function Compass({
   const attemptMsg =
     attempts === "never"
       ? T(
-          "Plan properly from day one.", "خطط بشكل جيد من اليوم الأول.",
+          "Plan properly from day one.",
+          "خطط بشكل جيد من اليوم الأول.",
           lang
         )
       : attempts === "once"
       ? T(
-          "Training, not failure — most quitters needed several tries.", "تدريب لا فشل — معظم من أقلعوا احتاجوا محاولات عديدة.",
+          "Training, not failure — most quitters needed several tries.",
+          "تدريب لا فشل — معظم من أقلعوا احتاجوا محاولات عديدة.",
           lang
         )
       : attempts === "2-4"
       ? T(
-          "You know your weak moments — that is a map.", "تعرف لحظات ضعفك — هذه خريطة.",
+          "You know your weak moments — that is a map.",
+          "تعرف لحظات ضعفك — هذه خريطة.",
           lang
         )
       : attempts === "5+"
       ? T(
-          "Persistence, not weakness — with the right support, the next can be the last.", "مثابرة لا ضعف — مع الدعم المناسب، القادمة قد تكون الأخيرة.",
+          "Persistence, not weakness — with the right support, the next can be the last.",
+          "مثابرة لا ضعف — مع الدعم المناسب، القادمة قد تكون الأخيرة.",
           lang
         )
       : "";
@@ -1082,7 +1144,8 @@ function Compass({
       <div>
         <label className="text-sm">
           {T(
-            "How important is quitting to you right now? (0–10)", "كم يهمك الإقلاع الآن؟ (0–10)",
+            "How important is quitting to you right now? (0–10)",
+            "كم يهمك الإقلاع الآن؟ (0–10)",
             lang
           )}
         </label>
@@ -1101,7 +1164,8 @@ function Compass({
       <div>
         <label className="text-sm">
           {T(
-            "If you decided today, how confident are you that you could quit? (0–10)", "لو قررت اليوم، كم أنت واثق أنك قادر على الإقلاع؟ (0–10)",
+            "If you decided today, how confident are you that you could quit? (0–10)",
+            "لو قررت اليوم، كم أنت واثق أنك قادر على الإقلاع؟ (0–10)",
             lang
           )}
         </label>
@@ -1120,7 +1184,8 @@ function Compass({
       <fieldset>
         <legend className="text-sm mb-1">
           {T(
-            "Have you tried to quit before?", "هل حاولت الإقلاع من قبل؟",
+            "Have you tried to quit before?",
+            "هل حاولت الإقلاع من قبل؟",
             lang
           )}
         </legend>
@@ -1145,7 +1210,9 @@ function Compass({
                 }}
               >
                 <input
-                  type="radio"name="attempts"className="sr-only"
+                  type="radio"
+                  name="attempts"
+                  className="sr-only"
                   checked={sel}
                   onChange={() => setAttempts(v)}
                 />
@@ -1159,7 +1226,8 @@ function Compass({
       <button
         onClick={reveal}
         disabled={!attempts}
-        className="rounded-full px-4 py-2 text-sm font-medium disabled:opacity-50"style={{ background: tokens.primary, color: "#fff" }}
+        className="rounded-full px-4 py-2 text-sm font-medium disabled:opacity-50"
+        style={{ background: tokens.primary, color: "#fff" }}
       >
         {T("Read my compass", "اقرأ بوصلتي", lang)}
       </button>
@@ -1644,7 +1712,7 @@ function Shooter({
       size: number;
       rot: number;
       vrot: number;
-      kind: "spark"| "ash"| "shard"| "half";
+      kind: "spark" | "ash" | "shard" | "half";
     }[],
     running: false,
     startedAt: 0,
@@ -1904,7 +1972,7 @@ function Shooter({
   function spawnParticles(
     x: number,
     y: number,
-    kind: "hit"| "miss",
+    kind: "hit" | "miss",
     hexEdge = false
   ) {
     const st = stateRef.current;
@@ -2142,15 +2210,17 @@ function Shooter({
         <div className="flex items-center gap-2">
           <button
             onClick={() => setMuted((m) => !m)}
-            className="rounded-full border px-2 py-1 text-sm"style={{ borderColor: tokens.border, background: "#fff" }}
-            aria-label={muted ? "Unmute": "Mute"}
+            className="rounded-full border px-2 py-1 text-sm"
+            style={{ borderColor: tokens.border, background: "#fff" }}
+            aria-label={muted ? "Unmute" : "Mute"}
           >
             {muted ? T("Sound off", "الصوت مغلق", lang) : T("Sound on", "الصوت مفتوح", lang)}
           </button>
           {!running && (
             <button
               onClick={startRound}
-              className="rounded-full px-4 py-1 text-sm font-medium"style={{ background: tokens.primary, color: "#fff" }}
+              className="rounded-full px-4 py-1 text-sm font-medium"
+              style={{ background: tokens.primary, color: "#fff" }}
             >
               {ended
                 ? T("Play again", "العب مجدداً", lang)
@@ -2254,7 +2324,8 @@ function Shooter({
         />
         {ended && (
           <div
-            className="absolute inset-0 flex items-center justify-center rounded-xl"style={{ background: "rgba(16,53,47,0.85)", color: "#fff" }}
+            className="absolute inset-0 flex items-center justify-center rounded-xl"
+            style={{ background: "rgba(16,53,47,0.85)", color: "#fff" }}
           >
             <div className="text-center p-4 max-w-sm">
               <div className="text-lg font-semibold mb-2">
@@ -2270,7 +2341,8 @@ function Shooter({
                 {accuracy >= 70 && (
                   <div className="mt-2" style={{ color: tokens.ember }}>
                     {T(
-                      "Precision like this deserves a quit date.", "دقة كهذه تستحق تاريخ إقلاع.",
+                      "Precision like this deserves a quit date.",
+                      "دقة كهذه تستحق تاريخ إقلاع.",
                       lang
                     )}
                   </div>
@@ -2278,14 +2350,16 @@ function Shooter({
                 {shots - hits > hits && (
                   <div className="mt-2 text-xs opacity-90">
                     {T(
-                      "You broke more glass than cigarettes — cravings win when we rush. Slow down, aim, breathe.", "كسرت زجاجاً أكثر من السجائر — الرغبة تفوز حين نستعجل. تمهّل، صوّب، تنفّس.",
+                      "You broke more glass than cigarettes — cravings win when we rush. Slow down, aim, breathe.",
+                      "كسرت زجاجاً أكثر من السجائر — الرغبة تفوز حين نستعجل. تمهّل، صوّب، تنفّس.",
                       lang
                     )}
                   </div>
                 )}
                 <ShareScore
                   lang={lang}
-                  hash="kys-4"tone="dark"
+                  hash="kys-4"
+                  tone="dark"
                   headline={T(
                     `I scored ${score} in Aqla's Break-the-Smoking-Habit Challenge — ${hits}/${shots} (${accuracy}%). Beat me:`,
                     `سجّلت ${score} نقطة في تحدي كسر عادة التدخين — ${hits}/${shots} (${accuracy}%). تحدّاني:`,
@@ -2293,7 +2367,8 @@ function Shooter({
                   )}
                   scoreCard={{
                     title: T(
-                      "Break the Smoking Habit — Aqla", "تحدي كسر عادة التدخين — أقلع",
+                      "Break the Smoking Habit — Aqla",
+                      "تحدي كسر عادة التدخين — أقلع",
                       lang
                     ),
                     stats: [
@@ -2320,7 +2395,8 @@ function Shooter({
       />
       <p className="text-xs opacity-70">
         {T(
-          "Aim at the lit cigarettes. Every hit shatters glass across the screen.", "صوّب على السجائر المولّعة. كل إصابة تنثر الزجاج في كل الشاشة.",
+          "Aim at the lit cigarettes. Every hit shatters glass across the screen.",
+          "صوّب على السجائر المولّعة. كل إصابة تنثر الزجاج في كل الشاشة.",
           lang
         )}
       </p>
@@ -2357,7 +2433,8 @@ function Stat({
       className="rounded-xl p-3 text-white"
       style={{
         background: ember
-          ? "linear-gradient(135deg,#E08A2E,#C4452F)": "linear-gradient(135deg,#0B3A25,#007A5A)",
+          ? "linear-gradient(135deg,#E08A2E,#C4452F)"
+          : "linear-gradient(135deg,#0B3A25,#007A5A)",
       }}
     >
       <div className="text-xl font-bold leading-tight">{value}</div>
@@ -2377,7 +2454,8 @@ function ShareScore({
 }: {
   lang: Lang;
   headline: string;
-  hash: string; // e.g. "kys-0"tone?: "teal"| "ember"| "dark";
+  hash: string; // e.g. "kys-0"
+  tone?: "teal" | "ember" | "dark";
   scoreCard?: {
     title: string;
     stats: { label: string; value: string }[];
@@ -2386,7 +2464,8 @@ function ShareScore({
 }) {
   const url = `${SHARE_URL}/#${hash}`;
   const tagline = T(
-    "Try Aqla — free, no signup:", "جرّب أقلع — مجاناً وبدون تسجيل:",
+    "Try Aqla — free, no signup:",
+    "جرّب أقلع — مجاناً وبدون تسجيل:",
     lang
   );
   const fullText = `${headline}\n\n${tagline} ${url}`;
@@ -2441,7 +2520,7 @@ function ShareScore({
     ctx.fillRect(0, 0, W, H);
 
     ctx.textAlign = "center";
-    ctx.direction = lang === "ar"? "rtl": "ltr";
+    ctx.direction = lang === "ar" ? "rtl" : "ltr";
 
     // Brand
     ctx.fillStyle = "#F6D68A";
@@ -2547,16 +2626,19 @@ function ShareScore({
   const btnBase =
     "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition active:scale-95 disabled:opacity-60";
   const primary =
-    tone === "dark"? { background: "#fff", color: "#0B3A25" }
-      : tone === "ember"? { background: "#C4452F", color: "#fff" }
+    tone === "dark"
+      ? { background: "#fff", color: "#0B3A25" }
+      : tone === "ember"
+      ? { background: "#C4452F", color: "#fff" }
       : { background: "#007A5A", color: "#fff" };
   const ghost =
-    tone === "dark"? { background: "rgba(255,255,255,0.15)", color: "#fff", border: "1px solid rgba(255,255,255,0.35)" }
+    tone === "dark"
+      ? { background: "rgba(255,255,255,0.15)", color: "#fff", border: "1px solid rgba(255,255,255,0.35)" }
       : { background: "#fff", color: "#0B3A25", border: "1px solid #D5E3DD" };
 
   return (
     <div className="mt-3 flex flex-wrap items-center gap-2">
-      <span className={tone === "dark"? "text-xs opacity-80": "text-xs opacity-70"}>
+      <span className={tone === "dark" ? "text-xs opacity-80" : "text-xs opacity-70"}>
         {T("Share your result:", "شارك نتيجتك:", lang)}
       </span>
       {scoreCard && (
@@ -2577,7 +2659,8 @@ function ShareScore({
       </button>
       <a
         href={`https://wa.me/?text=${enc}`}
-        target="_blank"rel="noopener noreferrer"
+        target="_blank"
+        rel="noopener noreferrer"
         className={btnBase}
         style={ghost}
       >
@@ -2585,7 +2668,8 @@ function ShareScore({
       </a>
       <a
         href={`https://twitter.com/intent/tweet?text=${enc}`}
-        target="_blank"rel="noopener noreferrer"
+        target="_blank"
+        rel="noopener noreferrer"
         className={btnBase}
         style={ghost}
       >

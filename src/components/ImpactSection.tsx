@@ -64,12 +64,12 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
   const scrollStableMotion = useScrollStableMotion();
 
   const slides: Slide[] = [
-    { icon: <Users className="h-5 w-5"/>, label: isAr ? "طالب مسجل": "Registered students", value: 1926, hue: ["#00A65A", "#006C35"] },
-    { icon: <ClipboardCheck className="h-5 w-5"/>, label: isAr ? "التقييمات المكتملة": "Assessments", value: s.assessments_completed, hue: ["#34d399", "#065f46"] },
-    { icon: <Stethoscope className="h-5 w-5"/>, label: isAr ? "حالات مراجعة مختص": "Doctor-review", value: s.doctor_review_count, hue: ["#f472b6", "#831843"] },
-    { icon: <Eye className="h-5 w-5"/>, label: isAr ? "زيارات الموقع": "Visits", value: s.total_visits, hue: ["#60a5fa", "#1e3a8a"] },
-    { icon: <MapPin className="h-5 w-5"/>, label: isAr ? "المدن المشاركة": "Cities", value: s.cities_represented, hue: ["#a78bfa", "#3b0764"] },
-    { icon: <Share2 className="h-5 w-5"/>, label: isAr ? "المشاركات الاجتماعية": "Shares", value: s.whatsapp_clicks, hue: ["#22d3ee", "#0e7490"] },
+    { icon: <Users className="h-5 w-5" />, label: isAr ? "طالب مسجل" : "Registered students", value: 1926, hue: ["#00A65A", "#006C35"] },
+    { icon: <ClipboardCheck className="h-5 w-5" />, label: isAr ? "التقييمات المكتملة" : "Assessments", value: s.assessments_completed, hue: ["#34d399", "#065f46"] },
+    { icon: <Stethoscope className="h-5 w-5" />, label: isAr ? "حالات مراجعة مختص" : "Doctor-review", value: s.doctor_review_count, hue: ["#f472b6", "#831843"] },
+    { icon: <Eye className="h-5 w-5" />, label: isAr ? "زيارات الموقع" : "Visits", value: s.total_visits, hue: ["#60a5fa", "#1e3a8a"] },
+    { icon: <MapPin className="h-5 w-5" />, label: isAr ? "المدن المشاركة" : "Cities", value: s.cities_represented, hue: ["#a78bfa", "#3b0764"] },
+    { icon: <Share2 className="h-5 w-5" />, label: isAr ? "المشاركات الاجتماعية" : "Shares", value: s.whatsapp_clicks, hue: ["#22d3ee", "#0e7490"] },
   ];
 
   const [idx, setIdx] = useState(0);
@@ -88,10 +88,10 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
     <section className="relative">
       <div className="text-center">
         <h2 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
-          {isAr ? "أثر أقلع حتى الآن": "Aqla Impact So Far"}
+          {isAr ? "أثر أقلع حتى الآن" : "Aqla Impact So Far"}
         </h2>
         <p className="mx-auto mt-2 max-w-xl text-[13px] text-muted-foreground">
-          {isAr ? "مؤشرات مجمعة دون عرض أي بيانات شخصية.": "Aggregate indicators — no personal data shown."}
+          {isAr ? "مؤشرات مجمعة دون عرض أي بيانات شخصية." : "Aggregate indicators — no personal data shown."}
         </p>
       </div>
 
@@ -116,50 +116,64 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
 
         {/* outer rotating hexagon ring */}
         <svg
-          viewBox="0 0 200 200"className="absolute"style={{ width: 340, height: 340, animation: "none" }}
+          viewBox="0 0 200 200"
+          className="absolute"
+          style={{ width: 340, height: 340, animation: "none" }}
         >
           <defs>
-            <linearGradient id="hexOuter"x1="0"y1="0"x2="1"y2="1">
-              <stop offset="0%"stopColor={active.hue[0]} stopOpacity="0.9" />
-              <stop offset="100%"stopColor={active.hue[1]} stopOpacity="0.9" />
+            <linearGradient id="hexOuter" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor={active.hue[0]} stopOpacity="0.9" />
+              <stop offset="100%" stopColor={active.hue[1]} stopOpacity="0.9" />
             </linearGradient>
           </defs>
           <polygon
             points={hexPoints}
-            fill="none"stroke="url(#hexOuter)"strokeWidth="0.8"strokeDasharray="3 4"style={{ transition: "stroke 1s ease" }}
+            fill="none"
+            stroke="url(#hexOuter)"
+            strokeWidth="0.8"
+            strokeDasharray="3 4"
+            style={{ transition: "stroke 1s ease" }}
           />
         </svg>
 
         {/* middle rotating hex (reverse) */}
         <svg
-          viewBox="0 0 200 200"className="absolute"style={{ width: 280, height: 280, animation: "none" }}
+          viewBox="0 0 200 200"
+          className="absolute"
+          style={{ width: 280, height: 280, animation: "none" }}
         >
-          <polygon points={hexPoints} fill="none"stroke={active.hue[0]} strokeOpacity="0.45"strokeWidth="0.6" />
+          <polygon points={hexPoints} fill="none" stroke={active.hue[0]} strokeOpacity="0.45" strokeWidth="0.6" />
         </svg>
 
         {/* inner solid hex */}
         <svg
-          viewBox="0 0 200 200"className="absolute"style={{ width: 230, height: 230, animation: "none" }}
+          viewBox="0 0 200 200"
+          className="absolute"
+          style={{ width: 230, height: 230, animation: "none" }}
         >
           <defs>
-            <linearGradient id="hexInner"x1="0"y1="0"x2="1"y2="1">
-              <stop offset="0%"stopColor={active.hue[0]} stopOpacity="0.18" />
-              <stop offset="100%"stopColor={active.hue[1]} stopOpacity="0.32" />
+            <linearGradient id="hexInner" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor={active.hue[0]} stopOpacity="0.18" />
+              <stop offset="100%" stopColor={active.hue[1]} stopOpacity="0.32" />
             </linearGradient>
-            <linearGradient id="hexInnerStroke"x1="0"y1="0"x2="1"y2="1">
+            <linearGradient id="hexInnerStroke" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor={active.hue[0]} />
               <stop offset="100%" stopColor={active.hue[1]} />
             </linearGradient>
           </defs>
           <polygon
             points={hexPoints}
-            fill="url(#hexInner)"stroke="url(#hexInnerStroke)"strokeWidth="1.4"style={{ transition: "fill 1s, stroke 1s" }}
+            fill="url(#hexInner)"
+            stroke="url(#hexInnerStroke)"
+            strokeWidth="1.4"
+            style={{ transition: "fill 1s, stroke 1s" }}
           />
         </svg>
 
         {/* orbiting dots */}
         <div
-          className="absolute"style={{ width: 340, height: 340, animation: "none" }}
+          className="absolute"
+          style={{ width: 340, height: 340, animation: "none" }}
         >
           {slides.map((sl, i) => {
             const angle = (i / slides.length) * Math.PI * 2 - Math.PI / 2;
@@ -185,8 +199,9 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
         {/* center content (flashes per slide) */}
         <div
           key={idx}
-          dir={isAr ? "rtl": "ltr"}
-          className="relative z-10 flex flex-col items-center justify-center text-center"style={{ animation: scrollStableMotion ? "none": "aqlaFlashIn .9s ease-out both" }}
+          dir={isAr ? "rtl" : "ltr"}
+          className="relative z-10 flex flex-col items-center justify-center text-center"
+          style={{ animation: scrollStableMotion ? "none" : "aqlaFlashIn .9s ease-out both" }}
         >
           <div
             className="grid h-11 w-11 place-items-center rounded-xl mb-2"
@@ -231,7 +246,8 @@ export function ImpactSection({ isAr }: { isAr: boolean }) {
 
       <p className="mt-4 text-center text-[11px] text-muted-foreground/80">
         {isAr
-          ? "تعرض هذه الأرقام بشكل إجمالي فقط، وقد تتغير مع تحديث نظام التحليلات.": "Figures are aggregate only and may shift as analytics update."}
+          ? "تعرض هذه الأرقام بشكل إجمالي فقط، وقد تتغير مع تحديث نظام التحليلات."
+          : "Figures are aggregate only and may shift as analytics update."}
       </p>
     </section>
   );

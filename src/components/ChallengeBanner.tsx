@@ -66,7 +66,7 @@ export function ChallengeBanner() {
       role: String(fd.get("role") || "").trim(),
       consent: fd.get("consent") === "on",
       at: new Date().toISOString(),
-      page: typeof window !== "undefined"? window.location.href : "",
+      page: typeof window !== "undefined" ? window.location.href : "",
     };
     if (!payload.name || !payload.email || !payload.consent) {
       toast.error("الاسم والبريد والموافقة مطلوبة");
@@ -95,7 +95,7 @@ export function ChallengeBanner() {
   }
 
   return (
-    <div dir="rtl"className="pointer-events-none relative w-full overflow-hidden bg-gradient-to-l from-red-900 via-red-800 to-red-950 text-white shadow-lg">
+    <div dir="rtl" className="pointer-events-none relative w-full overflow-hidden bg-gradient-to-l from-red-900 via-red-800 to-red-950 text-white shadow-lg">
       {/* shimmer stars */}
       <div className="pointer-events-none absolute inset-0 opacity-40"
         style={{
@@ -113,7 +113,8 @@ export function ChallengeBanner() {
       <div className="pointer-events-none relative flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 sm:py-3">
         <div className="pointer-events-none flex flex-wrap items-center gap-2 sm:gap-3 order-1">
           <span
-            className="inline-block h-2.5 w-2.5 rounded-full bg-rose-300 shadow-[0_0_12px_rgba(255,200,200,.9)]"style={{ animation: "aqlaPulseDot 1.4s ease-in-out infinite" }}
+            className="inline-block h-2.5 w-2.5 rounded-full bg-rose-300 shadow-[0_0_12px_rgba(255,200,200,.9)]"
+            style={{ animation: "aqlaPulseDot 1.4s ease-in-out infinite" }}
           />
           <span className="text-[13px] sm:text-sm font-semibold tracking-wide">
             أنشئ بطاقة إنجازك وشاركها مع زملائك
@@ -125,14 +126,16 @@ export function ChallengeBanner() {
             انضم بسرعة
           </button>
           <Link
-            to="/challenge-pathway"className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full bg-accent-green/95 text-white text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-digital transition shadow-sm"
+            to="/challenge-pathway"
+            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full bg-accent-green/95 text-white text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-digital transition shadow-sm"
           >
             <Trophy className="h-3.5 w-3.5" />
             مجتمع وتحديات أقلع
             <ArrowLeft className="h-3.5 w-3.5" />
           </Link>
           <Link
-            to="/try/shoot"className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full bg-amber-400 text-red-950 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-amber-300 transition shadow-sm"
+            to="/try/shoot"
+            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full bg-amber-400 text-red-950 text-[12px] sm:text-[13px] font-bold px-3 py-1 hover:bg-amber-300 transition shadow-sm"
           >
             <Crosshair className="h-3.5 w-3.5" />
             تحدي كسر عادة التدخين
@@ -148,10 +151,12 @@ export function ChallengeBanner() {
         </div>
 
         <div className="pointer-events-none flex items-center gap-2 order-2 sm:order-3">
-          <a href="https://www.linkedin.com/"target="_blank"rel="noreferrer"className="pointer-events-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
+          <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer"
+             className="pointer-events-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
             <Linkedin className="h-3.5 w-3.5" />
           </a>
-          <a href="https://twitter.com/"target="_blank"rel="noreferrer"className="pointer-events-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
+          <a href="https://twitter.com/" target="_blank" rel="noreferrer"
+             className="pointer-events-auto inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition">
             <Twitter className="h-3.5 w-3.5" />
           </a>
           <span className="text-[11px] opacity-80 hidden sm:inline">تابعنا</span>
@@ -163,7 +168,8 @@ export function ChallengeBanner() {
       {open && (
         <div className="pointer-events-auto fixed inset-0 z-[100] flex items-center justify-center bg-black/60 px-4" onClick={() => setOpen(false)}>
           <div
-            dir="rtl"className="w-full max-w-md rounded-2xl bg-white text-slate-900 p-5 shadow-2xl"
+            dir="rtl"
+            className="w-full max-w-md rounded-2xl bg-white text-slate-900 p-5 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-3">
@@ -171,16 +177,16 @@ export function ChallengeBanner() {
               <button onClick={() => setOpen(false)} className="text-slate-500 hover:text-slate-800 text-sm">إغلاق</button>
             </div>
             <form onSubmit={onSubmit} className="space-y-2.5">
-              <input name="name"required placeholder="الاسم"className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
-              <input name="email"type="email"required placeholder="البريد الإلكتروني"className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
-              <input name="phone"placeholder="الجوال (اختياري)"className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <input name="name" required placeholder="الاسم" className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <input name="email" type="email" required placeholder="البريد الإلكتروني" className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+              <input name="phone" placeholder="الجوال (اختياري)" className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" />
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <input name="university"placeholder="الجامعة"className="rounded-lg border border-slate-300 px-3 py-2 text-sm" />
-                <input name="college"placeholder="الكلية"className="rounded-lg border border-slate-300 px-3 py-2 text-sm" />
-                <input name="role"placeholder="الصفة"className="rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+                <input name="university" placeholder="الجامعة" className="rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+                <input name="college" placeholder="الكلية" className="rounded-lg border border-slate-300 px-3 py-2 text-sm" />
+                <input name="role" placeholder="الصفة" className="rounded-lg border border-slate-300 px-3 py-2 text-sm" />
               </div>
               <label className="flex items-start gap-2 text-xs text-slate-600 leading-5">
-                <input type="checkbox"name="consent"className="mt-0.5" required />
+                <input type="checkbox" name="consent" className="mt-0.5" required />
                 أوافق على إرسال بياناتي للمُيسّر لغرض التواصل والمتابعة.
               </label>
               <button
@@ -188,7 +194,7 @@ export function ChallengeBanner() {
                 disabled={sending}
                 className="w-full rounded-lg bg-red-800 text-white py-2 text-sm font-semibold hover:bg-red-900 disabled:opacity-60"
               >
-                {sending ? "جارٍ الإرسال…": "إرسال"}
+                {sending ? "جارٍ الإرسال…" : "إرسال"}
               </button>
             </form>
           </div>

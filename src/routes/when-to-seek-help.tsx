@@ -5,7 +5,10 @@ export const Route = createFileRoute("/when-to-seek-help")({
   head: () => ({ meta: [{ title: "متى أحتاج مراجعة مختص؟ — Aqla" }] }),
   component: () => (
     <SimpleContentPage
-      titleAr="متى أحتاج مراجعة مختص؟"titleEn="When to Seek Specialist Help"introAr="بعض المواقف تستدعي مراجعة مختص بدل الاكتفاء بالدعم الإلكتروني."introEn="Some situations call for a specialist rather than online support alone."
+      titleAr="متى أحتاج مراجعة مختص؟"
+      titleEn="When to Seek Specialist Help"
+      introAr="بعض المواقف تستدعي مراجعة مختص بدل الاكتفاء بالدعم الإلكتروني."
+      introEn="Some situations call for a specialist rather than online support alone."
       sectionsAr={[
         { heading: "اعتمادية مرتفعة", body: "إذا أظهر تقييم الاعتمادية درجة مرتفعة، أو فشلت محاولات سابقة متعددة." },
         { heading: "حالات صحية مصاحبة", body: "أمراض القلب، الربو، السكري، الحمل، أو اضطرابات نفسية معروفة." },

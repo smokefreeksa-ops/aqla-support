@@ -39,7 +39,8 @@ export function BackButton({
 
   return (
     <button
-      type="button"data-aqla-back=""
+      type="button"
+      data-aqla-back=""
       onClick={() => {
         if (hasHistory) {
           window.history.back();
@@ -52,13 +53,13 @@ export function BackButton({
         className,
       )}
     >
-      <ArrowLeft className="h-4 w-4 rtl:-scale-x-100"aria-hidden="true" />
+      <ArrowLeft className="h-4 w-4 rtl:-scale-x-100" aria-hidden="true" />
       <span>
         {textAr || textEn
           ? isAr
             ? (textAr ?? textEn)
             : (textEn ?? textAr)
-          : `${isAr ? "العودة إلى ": "Back to "}${label}`}
+          : `${isAr ? "العودة إلى " : "Back to "}${label}`}
       </span>
     </button>
   );

@@ -7,7 +7,7 @@ import type { LearnerDashboardData } from "@/lib/dashboard.functions";
 // consume this model.
 // ---------------------------------------------------------------------------
 
-export type CourseStatus = "not_started"| "in_progress"| "completed";
+export type CourseStatus = "not_started" | "in_progress" | "completed";
 
 export type CourseView = {
   slug: string;
@@ -26,7 +26,7 @@ export type CourseView = {
   score: number | null;
 };
 
-export type ExamStatus = "locked"| "available"| "passed"| "retake";
+export type ExamStatus = "locked" | "available" | "passed" | "retake";
 
 export type LearnerModel = {
   displayName: string;
@@ -60,7 +60,7 @@ export function buildLearnerModel(data: LearnerDashboardData): LearnerModel {
     const prog = progressBySlug.get(m.slug);
     const cert = certBySlug.get(m.slug);
     const completed = !!cert || !!prog?.completed;
-    const status: CourseStatus = completed ? "completed": prog ? "in_progress": "not_started";
+    const status: CourseStatus = completed ? "completed" : prog ? "in_progress" : "not_started";
     const percent = completed ? 100 : prog ? 50 : 0;
     return {
       slug: m.slug,
@@ -91,7 +91,8 @@ export function buildLearnerModel(data: LearnerDashboardData): LearnerModel {
     : completedModules < totalModules
       ? "locked"
       : data.examAttempts.length > 0
-        ? "retake": "available";
+        ? "retake"
+        : "available";
 
   return {
     displayName: data.profile.full_name?.trim() || data.profile.email?.split("@")[0] || "المتعلم",

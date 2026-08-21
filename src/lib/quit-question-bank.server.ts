@@ -13,13 +13,14 @@ export type ServerOption = {
   // For yes/no items we use 1/0.
   value: number;
   // For PSECDI Q1–Q4 only — declarative mapping back to typed answer.
-  ps_key?: "q1"| "q2"| "q3"| "q4";
+  ps_key?: "q1" | "q2" | "q3" | "q4";
 };
 export type ServerQuestion = {
-  id: string;            // e.g. "ftnd_q1"field: string;         // typed answer field, e.g. "q1"
+  id: string;            // e.g. "ftnd_q1"
+  field: string;         // typed answer field, e.g. "q1"
   prompt_ar: string;
   prompt_en: string;
-  kind: "single"| "yesno";
+  kind: "single" | "yesno";
   options: ServerOption[];
 };
 export type ServerBank = {

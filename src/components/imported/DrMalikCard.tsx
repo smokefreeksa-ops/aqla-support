@@ -69,7 +69,7 @@ export default function DrMalikCard() {
                   animationDuration: "2.5s",
                 }}
               />
-              <Brain className="w-16 h-16 md:w-20 md:h-20"style={{ color: "#00A65A" }} />
+              <Brain className="w-16 h-16 md:w-20 md:h-20" style={{ color: "#00A65A" }} />
             </div>
 
             <div
@@ -112,7 +112,8 @@ export default function DrMalikCard() {
             </h2>
 
             <p
-              className="text-base md:text-lg mb-6 leading-relaxed"style={{ color: "rgba(255,255,255,0.60)" }}
+              className="text-base md:text-lg mb-6 leading-relaxed"
+              style={{ color: "rgba(255,255,255,0.60)" }}
             >
               مساعدك الذكي المتخصص في الإقلاع عن التدخين — يفهم رحلتك، يدعمك في لحظات
               الضعف، ويقدم لك خطة علاجية مبنية على أحدث الأبحاث العلمية.
@@ -128,9 +129,10 @@ export default function DrMalikCard() {
                     border: "1px solid rgba(255,255,255,0.07)",
                   }}
                 >
-                  <Icon className="w-4 h-4 flex-shrink-0"style={{ color: "#00A65A" }} />
+                  <Icon className="w-4 h-4 flex-shrink-0" style={{ color: "#00A65A" }} />
                   <span
-                    className="text-sm"style={{ color: "rgba(255,255,255,0.75)" }}
+                    className="text-sm"
+                    style={{ color: "rgba(255,255,255,0.75)" }}
                   >
                     {text}
                   </span>
@@ -139,7 +141,8 @@ export default function DrMalikCard() {
             </div>
 
             <Link
-              to="/quit-chat"className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-white font-bold text-base md:text-lg transition-all duration-200 hover:scale-[1.03] active:scale-[0.97]"
+              to="/quit-chat"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-white font-bold text-base md:text-lg transition-all duration-200 hover:scale-[1.03] active:scale-[0.97]"
               style={{
                 background:
                   "linear-gradient(135deg, #00A65A 0%, #006C35 50%, #a78bfa 100%)",
@@ -151,7 +154,8 @@ export default function DrMalikCard() {
             </Link>
 
             <p
-              className="mt-3 text-xs"style={{ color: "rgba(255,255,255,0.30)" }}
+              className="mt-3 text-xs"
+              style={{ color: "rgba(255,255,255,0.30)" }}
             >
               مجاني تماماً · لا يحتاج تسجيل للبدء
             </p>

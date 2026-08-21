@@ -15,10 +15,10 @@ import aqlaLogo from "@/assets/aqla-logo-transparent.png";
 const REDCAP_URL = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM";
 const STORAGE_KEY = "aqla_study_overlay_dismissed";
 
-type Lang = "ar"| "en";
+type Lang = "ar" | "en";
 
 const COPY: Record<Lang, {
-  dir: "rtl"| "ltr";
+  dir: "rtl" | "ltr";
   eyebrow: string;
   university: string;
   title: string;
@@ -100,7 +100,14 @@ const COPY: Record<Lang, {
 function IconChevron({ open }: { open: boolean }) {
   return (
     <svg
-      viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="1.6"strokeLinecap="round"strokeLinejoin="round"className="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"style={{ transform: open ? "rotate(180deg)": "rotate(0deg)" }}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+      style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
       aria-hidden
     >
       <path d="M6 9l6 6 6-6" />
@@ -115,7 +122,7 @@ export function StudyInvitationOverlay() {
   const [mounted, setMounted] = useState(false);
   const [lang, setLang] = useState<Lang>("ar");
   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState<"invite"| "confirm">("invite");
+  const [step, setStep] = useState<"invite" | "confirm">("invite");
   const [launching, setLaunching] = useState(false);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const detailsRef = useRef<HTMLDivElement | null>(null);
@@ -131,7 +138,7 @@ export function StudyInvitationOverlay() {
     initializedRef.current = true;
 
     // Never cover the personal plan page — it blocks the PDF download button.
-    if (typeof window !== "undefined"&& window.location.pathname.startsWith("/quit-plan/")) return;
+    if (typeof window !== "undefined" && window.location.pathname.startsWith("/quit-plan/")) return;
     try {
       if (sessionStorage.getItem(STORAGE_KEY) === "1") return;
     } catch {
@@ -140,7 +147,7 @@ export function StudyInvitationOverlay() {
     }
 
     const entryId =
-      typeof crypto !== "undefined"&& typeof crypto.randomUUID === "function"
+      typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
         ? crypto.randomUUID()
         : `study-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
@@ -309,7 +316,7 @@ export function StudyInvitationOverlay() {
   return (
     <>
       <div
-        className={`fixed inset-0 z-[300] flex flex-col${launching ? "aqla-launching" : ""}`}
+        className={`fixed inset-0 z-[300] flex flex-col${launching ? " aqla-launching" : ""}`}
         style={{
           opacity: mounted ? 1 : 0,
           transition: "opacity 500ms ease-out",
@@ -336,7 +343,8 @@ export function StudyInvitationOverlay() {
 
         {/* Backdrop click closes */}
         <button
-          type="button"aria-label={isRTL ? "إغلاق": "Close"}
+          type="button"
+          aria-label={isRTL ? "إغلاق" : "Close"}
           onClick={close}
           className="absolute inset-0 z-[2] cursor-default"
         />
@@ -359,14 +367,16 @@ export function StudyInvitationOverlay() {
           {/* Modal */}
           <div
             ref={dialogRef}
-            role="dialog"aria-modal="true"aria-labelledby="aqla-study-title"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="aqla-study-title"
             tabIndex={-1}
             dir={t.dir}
             lang={lang}
             className="crystal-shell aqla-launch-panel relative flex max-h-[92%] w-full flex-col outline-none focus:outline-none focus-visible:outline-none"
             style={{
               width: "min(95%, clamp(500px, 61vw, 860px))",
-              transform: mounted ? "translateY(0) scale(1)": "translateY(8px) scale(0.98)",
+              transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
               transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
             }}
           >
@@ -385,10 +395,12 @@ export function StudyInvitationOverlay() {
         />
 
         {/* Language switch */}
-        <div className={`absolute top-3 ${isRTL ? "left-3": "right-3"} z-30`}>
+        <div className={`absolute top-3 ${isRTL ? "left-3" : "right-3"} z-30`}>
           <button
-            type="button"onClick={() => setLang(lang === "ar"? "en": "ar")}
-            className="inline-flex h-8 min-w-[56px] items-center justify-center rounded-full border border-[#c9a84c]/60 bg-[#06381f] px-3.5 text-[11.5px] font-semibold tracking-wide text-[#faf1d8] shadow-[0_6px_16px_-8px_rgba(6,56,31,0.7)] transition-colors duration-300 hover:bg-[#0d4a2e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/70"aria-label={lang === "ar"? "Switch to English": "التبديل إلى العربية"}
+            type="button"
+            onClick={() => setLang(lang === "ar" ? "en" : "ar")}
+            className="inline-flex h-8 min-w-[56px] items-center justify-center rounded-full border border-[#c9a84c]/60 bg-[#06381f] px-3.5 text-[11.5px] font-semibold tracking-wide text-[#faf1d8] shadow-[0_6px_16px_-8px_rgba(6,56,31,0.7)] transition-colors duration-300 hover:bg-[#0d4a2e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/70"
+            aria-label={lang === "ar" ? "Switch to English" : "التبديل إلى العربية"}
           >
 
             {t.langSwitchOther}
@@ -402,7 +414,8 @@ export function StudyInvitationOverlay() {
             <span className="inline-flex items-center justify-center rounded-2xl bg-[#f7fdf9]/95 px-6 py-3 shadow-[0_10px_30px_-14px_rgba(0,0,0,0.6)] ring-1 ring-[#c9a84c]/30">
             <img
               src={aqlaLogo}
-              alt="شعار أقلع — Aqla Logo"className="h-[52px] w-auto object-contain sm:h-[64px]"
+              alt="شعار أقلع — Aqla Logo"
+              className="h-[52px] w-auto object-contain sm:h-[64px]"
             />
             </span>
           </div>
@@ -423,13 +436,14 @@ export function StudyInvitationOverlay() {
           </div>
 
           {step === "invite" ? (
-          <div key="invite"className="flex flex-col gap-3.5 sm:gap-4 animate-fade-in">
+          <div key="invite" className="flex flex-col gap-3.5 sm:gap-4 animate-fade-in">
           {/* Title */}
           <h2
             id="aqla-study-title"
             className={`mx-auto max-w-[36ch] text-balance text-center font-bold tracking-tight text-[#f4fbf7] ${
               isRTL
-                ? "text-[23px] leading-[1.75] sm:text-[27px] sm:leading-[1.72]": "text-[22px] leading-[1.55] sm:text-[26px]"
+                ? "text-[23px] leading-[1.75] sm:text-[27px] sm:leading-[1.72]"
+                : "text-[22px] leading-[1.55] sm:text-[26px]"
             }`}
           >
             {t.title}
@@ -476,7 +490,8 @@ export function StudyInvitationOverlay() {
                 }
               }}
               aria-expanded={open}
-              aria-controls="aqla-study-details"className="inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-2xl border border-[#eaf6ef]/20 bg-[#eaf6ef]/[0.05] px-6 text-[14.5px] font-semibold text-[#eaf6ef] transition-all duration-300 hover:border-[#eaf6ef]/30 hover:bg-[#eaf6ef]/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eaf6ef]/25 motion-reduce:transition-none"
+              aria-controls="aqla-study-details"
+              className="inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-2xl border border-[#eaf6ef]/20 bg-[#eaf6ef]/[0.05] px-6 text-[14.5px] font-semibold text-[#eaf6ef] transition-all duration-300 hover:border-[#eaf6ef]/30 hover:bg-[#eaf6ef]/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eaf6ef]/25 motion-reduce:transition-none"
             >
               <span>{t.detailsToggle}</span>
               <IconChevron open={open} />
@@ -486,11 +501,12 @@ export function StudyInvitationOverlay() {
 
           <div ref={detailsRef} className="mt-1.5 border-t border-[#eaf6ef]/10 pt-3">
             <div
-              id="aqla-study-details"role="region"
+              id="aqla-study-details"
+              role="region"
               aria-hidden={!open}
               className="grid overflow-hidden transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
               style={{
-                gridTemplateRows: open ? "1fr": "0fr",
+                gridTemplateRows: open ? "1fr" : "0fr",
                 opacity: open ? 1 : 0,
               }}
             >
@@ -520,7 +536,8 @@ export function StudyInvitationOverlay() {
                   <div className="mt-4 flex items-center gap-2 text-[12.5px] text-[#cfe6da]">
                     <span className="text-[#a8c4b5]">{t.contactLabel}</span>
                     <a
-                      href="mailto:smokefreeksa@gmail.com"className="min-w-0 truncate font-semibold text-[#e6c97a] underline decoration-[#c9a84c]/50 underline-offset-2 transition-colors hover:decoration-[#c9a84c]"
+                      href="mailto:smokefreeksa@gmail.com"
+                      className="min-w-0 truncate font-semibold text-[#e6c97a] underline decoration-[#c9a84c]/50 underline-offset-2 transition-colors hover:decoration-[#c9a84c]"
                     >
                       smokefreeksa@gmail.com
                     </a>
@@ -541,9 +558,9 @@ export function StudyInvitationOverlay() {
 
           </div>
           ) : (
-          <div key="confirm"dir={t.dir} className="flex flex-col gap-4 animate-fade-in">
+          <div key="confirm" dir={t.dir} className="flex flex-col gap-4 animate-fade-in">
             <p className={`mx-auto max-w-[34ch] text-balance text-center font-semibold text-[#f4fbf7] ${
-              isRTL ? "text-[17px] leading-[1.9] sm:text-[19px]": "text-[16.5px] leading-[1.6] sm:text-[18px]"
+              isRTL ? "text-[17px] leading-[1.9] sm:text-[19px]" : "text-[16.5px] leading-[1.6] sm:text-[18px]"
             }`}>
               {t.confirmMessage}
             </p>

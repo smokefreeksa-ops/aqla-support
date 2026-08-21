@@ -25,7 +25,7 @@ function CertificatesPage() {
       </div>
 
       {valid.length === 0 ? (
-        <EmptyState title="لم تحصل على شهادات بعد"hint="أكمل وحدة تدريبية واجتز اختبارها للحصول على شهادة." />
+        <EmptyState title="لم تحصل على شهادات بعد" hint="أكمل وحدة تدريبية واجتز اختبارها للحصول على شهادة." />
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {valid.map((c) => <CertificateCard key={c.id} cert={c} />)}

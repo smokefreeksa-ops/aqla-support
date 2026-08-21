@@ -17,13 +17,13 @@ export const Route = createFileRoute("/voice-craving-scan")({
   component: VoiceCravingScan,
 });
 
-type Phase = "idle"| "recording"| "analyzing"| "done"| "error";
+type Phase = "idle" | "recording" | "analyzing" | "done" | "error";
 
 type Result = {
   jitter: number;
   zcr: number;
   rms: number;
-  band: "calm"| "watch"| "surge";
+  band: "calm" | "watch" | "surge";
 };
 
 const SAMPLE_MS = 5000;
@@ -82,28 +82,37 @@ async function recordAndAnalyze(): Promise<Result> {
 }
 
 function CalmProtocol({ ar }: { ar: boolean }) {
-  const [step, setStep] = useState<"in"| "hold"| "out">("in");
+  const [step, setStep] = useState<"in" | "hold" | "out">("in");
   const [count, setCount] = useState(4);
   useEffect(() => {
     const id = setInterval(() => {
       setCount((c) => {
         if (c > 1) return c - 1;
-        setStep((s) => (s === "in"? "hold": s === "hold"? "out": "in"));
-        return step === "in"? 7 : step === "hold" ? 8 : 4;
+        setStep((s) => (s === "in" ? "hold" : s === "hold" ? "out" : "in"));
+        return step === "in" ? 7 : step === "hold" ? 8 : 4;
       });
     }, 1000);
     return () => clearInterval(id);
   }, [step]);
 
   const label = ar
-    ? step === "in"? "استنشق": step === "hold"? "احبس": "أخرج": step === "in"? "Inhale": step === "hold"? "Hold": "Exhale";
-  const scale = step === "in"? 1.35 : step === "hold" ? 1.35 : 0.85;
+    ? step === "in"
+      ? "استنشق"
+      : step === "hold"
+        ? "احبس"
+        : "أخرج"
+    : step === "in"
+      ? "Inhale"
+      : step === "hold"
+        ? "Hold"
+        : "Exhale";
+  const scale = step === "in" ? 1.35 : step === "hold" ? 1.35 : 0.85;
 
   return (
     <div className="mt-6 rounded-2xl border border-accent-green/30 bg-accent-green/5 p-6 text-center">
       <div className="flex items-center justify-center gap-2 text-accent-green-light font-semibold mb-4">
         <Wind className="w-5 h-5" />
-        {ar ? "بروتوكول التهدئة 4-7-8": "Calm Protocol 4-7-8"}
+        {ar ? "بروتوكول التهدئة 4-7-8" : "Calm Protocol 4-7-8"}
       </div>
       <div
         className="mx-auto flex h-40 w-40 items-center justify-center rounded-full bg-gradient-to-br from-accent-green-light/40 to-brand/40 transition-transform duration-1000 ease-in-out"
@@ -116,7 +125,8 @@ function CalmProtocol({ ar }: { ar: boolean }) {
       </div>
       <p className="mt-4 text-sm text-white/70">
         {ar
-          ? "تابع الدائرة لدورة كاملة. سيتراجع الاندفاع خلال 90 ثانية.": "Follow the circle for one full cycle. The surge fades within 90 seconds."}
+          ? "تابع الدائرة لدورة كاملة. سيتراجع الاندفاع خلال 90 ثانية."
+          : "Follow the circle for one full cycle. The surge fades within 90 seconds."}
       </p>
     </div>
   );
@@ -169,14 +179,15 @@ function VoiceCravingScan() {
         <div className="mb-8 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-accent-green-light/30 bg-accent-green-light/10 px-3 py-1 text-xs font-semibold text-accent-green-light">
             <ShieldCheck className="h-3.5 w-3.5" />
-            {ar ? "معالجة كاملة على جهازك · لا حفظ ولا رفع": "On-device only · Nothing stored or uploaded"}
+            {ar ? "معالجة كاملة على جهازك · لا حفظ ولا رفع" : "On-device only · Nothing stored or uploaded"}
           </div>
           <h1 className="mt-4 text-3xl md:text-5xl font-extrabold tracking-tight">
-            {ar ? "فحص الرغبة الصوتي": "Voice Craving Scan"}
+            {ar ? "فحص الرغبة الصوتي" : "Voice Craving Scan"}
           </h1>
           <p className="mt-3 text-white/70 max-w-xl mx-auto">
             {ar
-              ? "خمس ثوانٍ من صوتك تكفي. نحسب الرجفان الدقيق في نبرتك (Zero-crossing × RMS) لنقيس شدة الاندفاع، ثم نُشغّل بروتوكول التهدئة إذا لزم.": "Five seconds of your voice is enough. We compute the fine tremor in your tone (Zero-crossing × RMS) to gauge the surge, and launch the Calm Protocol if needed."}
+              ? "خمس ثوانٍ من صوتك تكفي. نحسب الرجفان الدقيق في نبرتك (Zero-crossing × RMS) لنقيس شدة الاندفاع، ثم نُشغّل بروتوكول التهدئة إذا لزم."
+              : "Five seconds of your voice is enough. We compute the fine tremor in your tone (Zero-crossing × RMS) to gauge the surge, and launch the Calm Protocol if needed."}
           </p>
         </div>
 
@@ -185,7 +196,7 @@ function VoiceCravingScan() {
             <button
               type="button"
               onClick={start}
-              disabled={phase === "recording"|| phase === "analyzing"}
+              disabled={phase === "recording" || phase === "analyzing"}
               className="group relative flex h-40 w-40 items-center justify-center rounded-full bg-gradient-to-br from-[#00A65A] to-[#006C35] text-white shadow-[0_0_60px_rgba(0,166,90,0.35)] transition-transform active:scale-95 disabled:opacity-70"
             >
               {phase === "recording" && (
@@ -203,11 +214,15 @@ function VoiceCravingScan() {
                 <span>
                   {phase === "recording"
                     ? ar
-                      ? "جارٍ الالتقاط...": "Capturing...": phase === "analyzing"
+                      ? "جارٍ الالتقاط..."
+                      : "Capturing..."
+                    : phase === "analyzing"
                       ? ar
-                        ? "تحليل...": "Analyzing..."
+                        ? "تحليل..."
+                        : "Analyzing..."
                       : ar
-                        ? "اضغط للبدء": "Tap to start"}
+                        ? "اضغط للبدء"
+                        : "Tap to start"}
                 </span>
                 <span className="tabular-nums">{(elapsed / 1000).toFixed(1)}s / 5.0s</span>
               </div>
@@ -231,7 +246,8 @@ function VoiceCravingScan() {
               <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" />
               <div>
                 {ar
-                  ? "تعذّر الوصول إلى الميكروفون. تأكد من منح الإذن للمتصفح.": "Could not access the microphone. Please grant permission."}
+                  ? "تعذّر الوصول إلى الميكروفون. تأكد من منح الإذن للمتصفح."
+                  : "Could not access the microphone. Please grant permission."}
                 <div className="mt-1 text-xs text-red-200/70">{error}</div>
               </div>
             </div>
@@ -240,7 +256,7 @@ function VoiceCravingScan() {
           {result && (
             <div className="mt-8">
               <div className="grid grid-cols-3 gap-3">
-                <Metric label={ar ? "Jitter": "Jitter"} value={result.jitter.toFixed(3)} highlight />
+                <Metric label={ar ? "Jitter" : "Jitter"} value={result.jitter.toFixed(3)} highlight />
                 <Metric label="ZCR" value={result.zcr.toFixed(3)} />
                 <Metric label="RMS" value={result.rms.toFixed(4)} />
               </div>
@@ -248,19 +264,22 @@ function VoiceCravingScan() {
               <div className="mt-6 rounded-2xl border border-white/10 bg-black/40 p-6">
                 <div className="mb-3 flex items-center gap-2 text-sm text-white/60">
                   <Waves className="h-4 w-4" />
-                  {ar ? "قراءة الاندفاع": "Surge reading"}
+                  {ar ? "قراءة الاندفاع" : "Surge reading"}
                 </div>
                 <BandBar band={result.band} jitter={result.jitter} />
                 <p className="mt-4 text-sm text-white/80">
                   {result.band === "calm" &&
                     (ar
-                      ? "الحالة هادئة. صوتك مستقر — الرغبة تحت السيطرة الآن. تابع نشاطك.": "Calm. Your voice is stable — the craving is under control right now. Carry on.")}
+                      ? "الحالة هادئة. صوتك مستقر — الرغبة تحت السيطرة الآن. تابع نشاطك."
+                      : "Calm. Your voice is stable — the craving is under control right now. Carry on.")}
                   {result.band === "watch" &&
                     (ar
-                      ? "منطقة مراقبة. ارتفاع خفيف — خذ نفسًا عميقًا واشرب ماء.": "Watch zone. Slight elevation — take a deep breath and drink water.")}
+                      ? "منطقة مراقبة. ارتفاع خفيف — خذ نفسًا عميقًا واشرب ماء."
+                      : "Watch zone. Slight elevation — take a deep breath and drink water.")}
                   {result.band === "surge" &&
                     (ar
-                      ? "اندفاع رغبة قوي. سنبدأ بروتوكول التهدئة الآن.": "Strong craving surge detected. Launching the Calm Protocol now.")}
+                      ? "اندفاع رغبة قوي. سنبدأ بروتوكول التهدئة الآن."
+                      : "Strong craving surge detected. Launching the Calm Protocol now.")}
                 </p>
               </div>
 
@@ -272,12 +291,13 @@ function VoiceCravingScan() {
                   onClick={start}
                   className="rounded-xl border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/10"
                 >
-                  {ar ? "فحص جديد": "Scan again"}
+                  {ar ? "فحص جديد" : "Scan again"}
                 </button>
                 <Link
-                  to="/craving-coach"className="rounded-xl bg-accent-green px-5 py-2.5 text-sm font-bold text-white hover:bg-accent-green-light"
+                  to="/craving-coach"
+                  className="rounded-xl bg-accent-green px-5 py-2.5 text-sm font-bold text-white hover:bg-accent-green-light"
                 >
-                  {ar ? "أدوات إضافية للحظة الرغبة": "More craving tools"}
+                  {ar ? "أدوات إضافية للحظة الرغبة" : "More craving tools"}
                 </Link>
               </div>
             </div>
@@ -286,7 +306,8 @@ function VoiceCravingScan() {
 
         <p className="mt-6 text-center text-xs text-white/40">
           {ar
-            ? "الميزة مبنية على §4.3.3 من طلب براءة اختراع Aqla — Persona OS 2030.": "Feature based on §4.3.3 of the Aqla — Persona OS 2030 patent filing."}
+            ? "الميزة مبنية على §4.3.3 من طلب براءة اختراع Aqla — Persona OS 2030."
+            : "Feature based on §4.3.3 of the Aqla — Persona OS 2030 patent filing."}
         </p>
       </div>
     </div>
@@ -296,10 +317,10 @@ function VoiceCravingScan() {
 function Metric({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
     <div
-      className={`rounded-xl border p-3 text-center ${highlight ? "border-accent-green-light/40 bg-accent-green-light/10": "border-white/10 bg-white/5"}`}
+      className={`rounded-xl border p-3 text-center ${highlight ? "border-accent-green-light/40 bg-accent-green-light/10" : "border-white/10 bg-white/5"}`}
     >
       <div className="text-[10px] uppercase tracking-widest text-white/50">{label}</div>
-      <div className={`mt-1 text-lg font-extrabold tabular-nums ${highlight ? "text-accent-green-light": "text-white"}`}>
+      <div className={`mt-1 text-lg font-extrabold tabular-nums ${highlight ? "text-accent-green-light" : "text-white"}`}>
         {value}
       </div>
     </div>
@@ -308,7 +329,7 @@ function Metric({ label, value, highlight }: { label: string; value: string; hig
 
 function BandBar({ band, jitter }: { band: Result["band"]; jitter: number }) {
   const pct = Math.round(jitter * 100);
-  const color = band === "surge"? "bg-red-500": band === "watch"? "bg-amber-400": "bg-accent-green-light";
+  const color = band === "surge" ? "bg-red-500" : band === "watch" ? "bg-amber-400" : "bg-accent-green-light";
   return (
     <div>
       <div className="relative h-3 w-full overflow-hidden rounded-full bg-white/5">

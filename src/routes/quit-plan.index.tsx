@@ -17,7 +17,10 @@ export const Route = createFileRoute("/quit-plan/")({
   }),
   component: () => (
     <SimpleContentPage
-      titleAr="خطة أقلع"titleEn="Aqla Plan"introAr="خطة شخصية مبسطة للإقلاع تُبنى بعد إكمال تقييم الاعتمادية في مسار الإقلاع."introEn="A simplified personal cessation plan built after completing the dependence assessment in the Quit Pathway."
+      titleAr="خطة أقلع"
+      titleEn="Aqla Plan"
+      introAr="خطة شخصية مبسطة للإقلاع تُبنى بعد إكمال تقييم الاعتمادية في مسار الإقلاع."
+      introEn="A simplified personal cessation plan built after completing the dependence assessment in the Quit Pathway."
       sectionsAr={[
         { heading: "كيف أبدأ؟", body: "ابدأ بمسار الإقلاع لتحديد المنتج وإكمال أداة التقييم المناسبة، ثم تظهر خطتك المبدئية." },
         { heading: "ماذا تتضمن الخطة؟", body: "تاريخ بدء مقترح، خطوات يومية، تذكيرات بمواقف الإغراء، وخيارات للتواصل مع مختص عند الحاجة." },

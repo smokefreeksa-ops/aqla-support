@@ -67,7 +67,7 @@ export const submitQuitEngine = createServerFn({ method: "POST" })
     const dep = classifyDependence(a, intensity);
     const ready = classifyReadiness(a);
     const patterns = topTriggerPatterns(a);
-    const referral = requiresReferral(a) || dep === "high"|| dep === "complex_mixed";
+    const referral = requiresReferral(a) || dep === "high" || dep === "complex_mixed";
     const plan = buildPlan(a);
 
     const { data: inserted, error } = await supabaseAdmin
@@ -124,7 +124,7 @@ export const submitQuitEngine = createServerFn({ method: "POST" })
     // Email user (best effort)
     let emailDelivered = false;
     if (a.email) {
-      const html = `<div dir="rtl"style="font-family:Tajawal,Cairo,Arial,sans-serif">
+      const html = `<div dir="rtl" style="font-family:Tajawal,Cairo,Arial,sans-serif">
         <h2>خطتك الشخصية للإقلاع جاهزة</h2>
         <p>${plan.human_explanation}</p>
         <p>يمكنك مراجعة الخطة الكاملة عبر الرابط أدناه وتنزيلها كملف PDF.</p>
@@ -136,7 +136,7 @@ export const submitQuitEngine = createServerFn({ method: "POST" })
         recipient_type: "user",
         email: a.email,
         subject: "خطة إقلاعك الشخصية — أقلع",
-        status: r.ok ? "sent": "failed",
+        status: r.ok ? "sent" : "failed",
         error_message: r.error ?? null,
       } as never);
     }
@@ -147,10 +147,10 @@ export const submitQuitEngine = createServerFn({ method: "POST" })
       <ul>
         <li>Date: ${new Date().toISOString()}</li>
         <li>Primary product: ${a.primary_product ?? a.product_types[0]}</li>
-        <li>Mixed use: ${a.mixed_use ? "yes": "no"}</li>
+        <li>Mixed use: ${a.mixed_use ? "yes" : "no"}</li>
         <li>Dependence: ${dep}</li>
         <li>Readiness: ${ready}</li>
-        <li>Referral needed: ${referral ? "yes": "no"}</li>
+        <li>Referral needed: ${referral ? "yes" : "no"}</li>
         <li>Top triggers: ${patterns.slice(0, 3).join(", ")}</li>
         <li>Result ID: ${resultId}</li>
       </ul>
@@ -161,7 +161,7 @@ export const submitQuitEngine = createServerFn({ method: "POST" })
       recipient_type: "admin",
       email: "smokefreeksa@gmail.com",
       subject: "Aqla Quit Engine — new result",
-      status: adminRes.ok ? "sent": "failed",
+      status: adminRes.ok ? "sent" : "failed",
       error_message: adminRes.error ?? null,
     } as never);
 

@@ -28,7 +28,8 @@ const SYSTEM_AR = `أنت "مساعد أقلع الصوتي"، مساعد تثق
 - لا تحسب أي درجة اعتماد على النيكوتين، ولا تجري تقييم Fagerström أو HSI. التقييم يتم فقط داخل /aqla-quit-engine.
 - لا تشخّص ولا تعالج ولا تستبدل المختص.
 - في حال أي إشارة لإيذاء النفس أو الانتحار أو ألم صدر شديد أو ضيق تنفس حاد أو نزيف: ردّ فورًا برسالة طوارئ:
-  "هذا يبدو طارئًا. الرجاء الاتصال بالإسعاف 997 الآن أو التوجه لأقرب طوارئ. أنت لست وحدك."- لا تذكر أنك نموذج لغوي أو OpenAI. عرّف نفسك كـ"مساعد أقلع الصوتي".
+  "هذا يبدو طارئًا. الرجاء الاتصال بالإسعاف 997 الآن أو التوجه لأقرب طوارئ. أنت لست وحدك."
+- لا تذكر أنك نموذج لغوي أو OpenAI. عرّف نفسك كـ"مساعد أقلع الصوتي".
 - إذا طلب المستخدم خطة شاملة، أجب: "خطتك الكاملة تُبنى في محرّك أقلع الشخصي. افتح /aqla-quit-engine وسأرشدك."`;
 
 const SYSTEM_EN = `You are "Aqla Voice Assistant", a short, warm educational companion for the Aqla quit-smoking platform.
@@ -42,7 +43,8 @@ Strict rules:
 - Never score nicotine dependence. Never run Fagerström/HSI. Assessment happens only inside /aqla-quit-engine.
 - Do not diagnose, treat, or replace a clinician.
 - For any sign of self-harm, suicide, severe chest pain, severe breathing trouble, or bleeding, reply immediately:
-  "This sounds like an emergency. Please call 997 now or go to the nearest ER. You are not alone."- Do not mention you are an AI/OpenAI. Identify as "Aqla Voice Assistant".
+  "This sounds like an emergency. Please call 997 now or go to the nearest ER. You are not alone."
+- Do not mention you are an AI/OpenAI. Identify as "Aqla Voice Assistant".
 - If asked for a full plan, reply: "Your full plan is built in the Aqla Quit Engine. Open /aqla-quit-engine and I'll guide you."`;
 
 export const voiceChatStatus = createServerFn({ method: "GET" }).handler(async () => {
@@ -56,7 +58,9 @@ export const voiceChat = createServerFn({ method: "POST" })
     if (!apiKey) {
       return {
         reply:
-          data.lang === "ar"? "المساعد الصوتي غير متاح حاليًا. الرجاء المحاولة لاحقًا.": "Voice assistant is unavailable right now. Please try later.",
+          data.lang === "ar"
+            ? "المساعد الصوتي غير متاح حاليًا. الرجاء المحاولة لاحقًا."
+            : "Voice assistant is unavailable right now. Please try later.",
       };
     }
 
@@ -82,7 +86,9 @@ export const voiceChat = createServerFn({ method: "POST" })
         console.error("[voiceChat] OpenAI error", res.status, errText);
         return {
           reply:
-            data.lang === "ar"? "تعذّر الاتصال بالمساعد الآن. حاول بعد قليل.": "Couldn't reach the assistant right now. Please try again shortly.",
+            data.lang === "ar"
+              ? "تعذّر الاتصال بالمساعد الآن. حاول بعد قليل."
+              : "Couldn't reach the assistant right now. Please try again shortly.",
         };
       }
 
@@ -91,13 +97,15 @@ export const voiceChat = createServerFn({ method: "POST" })
       };
       const reply =
         json.choices?.[0]?.message?.content?.trim() ||
-        (data.lang === "ar"? "حاضر، كيف أقدر أساعدك؟": "I'm here. How can I help?");
+        (data.lang === "ar" ? "حاضر، كيف أقدر أساعدك؟" : "I'm here. How can I help?");
       return { reply };
     } catch (e) {
       console.error("[voiceChat] error", e);
       return {
         reply:
-          data.lang === "ar"? "صار خطأ بسيط. حاول مرة ثانية من فضلك.": "Something went wrong. Please try again.",
+          data.lang === "ar"
+            ? "صار خطأ بسيط. حاول مرة ثانية من فضلك."
+            : "Something went wrong. Please try again.",
       };
     }
   });

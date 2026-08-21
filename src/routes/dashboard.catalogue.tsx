@@ -40,16 +40,16 @@ function CataloguePage() {
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث…"className="max-w-xs" />
+        <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث…" className="max-w-xs" />
         {levels.map((l) => (
-          <Button key={l} size="sm"variant={level === l ? "default": "outline"} onClick={() => setLevel(l)}>
-            {l === "all"? "الكل" : l}
+          <Button key={l} size="sm" variant={level === l ? "default" : "outline"} onClick={() => setLevel(l)}>
+            {l === "all" ? "الكل" : l}
           </Button>
         ))}
       </div>
 
       {list.length === 0 ? (
-        <EmptyState title="لا توجد نتائج مطابقة"hint="جرّب كلمة بحث أخرى." />
+        <EmptyState title="لا توجد نتائج مطابقة" hint="جرّب كلمة بحث أخرى." />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((c) => <CourseCard key={c.slug} course={c} />)}

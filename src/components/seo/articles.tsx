@@ -46,7 +46,7 @@ export function ArticleScaffold({
           <Link to="/articles">مقالات أقلع</Link>
         </p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-primary sm:text-4xl">{titleAr}</h1>
-        <p className="mt-2 text-sm text-muted-foreground"dir="ltr"lang="en">
+        <p className="mt-2 text-sm text-muted-foreground" dir="ltr" lang="en">
           {titleEn}
         </p>
 
@@ -75,7 +75,7 @@ export function ArticleScaffold({
               </li>
             ))}
             <li>
-              <Link to="/quit-pathway"className="text-primary underline">
+              <Link to="/quit-pathway" className="text-primary underline">
                 مسار الإقلاع عن التدخين
               </Link>
             </li>

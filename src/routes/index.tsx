@@ -59,9 +59,9 @@ function LandingPage() {
   );
 }
 
-type Tone = "quit"| "academy"| "help"| "challenge";
+type Tone = "quit" | "academy" | "help" | "challenge";
 type Path = {
-  to: "/quit-pathway"| "/learn-train"| "/help-pathway"| "/challenge-pathway";
+  to: "/quit-pathway" | "/learn-train" | "/help-pathway" | "/challenge-pathway";
   title: string;
   description: string;
   cta: string;
@@ -76,37 +76,41 @@ function Inner() {
   const paths: Path[] = [
     {
       to: "/quit-pathway",
-      title: isAr ? "مركز أقلع الافتراضي لدعم الإقلاع": "Aqla Virtual Quit Center",
+      title: isAr ? "مركز أقلع الافتراضي لدعم الإقلاع" : "Aqla Virtual Quit Center",
       description: isAr
-        ? "تجربة تفاعلية تقودك من فهم استخدامك للتدخين أو النيكوتين، إلى التقييم، وبناء الخطة، والمتابعة، وطلب الدعم عند الحاجة.": "An interactive experience: understand your use, take the assessment, build your plan, follow up, and request support when needed.",
-      cta: isAr ? "ادخل مركز الإقلاع": "Enter Quit Center",
+        ? "تجربة تفاعلية تقودك من فهم استخدامك للتدخين أو النيكوتين، إلى التقييم، وبناء الخطة، والمتابعة، وطلب الدعم عند الحاجة."
+        : "An interactive experience: understand your use, take the assessment, build your plan, follow up, and request support when needed.",
+      cta: isAr ? "ادخل مركز الإقلاع" : "Enter Quit Center",
       icon: <Sparkles className="h-5 w-5" />,
       tone: "quit",
     },
     {
       to: "/learn-train",
-      title: isAr ? "أكاديمية أقلع للتدريب والشهادات": "Aqla Academy for Training & Certification",
+      title: isAr ? "أكاديمية أقلع للتدريب والشهادات" : "Aqla Academy for Training & Certification",
       description: isAr
-        ? "مركز تعليمي تفاعلي للتدريب، السيناريوهات، الاختبارات، والشهادات القابلة للتحميل والمشاركة والتحقق.": "An interactive academy for training, scenarios, exams, and shareable verifiable certificates.",
-      cta: isAr ? "ادخل الأكاديمية": "Enter Academy",
+        ? "مركز تعليمي تفاعلي للتدريب، السيناريوهات، الاختبارات، والشهادات القابلة للتحميل والمشاركة والتحقق."
+        : "An interactive academy for training, scenarios, exams, and shareable verifiable certificates.",
+      cta: isAr ? "ادخل الأكاديمية" : "Enter Academy",
       icon: <GraduationCap className="h-5 w-5" />,
       tone: "academy",
     },
     {
       to: "/help-pathway",
-      title: isAr ? "مسار أقلع لمساعدة شخص يهمك": "Aqla Help Pathway",
+      title: isAr ? "مسار أقلع لمساعدة شخص يهمك" : "Aqla Help Pathway",
       description: isAr
-        ? "لمن يريد دعم صديق، قريب، طالب، زميل، أو شخص يهتم لأمره برسالة أو بطاقة دعم محترمة وآمنة.": "Support a friend, relative, student, colleague — with a respectful, safe message or support card.",
-      cta: isAr ? "ابدأ مسار المساعدة": "Start Help Pathway",
+        ? "لمن يريد دعم صديق، قريب، طالب، زميل، أو شخص يهتم لأمره برسالة أو بطاقة دعم محترمة وآمنة."
+        : "Support a friend, relative, student, colleague — with a respectful, safe message or support card.",
+      cta: isAr ? "ابدأ مسار المساعدة" : "Start Help Pathway",
       icon: <HeartHandshake className="h-5 w-5" />,
       tone: "help",
     },
     {
       to: "/challenge-pathway",
-      title: isAr ? "مجتمع وتحديات أقلع": "Aqla Community & Challenges",
+      title: isAr ? "مجتمع وتحديات أقلع" : "Aqla Community & Challenges",
       description: isAr
-        ? "للتحديات، الألعاب التوعوية، الهاشتاقات، دعوة الأصدقاء، النقاط، الأوسمة، بطاقات التوعية، وأثر أقلع المجتمعي.": "Challenges, awareness games, hashtags, invites, points, medals, awareness cards, and Aqla's community impact.",
-      cta: isAr ? "ادخل التحديات والمجتمع": "Enter Community & Challenges",
+        ? "للتحديات، الألعاب التوعوية، الهاشتاقات، دعوة الأصدقاء، النقاط، الأوسمة، بطاقات التوعية، وأثر أقلع المجتمعي."
+        : "Challenges, awareness games, hashtags, invites, points, medals, awareness cards, and Aqla's community impact.",
+      cta: isAr ? "ادخل التحديات والمجتمع" : "Enter Community & Challenges",
       icon: <Trophy className="h-5 w-5" />,
       tone: "challenge",
     },
@@ -125,7 +129,7 @@ function Inner() {
 
 
 
-        <section id="pathways"className="cv-section scroll-mt-20 border-t border-[#c9a84c]/20">
+        <section id="pathways" className="cv-section scroll-mt-20 border-t border-[#c9a84c]/20">
           <div className="mx-auto max-w-6xl px-4 py-14 sm:py-20">
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {paths.map((p) => (
@@ -163,7 +167,8 @@ function Inner() {
           <div className="mx-auto max-w-4xl px-4 py-6 text-center">
             <p className="text-[12px] leading-6 text-[#f4f0e1]/70 sm:text-[13px]">
               {isAr
-                ? "أقلع يقدم التوعية والدعم، ولا يقدم تشخيصًا أو علاجًا أو وصفة طبية. اختيار بدائل النيكوتين أو أدوية الإقلاع أو جرعاتها يحتاج مراجعة مختص أو صيدلي.": "Aqla provides awareness and support. It does not provide diagnosis, treatment, or prescriptions."}
+                ? "أقلع يقدم التوعية والدعم، ولا يقدم تشخيصًا أو علاجًا أو وصفة طبية. اختيار بدائل النيكوتين أو أدوية الإقلاع أو جرعاتها يحتاج مراجعة مختص أو صيدلي."
+                : "Aqla provides awareness and support. It does not provide diagnosis, treatment, or prescriptions."}
             </p>
           </div>
         </section>

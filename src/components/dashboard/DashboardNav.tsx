@@ -62,9 +62,9 @@ export function DashboardNav({
     exact ? pathname === to : pathname.startsWith(to);
 
   return (
-    <header dir="rtl"className="sticky top-0 z-40 border-b border-white/10 bg-[#0A1A0E] text-white">
+    <header dir="rtl" className="sticky top-0 z-40 border-b border-white/10 bg-[#0A1A0E] text-white">
       <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4">
-        <Link to="/dashboard"className="flex items-center gap-2 font-bold tracking-tight">
+        <Link to="/dashboard" className="flex items-center gap-2 font-bold tracking-tight">
           <span className="grid h-7 w-7 place-items-center rounded-lg bg-white/10 text-[12px]">أق</span>
           <span className="text-sm">أكاديمية أقلع</span>
         </Link>
@@ -77,7 +77,8 @@ export function DashboardNav({
               className={cn(
                 "rounded-lg px-3 py-1.5 text-[13px] transition-colors",
                 isActive(item.to, "exact" in item ? item.exact : false)
-                  ? "bg-white/15 font-semibold text-white": "text-white/70 hover:bg-white/10 hover:text-white",
+                  ? "bg-white/15 font-semibold text-white"
+                  : "text-white/70 hover:bg-white/10 hover:text-white",
               )}
             >
               {item.label}
@@ -87,21 +88,24 @@ export function DashboardNav({
 
         <div className="ms-auto flex items-center gap-1">
           <Link
-            to="/dashboard/catalogue"aria-label="ابحث عن دورة"className="grid h-9 w-9 place-items-center rounded-lg text-white/80 hover:bg-white/10 hover:text-white"
+            to="/dashboard/catalogue"
+            aria-label="ابحث عن دورة"
+            className="grid h-9 w-9 place-items-center rounded-lg text-white/80 hover:bg-white/10 hover:text-white"
           >
             <Search className="h-4 w-4" />
           </Link>
 
           <DropdownMenu>
             <DropdownMenuTrigger
-              aria-label="الإشعارات"className="relative grid h-9 w-9 place-items-center rounded-lg text-white/80 hover:bg-white/10 hover:text-white"
+              aria-label="الإشعارات"
+              className="relative grid h-9 w-9 place-items-center rounded-lg text-white/80 hover:bg-white/10 hover:text-white"
             >
               <Bell className="h-4 w-4" />
               {notifications.length > 0 && (
                 <span className="absolute end-1.5 top-1.5 h-2 w-2 rounded-full bg-amber-400" />
               )}
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start"className="w-72">
+            <DropdownMenuContent align="start" className="w-72">
               <DropdownMenuLabel>الإشعارات</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {notifications.length === 0 ? (
@@ -120,11 +124,12 @@ export function DashboardNav({
 
           <DropdownMenu>
             <DropdownMenuTrigger
-              aria-label="حساب المتعلم"className="grid h-9 w-9 place-items-center rounded-full bg-white/15 text-[11px] font-semibold"
+              aria-label="حساب المتعلم"
+              className="grid h-9 w-9 place-items-center rounded-full bg-white/15 text-[11px] font-semibold"
             >
               {initials || <User className="h-4 w-4" />}
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start"className="w-56">
+            <DropdownMenuContent align="start" className="w-56">
               <DropdownMenuLabel className="truncate">{displayName}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
@@ -151,7 +156,7 @@ export function DashboardNav({
             onClick={() => setMobileOpen((v) => !v)}
             className="grid h-9 w-9 place-items-center rounded-lg text-white/80 hover:bg-white/10 lg:hidden"
           >
-            {mobileOpen ? <X className="h-4 w-4"/> : <Menu className="h-4 w-4" />}
+            {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
         </div>
       </div>
@@ -167,7 +172,8 @@ export function DashboardNav({
                 className={cn(
                   "flex items-center gap-2 rounded-xl px-3 py-2.5 text-[13px]",
                   isActive(item.to, "exact" in item ? item.exact : false)
-                    ? "bg-white/15 font-semibold": "bg-white/5 text-white/80",
+                    ? "bg-white/15 font-semibold"
+                    : "bg-white/5 text-white/80",
                 )}
               >
                 <item.icon className="h-4 w-4" />

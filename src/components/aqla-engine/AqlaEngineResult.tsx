@@ -29,7 +29,7 @@ export function AqlaEngineResult({ result, resultId, userName, supportPersonName
   };
 
   return (
-    <div dir="rtl"className="text-right max-w-3xl mx-auto px-4 py-6 print:hidden space-y-5">
+    <div dir="rtl" className="text-right max-w-3xl mx-auto px-4 py-6 print:hidden space-y-5">
       {result.safety_immediate && (
         <div className="bg-red-50 border-2 border-red-300 rounded-2xl p-5 text-red-900">
           <p className="font-bold mb-1">رسالة سلامة</p>
@@ -53,7 +53,7 @@ export function AqlaEngineResult({ result, resultId, userName, supportPersonName
       <Card title="2. مستوى الاعتماد العملي">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           <Stat label="الفئة" value={result.dependence_category} />
-          {typeof result.hsi_score === "number"&& <Stat label="HSI (سجائر)" value={`${result.hsi_score} / 6`} />}
+          {typeof result.hsi_score === "number" && <Stat label="HSI (سجائر)" value={`${result.hsi_score} / 6`} />}
           <Stat label="مؤشر أقلع العملي" value={`${result.aqla_intensity_score} / 10`} />
         </div>
         <p className="mt-3 text-slate-700">{result.readiness_text}</p>
@@ -107,7 +107,7 @@ export function AqlaEngineResult({ result, resultId, userName, supportPersonName
       </Card>
 
       <Card title="8. هل تحتاج إحالة؟">
-        <p className={result.referral_needed ? "text-amber-900": "text-ink"}>{result.referral_message}</p>
+        <p className={result.referral_needed ? "text-amber-900" : "text-ink"}>{result.referral_message}</p>
       </Card>
 
       {(supportPersonName || result.support_message_template) && (

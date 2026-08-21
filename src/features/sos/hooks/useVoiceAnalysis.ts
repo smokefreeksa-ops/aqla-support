@@ -11,7 +11,7 @@ import type { AcousticState } from "../sos.types";
  * disconnects. No MediaRecorder, no Blob, no upload, no download.
  */
 export interface VoiceAnalysisState {
-  status: "idle"| "requesting"| "recording"| "analyzing"| "done"| "error";
+  status: "idle" | "requesting" | "recording" | "analyzing" | "done" | "error";
   secondsLeft: number;
   liveLevel: number; // 0..1 for waveform UI
   result?: AcousticState;

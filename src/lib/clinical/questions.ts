@@ -5,7 +5,13 @@ import type { ClinicalAnswers, ProductKey } from "./types";
 import { EMERGENCY_RED_FLAGS } from "./safety";
 
 export type QuestionKind =
-  | "text"| "email"| "choice"| "multi"| "scale"| "notice"| "number";
+  | "text"
+  | "email"
+  | "choice"
+  | "multi"
+  | "scale"
+  | "notice"
+  | "number";
 
 export interface Choice {
   value: string;
@@ -345,7 +351,8 @@ export const QUESTIONS: Question[] = [
     health: true,
     prompt_ar: (a) =>
       (a.readiness ?? 10) < 5
-        ? "أقدّر صراحتك. ما راح أضغطك على قرار ما أنت مقتنع فيه. أي خيار أقرب لك الآن؟": "ممتاز. وش الخطة اللي تناسبك؟",
+        ? "أقدّر صراحتك. ما راح أضغطك على قرار ما أنت مقتنع فيه. أي خيار أقرب لك الآن؟"
+        : "ممتاز. وش الخطة اللي تناسبك؟",
     prompt_en: "Which option is closest to what you want now?",
     choices: [
       { value: "quit_now", label_ar: "أبي أقلع الآن", label_en: "Quit now" },
@@ -358,7 +365,7 @@ export const QUESTIONS: Question[] = [
     id: "quit_date",
     kind: "choice",
     health: true,
-    when: (a) => a.strategy === "quit_now"|| a.strategy === "future_date"|| a.strategy === "reduce_to_quit",
+    when: (a) => a.strategy === "quit_now" || a.strategy === "future_date" || a.strategy === "reduce_to_quit",
     prompt_ar: () => 'متى تبي يكون "يوم استقلالك"؟',
     prompt_en: "When is your independence day?",
     choices: [

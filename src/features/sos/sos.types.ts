@@ -7,12 +7,30 @@
  */
 
 export type SOSState =
-  | "idle"| "permission"| "voice_capture"| "local_analysis"| "context_fusion"| "protocol_selected"| "protocol_delivery"| "post_craving_check"| "logging"| "complete"| "fallback";
+  | "idle"
+  | "permission"
+  | "voice_capture"
+  | "local_analysis"
+  | "context_fusion"
+  | "protocol_selected"
+  | "protocol_delivery"
+  | "post_craving_check"
+  | "logging"
+  | "complete"
+  | "fallback";
 
-export type ProtocolId = "calm"| "energy_discharge"| "safe_escape"| "reboot";
+export type ProtocolId = "calm" | "energy_discharge" | "safe_escape" | "reboot";
 
 export type SelectionReason =
-  | "acute_state_override"| "persona_fight"| "persona_flight"| "persona_freeze"| "high_neuroticism"| "historical_effectiveness"| "universal_fallback"| "default"| "second_loop_alt";
+  | "acute_state_override"
+  | "persona_fight"
+  | "persona_flight"
+  | "persona_freeze"
+  | "high_neuroticism"
+  | "historical_effectiveness"
+  | "universal_fallback"
+  | "default"
+  | "second_loop_alt";
 
 export interface AcousticState {
   rmsEnergy: number;
@@ -32,9 +50,9 @@ export interface AqlaPersona {
   openness: number;
   agreeableness: number;
   conscientiousness: number;
-  chronotype: "morning"| "intermediate"| "evening";
-  stressResponse: "fight"| "flight"| "freeze"| "mixed";
-  preferredLanguage: "ar"| "en";
+  chronotype: "morning" | "intermediate" | "evening";
+  stressResponse: "fight" | "flight" | "freeze" | "mixed";
+  preferredLanguage: "ar" | "en";
   culturalContext?: {
     prayerAnchorsEnabled: boolean;
     coffeeAnchorEnabled: boolean;
@@ -90,7 +108,14 @@ export interface ProtocolStep {
   ar: string;
   en: string;
   visual:
-    | "still_center"| "breath_orb"| "wave_reframe"| "grounding"| "action_command"| "countdown"| "large_tap_target"| "choice";
+    | "still_center"
+    | "breath_orb"
+    | "wave_reframe"
+    | "grounding"
+    | "action_command"
+    | "countdown"
+    | "large_tap_target"
+    | "choice";
   countdown?: boolean;
   hapticOnStart?: boolean;
 }
@@ -101,5 +126,5 @@ export interface ProtocolDefinition {
   nameEn: string;
   totalSeconds: number;
   steps: ProtocolStep[];
-  accent: "calm"| "active"| "escape"| "reboot";
+  accent: "calm" | "active" | "escape" | "reboot";
 }

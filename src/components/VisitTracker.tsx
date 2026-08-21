@@ -6,7 +6,10 @@ import { getAnonSessionId, getReferrerType, getLang } from "@/lib/analytics";
 const PUBLIC_PATHS = new Set(["/", "/about", "/assessment", "/volunteer"]);
 
 const PATH_EVENT: Record<string, string> = {
-  "/": "homepage_viewed", "/about": "about_viewed", "/assessment": "assessment_viewed", "/volunteer": "volunteer_viewed",
+  "/": "homepage_viewed",
+  "/about": "about_viewed",
+  "/assessment": "assessment_viewed",
+  "/volunteer": "volunteer_viewed",
 };
 
 const MAX_DURATION = 30 * 60; // cap at 30 minutes
@@ -24,7 +27,7 @@ export function VisitTracker({ path }: { path: string }) {
     if (!PUBLIC_PATHS.has(path)) return;
 
     const sid = getAnonSessionId();
-    const lang = getLang() as "ar"| "en";
+    const lang = getLang() as "ar" | "en";
     const referrer_type = getReferrerType();
     const page_title = document.title?.slice(0, 255) ?? null;
     startRef.current = Date.now();

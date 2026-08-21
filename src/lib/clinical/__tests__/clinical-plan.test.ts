@@ -89,7 +89,7 @@ describe("safety ladder", () => {
   });
 
   it("recent cardiac event routes to clinician, not emergency", () => {
-    expect(gen({ cardiac: "recent_event"}).safety_gate_level).toBe("clinician");
+    expect(gen({ cardiac: "recent_event" }).safety_gate_level).toBe("clinician");
   });
 
   it("active symptoms route to urgent, not emergency", () => {
@@ -138,7 +138,7 @@ describe("relapse pathways", () => {
 
   it("a single puff does not reset the counter", () => {
     const puff = gen({}).lapse_pathways[0];
-    expect(puff.steps.join("")).toContain("لا تعيد ضبط عدّاد أيامك");
+    expect(puff.steps.join(" ")).toContain("لا تعيد ضبط عدّاد أيامك");
   });
 });
 
@@ -185,7 +185,7 @@ describe("question flow", () => {
       const q = nextQuestion(answers, answered);
       if (!q) break;
       answered.push(q.id as string);
-      answers = { ...answers, [q.id]: q.kind === "multi"? ["none"] : q.kind === "scale"? 7 : "x" };
+      answers = { ...answers, [q.id]: q.kind === "multi" ? ["none"] : q.kind === "scale" ? 7 : "x" };
     }
     expect(nextQuestion(answers, answered)).toBeNull();
   });

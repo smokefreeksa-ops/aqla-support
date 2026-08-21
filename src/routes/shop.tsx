@@ -49,7 +49,7 @@ function ShopPage() {
   );
 }
 
-type Stage = "browse"| "form"| "confirmed";
+type Stage = "browse" | "form" | "confirmed";
 
 type ConfirmedResult = {
   request_code: string;
@@ -96,7 +96,7 @@ function Inner() {
 
   function startRequest() {
     if (selected.size === 0) {
-      toast.error(isAr ? "اختر منتجًا واحدًا على الأقل": "Select at least one product.");
+      toast.error(isAr ? "اختر منتجًا واحدًا على الأقل" : "Select at least one product.");
       return;
     }
     trackEvent("nrt_request_started");
@@ -108,19 +108,19 @@ function Inner() {
     <div dir={dir} className="min-h-screen bg-background">
       <header className="border-b bg-card/70 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <Link to="/"className="flex items-center gap-3">
-            <img src={aqlaLogo} alt="Aqla — أقلع logo"className="h-[38px] w-auto object-contain sm:h-12" />
+          <Link to="/" className="flex items-center gap-3">
+            <img src={aqlaLogo} alt="Aqla — أقلع logo" className="h-[38px] w-auto object-contain sm:h-12" />
             <div className="leading-tight">
-              <div className="font-semibold tracking-tight">{isAr ? "أقلع": "Aqla"}</div>
+              <div className="font-semibold tracking-tight">{isAr ? "أقلع" : "Aqla"}</div>
               <div className="text-[11px] text-muted-foreground">Aqla — أقلع</div>
             </div>
           </Link>
           <div className="flex items-center gap-2">
-            <Button variant="ghost"size="sm"onClick={() => setLang(isAr ? "en": "ar")} className="gap-1.5">
+            <Button variant="ghost" size="sm" onClick={() => setLang(isAr ? "en" : "ar")} className="gap-1.5">
               <Languages className="h-4 w-4" />
-              {isAr ? "English": "العربية"}
+              {isAr ? "English" : "العربية"}
             </Button>
-            <Link to="/"><Button variant="ghost"size="sm">{isAr ? "الرئيسية": "Home"}</Button></Link>
+            <Link to="/"><Button variant="ghost" size="sm">{isAr ? "الرئيسية" : "Home"}</Button></Link>
           </div>
         </div>
       </header>
@@ -162,7 +162,7 @@ function Inner() {
 
       <footer className="mx-auto max-w-6xl px-4 py-8 text-center text-xs text-muted-foreground">
         <SocialLinks />
-        <p className="mt-3">© {isAr ? "أقلع": "Aqla"} — {new Date().getFullYear()}</p>
+        <p className="mt-3">© {isAr ? "أقلع" : "Aqla"} — {new Date().getFullYear()}</p>
       </footer>
 
       <Dialog open={learnMoreProduct !== null} onOpenChange={(o) => !o && setLearnMoreSlug(null)}>
@@ -191,14 +191,15 @@ function BrowseStage(props: {
       <section className="text-center">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1 text-xs font-medium text-primary">
           <ShoppingBag className="h-3.5 w-3.5" />
-          {isAr ? "طلب للمراجعة فقط": "Request for review only"}
+          {isAr ? "طلب للمراجعة فقط" : "Request for review only"}
         </span>
         <h1 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-          {isAr ? "متجر أقلع للدعم": "Aqla Support Shop"}
+          {isAr ? "متجر أقلع للدعم" : "Aqla Support Shop"}
         </h1>
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
           {isAr
-            ? "اختر المنتجات أو وسائل الدعم التي ترغب بمعرفة المزيد عنها، وسيقوم فريق أقلع بمراجعة طلبك والتواصل معك. لا تُعد هذه الصفحة وصفة طبية أو توصية علاجية.": "Choose the products or support options you would like to learn more about. The Aqla team will review your request and contact you. This page is not a prescription or medical recommendation."}
+            ? "اختر المنتجات أو وسائل الدعم التي ترغب بمعرفة المزيد عنها، وسيقوم فريق أقلع بمراجعة طلبك والتواصل معك. لا تُعد هذه الصفحة وصفة طبية أو توصية علاجية."
+            : "Choose the products or support options you would like to learn more about. The Aqla team will review your request and contact you. This page is not a prescription or medical recommendation."}
         </p>
       </section>
 
@@ -217,7 +218,7 @@ function BrowseStage(props: {
 
       <section className="mt-8">
         {isLoading && (
-          <p className="text-center text-sm text-muted-foreground">{isAr ? "جارٍ التحميل…": "Loading…"}</p>
+          <p className="text-center text-sm text-muted-foreground">{isAr ? "جارٍ التحميل…" : "Loading…"}</p>
         )}
         <div className="grid gap-4 sm:grid-cols-2">
           {products.map((p) => {
@@ -226,11 +227,11 @@ function BrowseStage(props: {
             return (
               <Card
                 key={p.id}
-                className={`rounded-2xl border-0 p-5 shadow-elegant card-gradient ${isSel ? "ring-2 ring-primary": ""}`}
+                className={`rounded-2xl border-0 p-5 shadow-elegant card-gradient ${isSel ? "ring-2 ring-primary" : ""}`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <h3 className="text-base font-semibold">{isAr ? p.name_ar : p.name_en}</h3>
-                  {isSel && <Badge className="bg-primary text-primary-foreground">{isAr ? "مضاف": "Added"}</Badge>}
+                  {isSel && <Badge className="bg-primary text-primary-foreground">{isAr ? "مضاف" : "Added"}</Badge>}
                 </div>
                 <p className="mt-2 text-sm leading-6 text-foreground/75">
                   {isAr ? p.description_ar : p.description_en}
@@ -249,15 +250,15 @@ function BrowseStage(props: {
                   <Button
                     size="sm"
                     onClick={() => toggleSelect(p.product_slug)}
-                    variant={isSel ? "secondary": "default"}
-                    className={isSel ? "": "quit-gradient border-0 text-white"}
+                    variant={isSel ? "secondary" : "default"}
+                    className={isSel ? "" : "quit-gradient border-0 text-white"}
                   >
-                    {isSel ? <Check className="h-4 w-4"/> : <Plus className="h-4 w-4" />}
-                    {isSel ? (isAr ? "إزالة": "Remove") : (isAr ? "أضف للطلب": "Add to request")}
+                    {isSel ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                    {isSel ? (isAr ? "إزالة" : "Remove") : (isAr ? "أضف للطلب" : "Add to request")}
                   </Button>
-                  <Button size="sm"variant="ghost" onClick={() => onLearnMore(p.product_slug)}>
+                  <Button size="sm" variant="ghost" onClick={() => onLearnMore(p.product_slug)}>
                     <Info className="h-4 w-4" />
-                    {isAr ? "معرفة المزيد": "Learn more"}
+                    {isAr ? "معرفة المزيد" : "Learn more"}
                   </Button>
                 </div>
               </Card>
@@ -272,12 +273,13 @@ function BrowseStage(props: {
             disabled={selected.size === 0}
             className="quit-gradient border-0 text-white"
           >
-            {isAr ? "إرسال الطلب للمراجعة": "Submit request for review"}
+            {isAr ? "إرسال الطلب للمراجعة" : "Submit request for review"}
             <ArrowRight className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <p className="text-xs text-muted-foreground">
             {isAr
-              ? "سيتم استكمال بياناتك في الخطوة التالية. جميع الطلبات تخضع لمراجعة الفريق.": "You will complete your details in the next step. All requests are reviewed by the team."}
+              ? "سيتم استكمال بياناتك في الخطوة التالية. جميع الطلبات تخضع لمراجعة الفريق."
+              : "You will complete your details in the next step. All requests are reviewed by the team."}
           </p>
         </div>
       </section>
@@ -298,29 +300,33 @@ function LearnMoreDialog({ isAr, product }: { isAr: boolean; product: ShopProduc
       </DialogHeader>
       <div className="space-y-3 text-sm leading-7">
         <p>
-          <b>{isAr ? "كيفية الاستخدام بشكل عام:": "General use concept:"}</b>{""}
+          <b>{isAr ? "كيفية الاستخدام بشكل عام:" : "General use concept:"}</b>{" "}
           {isAr
-            ? "تختلف طريقة الاستخدام حسب المنتج والشخص. لا نقدم هنا أي تعليمات للجرعة. يحتاج اختيار النوع والاستخدام مراجعة من مختص أو صيدلي.": "How to use varies by product and person. We do not provide dosing here. Choosing the type and use requires review by a clinician or pharmacist."}
+            ? "تختلف طريقة الاستخدام حسب المنتج والشخص. لا نقدم هنا أي تعليمات للجرعة. يحتاج اختيار النوع والاستخدام مراجعة من مختص أو صيدلي."
+            : "How to use varies by product and person. We do not provide dosing here. Choosing the type and use requires review by a clinician or pharmacist."}
         </p>
         <p>
-          <b>{isAr ? "من يجب أن يراجع قبل الاستخدام:": "Who should seek review first:"}</b>{""}
+          <b>{isAr ? "من يجب أن يراجع قبل الاستخدام:" : "Who should seek review first:"}</b>{" "}
           {isAr
-            ? "الحوامل والمرضعات، الأشخاص أقل من 18 سنة، من لديهم أمراض قلب أو ألم صدر، ضيق تنفس شديد، أو يستخدمون أدوية منتظمة.": "Pregnant or breastfeeding people, anyone under 18, those with heart disease or chest pain, severe shortness of breath, or anyone taking regular medications."}
+            ? "الحوامل والمرضعات، الأشخاص أقل من 18 سنة، من لديهم أمراض قلب أو ألم صدر، ضيق تنفس شديد، أو يستخدمون أدوية منتظمة."
+            : "Pregnant or breastfeeding people, anyone under 18, those with heart disease or chest pain, severe shortness of breath, or anyone taking regular medications."}
         </p>
         <p>
-          <b>{isAr ? "آثار جانبية شائعة عامة:": "General common side effects:"}</b>{""}
+          <b>{isAr ? "آثار جانبية شائعة عامة:" : "General common side effects:"}</b>{" "}
           {isAr
-            ? "قد تشمل تهيجًا موضعيًا، صداعًا، غثيانًا، أو اضطرابًا بسيطًا في النوم. تختلف بين المنتجات والأشخاص.": "May include local irritation, headache, nausea, or mild sleep disturbance. Varies by product and person."}
+            ? "قد تشمل تهيجًا موضعيًا، صداعًا، غثيانًا، أو اضطرابًا بسيطًا في النوم. تختلف بين المنتجات والأشخاص."
+            : "May include local irritation, headache, nausea, or mild sleep disturbance. Varies by product and person."}
         </p>
         <Card className="rounded-xl border-l-4 border-l-primary bg-primary-soft/50 p-3 text-sm">
           {isAr
-            ? "هذا ليس وصفة طبية. أكمل تقييم أقلع أو انتظر مراجعة الفريق قبل الاستخدام.": "This is not a prescription. Complete the Aqla assessment or wait for team review before use."}
+            ? "هذا ليس وصفة طبية. أكمل تقييم أقلع أو انتظر مراجعة الفريق قبل الاستخدام."
+            : "This is not a prescription. Complete the Aqla assessment or wait for team review before use."}
         </Card>
       </div>
       <DialogFooter className="sm:justify-start">
         <Link to="/assessment">
-          <Button variant="outline"size="sm">
-            {isAr ? "إكمال تقييم أقلع": "Complete Aqla assessment"}
+          <Button variant="outline" size="sm">
+            {isAr ? "إكمال تقييم أقلع" : "Complete Aqla assessment"}
             <ExternalLink className="h-3.5 w-3.5" />
           </Button>
         </Link>
@@ -338,15 +344,15 @@ type FormState = {
   city: string;
   district: string;
   delivery_address: string;
-  preferred_contact_method: ""| "whatsapp"| "phone"| "email";
-  preferred_language: ""| "ar"| "en";
+  preferred_contact_method: "" | "whatsapp" | "phone" | "email";
+  preferred_language: "" | "ar" | "en";
   notes: string;
-  age_group: ""| "under_18"| "18_24"| "25_34"| "35_44"| "45_plus";
-  pregnant_or_breastfeeding: ""| "yes"| "no"| "prefer_not_to_say"| "not_applicable";
-  chest_pain_or_heart_condition: ""| "yes"| "no"| "prefer_not_to_say";
-  severe_breathing_problem: ""| "yes"| "no"| "prefer_not_to_say";
-  taking_regular_medications: ""| "yes"| "no"| "prefer_not_to_say";
-  completed_aqla_assessment: ""| "yes"| "no";
+  age_group: "" | "under_18" | "18_24" | "25_34" | "35_44" | "45_plus";
+  pregnant_or_breastfeeding: "" | "yes" | "no" | "prefer_not_to_say" | "not_applicable";
+  chest_pain_or_heart_condition: "" | "yes" | "no" | "prefer_not_to_say";
+  severe_breathing_problem: "" | "yes" | "no" | "prefer_not_to_say";
+  taking_regular_medications: "" | "yes" | "no" | "prefer_not_to_say";
+  completed_aqla_assessment: "" | "yes" | "no";
   consent_to_contact: boolean;
   acknowledgement_not_prescription: boolean;
 };
@@ -379,7 +385,7 @@ function FormStage(props: {
   onSubmitted: (res: ConfirmedResult) => void;
 }) {
   const { isAr, products, selected, onCancel, onSubmitted } = props;
-  const [form, setForm] = useState<FormState>({ ...initialForm, preferred_language: isAr ? "ar": "en" });
+  const [form, setForm] = useState<FormState>({ ...initialForm, preferred_language: isAr ? "ar" : "en" });
   const [submitting, setSubmitting] = useState(false);
   const submitFn = useServerFn(submitNrtRequest);
 
@@ -395,15 +401,15 @@ function FormStage(props: {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.consent_to_contact || !form.acknowledgement_not_prescription) {
-      toast.error(isAr ? "يرجى الموافقة على الإقرارات المطلوبة": "Please accept the required acknowledgements.");
+      toast.error(isAr ? "يرجى الموافقة على الإقرارات المطلوبة" : "Please accept the required acknowledgements.");
       return;
     }
     if (form.full_name.trim().length < 2 || form.mobile_number.trim().length < 5) {
-      toast.error(isAr ? "الاسم ورقم الجوال مطلوبان": "Name and mobile number are required.");
+      toast.error(isAr ? "الاسم ورقم الجوال مطلوبان" : "Name and mobile number are required.");
       return;
     }
     if (selected.size === 0) {
-      toast.error(isAr ? "اختر منتجًا واحدًا على الأقل": "Select at least one product.");
+      toast.error(isAr ? "اختر منتجًا واحدًا على الأقل" : "Select at least one product.");
       return;
     }
     setSubmitting(true);
@@ -431,7 +437,7 @@ function FormStage(props: {
         },
       });
       if (!res.ok) {
-        toast.error(res.error ?? (isAr ? "تعذّر إرسال الطلب": "Could not submit request."));
+        toast.error(res.error ?? (isAr ? "تعذّر إرسال الطلب" : "Could not submit request."));
         return;
       }
       trackEvent("nrt_request_submitted");
@@ -454,16 +460,17 @@ function FormStage(props: {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold tracking-tight">
-          {isAr ? "إكمال بيانات الطلب": "Complete your request"}
+          {isAr ? "إكمال بيانات الطلب" : "Complete your request"}
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
           {isAr
-            ? "بياناتك تستخدم لمراجعة الفريق والتواصل معك فقط.": "Your details are used only for team review and contacting you."}
+            ? "بياناتك تستخدم لمراجعة الفريق والتواصل معك فقط."
+            : "Your details are used only for team review and contacting you."}
         </p>
       </div>
 
       <Card className="p-4">
-        <div className="text-sm font-semibold">{isAr ? "المنتجات المختارة": "Selected products"}</div>
+        <div className="text-sm font-semibold">{isAr ? "المنتجات المختارة" : "Selected products"}</div>
         <ul className="mt-2 space-y-1 text-sm">
           {selectedProducts.map((p) => (
             <li key={p.id} className="flex items-center gap-2">
@@ -476,37 +483,37 @@ function FormStage(props: {
 
       <Card className="space-y-4 p-4">
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label={isAr ? "الاسم الكامل": "Full name"} required>
+          <Field label={isAr ? "الاسم الكامل" : "Full name"} required>
             <Input value={form.full_name} onChange={(e) => update("full_name", e.target.value)} required maxLength={120} />
           </Field>
-          <Field label={isAr ? "رقم الجوال": "Mobile number"} required>
+          <Field label={isAr ? "رقم الجوال" : "Mobile number"} required>
             <Input value={form.mobile_number} onChange={(e) => update("mobile_number", e.target.value)} required maxLength={40} />
           </Field>
-          <Field label={isAr ? "البريد الإلكتروني (اختياري)": "Email (optional)"}>
-            <Input type="email"value={form.email} onChange={(e) => update("email", e.target.value)} maxLength={255} />
+          <Field label={isAr ? "البريد الإلكتروني (اختياري)" : "Email (optional)"}>
+            <Input type="email" value={form.email} onChange={(e) => update("email", e.target.value)} maxLength={255} />
           </Field>
-          <Field label={isAr ? "المدينة": "City"}>
+          <Field label={isAr ? "المدينة" : "City"}>
             <Input value={form.city} onChange={(e) => update("city", e.target.value)} maxLength={80} />
           </Field>
-          <Field label={isAr ? "الحي (اختياري)": "District (optional)"}>
+          <Field label={isAr ? "الحي (اختياري)" : "District (optional)"}>
             <Input value={form.district} onChange={(e) => update("district", e.target.value)} maxLength={120} />
           </Field>
-          <Field label={isAr ? "عنوان التوصيل (اختياري)": "Delivery address (optional)"}>
+          <Field label={isAr ? "عنوان التوصيل (اختياري)" : "Delivery address (optional)"}>
             <Input value={form.delivery_address} onChange={(e) => update("delivery_address", e.target.value)} maxLength={500} />
           </Field>
-          <Field label={isAr ? "وسيلة التواصل المفضلة": "Preferred contact method"}>
+          <Field label={isAr ? "وسيلة التواصل المفضلة" : "Preferred contact method"}>
             <Select value={form.preferred_contact_method} onValueChange={(v) => update("preferred_contact_method", v as FormState["preferred_contact_method"])}>
-              <SelectTrigger><SelectValue placeholder={isAr ? "اختر": "Choose"} /></SelectTrigger>
+              <SelectTrigger><SelectValue placeholder={isAr ? "اختر" : "Choose"} /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                <SelectItem value="phone">{isAr ? "هاتف": "Phone"}</SelectItem>
-                <SelectItem value="email">{isAr ? "بريد إلكتروني": "Email"}</SelectItem>
+                <SelectItem value="phone">{isAr ? "هاتف" : "Phone"}</SelectItem>
+                <SelectItem value="email">{isAr ? "بريد إلكتروني" : "Email"}</SelectItem>
               </SelectContent>
             </Select>
           </Field>
-          <Field label={isAr ? "اللغة المفضلة": "Preferred language"}>
+          <Field label={isAr ? "اللغة المفضلة" : "Preferred language"}>
             <Select value={form.preferred_language} onValueChange={(v) => update("preferred_language", v as FormState["preferred_language"])}>
-              <SelectTrigger><SelectValue placeholder={isAr ? "اختر": "Choose"} /></SelectTrigger>
+              <SelectTrigger><SelectValue placeholder={isAr ? "اختر" : "Choose"} /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="ar">العربية</SelectItem>
                 <SelectItem value="en">English</SelectItem>
@@ -518,52 +525,52 @@ function FormStage(props: {
 
       <Card className="space-y-4 p-4">
         <div className="text-sm font-semibold text-foreground">
-          {isAr ? "أسئلة السلامة": "Safety screening"}
+          {isAr ? "أسئلة السلامة" : "Safety screening"}
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label={isAr ? "الفئة العمرية": "Age group"}>
+          <Field label={isAr ? "الفئة العمرية" : "Age group"}>
             <Select value={form.age_group} onValueChange={(v) => update("age_group", v as FormState["age_group"])}>
-              <SelectTrigger><SelectValue placeholder={isAr ? "اختر": "Choose"} /></SelectTrigger>
+              <SelectTrigger><SelectValue placeholder={isAr ? "اختر" : "Choose"} /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="under_18">{isAr ? "أقل من 18": "Under 18"}</SelectItem>
+                <SelectItem value="under_18">{isAr ? "أقل من 18" : "Under 18"}</SelectItem>
                 <SelectItem value="18_24">18–24</SelectItem>
                 <SelectItem value="25_34">25–34</SelectItem>
                 <SelectItem value="35_44">35–44</SelectItem>
-                <SelectItem value="45_plus">{isAr ? "45 فأكثر": "45+"}</SelectItem>
+                <SelectItem value="45_plus">{isAr ? "45 فأكثر" : "45+"}</SelectItem>
               </SelectContent>
             </Select>
           </Field>
-          <Field label={isAr ? "حامل أو مرضعة؟": "Pregnant or breastfeeding?"}>
+          <Field label={isAr ? "حامل أو مرضعة؟" : "Pregnant or breastfeeding?"}>
             <Select value={form.pregnant_or_breastfeeding} onValueChange={(v) => update("pregnant_or_breastfeeding", v as FormState["pregnant_or_breastfeeding"])}>
-              <SelectTrigger><SelectValue placeholder={isAr ? "اختر": "Choose"} /></SelectTrigger>
+              <SelectTrigger><SelectValue placeholder={isAr ? "اختر" : "Choose"} /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="yes">{isAr ? "نعم": "Yes"}</SelectItem>
-                <SelectItem value="no">{isAr ? "لا": "No"}</SelectItem>
-                <SelectItem value="prefer_not_to_say">{isAr ? "أفضّل عدم الإجابة": "Prefer not to say"}</SelectItem>
-                <SelectItem value="not_applicable">{isAr ? "لا ينطبق": "Not applicable"}</SelectItem>
+                <SelectItem value="yes">{isAr ? "نعم" : "Yes"}</SelectItem>
+                <SelectItem value="no">{isAr ? "لا" : "No"}</SelectItem>
+                <SelectItem value="prefer_not_to_say">{isAr ? "أفضّل عدم الإجابة" : "Prefer not to say"}</SelectItem>
+                <SelectItem value="not_applicable">{isAr ? "لا ينطبق" : "Not applicable"}</SelectItem>
               </SelectContent>
             </Select>
           </Field>
-          <Field label={isAr ? "ألم صدر أو أمراض قلب؟": "Chest pain or heart condition?"}>
+          <Field label={isAr ? "ألم صدر أو أمراض قلب؟" : "Chest pain or heart condition?"}>
             <PickOne value={form.chest_pain_or_heart_condition} options={yesNoPns} onChange={(v) => update("chest_pain_or_heart_condition", v)} isAr={isAr} />
           </Field>
-          <Field label={isAr ? "ضيق تنفس شديد؟": "Severe breathing problem?"}>
+          <Field label={isAr ? "ضيق تنفس شديد؟" : "Severe breathing problem?"}>
             <PickOne value={form.severe_breathing_problem} options={yesNoPns} onChange={(v) => update("severe_breathing_problem", v)} isAr={isAr} />
           </Field>
-          <Field label={isAr ? "تستخدم أدوية منتظمة؟": "Taking regular medications?"}>
+          <Field label={isAr ? "تستخدم أدوية منتظمة؟" : "Taking regular medications?"}>
             <PickOne value={form.taking_regular_medications} options={yesNoPns} onChange={(v) => update("taking_regular_medications", v)} isAr={isAr} />
           </Field>
-          <Field label={isAr ? "هل أكملت تقييم أقلع؟": "Completed the Aqla assessment?"}>
+          <Field label={isAr ? "هل أكملت تقييم أقلع؟" : "Completed the Aqla assessment?"}>
             <Select value={form.completed_aqla_assessment} onValueChange={(v) => update("completed_aqla_assessment", v as FormState["completed_aqla_assessment"])}>
-              <SelectTrigger><SelectValue placeholder={isAr ? "اختر": "Choose"} /></SelectTrigger>
+              <SelectTrigger><SelectValue placeholder={isAr ? "اختر" : "Choose"} /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="yes">{isAr ? "نعم": "Yes"}</SelectItem>
-                <SelectItem value="no">{isAr ? "لا": "No"}</SelectItem>
+                <SelectItem value="yes">{isAr ? "نعم" : "Yes"}</SelectItem>
+                <SelectItem value="no">{isAr ? "لا" : "No"}</SelectItem>
               </SelectContent>
             </Select>
           </Field>
         </div>
-        <Field label={isAr ? "ملاحظات (اختياري)": "Notes (optional)"}>
+        <Field label={isAr ? "ملاحظات (اختياري)" : "Notes (optional)"}>
           <Textarea value={form.notes} onChange={(e) => update("notes", e.target.value)} maxLength={2000} rows={3} />
         </Field>
       </Card>
@@ -573,22 +580,24 @@ function FormStage(props: {
           <Checkbox checked={form.acknowledgement_not_prescription} onCheckedChange={(v) => update("acknowledgement_not_prescription", Boolean(v))} />
           <span className="text-sm leading-6">
             {isAr
-              ? "أوافق على أن هذا الطلب لا يُعد وصفة طبية أو توصية علاجية، وأن فريق أقلع سيقوم بمراجعته قبل التواصل معي.": "I understand that this request is not a prescription or treatment recommendation, and that the Aqla team will review it before contacting me."}
+              ? "أوافق على أن هذا الطلب لا يُعد وصفة طبية أو توصية علاجية، وأن فريق أقلع سيقوم بمراجعته قبل التواصل معي."
+              : "I understand that this request is not a prescription or treatment recommendation, and that the Aqla team will review it before contacting me."}
           </span>
         </label>
         <label className="flex items-start gap-3">
           <Checkbox checked={form.consent_to_contact} onCheckedChange={(v) => update("consent_to_contact", Boolean(v))} />
           <span className="text-sm leading-6">
             {isAr
-              ? "أوافق على أن يتواصل معي فريق أقلع بخصوص هذا الطلب.": "I agree for the Aqla team to contact me about this request."}
+              ? "أوافق على أن يتواصل معي فريق أقلع بخصوص هذا الطلب."
+              : "I agree for the Aqla team to contact me about this request."}
           </span>
         </label>
       </Card>
 
       <div className="flex flex-wrap gap-2">
-        <Button type="button"variant="outline"onClick={onCancel}>{isAr ? "العودة للمنتجات": "Back to products"}</Button>
-        <Button type="submit"disabled={submitting} className="quit-gradient border-0 text-white">
-          {submitting ? (isAr ? "جارٍ الإرسال…": "Sending…") : (isAr ? "إرسال الطلب للمراجعة": "Submit request for review")}
+        <Button type="button" variant="outline" onClick={onCancel}>{isAr ? "العودة للمنتجات" : "Back to products"}</Button>
+        <Button type="submit" disabled={submitting} className="quit-gradient border-0 text-white">
+          {submitting ? (isAr ? "جارٍ الإرسال…" : "Sending…") : (isAr ? "إرسال الطلب للمراجعة" : "Submit request for review")}
         </Button>
       </div>
     </form>
@@ -620,9 +629,11 @@ function PickOne<T extends string>({
       {options.map((o) => (
         <Button
           key={o.v}
-          type="button"size="sm"variant={value === o.v ? "default": "outline"}
+          type="button"
+          size="sm"
+          variant={value === o.v ? "default" : "outline"}
           onClick={() => onChange(o.v)}
-          className={value === o.v ? "quit-gradient border-0 text-white": ""}
+          className={value === o.v ? "quit-gradient border-0 text-white" : ""}
         >
           {isAr ? o.ar : o.en}
         </Button>
@@ -641,10 +652,10 @@ function ConfirmedStage({ isAr, result }: { isAr: boolean; result: ConfirmedResu
         <Check className="h-7 w-7" />
       </div>
       <h2 className="mt-5 text-2xl font-semibold tracking-tight">
-        {isAr ? "تم استلام طلبك بنجاح": "Your request has been received"}
+        {isAr ? "تم استلام طلبك بنجاح" : "Your request has been received"}
       </h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        {isAr ? "رقم الطلب:": "Request number:"} <b className="text-foreground">{result.request_code}</b>
+        {isAr ? "رقم الطلب:" : "Request number:"} <b className="text-foreground">{result.request_code}</b>
       </p>
 
       {result.requires_clinician_review ? (
@@ -653,7 +664,8 @@ function ConfirmedStage({ isAr, result }: { isAr: boolean; result: ConfirmedResu
             <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-destructive" />
             <p className="text-sm leading-7">
               {isAr
-                ? "تم استلام طلبك، ويحتاج إلى مراجعة مختص قبل أي خطوة. سيتواصل معك فريق أقلع.": "Your request has been received and requires clinician review before any next step. The Aqla team will contact you."}
+                ? "تم استلام طلبك، ويحتاج إلى مراجعة مختص قبل أي خطوة. سيتواصل معك فريق أقلع."
+                : "Your request has been received and requires clinician review before any next step. The Aqla team will contact you."}
             </p>
           </div>
         </Card>
@@ -661,30 +673,35 @@ function ConfirmedStage({ isAr, result }: { isAr: boolean; result: ConfirmedResu
         <Card className="mt-6 rounded-2xl border-l-4 border-l-primary p-4 text-start">
           <p className="text-sm leading-7">
             {isAr
-              ? "تم استلام طلبك. سيتواصل معك فريق أقلع لمراجعة التفاصيل وتأكيد الخطوة المناسبة.": "Your request has been received. The Aqla team will contact you to review the details and confirm the appropriate next step."}
+              ? "تم استلام طلبك. سيتواصل معك فريق أقلع لمراجعة التفاصيل وتأكيد الخطوة المناسبة."
+              : "Your request has been received. The Aqla team will contact you to review the details and confirm the appropriate next step."}
           </p>
         </Card>
       )}
 
       <Card className="mt-4 rounded-2xl p-4 text-start text-sm leading-7 text-muted-foreground">
         {isAr
-          ? "يرجى عدم استخدام أي منتج علاجي دون مراجعة مختص إذا كانت لديك حالة صحية أو كنت غير متأكد من مناسبته لك.": "Please do not use any therapeutic product without clinician or pharmacist review if you have a health condition or are unsure whether it is suitable for you."}
+          ? "يرجى عدم استخدام أي منتج علاجي دون مراجعة مختص إذا كانت لديك حالة صحية أو كنت غير متأكد من مناسبته لك."
+          : "Please do not use any therapeutic product without clinician or pharmacist review if you have a health condition or are unsure whether it is suitable for you."}
       </Card>
 
       <div className="mt-6 flex flex-wrap justify-center gap-2">
-        <Button variant="outline"onClick={() => nav({ to: "/" })}>
-          {isAr ? "العودة للرئيسية": "Back to home"}
+        <Button variant="outline" onClick={() => nav({ to: "/" })}>
+          {isAr ? "العودة للرئيسية" : "Back to home"}
         </Button>
-        <Link to="/assessment"onClick={() => trackEvent("complete_assessment_clicked_from_shop")}>
+        <Link to="/assessment" onClick={() => trackEvent("complete_assessment_clicked_from_shop")}>
           <Button className="quit-gradient border-0 text-white">
-            {isAr ? "إكمال تقييم أقلع": "Complete Aqla assessment"}
+            {isAr ? "إكمال تقييم أقلع" : "Complete Aqla assessment"}
           </Button>
         </Link>
         <a
-          href="https://wa.me/966555096412"target="_blank"rel="noopener noreferrer"onClick={() => trackEvent("whatsapp_clicked_from_shop")}
+          href="https://wa.me/966555096412"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackEvent("whatsapp_clicked_from_shop")}
         >
           <Button variant="secondary">
-            {isAr ? "تواصل عبر واتساب": "Contact on WhatsApp"}
+            {isAr ? "تواصل عبر واتساب" : "Contact on WhatsApp"}
           </Button>
         </a>
       </div>

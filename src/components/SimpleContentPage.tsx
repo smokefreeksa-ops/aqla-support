@@ -57,18 +57,18 @@ function SimplePageInner({
     <div dir={dir} className="min-h-screen bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
-        <div className={`mb-6 flex ${isAr ? "justify-end": "justify-start"}`}>
+        <div className={`mb-6 flex ${isAr ? "justify-end" : "justify-start"}`}>
           <BackButton fallback={backTo} labelAr={backLabelAr} labelEn={backLabelEn} />
         </div>
-        <h1 className={`text-3xl font-bold tracking-tight sm:text-4xl ${isAr ? "text-right": ""}`}>{title}</h1>
+        <h1 className={`text-3xl font-bold tracking-tight sm:text-4xl ${isAr ? "text-right" : ""}`}>{title}</h1>
         {intro && (
-          <p className={`mt-4 text-[14.5px] leading-7 text-foreground/75 ${isAr ? "text-right": ""}`}>{intro}</p>
+          <p className={`mt-4 text-[14.5px] leading-7 text-foreground/75 ${isAr ? "text-right" : ""}`}>{intro}</p>
         )}
 
         {sections && sections.length > 0 && (
           <div className="mt-8 space-y-5">
             {sections.map((s, i) => (
-              <Card key={i} className={`rounded-2xl border-border/60 p-5 sm:p-6 ${isAr ? "text-right": ""}`}>
+              <Card key={i} className={`rounded-2xl border-border/60 p-5 sm:p-6 ${isAr ? "text-right" : ""}`}>
                 <h2 className="text-lg font-semibold tracking-tight">{s.heading}</h2>
                 <div className="mt-3 text-[13.5px] leading-7 text-foreground/75">{s.body}</div>
               </Card>
@@ -77,7 +77,7 @@ function SimplePageInner({
         )}
 
         {cta && (
-          <div className={`mt-10 flex ${isAr ? "justify-end": "justify-start"}`}>
+          <div className={`mt-10 flex ${isAr ? "justify-end" : "justify-start"}`}>
             <Link
               to={cta.to}
               className="inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground hover:bg-primary/90"

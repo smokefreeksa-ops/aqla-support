@@ -39,7 +39,8 @@ function Chip({ active, children, onClick }: { active: boolean; children: React.
       onClick={onClick}
       className={`text-right px-4 py-3 rounded-xl border-2 transition-all text-sm md:text-base ${
         active
-          ? "bg-blue-900 text-white border-blue-900 shadow-md": "bg-white text-slate-800 border-slate-200 hover:border-blue-400"
+          ? "bg-blue-900 text-white border-blue-900 shadow-md"
+          : "bg-white text-slate-800 border-slate-200 hover:border-blue-400"
       }`}
     >
       {children}
@@ -116,7 +117,7 @@ export function AqlaQuitEngine() {
     const next = a.product_types.includes(v)
       ? a.product_types.filter((x) => x !== v)
       : [...a.product_types, v];
-    const real = next.filter((p) => p !== "multiple"&& p !== "relapse_prevention");
+    const real = next.filter((p) => p !== "multiple" && p !== "relapse_prevention");
     update({
       product_types: next,
       primary_product: real[0],
@@ -132,7 +133,7 @@ export function AqlaQuitEngine() {
 
   const toggleSafety = (v: SafetyFlag) => {
     let next = a.safety_flags.includes(v) ? a.safety_flags.filter((x) => x !== v) : [...a.safety_flags, v];
-    if (v === "none"&& next.includes("none")) next = ["none"];
+    if (v === "none" && next.includes("none")) next = ["none"];
     else if (v !== "none") next = next.filter((x) => x !== "none");
     update({ safety_flags: next });
   };
@@ -196,7 +197,7 @@ export function AqlaQuitEngine() {
   const progress = ((step + 1) / 8) * 100;
 
   return (
-    <div dir="rtl"className="text-right max-w-2xl mx-auto px-4 py-6 print:hidden">
+    <div dir="rtl" className="text-right max-w-2xl mx-auto px-4 py-6 print:hidden">
       <div className="mb-6">
         <div className="flex items-center justify-between text-sm text-slate-600 mb-2">
           <span>الخطوة {step + 1} من 8</span>
@@ -226,7 +227,7 @@ export function AqlaQuitEngine() {
             <div>
               <h2 className="text-xl font-bold text-blue-900 mb-3">بعد الاستيقاظ، متى تستخدم أول نيكوتين؟</h2>
               <SinglePick options={FIRST_USE_OPTIONS} value={a.first_use_after_waking} onChange={(v: FirstUseAfterWaking) => update({ first_use_after_waking: v })} />
-              {(a.first_use_after_waking === "lt_5"|| a.first_use_after_waking === "6_30") && (
+              {(a.first_use_after_waking === "lt_5" || a.first_use_after_waking === "6_30") && (
                 <div className="mt-4 bg-amber-50 border border-amber-200 text-amber-900 rounded-lg p-3 text-sm">
                   يبدو أن النيكوتين يدخل يومك مبكرًا. هذا لا يعني أنك ضعيف، لكنه يعني أن جسمك قد يطلب النيكوتين بسرعة. خطتك تحتاج دعمًا أقوى في الصباح وأول 72 ساعة.
                 </div>
@@ -335,7 +336,7 @@ export function AqlaQuitEngine() {
                 </div>
                 <div className="md:col-span-2">
                   <label className="text-sm font-semibold text-slate-700">بريدك الإلكتروني (اختياري — لإرسال نسخة من الخطة)</label>
-                  <Input type="email"value={a.email ?? ""} onChange={(e) => update({ email: e.target.value })} placeholder="name@example.com" />
+                  <Input type="email" value={a.email ?? ""} onChange={(e) => update({ email: e.target.value })} placeholder="name@example.com" />
                 </div>
               </div>
             </div>
@@ -353,7 +354,7 @@ export function AqlaQuitEngine() {
           </Button>
         ) : (
           <Button disabled={submitting} className="bg-blue-900 hover:bg-blue-800 text-white" onClick={onSubmit}>
-            {submitting ? "جاري إنشاء الخطة...": "أنشئ خطتي الشخصية"}
+            {submitting ? "جاري إنشاء الخطة..." : "أنشئ خطتي الشخصية"}
           </Button>
         )}
       </div>

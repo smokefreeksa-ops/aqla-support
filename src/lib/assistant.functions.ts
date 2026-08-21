@@ -20,10 +20,19 @@ type Lang = (typeof PRIMARY_LANGS)[number] | (typeof FALLBACK_LANGS)[number];
 
 // ---------- Center types ----------
 const CenterType = z.enum([
-  "general", "public_pre_login", "quit_pathway", "quit_center", "help_pathway", "help_center", "learn_train", "academy", "challenge_pathway", "community_challenges",
+  "general",
+  "public_pre_login",
+  "quit_pathway",
+  "quit_center",
+  "help_pathway",
+  "help_center",
+  "learn_train",
+  "academy",
+  "challenge_pathway",
+  "community_challenges",
 ]);
 type Center = z.infer<typeof CenterType>;
-type CanonicalCenter = "general"| "public_pre_login"| "quit_pathway"| "help_pathway"| "learn_train"| "challenge_pathway";
+type CanonicalCenter = "general" | "public_pre_login" | "quit_pathway" | "help_pathway" | "learn_train" | "challenge_pathway";
 
 function normalizeCenter(center: Center): CanonicalCenter {
   if (center === "quit_center") return "quit_pathway";
@@ -143,7 +152,7 @@ const SAFETY_REPLIES = {
   },
 };
 
-function pickSafetyLang(lang: Lang): "ar"| "en" {
+function pickSafetyLang(lang: Lang): "ar" | "en" {
   // Arabic-first for fallback languages; Arabic also for ar/ur/fa speakers culturally close
   if (lang === "ar") return "ar";
   return "en";
@@ -152,11 +161,11 @@ function pickSafetyLang(lang: Lang): "ar"| "en" {
 function safetyOverride(userText: string, lang: Lang): string | null {
   if (EMERGENCY_PATTERNS.test(userText)) {
     const l = pickSafetyLang(lang);
-    return SAFETY_REPLIES.emergency[l] + (l === "ar"? "\n\n"+ SAFETY_REPLIES.emergency.en : "");
+    return SAFETY_REPLIES.emergency[l] + (l === "ar" ? "\n\n" + SAFETY_REPLIES.emergency.en : "");
   }
   if (MEDICATION_PATTERNS.test(userText)) {
     const l = pickSafetyLang(lang);
-    return SAFETY_REPLIES.medication[l] + (l === "ar"? "\n\n"+ SAFETY_REPLIES.medication.en : "");
+    return SAFETY_REPLIES.medication[l] + (l === "ar" ? "\n\n" + SAFETY_REPLIES.medication.en : "");
   }
   return null;
 }
@@ -173,7 +182,9 @@ PERSONA: You are "مساعد أقلع الذكي" — Aqla's friendly pre-regist
 - Keep replies short (1–4 sentences). End most replies with a soft nudge toward signing in or picking a path.
 - If the user clicks "قل لي نكتة": tell ONE short Saudi-style joke about nicotine/procrastination, then gently connect it to Aqla in one line.
 - If asked "وش فكرة أقلع؟": Aqla (أقلع) is a free physician-supervised platform for quitting smoking and nicotine — and will remain free.
-- If asked "من هو مؤسس أقلع؟": reply: "أقلع مبادرة أسسها ويشرف عليها سعادة الدكتور مالك عبدالملك الذبياني، Malik A. Althobiani، مع فريق من الأخصائيين المدربين."- If asked "هل أقلع مجاني؟": "نعم، أقلع مجاني للجميع وسيبقى مجانيًا."- If asked "اختَر لي المسار المناسب": briefly ask 1 clarifying question (هل تبي تقلع لنفسك، تساعد شخص، تتدرب، أو تشارك في تحدي مجتمعي؟) then suggest the matching route from the list below.
+- If asked "من هو مؤسس أقلع؟": reply: "أقلع مبادرة أسسها ويشرف عليها سعادة الدكتور مالك عبدالملك الذبياني، Malik A. Althobiani، مع فريق من الأخصائيين المدربين."
+- If asked "هل أقلع مجاني؟": "نعم، أقلع مجاني للجميع وسيبقى مجانيًا."
+- If asked "اختَر لي المسار المناسب": briefly ask 1 clarifying question (هل تبي تقلع لنفسك، تساعد شخص، تتدرب، أو تشارك في تحدي مجتمعي؟) then suggest the matching route from the list below.
 - If asked "تواصل عبر واتساب": tell them to use the floating WhatsApp button on the page.
 - The four Aqla centers: (1) مركز أقلع الافتراضي لدعم الإقلاع — /quit-pathway، (2) أكاديمية أقلع للتدريب والشهادات — /learn-train، (3) مسار أقلع لمساعدة شخص يهمك — /help-pathway، (4) مجتمع وتحديات أقلع — /challenge-pathway.
 - Never claim to access user data. Never give medication doses. Never give clinical scores.
@@ -202,7 +213,11 @@ KNOWN ROUTES (use ONLY these, no duplicates, no invented paths):
 
 OUTPUT CONTRACT — return ONLY valid JSON, no markdown fences, with this shape:
 {
-  "bot_name": "Aqla Assistant", "language": "<reply language code>", "reply": "<your educational response in ${replyLang}>", "suggested_route": "<one of the known route paths above, or null>", "is_safety_critical": false
+  "bot_name": "Aqla Assistant",
+  "language": "<reply language code>",
+  "reply": "<your educational response in ${replyLang}>",
+  "suggested_route": "<one of the known route paths above, or null>",
+  "is_safety_critical": false
 }
 
 If the user asks something you cannot answer safely, set reply to a kind redirection to a clinician or to the appropriate Aqla pathway route.`;
@@ -312,7 +327,9 @@ export const chatWithAssistant = createServerFn({ method: "POST" })
     if (res.status === 429) {
       return {
         reply:
-          lang === "ar"? "الخدمة مزدحمة حاليًا. حاول مرة أخرى بعد قليل.": "The assistant is busy right now. Please try again shortly.",
+          lang === "ar"
+            ? "الخدمة مزدحمة حاليًا. حاول مرة أخرى بعد قليل."
+            : "The assistant is busy right now. Please try again shortly.",
         bot_name: "Aqla Assistant",
         language: lang,
         suggested_route: null,
@@ -322,7 +339,9 @@ export const chatWithAssistant = createServerFn({ method: "POST" })
     if (res.status === 402) {
       return {
         reply:
-          lang === "ar"? "تم استنفاد رصيد المساعد مؤقتًا. الرجاء المحاولة لاحقًا.": "Assistant credits are temporarily exhausted. Please try again later.",
+          lang === "ar"
+            ? "تم استنفاد رصيد المساعد مؤقتًا. الرجاء المحاولة لاحقًا."
+            : "Assistant credits are temporarily exhausted. Please try again later.",
         bot_name: "Aqla Assistant",
         language: lang,
         suggested_route: null,
@@ -349,7 +368,7 @@ export const chatWithAssistant = createServerFn({ method: "POST" })
       // bot_name is enforced by code, never trusted from model
       bot_name: "Aqla Assistant",
       language: lang,
-      reply: (parsed?.reply ?? raw ?? "").trim() || (lang === "ar"? "تعذّر توليد ردّ الآن.": "Couldn't generate a reply."),
+      reply: (parsed?.reply ?? raw ?? "").trim() || (lang === "ar" ? "تعذّر توليد ردّ الآن." : "Couldn't generate a reply."),
       suggested_route: suggested,
       is_safety_critical: false,
     };

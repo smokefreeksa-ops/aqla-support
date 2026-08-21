@@ -55,7 +55,7 @@ export function SOSComplete({
             أنت لم تنتظر انتهاء الرغبة. أنت غيّرت مسارها.
           </p>
           <p className="text-white/60 text-sm">
-            {delta} {delta === 1 ? "درجة": "درجات"} أقل خلال جلسة واحدة
+            {delta} {delta === 1 ? "درجة" : "درجات"} أقل خلال جلسة واحدة
           </p>
         </>
       ) : (
@@ -100,7 +100,8 @@ export function SOSComplete({
                 }}
                 className={`rounded-full px-3 py-1.5 text-sm border transition ${
                   sel
-                    ? "bg-red-600 border-red-500 text-white": "bg-white/5 border-white/10 text-white/80 hover:bg-white/10"
+                    ? "bg-red-600 border-red-500 text-white"
+                    : "bg-white/5 border-white/10 text-white/80 hover:bg-white/10"
                 }`}
               >
                 {t.label}
@@ -120,7 +121,9 @@ export function SOSComplete({
           </p>
           <a
             href={redcapUrl}
-            target="_blank"rel="noopener noreferrer"className="inline-block mt-3 rounded-full px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-sm"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-3 rounded-full px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-sm"
           >
             المشاركة في الدراسة
           </a>

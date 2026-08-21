@@ -62,20 +62,20 @@ function Inner() {
     <div dir={dir} className="min-h-screen bg-background">
       <header className="border-b bg-card/70 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <Link to="/"className="flex items-center gap-3">
-            <img src={aqlaLogo} alt="Aqla logo"className="h-[38px] w-auto object-contain sm:h-12" />
+          <Link to="/" className="flex items-center gap-3">
+            <img src={aqlaLogo} alt="Aqla logo" className="h-[38px] w-auto object-contain sm:h-12" />
             <div className="leading-tight">
               <div className="font-semibold tracking-tight">Aqla — أقلع</div>
               <div className="text-[11px] text-muted-foreground">{t("أدوات أقلع", "Aqla Tools")}</div>
             </div>
           </Link>
           <div className="flex items-center gap-2">
-            <Button variant="ghost"size="sm"onClick={() => setLang(isAr ? "en": "ar")} className="gap-1.5">
+            <Button variant="ghost" size="sm" onClick={() => setLang(isAr ? "en" : "ar")} className="gap-1.5">
               <Languages className="h-4 w-4" />
-              {isAr ? "English": "العربية"}
+              {isAr ? "English" : "العربية"}
             </Button>
-            <Link to="/"><Button variant="ghost"size="sm">{t("الرئيسية", "Home")}</Button></Link>
-            <Link to="/assessment"><Button size="sm"className="quit-gradient border-0 text-white">{t("ابدأ التقييم", "Start assessment")}</Button></Link>
+            <Link to="/"><Button variant="ghost" size="sm">{t("الرئيسية", "Home")}</Button></Link>
+            <Link to="/assessment"><Button size="sm" className="quit-gradient border-0 text-white">{t("ابدأ التقييم", "Start assessment")}</Button></Link>
           </div>
         </div>
       </header>
@@ -90,18 +90,20 @@ function Inner() {
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground sm:text-lg">
             {t(
-              "أدوات بسيطة وممتعة تساعدك على فهم التدخين والنيكوتين بطريقة عملية، وتشجعك على بدء الخطوة الأولى أو مساعدة غيرك.", "Simple, engaging tools to help you understand smoking and nicotine, take your first step, or help someone else begin."
+              "أدوات بسيطة وممتعة تساعدك على فهم التدخين والنيكوتين بطريقة عملية، وتشجعك على بدء الخطوة الأولى أو مساعدة غيرك.",
+              "Simple, engaging tools to help you understand smoking and nicotine, take your first step, or help someone else begin."
             )}
           </p>
           <p className="mx-auto mt-3 max-w-2xl text-xs text-muted-foreground/80">
             {t(
-              "هذه الأدوات للتوعية والتأمل الذاتي فقط، وليست تشخيصًا طبيًا ولا تغني عن مراجعة المختص.", "These tools are for awareness and self-reflection only. They are not a medical diagnosis and do not replace clinician review."
+              "هذه الأدوات للتوعية والتأمل الذاتي فقط، وليست تشخيصًا طبيًا ولا تغني عن مراجعة المختص.",
+              "These tools are for awareness and self-reflection only. They are not a medical diagnosis and do not replace clinician review."
             )}
           </p>
         </section>
 
         <Tabs value={tab} onValueChange={setTab} className="mt-8">
-          <TabsList dir={isAr ? "rtl": "ltr"} className="mx-auto flex w-full max-w-3xl flex-wrap justify-center gap-1 bg-muted/50">
+          <TabsList dir={isAr ? "rtl" : "ltr"} className="mx-auto flex w-full max-w-3xl flex-wrap justify-center gap-1 bg-muted/50">
             <TabsTrigger value="all">{t("الكل", "All")}</TabsTrigger>
             {CATEGORIES.map((c) => (
               <TabsTrigger key={c.v} value={c.v}>{isAr ? c.ar : c.en}</TabsTrigger>
@@ -110,13 +112,13 @@ function Inner() {
 
           <TabsContent value={tab} forceMount>
             <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {(tab === "all"|| tab === "money")      && <CostCalculator isAr={isAr} />}
-              {(tab === "all"|| tab === "dependence") && <DependenceCheck isAr={isAr} />}
-              {(tab === "all"|| tab === "breathing")  && <BreathChallenge isAr={isAr} />}
-              {(tab === "all"|| tab === "share")      && <QuitTimeline isAr={isAr} />}
-              {(tab === "all"|| tab === "triggers")   && <TriggerMap isAr={isAr} />}
-              {(tab === "all"|| tab === "share")      && <PledgeCard isAr={isAr} />}
-              {(tab === "all"|| tab === "readiness")  && <ReadinessMeter isAr={isAr} />}
+              {(tab === "all" || tab === "money")      && <CostCalculator isAr={isAr} />}
+              {(tab === "all" || tab === "dependence") && <DependenceCheck isAr={isAr} />}
+              {(tab === "all" || tab === "breathing")  && <BreathChallenge isAr={isAr} />}
+              {(tab === "all" || tab === "share")      && <QuitTimeline isAr={isAr} />}
+              {(tab === "all" || tab === "triggers")   && <TriggerMap isAr={isAr} />}
+              {(tab === "all" || tab === "share")      && <PledgeCard isAr={isAr} />}
+              {(tab === "all" || tab === "readiness")  && <ReadinessMeter isAr={isAr} />}
             </div>
           </TabsContent>
         </Tabs>
@@ -124,7 +126,8 @@ function Inner() {
         <Card className="mt-12 rounded-2xl border-l-4 border-l-secondary p-4 card-gradient">
           <p className="text-sm text-muted-foreground">
             {t(
-              "تنبيه: لا تشارك معلومات صحية خاصة إذا لم تكن مرتاحًا لذلك.", "Note: Do not share private health information unless you are comfortable doing so."
+              "تنبيه: لا تشارك معلومات صحية خاصة إذا لم تكن مرتاحًا لذلك.",
+              "Note: Do not share private health information unless you are comfortable doing so."
             )}
           </p>
         </Card>
@@ -157,27 +160,30 @@ function ShareRow({ text, isAr, onShare }: { text: string; isAr: boolean; onShar
   }
   return (
     <div className="mt-3 flex flex-wrap gap-2">
-      <a href={wa} target="_blank"rel="noopener noreferrer"onClick={() => { trackEvent("share_whatsapp_clicked"); onShare?.("whatsapp"); }}>
-        <Button size="sm"variant="outline"className="gap-1.5">
-          <MessageCircle className="h-4 w-4"/>{t("واتساب", "WhatsApp")}
+      <a href={wa} target="_blank" rel="noopener noreferrer"
+         onClick={() => { trackEvent("share_whatsapp_clicked"); onShare?.("whatsapp"); }}>
+        <Button size="sm" variant="outline" className="gap-1.5">
+          <MessageCircle className="h-4 w-4" />{t("واتساب", "WhatsApp")}
         </Button>
       </a>
-      <a href={tw} target="_blank"rel="noopener noreferrer"onClick={() => { trackEvent("share_x_clicked"); onShare?.("x"); }}>
-        <Button size="sm"variant="outline"className="gap-1.5">
+      <a href={tw} target="_blank" rel="noopener noreferrer"
+         onClick={() => { trackEvent("share_x_clicked"); onShare?.("x"); }}>
+        <Button size="sm" variant="outline" className="gap-1.5">
           <Twitter className="h-4 w-4" />X
         </Button>
       </a>
-      <Button size="sm"variant="outline"className="gap-1.5" onClick={copy}>
-        <Copy className="h-4 w-4"/>{t("نسخ النص", "Copy text")}
+      <Button size="sm" variant="outline" className="gap-1.5" onClick={copy}>
+        <Copy className="h-4 w-4" />{t("نسخ النص", "Copy text")}
       </Button>
     </div>
   );
 }
 
 function StartAssessment({ isAr, from, label }: { isAr: boolean; from: string; label?: string }) {
-  const txt = label ?? (isAr ? "ابدأ تقييم أقلع": "Start Aqla assessment");
+  const txt = label ?? (isAr ? "ابدأ تقييم أقلع" : "Start Aqla assessment");
   return (
-    <Link to="/assessment"className="mt-3 block"onClick={() => trackEvent("start_assessment_clicked_from_tool", from)}>
+    <Link to="/assessment" className="mt-3 block"
+          onClick={() => trackEvent("start_assessment_clicked_from_tool", from)}>
       <Button className="w-full quit-gradient border-0 text-white hover:opacity-95">
         {txt}<ArrowRight className="h-4 w-4 rtl:rotate-180" />
       </Button>
@@ -232,10 +238,10 @@ function CostCalculator({ isAr }: { isAr: boolean }) {
     trackEvent("cost_calculator_used");
   }
   const fmt = (n: number) =>
-    new Intl.NumberFormat(isAr ? "ar-SA": "en-US", { maximumFractionDigits: 0 }).format(Math.round(n));
+    new Intl.NumberFormat(isAr ? "ar-SA" : "en-US", { maximumFractionDigits: 0 }).format(Math.round(n));
   const sar = t("ر.س", "SAR");
   const yearlyFmt = out
-    ? new Intl.NumberFormat(isAr ? "ar-SA": "en-US", { maximumFractionDigits: 0 }).format(Math.round(out.yearly))
+    ? new Intl.NumberFormat(isAr ? "ar-SA" : "en-US", { maximumFractionDigits: 0 }).format(Math.round(out.yearly))
     : "";
   const messageAr = out
     ? `اكتشفت أن التدخين قد يكلّفني حوالي ${yearlyFmt} ريال في السنة.\nتخيل لو هذا المبلغ راح لشيء يفيد صحتك أو مستقبلك.\n\nجرّب الحاسبة وشوف رقمك:`
@@ -246,25 +252,25 @@ function CostCalculator({ isAr }: { isAr: boolean }) {
 
   return (
     <Card className="rounded-3xl border-0 p-6 shadow-elegant card-gradient">
-      <ToolHeader icon={<Calculator className="h-5 w-5"/>} title={t("حاسبة تكلفة التدخين", "Smoking Cost Calculator")} />
+      <ToolHeader icon={<Calculator className="h-5 w-5" />} title={t("حاسبة تكلفة التدخين", "Smoking Cost Calculator")} />
       <div className="mt-5 space-y-3">
         <div>
           <Label className="text-xs">{t("عدد السجائر يوميًا", "Cigarettes per day")}</Label>
-          <Input inputMode="numeric"value={cpd} onChange={(e) => setCpd(e.target.value)} placeholder="20" />
+          <Input inputMode="numeric" value={cpd} onChange={(e) => setCpd(e.target.value)} placeholder="20" />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label className="text-xs">{t("السجائر في العلبة", "Cigarettes per pack")}</Label>
-            <Input inputMode="numeric"value={perPack} onChange={(e) => setPerPack(e.target.value)} placeholder="20" />
+            <Input inputMode="numeric" value={perPack} onChange={(e) => setPerPack(e.target.value)} placeholder="20" />
           </div>
           <div>
             <Label className="text-xs">{t("سعر العلبة", "Pack price")} ({sar})</Label>
-            <Input inputMode="decimal"value={price} onChange={(e) => setPrice(e.target.value)} placeholder="27" />
+            <Input inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="27" />
           </div>
         </div>
         <div>
           <Label className="text-xs">{t("سنوات التدخين (اختياري)", "Years smoked (optional)")}</Label>
-          <Input inputMode="numeric"value={years} onChange={(e) => setYears(e.target.value)} placeholder="—" />
+          <Input inputMode="numeric" value={years} onChange={(e) => setYears(e.target.value)} placeholder="—" />
         </div>
       </div>
       <Button onClick={calc} className="mt-4 w-full quit-gradient border-0 text-white hover:opacity-95">
@@ -280,14 +286,17 @@ function CostCalculator({ isAr }: { isAr: boolean }) {
           <Row label={t("خلال 10 سنوات", "Over 10 years")} value={`${fmt(out.ten)} ${sar}`} />
           {out.past !== null && <Row label={t("خلال سنوات التدخين السابقة", "Across years smoked")} value={`${fmt(out.past)} ${sar}`} />}
           <p className="pt-2 text-xs leading-6 text-foreground/70">
-            {t("قد يكون التدخين مكلفًا أكثر مما تتوقع. معرفة الرقم قد تكون أول خطوة للتغيير.", "Smoking may cost more than you think. Seeing the number can be the first step toward change.")}
+            {t("قد يكون التدخين مكلفًا أكثر مما تتوقع. معرفة الرقم قد تكون أول خطوة للتغيير.",
+               "Smoking may cost more than you think. Seeing the number can be the first step toward change.")}
           </p>
           <ShareResult
             shareType="cost"
             isAr={isAr}
             messageAr={messageAr}
             messageEn={messageEn}
-            targetPath="/request-support"titleAr="حاسبة تكلفة التدخين"titleEn="Smoking Cost Calculator"
+            targetPath="/request-support"
+            titleAr="حاسبة تكلفة التدخين"
+            titleEn="Smoking Cost Calculator"
             payload={{ yearly_cost_sar: Math.round(out.yearly) }}
           />
           <StartAssessment isAr={isAr} from="cost_calculator" />
@@ -299,7 +308,7 @@ function CostCalculator({ isAr }: { isAr: boolean }) {
 
 function Row({ label, value, bold }: { label: string; value: string; bold?: boolean }) {
   return (
-    <div className={`flex items-center justify-between ${bold ? "font-semibold text-primary": ""}`}>
+    <div className={`flex items-center justify-between ${bold ? "font-semibold text-primary" : ""}`}>
       <span className="text-muted-foreground">{label}</span>
       <span>{value}</span>
     </div>
@@ -314,7 +323,8 @@ function DependenceCheck({ isAr }: { isAr: boolean }) {
     t("هل تشعر برغبة قوية أو ملحّة لاستخدام النيكوتين؟", "Do you feel strong cravings?"),
     t("هل حاولت التوقف من قبل ولم تستطع؟", "Have you tried to stop but could not?"),
     t("هل تستخدم أكثر من منتج نيكوتين؟", "Do you use more than one nicotine product?"),
-    t("هل تشعر بتوتر أو عصبية أو قلق عندما لا تستطيع استخدام النيكوتين؟", "Do you feel irritable, restless, or anxious when you cannot use nicotine?"),
+    t("هل تشعر بتوتر أو عصبية أو قلق عندما لا تستطيع استخدام النيكوتين؟",
+      "Do you feel irritable, restless, or anxious when you cannot use nicotine?"),
   ];
   const [a, setA] = useState<(boolean|null)[]>(Array(qs.length).fill(null));
   const [done, setDone] = useState(false);
@@ -331,18 +341,18 @@ function DependenceCheck({ isAr }: { isAr: boolean }) {
 
   return (
     <Card className="rounded-3xl border-0 p-6 shadow-elegant card-gradient">
-      <ToolHeader icon={<Gauge className="h-5 w-5"/>} title={t("اعرف مستوى اعتمادك خلال دقيقة", "Know Your Dependence Level in 1 Minute")} />
+      <ToolHeader icon={<Gauge className="h-5 w-5" />} title={t("اعرف مستوى اعتمادك خلال دقيقة", "Know Your Dependence Level in 1 Minute")} />
       {!done ? (
         <div className="mt-5 space-y-3">
           {qs.map((q, i) => (
             <div key={i} className="rounded-xl border bg-card/50 p-3">
               <p className="text-sm">{q}</p>
               <div className="mt-2 flex gap-2">
-                <Button size="sm"variant={a[i] === true ? "default": "outline"}
+                <Button size="sm" variant={a[i] === true ? "default" : "outline"}
                         onClick={() => { const n=[...a]; n[i]=true; setA(n); }}>
                   {t("نعم", "Yes")}
                 </Button>
-                <Button size="sm"variant={a[i] === false ? "default": "outline"}
+                <Button size="sm" variant={a[i] === false ? "default" : "outline"}
                         onClick={() => { const n=[...a]; n[i]=false; setA(n); }}>
                   {t("لا", "No")}
                 </Button>
@@ -360,17 +370,20 @@ function DependenceCheck({ isAr }: { isAr: boolean }) {
           <p className="text-xs text-muted-foreground">{t("النتيجة", "Result")}</p>
           <p className={`mt-1 text-xl font-semibold ${level.cls}`}>{levelLabel}</p>
           <p className="mt-3 text-xs leading-6 text-foreground/70">
-            {t("هذه نتيجة توعوية سريعة وليست تشخيصًا. للحصول على مسار أدق، أكمل تقييم أقلع الكامل.", "This is a quick educational check, not a diagnosis. For a more accurate pathway, complete the full Aqla assessment.")}
+            {t("هذه نتيجة توعوية سريعة وليست تشخيصًا. للحصول على مسار أدق، أكمل تقييم أقلع الكامل.",
+               "This is a quick educational check, not a diagnosis. For a more accurate pathway, complete the full Aqla assessment.")}
           </p>
           <ShareResult
             shareType="quick-check"
             isAr={isAr}
             messageAr={messageAr}
             messageEn={messageEn}
-            targetPath="/request-support"titleAr="فحص النيكوتين السريع"titleEn="Quick Nicotine Check"
+            targetPath="/request-support"
+            titleAr="فحص النيكوتين السريع"
+            titleEn="Quick Nicotine Check"
             payload={{ level: isAr ? level.ar : level.en }}
           />
-          <StartAssessment isAr={isAr} from="dependence_check"label={t("أكمل التقييم الكامل", "Complete full assessment")} />
+          <StartAssessment isAr={isAr} from="dependence_check" label={t("أكمل التقييم الكامل", "Complete full assessment")} />
         </div>
       )}
     </Card>
@@ -426,15 +439,16 @@ function BreathChallenge({ isAr }: { isAr: boolean }) {
 
   return (
     <Card className="rounded-3xl border-0 p-6 shadow-elegant card-gradient">
-      <ToolHeader icon={<Wind className="h-5 w-5"/>} title={t("تحدي الوعي بالتنفس", "Breath Awareness Challenge")} />
+      <ToolHeader icon={<Wind className="h-5 w-5" />} title={t("تحدي الوعي بالتنفس", "Breath Awareness Challenge")} />
       <div className="mt-4 rounded-2xl border border-sky-200 bg-sky-50 p-3 text-xs leading-6 text-sky-900">
         {t(
-          "هذا تحدٍ توعوي بسيط، وليس اختبارًا طبيًا للرئة. لا تستخدمه إذا كنت تعاني من ألم في الصدر، ضيق تنفس، دوخة، حمل، ربو غير مستقر، أو أي مشكلة صحية. توقف فورًا إذا شعرت بعدم ارتياح.", "This is a simple awareness challenge, not a medical lung test. Do not use it if you have chest pain, shortness of breath, dizziness, pregnancy, unstable asthma, or any health concern. Stop immediately if you feel uncomfortable."
+          "هذا تحدٍ توعوي بسيط، وليس اختبارًا طبيًا للرئة. لا تستخدمه إذا كنت تعاني من ألم في الصدر، ضيق تنفس، دوخة، حمل، ربو غير مستقر، أو أي مشكلة صحية. توقف فورًا إذا شعرت بعدم ارتياح.",
+          "This is a simple awareness challenge, not a medical lung test. Do not use it if you have chest pain, shortness of breath, dizziness, pregnancy, unstable asthma, or any health concern. Stop immediately if you feel uncomfortable."
         )}
       </div>
 
       {!acknowledged ? (
-        <Button onClick={() => setAcknowledged(true)} variant="outline"className="mt-4 w-full">
+        <Button onClick={() => setAcknowledged(true)} variant="outline" className="mt-4 w-full">
           {t("فهمت — متابعة", "I understand — continue")}
         </Button>
       ) : (
@@ -453,19 +467,23 @@ function BreathChallenge({ isAr }: { isAr: boolean }) {
             <div className="mt-4 rounded-2xl bg-primary-soft p-4 text-sm">
               {autoStopped && (
                 <p className="mb-2 text-xs font-medium text-rose-600">
-                  {t("تم إيقاف التحدي تلقائيًا للحفاظ على السلامة.", "The challenge stopped automatically for safety.")}
+                  {t("تم إيقاف التحدي تلقائيًا للحفاظ على السلامة.",
+                     "The challenge stopped automatically for safety.")}
                 </p>
               )}
               <p className={`text-base font-semibold ${band(final).cls}`}>{isAr ? band(final).ar : band(final).en}</p>
               <p className="mt-2 text-xs text-foreground/70">
-                {t("هذه أداة توعية فقط، وليست تقييمًا لوظائف الرئة.", "This is an awareness tool only and does not assess lung function.")}
+                {t("هذه أداة توعية فقط، وليست تقييمًا لوظائف الرئة.",
+                   "This is an awareness tool only and does not assess lung function.")}
               </p>
               <ShareResult
                 shareType="breath"
                 isAr={isAr}
                 messageAr={messageAr}
                 messageEn={messageEn}
-                targetPath="/request-support"titleAr="تحدي الوعي بالتنفس"titleEn="Breath Awareness Challenge"
+                targetPath="/request-support"
+                titleAr="تحدي الوعي بالتنفس"
+                titleEn="Breath Awareness Challenge"
                 payload={{ seconds: final }}
               />
               <StartAssessment isAr={isAr} from="breath_challenge" />
@@ -483,28 +501,37 @@ function QuitTimeline({ isAr }: { isAr: boolean }) {
   useEffect(() => { trackEvent("quit_timeline_viewed"); }, []);
   const items = [
     { when: t("20 دقيقة", "20 minutes"),
-      text: t("يبدأ معدل النبض وضغط الدم بالعودة نحو القيم الطبيعية.", "Heart rate and blood pressure begin to ease toward normal levels.") },
+      text: t("يبدأ معدل النبض وضغط الدم بالعودة نحو القيم الطبيعية.",
+              "Heart rate and blood pressure begin to ease toward normal levels.") },
     { when: t("24 ساعة", "24 hours"),
-      text: t("تبدأ مستويات أول أكسيد الكربون في الدم بالانخفاض.", "Carbon monoxide levels in the blood start to decrease.") },
+      text: t("تبدأ مستويات أول أكسيد الكربون في الدم بالانخفاض.",
+              "Carbon monoxide levels in the blood start to decrease.") },
     { when: t("48 ساعة", "48 hours"),
-      text: t("قد تلاحظ تحسنًا تدريجيًا في حاستي الشم والتذوق.", "You may notice gradual improvement in smell and taste.") },
+      text: t("قد تلاحظ تحسنًا تدريجيًا في حاستي الشم والتذوق.",
+              "You may notice gradual improvement in smell and taste.") },
     { when: t("2–12 أسبوع", "2–12 weeks"),
-      text: t("قد تتحسن الدورة الدموية وكفاءة التنفس مع الوقت.", "Circulation and breathing efficiency may improve over time.") },
+      text: t("قد تتحسن الدورة الدموية وكفاءة التنفس مع الوقت.",
+              "Circulation and breathing efficiency may improve over time.") },
     { when: t("3–9 أشهر", "3–9 months"),
-      text: t("قد يقل السعال وضيق التنفس تدريجيًا.", "Cough and shortness of breath may gradually decrease.") },
+      text: t("قد يقل السعال وضيق التنفس تدريجيًا.",
+              "Cough and shortness of breath may gradually decrease.") },
     { when: t("سنة واحدة", "1 year"),
-      text: t("قد ينخفض خطر بعض أمراض القلب مقارنة بالتدخين المستمر.", "Risk of some heart-related conditions may decrease compared to continued smoking.") },
+      text: t("قد ينخفض خطر بعض أمراض القلب مقارنة بالتدخين المستمر.",
+              "Risk of some heart-related conditions may decrease compared to continued smoking.") },
     { when: t("5 سنوات", "5 years"),
-      text: t("قد يستمر تحسن المؤشرات الصحية العامة على المدى الطويل.", "General health indicators may continue to improve over the long term.") },
+      text: t("قد يستمر تحسن المؤشرات الصحية العامة على المدى الطويل.",
+              "General health indicators may continue to improve over the long term.") },
   ];
   const shareText = t(
-    "تعرفت على رحلة التعافي بعد الإقلاع مع أقلع. الخطوة الأولى تبدأ اليوم.", "I explored the quitting recovery timeline with Aqla. The first step starts today."
+    "تعرفت على رحلة التعافي بعد الإقلاع مع أقلع. الخطوة الأولى تبدأ اليوم.",
+    "I explored the quitting recovery timeline with Aqla. The first step starts today."
   );
   return (
     <Card className="rounded-3xl border-0 p-6 shadow-elegant card-gradient md:col-span-2 xl:col-span-2">
-      <ToolHeader icon={<Clock className="h-5 w-5"/>} title={t("ماذا يحدث بعد الإقلاع؟", "What Happens After Quitting?")} />
+      <ToolHeader icon={<Clock className="h-5 w-5" />} title={t("ماذا يحدث بعد الإقلاع؟", "What Happens After Quitting?")} />
       <p className="mt-3 text-sm text-muted-foreground">
-        {t("رحلة الإقلاع تبدأ بخطوة. تعرّف على التغيرات الإيجابية التي قد تحدث مع الوقت.", "Quitting starts with one step. Explore positive changes that may happen over time.")}
+        {t("رحلة الإقلاع تبدأ بخطوة. تعرّف على التغيرات الإيجابية التي قد تحدث مع الوقت.",
+           "Quitting starts with one step. Explore positive changes that may happen over time.")}
       </p>
       <ol className="relative mt-5 space-y-3 border-s-2 border-primary/30 ps-5">
         {items.map((it, i) => (
@@ -518,10 +545,11 @@ function QuitTimeline({ isAr }: { isAr: boolean }) {
         ))}
       </ol>
       <p className="mt-3 text-xs text-muted-foreground/80">
-        {t("معلومات تثقيفية عامة وليست توقعات فردية.", "General educational information, not individual predictions.")}
+        {t("معلومات تثقيفية عامة وليست توقعات فردية.",
+           "General educational information, not individual predictions.")}
       </p>
       <ShareRow text={shareText} isAr={isAr} />
-      <StartAssessment isAr={isAr} from="quit_timeline"label={t("ابدأ رحلتك الآن", "Start your journey now")} />
+      <StartAssessment isAr={isAr} from="quit_timeline" label={t("ابدأ رحلتك الآن", "Start your journey now")} />
     </Card>
   );
 }
@@ -573,13 +601,13 @@ function TriggerMap({ isAr }: { isAr: boolean }) {
 
   return (
     <Card className="rounded-3xl border-0 p-6 shadow-elegant card-gradient md:col-span-2 xl:col-span-2">
-      <ToolHeader icon={<MapPin className="h-5 w-5"/>} title={t("خريطة محفزاتك", "Your Trigger Map")} />
+      <ToolHeader icon={<MapPin className="h-5 w-5" />} title={t("خريطة محفزاتك", "Your Trigger Map")} />
       <p className="mt-3 text-sm">
         {t("متى تزداد رغبتك في التدخين أو النيكوتين؟", "When do you feel the strongest urge to smoke or use nicotine?")}
       </p>
       <div className="mt-3 flex flex-wrap gap-2">
         {opts.map((o) => (
-          <Button key={o.v} size="sm"variant={sel.includes(o.v) ? "default": "outline"} onClick={() => toggle(o.v)}>
+          <Button key={o.v} size="sm" variant={sel.includes(o.v) ? "default" : "outline"} onClick={() => toggle(o.v)}>
             {isAr ? o.ar : o.en}
           </Button>
         ))}
@@ -593,20 +621,23 @@ function TriggerMap({ isAr }: { isAr: boolean }) {
       {done && top.length > 0 && (
         <div className="mt-4 rounded-2xl bg-primary-soft p-4 text-sm">
           <p className="text-xs text-muted-foreground">{t("أكثر محفزاتك", "Your top triggers")}</p>
-          <p className="mt-1 font-semibold text-primary">{top.join(isAr ? "، ": ", ")}</p>
+          <p className="mt-1 font-semibold text-primary">{top.join(isAr ? "، " : ", ")}</p>
           <p className="mt-3 text-xs font-medium">{t("أفكار بسيطة للتعامل:", "Simple coping ideas:")}</p>
           <ul className="mt-1 grid list-disc grid-cols-1 gap-1 ps-5 text-xs leading-6 sm:grid-cols-2">
             {tips.map((tip, i) => <li key={i}>{tip}</li>)}
           </ul>
           <p className="mt-2 text-[11px] text-muted-foreground/80">
-            {t("ملاحظة: لا توصي هذه الأداة بأي أدوية أو بدائل نيكوتين.", "Note: this tool does not recommend medication or nicotine alternatives.")}
+            {t("ملاحظة: لا توصي هذه الأداة بأي أدوية أو بدائل نيكوتين.",
+               "Note: this tool does not recommend medication or nicotine alternatives.")}
           </p>
           <ShareResult
             shareType="trigger"
             isAr={isAr}
             messageAr={messageAr}
             messageEn={messageEn}
-            targetPath="/request-support"titleAr="خريطة المحفزات"titleEn="Trigger Map"
+            targetPath="/request-support"
+            titleAr="خريطة المحفزات"
+            titleEn="Trigger Map"
             payload={{ top_triggers: top }}
           />
           <StartAssessment isAr={isAr} from="trigger_map" />
@@ -636,7 +667,7 @@ function PledgeCard({ isAr }: { isAr: boolean }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const recordCity = useServerFn(recordCityChallengeEvent);
   const chosen = reasons.find((r) => r.v === reason);
-  const reasonLabel = reason === "other"? other.trim() : (chosen ? (isAr ? chosen.ar : chosen.en) : "");
+  const reasonLabel = reason === "other" ? other.trim() : (chosen ? (isAr ? chosen.ar : chosen.en) : "");
   const messageAr =
     `مستقبلي يستاهل أبدأ من اليوم.\n\nاخترت أول خطوة مع أقلع${reasonLabel ? ` لأجل ${reasonLabel}` : ""}، ويمكن خطوة بسيطة اليوم تصنع فرق كبير بكرة.\n\nاكتب سببك أنت أيضًا وصمّم بطاقتك:`;
   const messageEn =
@@ -644,13 +675,13 @@ function PledgeCard({ isAr }: { isAr: boolean }) {
 
   return (
     <Card className="rounded-3xl border-0 p-6 shadow-elegant card-gradient">
-      <ToolHeader icon={<HeartHandshake className="h-5 w-5"/>} title={t("وعد الإقلاع", "Quit Pledge")} />
+      <ToolHeader icon={<HeartHandshake className="h-5 w-5" />} title={t("وعد الإقلاع", "Quit Pledge")} />
       {!created ? (
         <div className="mt-5 space-y-3">
           <p className="text-xs text-muted-foreground">{t("اختر سببك للبدء", "Choose your reason to start")}</p>
           <div className="flex flex-wrap gap-2">
             {reasons.map((r) => (
-              <Button key={r.v} size="sm"variant={reason === r.v ? "default": "outline"} onClick={() => setReason(r.v)}>
+              <Button key={r.v} size="sm" variant={reason === r.v ? "default" : "outline"} onClick={() => setReason(r.v)}>
                 {isAr ? r.ar : r.en}
               </Button>
             ))}
@@ -660,12 +691,14 @@ function PledgeCard({ isAr }: { isAr: boolean }) {
           )}
           <div>
             <Label className="text-xs">
-              {t("اختر مدينتك لإضافة تعهدك إلى تحدي المدن (اختياري)", "Choose your city to add your pledge to the City Challenge (optional)")}
+              {t("اختر مدينتك لإضافة تعهدك إلى تحدي المدن (اختياري)",
+                 "Choose your city to add your pledge to the City Challenge (optional)")}
             </Label>
             <Input value={city} onChange={(e) => setCity(e.target.value)}
                    placeholder={t("مدينتك", "Your city")} maxLength={60} />
             <p className="mt-1 text-[10px] text-muted-foreground">
-              {t("لا نطلب اسمك أو رقمك. تُستخدم المدينة لأغراض إحصائية فقط.", "We don't ask for your name or phone. City is used for aggregate stats only.")}
+              {t("لا نطلب اسمك أو رقمك. تُستخدم المدينة لأغراض إحصائية فقط.",
+                 "We don't ask for your name or phone. City is used for aggregate stats only.")}
             </p>
           </div>
           <Button onClick={() => {
@@ -685,12 +718,12 @@ function PledgeCard({ isAr }: { isAr: boolean }) {
         </div>
       ) : (
         <div className="mt-5 space-y-3">
-          <div ref={cardRef} dir={isAr ? "rtl": "ltr"}
+          <div ref={cardRef} dir={isAr ? "rtl" : "ltr"}
                className="relative overflow-hidden rounded-2xl p-6 text-center text-white shadow-elegant quit-gradient">
             <div className="absolute -end-6 -top-6 h-24 w-24 rounded-full bg-white/10 blur-2xl" />
             <div className="absolute -start-6 -bottom-6 h-24 w-24 rounded-full bg-white/10 blur-2xl" />
             <div className="relative">
-              <img src={aqlaLogo} alt="Aqla"className="mx-auto h-10 w-auto opacity-95" />
+              <img src={aqlaLogo} alt="Aqla" className="mx-auto h-10 w-auto opacity-95" />
               <p className="mt-3 text-xs opacity-90">Aqla — أقلع</p>
               <p className="mt-2 text-lg font-semibold leading-7">
                 {t("بدأت خطوتي الأولى مع أقلع", "I started my first step with Aqla")}
@@ -701,8 +734,9 @@ function PledgeCard({ isAr }: { isAr: boolean }) {
             </div>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
-            <Button variant="outline"className="flex-1 gap-1.5"onClick={() => cardRef.current && saveAsImage(cardRef.current, "aqla-pledge.png")}>
-              <Download className="h-4 w-4"/>{t("احفظ البطاقة", "Save card")}
+            <Button variant="outline" className="flex-1 gap-1.5"
+                    onClick={() => cardRef.current && saveAsImage(cardRef.current, "aqla-pledge.png")}>
+              <Download className="h-4 w-4" />{t("احفظ البطاقة", "Save card")}
             </Button>
           </div>
           <ShareResult
@@ -710,7 +744,9 @@ function PledgeCard({ isAr }: { isAr: boolean }) {
             isAr={isAr}
             messageAr={messageAr}
             messageEn={messageEn}
-            targetPath="/request-support"titleAr="وعد الإقلاع"titleEn="Quit Pledge"
+            targetPath="/request-support"
+            titleAr="وعد الإقلاع"
+            titleEn="Quit Pledge"
             payload={{ reason: reasonLabel, city: city.trim() || null }}
             snapshotRef={cardRef}
           />
@@ -743,9 +779,10 @@ function ReadinessMeter({ isAr }: { isAr: boolean }) {
     `My readiness today on the Aqla scale: ${val}/10.\nWhere I am right now matters less than the fact I'm thinking about my next step.\n\nSee your readiness:`;
   return (
     <Card className="rounded-3xl border-0 p-6 shadow-elegant card-gradient">
-      <ToolHeader icon={<Sparkles className="h-5 w-5"/>} title={t("مقياس الاستعداد للإقلاع", "Quit Readiness Meter")} />
+      <ToolHeader icon={<Sparkles className="h-5 w-5" />} title={t("مقياس الاستعداد للإقلاع", "Quit Readiness Meter")} />
       <p className="mt-3 text-sm">
-        {t("كم تشعر أنك مستعد للإقلاع أو التقليل اليوم؟", "How ready do you feel to quit or reduce today?")}
+        {t("كم تشعر أنك مستعد للإقلاع أو التقليل اليوم؟",
+           "How ready do you feel to quit or reduce today?")}
       </p>
       <div className="mt-4">
         <Slider value={[val]} min={0} max={10} step={1} onValueChange={(v) => setVal(v[0] ?? 0)} />
@@ -765,7 +802,9 @@ function ReadinessMeter({ isAr }: { isAr: boolean }) {
             isAr={isAr}
             messageAr={messageAr}
             messageEn={messageEn}
-            targetPath="/request-support"titleAr="مقياس الاستعداد"titleEn="Readiness Meter"
+            targetPath="/request-support"
+            titleAr="مقياس الاستعداد"
+            titleEn="Readiness Meter"
             payload={{ readiness: val }}
           />
           <StartAssessment isAr={isAr} from="readiness_meter" />

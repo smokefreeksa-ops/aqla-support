@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-export type Lang = "en"| "ar";
+export type Lang = "en" | "ar";
 
 export const dict = {
   en: {
@@ -238,19 +238,19 @@ export const LangContext = createContext<{ lang: Lang; setLang: (l: Lang) => voi
 export function useLang() {
   const ctx = useContext(LangContext);
   const t = dict[ctx.lang];
-  return { ...ctx, t, dir: ctx.lang === "ar"? "rtl": "ltr" };
+  return { ...ctx, t, dir: ctx.lang === "ar" ? "rtl" : "ltr" };
 }
 
 export function useLangState() {
   const [lang, setLangState] = useState<Lang>("ar");
   useEffect(() => {
-    const raw = typeof window !== "undefined"? localStorage.getItem("lang") : null;
-    const saved: Lang = raw === "en"|| raw === "ar"? raw : "ar";
+    const raw = typeof window !== "undefined" ? localStorage.getItem("lang") : null;
+    const saved: Lang = raw === "en" || raw === "ar" ? raw : "ar";
     setLangState(saved);
   }, []);
   useEffect(() => {
     if (typeof document !== "undefined") {
-      document.documentElement.dir = lang === "ar"? "rtl": "ltr";
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
       document.documentElement.lang = lang;
     }
   }, [lang]);

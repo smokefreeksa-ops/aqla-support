@@ -24,14 +24,14 @@ export const Route = createFileRoute("/dashboard")({
 function DashboardLayout() {
   const { model } = useLearnerDashboard();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isSubPage = pathname !== "/dashboard"&& pathname !== "/dashboard/";
+  const isSubPage = pathname !== "/dashboard" && pathname !== "/dashboard/";
   return (
-    <div dir="rtl"className="min-h-screen bg-background text-foreground">
+    <div dir="rtl" className="min-h-screen bg-background text-foreground">
       <DashboardNav displayName={model?.displayName ?? "المتعلم"} />
       <main className="mx-auto max-w-7xl px-4 py-6 sm:py-8">
         {isSubPage && (
           <div className="mb-5">
-            <BackButton fallback="/dashboard"labelAr="لوحة المتعلم"labelEn="Dashboard" />
+            <BackButton fallback="/dashboard" labelAr="لوحة المتعلم" labelEn="Dashboard" />
           </div>
         )}
         <Outlet />

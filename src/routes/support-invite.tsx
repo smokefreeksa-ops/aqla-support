@@ -42,8 +42,8 @@ function PageWrap() {
   );
 }
 
-type RelKey = "friend"| "sibling"| "parent"| "spouse"| "colleague"| "student"| "relative"| "someone";
-type StyleKey = "gentle"| "emotional"| "short"| "formal"| "warm"| "encouraging";
+type RelKey = "friend" | "sibling" | "parent" | "spouse" | "colleague" | "student" | "relative" | "someone";
+type StyleKey = "gentle" | "emotional" | "short" | "formal" | "warm" | "encouraging";
 
 const REL: { key: RelKey; ar: string; en: string }[] = [
   { key: "friend", ar: "صديق", en: "Friend" },
@@ -117,8 +117,8 @@ function SupportInvitePage() {
 
   useEffect(() => { trackEvent("support_invite_viewed"); }, []);
 
-  const recipientDisplay = recipient.trim() || (isAr ? "شخص يهمني": "Someone I care about");
-  const inviterDisplay = inviter.trim() || (isAr ? "شخص يهتم لأمرك": "Someone who cares about you");
+  const recipientDisplay = recipient.trim() || (isAr ? "شخص يهمني" : "Someone I care about");
+  const inviterDisplay = inviter.trim() || (isAr ? "شخص يهتم لأمرك" : "Someone who cares about you");
 
   const messageAr = useMemo(() => custom.trim() || TEMPLATES_AR[style](recipientDisplay), [custom, style, recipientDisplay]);
   const messageEn = useMemo(() => custom.trim() || TEMPLATES_EN[style](recipientDisplay), [custom, style, recipientDisplay]);
@@ -152,7 +152,8 @@ function SupportInvitePage() {
   async function createInvite() {
     if (!customSafe) {
       toast.error(isAr
-        ? "خلّ الرسالة داعمة ومحترمة، بدون ضغط أو أحكام أو ادعاءات طبية.": "Keep the message supportive and respectful, without pressure, judgment, or medical claims.");
+        ? "خلّ الرسالة داعمة ومحترمة، بدون ضغط أو أحكام أو ادعاءات طبية."
+        : "Keep the message supportive and respectful, without pressure, judgment, or medical claims.");
       return;
     }
     if (custom.length > limit) {
@@ -185,10 +186,10 @@ function SupportInvitePage() {
         const url = `${window.location.origin}${res.share_path}`;
         setShareUrl(url);
         trackEvent("support_invite_created", style);
-        toast.success(isAr ? "تم إنشاء البطاقة": "Card created");
+        toast.success(isAr ? "تم إنشاء البطاقة" : "Card created");
       }
     } catch (e) {
-      toast.error(isAr ? "تعذّر إنشاء البطاقة": "Could not create card");
+      toast.error(isAr ? "تعذّر إنشاء البطاقة" : "Could not create card");
       console.error(e);
     } finally {
       setCreating(false);
@@ -198,7 +199,7 @@ function SupportInvitePage() {
   async function downloadCard() {
     const dataUrl = await snapshotDataUrl();
     if (!dataUrl) {
-      toast.error(isAr ? "تعذّر تحميل البطاقة": "Could not download card");
+      toast.error(isAr ? "تعذّر تحميل البطاقة" : "Could not download card");
       return;
     }
     const a = document.createElement("a");
@@ -230,19 +231,19 @@ function SupportInvitePage() {
       {/* Header */}
       <header className="border-b border-brand/10 bg-white/70 backdrop-blur">
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-          <Link to="/"className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <AqlaLogoBadge size={36} />
-            <span className="font-semibold text-ink">{isAr ? "أقلع": "Aqla"}</span>
+            <span className="font-semibold text-ink">{isAr ? "أقلع" : "Aqla"}</span>
           </Link>
           <div className="flex items-center gap-2">
             <Link to="/challenges">
-              <Button variant="ghost"size="sm"className="gap-1">
+              <Button variant="ghost" size="sm" className="gap-1">
                 <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
-                {isAr ? "تحديات أقلع": "Challenges"}
+                {isAr ? "تحديات أقلع" : "Challenges"}
               </Button>
             </Link>
-            <Button variant="outline"size="sm"onClick={() => setLang(isAr ? "en": "ar")} className="gap-1">
-              <Languages className="h-4 w-4"/> {isAr ? "EN": "ع"}
+            <Button variant="outline" size="sm" onClick={() => setLang(isAr ? "en" : "ar")} className="gap-1">
+              <Languages className="h-4 w-4" /> {isAr ? "EN" : "ع"}
             </Button>
           </div>
         </div>
@@ -251,20 +252,22 @@ function SupportInvitePage() {
       <main className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
         {/* Hero */}
         <section className="text-center max-w-3xl mx-auto">
-          <Badge variant="secondary"className="rounded-full px-3 py-1 mb-3">
+          <Badge variant="secondary" className="rounded-full px-3 py-1 mb-3">
             <ShieldCheck className="me-1 inline h-3.5 w-3.5" />
-            {isAr ? "رسائل دعم محترمة، بدون ضغط": "Respectful support, no pressure"}
+            {isAr ? "رسائل دعم محترمة، بدون ضغط" : "Respectful support, no pressure"}
           </Badge>
           <h1 className="text-3xl sm:text-4xl font-bold text-ink">
-            {isAr ? "أرسل رسالة لشخص يهمك": "Send a Message to Someone You Care About"}
+            {isAr ? "أرسل رسالة لشخص يهمك" : "Send a Message to Someone You Care About"}
           </h1>
           <p className="mt-3 text-muted-foreground">
             {isAr
-              ? "اكتب اسم الشخص، أضف رسالتك، وصمّم بطاقة دعم تحمل شعار أقلع يمكن إرسالها عبر واتساب أو الرسائل أو مشاركتها برابط مباشر.": "Add the person's name, write your message, and create an Aqla-branded support card that can be sent by WhatsApp, SMS, or shared with a direct link."}
+              ? "اكتب اسم الشخص، أضف رسالتك، وصمّم بطاقة دعم تحمل شعار أقلع يمكن إرسالها عبر واتساب أو الرسائل أو مشاركتها برابط مباشر."
+              : "Add the person's name, write your message, and create an Aqla-branded support card that can be sent by WhatsApp, SMS, or shared with a direct link."}
           </p>
           <p className="mt-2 text-xs text-amber-700">
             {isAr
-              ? "هذه الرسائل للتوعية والدعم فقط. لا تستخدمها للضغط أو اللوم أو تقديم نصيحة طبية.": "These messages are for awareness and support only. Do not use them to pressure, blame, or provide medical advice."}
+              ? "هذه الرسائل للتوعية والدعم فقط. لا تستخدمها للضغط أو اللوم أو تقديم نصيحة طبية."
+              : "These messages are for awareness and support only. Do not use them to pressure, blame, or provide medical advice."}
           </p>
         </section>
 
@@ -272,39 +275,41 @@ function SupportInvitePage() {
           {/* Form */}
           <Card className="p-6 space-y-4">
             <div>
-              <Label>{isAr ? "اسم الشخص الذي تريد دعوته": "Recipient name"}</Label>
+              <Label>{isAr ? "اسم الشخص الذي تريد دعوته" : "Recipient name"}</Label>
               <Input
                 value={recipient}
                 onChange={(e) => setRecipient(e.target.value.slice(0, 80))}
-                placeholder={isAr ? "مثال: محمد": "Example: Mohammed"}
+                placeholder={isAr ? "مثال: محمد" : "Example: Mohammed"}
               />
             </div>
 
             <div>
-              <Label>{isAr ? "رقم الجوال للإرسال (اختياري)": "Mobile number for sending (optional)"}</Label>
+              <Label>{isAr ? "رقم الجوال للإرسال (اختياري)" : "Mobile number for sending (optional)"}</Label>
               <Input
                 value={phone}
                 onChange={(e) => setPhone(e.target.value.slice(0, 20))}
-                placeholder="+9665XXXXXXXX"inputMode="tel"
+                placeholder="+9665XXXXXXXX"
+                inputMode="tel"
               />
               <p className="text-xs text-muted-foreground mt-1">
                 {isAr
-                  ? "يُستخدم فقط لفتح واتساب أو الرسائل، ولن يظهر في البطاقة أو صفحة المشاركة.": "Used only to open WhatsApp or SMS. Never shown on the card or share page, never stored."}
+                  ? "يُستخدم فقط لفتح واتساب أو الرسائل، ولن يظهر في البطاقة أو صفحة المشاركة."
+                  : "Used only to open WhatsApp or SMS. Never shown on the card or share page, never stored."}
               </p>
             </div>
 
             <div>
-              <Label>{isAr ? "اسمك أو لقبك": "Your name or nickname"}</Label>
+              <Label>{isAr ? "اسمك أو لقبك" : "Your name or nickname"}</Label>
               <Input
                 value={inviter}
                 onChange={(e) => setInviter(e.target.value.slice(0, 80))}
-                placeholder={isAr ? "مثال: مالك": "Example: Malik"}
+                placeholder={isAr ? "مثال: مالك" : "Example: Malik"}
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label>{isAr ? "ما علاقتك به؟": "Relationship"}</Label>
+                <Label>{isAr ? "ما علاقتك به؟" : "Relationship"}</Label>
                 <Select value={relationship} onValueChange={(v) => setRelationship(v as RelKey)}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -315,7 +320,7 @@ function SupportInvitePage() {
                 </Select>
               </div>
               <div>
-                <Label>{isAr ? "أسلوب الرسالة": "Message style"}</Label>
+                <Label>{isAr ? "أسلوب الرسالة" : "Message style"}</Label>
                 <Select value={style} onValueChange={(v) => setStyle(v as StyleKey)}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -328,22 +333,23 @@ function SupportInvitePage() {
             </div>
 
             <div>
-              <Label>{isAr ? "اكتب رسالتك الخاصة (اختياري)": "Write your own message (optional)"}</Label>
+              <Label>{isAr ? "اكتب رسالتك الخاصة (اختياري)" : "Write your own message (optional)"}</Label>
               <Textarea
                 value={custom}
                 onChange={(e) => setCustom(e.target.value)}
                 placeholder={isAr
-                  ? "مثال: أرسلت لك هذه الدعوة لأن صحتك تهمني، ولأن خطوة بسيطة قد تصنع فرقًا كبيرًا.": "Example: I sent you this because your health matters to me, and one small step can make a real difference."}
+                  ? "مثال: أرسلت لك هذه الدعوة لأن صحتك تهمني، ولأن خطوة بسيطة قد تصنع فرقًا كبيرًا."
+                  : "Example: I sent you this because your health matters to me, and one small step can make a real difference."}
                 rows={4}
                 maxLength={limit + 50}
               />
               <div className="flex items-center justify-between text-xs mt-1">
-                <span className={custom.length > limit ? "text-destructive": "text-muted-foreground"}>
+                <span className={custom.length > limit ? "text-destructive" : "text-muted-foreground"}>
                   {custom.length}/{limit}
                 </span>
                 {!customSafe && (
                   <span className="text-destructive">
-                    {isAr ? "الرجاء استخدام صياغة داعمة بدون ضغط أو ادعاءات طبية.": "Please use supportive wording without pressure or medical claims."}
+                    {isAr ? "الرجاء استخدام صياغة داعمة بدون ضغط أو ادعاءات طبية." : "Please use supportive wording without pressure or medical claims."}
                   </span>
                 )}
               </div>
@@ -353,12 +359,12 @@ function SupportInvitePage() {
               <Button onClick={createInvite} disabled={creating || !customSafe} className="quit-gradient text-white border-0">
                 <Sparkles className="h-4 w-4" />
                 {creating
-                  ? (isAr ? "جاري الإنشاء…": "Creating…")
-                  : (isAr ? "أنشئ البطاقة وشاركها": "Create & share card")}
+                  ? (isAr ? "جاري الإنشاء…" : "Creating…")
+                  : (isAr ? "أنشئ البطاقة وشاركها" : "Create & share card")}
               </Button>
               <Button variant="outline" onClick={downloadCard}>
                 <Download className="h-4 w-4" />
-                {isAr ? "تحميل البطاقة": "Download card"}
+                {isAr ? "تحميل البطاقة" : "Download card"}
               </Button>
             </div>
           </Card>
@@ -374,45 +380,48 @@ function SupportInvitePage() {
                 <div className="flex items-center gap-3">
                   <img
                     src={aqlaLogo}
-                    alt="Aqla"crossOrigin="anonymous"className="h-12 w-12 object-contain rounded-lg bg-white p-1 shadow-sm"
+                    alt="Aqla"
+                    crossOrigin="anonymous"
+                    className="h-12 w-12 object-contain rounded-lg bg-white p-1 shadow-sm"
                   />
                   <div>
-                    <div className="font-bold text-ink leading-tight">{isAr ? "أقلع": "Aqla"}</div>
+                    <div className="font-bold text-ink leading-tight">{isAr ? "أقلع" : "Aqla"}</div>
                     <div className="text-[11px] text-brand">
-                      {isAr ? "رسالة دعم من أقلع": "A support message from Aqla"}
+                      {isAr ? "رسالة دعم من أقلع" : "A support message from Aqla"}
                     </div>
                   </div>
                 </div>
-                <Badge variant="outline"className="border-digital/40 text-brand text-[10px]">
+                <Badge variant="outline" className="border-digital/40 text-brand text-[10px]">
                   {SITE_URL.replace(/^https?:\/\//, "")}
                 </Badge>
               </div>
 
               <div className="mt-6 border-t border-brand/10 pt-4">
                 <div className="text-sm text-ink-secondary/80">
-                  {isAr ? "إلى /": "To /"} <span className="font-semibold text-ink">{recipientDisplay}</span>
+                  {isAr ? "إلى /" : "To /"} <span className="font-semibold text-ink">{recipientDisplay}</span>
                 </div>
                 <p className="mt-4 text-ink leading-7 whitespace-pre-line">{message}</p>
                 <div className="mt-6 text-sm text-ink-secondary/80">
-                  {isAr ? "من /": "From /"} <span className="font-semibold text-ink">{inviterDisplay}</span>
+                  {isAr ? "من /" : "From /"} <span className="font-semibold text-ink">{inviterDisplay}</span>
                 </div>
               </div>
 
               <div className="mt-6 rounded-xl bg-gradient-to-r from-brand to-teal-800 text-white p-4 text-center">
-                <div className="text-sm">{isAr ? "ابدأ بخطوة بسيطة اليوم": "Start with one small step today"}</div>
-                <div className="font-bold mt-1">{isAr ? "جرّب أقلع الآن": "Try Aqla now"}</div>
+                <div className="text-sm">{isAr ? "ابدأ بخطوة بسيطة اليوم" : "Start with one small step today"}</div>
+                <div className="font-bold mt-1">{isAr ? "جرّب أقلع الآن" : "Try Aqla now"}</div>
               </div>
 
               <div className="mt-4 text-[11px] text-ink-secondary/70 text-center">
                 {isAr
-                  ? "أقلع — منصة مجانية للجميع، وستبقى مجانية": "Aqla — free for everyone, and always will be"}
+                  ? "أقلع — منصة مجانية للجميع، وستبقى مجانية"
+                  : "Aqla — free for everyone, and always will be"}
               </div>
             </div>
 
             {shareUrl && (
               <Card className="p-4 space-y-3">
                 <div className="text-sm font-medium text-ink">
-                  {isAr ? "رابط البطاقة للمشاركة": "Shareable card link"}
+                  {isAr ? "رابط البطاقة للمشاركة" : "Shareable card link"}
                 </div>
                 <div className="text-xs break-all text-muted-foreground bg-muted p-2 rounded">{shareUrl}</div>
                 <ShareButtons
@@ -423,21 +432,22 @@ function SupportInvitePage() {
                   textEn={!isAr
                     ? `I created a support message for someone I care about through Aqla.\n\nSometimes people do not need pressure. They need a gentle beginning.\n\nTry it here:`
                     : undefined}
-                  lang={isAr ? "ar": "en"}
+                  lang={isAr ? "ar" : "en"}
                 />
                 <div className="flex flex-wrap gap-2 pt-1">
                   {directWa && (
-                    <a href={directWa} target="_blank"rel="noopener noreferrer"onClick={() => trackEvent("support_invite_whatsapp_clicked")}>
-                      <Button size="sm"variant="outline"className="gap-1 text-brand">
+                    <a href={directWa} target="_blank" rel="noopener noreferrer"
+                       onClick={() => trackEvent("support_invite_whatsapp_clicked")}>
+                      <Button size="sm" variant="outline" className="gap-1 text-brand">
                         <MessageCircle className="h-4 w-4" />
-                        {isAr ? "إرسال واتساب مباشر": "Send via WhatsApp"}
+                        {isAr ? "إرسال واتساب مباشر" : "Send via WhatsApp"}
                       </Button>
                     </a>
                   )}
                   {directSms && (
                     <a href={directSms} onClick={() => trackEvent("support_invite_sms_clicked")}>
-                      <Button size="sm"variant="outline"className="gap-1">
-                        {isAr ? "إرسال رسالة SMS": "Send via SMS"}
+                      <Button size="sm" variant="outline" className="gap-1">
+                        {isAr ? "إرسال رسالة SMS" : "Send via SMS"}
                       </Button>
                     </a>
                   )}

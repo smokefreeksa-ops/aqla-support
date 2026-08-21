@@ -116,10 +116,12 @@ export function CommandPalette() {
 export function SearchTrigger({ className = "" }: { className?: string }) {
   return (
     <button
-      type="button"aria-label="بحث سريع · Quick search"onClick={() => window.dispatchEvent(new CustomEvent("aqla:open-search"))}
+      type="button"
+      aria-label="بحث سريع · Quick search"
+      onClick={() => window.dispatchEvent(new CustomEvent("aqla:open-search"))}
       className={`inline-flex min-h-11 items-center gap-2 rounded-full border border-border/60 bg-background/60 px-3 text-xs text-muted-foreground transition-colors hover:text-foreground ${className}`}
     >
-      <Search className="h-4 w-4"aria-hidden="true" />
+      <Search className="h-4 w-4" aria-hidden="true" />
       <span className="hidden sm:inline">بحث</span>
       <kbd className="hidden rounded border border-border/60 px-1 text-[10px] md:inline">⌘K</kbd>
     </button>

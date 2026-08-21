@@ -29,7 +29,12 @@ export const Route = createFileRoute("/volunteer")({
 });
 
 const INTERESTS = [
-  "awareness_campaigns", "smoker_support", "data_entry", "follow_up_coordination", "content_creation", "events",
+  "awareness_campaigns",
+  "smoker_support",
+  "data_entry",
+  "follow_up_coordination",
+  "content_creation",
+  "events",
 ] as const;
 type Interest = (typeof INTERESTS)[number];
 
@@ -43,10 +48,10 @@ type State = {
   affiliation: string;
   academic_level: string;
   preferred_language: Lang;
-  preferred_contact: "whatsapp"| "sms"| "phone"| "email";
+  preferred_contact: "whatsapp" | "sms" | "phone" | "email";
   motivation: string;
-  prior_awareness_work: "yes"| "no"| "";
-  smoking_status: "smoker"| "former_smoker"| "non_smoker"| "";
+  prior_awareness_work: "yes" | "no" | "";
+  smoking_status: "smoker" | "former_smoker" | "non_smoker" | "";
   availability: string;
   interests: Interest[];
   screening: {
@@ -159,14 +164,14 @@ function Flow() {
       <VisitTracker path="/volunteer" />
       <header className="border-b bg-card/70 backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-          <Link to="/"className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <div className="grid h-9 w-9 place-items-center rounded-xl volunteer-gradient text-white">
               <Users className="h-5 w-5" />
             </div>
             <span className="font-semibold">{t.brandShort}</span>
           </Link>
-          <Button variant="ghost"size="sm"onClick={() => setLang(lang === "ar"? "en": "ar")} className="gap-1.5">
-            <Languages className="h-4 w-4"/>{lang === "ar"? "English": "العربية"}
+          <Button variant="ghost" size="sm" onClick={() => setLang(lang === "ar" ? "en" : "ar")} className="gap-1.5">
+            <Languages className="h-4 w-4" />{lang === "ar" ? "English" : "العربية"}
           </Button>
         </div>
         <div className="mx-auto max-w-3xl px-4 pb-3">
@@ -218,9 +223,9 @@ function Flow() {
                 <Select value={s.gender} onValueChange={(v) => setS({ ...s, gender: v })}>
                   <SelectTrigger><SelectValue placeholder="—" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="male">{lang === "ar"? "ذكر": "Male"}</SelectItem>
-                    <SelectItem value="female">{lang === "ar"? "أنثى": "Female"}</SelectItem>
-                    <SelectItem value="prefer_not">{lang === "ar"? "أفضل عدم الإفصاح": "Prefer not to say"}</SelectItem>
+                    <SelectItem value="male">{lang === "ar" ? "ذكر" : "Male"}</SelectItem>
+                    <SelectItem value="female">{lang === "ar" ? "أنثى" : "Female"}</SelectItem>
+                    <SelectItem value="prefer_not">{lang === "ar" ? "أفضل عدم الإفصاح" : "Prefer not to say"}</SelectItem>
                   </SelectContent>
                 </Select>
               </Field>
@@ -234,12 +239,12 @@ function Flow() {
                 <Select value={s.academic_level} onValueChange={(v) => setS({ ...s, academic_level: v })}>
                   <SelectTrigger><SelectValue placeholder="—" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="high_school">{lang === "ar"? "ثانوي": "High school"}</SelectItem>
-                    <SelectItem value="diploma">{lang === "ar"? "دبلوم": "Diploma"}</SelectItem>
-                    <SelectItem value="undergraduate">{lang === "ar"? "بكالوريوس": "Undergraduate"}</SelectItem>
-                    <SelectItem value="graduate">{lang === "ar"? "دراسات عليا": "Graduate"}</SelectItem>
-                    <SelectItem value="working">{lang === "ar"? "موظف/عامل": "Working professional"}</SelectItem>
-                    <SelectItem value="other">{lang === "ar"? "أخرى": "Other"}</SelectItem>
+                    <SelectItem value="high_school">{lang === "ar" ? "ثانوي" : "High school"}</SelectItem>
+                    <SelectItem value="diploma">{lang === "ar" ? "دبلوم" : "Diploma"}</SelectItem>
+                    <SelectItem value="undergraduate">{lang === "ar" ? "بكالوريوس" : "Undergraduate"}</SelectItem>
+                    <SelectItem value="graduate">{lang === "ar" ? "دراسات عليا" : "Graduate"}</SelectItem>
+                    <SelectItem value="working">{lang === "ar" ? "موظف/عامل" : "Working professional"}</SelectItem>
+                    <SelectItem value="other">{lang === "ar" ? "أخرى" : "Other"}</SelectItem>
                   </SelectContent>
                 </Select>
               </Field>
@@ -258,7 +263,7 @@ function Flow() {
                   <SelectContent>
                     <SelectItem value="whatsapp">WhatsApp</SelectItem>
                     <SelectItem value="sms">SMS</SelectItem>
-                    <SelectItem value="phone">{lang === "ar"? "اتصال": "Phone call"}</SelectItem>
+                    <SelectItem value="phone">{lang === "ar" ? "اتصال" : "Phone call"}</SelectItem>
                     <SelectItem value="email">Email</SelectItem>
                   </SelectContent>
                 </Select>

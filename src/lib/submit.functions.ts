@@ -179,7 +179,8 @@ const Submission = z.object({
     })
     .nullable(),
   readiness: z.enum([
-    "quit_now","quit_prepare","reduce_first","not_ready_score", "discuss_alternatives","score_only","helping_someone"
+    "quit_now","quit_prepare","reduce_first","not_ready_score",
+    "discuss_alternatives","score_only","helping_someone"
   ]),
   riskFlags: z.array(z.string()),
   extras: ExtrasSchema,
@@ -219,7 +220,7 @@ export const submitAssessment = createServerFn({ method: "POST" })
       }
     }
     // HONC high category also escalates to clinician review
-    if (honcResult?.category === "high"&& !data.riskFlags.includes("requests_clinician")) {
+    if (honcResult?.category === "high" && !data.riskFlags.includes("requests_clinician")) {
       data.riskFlags.push("requests_clinician");
     }
 
@@ -260,7 +261,7 @@ export const submitAssessment = createServerFn({ method: "POST" })
         education_level: data.extras?.extendedDemographics?.education_level ?? null,
         nationality: data.extras?.extendedDemographics?.nationality ?? null,
         pregnancy: data.extras?.extendedDemographics?.pregnancy ?? data.extras?.safetyFlags?.pregnancy ?? null,
-        research_consent_status: data.extras?.consentResearchPublication ? "given": "not_given",
+        research_consent_status: data.extras?.consentResearchPublication ? "given" : "not_given",
         cohort: cohort.cohort,
         cohort_reason: cohort.reason,
         doctor_review_needed: cohort.doctorReviewNeeded,

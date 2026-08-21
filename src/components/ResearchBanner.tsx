@@ -19,7 +19,8 @@ export function ResearchBanner({ onNavigate }: { onNavigate?: () => void } = {})
   return (
     <>
       <div
-        dir="rtl"className="relative block w-full overflow-hidden border-b border-red-500/30 px-3 py-1.5"
+        dir="rtl"
+        className="relative block w-full overflow-hidden border-b border-red-500/30 px-3 py-1.5"
         style={{
           backgroundImage:
             "linear-gradient(90deg, rgba(127,29,29,0.55) 0%, rgba(185,28,28,0.6) 25%, rgba(239,68,68,0.6) 50%, rgba(185,28,28,0.6) 75%, rgba(127,29,29,0.55) 100%)",
@@ -32,7 +33,9 @@ export function ResearchBanner({ onNavigate }: { onNavigate?: () => void } = {})
 
           <a
             href={RESEARCH_REDCAP_URL}
-            target="_blank"rel="noopener noreferrer"onClick={() => track("study_banner_click", "banner")}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => track("study_banner_click", "banner")}
             className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-[10px] font-bold text-red-700 ring-1 ring-white/60 transition-colors hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:text-[11px]"
           >
             شارك الآن في الدراسة
@@ -58,7 +61,8 @@ export function ResearchBanner({ onNavigate }: { onNavigate?: () => void } = {})
           </Link>
 
           <span
-            title="إجمالي الزيارات"className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-white ring-1 ring-white/20 sm:text-[11px]"
+            title="إجمالي الزيارات"
+            className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold text-white ring-1 ring-white/20 sm:text-[11px]"
           >
             <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-white" />
             {formatCount(visits)} زيارة

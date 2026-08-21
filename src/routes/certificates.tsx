@@ -30,20 +30,21 @@ function Inner() {
     <div dir={dir} className="min-h-screen bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
-        <div className={isAr ? "text-right": ""}>
+        <div className={isAr ? "text-right" : ""}>
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            {isAr ? "الشهادات": "Certificates"}
+            {isAr ? "الشهادات" : "Certificates"}
           </h1>
           <p className="mt-3 text-[14.5px] leading-7 text-foreground/75">
             {isAr
-              ? "أصدر أقلع شهادات توعوية ورمزية لمن أكمل التدريب التطوعي أو شارك في التحديات. الشهادات للتوعية فقط ولا تمنح صلاحية مهنية.": "Aqla issues awareness and symbolic certificates for those who complete volunteer training or join challenges. Certificates are for awareness only and confer no professional authority."}
+              ? "أصدر أقلع شهادات توعوية ورمزية لمن أكمل التدريب التطوعي أو شارك في التحديات. الشهادات للتوعية فقط ولا تمنح صلاحية مهنية."
+              : "Aqla issues awareness and symbolic certificates for those who complete volunteer training or join challenges. Certificates are for awareness only and confer no professional authority."}
           </p>
         </div>
 
-        <Card className={`mt-6 rounded-2xl p-5 ${isAr ? "text-right": ""}`}>
-          <h2 className="text-lg font-semibold">{isAr ? "التحقق برمز الشهادة": "Verify by certificate code"}</h2>
+        <Card className={`mt-6 rounded-2xl p-5 ${isAr ? "text-right" : ""}`}>
+          <h2 className="text-lg font-semibold">{isAr ? "التحقق برمز الشهادة" : "Verify by certificate code"}</h2>
           <p className="mt-1 text-[13px] text-foreground/70">
-            {isAr ? "أدخل رمز الشهادة لعرض صفحة التحقق الرسمية.": "Enter the certificate code to open the official verification page."}
+            {isAr ? "أدخل رمز الشهادة لعرض صفحة التحقق الرسمية." : "Enter the certificate code to open the official verification page."}
           </p>
           <form
             onSubmit={(e) => {
@@ -56,27 +57,27 @@ function Inner() {
             <input
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              placeholder={isAr ? "مثال: AQ-XXXX-XXXX": "e.g. AQ-XXXX-XXXX"}
+              placeholder={isAr ? "مثال: AQ-XXXX-XXXX" : "e.g. AQ-XXXX-XXXX"}
               className="h-10 flex-1 rounded-md border border-input bg-background px-3 text-sm"
             />
-            <Button type="submit">{isAr ? "تحقق": "Verify"}</Button>
+            <Button type="submit">{isAr ? "تحقق" : "Verify"}</Button>
           </form>
         </Card>
 
-        <Card className={`mt-6 rounded-2xl p-5 ${isAr ? "text-right": ""}`}>
+        <Card className={`mt-6 rounded-2xl p-5 ${isAr ? "text-right" : ""}`}>
           <h2 className="text-lg font-semibold flex items-center gap-2">
             <Award className="h-4 w-4 text-primary" />
-            {isAr ? "كيف أحصل على شهادة؟": "How to earn a certificate"}
+            {isAr ? "كيف أحصل على شهادة؟" : "How to earn a certificate"}
           </h2>
-          <ul className={`mt-3 space-y-2 text-[13.5px] leading-7 text-foreground/75 ${isAr ? "pr-4 list-disc list-inside": "pl-4 list-disc"}`}>
-            <li>{isAr ? "أكمل وحدات التدريب التطوعي السبع في «التعلم والتدريب».": "Complete the seven volunteer training modules under Learn & Train."}</li>
-            <li>{isAr ? "اجتز الاختبار النهائي بنسبة النجاح المطلوبة.": "Pass the final exam with the required score."}</li>
-            <li>{isAr ? "تُصدر الشهادة تلقائيًا مع رمز تحقق فريد.": "The certificate is issued automatically with a unique verification code."}</li>
+          <ul className={`mt-3 space-y-2 text-[13.5px] leading-7 text-foreground/75 ${isAr ? "pr-4 list-disc list-inside" : "pl-4 list-disc"}`}>
+            <li>{isAr ? "أكمل وحدات التدريب التطوعي السبع في «التعلم والتدريب»." : "Complete the seven volunteer training modules under Learn & Train."}</li>
+            <li>{isAr ? "اجتز الاختبار النهائي بنسبة النجاح المطلوبة." : "Pass the final exam with the required score."}</li>
+            <li>{isAr ? "تُصدر الشهادة تلقائيًا مع رمز تحقق فريد." : "The certificate is issued automatically with a unique verification code."}</li>
           </ul>
           <div className="mt-4">
             <Link to="/learn-train">
-              <Button variant="outline"className="gap-2">
-                {isAr ? "ابدأ التدريب": "Start Training"}
+              <Button variant="outline" className="gap-2">
+                {isAr ? "ابدأ التدريب" : "Start Training"}
                 <ExternalLink className="h-3.5 w-3.5" />
               </Button>
             </Link>

@@ -4,7 +4,15 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 // Forbidden keys — never stored in safe_public_payload
 const FORBIDDEN_KEYS = new Set([
-  "phone", "phone_number", "email", "email_address", "participant_code", "participant_id", "cohort", "cohort_assignment", "doctor_review", "doctor_review_needed", "clinical_notes", "clinical_diagnosis", "raw_answers", "answers", "raw_score", "score_raw", "health_details", "health_history", "full_name", "first_name", "last_name", "date_of_birth", "dob", "national_id",
+  "phone", "phone_number", "email", "email_address",
+  "participant_code", "participant_id",
+  "cohort", "cohort_assignment",
+  "doctor_review", "doctor_review_needed",
+  "clinical_notes", "clinical_diagnosis",
+  "raw_answers", "answers", "raw_score", "score_raw",
+  "health_details", "health_history",
+  "full_name", "first_name", "last_name",
+  "date_of_birth", "dob", "national_id",
 ]);
 
 function sanitizePayload(input: unknown): Record<string, unknown> {
@@ -18,7 +26,7 @@ function sanitizePayload(input: unknown): Record<string, unknown> {
     // Truncate long strings
     if (typeof value === "string") {
       out[key] = value.slice(0, 500);
-    } else if (typeof value === "number"|| typeof value === "boolean" || value === null) {
+    } else if (typeof value === "number" || typeof value === "boolean" || value === null) {
       out[key] = value;
     } else if (Array.isArray(value)) {
       out[key] = value.slice(0, 20).map((v) =>
@@ -32,7 +40,9 @@ function sanitizePayload(input: unknown): Record<string, unknown> {
 }
 
 const ALLOWED_TYPES = new Set([
-  "pledge", "quick-check", "breath", "cost", "trigger", "readiness", "knowledge", "medal", "poster", "city", "passport", "certificate", "support-invite",
+  "pledge", "quick-check", "breath", "cost", "trigger",
+  "readiness", "knowledge", "medal", "poster", "city",
+  "passport", "certificate", "support-invite",
 ]);
 
 const createInputSchema = z.object({
@@ -66,7 +76,7 @@ export const createShareCard = createServerFn({ method: "POST" })
         const match = data.image_data_url.match(/^data:(image\/[a-z]+);base64,(.+)$/);
         if (match) {
           const mime = match[1];
-          const ext = mime.split("/")[1] === "jpeg"? "jpg": mime.split("/")[1];
+          const ext = mime.split("/")[1] === "jpeg" ? "jpg" : mime.split("/")[1];
           const bytes = Buffer.from(match[2], "base64");
           const path = `${data.share_type}/${crypto.randomUUID()}.${ext}`;
           const { error: upErr } = await supabaseAdmin.storage

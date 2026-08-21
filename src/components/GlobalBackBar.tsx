@@ -14,9 +14,9 @@ function normalise(pathname: string): string {
 export function resolveParentPath(pathname: string): string {
   const clean = normalise(pathname);
   const segments = clean.split("/").filter(Boolean);
-  if (segments.length <= 1) return clean.startsWith("/en") ? "/en": "/";
+  if (segments.length <= 1) return clean.startsWith("/en") ? "/en" : "/";
   segments.pop();
-  const parent = "/"+ segments.join("/");
+  const parent = "/" + segments.join("/");
   return parent || "/";
 }
 
@@ -31,7 +31,7 @@ export function GlobalBackBar() {
   const canGoBack = useCanGoBack();
   const navigate = useNavigate();
   const { lang } = useLang();
-  const isAr = lang === "ar"&& !(pathname === "/en"|| pathname.startsWith("/en/"));
+  const isAr = lang === "ar" && !(pathname === "/en" || pathname.startsWith("/en/"));
 
   const [top, setTop] = useState(76);
   const [duplicate, setDuplicate] = useState(false);
@@ -87,7 +87,10 @@ export function GlobalBackBar() {
 
   return (
     <button
-      type="button"data-aqla-back=""data-aqla-back-global=""aria-label={isAr ? "العودة": "Back"}
+      type="button"
+      data-aqla-back=""
+      data-aqla-back-global=""
+      aria-label={isAr ? "العودة" : "Back"}
       onClick={() => {
         if (hasHistory) window.history.back();
         else navigate({ to: fallback });
@@ -95,8 +98,8 @@ export function GlobalBackBar() {
       className="fixed z-30 inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/35 px-3 py-1.5 text-[13px] font-medium text-white shadow-sm backdrop-blur-md transition-colors hover:bg-black/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
       style={{ top, insetInlineStart: 12 }}
     >
-      <ArrowLeft className="h-4 w-4 rtl:-scale-x-100"aria-hidden="true" />
-      <span>{isAr ? "العودة": "Back"}</span>
+      <ArrowLeft className="h-4 w-4 rtl:-scale-x-100" aria-hidden="true" />
+      <span>{isAr ? "العودة" : "Back"}</span>
     </button>
   );
 }

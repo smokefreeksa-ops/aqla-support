@@ -13,7 +13,7 @@ export default function SaudiFlagWave() {
         full-viewport SVG filter repaint on every scroll frame. The field is
         now painted directly.
       */}
-      <div className="absolute inset-0"style={{ background: "#006C35" }} />
+      <div className="absolute inset-0" style={{ background: "#006C35" }} />
 
 
       {/* Dark scrim for text readability */}

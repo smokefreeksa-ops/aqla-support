@@ -29,9 +29,9 @@ export const Route = createFileRoute("/poster-studio")({
   component: PosterStudioPage,
 });
 
-type PosterType = "awareness"| "medal"| "quit_pledge"| "supporter"| "volunteer"| "ig_story"| "square";
-type TemplateKey = "premium_green"| "youth_modern"| "saudi_vision"| "minimal_white"| "challenge_winner"| "volunteer_supporter"| "quit_pledge";
-type ExportSize = "ig_square"| "ig_story"| "x_post"| "wa_status"| "a4";
+type PosterType = "awareness" | "medal" | "quit_pledge" | "supporter" | "volunteer" | "ig_story" | "square";
+type TemplateKey = "premium_green" | "youth_modern" | "saudi_vision" | "minimal_white" | "challenge_winner" | "volunteer_supporter" | "quit_pledge";
+type ExportSize = "ig_square" | "ig_story" | "x_post" | "wa_status" | "a4";
 
 const POSTER_TYPES: { key: PosterType; ar: string; en: string; icon: typeof Sparkles }[] = [
   { key: "awareness", ar: "منشور توعوي", en: "Awareness Poster", icon: Sparkles },
@@ -120,10 +120,10 @@ function Inner() {
 
   const selectedTemplate = useMemo(() => TEMPLATES.find((t) => t.key === template)!, [template]);
   const selectedSize = useMemo(() => EXPORT_SIZES.find((s) => s.key === exportSize)!, [exportSize]);
-  const finalName = displayName.trim() || (isAr ? "داعم أقلع": "Aqla Supporter");
+  const finalName = displayName.trim() || (isAr ? "داعم أقلع" : "Aqla Supporter");
   const finalMessage = useCustom && customMessage.trim()
     ? customMessage.trim()
-    : (MESSAGES.find((m) => m.key === messageKey)?.[isAr ? "ar": "en"] ?? "");
+    : (MESSAGES.find((m) => m.key === messageKey)?.[isAr ? "ar" : "en"] ?? "");
 
   const customLen = isAr ? 90 : 120;
   const customTooLong = useCustom && customMessage.length > customLen;
@@ -158,7 +158,8 @@ function Inner() {
       }});
       if (!res.ok && res.error === "unsafe_message") {
         toast.error(isAr
-          ? "لا يمكن استخدام هذه العبارة لأنها قد تُفهم كنصيحة طبية أو ادعاء علاجي. يرجى اختيار عبارة توعوية عامة.": "This phrase cannot be used because it may be understood as medical advice or a treatment claim. Please choose a general awareness message.");
+          ? "لا يمكن استخدام هذه العبارة لأنها قد تُفهم كنصيحة طبية أو ادعاء علاجي. يرجى اختيار عبارة توعوية عامة."
+          : "This phrase cannot be used because it may be understood as medical advice or a treatment claim. Please choose a general awareness message.");
         setRecorded(false);
       }
     } catch { setRecorded(false); }
@@ -192,16 +193,16 @@ function Inner() {
       a.remove();
       void fireEvent("poster_downloaded");
       void recordOnce();
-      toast.success(isAr ? "تم تحميل الصورة": "Image downloaded");
+      toast.success(isAr ? "تم تحميل الصورة" : "Image downloaded");
     } catch (e) {
-      toast.error(isAr ? "تعذّر التحميل": "Download failed");
+      toast.error(isAr ? "تعذّر التحميل" : "Download failed");
     } finally {
       setDownloading(false);
     }
   };
 
   const shareText = useMemo(() => {
-    const url = typeof window !== "undefined"? `${window.location.origin}/poster-studio` : "/poster-studio";
+    const url = typeof window !== "undefined" ? `${window.location.origin}/poster-studio` : "/poster-studio";
     return isAr
       ? `صممت منشوري التوعوي مع أقلع لنشر الوعي حول التدخين والنيكوتين. جرّب أنت أيضًا: ${url}`
       : `I created my Aqla awareness poster to spread tobacco and nicotine awareness. Try it here: ${url}`;
@@ -220,7 +221,7 @@ function Inner() {
   const copyText = async () => {
     try {
       await navigator.clipboard.writeText(shareText);
-      toast.success(isAr ? "تم نسخ النص": "Text copied");
+      toast.success(isAr ? "تم نسخ النص" : "Text copied");
       void fireEvent("poster_text_copied");
       void recordOnce();
     } catch { /* ignore */ }
@@ -265,10 +266,10 @@ function Inner() {
       }});
       setSharePath(res.share_path);
       void recordOnce();
-      toast.success(isAr ? "تم إنشاء رابط المشاركة": "Share link ready");
+      toast.success(isAr ? "تم إنشاء رابط المشاركة" : "Share link ready");
     } catch (e) {
       console.error(e);
-      toast.error(isAr ? "تعذّر إنشاء رابط المشاركة": "Couldn't create share link");
+      toast.error(isAr ? "تعذّر إنشاء رابط المشاركة" : "Couldn't create share link");
     } finally {
       setGeneratingShare(false);
     }
@@ -286,20 +287,20 @@ function Inner() {
     <div dir={dir} className="relative min-h-screen bg-background">
       <header className="border-b bg-card/70 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <Link to="/"className="flex items-center gap-3">
-            <img src={aqlaLogo} alt="Aqla — أقلع logo"className="h-10 w-auto" />
+          <Link to="/" className="flex items-center gap-3">
+            <img src={aqlaLogo} alt="Aqla — أقلع logo" className="h-10 w-auto" />
             <div className="leading-tight">
-              <div className="font-semibold">{isAr ? "أقلع": "Aqla"}</div>
-              <div className="text-[11px] text-muted-foreground">{isAr ? "استوديو التوعية": "Awareness Studio"}</div>
+              <div className="font-semibold">{isAr ? "أقلع" : "Aqla"}</div>
+              <div className="text-[11px] text-muted-foreground">{isAr ? "استوديو التوعية" : "Awareness Studio"}</div>
             </div>
           </Link>
           <div className="flex items-center gap-2">
-            <Button variant="ghost"size="sm"onClick={() => setLang(isAr ? "en": "ar")} className="gap-1.5">
+            <Button variant="ghost" size="sm" onClick={() => setLang(isAr ? "en" : "ar")} className="gap-1.5">
               <Languages className="h-4 w-4" />
-              {isAr ? "English": "العربية"}
+              {isAr ? "English" : "العربية"}
             </Button>
             <Link to="/">
-              <Button variant="outline"size="sm">{isAr ? "الرئيسية": "Home"}</Button>
+              <Button variant="outline" size="sm">{isAr ? "الرئيسية" : "Home"}</Button>
             </Link>
           </div>
         </div>
@@ -308,18 +309,19 @@ function Inner() {
       <main className="mx-auto max-w-5xl px-4 py-8">
         <section className="text-center">
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl text-primary">
-            {isAr ? "استوديو أقلع للتوعية": "Aqla Awareness Poster Studio"}
+            {isAr ? "استوديو أقلع للتوعية" : "Aqla Awareness Poster Studio"}
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
             {isAr
-              ? "اكتب اسمك، اختر رسالتك، وشارك بطاقة توعوية تحمل شعار أقلع لنشر الوعي حول التدخين والنيكوتين.": "Add your name, choose your message, and share an Aqla awareness card to spread tobacco and nicotine awareness."}
+              ? "اكتب اسمك، اختر رسالتك، وشارك بطاقة توعوية تحمل شعار أقلع لنشر الوعي حول التدخين والنيكوتين."
+              : "Add your name, choose your message, and share an Aqla awareness card to spread tobacco and nicotine awareness."}
           </p>
         </section>
 
         {/* Stepper */}
         <div className="mt-6 flex items-center justify-center gap-2 text-xs">
           {[1, 2, 3, 4, 5].map((n) => (
-            <div key={n} className={`flex h-7 w-7 items-center justify-center rounded-full border ${step === n ? "bg-primary text-primary-foreground border-primary": "bg-muted text-muted-foreground"}`}>
+            <div key={n} className={`flex h-7 w-7 items-center justify-center rounded-full border ${step === n ? "bg-primary text-primary-foreground border-primary" : "bg-muted text-muted-foreground"}`}>
               {n}
             </div>
           ))}
@@ -330,13 +332,13 @@ function Inner() {
           <div className="space-y-6">
             {step === 1 && (
               <Card className="p-5">
-                <h2 className="text-lg font-semibold">{isAr ? "اختر نوع التصميم": "Choose poster type"}</h2>
+                <h2 className="text-lg font-semibold">{isAr ? "اختر نوع التصميم" : "Choose poster type"}</h2>
                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
                   {POSTER_TYPES.map((p) => (
                     <button
                       key={p.key}
                       onClick={() => { setPosterType(p.key); void fireEvent("poster_type_selected"); setStep(2); }}
-                      className={`flex items-center gap-3 rounded-xl border p-3 text-start transition hover:border-primary hover:bg-primary-soft ${posterType === p.key ? "border-primary bg-primary-soft": ""}`}
+                      className={`flex items-center gap-3 rounded-xl border p-3 text-start transition hover:border-primary hover:bg-primary-soft ${posterType === p.key ? "border-primary bg-primary-soft" : ""}`}
                     >
                       <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary/10 text-primary">
                         <p.icon className="h-5 w-5" />
@@ -350,42 +352,42 @@ function Inner() {
 
             {step === 2 && (
               <Card className="p-5 space-y-4">
-                <h2 className="text-lg font-semibold">{isAr ? "اكتب اسمك (اختياري)": "Enter your name (optional)"}</h2>
+                <h2 className="text-lg font-semibold">{isAr ? "اكتب اسمك (اختياري)" : "Enter your name (optional)"}</h2>
                 <Input
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value.slice(0, 60))}
-                  placeholder={isAr ? "اكتب اسمك أو اسمًا مستعارًا": "Enter your name or nickname"}
+                  placeholder={isAr ? "اكتب اسمك أو اسمًا مستعارًا" : "Enter your name or nickname"}
                   dir={dir}
                 />
                 <p className="text-xs text-muted-foreground">
                   {isAr ? `إذا تركته فارغًا سيُستخدم "داعم أقلع".` : `If left empty, "Aqla Supporter" will be used.`}
                 </p>
                 <div>
-                  <label className="text-sm font-medium">{isAr ? "أضف مدينتك (اختياري)": "Add your city (optional)"}</label>
+                  <label className="text-sm font-medium">{isAr ? "أضف مدينتك (اختياري)" : "Add your city (optional)"}</label>
                   <Input
                     value={city}
                     onChange={(e) => setCity(e.target.value.slice(0, 60))}
-                    placeholder={isAr ? "مثال: جدة": "e.g. Jeddah"}
+                    placeholder={isAr ? "مثال: جدة" : "e.g. Jeddah"}
                     dir={dir}
                     className="mt-2"
                   />
                 </div>
                 <div className="flex justify-between">
-                  <Button variant="outline"onClick={() => setStep(1)}><ArrowLeft className="h-4 w-4 rtl:rotate-180"/>{isAr ? "السابق": "Back"}</Button>
-                  <Button onClick={() => setStep(3)}>{isAr ? "التالي": "Next"}</Button>
+                  <Button variant="outline" onClick={() => setStep(1)}><ArrowLeft className="h-4 w-4 rtl:rotate-180" />{isAr ? "السابق" : "Back"}</Button>
+                  <Button onClick={() => setStep(3)}>{isAr ? "التالي" : "Next"}</Button>
                 </div>
               </Card>
             )}
 
             {step === 3 && (
               <Card className="p-5 space-y-4">
-                <h2 className="text-lg font-semibold">{isAr ? "اختر رسالتك التوعوية": "Choose your awareness message"}</h2>
+                <h2 className="text-lg font-semibold">{isAr ? "اختر رسالتك التوعوية" : "Choose your awareness message"}</h2>
                 <div className="grid gap-2">
                   {MESSAGES.map((m) => (
                     <button
                       key={m.key}
                       onClick={() => { setMessageKey(m.key); setUseCustom(false); }}
-                      className={`rounded-lg border p-3 text-start text-sm transition hover:border-primary ${!useCustom && messageKey === m.key ? "border-primary bg-primary-soft": ""}`}
+                      className={`rounded-lg border p-3 text-start text-sm transition hover:border-primary ${!useCustom && messageKey === m.key ? "border-primary bg-primary-soft" : ""}`}
                     >
                       {isAr ? m.ar : m.en}
                     </button>
@@ -395,7 +397,7 @@ function Inner() {
                 <div className="pt-2 border-t">
                   <label className="flex items-center gap-2 text-sm">
                     <input type="checkbox" checked={useCustom} onChange={(e) => setUseCustom(e.target.checked)} />
-                    {isAr ? "رسالة مخصصة قصيرة": "Use a short custom message"}
+                    {isAr ? "رسالة مخصصة قصيرة" : "Use a short custom message"}
                   </label>
                   {useCustom && (
                     <>
@@ -403,38 +405,39 @@ function Inner() {
                         className="mt-2"
                         value={customMessage}
                         onChange={(e) => setCustomMessage(e.target.value.slice(0, customLen + 20))}
-                        placeholder={isAr ? "اكتب رسالة توعوية قصيرة": "Write a short awareness message"}
+                        placeholder={isAr ? "اكتب رسالة توعوية قصيرة" : "Write a short awareness message"}
                         dir={dir}
                         maxLength={customLen + 20}
                       />
-                      <div className={`mt-1 text-xs ${customTooLong ? "text-destructive": "text-muted-foreground"}`}>
+                      <div className={`mt-1 text-xs ${customTooLong ? "text-destructive" : "text-muted-foreground"}`}>
                         {customMessage.length} / {customLen}
                       </div>
                       {customUnsafe && (
                         <p className="mt-2 text-xs text-destructive">
                           {isAr
-                            ? "لا يمكن استخدام هذه العبارة لأنها قد تُفهم كنصيحة طبية أو ادعاء علاجي. يرجى اختيار عبارة توعوية عامة.": "This phrase cannot be used because it may be understood as medical advice or a treatment claim. Please choose a general awareness message."}
+                            ? "لا يمكن استخدام هذه العبارة لأنها قد تُفهم كنصيحة طبية أو ادعاء علاجي. يرجى اختيار عبارة توعوية عامة."
+                            : "This phrase cannot be used because it may be understood as medical advice or a treatment claim. Please choose a general awareness message."}
                         </p>
                       )}
                     </>
                   )}
                 </div>
                 <div className="flex justify-between">
-                  <Button variant="outline"onClick={() => setStep(2)}><ArrowLeft className="h-4 w-4 rtl:rotate-180"/>{isAr ? "السابق": "Back"}</Button>
-                  <Button onClick={() => setStep(4)} disabled={customUnsafe || customTooLong}>{isAr ? "التالي": "Next"}</Button>
+                  <Button variant="outline" onClick={() => setStep(2)}><ArrowLeft className="h-4 w-4 rtl:rotate-180" />{isAr ? "السابق" : "Back"}</Button>
+                  <Button onClick={() => setStep(4)} disabled={customUnsafe || customTooLong}>{isAr ? "التالي" : "Next"}</Button>
                 </div>
               </Card>
             )}
 
             {step === 4 && (
               <Card className="p-5 space-y-4">
-                <h2 className="text-lg font-semibold">{isAr ? "اختر القالب": "Choose template"}</h2>
+                <h2 className="text-lg font-semibold">{isAr ? "اختر القالب" : "Choose template"}</h2>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {TEMPLATES.map((t) => (
                     <button
                       key={t.key}
                       onClick={() => setTemplate(t.key)}
-                      className={`rounded-xl border-2 p-3 text-start transition ${template === t.key ? "border-primary": "border-transparent hover:border-primary/40"}`}
+                      className={`rounded-xl border-2 p-3 text-start transition ${template === t.key ? "border-primary" : "border-transparent hover:border-primary/40"}`}
                     >
                       <div className="h-16 w-full rounded-md" style={{ background: t.bg }} />
                       <div className="mt-2 text-sm font-medium">{isAr ? t.ar : t.en}</div>
@@ -442,13 +445,13 @@ function Inner() {
                   ))}
                 </div>
 
-                <h3 className="pt-2 text-sm font-semibold">{isAr ? "حجم التصدير": "Export size"}</h3>
+                <h3 className="pt-2 text-sm font-semibold">{isAr ? "حجم التصدير" : "Export size"}</h3>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {EXPORT_SIZES.map((s) => (
                     <button
                       key={s.key}
                       onClick={() => setExportSize(s.key)}
-                      className={`rounded-lg border p-2 text-xs transition ${exportSize === s.key ? "border-primary bg-primary-soft": ""}`}
+                      className={`rounded-lg border p-2 text-xs transition ${exportSize === s.key ? "border-primary bg-primary-soft" : ""}`}
                     >
                       {isAr ? s.ar : s.en}
                       <div className="text-[10px] text-muted-foreground">{s.w}×{s.h}</div>
@@ -457,65 +460,68 @@ function Inner() {
                 </div>
 
                 <div className="flex justify-between">
-                  <Button variant="outline"onClick={() => setStep(3)}><ArrowLeft className="h-4 w-4 rtl:rotate-180"/>{isAr ? "السابق": "Back"}</Button>
-                  <Button onClick={() => { setStep(5); void fireEvent("poster_preview_generated"); }}>{isAr ? "معاينة": "Preview"}</Button>
+                  <Button variant="outline" onClick={() => setStep(3)}><ArrowLeft className="h-4 w-4 rtl:rotate-180" />{isAr ? "السابق" : "Back"}</Button>
+                  <Button onClick={() => { setStep(5); void fireEvent("poster_preview_generated"); }}>{isAr ? "معاينة" : "Preview"}</Button>
                 </div>
               </Card>
             )}
 
             {step === 5 && (
               <Card className="p-5 space-y-3">
-                <h2 className="text-lg font-semibold">{isAr ? "حفظ ومشاركة": "Save & share"}</h2>
+                <h2 className="text-lg font-semibold">{isAr ? "حفظ ومشاركة" : "Save & share"}</h2>
                 <div className="grid grid-cols-2 gap-2">
                   <Button onClick={downloadPng} disabled={downloading || customUnsafe} className="gap-1.5">
-                    <Download className="h-4 w-4"/>{isAr ? "تحميل الصورة": "Download image"}
+                    <Download className="h-4 w-4" />{isAr ? "تحميل الصورة" : "Download image"}
                   </Button>
-                  <Button onClick={shareWhatsApp} variant="secondary"className="gap-1.5">
-                    <Share2 className="h-4 w-4"/>{isAr ? "واتساب": "WhatsApp"}
+                  <Button onClick={shareWhatsApp} variant="secondary" className="gap-1.5">
+                    <Share2 className="h-4 w-4" />{isAr ? "واتساب" : "WhatsApp"}
                   </Button>
-                  <Button onClick={shareX} variant="secondary"className="gap-1.5">
-                    <Share2 className="h-4 w-4"/>{isAr ? "منصة X": "Share on X"}
+                  <Button onClick={shareX} variant="secondary" className="gap-1.5">
+                    <Share2 className="h-4 w-4" />{isAr ? "منصة X" : "Share on X"}
                   </Button>
-                  <Button onClick={copyText} variant="outline"className="gap-1.5">
-                    <Copy className="h-4 w-4"/>{isAr ? "نسخ النص": "Copy text"}
+                  <Button onClick={copyText} variant="outline" className="gap-1.5">
+                    <Copy className="h-4 w-4" />{isAr ? "نسخ النص" : "Copy text"}
                   </Button>
-                  <Button onClick={reset} variant="outline"className="gap-1.5">
-                    <RotateCcw className="h-4 w-4"/>{isAr ? "تصميم آخر": "Another design"}
+                  <Button onClick={reset} variant="outline" className="gap-1.5">
+                    <RotateCcw className="h-4 w-4" />{isAr ? "تصميم آخر" : "Another design"}
                   </Button>
-                  <Link to="/assessment"onClick={() => fireEvent("poster_start_assessment_clicked")}>
+                  <Link to="/assessment" onClick={() => fireEvent("poster_start_assessment_clicked")}>
                     <Button className="w-full gap-1.5">
-                      <Sparkles className="h-4 w-4"/>{isAr ? "ابدأ تقييم أقلع": "Start Aqla assessment"}
+                      <Sparkles className="h-4 w-4" />{isAr ? "ابدأ تقييم أقلع" : "Start Aqla assessment"}
                     </Button>
                   </Link>
                 </div>
 
                 <div className="border-t pt-3 space-y-2">
                   <div className="text-sm font-medium">
-                    {isAr ? "رابط مشاركة عام (يعمل على LinkedIn و X)": "Public share link (works on LinkedIn & X)"}
+                    {isAr ? "رابط مشاركة عام (يعمل على LinkedIn و X)" : "Public share link (works on LinkedIn & X)"}
                   </div>
                   {!sharePath ? (
                     <Button
                       onClick={createShareLink}
                       disabled={generatingShare || customUnsafe}
-                      variant="default"className="w-full gap-1.5 bg-emerald-700 hover:bg-emerald-800"
+                      variant="default"
+                      className="w-full gap-1.5 bg-emerald-700 hover:bg-emerald-800"
                     >
                       <Share2 className="h-4 w-4" />
                       {generatingShare
-                        ? (isAr ? "جاري الإنشاء…": "Creating…")
-                        : (isAr ? "أنشئ رابط مشاركة": "Create share link")}
+                        ? (isAr ? "جاري الإنشاء…" : "Creating…")
+                        : (isAr ? "أنشئ رابط مشاركة" : "Create share link")}
                     </Button>
                   ) : (
                     <ShareButtons
                       shareUrl={`${SITE_URL}${sharePath}`}
                       textAr={`${finalMessage}\n\nصممت بطاقتي مع أقلع — جرّب أنت أيضًا.`}
-                      textEn="I created my Aqla awareness card. Try yours too."lang={isAr ? "ar": "en"}
+                      textEn="I created my Aqla awareness card. Try yours too."
+                      lang={isAr ? "ar" : "en"}
                     />
                   )}
                 </div>
 
                 <p className="text-[11px] text-muted-foreground">
                   {isAr
-                    ? "منشور توعوي ولا يمثل نصيحة طبية شخصية.": "Awareness content only. Not personal medical advice."}
+                    ? "منشور توعوي ولا يمثل نصيحة طبية شخصية."
+                    : "Awareness content only. Not personal medical advice."}
                 </p>
               </Card>
             )}
@@ -525,9 +531,9 @@ function Inner() {
           <div className="lg:sticky lg:top-6 lg:self-start">
             <Card className="p-3">
               <div className="text-center text-xs text-muted-foreground mb-2">
-                {isAr ? "معاينة مباشرة": "Live preview"}
+                {isAr ? "معاينة مباشرة" : "Live preview"}
               </div>
-              <div className="mx-auto"style={{ width: "100%", maxWidth: 380 }}>
+              <div className="mx-auto" style={{ width: "100%", maxWidth: 380 }}>
                 <PosterPreview
                   ref={previewRef}
                   template={selectedTemplate}
@@ -571,7 +577,7 @@ const PosterPreview = forwardRef<HTMLDivElement, PreviewProps>(function PosterPr
   return (
     <div
       ref={ref}
-      dir={isAr ? "rtl": "ltr"}
+      dir={isAr ? "rtl" : "ltr"}
       style={{
         background: template.bg,
         color: template.fg,
@@ -584,7 +590,7 @@ const PosterPreview = forwardRef<HTMLDivElement, PreviewProps>(function PosterPr
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        fontFamily: isAr ? "'Tajawal', 'Inter', sans-serif": "'Inter', sans-serif",
+        fontFamily: isAr ? "'Tajawal', 'Inter', sans-serif" : "'Inter', sans-serif",
         boxShadow: "0 10px 40px rgba(0,0,0,0.15)",
       }}
     >
@@ -612,7 +618,9 @@ const PosterPreview = forwardRef<HTMLDivElement, PreviewProps>(function PosterPr
           }}>
             <img
               src={aqlaLogo}
-              alt="Aqla — أقلع"crossOrigin="anonymous"onError={(e) => { console.warn("Aqla logo failed to load"); (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+              alt="Aqla — أقلع"
+              crossOrigin="anonymous"
+              onError={(e) => { console.warn("Aqla logo failed to load"); (e.currentTarget as HTMLImageElement).style.display = "none"; }}
               style={{ height: "min(44px, 7.5vw)", width: "auto", display: "block", objectFit: "contain" }}
             />
           </div>
@@ -636,27 +644,28 @@ const PosterPreview = forwardRef<HTMLDivElement, PreviewProps>(function PosterPr
         {isMedal ? (
           <>
             <div style={{ fontSize: "clamp(11px, 2.4vw, 14px)", opacity: 0.9 }}>
-              {isAr ? "يُمنح هذا الوسام إلى": "This medal is presented to"}
+              {isAr ? "يُمنح هذا الوسام إلى" : "This medal is presented to"}
             </div>
             <div style={{ marginTop: 8, fontWeight: 800, fontSize: "clamp(22px, 6vw, 38px)", color: template.accent }}>
               {name}
             </div>
             <div style={{ marginTop: 8, fontSize: "clamp(11px, 2.6vw, 14px)", opacity: 0.95 }}>
               {isAr
-                ? "لمساهمته في نشر الوعي حول التدخين والنيكوتين": "for supporting tobacco and nicotine awareness"}
+                ? "لمساهمته في نشر الوعي حول التدخين والنيكوتين"
+                : "for supporting tobacco and nicotine awareness"}
             </div>
           </>
         ) : isVolunteer ? (
           <>
             <div style={{ fontWeight: 800, fontSize: "clamp(18px, 5vw, 30px)", color: template.accent }}>{name}</div>
             <div style={{ marginTop: 10, fontWeight: 700, fontSize: "clamp(14px, 3.4vw, 20px)" }}>
-              {isAr ? "أنا متطوع/ة لدعم التوعية مع أقلع": "I volunteer to support awareness with Aqla"}
+              {isAr ? "أنا متطوع/ة لدعم التوعية مع أقلع" : "I volunteer to support awareness with Aqla"}
             </div>
           </>
         ) : isPledge ? (
           <>
             <div style={{ fontSize: "clamp(11px, 2.4vw, 14px)", opacity: 0.9 }}>
-              {isAr ? "وعد الإقلاع": "Quit Pledge"}
+              {isAr ? "وعد الإقلاع" : "Quit Pledge"}
             </div>
             <div style={{ marginTop: 8, fontWeight: 800, fontSize: "clamp(20px, 5.5vw, 34px)", color: template.accent }}>{name}</div>
             <div style={{ marginTop: 10, fontWeight: 600, fontSize: "clamp(13px, 3vw, 18px)", lineHeight: 1.4 }}>
@@ -667,7 +676,7 @@ const PosterPreview = forwardRef<HTMLDivElement, PreviewProps>(function PosterPr
           <>
             <div style={{ fontWeight: 700, fontSize: "clamp(16px, 4.5vw, 28px)", lineHeight: 1.3 }}>{message}</div>
             <div style={{ marginTop: 14, fontSize: "clamp(11px, 2.4vw, 14px)", opacity: 0.85 }}>
-              {isAr ? "— ": "— "}{name}
+              {isAr ? "— " : "— "}{name}
             </div>
           </>
         )}
@@ -681,16 +690,17 @@ const PosterPreview = forwardRef<HTMLDivElement, PreviewProps>(function PosterPr
       {/* Bottom: footer */}
       <div style={{ position: "relative", textAlign: "center", fontSize: "clamp(9px, 2vw, 11px)", opacity: 0.85, lineHeight: 1.5 }}>
         <div style={{ fontWeight: 600 }}>
-          {isAr ? "أقلع — Aqla | للتوعية حول التدخين والنيكوتين": "Aqla — أقلع | Tobacco & Nicotine Awareness"}
+          {isAr ? "أقلع — Aqla | للتوعية حول التدخين والنيكوتين" : "Aqla — أقلع | Tobacco & Nicotine Awareness"}
         </div>
         {isMedal && (
           <div style={{ marginTop: 4, fontSize: "clamp(8px, 1.7vw, 10px)", opacity: 0.7 }}>
             {isAr
-              ? "وسام توعوي رمزي، وليس شهادة تدريب أو اعتماد مهني.": "Symbolic awareness badge, not a training certificate or professional credential."}
+              ? "وسام توعوي رمزي، وليس شهادة تدريب أو اعتماد مهني."
+              : "Symbolic awareness badge, not a training certificate or professional credential."}
           </div>
         )}
         <div style={{ marginTop: 4, fontSize: "clamp(8px, 1.7vw, 10px)", opacity: 0.7 }}>
-          {isAr ? "منشور توعوي ولا يمثل نصيحة طبية شخصية.": "Awareness content only. Not personal medical advice."}
+          {isAr ? "منشور توعوي ولا يمثل نصيحة طبية شخصية." : "Awareness content only. Not personal medical advice."}
         </div>
       </div>
     </div>

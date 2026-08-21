@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Pos = { x: number; y: number };
-type Side = "left"| "right";
+type Side = "left" | "right";
 
 export type DraggableWidgetState = {
   ref: React.RefObject<HTMLDivElement | null>;
@@ -181,17 +181,17 @@ export function useDraggableWidget(opts: {
         top: pos.y,
         right: "auto",
         bottom: "auto",
-        touchAction: dragEnabled ? "none": "manipulation",
-        userSelect: dragEnabled ? "none": "auto",
-        cursor: dragging ? "grabbing": "grab",
+        touchAction: dragEnabled ? "none" : "manipulation",
+        userSelect: dragEnabled ? "none" : "auto",
+        cursor: dragging ? "grabbing" : "grab",
       }
     : {
         position: "fixed",
         bottom: `calc(${defaultBottom}px + env(safe-area-inset-bottom, 0px))`,
         [defaultSide]: defaultSideOffset,
-        touchAction: dragEnabled ? "none": "manipulation",
-        userSelect: dragEnabled ? "none": "auto",
-        cursor: dragEnabled ? (dragging ? "grabbing": "grab") : "auto",
+        touchAction: dragEnabled ? "none" : "manipulation",
+        userSelect: dragEnabled ? "none" : "auto",
+        cursor: dragEnabled ? (dragging ? "grabbing" : "grab") : "auto",
       };
 
   return { ref, style, onPointerDown, reset, dragging };

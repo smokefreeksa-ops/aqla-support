@@ -83,16 +83,16 @@ export const submitNrtRequest = createServerFn({ method: "POST" })
     const safetyFlags = {
       under_18: data.age_group === "under_18",
       pregnant_or_breastfeeding:
-        data.pregnant_or_breastfeeding === "yes"|| data.pregnant_or_breastfeeding === "prefer_not_to_say",
+        data.pregnant_or_breastfeeding === "yes" || data.pregnant_or_breastfeeding === "prefer_not_to_say",
       chest_pain_or_heart_condition:
-        data.chest_pain_or_heart_condition === "yes"|| data.chest_pain_or_heart_condition === "prefer_not_to_say",
+        data.chest_pain_or_heart_condition === "yes" || data.chest_pain_or_heart_condition === "prefer_not_to_say",
       severe_breathing_problem:
-        data.severe_breathing_problem === "yes"|| data.severe_breathing_problem === "prefer_not_to_say",
+        data.severe_breathing_problem === "yes" || data.severe_breathing_problem === "prefer_not_to_say",
       taking_regular_medications:
-        data.taking_regular_medications === "yes"|| data.taking_regular_medications === "prefer_not_to_say",
+        data.taking_regular_medications === "yes" || data.taking_regular_medications === "prefer_not_to_say",
     };
     const requiresReview = Object.values(safetyFlags).some(Boolean);
-    const orderStatus = requiresReview ? "pending_clinician_review": "new_request";
+    const orderStatus = requiresReview ? "pending_clinician_review" : "new_request";
     const requestCode = generateRequestCode();
 
     const { data: inserted, error } = await supabaseAdmin
@@ -136,8 +136,19 @@ export const submitNrtRequest = createServerFn({ method: "POST" })
       Mobile: data.mobile_number,
       Email: data.email ?? "—",
       City: data.city ?? "—",
-      District: data.district ?? "—", "Delivery address": data.delivery_address ?? "—", "Selected products": data.selected_products,
-      Quantity: data.quantity_requested ?? "—", "Preferred contact": data.preferred_contact_method ?? "—", "Preferred language": data.preferred_language ?? "—", "Age group": data.age_group ?? "—", "Pregnant/breastfeeding": data.pregnant_or_breastfeeding ?? "—", "Chest pain / heart condition": data.chest_pain_or_heart_condition ?? "—", "Severe breathing problem": data.severe_breathing_problem ?? "—", "Taking regular medications": data.taking_regular_medications ?? "—", "Completed Aqla assessment": data.completed_aqla_assessment ?? "—", "Requires clinician review": requiresReview ? "YES": "no",
+      District: data.district ?? "—",
+      "Delivery address": data.delivery_address ?? "—",
+      "Selected products": data.selected_products,
+      Quantity: data.quantity_requested ?? "—",
+      "Preferred contact": data.preferred_contact_method ?? "—",
+      "Preferred language": data.preferred_language ?? "—",
+      "Age group": data.age_group ?? "—",
+      "Pregnant/breastfeeding": data.pregnant_or_breastfeeding ?? "—",
+      "Chest pain / heart condition": data.chest_pain_or_heart_condition ?? "—",
+      "Severe breathing problem": data.severe_breathing_problem ?? "—",
+      "Taking regular medications": data.taking_regular_medications ?? "—",
+      "Completed Aqla assessment": data.completed_aqla_assessment ?? "—",
+      "Requires clinician review": requiresReview ? "YES" : "no",
       Notes: data.notes ?? "—",
       Submitted: new Date().toISOString(),
     });
@@ -177,7 +188,7 @@ export const submitNrtRequest = createServerFn({ method: "POST" })
             event_type: "nrt_shop_request",
             recipient_email: data.email,
             subject: userSubject,
-            sent_status: res.ok ? "sent": "failed",
+            sent_status: res.ok ? "sent" : "failed",
             sent_at: res.ok ? new Date().toISOString() : null,
             provider_response: `HTTP ${res.status} ${res.statusText}${respText ? ` — ${respText.slice(0, 500)}` : ""}`,
             error_message: res.ok ? null : respText.slice(0, 1000),
@@ -275,7 +286,15 @@ const UpdateInput = z.object({
   id: z.string().uuid(),
   new_status: z
     .enum([
-      "new_request", "pending_clinician_review", "contacted", "approved_for_fulfillment", "sent_to_pharmacy_or_supplier", "completed", "cancelled", "not_eligible", "unable_to_contact",
+      "new_request",
+      "pending_clinician_review",
+      "contacted",
+      "approved_for_fulfillment",
+      "sent_to_pharmacy_or_supplier",
+      "completed",
+      "cancelled",
+      "not_eligible",
+      "unable_to_contact",
     ])
     .optional(),
   requires_clinician_review: z.boolean().optional(),
@@ -303,7 +322,7 @@ export const adminUpdateNrtRequest = createServerFn({ method: "POST" })
     if (typeof data.requires_clinician_review === "boolean") patch.requires_clinician_review = data.requires_clinician_review;
     if (data.internal_note) {
       const stamp = new Date().toISOString();
-      const appended = `${cur.internal_notes ? cur.internal_notes + "\n": ""}[${stamp}] ${data.internal_note}`;
+      const appended = `${cur.internal_notes ? cur.internal_notes + "\n" : ""}[${stamp}] ${data.internal_note}`;
       patch.internal_notes = appended;
     }
     if (Object.keys(patch).length === 0) return { ok: true };
@@ -338,7 +357,19 @@ export const adminExportNrtRequestsCsv = createServerFn({ method: "GET" })
     .limit(5000);
   if (error) return { csv: "", error: error.message };
   const headers = [
-    "request_code", "created_at", "full_name", "mobile_number", "email", "city", "district", "delivery_address", "selected_products", "requires_clinician_review", "order_status", "preferred_contact_method", "preferred_language",
+    "request_code",
+    "created_at",
+    "full_name",
+    "mobile_number",
+    "email",
+    "city",
+    "district",
+    "delivery_address",
+    "selected_products",
+    "requires_clinician_review",
+    "order_status",
+    "preferred_contact_method",
+    "preferred_language",
   ];
   const list = (rows ?? []) as unknown as Record<string, unknown>[];
   const lines = [headers.join(",")];

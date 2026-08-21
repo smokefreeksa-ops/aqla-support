@@ -52,7 +52,7 @@ export const Route = createFileRoute("/share/$type/$id")({
         <AqlaLogoBadge size={64} className="mx-auto mb-4" />
         <h1 className="text-2xl font-bold">البطاقة غير متاحة</h1>
         <p className="text-muted-foreground mt-2">Share card not available.</p>
-        <Link to="/"className="mt-4 inline-block">
+        <Link to="/" className="mt-4 inline-block">
           <Button>العودة للرئيسية</Button>
         </Link>
       </div>
@@ -64,7 +64,7 @@ export const Route = createFileRoute("/share/$type/$id")({
         <AqlaLogoBadge size={64} className="mx-auto mb-4" />
         <h1 className="text-xl font-semibold">حدث خطأ</h1>
         <p className="text-sm text-muted-foreground mt-1">{error.message}</p>
-        <Link to="/"className="mt-4 inline-block">
+        <Link to="/" className="mt-4 inline-block">
           <Button>الرئيسية</Button>
         </Link>
       </div>
@@ -92,7 +92,7 @@ function SharePage() {
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-stone-50 to-teal-50">
       <div className="mx-auto max-w-2xl px-4 py-8 sm:py-12">
         <div className="mb-4">
-          <BackButton fallback="/"labelAr="الرئيسية"labelEn="Home" />
+          <BackButton fallback="/" labelAr="الرئيسية" labelEn="Home" />
         </div>
 
         <Card className="overflow-hidden border-emerald-700/20 shadow-lg">
@@ -111,7 +111,8 @@ function SharePage() {
               <img
                 src={card.image_url}
                 alt={titleAr}
-                className="w-full h-auto block"loading="eager"
+                className="w-full h-auto block"
+                loading="eager"
               />
             </div>
           ) : (
@@ -135,7 +136,7 @@ function SharePage() {
 
             <div className="flex flex-col sm:flex-row gap-2 justify-center pt-2">
               <a href={targetUrl}>
-                <Button size="lg"className="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800">
+                <Button size="lg" className="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800">
                   {ctaAr} · {ctaEn}
                 </Button>
               </a>

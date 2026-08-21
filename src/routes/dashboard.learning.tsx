@@ -33,7 +33,7 @@ function LearningPage() {
         <p className="mt-1 text-[13px] text-muted-foreground">كل دوراتك ومساراتك ورحلاتك التدريبية في مكان واحد.</p>
       </div>
 
-      <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث في دوراتك…"className="max-w-sm" />
+      <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="ابحث في دوراتك…" className="max-w-sm" />
 
       <Tabs defaultValue="all">
         <TabsList>

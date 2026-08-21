@@ -74,7 +74,7 @@ export default function AboutSection() {
   }, []);
 
   return (
-    <section id="about"ref={sectionRef} className="saudi-map-section py-24 md:py-32">
+    <section id="about" ref={sectionRef} className="saudi-map-section py-24 md:py-32">
       <div className="container mx-auto px-4 md:px-6">
         <div className="mb-14 grid gap-5 text-center md:grid-cols-2 md:text-right">
           <h2 className="text-4xl md:text-5xl font-semibold text-gray-900">
@@ -90,7 +90,8 @@ export default function AboutSection() {
             <div className="relative w-full h-full max-w-2xl mx-auto">
               <img
                 src={founderImg}
-                alt="مؤسس برنامج أقلع"className="w-full h-full object-cover object-center rounded-lg"
+                alt="مؤسس برنامج أقلع"
+                className="w-full h-full object-cover object-center rounded-lg"
               />
             </div>
           </div>
@@ -106,7 +107,7 @@ export default function AboutSection() {
 
               <div>
                 <div className="flex items-center gap-4 mb-4">
-                  <img src="/aqla-logo.png"alt="Aqla"className="h-16 w-auto object-contain" />
+                  <img src="/aqla-logo.png" alt="Aqla" className="h-16 w-auto object-contain" />
                   <div>
                     <h3 className="text-xl font-bold text-gray-900">الدكتور مالك الذبياني</h3>
                     <p className="text-sm text-blue-600 font-medium">
@@ -131,7 +132,8 @@ export default function AboutSection() {
               </div>
 
               <a
-                href="/learn-train"className="inline-flex items-center gap-2 text-blue-600 font-semibold text-sm hover:text-blue-700 transition-colors"
+                href="/learn-train"
+                className="inline-flex items-center gap-2 text-blue-600 font-semibold text-sm hover:text-blue-700 transition-colors"
               >
                 تعرف أكثر على الدكتور مالك ←
               </a>

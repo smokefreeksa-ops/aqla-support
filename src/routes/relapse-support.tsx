@@ -5,7 +5,10 @@ export const Route = createFileRoute("/relapse-support")({
   head: () => ({ meta: [{ title: "مدرب الرجوع — Aqla" }] }),
   component: () => (
     <SimpleContentPage
-      titleAr="مدرب الرجوع"titleEn="Relapse Support"introAr="الرجوع جزء من الرحلة لكثير من الناس. لست وحدك، ويمكنك البدء من جديد اليوم."introEn="Relapse is part of the journey for many people. You are not alone — you can start again today."
+      titleAr="مدرب الرجوع"
+      titleEn="Relapse Support"
+      introAr="الرجوع جزء من الرحلة لكثير من الناس. لست وحدك، ويمكنك البدء من جديد اليوم."
+      introEn="Relapse is part of the journey for many people. You are not alone — you can start again today."
       sectionsAr={[
         { heading: "تطبيع التجربة", body: "أغلب من نجح في الإقلاع مرّ بمحاولات سابقة. كل محاولة تعلّمك المزيد عن نفسك." },
         { heading: "خطوات اليوم الأول من جديد", body: "اكتب ما الذي حصل، حدد المحفّز، واختر خطوة صغيرة واحدة لتبدأ بها اليوم." },

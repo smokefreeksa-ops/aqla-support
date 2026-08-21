@@ -9,7 +9,7 @@ async function getRoles(userId: string) {
     .from("user_roles")
     .select("role")
     .eq("user_id", userId);
-  return (data ?? []).map((r) => r.role as "receptionist"| "physician");
+  return (data ?? []).map((r) => r.role as "receptionist" | "physician");
 }
 
 async function logAudit(userId: string, action: string, entity: string, entityId?: string, details?: unknown) {
@@ -264,7 +264,7 @@ function toCsv(rows: Record<string, unknown>[]): string {
   const headers = Array.from(rows.reduce<Set<string>>((s, r) => { Object.keys(r).forEach((k) => s.add(k)); return s; }, new Set()));
   const escape = (v: unknown) => {
     if (v == null) return "";
-    const s = (typeof v === "object"? JSON.stringify(v) : String(v)).replace(/"/g, '""');
+    const s = (typeof v === "object" ? JSON.stringify(v) : String(v)).replace(/"/g, '""');
     return /[",\n]/.test(s) ? `"${s}"` : s;
   };
   return [headers.join(","), ...rows.map((r) => headers.map((h) => escape(r[h])).join(","))].join("\n");
@@ -300,7 +300,8 @@ function stripPiiStrict<T extends Record<string, unknown>>(r: T): Record<string,
 
 // Canonical product types for research exports
 const PRODUCT_TYPES = [
-  "cigarettes", "vape/e-cigarette", "shisha/hookah", "nicotine_pouches", "smokeless_tobacco", "heated_tobacco", "other",
+  "cigarettes", "vape/e-cigarette", "shisha/hookah",
+  "nicotine_pouches", "smokeless_tobacco", "heated_tobacco", "other",
 ] as const;
 type ProductType = typeof PRODUCT_TYPES[number];
 
@@ -326,10 +327,10 @@ const FTND_LABELS = {
   q6: { 1: "yes", 0: "no" } as Record<number, string>,
 };
 const ftndLabel = (q: keyof typeof FTND_LABELS, v: number | null | undefined) =>
-  v == null ? "not_answered": (FTND_LABELS[q][v] ?? "unknown");
+  v == null ? "not_answered" : (FTND_LABELS[q][v] ?? "unknown");
 
 const yesNo = (v: boolean | null | undefined) =>
-  v == null ? "not_answered": v ? "yes": "no";
+  v == null ? "not_answered" : v ? "yes" : "no";
 
 const FOLLOWUP_TIMEPOINTS = ["1w", "4w", "12w", "6m", "12m"] as const;
 const FOLLOWUP_LABEL: Record<string, string> = {
@@ -343,7 +344,10 @@ export const exportCsv = createServerFn({ method: "POST" })
     z
       .object({
         type: z.enum([
-          "full", "anonymized", "cohort", "follow_up_due", "research", "baseline", "follow_up_outcomes", "product_use", "youth_nicotine", "city_summary", "dependence_items", "readiness_quit_history", "research_consent_only", "community_exposure",
+          "full", "anonymized", "cohort", "follow_up_due", "research",
+          "baseline", "follow_up_outcomes", "product_use", "youth_nicotine", "city_summary",
+          "dependence_items", "readiness_quit_history", "research_consent_only",
+          "community_exposure",
         ]),
         cohort: z.string().optional(),
         researchConsentOnly: z.boolean().optional(),
@@ -573,7 +577,7 @@ export const exportCsv = createServerFn({ method: "POST" })
         days_used_past_30_days: number | null;
         age_first_use: number | null;
         age_regular_use: number | null;
-        main_product_yes_no: "yes"| "no" | null;
+        main_product_yes_no: "yes" | "no" | null;
         usual_place_of_use: string | null;
         source_of_product: string | null;
         use_at_school_work: boolean | null;
@@ -619,7 +623,7 @@ export const exportCsv = createServerFn({ method: "POST" })
         r.days_used_past_30_days = (d.days_used_30d as number | null) ?? r.days_used_past_30_days;
         r.age_first_use = (d.age_first_use as number | null) ?? r.age_first_use;
         r.age_regular_use = (d.age_regular_use as number | null) ?? r.age_regular_use;
-        if (d.is_main_product != null) r.main_product_yes_no = d.is_main_product ? "yes": "no";
+        if (d.is_main_product != null) r.main_product_yes_no = d.is_main_product ? "yes" : "no";
         r.usual_place_of_use = (d.usual_place as string | null) ?? r.usual_place_of_use;
         r.source_of_product = (d.source as string | null) ?? r.source_of_product;
         r.family_peer_use = (d.family_peer_use as boolean | null) ?? r.family_peer_use;
@@ -764,7 +768,7 @@ export const exportCsv = createServerFn({ method: "POST" })
     } else if (data.type === "community_exposure") {
       const { data: ce } = await supabaseAdmin
         .from("community_exposure").select("*").in("participant_id", PID_SAFE);
-      const NA = (v: unknown) => (v == null || v === ""? "not_answered" : v);
+      const NA = (v: unknown) => (v == null || v === "" ? "not_answered" : v);
       cleaned = (ce ?? []).map((r) => ({
         participant_code: codeOf(r.participant_id),
         submission_date: r.created_at,
@@ -782,14 +786,15 @@ export const exportCsv = createServerFn({ method: "POST" })
       }));
     } else {
       // full / anonymized / cohort / follow_up_due / research
-      const isAnon = data.type === "anonymized"|| data.type === "research";
+      const isAnon = data.type === "anonymized" || data.type === "research";
       const cols: string = isAnon
-        ? "participant_code, age, gender, city, affiliation_type, education_level, nationality, preferred_language, cohort, cohort_reason, doctor_review_needed, urgent_symptom, research_consent_status, created_at": "participant_code, full_name, mobile, email, age, gender, city, affiliation, affiliation_type, education_level, preferred_language, preferred_contact, cohort, cohort_reason, doctor_review_needed, urgent_symptom, contacted, contact_date, follow_up_status, appointment_requested, research_consent_status, created_at";
+        ? "participant_code, age, gender, city, affiliation_type, education_level, nationality, preferred_language, cohort, cohort_reason, doctor_review_needed, urgent_symptom, research_consent_status, created_at"
+        : "participant_code, full_name, mobile, email, age, gender, city, affiliation, affiliation_type, education_level, preferred_language, preferred_contact, cohort, cohort_reason, doctor_review_needed, urgent_symptom, contacted, contact_date, follow_up_status, appointment_requested, research_consent_status, created_at";
       let q = supabaseAdmin
         .from("participants")
         .select(cols as never)
         .order("created_at", { ascending: false }).limit(10000);
-      if (data.type === "cohort"&& data.cohort) q = q.eq("cohort", data.cohort as never);
+      if (data.type === "cohort" && data.cohort) q = q.eq("cohort", data.cohort as never);
       if (data.type === "follow_up_due") q = q.eq("contacted", false);
       if (data.researchConsentOnly || data.type === "research") q = q.eq("research_consent_status", "given");
       const { data: rows, error } = await q;
@@ -820,7 +825,7 @@ export const exportCsv = createServerFn({ method: "POST" })
         export_type: data.type,
         generated_by: generatedBy,
         generated_at: new Date().toISOString(),
-        research_consent_only: data.researchConsentOnly ? "yes": "no",
+        research_consent_only: data.researchConsentOnly ? "yes" : "no",
         cohort_filter: data.cohort ?? null,
         estimated_row_count: cleaned.length,
       })}<p style="font-family:-apple-system,Segoe UI,Arial,sans-serif;font-size:12px;color:#666">CSV file not attached. Download from the admin dashboard.</p>`,
@@ -945,7 +950,8 @@ export const sendTestEmail = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     await requireAdmin(context.userId);
     await sendAdminNotification(
-      "staff_login", "Aqla notification test",
+      "staff_login",
+      "Aqla notification test",
       `<p style="font-family:-apple-system,Segoe UI,Arial,sans-serif">This is a safe test email from Aqla. No real participant data included.</p>`,
       { staff_email: "smokefreeksa@gmail.com" },
     );

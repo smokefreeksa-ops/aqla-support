@@ -5,7 +5,12 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 export type NotificationType =
-  | "full_quit_support_submission"| "full_volunteer_application"| "follow_up_visit"| "csv_export_alert"| "staff_signup"| "staff_login";
+  | "full_quit_support_submission"
+  | "full_volunteer_application"
+  | "follow_up_visit"
+  | "csv_export_alert"
+  | "staff_signup"
+  | "staff_login";
 
 const DEFAULT_RECIPIENT = "smokefreeksa@gmail.com";
 
@@ -28,7 +33,9 @@ export function renderKeyValueHtml(data: Record<string, unknown>): string {
     .map(([k, v]) => {
       const val =
         v === null || v === undefined
-          ? "<em>n/a</em>": typeof v === "object"? `<pre style="margin:0;white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace;font-size:12px">${escapeHtml(JSON.stringify(v, null, 2))}</pre>`
+          ? "<em>n/a</em>"
+          : typeof v === "object"
+            ? `<pre style="margin:0;white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace;font-size:12px">${escapeHtml(JSON.stringify(v, null, 2))}</pre>`
             : escapeHtml(v);
       return `<tr><td style="padding:4px 10px;vertical-align:top;color:#555;border-bottom:1px solid #eee"><b>${escapeHtml(k)}</b></td><td style="padding:4px 10px;border-bottom:1px solid #eee">${val}</td></tr>`;
     })

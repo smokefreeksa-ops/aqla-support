@@ -104,7 +104,7 @@ export function planEmailHtml(plan: ClinicalPlanJSON, planUrl: string): string {
       .map((i) => `<li>${escapeHtml(i)}</li>`)
       .join("")}</ul>`;
 
-  return `<div dir="rtl"style="font-family:Tahoma,Arial,sans-serif;font-size:14px;line-height:1.85;color:#1f2933;max-width:720px;margin:auto;background:#fff">
+  return `<div dir="rtl" style="font-family:Tahoma,Arial,sans-serif;font-size:14px;line-height:1.85;color:#1f2933;max-width:720px;margin:auto;background:#fff">
     <h1 style="color:#006C35;font-size:22px;margin:0 0 6px">خطة أقلع السلوكية الشخصية</h1>
     <p style="color:#556;margin:0 0 16px">أهلًا ${escapeHtml(plan.identity.nickname)} — هذه نسخة من خطتك كما ظهرت لك على الشاشة تمامًا (الإصدار ${plan.plan_version}).</p>
     ${section("إدارة الرغبة", plan.craving_management.items)}
@@ -113,7 +113,7 @@ export function planEmailHtml(plan: ClinicalPlanJSON, planUrl: string): string {
     ${plan.lapse_pathways.map((p) => section(`إذا حدث: ${p.title_ar}`, p.steps)).join("")}
     ${plan.money ? section(plan.money.title_ar, plan.money.items) : ""}
     ${section("خدمات وإحالات", plan.services.items)}
-    <p style="margin:22px 0"><a href="${planUrl}"style="background:#006C35;color:#fff;padding:12px 18px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:bold">عرض الخطة الكاملة وتحميلها PDF</a></p>
+    <p style="margin:22px 0"><a href="${planUrl}" style="background:#006C35;color:#fff;padding:12px 18px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:bold">عرض الخطة الكاملة وتحميلها PDF</a></p>
     <div style="background:#fdecea;border-radius:6px;padding:10px;color:#8a1a1a;font-size:12px;margin-top:12px">${escapeHtml(plan.disclaimer_ar)}</div>
   </div>`;
 }
@@ -265,7 +265,8 @@ export async function finalizeClinicalPlanRow(planId: string, answers: ClinicalA
   let emailStatus: EmailStatus = isMinor && answers.plan_email_consent
     ? "disabled_minor"
     : consented
-      ? "consented_pending": "not_requested";
+      ? "consented_pending"
+      : "not_requested";
   let emailError: string | null = null;
 
   const { error } = await supabaseAdmin
@@ -298,7 +299,7 @@ export async function finalizeClinicalPlanRow(planId: string, answers: ClinicalA
       plan_email_consent_at: consented ? new Date().toISOString() : null,
       plan_email_consent_version: consented ? PLAN_EMAIL_CONSENT_VERSION : null,
       email_status: emailStatus,
-      status: plan.safety.suppress_plan ? "safety_hold": "finalized",
+      status: plan.safety.suppress_plan ? "safety_hold" : "finalized",
     })
     .eq("id", planId);
   if (error) throw new Error(error.message);
@@ -361,7 +362,7 @@ export async function getClinicalPlanByToken(planToken: string, version?: number
 
   const planJson = (versionRow?.plan_json ?? row.plan) as ClinicalPlanJSON | null;
   const isRelease1 =
-    !!planJson && typeof planJson === "object"&& typeof planJson.schema_version === "string" &&
+    !!planJson && typeof planJson === "object" && typeof planJson.schema_version === "string" &&
     planJson.schema_version.startsWith("plan_json.v");
 
   return {
@@ -455,7 +456,9 @@ export async function resendClinicalPlanEmail(planToken: string, email: string) 
   if (result.status !== "sent") {
     return {
       ok: false,
-      message: result.error === "email_suppressed"? "هذا البريد مُلغى الاشتراك من رسائلنا.": "تعذر إرسال البريد الآن، حاول لاحقًا.",
+      message: result.error === "email_suppressed"
+        ? "هذا البريد مُلغى الاشتراك من رسائلنا."
+        : "تعذر إرسال البريد الآن، حاول لاحقًا.",
     };
   }
   return { ok: true, message: "تم إرسال خطتك إلى بريدك الإلكتروني." };

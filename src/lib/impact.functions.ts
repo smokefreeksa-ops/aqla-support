@@ -106,7 +106,16 @@ export const recordPageDuration = createServerFn({ method: "POST" })
 // ============ Engagement events ============
 
 const ALLOWED_EVENTS = new Set([
-  "homepage_viewed", "about_viewed", "assessment_viewed", "volunteer_viewed", "result_viewed", "quit_track_clicked", "volunteer_track_clicked", "assessment_started", "consent_completed", "product_step_completed", "dependence_step_completed", "readiness_step_completed", "risk_step_completed", "assessment_completed", "followup_requested", "volunteer_started", "volunteer_completed", "whatsapp_clicked", "social_instagram_clicked", "social_x_clicked", "social_tiktok_clicked", "social_youtube_clicked", "chatbot_opened", "chatbot_message_sent",
+  "homepage_viewed", "about_viewed", "assessment_viewed", "volunteer_viewed", "result_viewed",
+  "quit_track_clicked", "volunteer_track_clicked",
+  "assessment_started", "consent_completed", "product_step_completed",
+  "dependence_step_completed", "readiness_step_completed", "risk_step_completed",
+  "assessment_completed",
+  "followup_requested",
+  "volunteer_started", "volunteer_completed",
+  "whatsapp_clicked",
+  "social_instagram_clicked", "social_x_clicked", "social_tiktok_clicked", "social_youtube_clicked",
+  "chatbot_opened", "chatbot_message_sent",
 ]);
 
 const EventInput = z.object({

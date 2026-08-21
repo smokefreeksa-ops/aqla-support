@@ -17,7 +17,7 @@ export function LoadingState({
   rows?: number;
 }) {
   return (
-    <div className="space-y-4"role="status"aria-live="polite"aria-busy="true">
+    <div className="space-y-4" role="status" aria-live="polite" aria-busy="true">
       <span className="sr-only">{label}</span>
       <AqlaSkeleton className="h-32 w-full rounded-3xl" />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -51,12 +51,12 @@ export function EmptyState({
   return (
     <div className="rounded-2xl border border-border/60 bg-card/50 p-8 text-center">
       <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full border border-border/60 bg-background/60">
-        {icon ?? <Inbox className="h-5 w-5 text-muted-foreground"aria-hidden="true" />}
+        {icon ?? <Inbox className="h-5 w-5 text-muted-foreground" aria-hidden="true" />}
       </div>
-      <p className="text-[15px] font-semibold text-foreground"dir="rtl">{title}</p>
+      <p className="text-[15px] font-semibold text-foreground" dir="rtl">{title}</p>
       {titleEn ? <p className="mt-0.5 text-[13px] text-muted-foreground">{titleEn}</p> : null}
       {description ? (
-        <p className="mx-auto mt-2 max-w-md text-[13px] text-muted-foreground"dir="rtl">{description}</p>
+        <p className="mx-auto mt-2 max-w-md text-[13px] text-muted-foreground" dir="rtl">{description}</p>
       ) : null}
       {action ? <div className="mt-5 flex justify-center">{action}</div> : null}
     </div>
@@ -77,13 +77,14 @@ export function ErrorState({
 }) {
   return (
     <div
-      role="alert"className="rounded-2xl border border-destructive/30 bg-destructive/5 p-8 text-center"
+      role="alert"
+      className="rounded-2xl border border-destructive/30 bg-destructive/5 p-8 text-center"
     >
-      <p className="text-[15px] font-semibold text-foreground"dir="rtl">{title}</p>
-      <p className="mt-1 text-[13px] text-muted-foreground"dir="rtl">{description}</p>
+      <p className="text-[15px] font-semibold text-foreground" dir="rtl">{title}</p>
+      <p className="mt-1 text-[13px] text-muted-foreground" dir="rtl">{description}</p>
       {onRetry ? (
-        <Button className="mt-4"size="sm" onClick={onRetry}>
-          <RefreshCw className="me-1.5 h-4 w-4"aria-hidden="true" />
+        <Button className="mt-4" size="sm" onClick={onRetry}>
+          <RefreshCw className="me-1.5 h-4 w-4" aria-hidden="true" />
           {retryLabel}
         </Button>
       ) : null}

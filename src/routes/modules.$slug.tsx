@@ -95,16 +95,16 @@ function Inner() {
 
   async function claimCertificate() {
     if (fullName.trim().length < 2) {
-      toast.error(isAr ? "أدخل اسمك الكامل": "Enter your full name");
+      toast.error(isAr ? "أدخل اسمك الكامل" : "Enter your full name");
       return;
     }
     if (!scopeAccepted) {
-      toast.error(isAr ? "يجب الموافقة على تعهّد المتطوّع أولًا": "You must accept the volunteer scope statement first");
+      toast.error(isAr ? "يجب الموافقة على تعهّد المتطوّع أولًا" : "You must accept the volunteer scope statement first");
       return;
     }
     const trimmedEmail = email.trim();
     if (trimmedEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(trimmedEmail)) {
-      toast.error(isAr ? "بريد إلكتروني غير صالح": "Invalid email address");
+      toast.error(isAr ? "بريد إلكتروني غير صالح" : "Invalid email address");
       return;
     }
     setIssuing(true);
@@ -124,21 +124,25 @@ function Inner() {
         const msg =
           res.error === "safety_critical_failed"
             ? isAr
-              ? "لم تنجح لأن سؤالًا يتعلق بالسلامة أُجيب خطأً. راجع القسم المرتبط وأعد المحاولة.": "Blocked — a safety-critical question was answered incorrectly. Review the safety section and retry.": res.error === "scope_not_accepted"? isAr ? "يجب قبول تعهّد المتطوّع": "Scope acceptance is required": res.error === "score_below_threshold"
+              ? "لم تنجح لأن سؤالًا يتعلق بالسلامة أُجيب خطأً. راجع القسم المرتبط وأعد المحاولة."
+              : "Blocked — a safety-critical question was answered incorrectly. Review the safety section and retry."
+            : res.error === "scope_not_accepted"
+            ? isAr ? "يجب قبول تعهّد المتطوّع" : "Scope acceptance is required"
+            : res.error === "score_below_threshold"
             ? isAr ? `نتيجتك ${res.score}% (المطلوب 80%)` : `Your score ${res.score}% (need 80%)`
-            : isAr ? "تعذّر إصدار الشهادة": "Could not issue certificate";
+            : isAr ? "تعذّر إصدار الشهادة" : "Could not issue certificate";
         toast.error(msg);
         return;
       }
       toast.success(
         trimmedEmail
-          ? (isAr ? "تم إصدار شهادتك وأُرسلت إلى بريدك ": "Certificate issued & emailed ")
-          : (isAr ? "تم إصدار شهادتك ": "Certificate issued "),
+          ? (isAr ? "تم إصدار شهادتك وأُرسلت إلى بريدك " : "Certificate issued & emailed ")
+          : (isAr ? "تم إصدار شهادتك " : "Certificate issued "),
       );
       navigate({ to: "/academy-certificate/$code", params: { code: res.certificate_code } });
     } catch (e) {
       console.error(e);
-      toast.error(isAr ? "خطأ في الشبكة": "Network error");
+      toast.error(isAr ? "خطأ في الشبكة" : "Network error");
     } finally {
       setIssuing(false);
     }
@@ -151,10 +155,10 @@ function Inner() {
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
         <div className="mb-5">
-          <BackButton fallback="/academy"labelAr="الأكاديمية"labelEn="Academy" />
+          <BackButton fallback="/academy" labelAr="الأكاديمية" labelEn="Academy" />
         </div>
-        <Link to="/"className="inline-flex items-center gap-1 text-sm text-brand hover:underline mb-4">
-          {isAr ? "الرئيسية": "Home"}
+        <Link to="/" className="inline-flex items-center gap-1 text-sm text-brand hover:underline mb-4">
+          {isAr ? "الرئيسية" : "Home"}
         </Link>
 
         <div className="mb-6">
@@ -188,14 +192,16 @@ function Inner() {
         {/* Sources */}
         <section className="mt-6 rounded-xl bg-gray-50 border border-gray-200 p-4">
           <div className="text-xs font-bold text-gray-500 uppercase mb-2">
-            {isAr ? "المصادر الرسمية": "Official sources"}
+            {isAr ? "المصادر الرسمية" : "Official sources"}
           </div>
           <ul className="space-y-1">
             {mod.sources.map((s) => (
               <li key={s.url}>
                 <a
                   href={s.url}
-                  target="_blank"rel="noopener noreferrer"className="inline-flex items-center gap-1 text-sm text-brand hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-sm text-brand hover:underline"
                 >
                   {s.label}
                   <ExternalLink className="h-3 w-3" />
@@ -208,7 +214,7 @@ function Inner() {
         {/* Quiz */}
         <section className="mt-8">
           <h2 className="text-xl font-bold text-gray-900 mb-1">
-            {isAr ? "اختبار الوحدة": "Module quiz"}
+            {isAr ? "اختبار الوحدة" : "Module quiz"}
           </h2>
           <p className="text-xs text-gray-500 mb-3">
             {isAr
@@ -225,7 +231,7 @@ function Inner() {
                 <div
                   key={qq.id}
                   className={`rounded-xl border p-4 bg-white ${
-                    isCorrect ? "border-accent-green-light": isWrong ? "border-red-400": "border-gray-200"
+                    isCorrect ? "border-accent-green-light" : isWrong ? "border-red-400" : "border-gray-200"
                   }`}
                 >
                   <div className="flex items-start gap-2 mb-3">
@@ -234,11 +240,11 @@ function Inner() {
                     </div>
                     {qq.safetyCritical && (
                       <span
-                        title={isAr ? "سؤال يخص السلامة — يجب أن يكون صحيحًا": "Safety-critical — must be correct"}
+                        title={isAr ? "سؤال يخص السلامة — يجب أن يكون صحيحًا" : "Safety-critical — must be correct"}
                         className="inline-flex items-center gap-1 rounded-md bg-amber-50 border border-amber-200 px-2 py-0.5 text-[10px] font-bold text-amber-800"
                       >
                         <ShieldAlert className="w-3 h-3" />
-                        {isAr ? "سلامة": "Safety"}
+                        {isAr ? "سلامة" : "Safety"}
                       </span>
                     )}
                   </div>
@@ -259,7 +265,8 @@ function Inner() {
                               : showWrong
                               ? "bg-red-50 border-red-400 text-red-900"
                               : active
-                              ? "border-accent-green bg-surface-soft/50": "border-gray-200 hover:border-gray-300"
+                              ? "border-accent-green bg-surface-soft/50"
+                              : "border-gray-200 hover:border-gray-300"
                           }`}
                         >
                           <span className="inline-flex items-center gap-2">
@@ -273,7 +280,7 @@ function Inner() {
                   </div>
                   {submitted && (
                     <div className="mt-3 text-xs text-gray-600 border-t border-gray-100 pt-2">
-                      <span className="font-bold">{isAr ? "المرجع: ": "Reference: "}</span>
+                      <span className="font-bold">{isAr ? "المرجع: " : "Reference: "}</span>
                       {isAr ? qq.explanation.ar : qq.explanation.en}
                       <span className="ms-2 text-gray-400">· {qq.source}</span>
                     </div>
@@ -290,7 +297,7 @@ function Inner() {
                 disabled={Object.keys(answers).length < mod.quiz.length}
                 className="px-5 py-2.5 rounded-lg bg-brand text-white text-sm font-bold hover:bg-ink-secondary disabled:opacity-40"
               >
-                {isAr ? "تحقق من الإجابات": "Check answers"}
+                {isAr ? "تحقق من الإجابات" : "Check answers"}
               </button>
             ) : (
               <>
@@ -303,7 +310,7 @@ function Inner() {
                   onClick={resetAttempt}
                   className="px-4 py-2 rounded-lg border border-gray-300 text-sm font-semibold hover:border-gray-400"
                 >
-                  {isAr ? "إعادة (خيارات جديدة)": "Retry (new option order)"}
+                  {isAr ? "إعادة (خيارات جديدة)" : "Retry (new option order)"}
                 </button>
               </>
             )}
@@ -314,19 +321,21 @@ function Inner() {
               <div className="flex items-center gap-2 mb-2">
                 <ShieldAlert className="w-5 h-5 text-red-700" />
                 <div className="font-bold text-gray-900">
-                  {isAr ? "يلزم مراجعة جانب السلامة": "Safety Review Required"}
+                  {isAr ? "يلزم مراجعة جانب السلامة" : "Safety Review Required"}
                 </div>
               </div>
               <p className="text-sm text-red-900">
                 {isAr
-                  ? "درجتك الإجمالية تجاوزت الحد، لكن سؤالًا (أو أكثر) يخص السلامة أُجيب بشكل غير صحيح. الشهادة لا تُصدر حتى تُجيب على كل أسئلة السلامة بشكل صحيح. راجع «وحدة السلامة والحدود والإحالة» ثم أعد المحاولة.": "Your overall score passed, but at least one safety-critical question was answered incorrectly. A certificate is not issued until every safety-critical question is correct. Review the Safety, Boundaries & Referral module, then retry."}
+                  ? "درجتك الإجمالية تجاوزت الحد، لكن سؤالًا (أو أكثر) يخص السلامة أُجيب بشكل غير صحيح. الشهادة لا تُصدر حتى تُجيب على كل أسئلة السلامة بشكل صحيح. راجع «وحدة السلامة والحدود والإحالة» ثم أعد المحاولة."
+                  : "Your overall score passed, but at least one safety-critical question was answered incorrectly. A certificate is not issued until every safety-critical question is correct. Review the Safety, Boundaries & Referral module, then retry."}
               </p>
               <div className="mt-3">
                 <Link
-                  to="/modules/$slug"params={{ slug: "safety-and-referral" }}
+                  to="/modules/$slug"
+                  params={{ slug: "safety-and-referral" }}
                   className="inline-flex items-center gap-1 text-sm font-bold text-red-800 underline"
                 >
-                  {isAr ? "افتح وحدة السلامة": "Open the Safety module"}
+                  {isAr ? "افتح وحدة السلامة" : "Open the Safety module"}
                 </Link>
               </div>
             </div>
@@ -342,13 +351,14 @@ function Inner() {
               </div>
               <p className="text-sm text-ink">
                 {isAr
-                  ? "قبل إصدار الشهادة، يرجى إدخال اسمك والموافقة على تعهّد المتطوّع أدناه.": "Before we issue the certificate, please enter your name and confirm the volunteer scope statement below."}
+                  ? "قبل إصدار الشهادة، يرجى إدخال اسمك والموافقة على تعهّد المتطوّع أدناه."
+                  : "Before we issue the certificate, please enter your name and confirm the volunteer scope statement below."}
               </p>
 
               {/* Scope statement */}
               <div className="mt-4 rounded-lg border border-border-soft bg-white p-3">
                 <div className="text-xs font-bold text-ink-secondary mb-1">
-                  {isAr ? "تعهّد نطاق الدور": "Scope & conduct statement"}
+                  {isAr ? "تعهّد نطاق الدور" : "Scope & conduct statement"}
                 </div>
                 <p className="text-[13px] leading-6 text-gray-700">
                   {isAr ? SCOPE_STATEMENT.ar : SCOPE_STATEMENT.en}
@@ -361,7 +371,7 @@ function Inner() {
                     className="mt-1"
                   />
                   <span className="text-sm text-gray-800">
-                    {isAr ? "أوافق على هذا التعهّد.": "I accept this statement."}
+                    {isAr ? "أوافق على هذا التعهّد." : "I accept this statement."}
                   </span>
                 </label>
               </div>
@@ -371,7 +381,7 @@ function Inner() {
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder={isAr ? "الاسم الكامل": "Full name"}
+                  placeholder={isAr ? "الاسم الكامل" : "Full name"}
                   className="w-full rounded-lg border border-accent-green-light bg-white px-3 py-2 text-sm outline-none focus:border-digital"
                   maxLength={120}
                 />
@@ -379,7 +389,7 @@ function Inner() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={isAr ? "البريد الإلكتروني (اختياري — لإرسال الشهادة)": "Email (optional — to receive certificate)"}
+                  placeholder={isAr ? "البريد الإلكتروني (اختياري — لإرسال الشهادة)" : "Email (optional — to receive certificate)"}
                   className="w-full rounded-lg border border-accent-green-light bg-white px-3 py-2 text-sm outline-none focus:border-digital"
                   maxLength={254}
                 />
@@ -389,8 +399,8 @@ function Inner() {
                   className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-brand text-white text-sm font-bold hover:bg-ink-secondary disabled:opacity-40"
                 >
                   {issuing
-                    ? (isAr ? "جارٍ الإصدار...": "Issuing...")
-                    : (isAr ? "أصدر الشهادة": "Issue certificate")}
+                    ? (isAr ? "جارٍ الإصدار..." : "Issuing...")
+                    : (isAr ? "أصدر الشهادة" : "Issue certificate")}
                 </button>
               </div>
             </div>
@@ -403,7 +413,8 @@ function Inner() {
               </div>
               <p className="text-sm text-amber-900">
                 {isAr
-                  ? "راجع محتوى الوحدة أعلاه ثم أعد المحاولة. سيتم توليد ترتيب جديد للخيارات.": "Review the module content above, then retry. A new option order will be generated."}
+                  ? "راجع محتوى الوحدة أعلاه ثم أعد المحاولة. سيتم توليد ترتيب جديد للخيارات."
+                  : "Review the module content above, then retry. A new option order will be generated."}
               </p>
             </div>
           )}

@@ -29,12 +29,12 @@ export const Route = createFileRoute("/quit-chat")({
 });
 
 type Msg = {
-  from: "bot"| "user";
+  from: "bot" | "user";
   text: string;
   quickReplies?: QuickReply[];
   multi?: QuickReply[];
-  actions?: { label: string; onClick: () => void; variant?: "primary"| "secondary"; icon?: "print"| "dashboard" }[];
-  input?: "text"| "email"| "number-row"| "number";
+  actions?: { label: string; onClick: () => void; variant?: "primary" | "secondary"; icon?: "print" | "dashboard" }[];
+  input?: "text" | "email" | "number-row" | "number";
   plan?: ClinicalPlanJSON;
 };
 type QuickReply = { label: string; value: string };
@@ -44,7 +44,8 @@ function QuitChatPage() {
   return (
     <>
       <div
-        dir="rtl"className="min-h-screen bg-background font-[IBM_Plex_Sans_Arabic,Tajawal,Cairo,system-ui,sans-serif] text-right print:hidden"
+        dir="rtl"
+        className="min-h-screen bg-background font-[IBM_Plex_Sans_Arabic,Tajawal,Cairo,system-ui,sans-serif] text-right print:hidden"
       >
         <SiteHeader />
         <main className="mx-auto max-w-2xl px-3 py-6 sm:py-10">
@@ -59,7 +60,7 @@ function QuitChatPage() {
         <SiteFooter />
       </div>
       {plan ? (
-        <div className="hidden print:block bg-white p-6"dir="rtl">
+        <div className="hidden print:block bg-white p-6" dir="rtl">
           <ClinicalPlanView plan={plan} />
         </div>
       ) : null}

@@ -24,15 +24,16 @@ export const Route = createFileRoute("/try/")({
 
 function TryIndexPage() {
   return (
-    <div dir="rtl"lang="ar"className="min-h-screen bg-[#EAF3F0]">
+    <div dir="rtl" lang="ar" className="min-h-screen bg-[#EAF3F0]">
       <header className="sticky top-0 z-30 border-b border-[#D5E3DD] bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <Link to="/"className="flex items-center gap-2">
-            <img src={aqlaLogo} alt="أقلع — Aqla"className="h-9 w-9 rounded-full bg-white object-contain p-1 shadow" />
+          <Link to="/" className="flex items-center gap-2">
+            <img src={aqlaLogo} alt="أقلع — Aqla" className="h-9 w-9 rounded-full bg-white object-contain p-1 shadow" />
             <span className="text-sm font-semibold text-[#0b3a25]">أقلع | Aqla</span>
           </Link>
           <Link
-            to="/"className="inline-flex items-center gap-1.5 rounded-full bg-[#0b3a25] px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-[#0e4a30] sm:text-sm"
+            to="/"
+            className="inline-flex items-center gap-1.5 rounded-full bg-[#0b3a25] px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-[#0e4a30] sm:text-sm"
           >
             <span>الدخول للمنصة الكاملة</span>
             <ArrowRight className="h-4 w-4 rotate-180" />
@@ -62,7 +63,8 @@ function TryIndexPage() {
               ادخل منصة أقلع الكاملة: خطة إقلاع شخصية، دعم فوري، ومجتمع يساندك.
             </p>
             <Link
-              to="/"className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#007A5A] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0e4a30]"
+              to="/"
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#007A5A] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0e4a30]"
             >
               <span>ابدأ رحلتك مع أقلع</span>
               <ArrowRight className="h-4 w-4 rotate-180" />

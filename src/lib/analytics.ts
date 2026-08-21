@@ -39,5 +39,5 @@ export function getReferrerType(): string {
 export function getLang(): string {
   if (typeof document === "undefined") return "ar";
   const l = document.documentElement.lang || localStorage.getItem("lang") || "ar";
-  return l === "en"? "en": "ar";
+  return l === "en" ? "en" : "ar";
 }

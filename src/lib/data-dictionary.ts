@@ -289,7 +289,8 @@ export const DATA_DICTIONARY: DataDictionaryEntry[] = [
       table_name: "readiness_stage / motivation_assessment / quit_history",
       export_file: "readiness_quit_history",
       question_text_ar: ar, question_text_en: en, response_options: opts,
-      branching_rule: name === "longest_quit_duration"|| name === "number_of_quit_attempts"? "asked if ever_tried_to_quit = yes": "asked at baseline",
+      branching_rule: name === "longest_quit_duration" || name === "number_of_quit_attempts"
+        ? "asked if ever_tried_to_quit = yes" : "asked at baseline",
       source_framework: "Prochaska Stages of Change / NCSCT",
       included_in_full_export: true, included_in_anonymized_export: true,
       included_in_research_export: true, identifiable_or_sensitive: false,
@@ -356,7 +357,7 @@ export const DATA_DICTIONARY: DataDictionaryEntry[] = [
     return vars.map(([name, ar, en, opts, coding]) => ({
       section: "Export: research_consent_only",
       variable: name, question: en, options: opts, coding,
-      required: name === "participant_code"|| name === "research_consent_status",
+      required: name === "participant_code" || name === "research_consent_status",
       source: "Internal / Ethics",
       triagePurpose: "—",
       researchPurpose: "Restricted research dataset (consent_research_publication = given)",
@@ -388,15 +389,18 @@ export const DATA_DICTIONARY: DataDictionaryEntry[] = [
     return items.map(([name, ar, en]) => ({
       section: "Export: community_exposure",
       variable: name, question: en,
-      options: name === "main_source_of_products"? "free text (shop / friend / family / online / other)": "yes / no / not_sure / prefer_not_to_answer",
-      coding: name === "main_source_of_products"? "text": "enum",
+      options: name === "main_source_of_products"
+        ? "free text (shop / friend / family / online / other)"
+        : "yes / no / not_sure / prefer_not_to_answer",
+      coding: name === "main_source_of_products" ? "text" : "enum",
       required: false, source: "GYTS / GATS / WHO MPOWER",
       triagePurpose: "—",
       researchPurpose: "Community-level exposure & access surveillance",
       inAnonymizedExport: true,
       table_name: "community_exposure", export_file: "community_exposure",
       question_text_ar: ar, question_text_en: en,
-      response_options: name === "main_source_of_products"? "free text": "yes / no / not_sure / prefer_not_to_answer",
+      response_options: name === "main_source_of_products"
+        ? "free text" : "yes / no / not_sure / prefer_not_to_answer",
       branching_rule: "optional research extension; skippable; underage question only if applicable",
       source_framework: "GYTS / GATS / WHO MPOWER",
       included_in_full_export: true, included_in_anonymized_export: true,

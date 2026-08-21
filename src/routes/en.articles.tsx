@@ -42,7 +42,7 @@ function EnArticles() {
                 {a.titleEn}
               </Link>
             </h2>
-            <p className="mt-1 text-sm text-muted-foreground"dir="rtl"lang="ar">
+            <p className="mt-1 text-sm text-muted-foreground" dir="rtl" lang="ar">
               {a.titleAr}
             </p>
           </li>

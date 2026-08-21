@@ -34,16 +34,17 @@ function NotFoundComponent() {
           <span>Coming soon</span>
         </div>
         <h1 className="text-6xl font-bold tracking-tight text-foreground sm:text-7xl">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground"dir="rtl">
+        <h2 className="mt-4 text-xl font-semibold text-foreground" dir="rtl">
           هذه الصفحة قيد الإعداد
         </h2>
         <p className="mt-2 text-sm text-muted-foreground">
           This page isn't ready yet. We're working on it — check back soon.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <BackButton fallback="/"labelAr="الرئيسية"labelEn="Home"textAr="العودة"textEn="Go back" />
+          <BackButton fallback="/" labelAr="الرئيسية" labelEn="Home" textAr="العودة" textEn="Go back" />
           <Link
-            to="/"className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md"
+            to="/"
+            className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md"
           >
             <span dir="rtl">العودة للرئيسية</span>
             <span className="mx-2 opacity-50">·</span>
@@ -65,14 +66,22 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
       <div className="relative z-10 w-full max-w-md text-center">
         <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full border border-border/60 bg-background/60 backdrop-blur-sm">
           <svg
-            xmlns="http://www.w3.org/2000/svg"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="1.75"strokeLinecap="round"strokeLinejoin="round"className="h-6 w-6 text-foreground/70"aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-6 w-6 text-foreground/70"
+            aria-hidden="true"
           >
             <path d="M12 9v4" />
             <path d="M12 17h.01" />
             <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
           </svg>
         </div>
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground"dir="rtl">
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground" dir="rtl">
           حدث خطأ غير متوقع
         </h1>
         <p className="mt-1 text-lg font-medium text-foreground">Something went wrong</p>
@@ -80,7 +89,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           We couldn't load this page. Please try again in a moment.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <BackButton fallback="/"labelAr="الرئيسية"labelEn="Home"textAr="العودة"textEn="Go back" />
+          <BackButton fallback="/" labelAr="الرئيسية" labelEn="Home" textAr="العودة" textEn="Go back" />
           <button
             onClick={() => {
               router.invalidate();
@@ -93,7 +102,8 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             <span>Try again</span>
           </button>
           <a
-            href="/"className="inline-flex items-center justify-center rounded-full border border-input bg-background/60 px-6 py-2.5 text-sm font-medium text-foreground backdrop-blur-sm transition-colors hover:bg-accent"
+            href="/"
+            className="inline-flex items-center justify-center rounded-full border border-input bg-background/60 px-6 py-2.5 text-sm font-medium text-foreground backdrop-blur-sm transition-colors hover:bg-accent"
           >
             <span dir="rtl">الرئيسية</span>
             <span className="mx-2 opacity-50">·</span>
@@ -139,7 +149,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         type: "application/ld+json",
         children: JSON.stringify({
-          "@context": "https://schema.org", "@type": "Organization",
+          "@context": "https://schema.org",
+          "@type": "Organization",
           name: "أقلع",
           alternateName: ["Aqla", "اقلع", "منصة أقلع", "Aqla Platform", "لا تتن", "La-Tatten"],
           url: "https://aqla1.com",
@@ -148,7 +159,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           description:
             "أقلع — منصة سعودية مجانية للإقلاع عن التدخين والنيكوتين: تقييم الاعتماد، خطة إقلاع، متابعة، وتدريب.",
           sameAs: [
-            "https://x.com/SmokeOffKSA", "https://althobiani.com", "https://la-tatten.com",
+            "https://x.com/SmokeOffKSA",
+            "https://althobiani.com",
+            "https://la-tatten.com",
           ],
           founder: {
             "@type": "Person",
@@ -161,7 +174,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             },
             url: "https://althobiani.com",
             sameAs: [
-              "https://orcid.org/0000-0002-2760-6929", "https://scholar.google.com/citations?user=Malik-Althobiani", "https://www.linkedin.com/in/malik-althobiani", "https://althobiani.com",
+              "https://orcid.org/0000-0002-2760-6929",
+              "https://scholar.google.com/citations?user=Malik-Althobiani",
+              "https://www.linkedin.com/in/malik-althobiani",
+              "https://althobiani.com",
             ],
           },
         }),
@@ -169,7 +185,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         type: "application/ld+json",
         children: JSON.stringify({
-          "@context": "https://schema.org", "@type": "WebSite",
+          "@context": "https://schema.org",
+          "@type": "WebSite",
           name: "أقلع",
           alternateName: ["Aqla", "اقلع", "منصة أقلع", "Aqla Platform", "لا تتن", "La-Tatten"],
           url: "https://aqla1.com",
@@ -187,7 +204,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ar"dir="rtl">
+    <html lang="ar" dir="rtl">
       <head>
         <HeadContent />
       </head>
@@ -202,7 +219,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const onSosRoute = pathname === "/sos"|| pathname.startsWith("/sos/");
+  const onSosRoute = pathname === "/sos" || pathname.startsWith("/sos/");
 
   return (
     <QueryClientProvider client={queryClient}>

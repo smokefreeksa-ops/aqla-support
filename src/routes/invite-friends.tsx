@@ -79,14 +79,14 @@ function Inner() {
     if (!referralUrl) return;
     try {
       await navigator.clipboard.writeText(referralUrl);
-      toast.success(isAr ? "تم نسخ الرابط.": "Link copied.");
+      toast.success(isAr ? "تم نسخ الرابط." : "Link copied.");
       trackEvent("invite_copy", code);
     } catch {
-      toast.error(isAr ? "تعذر النسخ تلقائيًا. يمكنك نسخ الرابط يدويًا.": "Could not copy automatically. Copy the link manually.");
+      toast.error(isAr ? "تعذر النسخ تلقائيًا. يمكنك نسخ الرابط يدويًا." : "Could not copy automatically. Copy the link manually.");
     }
   }
 
-  function share(channel: "whatsapp"| "x"| "linkedin") {
+  function share(channel: "whatsapp" | "x" | "linkedin") {
     if (!shareLandingUrl) return;
     const text = `${message} ${referralUrl}`;
     let url = "";
@@ -111,7 +111,7 @@ function Inner() {
       setTimeout(() => URL.revokeObjectURL(link.href), 1000);
       trackEvent("invite_download_card", code);
     } catch {
-      toast.error(isAr ? "تعذر تحميل الملف حاليًا. حاول مرة أخرى.": "Could not download the file. Please try again.");
+      toast.error(isAr ? "تعذر تحميل الملف حاليًا. حاول مرة أخرى." : "Could not download the file. Please try again.");
     }
   }
 
@@ -131,77 +131,79 @@ function Inner() {
     <div dir={dir} className="min-h-screen bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
-        <div className={isAr ? "text-right": ""}>
+        <div className={isAr ? "text-right" : ""}>
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            {isAr ? "ادعُ أصدقاءك": "Invite Your Friends"}
+            {isAr ? "ادعُ أصدقاءك" : "Invite Your Friends"}
           </h1>
           <p className="mt-3 text-[14.5px] leading-7 text-foreground/75">
             {isAr
-              ? "كل دعوة قد تكون بداية رحلة جديدة لأحد أحبائك. هذا الرابط شخصي لك.": "Every invitation may be the start of a new journey for someone you care about. This link is personal to you."}
+              ? "كل دعوة قد تكون بداية رحلة جديدة لأحد أحبائك. هذا الرابط شخصي لك."
+              : "Every invitation may be the start of a new journey for someone you care about. This link is personal to you."}
           </p>
         </div>
 
-        <Card className={`mt-6 rounded-2xl p-5 sm:p-6 ${isAr ? "text-right": ""}`}>
+        <Card className={`mt-6 rounded-2xl p-5 sm:p-6 ${isAr ? "text-right" : ""}`}>
           <label className="text-xs font-semibold uppercase tracking-wider text-primary">
-            {isAr ? "رابط الدعوة الشخصي": "Your invite link"}
+            {isAr ? "رابط الدعوة الشخصي" : "Your invite link"}
           </label>
           <div className="mt-2 flex flex-col gap-2 sm:flex-row">
             <input
               readOnly
               value={referralUrl}
               onClick={(e) => (e.target as HTMLInputElement).select()}
-              className="h-11 flex-1 rounded-md border border-input bg-card px-3 text-sm font-mono"aria-label={isAr ? "رابط الدعوة": "Invite link"}
+              className="h-11 flex-1 rounded-md border border-input bg-card px-3 text-sm font-mono"
+              aria-label={isAr ? "رابط الدعوة" : "Invite link"}
             />
             <Button onClick={copy} className="gap-2">
               <Copy className="h-4 w-4" />
-              {isAr ? "نسخ": "Copy"}
+              {isAr ? "نسخ" : "Copy"}
             </Button>
           </div>
           <p className="mt-2 text-xs text-muted-foreground">
-            {isAr ? "الرمز: ": "Code: "}
+            {isAr ? "الرمز: " : "Code: "}
             <span className="font-mono">{code}</span>
           </p>
         </Card>
 
-        <Card className={`mt-6 rounded-2xl p-5 sm:p-6 ${isAr ? "text-right": ""}`}>
-          <h2 className="text-lg font-semibold">{isAr ? "مشاركة": "Share"}</h2>
+        <Card className={`mt-6 rounded-2xl p-5 sm:p-6 ${isAr ? "text-right" : ""}`}>
+          <h2 className="text-lg font-semibold">{isAr ? "مشاركة" : "Share"}</h2>
           <div className="mt-3 flex flex-wrap gap-2">
-            <Button variant="outline"onClick={() => share("whatsapp")} className="gap-2">
+            <Button variant="outline" onClick={() => share("whatsapp")} className="gap-2">
               <MessageCircle className="h-4 w-4 text-brand" />
-              {isAr ? "واتساب": "WhatsApp"}
+              {isAr ? "واتساب" : "WhatsApp"}
             </Button>
-            <Button variant="outline"onClick={() => share("x")} className="gap-2">
+            <Button variant="outline" onClick={() => share("x")} className="gap-2">
               <Twitter className="h-4 w-4" />
               X
             </Button>
-            <Button variant="outline"onClick={() => share("linkedin")} className="gap-2">
+            <Button variant="outline" onClick={() => share("linkedin")} className="gap-2">
               <Linkedin className="h-4 w-4 text-[#0a66c2]" />
               LinkedIn
             </Button>
-            <Button variant="outline"onClick={nativeShare} className="gap-2">
+            <Button variant="outline" onClick={nativeShare} className="gap-2">
               <Share2 className="h-4 w-4" />
-              {isAr ? "خيارات النظام": "System share"}
+              {isAr ? "خيارات النظام" : "System share"}
             </Button>
-            <Button variant="outline"onClick={downloadInviteCard} className="gap-2">
+            <Button variant="outline" onClick={downloadInviteCard} className="gap-2">
               <Download className="h-4 w-4" />
-              {isAr ? "تحميل بطاقة الدعوة": "Download invite card"}
+              {isAr ? "تحميل بطاقة الدعوة" : "Download invite card"}
             </Button>
           </div>
         </Card>
 
-        <Card className={`mt-6 rounded-2xl p-5 sm:p-6 ${isAr ? "text-right": ""}`}>
+        <Card className={`mt-6 rounded-2xl p-5 sm:p-6 ${isAr ? "text-right" : ""}`}>
           <h2 className="text-lg font-semibold flex items-center gap-2">
             <QrCode className="h-4 w-4 text-primary" />
-            {isAr ? "رمز QR": "QR code"}
+            {isAr ? "رمز QR" : "QR code"}
           </h2>
           <p className="mt-1 text-xs text-muted-foreground">
-            {isAr ? "امسح الرمز للوصول إلى صفحة دعوتك.": "Scan the code to open your invite page."}
+            {isAr ? "امسح الرمز للوصول إلى صفحة دعوتك." : "Scan the code to open your invite page."}
           </p>
           {qrSrc && (
             <div className="mt-3 flex flex-col items-start gap-2 sm:items-center sm:justify-center">
-              <img src={qrSrc} alt={isAr ? "رمز QR للدعوة": "Invite QR code"} width={180} height={180} className="rounded-md border border-border/60" />
+              <img src={qrSrc} alt={isAr ? "رمز QR للدعوة" : "Invite QR code"} width={180} height={180} className="rounded-md border border-border/60" />
               <a className="text-xs text-primary underline" href={qrSrc} download={`aqla-invite-${code}.png`}>
-                {isAr ? "تحميل صورة الرمز": "Download QR image"}
+                {isAr ? "تحميل صورة الرمز" : "Download QR image"}
               </a>
             </div>
           )}
@@ -209,7 +211,8 @@ function Inner() {
 
         <p className="mt-6 text-center text-[11px] text-muted-foreground">
           {isAr
-            ? "بمشاركتك تساهم في نشر التوعية. لا نشارك أي بيانات صحية شخصية.": "Sharing helps spread awareness. We never share personal health data."}
+            ? "بمشاركتك تساهم في نشر التوعية. لا نشارك أي بيانات صحية شخصية."
+            : "Sharing helps spread awareness. We never share personal health data."}
         </p>
       </main>
       <SiteFooter />
@@ -219,27 +222,27 @@ function Inner() {
 
 function buildInviteSvg(opts: { isAr: boolean; url: string; code: string; message: string }) {
   const { isAr, url, code, message } = opts;
-  const heading = isAr ? "أقلع": "Aqla";
-  const sub = isAr ? "دعوة شخصية للانضمام": "A personal invitation";
-  return `<?xml version="1.0"encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg"width="800"height="450"viewBox="0 0 800 450">
+  const heading = isAr ? "أقلع" : "Aqla";
+  const sub = isAr ? "دعوة شخصية للانضمام" : "A personal invitation";
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
   <defs>
-    <linearGradient id="g"x1="0"y1="0"x2="1"y2="1">
-      <stop offset="0%"stop-color="#0c3b3e" />
-      <stop offset="100%"stop-color="#1f7a73" />
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0c3b3e" />
+      <stop offset="100%" stop-color="#1f7a73" />
     </linearGradient>
   </defs>
-  <rect width="800"height="450"fill="url(#g)"rx="24"/>
-  <text x="400"y="120"text-anchor="middle"font-family="system-ui, sans-serif"font-size="64"font-weight="700"fill="#ffffff">${escapeXml(heading)}</text>
-  <text x="400"y="170"text-anchor="middle"font-family="system-ui, sans-serif"font-size="20"fill="#cdeeea">${escapeXml(sub)}</text>
-  <foreignObject x="60"y="200"width="680"height="120">
-    <div xmlns="http://www.w3.org/1999/xhtml"style="color:white;font-family:system-ui,sans-serif;font-size:18px;line-height:1.6;text-align:${isAr ? "right": "left"};direction:${isAr ? "rtl": "ltr"};">
+  <rect width="800" height="450" fill="url(#g)" rx="24"/>
+  <text x="400" y="120" text-anchor="middle" font-family="system-ui, sans-serif" font-size="64" font-weight="700" fill="#ffffff">${escapeXml(heading)}</text>
+  <text x="400" y="170" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" fill="#cdeeea">${escapeXml(sub)}</text>
+  <foreignObject x="60" y="200" width="680" height="120">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="color:white;font-family:system-ui,sans-serif;font-size:18px;line-height:1.6;text-align:${isAr ? "right" : "left"};direction:${isAr ? "rtl" : "ltr"};">
       ${escapeXml(message)}
     </div>
   </foreignObject>
-  <text x="60"y="380"font-family="monospace"font-size="14"fill="#cdeeea">${escapeXml(code)}</text>
-  <text x="740"y="380"text-anchor="end"font-family="monospace"font-size="14"fill="#cdeeea">${escapeXml(url)}</text>
-  <text x="400"y="420"text-anchor="middle"font-family="system-ui, sans-serif"font-size="12"fill="#9fd6cf">${escapeXml(SITE_URL.replace(/^https?:\/\//, ""))}</text>
+  <text x="60" y="380" font-family="monospace" font-size="14" fill="#cdeeea">${escapeXml(code)}</text>
+  <text x="740" y="380" text-anchor="end" font-family="monospace" font-size="14" fill="#cdeeea">${escapeXml(url)}</text>
+  <text x="400" y="420" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#9fd6cf">${escapeXml(SITE_URL.replace(/^https?:\/\//, ""))}</text>
 </svg>`;
 }
 

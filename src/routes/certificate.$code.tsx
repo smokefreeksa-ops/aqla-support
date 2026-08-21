@@ -27,7 +27,7 @@ function CertificatePage() {
     queryFn: () => verifyFn({ data: { code } }),
   });
 
-  const verifyUrl = typeof window !== "undefined"? `${window.location.origin}/certificate/${code}` : "";
+  const verifyUrl = typeof window !== "undefined" ? `${window.location.origin}/certificate/${code}` : "";
   const shareText = `I completed the Aqla Volunteer Smoking and Nicotine Cessation Support Training. Verify: ${verifyUrl}`;
 
   async function copyLink() {
@@ -47,14 +47,14 @@ function CertificatePage() {
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-amber-50/30 to-emerald-50/30 print:bg-white">
       <header className="border-b bg-card/70 backdrop-blur print:hidden">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-          <Link to="/"className="font-semibold text-primary">Aqla — أقلع</Link>
-          <Link to="/training"><Button variant="outline"size="sm">Training</Button></Link>
+          <Link to="/" className="font-semibold text-primary">Aqla — أقلع</Link>
+          <Link to="/training"><Button variant="outline" size="sm">Training</Button></Link>
         </div>
       </header>
 
       <main className="mx-auto max-w-4xl px-4 py-8">
         <div className="mb-5">
-          <BackButton fallback="/certificates"labelAr="الشهادات"labelEn="Certificates" />
+          <BackButton fallback="/certificates" labelAr="الشهادات" labelEn="Certificates" />
         </div>
         {!found ? (
           <Card className="p-8 text-center">
@@ -131,8 +131,8 @@ function CertificatePage() {
 
             <div className="mt-4 flex flex-wrap gap-2 justify-center print:hidden">
               <Button onClick={() => window.print()}><Download className="me-2 h-4 w-4" />Download / Print</Button>
-              <Button variant="outline"onClick={shareOut}><Share2 className="me-2 h-4 w-4" />Share</Button>
-              <Button variant="outline"onClick={copyLink}><LinkIcon className="me-2 h-4 w-4" />Copy verification link</Button>
+              <Button variant="outline" onClick={shareOut}><Share2 className="me-2 h-4 w-4" />Share</Button>
+              <Button variant="outline" onClick={copyLink}><LinkIcon className="me-2 h-4 w-4" />Copy verification link</Button>
             </div>
             <div className="mt-3 text-center text-xs text-muted-foreground print:hidden flex items-center justify-center gap-1">
               <ShieldCheck className="h-3.5 w-3.5" /> Verified via Aqla certificate registry
