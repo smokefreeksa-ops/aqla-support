@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { incrementAnalyticsMetric } from '@/lib/analytics.server'
+import { getAdaptiveTriageContext } from '@/lib/adaptive-assessment.server'
 import { appendConversationMessage, ensureConversation, type AqlaMode } from '@/lib/conversation-store.server'
 import { getCurrentAqlaUser, hasAqlaRole } from '@/lib/current-user.server'
 import { sendPlanReadyEmail } from '@/lib/email.server'
@@ -81,8 +82,10 @@ const schema = {
 
 const baseInstructions = `You are Aqla (أقلع), the conversational operating layer for a Saudi smoking and nicotine cessation platform.
 Arabic is primary. Reply in the application language.
-Aqla has a deterministic clinical/safety engine and structured Personal Twin. Never recalculate validated scores, override safety/referral decisions, diagnose, prescribe or choose medication doses.
-Use the Personal Twin only as supplied. Never claim to remember facts that are not present in the supplied context.
+Aqla has a deterministic clinical/safety engine, deterministic adaptive triage and a structured Personal Twin. Those supplied deterministic outputs are authoritative. Never recalculate or override safety, referral, HSI, PSECDI, oral-nicotine screening, product triage or follow-up focus.
+HSI and PSECDI may be described as product-specific dependence/screening indicators, not diagnoses. The AQla oral nicotine adapted screen is explicitly non-validated and must never be described as a validated clinical measure.
+Never diagnose, prescribe or choose medication doses. Do not reinterpret internal categories as diagnoses or promise a clinical outcome.
+Use the Personal Twin and adaptive triage only as supplied. Never claim to remember facts that are not present in the supplied context.
 Support quitting now, preparing, reducing first and relapse prevention without shame or pressure.
 The available action field is a suggestion for a trusted Aqla tool. Choose only one action and only when it directly helps the user's latest request.
 Use start_assessment when the user wants a new quit plan or assessment.
@@ -158,11 +161,40 @@ export async function POST(request: NextRequest) {
     console.error('Aqla Personal Twin context unavailable', error instanceof Error ? error.message : 'unknown')
   }
 
+  let adaptiveTriage: Record<string, unknown> | null = null
+  try {
+    const adaptive = await getAdaptiveTriageContext(user.sub)
+    if (adaptive?.triage) {
+      adaptiveTriage = {
+        primary_product: adaptive.triage.primary_product,
+        nicotine_exposure: adaptive.triage.nicotine_exposure,
+        behavioural_pattern: adaptive.triage.behavioural_pattern,
+        mixed_product_complexity: adaptive.triage.mixed_product_complexity,
+        readiness: adaptive.triage.readiness,
+        confidence: adaptive.triage.confidence,
+        relapse_vulnerability: adaptive.triage.relapse_vulnerability,
+        support_need: adaptive.triage.support_need,
+        safety_track: adaptive.triage.safety_track,
+        followup_focus: adaptive.triage.followup_focus,
+        product_measures: adaptive.triage.product_measures.map((measure) => ({
+          product: measure.product,
+          instrument: measure.instrument,
+          score: measure.score,
+          category: measure.category,
+          validated: measure.validated,
+        })),
+      }
+    }
+  } catch (error) {
+    console.error('Aqla adaptive triage context unavailable', error instanceof Error ? error.message : 'unknown')
+  }
+
   try {
     const response = await openAIStructuredResponse<AssistantOutput>({
       instructions: `${baseInstructions}\nCurrent Aqla mode: ${mode}.\nApplication reply language: ${lang === 'ar' ? 'Arabic' : 'English'}.`,
       input: JSON.stringify({
         personal_twin: twinContext,
+        adaptive_triage: adaptiveTriage,
         recent_conversation: clean,
       }),
       schemaName: 'aqla_os_response',
