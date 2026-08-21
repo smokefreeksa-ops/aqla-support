@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 
 const REDCAP_URL = 'https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM'
 const LOGO_URL = '/aqla-logo.png'
-const DISMISS_KEY = 'aqla_study_invitation_dismissed_v1'
 
 const copy = {
   ar: {
@@ -65,13 +64,6 @@ export default function StudyInvitation({ overlay = false }: { overlay?: boolean
   const t = copy[lang]
 
   useEffect(() => {
-    if (!overlay) return
-    try {
-      if (window.localStorage.getItem(DISMISS_KEY) === '1') setVisible(false)
-    } catch { /* show invitation when storage is unavailable */ }
-  }, [overlay])
-
-  useEffect(() => {
     if (!overlay || !visible) return
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -104,7 +96,8 @@ export default function StudyInvitation({ overlay = false }: { overlay?: boolean
 
   function dismiss() {
     if (overlay) {
-      try { window.localStorage.setItem(DISMISS_KEY, '1') } catch { /* no-op */ }
+      // Dismiss only this visit. No local/session storage is written, so the
+      // study invitation appears again whenever the entry page is visited anew.
       setVisible(false)
       return
     }
