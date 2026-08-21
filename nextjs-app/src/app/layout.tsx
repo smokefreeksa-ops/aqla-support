@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import './study-invitation-v2.css'
+import './study-invitation-backdrop.css'
 import './quit-engine.css'
 import './followup.css'
 import './plan-print.css'
