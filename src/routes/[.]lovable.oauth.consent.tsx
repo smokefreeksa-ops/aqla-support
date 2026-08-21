@@ -52,7 +52,9 @@ function Consent() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const clientName = details?.client?.name ?? details?.client?.client_name ?? "an app";
+  const rawClientName = details?.client?.name ?? details?.client?.client_name ?? "an app";
+  // Never surface platform vendor names to end users — present them as Aqla.
+  const clientName = /lovable/i.test(rawClientName) ? "أقلع — Aqla" : rawClientName;
 
   async function decide(approve: boolean) {
     setBusy(true);
