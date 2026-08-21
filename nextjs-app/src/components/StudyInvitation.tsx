@@ -114,7 +114,7 @@ export default function StudyInvitation({ overlay = false }: { overlay?: boolean
       aria-label={t.dialogLabel}
     >
       <section className="study-v2-modal">
-        <img src={LOGO_URL} alt="Aqla — أقلع" className="study-v2-logo" />
+        <img src={LOGO_URL} alt="AQla — أقلع" className="study-v2-logo" />
 
         <div className="study-v2-language" dir="ltr" aria-label="Language">
           <button
