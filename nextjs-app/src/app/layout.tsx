@@ -12,9 +12,15 @@ import './aqla-institutional.css'
 import './aqla-theme-overrides.css'
 import './aqla-public-claims-safety.css'
 
+const appUrl = process.env.AQLA_APP_URL || 'https://staging.smokefreeksa.com'
+const title = 'أقلع — Aqla'
+const description = 'منصة أقلع لدعم الإقلاع عن التدخين والنيكوتين بخطة شخصية وتقييم تكيفي وأدوات دعم عملية.'
+
 export const metadata: Metadata = {
-  title: 'أقلع — Aqla',
-  description: 'منصة أقلع لدعم الإقلاع عن التدخين والنيكوتين',
+  metadataBase: new URL(appUrl),
+  applicationName: 'Aqla — أقلع',
+  title,
+  description,
   robots: {
     index: false,
     follow: false,
@@ -24,6 +30,28 @@ export const metadata: Metadata = {
       follow: false,
       noimageindex: true,
     },
+  },
+  openGraph: {
+    title,
+    description,
+    siteName: 'Aqla — أقلع',
+    type: 'website',
+    locale: 'ar_SA',
+    alternateLocale: ['en_GB'],
+    images: [
+      {
+        url: '/aqla-logo.png',
+        width: 400,
+        height: 225,
+        alt: 'Aqla — أقلع',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title,
+    description,
+    images: ['/aqla-logo.png'],
   },
   icons: {
     icon: '/aqla-logo.png',
