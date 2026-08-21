@@ -218,7 +218,7 @@ function StepVisual({
               choice === "water" ? "bg-red-600" : "bg-white/10 hover:bg-white/15"
             }`}
           >
-            💧 ماء
+             ماء
           </button>
           <button
             onClick={() => setChoice("walk")}
@@ -226,7 +226,7 @@ function StepVisual({
               choice === "walk" ? "bg-red-600" : "bg-white/10 hover:bg-white/15"
             }`}
           >
-            🚶 ١٠ خطوات
+             ١٠ خطوات
           </button>
         </div>
       );

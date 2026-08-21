@@ -981,7 +981,7 @@ function ResultView({
 </style>
 </head>
 <body>
-<button class="print-btn noprint" onclick="window.print()">${isAr ? "🖨️ حفظ كـ PDF" : "🖨️ Save as PDF"}</button>
+<button class="print-btn noprint" onclick="window.print()">${isAr ? " حفظ كـ PDF" : " Save as PDF"}</button>
 <div class="wrap">
   <header>
     <div style="display:flex; align-items:center; gap:12px;">
@@ -1054,8 +1054,8 @@ function ResultView({
   ${result.urgent || result.doctorReviewNeeded ? `
   <section>
     <h2>${isAr ? "تنبيهات هامة" : "Important Flags"}</h2>
-    ${result.urgent ? `<div class="flag"><strong>⚠ ${isAr ? "مراجعة عاجلة:" : "Urgent review:"}</strong> ${isAr ? "يرجى التواصل مع خط الدعم في أقرب وقت." : "Please contact the support line as soon as possible."}</div>` : ""}
-    ${result.doctorReviewNeeded ? `<div class="flag" style="background:#fef3c7; border-color:#fde68a; color:#78350f;"><strong>👨‍⚕️ ${isAr ? "مراجعة الطبيب:" : "Clinician review:"}</strong> ${isAr ? "سيتم توجيه ملفك للمراجعة." : "Your file will be routed for review."}</div>` : ""}
+    ${result.urgent ? `<div class="flag"><strong> ${isAr ? "مراجعة عاجلة:" : "Urgent review:"}</strong> ${isAr ? "يرجى التواصل مع خط الدعم في أقرب وقت." : "Please contact the support line as soon as possible."}</div>` : ""}
+    ${result.doctorReviewNeeded ? `<div class="flag" style="background:#fef3c7; border-color:#fde68a; color:#78350f;"><strong> ${isAr ? "مراجعة الطبيب:" : "Clinician review:"}</strong> ${isAr ? "سيتم توجيه ملفك للمراجعة." : "Your file will be routed for review."}</div>` : ""}
   </section>` : ""}
 
   <section>

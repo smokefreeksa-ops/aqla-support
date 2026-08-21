@@ -157,7 +157,7 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
                 <div>
                   <div className="font-semibold text-base">{tool.name}</div>
                   <div className="text-sm opacity-75 mt-1">{tool.desc}</div>
-                  <div className="text-xs opacity-80 mt-1">⏱ {tool.time}</div>
+                  <div className="text-xs opacity-80 mt-1"> {tool.time}</div>
                 </div>
               </div>
             </div>
@@ -297,7 +297,7 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
                           {tool.desc}
                         </div>
                         <div className="text-xs opacity-80 mt-1">
-                          ⏱ {tool.time}
+                           {tool.time}
                         </div>
                       </div>
                     </div>
@@ -560,14 +560,14 @@ function MoneyCounter({
         </div>
         <ul className="grid gap-1 sm:grid-cols-3">
           <li>
-            ✈️ {fmt(flights)}{" "}
+             {fmt(flights)}{" "}
             {T("round-trip flights", "رحلة طيران ذهاب وعودة", lang)}
           </li>
           <li>
-            📱 {fmt(phones)} {T("new smartphones", "هاتف جديد", lang)}
+             {fmt(phones)} {T("new smartphones", "هاتف جديد", lang)}
           </li>
           <li>
-            🛒 {fmt(groceries)}{" "}
+             {fmt(groceries)}{" "}
             {T("months of family groceries", "شهر من مؤن الأسرة", lang)}
           </li>
         </ul>
@@ -2201,11 +2201,11 @@ function Shooter({
     <div className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex flex-wrap gap-4 text-sm">
-          <span>🎯 {T("Hits", "إصابات", lang)}: <b>{hits}</b></span>
-          <span>🔫 {T("Shots", "طلقات", lang)}: <b>{shots}</b></span>
-          <span>📊 {T("Accuracy", "الدقة", lang)}: <b>{accuracy}%</b></span>
-          <span>🔥 {T("Best streak", "أفضل سلسلة", lang)}: <b>{bestStreak}</b></span>
-          <span>⏱ {timeLeft}s</span>
+          <span> {T("Hits", "إصابات", lang)}: <b>{hits}</b></span>
+          <span> {T("Shots", "طلقات", lang)}: <b>{shots}</b></span>
+          <span> {T("Accuracy", "الدقة", lang)}: <b>{accuracy}%</b></span>
+          <span> {T("Best streak", "أفضل سلسلة", lang)}: <b>{bestStreak}</b></span>
+          <span> {timeLeft}s</span>
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -2214,7 +2214,7 @@ function Shooter({
             style={{ borderColor: tokens.border, background: "#fff" }}
             aria-label={muted ? "Unmute" : "Mute"}
           >
-            {muted ? "🔇" : "🔊"}
+            {muted ? T("Sound off", "الصوت مغلق", lang) : T("Sound on", "الصوت مفتوح", lang)}
           </button>
           {!running && (
             <button
@@ -2332,9 +2332,9 @@ function Shooter({
                 {T("Round complete", "انتهت الجولة", lang)}
               </div>
               <div className="text-sm space-y-1">
-                <div>🎯 {hits} / 🔫 {shots} — {accuracy}%</div>
-                <div>🔥 {T("Best streak", "أفضل سلسلة", lang)}: {bestStreak}</div>
-                <div>🏆 {T("Score", "النقاط", lang)}: {score}</div>
+                <div> {hits} /  {shots} — {accuracy}%</div>
+                <div> {T("Best streak", "أفضل سلسلة", lang)}: {bestStreak}</div>
+                <div> {T("Score", "النقاط", lang)}: {score}</div>
                 <div className="opacity-80 text-xs mt-2">
                   {T("Session best", "أفضل جلسة", lang)}: {best.score} / {best.acc}%
                 </div>
@@ -2649,13 +2649,13 @@ function ShareScore({
           className={btnBase}
           style={primary}
         >
-          🖼️ {imgBusy
+           {imgBusy
             ? T("Preparing…", "جاري التحضير…", lang)
             : T("Share image", "شارك صورة النتيجة", lang)}
         </button>
       )}
       <button type="button" onClick={() => void nativeShare()} className={btnBase} style={scoreCard ? ghost : primary}>
-        📣 {T("Share", "شارك", lang)}
+         {T("Share", "شارك", lang)}
       </button>
       <a
         href={`https://wa.me/?text=${enc}`}
@@ -2664,7 +2664,7 @@ function ShareScore({
         className={btnBase}
         style={ghost}
       >
-        🟢 WhatsApp
+         WhatsApp
       </a>
       <a
         href={`https://twitter.com/intent/tweet?text=${enc}`}

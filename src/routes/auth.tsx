@@ -82,7 +82,7 @@ function LoginPage() {
           className="rounded-2xl border border-[#006C35]/25 bg-gradient-to-br from-[#006C35]/10 to-[#00A65A]/5 p-4 text-center shadow-sm"
         >
           <p className="text-sm font-semibold leading-6 text-[#006C35]">
-            شارك تجربتك مع أضرار النيكوتين وساهم في البحث العلمي 🌱
+            شارك تجربتك مع أضرار النيكوتين وساهم في البحث العلمي 
           </p>
           <p className="mt-1 text-xs text-foreground/70">
             تسجيلك يساعدنا نفهم أكثر ونطوّر دعم الإقلاع في السعودية.

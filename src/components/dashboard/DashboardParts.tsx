@@ -78,7 +78,7 @@ export function CourseCard({ course, onStart }: { course: CourseView; onStart?: 
       <CardContent className="flex flex-1 flex-col pt-0">
         <p className="line-clamp-3 text-[13px] leading-6 text-muted-foreground">{course.summaryAr}</p>
         <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] text-muted-foreground">
-          <span>⏱ {course.durationAr}</span>
+          <span> {course.durationAr}</span>
           <span>· {course.level}</span>
           {course.score != null && <span>· النتيجة {course.score}%</span>}
         </div>

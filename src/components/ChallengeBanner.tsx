@@ -89,7 +89,7 @@ export function ChallengeBanner() {
       saveLocalDeltas(next);
       return next;
     });
-    toast.success("تم تسجيلك بنجاح ✨");
+    toast.success("تم تسجيلك بنجاح ");
     setOpen(false);
     setSending(false);
   }
