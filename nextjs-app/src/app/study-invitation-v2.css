@@ -1,4 +1,4 @@
-/* AQla study-first invitation — compact centred modal with the AQla page clearly visible around it. */
+/* AQla study-first invitation — compact centred modal with the AQla page clearly visible around it. Mobile is intentionally 60vw × 60vh so the underlying AQla page remains visible on all sides. */
 .study-v2-screen {
   --study-modal-width: 45vw;
   --study-modal-height: 60vh;
