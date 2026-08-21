@@ -94,8 +94,6 @@ export default function StudyInvitation({ overlay = false }: { overlay?: boolean
 
   function dismiss() {
     if (overlay) {
-      // Dismiss only this visit. No local/session storage is written, so the
-      // study invitation appears again whenever the entry page is visited anew.
       setVisible(false)
       return
     }
@@ -117,43 +115,17 @@ export default function StudyInvitation({ overlay = false }: { overlay?: boolean
         <img src={LOGO_URL} alt="AQla — أقلع" className="study-v2-logo" />
 
         <div className="study-v2-language" dir="ltr" aria-label="Language">
-          <button
-            type="button"
-            className={lang === 'ar' ? 'active' : ''}
-            aria-pressed={lang === 'ar'}
-            aria-label="العربية"
-            onClick={() => setLang('ar')}
-          >A</button>
+          <button type="button" className={lang === 'ar' ? 'active' : ''} aria-pressed={lang === 'ar'} aria-label="العربية" onClick={() => setLang('ar')}>A</button>
           <span aria-hidden="true" />
-          <button
-            type="button"
-            className={lang === 'en' ? 'active' : ''}
-            aria-pressed={lang === 'en'}
-            aria-label="English"
-            onClick={() => setLang('en')}
-          >E</button>
+          <button type="button" className={lang === 'en' ? 'active' : ''} aria-pressed={lang === 'en'} aria-label="English" onClick={() => setLang('en')}>E</button>
         </div>
 
         <div className="study-v2-content">
           <h1 className="study-v2-headline">{t.headline}</h1>
-
-          <p className="study-v2-explanation">
-            <span>{t.explanationTop}</span>
-            <span>{t.explanationBottom}</span>
-          </p>
-
+          <p className="study-v2-explanation"><span>{t.explanationTop}</span><span>{t.explanationBottom}</span></p>
           <p className="study-v2-incentive">{t.incentive}</p>
           <p className="study-v2-question">{t.question}</p>
-
-          <a
-            className="study-v2-primary"
-            href={REDCAP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={dismiss}
-          >
-            {t.cta}
-          </a>
+          <a className="study-v2-primary" href={REDCAP_URL} target="_blank" rel="noopener noreferrer" onClick={dismiss}>{t.cta}</a>
         </div>
 
         <div className="study-v2-details-wrap" ref={detailsRef}>
@@ -167,21 +139,12 @@ export default function StudyInvitation({ overlay = false }: { overlay?: boolean
               <section><h3>{t.contactTitle}</h3><p dir="ltr">{t.contactBody}</p></section>
             </div>
           ) : null}
-          <button
-            type="button"
-            className="study-v2-details-toggle"
-            aria-expanded={detailsOpen}
-            onClick={() => setDetailsOpen((open) => !open)}
-          >
-            {t.details} <span aria-hidden="true">{detailsOpen ? '▴' : '▾'}</span>
-          </button>
+          <button type="button" className="study-v2-details-toggle" aria-expanded={detailsOpen} onClick={() => setDetailsOpen((open) => !open)}>{t.details} <span aria-hidden="true">{detailsOpen ? '▴' : '▾'}</span></button>
         </div>
       </section>
 
       <button type="button" className="study-v2-close" aria-label={t.closeLabel} onClick={dismiss}>
-        <svg viewBox="0 0 44 44" aria-hidden="true">
-          <path d="M8 8L36 36M36 8L8 36" />
-        </svg>
+        <svg viewBox="0 0 44 44" aria-hidden="true"><path d="M8 8L36 36M36 8L8 36" /></svg>
       </button>
     </main>
   )
