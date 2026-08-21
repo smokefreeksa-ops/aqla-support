@@ -459,7 +459,7 @@ export default function HeroSection() {
               color: "rgba(255,255,255,0.92)",
             }}
           >
-            <span className="text-base" aria-hidden>{item.emoji}</span>
+            
             <span>{item.label}</span>
             <span className="text-[11px] opacity-70">جرّبها الآن ←</span>
           </button>
