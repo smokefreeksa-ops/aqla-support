@@ -87,8 +87,9 @@ export function AqlaWelcomeGate() {
     setGoogleLoading(true);
     try {
       savePostLoginRedirect();
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+      const result = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: window.location.origin },
       });
       if (result.error) {
         toast.error("تعذّر تسجيل الدخول. حاول مرة أخرى.");
