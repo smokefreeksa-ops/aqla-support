@@ -1,0 +1,14 @@
+/* Full-viewport backdrop for the study invitation overlay.
+   Keep the modal and all of its contents sharp and unchanged; only the AQla page behind it recedes. */
+.study-v2-screen.study-v2-overlay {
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Disable the previous local 2px blur patch around the modal so the backdrop treatment is uniform
+   across the full viewport and never adds an extra blur layer near the card. */
+.study-v2-screen.study-v2-overlay::before {
+  content: none;
+  display: none;
+}
