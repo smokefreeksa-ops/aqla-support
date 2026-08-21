@@ -68,13 +68,12 @@ const FEATURES = [
 ]
 
 const MODULES = [
-  { no: '01', mins: '20', ar: 'أساسيات التبغ والنيكوتين والصحة العامة', en: 'Tobacco, nicotine and public-health fundamentals', descAr: 'حقائق موثقة من WHO وCDC حول التبغ ودور المتطوع التوعوي.', descEn: 'Core tobacco and public-health concepts informed by WHO and CDC sources.' },
-  { no: '02', mins: '20', ar: 'الاعتماد والانسحاب واستخدام المنتجات', en: 'Dependence, withdrawal and product use', descAr: 'علامات الاعتماد والانسحاب والاستخدام المزدوج والفرق بين الفرز والتشخيص.', descEn: 'Dependence, withdrawal, dual use, and the difference between screening and diagnosis.' },
-  { no: '03', mins: '18', ar: 'مهارات التواصل', en: 'Communication skills', descAr: 'طلب الإذن، الأسئلة المفتوحة، الاستماع العاكس واحترام الاستقلالية.', descEn: 'Permission, open questions, reflective listening and respect for autonomy.' },
-  { no: '04', mins: '22', ar: 'الاستعداد والتخطيط للإقلاع', en: 'Readiness and quit planning', descAr: 'تقييم الاستعداد، تحديد الهدف، وتخطيط التعامل مع المحفزات.', descEn: 'Readiness, goal setting and practical trigger planning.' },
-  { no: '05', mins: '18', ar: 'الرغبة والانتكاس والدعم اللطيف', en: 'Cravings, relapse and compassionate support', descAr: 'التعامل مع الرغبة والانتكاس دون لوم أو وصم.', descEn: 'Managing cravings and relapse without blame or stigma.' },
-  { no: '06', mins: '25', ar: 'السلامة والحدود والإحالة', en: 'Safety, boundaries and referral', descAr: 'الطوارئ، حماية القصر، الحمل، الأدوية وحدود السرية.', descEn: 'Emergencies, minors, pregnancy, medication and confidentiality boundaries.' },
-  { no: '07', mins: '20', ar: 'التطبيق المجتمعي ومسارات أقلع', en: 'Community application and Aqla pathways', descAr: 'أخلاقيات الفعاليات والخصوصية والإحالة إلى المسارات المناسبة.', descEn: 'Outreach ethics, privacy and referral to appropriate pathways.' },
+  { no: '01', ar: 'افهم نمط النيكوتين', en: 'Understand your nicotine pattern', descAr: 'لاحظ توقيت الاستخدام والروتين وحدد المنتج الأساسي إذا كنت تستخدم أكثر من منتج.', descEn: 'Notice timing and routines, and identify a primary product if you use more than one.' },
+  { no: '02', ar: 'اعرف محفزاتك', en: 'Know your triggers', descAr: 'تعرف على المواقف المتكررة التي ترتبط بالاستخدام وخطط لتغيير روتين واحد في كل مرة.', descEn: 'Identify repeated situations linked to use and plan to change one routine at a time.' },
+  { no: '03', ar: 'تعامل مع الرغبة', en: 'Handle a craving', descAr: 'استخدم التأخير وتغيير المكان أو النشاط وخطوات قصيرة حتى تمر موجة الرغبة.', descEn: 'Use delay, a change of place or activity, and short practical steps while the urge passes.' },
+  { no: '04', ar: 'توقع أعراض الانسحاب', en: 'Expect withdrawal symptoms', descAr: 'افهم الأعراض الشائعة وخطط للأيام الأولى واطلب تقييمًا مهنيًا عند وجود أعراض شديدة أو مقلقة.', descEn: 'Understand common symptoms, plan for the early days, and seek professional assessment for severe or concerning symptoms.' },
+  { no: '05', ar: 'تعافَ من الزلة بسرعة', en: 'Recover quickly from a slip', descAr: 'تعامل مع الزلة كمعلومة تساعدك على تعديل الخطة بدل اعتبارها نهاية للمحاولة.', descEn: 'Treat a slip as information for adjusting the plan rather than the end of the attempt.' },
+  { no: '06', ar: 'حافظ على التقدم', en: 'Maintain progress', descAr: 'راجع المواقف عالية الخطورة وابنِ روتينًا بديلًا يمكن الاستمرار عليه واطلب الدعم عند الحاجة.', descEn: 'Review higher-risk situations, build sustainable replacement routines and seek support when needed.' },
 ]
 
 const SELF_TOOLS: Card[] = [
@@ -275,9 +274,9 @@ export default function AqlaPublicLandingInstitutional({ signedIn, latestPlanId,
 
       <section className="aqla-section">
         <div className="aqla-section-inner">
-          <SectionHeading eyebrow={ar ? 'المسار التعليمي' : 'Learning pathway'} title={ar ? 'الوحدات التعليمية' : 'Learning modules'} text={ar ? 'محتوى ثنائي اللغة مستند إلى مصادر منظمة الصحة العالمية ومراكز مكافحة الأمراض الأمريكية.' : 'Bilingual learning content informed by WHO and CDC sources.'} />
+          <SectionHeading eyebrow={ar ? 'المسار التعليمي' : 'Learning pathway'} title={ar ? 'الوحدات التعليمية' : 'Learning modules'} text={ar ? 'ست وحدات تعليمية قصيرة تعكس المحتوى المتاح حاليًا داخل أكاديمية أقلع.' : 'Six concise modules reflecting the learning content currently available in the Aqla Academy.'} />
           <div className="aqla-grid three">
-            {MODULES.map((module) => <article className="aqla-card" key={module.no}><span className="aqla-card-number">{ar ? `الوحدة ${module.no}` : `Module ${module.no}`}</span><h3>{ar ? module.ar : module.en}</h3><p>{ar ? module.descAr : module.descEn}</p><div className="aqla-meta-row"><span>{module.mins} {ar ? 'دقيقة' : 'minutes'}</span><span>{ar ? 'إرشادات عملية' : 'Practical guidance'}</span></div><Link className="aqla-card-link" href="/aqla/academy">{ar ? 'ابدأ التعلم' : 'Start learning'}</Link></article>)}
+            {MODULES.map((module) => <article className="aqla-card" key={module.no}><span className="aqla-card-number">{ar ? `الوحدة ${module.no}` : `Module ${module.no}`}</span><h3>{ar ? module.ar : module.en}</h3><p>{ar ? module.descAr : module.descEn}</p><Link className="aqla-card-link" href="/aqla/academy">{ar ? 'ابدأ التعلم' : 'Start learning'}</Link></article>)}
           </div>
         </div>
       </section>
