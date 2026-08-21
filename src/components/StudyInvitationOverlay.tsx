@@ -411,12 +411,15 @@ export function StudyInvitationOverlay() {
 
           {/* Logo */}
           <div className="flex justify-center">
-            <img
-              src={aqlaLogo}
-              alt="شعار أقلع — Aqla Logo"
-              className="h-[96px] w-auto object-contain drop-shadow-[0_10px_24px_rgba(0,0,0,0.45)] sm:h-[120px]"
-            />
+            <span className="inline-flex items-center justify-center rounded-3xl bg-[#f7fdf9] px-7 py-4 shadow-[0_14px_36px_-16px_rgba(0,0,0,0.65)] ring-1 ring-[#c9a84c]/35">
+              <img
+                src={aqlaLogo}
+                alt="شعار أقلع — Aqla Logo"
+                className="h-[80px] w-auto object-contain sm:h-[104px]"
+              />
+            </span>
           </div>
+
 
 
 
