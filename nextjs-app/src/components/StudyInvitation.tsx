@@ -11,8 +11,7 @@ const copy = {
     lang: 'ar',
     dialogLabel: 'دعوة للمشاركة في الدراسة العلمية',
     closeLabel: 'إغلاق دعوة الدراسة والمتابعة إلى أقلع',
-    headlineTop: 'شارك في',
-    headlineBottom: 'الدراسة',
+    headline: 'شارك في الدراسة',
     explanationTop: 'رأيك يهمنا في فهم دور منتجات النيكوتين الخالية من التبغ',
     explanationBottom: 'في الحد من أضرار التدخين',
     incentive: 'أكمل الاستبيان وادخل السحب للفوز بـ ٥٠٠ ريال سعودي',
@@ -35,8 +34,7 @@ const copy = {
     lang: 'en',
     dialogLabel: 'Scientific study invitation',
     closeLabel: 'Close the study invitation and continue to Aqla',
-    headlineTop: 'Take part in',
-    headlineBottom: 'the study',
+    headline: 'Take part in the study',
     explanationTop: 'Your views matter in helping us understand the role of tobacco-free nicotine products',
     explanationBottom: 'in reducing smoking-related harm',
     incentive: 'Complete the survey and enter the draw to win SAR 500',
@@ -137,10 +135,7 @@ export default function StudyInvitation({ overlay = false }: { overlay?: boolean
         </div>
 
         <div className="study-v2-content">
-          <h1 className="study-v2-headline">
-            <span>{t.headlineTop}</span>
-            <span>{t.headlineBottom}</span>
-          </h1>
+          <h1 className="study-v2-headline">{t.headline}</h1>
 
           <p className="study-v2-explanation">
             <span>{t.explanationTop}</span>
