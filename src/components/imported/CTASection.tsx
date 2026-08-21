@@ -2,20 +2,15 @@ import { ArrowLeft, CheckCircle } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 
 const benefits = [
-  "محتوى معتمد علمياً من متخصصين",
-  "مجاني تماماً بدون أي رسوم",
-  "شهادة إتمام معتمدة",
-  "دعم متواصل على مدار الساعة",
-  "7 وحدات تعليمية شاملة",
-  "أدوات تفاعلية متطورة",
+  "محتوى معتمد علمياً من متخصصين", "مجاني تماماً بدون أي رسوم", "شهادة إتمام معتمدة", "دعم متواصل على مدار الساعة", "7 وحدات تعليمية شاملة", "أدوات تفاعلية متطورة",
 ];
 
 export default function CTASection() {
   const navigate = useNavigate();
 
   return (
-    <section id="register" className="relative overflow-hidden py-24 md:py-32">
-      <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 90% 90% at 50% 40%, rgba(10,58,34,0.75) 0%, rgba(4,24,14,0.85) 55%, rgba(2,8,4,0.95) 100%)" }} />
+    <section id="register"className="relative overflow-hidden py-24 md:py-32">
+      <div className="absolute inset-0"style={{ background: "radial-gradient(ellipse 90% 90% at 50% 40%, rgba(10,58,34,0.75) 0%, rgba(4,24,14,0.85) 55%, rgba(2,8,4,0.95) 100%)" }} />
       <div
         className="absolute inset-0 opacity-10 pointer-events-none"
         style={{
@@ -25,8 +20,7 @@ export default function CTASection() {
         }}
       />
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full opacity-20 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse, #93c5fd 0%, transparent 70%)" }}
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full opacity-20 pointer-events-none"style={{ background: "radial-gradient(ellipse, #93c5fd 0%, transparent 70%)" }}
       />
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
@@ -34,9 +28,7 @@ export default function CTASection() {
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/15 rounded-full border border-white/25 mb-6">
               <img
-                src="/aqla-logo.png"
-                alt="Aqla"
-                className="w-5 h-5 object-contain brightness-0 invert"
+                src="/aqla-logo.png"alt="Aqla"className="w-5 h-5 object-contain brightness-0 invert"
               />
               <span className="text-sm font-bold text-white">انضم إلى برنامج أقلع</span>
             </div>

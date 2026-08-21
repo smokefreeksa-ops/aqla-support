@@ -1,63 +1,35 @@
 // Aqla Release 1 — clinical domain types (behavioural only).
 
-export type Jurisdiction = "SA" | "GENERIC";
+export type Jurisdiction = "SA"| "GENERIC";
 
-export type AgeBand = "under_18" | "18_24" | "25_39" | "40_59" | "60_plus";
+export type AgeBand = "under_18"| "18_24"| "25_39"| "40_59"| "60_plus";
 
 export type ProductKey =
-  | "cigarettes"
-  | "vape"
-  | "shisha"
-  | "pouches"
-  | "heated"
-  | "other";
+  | "cigarettes"| "vape"| "shisha"| "pouches"| "heated"| "other";
 
-export type CardiacState = "none" | "stable" | "recent_event" | "active_symptoms";
+export type CardiacState = "none"| "stable"| "recent_event"| "active_symptoms";
 
-export type MentalHealthState = "none" | "stable" | "unstable";
+export type MentalHealthState = "none"| "stable"| "unstable";
 
 /** Six-level safety ladder. Ordered from lowest to highest. */
 export type SafetyGateLevel =
-  | "self_management"
-  | "pharmacist"
-  | "cessation_specialist"
-  | "clinician"
-  | "urgent"
-  | "emergency";
+  | "self_management"| "pharmacist"| "cessation_specialist"| "clinician"| "urgent"| "emergency";
 
 export const SAFETY_LEVEL_ORDER: SafetyGateLevel[] = [
-  "self_management",
-  "pharmacist",
-  "cessation_specialist",
-  "clinician",
-  "urgent",
-  "emergency",
+  "self_management", "pharmacist", "cessation_specialist", "clinician", "urgent", "emergency",
 ];
 
 export type QuitStrategy =
-  | "quit_now"
-  | "future_date"
-  | "reduce_to_quit"
-  | "not_ready_yet";
+  | "quit_now"| "future_date"| "reduce_to_quit"| "not_ready_yet";
 
 export type DependenceStatus =
-  | "ftnd_scored"
-  | "ftnd_declined"
-  | "descriptive_only";
+  | "ftnd_scored"| "ftnd_declined"| "descriptive_only";
 
 export type PlanVariant =
-  | "adult_standard"
-  | "adolescent"
-  | "pregnancy"
-  | "emergency_hold";
+  | "adult_standard"| "adolescent"| "pregnancy"| "emergency_hold";
 
 export type EmailStatus =
-  | "not_requested"
-  | "consented_pending"
-  | "sent"
-  | "failed"
-  | "provider_unavailable"
-  | "disabled_minor";
+  | "not_requested"| "consented_pending"| "sent"| "failed"| "provider_unavailable"| "disabled_minor";
 
 /** Raw answers collected by the conversational runner. */
 export interface ClinicalAnswers {
@@ -68,8 +40,8 @@ export interface ClinicalAnswers {
   privacy_ack?: boolean;
 
   age_band?: AgeBand;
-  sex?: "male" | "female" | "prefer_not";
-  pregnancy?: "pregnant" | "breastfeeding" | "neither";
+  sex?: "male"| "female"| "prefer_not";
+  pregnancy?: "pregnant"| "breastfeeding"| "neither";
 
   products?: ProductKey[];
 
@@ -119,7 +91,7 @@ export interface PlanSection {
 }
 
 export interface LapsePathway {
-  id: "one_puff" | "one_cigarette" | "one_day" | "regular_relapse";
+  id: "one_puff"| "one_cigarette"| "one_day"| "regular_relapse";
   title_ar: string;
   title_en: string;
   trigger_ar: string;

@@ -13,7 +13,7 @@ export default function InteractiveToolsSection() {
   const go = () => navigate({ to: "/craving-coach" });
 
   return (
-    <section id="interactive" className="saudi-map-section py-20 md:py-32">
+    <section id="interactive"className="saudi-map-section py-20 md:py-32">
       <div className="saudi-map-content container mx-auto px-4 md:px-6 max-w-7xl">
         <div className="mb-16 md:mb-20">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 mb-6">

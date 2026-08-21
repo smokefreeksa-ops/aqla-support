@@ -25,10 +25,7 @@ function FaqPage() {
 
   return (
     <SimpleContentPage
-      titleAr="الأسئلة الشائعة"
-      titleEn="Frequently Asked Questions"
-      introAr="إجابات سريعة على أكثر الأسئلة شيوعًا حول منصة أقلع."
-      introEn="Quick answers to the most common questions about the Aqla platform."
+      titleAr="الأسئلة الشائعة"titleEn="Frequently Asked Questions"introAr="إجابات سريعة على أكثر الأسئلة شيوعًا حول منصة أقلع."introEn="Quick answers to the most common questions about the Aqla platform."
       sectionsAr={sections.map((s) => ({ heading: s.q, body: s.a }))}
       sectionsEn={sectionsEn.map((s) => ({ heading: s.q, body: s.a }))}
     />

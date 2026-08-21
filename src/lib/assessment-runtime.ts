@@ -3,7 +3,7 @@
 // Shared helpers for the academy quizzes and the volunteer-training final exam.
 //
 // Design goals (from the professional-assessment spec):
-//   1. Correct answers are stored by STABLE KEY (e.g. "a" / "b" / "c"), never by
+//   1. Correct answers are stored by STABLE KEY (e.g. "a"/ "b"/ "c"), never by
 //      display position. Options are shuffled per-attempt at serve time; scoring
 //      matches on the key that travels with the option, so shuffling can never
 //      change which answer is correct.
@@ -25,7 +25,7 @@ export type AnswerOption = {
   en: string;
 };
 
-export type QuestionDifficulty = "foundational" | "intermediate" | "advanced";
+export type QuestionDifficulty = "foundational"| "intermediate"| "advanced";
 
 export type AssessmentQuestion = {
   /** Stable question identifier (e.g. "acad.m1.q3"). Used server-side for scoring. */

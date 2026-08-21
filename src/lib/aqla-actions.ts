@@ -48,7 +48,7 @@ export const ROUTE_ACTIONS: Record<string, string> = {
 };
 
 // Map a raw route path returned by the assistant to a labelled button.
-export function routeToButton(route: string, lang: "ar" | "en"): AqlaButton | null {
+export function routeToButton(route: string, lang: "ar"| "en"): AqlaButton | null {
   const entry = Object.entries(ROUTE_ACTIONS).find(([, r]) => r === route);
   if (!entry) return null;
   const [action] = entry;

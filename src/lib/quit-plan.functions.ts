@@ -32,8 +32,7 @@ function emailConfig() {
       error: !apiKey && !from
         ? "EMAIL_PROVIDER_API_KEY and EMAIL_FROM_ADDRESS not configured"
         : !apiKey
-          ? "EMAIL_PROVIDER_API_KEY not configured"
-          : "EMAIL_FROM_ADDRESS not configured",
+          ? "EMAIL_PROVIDER_API_KEY not configured": "EMAIL_FROM_ADDRESS not configured",
     };
   }
   return { ok: true as const, apiKey, from };
@@ -59,7 +58,7 @@ async function sendEmail(to: string, subject: string, html: string): Promise<{ s
 
 async function logPlanEmail(input: {
   quitPlanId: string;
-  recipientType: "user" | "admin";
+  recipientType: "user"| "admin";
   email: string;
   subject: string;
   sent: boolean;
@@ -70,7 +69,7 @@ async function logPlanEmail(input: {
     recipient_type: input.recipientType,
     email: input.email,
     subject: input.subject,
-    status: input.sent ? "sent" : input.error?.includes("not configured") ? "pending_provider_setup" : "failed",
+    status: input.sent ? "sent": input.error?.includes("not configured") ? "pending_provider_setup": "failed",
     error_message: input.error,
   });
 }
@@ -81,7 +80,7 @@ function listHtml(items: string[]): string {
 
 function userPlanEmailHtml(plan: QuitPlanJSON, planUrl: string): string {
   const refsList = plan.references.map((r, i) => `<li>${i + 1}. ${escapeHtml(r.full)}</li>`).join("");
-  return `<div dir="rtl" style="font-family:Tahoma,Arial,sans-serif;font-size:14px;line-height:1.85;color:#1f2933;max-width:720px;margin:auto;background:#fff">
+  return `<div dir="rtl"style="font-family:Tahoma,Arial,sans-serif;font-size:14px;line-height:1.85;color:#1f2933;max-width:720px;margin:auto;background:#fff">
     <h1 style="color:#0b6e4f;font-size:22px;margin:0 0 6px">${escapeHtml(plan.title)}</h1>
     <p style="color:#556;margin:0 0 18px">السلام عليكم ${escapeHtml(plan.identity.nickname)}، تم إنشاء خطتك الشخصية في أقلع بناءً على إجاباتك.</p>
     <table style="border-collapse:collapse;width:100%;margin:12px 0;background:#fafafa">
@@ -96,7 +95,7 @@ function userPlanEmailHtml(plan: QuitPlanJSON, planUrl: string): string {
     <h2 style="color:#0b6e4f;font-size:16px;margin-top:18px">محفزاتك الأساسية</h2><ul>${listHtml(plan.triggers)}</ul>
     <h2 style="color:#0b6e4f;font-size:16px;margin-top:18px">خطة التعامل مع المحفزات</h2><ul>${listHtml(plan.trigger_plan)}</ul>
     <h2 style="color:#0b6e4f;font-size:16px;margin-top:18px">خطة الرغبة الشديدة</h2><ul>${listHtml(plan.craving_rescue)}</ul>
-    <p style="margin:22px 0"><a href="${planUrl}" style="background:#0b6e4f;color:#fff;padding:12px 18px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:bold">عرض الخطة الكاملة وتحميل خطة أقلع PDF</a></p>
+    <p style="margin:22px 0"><a href="${planUrl}"style="background:#0b6e4f;color:#fff;padding:12px 18px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:bold">عرض الخطة الكاملة وتحميل خطة أقلع PDF</a></p>
     <p style="color:#667085;font-size:12px">إذا لم يعمل الزر، انسخ الرابط: ${planUrl}</p>
     <div style="background:#fff7e6;border:1px solid #f0c36a;border-radius:6px;padding:10px;margin-top:14px;font-size:12px;color:#7a4b00">${escapeHtml(plan.pharmacy_discussion.intro)}</div>
     <div style="background:#fdecea;border-radius:6px;padding:10px;color:#8a1a1a;font-size:12px;margin-top:12px">${escapeHtml(plan.emergency_disclaimer)}</div>
@@ -109,25 +108,18 @@ function adminPlanEmailHtml(plan: QuitPlanJSON, intake: QuitPlanIntake, planId: 
     "name/nickname": intake.nickname,
     email: intake.email,
     city: intake.city,
-    "product type": plan.use.product_ar,
-    "assessment tool": plan.assessment.instrument_label_ar,
-    "score band": `${plan.assessment.band_ar} (${plan.assessment.band})`,
-    "validated": plan.assessment.validated,
-    "risk flag": plan.assessment.risk_flag,
+    "product type": plan.use.product_ar, "assessment tool": plan.assessment.instrument_label_ar, "score band": `${plan.assessment.band_ar} (${plan.assessment.band})`, "validated": plan.assessment.validated, "risk flag": plan.assessment.risk_flag,
     goal: plan.goal.label_ar,
-    "quit/reduction date": plan.dates.quit_or_reduce_date ?? "—",
-    "follow-up preference": plan.followup_preference_ar,
-    "plan link": planUrl,
-    "created date": plan.meta.generated_at,
+    "quit/reduction date": plan.dates.quit_or_reduce_date ?? "—", "follow-up preference": plan.followup_preference_ar, "plan link": planUrl, "created date": plan.meta.generated_at,
   };
   const htmlRows = Object.entries(rows)
     .map(([k, v]) => `<tr><td style="padding:7px 10px;border-bottom:1px solid #e5e7eb;color:#555"><b>${escapeHtml(k)}</b></td><td style="padding:7px 10px;border-bottom:1px solid #e5e7eb">${escapeHtml(v)}</td></tr>`)
     .join("");
-  return `<div dir="rtl" style="font-family:Tahoma,Arial,sans-serif;font-size:14px;line-height:1.7;color:#1f2933;max-width:720px;margin:auto;background:#fff">
+  return `<div dir="rtl"style="font-family:Tahoma,Arial,sans-serif;font-size:14px;line-height:1.7;color:#1f2933;max-width:720px;margin:auto;background:#fff">
     <h1 style="color:#0b6e4f;font-size:20px;margin:0 0 12px">تم إنشاء خطة إقلاع جديدة في أقلع</h1>
     <p>ملخص إداري محدود للخطة رقم ${escapeHtml(planId)}. لا يتضمن تفاصيل صحية خاصة أو الإجابات الخام.</p>
-    <table dir="ltr" style="border-collapse:collapse;width:100%;margin:12px 0;background:#fafafa;text-align:left">${htmlRows}</table>
-    <p><a href="${planUrl}" style="color:#0b6e4f;font-weight:bold">Open plan</a></p>
+    <table dir="ltr"style="border-collapse:collapse;width:100%;margin:12px 0;background:#fafafa;text-align:left">${htmlRows}</table>
+    <p><a href="${planUrl}"style="color:#0b6e4f;font-weight:bold">Open plan</a></p>
   </div>`;
 }
 
@@ -231,11 +223,7 @@ export const finalizeQuitPlan = createServerFn({ method: "POST" })
           craving_pattern: z.string().optional(),
           previous_quit_attempts: z.string().optional(),
           readiness: z.enum([
-            "quit_now",
-            "quit_prepare",
-            "reduce_first",
-            "not_ready_score",
-            "discuss_alternatives",
+            "quit_now", "quit_prepare", "reduce_first", "not_ready_score", "discuss_alternatives",
           ]),
           goal: z.enum(["quit_full", "reduce_first", "understand", "not_ready_now"]),
           quit_date: z.string().nullable().optional(),
@@ -392,7 +380,6 @@ export const scheduleReminder = createServerFn({ method: "POST" })
       ok: true,
       scheduledFor: d.toISOString(),
       message: dispatcherReady
-        ? "تم جدولة التذكير."
-        : "تم حفظ التذكير، وسيتم تفعيله عند اكتمال إعداد الإرسال.",
+        ? "تم جدولة التذكير.": "تم حفظ التذكير، وسيتم تفعيله عند اكتمال إعداد الإرسال.",
     };
   });

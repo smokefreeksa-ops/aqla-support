@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 
 type PathItem = {
-  to: "/quit-pathway" | "/learn-train" | "/help-pathway" | "/challenge-pathway";
+  to: "/quit-pathway"| "/learn-train"| "/help-pathway"| "/challenge-pathway";
   title: string;
   description: string;
   cta: string;
@@ -151,7 +151,7 @@ export function CinematicHero({ isAr }: Props) {
           onClick={() => setStage(3)}
           className="absolute right-4 top-4 z-20 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[11px] font-medium text-white/80 backdrop-blur-md transition hover:bg-white/10 hover:text-white"
         >
-          {isAr ? "تخطي المقدمة" : "Skip intro"}
+          {isAr ? "تخطي المقدمة": "Skip intro"}
         </button>
       )}
 
@@ -180,10 +180,9 @@ export function CinematicHero({ isAr }: Props) {
                 tabIndex={i === pathIdx ? 0 : -1}
                 className={`group absolute inset-0 block rounded-3xl border border-white/10 bg-white/[0.06] p-5 text-center backdrop-blur-2xl shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)] transition-all duration-[900ms] ease-out ${
                   i === pathIdx
-                    ? "opacity-100 scale-100 blur-0 pointer-events-auto"
-                    : "opacity-0 scale-95 blur-sm pointer-events-none"
+                    ? "opacity-100 scale-100 blur-0 pointer-events-auto": "opacity-0 scale-95 blur-sm pointer-events-none"
                 }`}
-                style={{ direction: isAr ? "rtl" : "ltr" }}
+                style={{ direction: isAr ? "rtl": "ltr" }}
               >
                 <div className="mx-auto mb-3 grid h-8 w-8 place-items-center rounded-full bg-white/10">
                   <span className="aqla-emblem-dot" />
@@ -203,8 +202,7 @@ export function CinematicHero({ isAr }: Props) {
 
             {/* Autoplay progress bar */}
             <div
-              className="absolute left-1/2 -translate-x-1/2 h-[2px] w-24 overflow-hidden rounded-full bg-white/10"
-              style={{ top: "calc(100% + 14px)" }}
+              className="absolute left-1/2 -translate-x-1/2 h-[2px] w-24 overflow-hidden rounded-full bg-white/10"style={{ top: "calc(100% + 14px)" }}
             >
               <div
                 className="h-full bg-white/80 transition-[width] duration-100 ease-linear"
@@ -214,8 +212,7 @@ export function CinematicHero({ isAr }: Props) {
 
             {/* Pager dots */}
             <div
-              className="absolute left-1/2 -translate-x-1/2 flex gap-1.5"
-              style={{ top: "calc(100% + 26px)" }}
+              className="absolute left-1/2 -translate-x-1/2 flex gap-1.5"style={{ top: "calc(100% + 26px)" }}
             >
               {PATHS.map((_, i) => (
                 <button
@@ -226,7 +223,7 @@ export function CinematicHero({ isAr }: Props) {
                   }}
                   aria-label={`Slide ${i + 1}`}
                   className={`h-1.5 rounded-full transition-all ${
-                    i === pathIdx ? "w-6 bg-white" : "w-1.5 bg-white/30 hover:bg-white/60"
+                    i === pathIdx ? "w-6 bg-white": "w-1.5 bg-white/30 hover:bg-white/60"
                   }`}
                 />
               ))}
@@ -237,7 +234,7 @@ export function CinematicHero({ isAr }: Props) {
 
       <div
         className={`relative mx-auto max-w-3xl px-4 pt-20 pb-12 sm:pt-28 sm:pb-16 aqla-text-drift ${
-          isAr ? "text-right" : "text-left"
+          isAr ? "text-right": "text-left"
         } md:text-center`}
       >
 
@@ -248,14 +245,13 @@ export function CinematicHero({ isAr }: Props) {
             stage >= 1 && !dissolved
               ? "opacity-100 translate-y-0 blur-0"
               : stage === 0
-              ? "opacity-0 translate-y-4 blur-md"
-              : "opacity-0 -translate-y-2 blur-md scale-105"
+              ? "opacity-0 translate-y-4 blur-md": "opacity-0 -translate-y-2 blur-md scale-105"
           }`}
           style={{
             textShadow: "0 0 60px rgba(255,255,255,0.25)",
           }}
         >
-          {isAr ? "أقلع" : "Aqla"}
+          {isAr ? "أقلع": "Aqla"}
         </h1>
 
         {/* Supervisor line */}
@@ -264,14 +260,12 @@ export function CinematicHero({ isAr }: Props) {
             stage >= 2 && !dissolved
               ? "opacity-100 translate-y-0 blur-0"
               : stage < 2
-              ? "opacity-0 translate-y-3 blur-sm"
-              : "opacity-0 -translate-y-1 blur-sm"
+              ? "opacity-0 translate-y-3 blur-sm": "opacity-0 -translate-y-1 blur-sm"
           }`}
-          style={{ transitionDelay: stage >= 2 && !dissolved ? "0ms" : "0ms" }}
+          style={{ transitionDelay: stage >= 2 && !dissolved ? "0ms": "0ms" }}
         >
           {isAr
-            ? "بإشراف سعادة الدكتور مالك عبدالملك الذبياني وفريق من الأخصائيين المدربين."
-            : "Supervised by Dr. Malik Abdulmalik AlThubayani and a team of trained specialists."}
+            ? "بإشراف سعادة الدكتور مالك عبدالملك الذبياني وفريق من الأخصائيين المدربين.": "Supervised by Dr. Malik Abdulmalik AlThubayani and a team of trained specialists."}
         </p>
 
         {/* Mission paragraph */}
@@ -280,14 +274,12 @@ export function CinematicHero({ isAr }: Props) {
             stage >= 2 && !dissolved
               ? "opacity-100 translate-y-0 blur-0"
               : stage < 2
-              ? "opacity-0 translate-y-3 blur-sm"
-              : "opacity-0 -translate-y-1 blur-sm"
+              ? "opacity-0 translate-y-3 blur-sm": "opacity-0 -translate-y-1 blur-sm"
           }`}
-          style={{ transitionDelay: stage >= 2 && !dissolved ? "250ms" : "0ms" }}
+          style={{ transitionDelay: stage >= 2 && !dissolved ? "250ms": "0ms" }}
         >
           {isAr
-            ? "في أقلع، نضع صحة الإنسان وجودة الحياة في قلب رسالتنا، ونسعى لجعل أول خطوة للإقلاع أسهل، وأقرب، وأكثر إنسانية — بما يتماشى مع مستهدفات رؤية المملكة 2030 بقيادة صاحب السمو الملكي الأمير محمد بن سلمان بن عبدالعزيز آل سعود."
-            : "At Aqla, we place human health and quality of life at the heart of our mission, striving to make the first step toward cessation easier, closer, and more humane — in alignment with Vision 2030 under HRH Crown Prince Mohammed bin Salman."}
+            ? "في أقلع، نضع صحة الإنسان وجودة الحياة في قلب رسالتنا، ونسعى لجعل أول خطوة للإقلاع أسهل، وأقرب، وأكثر إنسانية — بما يتماشى مع مستهدفات رؤية المملكة 2030 بقيادة صاحب السمو الملكي الأمير محمد بن سلمان بن عبدالعزيز آل سعود.": "At Aqla, we place human health and quality of life at the heart of our mission, striving to make the first step toward cessation easier, closer, and more humane — in alignment with Vision 2030 under HRH Crown Prince Mohammed bin Salman."}
         </p>
 
       </div>

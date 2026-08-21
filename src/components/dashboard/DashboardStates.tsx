@@ -21,10 +21,9 @@ export function DashboardError({ onRetry }: { onRetry: () => void }) {
       <p className="mt-1 text-[13px] text-muted-foreground">تحقق من اتصالك ثم أعد المحاولة.</p>
       <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
         <Button size="sm" onClick={onRetry}>إعادة المحاولة</Button>
-        <BackButton fallback="/" labelAr="الرئيسية" labelEn="Home" textAr="العودة" textEn="Go back" />
+        <BackButton fallback="/"labelAr="الرئيسية"labelEn="Home"textAr="العودة"textEn="Go back" />
         <Link
-          to="/"
-          className="inline-flex items-center rounded-full border border-border/60 bg-background/60 px-3.5 py-1.5 text-sm font-medium text-foreground/80 hover:bg-accent"
+          to="/"className="inline-flex items-center rounded-full border border-border/60 bg-background/60 px-3.5 py-1.5 text-sm font-medium text-foreground/80 hover:bg-accent"
         >
           الرئيسية
         </Link>

@@ -29,7 +29,7 @@ function Section({ title, items }: { title: string; items: string[] }) {
 
 export function SafetyCard({ plan }: { plan: ClinicalPlanJSON }) {
   const s = LEVEL_STYLES[plan.safety.level];
-  const Icon = plan.safety.level === "emergency" ? ShieldAlert : plan.safety.level === "urgent" ? AlertTriangle : Info;
+  const Icon = plan.safety.level === "emergency"? ShieldAlert : plan.safety.level === "urgent" ? AlertTriangle : Info;
   return (
     <div className={`rounded-2xl ${s.bg} ring-2 ${s.ring} p-4 print:break-inside-avoid`}>
       <div className={`flex items-center gap-2 font-bold ${s.text}`}>
@@ -55,7 +55,7 @@ export function SafetyCard({ plan }: { plan: ClinicalPlanJSON }) {
  */
 export function ClinicalPlanView({ plan }: { plan: ClinicalPlanJSON }) {
   return (
-    <div dir="rtl" className="space-y-3 text-right">
+    <div dir="rtl"className="space-y-3 text-right">
       <SafetyCard plan={plan} />
 
       {plan.safety.suppress_plan ? (
@@ -75,9 +75,7 @@ export function ClinicalPlanView({ plan }: { plan: ClinicalPlanJSON }) {
                 </span>
               ) : (
                 <span>
-                  {plan.dependence_status === "ftnd_declined"
-                    ? "تم تخطي اختبار الاعتماد بناءً على اختيارك."
-                    : "لم يُستخدم مقياس اعتماد رقمي — الوصف فقط."}
+                  {plan.dependence_status === "ftnd_declined"? "تم تخطي اختبار الاعتماد بناءً على اختيارك.": "لم يُستخدم مقياس اعتماد رقمي — الوصف فقط."}
                 </span>
               )}
               {plan.dependence.descriptive_notes.map((n, i) => (
@@ -147,11 +145,11 @@ export function ClinicalPlanView({ plan }: { plan: ClinicalPlanJSON }) {
         <summary className="cursor-pointer font-semibold text-[#0b3a25]">المراجع ومعلومات الإصدار</summary>
         <ul className="mt-2 space-y-1">
           {plan.references.map((r, i) => (
-            <li key={i} dir="ltr" className="text-left">{r}</li>
+            <li key={i} dir="ltr"className="text-left">{r}</li>
           ))}
         </ul>
-        <p className="mt-2" dir="ltr">
-          {plan.clinical_rule_version} · {plan.schema_version} · v{plan.plan_version} ·{" "}
+        <p className="mt-2"dir="ltr">
+          {plan.clinical_rule_version} · {plan.schema_version} · v{plan.plan_version} ·{""}
           {plan.jurisdiction} · medication content: excluded
         </p>
       </details>

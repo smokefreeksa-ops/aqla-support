@@ -69,8 +69,7 @@ export function FloatingWhatsAppButton({ forceVisible = false }: { forceVisible?
     const message = "السلام عليكم، أرغب في التواصل مع فريق أقلع بخصوص دعم الإقلاع عن التدخين أو النيكوتين.";
     window.open(
       `https://wa.me/966555096412?text=${encodeURIComponent(message)}`,
-      "_blank",
-      "noopener,noreferrer",
+      "_blank", "noopener,noreferrer",
     );
     setMenuOpen(false);
   };
@@ -86,8 +85,7 @@ export function FloatingWhatsAppButton({ forceVisible = false }: { forceVisible?
       ref={ref}
       style={{ ...style, zIndex: 40 }}
       onPointerDown={handlePointerDown}
-      className="group"
-      dir="rtl"
+      className="group"dir="rtl"
     >
       <div className="flex flex-col items-end gap-1.5">
         {/* Contact options popup */}
@@ -98,16 +96,14 @@ export function FloatingWhatsAppButton({ forceVisible = false }: { forceVisible?
           >
             <div className="flex items-center justify-between gap-2 border-b border-[#0b3a25]/10 pb-2">
               <span
-                className="text-sm font-semibold text-[#0b3a25]"
-                style={{ unicodeBidi: "plaintext" }}
+                className="text-sm font-semibold text-[#0b3a25]"style={{ unicodeBidi: "plaintext" }}
               >
                 تواصل معنا
               </span>
               <button
                 type="button"
                 onClick={() => setMenuOpen(false)}
-                className="rounded p-1 hover:bg-[#0b3a25]/10"
-                aria-label="إغلاق"
+                className="rounded p-1 hover:bg-[#0b3a25]/10"aria-label="إغلاق"
               >
                 <X className="h-4 w-4 text-[#0b3a25]" />
               </button>
@@ -135,9 +131,7 @@ export function FloatingWhatsAppButton({ forceVisible = false }: { forceVisible?
         <button
           type="button"
           onClick={handleButtonClick}
-          dir="rtl"
-          className="inline-flex max-w-[min(18rem,70vw)] items-center gap-2 rounded-full bg-[#0b3a25] px-4 py-2.5 text-sm font-semibold text-[#f4f0e1] shadow-lg transition hover:bg-[#0e4a30] focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/50"
-          style={{ unicodeBidi: "plaintext" }}
+          dir="rtl"className="inline-flex max-w-[min(18rem,70vw)] items-center gap-2 rounded-full bg-[#0b3a25] px-4 py-2.5 text-sm font-semibold text-[#f4f0e1] shadow-lg transition hover:bg-[#0e4a30] focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/50"style={{ unicodeBidi: "plaintext" }}
         >
           <Phone className="h-4 w-4 shrink-0" />
           <span className="text-right leading-snug">{MAIN_LINE}</span>

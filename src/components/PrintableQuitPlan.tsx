@@ -61,10 +61,7 @@ export function PrintableQuitPlan({ data }: { data: PrintableQuitPlanData }) {
 
   return (
     <div
-      id="aqla-print-area"
-      dir="rtl"
-      className="hidden print:block bg-white text-slate-900 p-8 max-w-4xl mx-auto text-right"
-      style={{ fontFamily: "Tajawal, Cairo, system-ui, sans-serif" }}
+      id="aqla-print-area"dir="rtl"className="hidden print:block bg-white text-slate-900 p-8 max-w-4xl mx-auto text-right"style={{ fontFamily: "Tajawal, Cairo, system-ui, sans-serif" }}
     >
       {/* Header */}
       <div className="border-b-4 border-blue-900 pb-4 mb-6">
@@ -103,8 +100,7 @@ export function PrintableQuitPlan({ data }: { data: PrintableQuitPlanData }) {
             <p className="mt-2">
               <span className="font-bold">الخطة الطبية الموصى بها:</span> للسيطرة على الأعراض
               الانسحابية الشديدة، يُنصح بشدة باستخدام العلاج ببدائل النيكوتين (NRT) المزدوج. استخدم
-              "لصقات النيكوتين" (عيار 21 ملغ) كجرعة أساسية طوال اليوم، مع استخدام "علكة النيكوتين"
-              (عيار 2 ملغ) عند نوبات الرغبة الشديدة والمفاجئة.{" "}
+              "لصقات النيكوتين"(عيار 21 ملغ) كجرعة أساسية طوال اليوم، مع استخدام "علكة النيكوتين"(عيار 2 ملغ) عند نوبات الرغبة الشديدة والمفاجئة.{" "}
               <span className="text-slate-600">
                 (يرجى استشارة طبيبك أو الصيدلي لتأكيد الجرعات).
               </span>

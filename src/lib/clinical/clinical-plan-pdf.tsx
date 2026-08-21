@@ -78,7 +78,7 @@ export function ClinicalPlanPdf({ plan }: { plan: ClinicalPlanJSON }) {
               {plan.identity.city ? ` — ${plan.identity.city}` : ""}
             </Text>
             <Text style={s.meta}>
-              الإصدار {plan.plan_version} • {plan.clinical_rule_version} •{" "}
+              الإصدار {plan.plan_version} • {plan.clinical_rule_version} •{""}
               {new Date(plan.generated_at).toISOString().slice(0, 10)}
             </Text>
           </View>

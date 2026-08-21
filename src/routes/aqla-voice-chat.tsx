@@ -20,7 +20,7 @@ export const Route = createFileRoute("/aqla-voice-chat")({
   }),
 });
 
-type Msg = { role: "user" | "assistant"; content: string };
+type Msg = { role: "user"| "assistant"; content: string };
 
 type SR = {
   lang: string;
@@ -195,7 +195,7 @@ function AqlaVoiceChatPage() {
   }
 
   return (
-    <div dir="rtl" className="min-h-screen bg-gradient-to-b from-background to-muted/30">
+    <div dir="rtl"className="min-h-screen bg-gradient-to-b from-background to-muted/30">
       <div className="mx-auto max-w-2xl px-4 py-8">
         <header className="mb-6 text-right">
           <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs text-primary">
@@ -206,7 +206,7 @@ function AqlaVoiceChatPage() {
             مساعد أقلع الصوتي
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            دعم سريع للرغبة وتمارين تنفّس. لا يُغني عن{" "}
+            دعم سريع للرغبة وتمارين تنفّس. لا يُغني عن{""}
             <Link
               to={appRoutes.aqlaQuitEngine}
               className="font-medium text-primary underline-offset-2 hover:underline"
@@ -227,9 +227,7 @@ function AqlaVoiceChatPage() {
                 key={i}
                 dir="rtl"
                 className={`max-w-[88%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
-                  m.role === "user"
-                    ? "mr-auto bg-primary text-primary-foreground"
-                    : "ml-auto bg-muted text-foreground"
+                  m.role === "user"? "mr-auto bg-primary text-primary-foreground": "ml-auto bg-muted text-foreground"
                 }`}
                 style={{ textAlign: "right" }}
               >
@@ -250,14 +248,12 @@ function AqlaVoiceChatPage() {
 
           <div className="flex items-center justify-between gap-3 border-t border-border bg-background/60 p-3">
             <Button
-              type="button"
-              variant="ghost"
-              size="icon"
+              type="button"variant="ghost"size="icon"
               onClick={toggleMute}
-              aria-label={muted ? "تشغيل الصوت" : "كتم الصوت"}
-              title={muted ? "تشغيل الصوت" : "كتم الصوت"}
+              aria-label={muted ? "تشغيل الصوت": "كتم الصوت"}
+              title={muted ? "تشغيل الصوت": "كتم الصوت"}
             >
-              {muted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+              {muted ? <VolumeX className="h-5 w-5"/> : <Volume2 className="h-5 w-5" />}
             </Button>
 
             <div className="flex flex-1 items-center justify-center">
@@ -265,22 +261,21 @@ function AqlaVoiceChatPage() {
                 type="button"
                 onClick={listening ? stopListening : startListening}
                 disabled={!supported || thinking}
-                aria-label={listening ? "إيقاف التسجيل" : "ابدأ التحدّث"}
+                aria-label={listening ? "إيقاف التسجيل": "ابدأ التحدّث"}
                 className={`relative inline-flex h-16 w-16 items-center justify-center rounded-full shadow-lg transition focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50 ${
                   listening
-                    ? "bg-destructive text-destructive-foreground"
-                    : "bg-primary text-primary-foreground hover:scale-105"
+                    ? "bg-destructive text-destructive-foreground": "bg-primary text-primary-foreground hover:scale-105"
                 }`}
               >
                 {listening && (
                   <span className="absolute inset-0 animate-ping rounded-full bg-destructive/40" />
                 )}
-                {listening ? <MicOff className="h-7 w-7" /> : <Mic className="h-7 w-7" />}
+                {listening ? <MicOff className="h-7 w-7"/> : <Mic className="h-7 w-7" />}
               </button>
             </div>
 
             <div className="w-10 text-center text-[10px] text-muted-foreground">
-              {speaking ? "يتحدّث…" : listening ? "أستمع…" : "جاهز"}
+              {speaking ? "يتحدّث…": listening ? "أستمع…": "جاهز"}
             </div>
           </div>
         </div>
@@ -298,7 +293,7 @@ function AqlaVoiceChatPage() {
             <li>المساعد للدعم التثقيفي فقط ولا يقدّم تشخيصًا أو وصفة دوائية.</li>
             <li>للطوارئ (ألم صدر شديد، ضيق تنفس، أفكار إيذاء): اتصل بـ 997 فورًا.</li>
             <li>
-              لبناء خطة كاملة افتح{" "}
+              لبناء خطة كاملة افتح{""}
               <Link to={appRoutes.aqlaQuitEngine} className="text-primary underline-offset-2 hover:underline">
                 محرّك أقلع الشخصي
               </Link>

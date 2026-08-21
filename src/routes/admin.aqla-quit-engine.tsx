@@ -15,7 +15,7 @@ function Page() {
   });
 
   return (
-    <main dir="rtl" className="min-h-screen bg-slate-50 p-6 text-right">
+    <main dir="rtl"className="min-h-screen bg-slate-50 p-6 text-right">
       <h1 className="text-2xl font-extrabold text-blue-900 mb-6">لوحة محرك خطة الإقلاع الشخصية</h1>
       {isLoading && <p>جاري التحميل...</p>}
       {data && (

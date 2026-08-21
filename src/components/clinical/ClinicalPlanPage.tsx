@@ -65,7 +65,7 @@ export function ClinicalPlanPage({ plan, planToken }: { plan: ClinicalPlanJSON; 
   }
 
   return (
-    <div dir="rtl" className="mx-auto max-w-3xl space-y-4 px-4 py-8 text-right">
+    <div dir="rtl"className="mx-auto max-w-3xl space-y-4 px-4 py-8 text-right">
       <header className="space-y-1">
         <h1 className="text-2xl font-bold text-[#0b3a25]">خطة أقلع السلوكية — {plan.identity.nickname}</h1>
         <p className="text-xs text-[#4b5a52]">
@@ -77,7 +77,7 @@ export function ClinicalPlanPage({ plan, planToken }: { plan: ClinicalPlanJSON; 
             disabled={downloading}
             className="inline-flex items-center gap-2 rounded-md bg-[#006C35] px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
           >
-            {downloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+            {downloading ? <Loader2 className="h-4 w-4 animate-spin"/> : <Download className="h-4 w-4" />}
             تحميل خطتي PDF
           </button>
           <button
@@ -99,19 +99,17 @@ export function ClinicalPlanPage({ plan, planToken }: { plan: ClinicalPlanJSON; 
         {showEmail && (
           <div className="flex flex-wrap items-center gap-2 pt-2">
             <input
-              type="email"
-              dir="ltr"
+              type="email"dir="ltr"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="name@example.com"
-              className="w-64 rounded-md border border-[#cfe3d7] bg-white px-3 py-2 text-sm text-[#0b3a25] placeholder:text-[#9bb3a6]"
+              placeholder="name@example.com"className="w-64 rounded-md border border-[#cfe3d7] bg-white px-3 py-2 text-sm text-[#0b3a25] placeholder:text-[#9bb3a6]"
             />
             <button
               onClick={sendByEmail}
               disabled={sending}
               className="inline-flex items-center gap-2 rounded-md bg-[#006C35] px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
             >
-              {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
+              {sending ? <Loader2 className="h-4 w-4 animate-spin"/> : <Mail className="h-4 w-4" />}
               إرسال
             </button>
             <span className="text-[11px] text-[#4b5a52]">بالضغط على إرسال أنت توافق على استلام نسخة من خطتك عبر البريد.</span>

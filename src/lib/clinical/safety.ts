@@ -14,11 +14,7 @@ import type {
 import { SAFETY_LEVEL_ORDER } from "./types";
 
 export const EMERGENCY_RED_FLAGS = [
-  "chest_pain_now",
-  "severe_breathlessness",
-  "coughing_blood",
-  "loss_of_consciousness",
-  "self_harm_risk",
+  "chest_pain_now", "severe_breathlessness", "coughing_blood", "loss_of_consciousness", "self_harm_risk",
 ] as const;
 
 export const RED_FLAG_LABELS_AR: Record<string, string> = {
@@ -56,9 +52,7 @@ export function evaluateSafety(
       message_ar: profile.emergency_ar,
       actions_ar: [
         profile.emergency_ar,
-        "لا تنتظر ولا تقُد بنفسك إن كنت تشعر بتدهور.",
-        "أخبر شخصًا قريبًا منك الآن بما تشعر به.",
-        "يمكننا العودة لخطة الإقلاع بعد أن تطمئن على سلامتك.",
+        "لا تنتظر ولا تقُد بنفسك إن كنت تشعر بتدهور.", "أخبر شخصًا قريبًا منك الآن بما تشعر به.", "يمكننا العودة لخطة الإقلاع بعد أن تطمئن على سلامتك.",
       ],
     };
   }
@@ -99,7 +93,7 @@ export function evaluateSafety(
   }
 
   // ---- Pregnancy / breastfeeding ----
-  if (answers.pregnancy === "pregnant" || answers.pregnancy === "breastfeeding") {
+  if (answers.pregnancy === "pregnant"|| answers.pregnancy === "breastfeeding") {
     flags.push(`pregnancy:${answers.pregnancy}`);
     level = highest(level, "clinician");
   }
@@ -145,8 +139,7 @@ export function evaluateSafety(
     ],
     urgent: [
       profile.urgent_ar,
-      "لا تؤجل التقييم إلى موعد لاحق.",
-      "إذا ظهرت أعراض خطيرة (ألم صدر شديد، ضيق تنفس شديد، دم مع السعال، فقدان وعي) فهذه حالة طارئة.",
+      "لا تؤجل التقييم إلى موعد لاحق.", "إذا ظهرت أعراض خطيرة (ألم صدر شديد، ضيق تنفس شديد، دم مع السعال، فقدان وعي) فهذه حالة طارئة.",
     ],
     emergency: [profile.emergency_ar],
   };

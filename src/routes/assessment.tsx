@@ -54,7 +54,7 @@ type State = {
     city: string;
     affiliation: string;
     preferred_language: Lang;
-    preferred_contact: "whatsapp" | "phone" | "sms" | "email";
+    preferred_contact: "whatsapp"| "phone"| "sms"| "email";
     self_completing: boolean;
     previously_tried_quit: boolean | null;
     previous_quit_attempts: string;
@@ -202,14 +202,7 @@ const FOLLOWUP_OPTS = [
   { v: "no_contact", en: "No contact now", ar: "لا تواصل الآن" },
 ];
 
-const STEP_LABELS: (keyof import("@/lib/i18n").Dict)[] = [
-  "stepConsent",
-  "stepTriage",
-  "stepProducts",
-  "stepDependence",
-  "stepReadiness",
-  "stepRisk",
-  "stepResult",
+const STEP_LABELS: (keyof import("@/lib/i18n").Dict)[] = [ "stepConsent", "stepTriage", "stepProducts", "stepDependence", "stepReadiness", "stepRisk", "stepResult",
 ];
 
 type Result = Awaited<ReturnType<typeof submitAssessment>>;
@@ -301,20 +294,20 @@ function Flow() {
     if (step === 0) {
       const c = s.consent;
       if (!c.consent_assessment || !c.consent_contact || !c.consent_educational || !c.consent_service_eval) {
-        return lang === "ar" ? "يرجى الموافقة على البنود المطلوبة" : "Please accept the required consents";
+        return lang === "ar"? "يرجى الموافقة على البنود المطلوبة": "Please accept the required consents";
       }
     }
     if (step === 1) {
       const tr = s.triage;
       if (!tr.full_name.trim() || tr.mobile.trim().length < 5 || !tr.city.trim() || !tr.main_reason) {
-        return lang === "ar" ? "يرجى تعبئة الحقول المطلوبة" : "Please complete required fields";
+        return lang === "ar"? "يرجى تعبئة الحقول المطلوبة": "Please complete required fields";
       }
     }
     if (step === 2 && s.products.length === 0) {
-      return lang === "ar" ? "اختر منتجاً واحداً على الأقل" : "Select at least one";
+      return lang === "ar"? "اختر منتجاً واحداً على الأقل": "Select at least one";
     }
     if (step === 4 && !s.readiness) {
-      return lang === "ar" ? "اختر خياراً" : "Pick one option";
+      return lang === "ar"? "اختر خياراً": "Pick one option";
     }
     return null;
   }
@@ -382,7 +375,7 @@ function Flow() {
       });
       setResult(r);
       setStep(6);
-      toast.success(lang === "ar" ? "تم حفظ تقييمك" : "Your assessment was saved");
+      toast.success(lang === "ar"? "تم حفظ تقييمك": "Your assessment was saved");
       if (typeof window !== "undefined") window.scrollTo({ top: 0 });
     } catch (e) {
       toast.error((e as Error).message);
@@ -396,12 +389,12 @@ function Flow() {
       <VisitTracker path="/assessment" />
       <header className="border-b bg-card">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-          <Link to="/" className="text-sm font-medium text-muted-foreground hover:text-foreground">
+          <Link to="/"className="text-sm font-medium text-muted-foreground hover:text-foreground">
             ← Aqla
           </Link>
-          <Button variant="ghost" size="sm" onClick={() => setLang(lang === "ar" ? "en" : "ar")} className="gap-1.5">
+          <Button variant="ghost"size="sm"onClick={() => setLang(lang === "ar"? "en": "ar")} className="gap-1.5">
             <Languages className="h-4 w-4" />
-            {lang === "ar" ? "English" : "العربية"}
+            {lang === "ar"? "English": "العربية"}
           </Button>
         </div>
       </header>
@@ -412,7 +405,7 @@ function Flow() {
             <Progress value={progress} className="h-2" />
             <div className="mt-2 flex justify-between text-xs text-muted-foreground">
               {STEP_LABELS.map((k, i) => (
-                <span key={k} className={i === visibleIndex ? "font-semibold text-primary" : ""}>
+                <span key={k} className={i === visibleIndex ? "font-semibold text-primary": ""}>
                   {t[k]}
                 </span>
               ))}
@@ -475,9 +468,9 @@ function Flow() {
                 <Select value={s.triage.gender} onValueChange={(v) => setS((p) => ({ ...p, triage: { ...p.triage, gender: v } }))}>
                   <SelectTrigger><SelectValue placeholder="—" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="male">{lang === "ar" ? "ذكر" : "Male"}</SelectItem>
-                    <SelectItem value="female">{lang === "ar" ? "أنثى" : "Female"}</SelectItem>
-                    <SelectItem value="prefer_not">{lang === "ar" ? "أفضل عدم القول" : "Prefer not to say"}</SelectItem>
+                    <SelectItem value="male">{lang === "ar"? "ذكر": "Male"}</SelectItem>
+                    <SelectItem value="female">{lang === "ar"? "أنثى": "Female"}</SelectItem>
+                    <SelectItem value="prefer_not">{lang === "ar"? "أفضل عدم القول": "Prefer not to say"}</SelectItem>
                   </SelectContent>
                 </Select>
               </Field>
@@ -501,7 +494,7 @@ function Flow() {
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                    <SelectItem value="phone">{lang === "ar" ? "مكالمة" : "Phone call"}</SelectItem>
+                    <SelectItem value="phone">{lang === "ar"? "مكالمة": "Phone call"}</SelectItem>
                     <SelectItem value="sms">SMS</SelectItem>
                     <SelectItem value="email">Email</SelectItem>
                   </SelectContent>
@@ -519,7 +512,7 @@ function Flow() {
                     <SelectItem value="0">0</SelectItem>
                     <SelectItem value="1">1</SelectItem>
                     <SelectItem value="2-3">2–3</SelectItem>
-                    <SelectItem value=">3">{lang === "ar" ? "أكثر من ٣" : "More than 3"}</SelectItem>
+                    <SelectItem value=">3">{lang === "ar"? "أكثر من ٣": "More than 3"}</SelectItem>
                   </SelectContent>
                 </Select>
               </Field>
@@ -528,13 +521,13 @@ function Flow() {
               <Select value={s.triage.main_reason} onValueChange={(v) => setS((p) => ({ ...p, triage: { ...p.triage, main_reason: v } }))}>
                 <SelectTrigger><SelectValue placeholder="—" /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="know_score">{lang === "ar" ? "أريد معرفة درجة اعتمادي" : "I want to know my dependence score"}</SelectItem>
-                  <SelectItem value="quit_completely">{lang === "ar" ? "أريد الإقلاع كلياً" : "I want to quit completely"}</SelectItem>
-                  <SelectItem value="reduce">{lang === "ar" ? "أريد التقليل" : "I want to reduce"}</SelectItem>
-                  <SelectItem value="worried_health">{lang === "ar" ? "قلق على صحتي" : "I am worried about my health"}</SelectItem>
-                  <SelectItem value="family_advised">{lang === "ar" ? "نصحتني عائلتي/مدرستي" : "Family/school advised me"}</SelectItem>
-                  <SelectItem value="discuss_alts">{lang === "ar" ? "مناقشة البدائل مع طبيب" : "Discuss alternatives with a clinician"}</SelectItem>
-                  <SelectItem value="other">{lang === "ar" ? "أخرى" : "Other"}</SelectItem>
+                  <SelectItem value="know_score">{lang === "ar"? "أريد معرفة درجة اعتمادي": "I want to know my dependence score"}</SelectItem>
+                  <SelectItem value="quit_completely">{lang === "ar"? "أريد الإقلاع كلياً": "I want to quit completely"}</SelectItem>
+                  <SelectItem value="reduce">{lang === "ar"? "أريد التقليل": "I want to reduce"}</SelectItem>
+                  <SelectItem value="worried_health">{lang === "ar"? "قلق على صحتي": "I am worried about my health"}</SelectItem>
+                  <SelectItem value="family_advised">{lang === "ar"? "نصحتني عائلتي/مدرستي": "Family/school advised me"}</SelectItem>
+                  <SelectItem value="discuss_alts">{lang === "ar"? "مناقشة البدائل مع طبيب": "Discuss alternatives with a clinician"}</SelectItem>
+                  <SelectItem value="other">{lang === "ar"? "أخرى": "Other"}</SelectItem>
                 </SelectContent>
               </Select>
             </Field>
@@ -567,8 +560,7 @@ function Flow() {
                     <div key={q.key}>
                       <p className="text-sm font-medium">{lang === "ar" ? q.ar : q.en}</p>
                       <RadioGroup
-                        className="mt-2"
-                        value={String(s.ftnd[q.key as keyof State["ftnd"]])}
+                        className="mt-2"value={String(s.ftnd[q.key as keyof State["ftnd"]])}
                         onValueChange={(v) => setS((p) => ({ ...p, ftnd: { ...p.ftnd, [q.key]: Number(v) } }))}
                       >
                         {q.opts.map((o, i) => (
@@ -593,8 +585,8 @@ function Flow() {
                     <div key={q.k} className="flex items-start justify-between gap-3 rounded-lg border p-3">
                       <span className="text-sm">{lang === "ar" ? q.ar : q.en}</span>
                       <div className="flex gap-1">
-                        <Button type="button" size="sm" variant={s.nicotine[q.k] ? "default" : "outline"} onClick={() => setS((p) => ({ ...p, nicotine: { ...p.nicotine, [q.k]: true } }))}>{t.yes}</Button>
-                        <Button type="button" size="sm" variant={!s.nicotine[q.k] ? "default" : "outline"} onClick={() => setS((p) => ({ ...p, nicotine: { ...p.nicotine, [q.k]: false } }))}>{t.no}</Button>
+                        <Button type="button"size="sm"variant={s.nicotine[q.k] ? "default": "outline"} onClick={() => setS((p) => ({ ...p, nicotine: { ...p.nicotine, [q.k]: true } }))}>{t.yes}</Button>
+                        <Button type="button"size="sm"variant={!s.nicotine[q.k] ? "default": "outline"} onClick={() => setS((p) => ({ ...p, nicotine: { ...p.nicotine, [q.k]: false } }))}>{t.no}</Button>
                       </div>
                     </div>
                   ))}
@@ -624,7 +616,7 @@ function Flow() {
             <p className="mt-1 text-sm text-muted-foreground">{t.riskSubtitle}</p>
             <div className="mt-3 grid gap-2">
               {RISK_OPTS.map((r) => (
-                <label key={r.v} className={`flex items-center gap-2 rounded-lg border p-3 cursor-pointer hover:bg-muted/40 ${r.urgent ? "border-destructive/40" : ""}`}>
+                <label key={r.v} className={`flex items-center gap-2 rounded-lg border p-3 cursor-pointer hover:bg-muted/40 ${r.urgent ? "border-destructive/40": ""}`}>
                   <Checkbox checked={s.riskFlags.includes(r.v)} onCheckedChange={() => toggleRisk(r.v)} />
                   <span className="text-sm">{lang === "ar" ? r.ar : r.en}</span>
                 </label>
@@ -647,12 +639,10 @@ function Flow() {
               />
               <div>
                 <div className="font-semibold">
-                  {lang === "ar" ? "إضافة بحثية اختيارية (دقيقة واحدة)" : "Optional research extension (1 minute)"}
+                  {lang === "ar"? "إضافة بحثية اختيارية (دقيقة واحدة)": "Optional research extension (1 minute)"}
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  {lang === "ar"
-                    ? "ساعدنا في فهم التدخين في مدينتنا. لن يؤثر هذا على رعايتك."
-                    : "Help us understand nicotine use in our city. This will not affect your care."}
+                  {lang === "ar"? "ساعدنا في فهم التدخين في مدينتنا. لن يؤثر هذا على رعايتك.": "Help us understand nicotine use in our city. This will not affect your care."}
                 </div>
               </div>
             </label>
@@ -664,41 +654,39 @@ function Flow() {
                     onCheckedChange={(v) => setS((p) => ({ ...p, research: { ...p.research, consent_publication: !!v } }))}
                   />
                   <span className="text-sm">
-                    {lang === "ar"
-                      ? "أوافق على استخدام بياناتي المجهولة في النشر العلمي عند الموافقة الأخلاقية."
-                      : "I agree my anonymized data may be used for research publication, subject to ethics approval."}
+                    {lang === "ar"? "أوافق على استخدام بياناتي المجهولة في النشر العلمي عند الموافقة الأخلاقية.": "I agree my anonymized data may be used for research publication, subject to ethics approval."}
                   </span>
                 </label>
                 <div className="grid grid-cols-2 gap-3">
-                  <Field label={lang === "ar" ? "أهمية الإقلاع (0–10)" : "Importance of quitting (0–10)"}>
+                  <Field label={lang === "ar"? "أهمية الإقلاع (0–10)": "Importance of quitting (0–10)"}>
                     <Input type="number" min={0} max={10}
                       value={s.research.importance_0_10}
                       onChange={(e) => setS((p) => ({ ...p, research: { ...p.research, importance_0_10: e.target.value } }))} />
                   </Field>
-                  <Field label={lang === "ar" ? "ثقتك بقدرتك (0–10)" : "Confidence you can quit (0–10)"}>
+                  <Field label={lang === "ar"? "ثقتك بقدرتك (0–10)": "Confidence you can quit (0–10)"}>
                     <Input type="number" min={0} max={10}
                       value={s.research.confidence_0_10}
                       onChange={(e) => setS((p) => ({ ...p, research: { ...p.research, confidence_0_10: e.target.value } }))} />
                   </Field>
                 </div>
-                <Field label={lang === "ar" ? "السبب الرئيسي للإقلاع" : "Main reason to quit"}>
+                <Field label={lang === "ar"? "السبب الرئيسي للإقلاع": "Main reason to quit"}>
                   <Input value={s.research.main_reason}
                     onChange={(e) => setS((p) => ({ ...p, research: { ...p.research, main_reason: e.target.value } }))} />
                 </Field>
                 <YesNo
-                  label={lang === "ar" ? "هل سبق وحاولت الإقلاع؟" : "Have you ever tried to quit?"}
+                  label={lang === "ar"? "هل سبق وحاولت الإقلاع؟": "Have you ever tried to quit?"}
                   value={s.research.ever_tried ?? false}
                   onChange={(v) => setS((p) => ({ ...p, research: { ...p.research, ever_tried: v } }))}
                 />
                 {s.research.ever_tried && (
                   <div className="grid grid-cols-2 gap-3">
-                    <Field label={lang === "ar" ? "عدد المحاولات" : "Number of attempts"}>
+                    <Field label={lang === "ar"? "عدد المحاولات": "Number of attempts"}>
                       <Input type="number" min={0} max={99}
                         value={s.research.attempts_count}
                         onChange={(e) => setS((p) => ({ ...p, research: { ...p.research, attempts_count: e.target.value } }))} />
                     </Field>
-                    <Field label={lang === "ar" ? "أطول فترة إقلاع" : "Longest quit duration"}>
-                      <Input placeholder={lang === "ar" ? "مثلاً: 3 أشهر" : "e.g. 3 months"}
+                    <Field label={lang === "ar"? "أطول فترة إقلاع": "Longest quit duration"}>
+                      <Input placeholder={lang === "ar"? "مثلاً: 3 أشهر": "e.g. 3 months"}
                         value={s.research.longest_quit_duration}
                         onChange={(e) => setS((p) => ({ ...p, research: { ...p.research, longest_quit_duration: e.target.value } }))} />
                     </Field>
@@ -713,14 +701,10 @@ function Flow() {
                     />
                     <div>
                       <div className="font-semibold text-sm">
-                        {lang === "ar"
-                          ? "اختياري: ساعدنا في فهم استخدام النيكوتين في مجتمعنا"
-                          : "Optional: Help us understand nicotine use in our community"}
+                        {lang === "ar"? "اختياري: ساعدنا في فهم استخدام النيكوتين في مجتمعنا": "Optional: Help us understand nicotine use in our community"}
                       </div>
                       <div className="text-xs text-muted-foreground">
-                        {lang === "ar"
-                          ? "هذا القسم تطوّعي ولا يؤثر على حصولك على الدعم."
-                          : "This section is voluntary and does not affect your access to support."}
+                        {lang === "ar"? "هذا القسم تطوّعي ولا يؤثر على حصولك على الدعم.": "This section is voluntary and does not affect your access to support."}
                       </div>
                     </div>
                   </label>
@@ -745,19 +729,19 @@ function Flow() {
                             value={(s.research as unknown as Record<string, string>)[key]}
                             onChange={(e) => setS((p) => ({ ...p, research: { ...p.research, [key]: e.target.value } as typeof p.research }))}
                           >
-                            <option value="">{lang === "ar" ? "—" : "—"}</option>
-                            <option value="yes">{lang === "ar" ? "نعم" : "Yes"}</option>
-                            <option value="no">{lang === "ar" ? "لا" : "No"}</option>
-                            <option value="not_sure">{lang === "ar" ? "لست متأكداً" : "Not sure"}</option>
-                            <option value="prefer_not_to_answer">{lang === "ar" ? "أفضّل عدم الإجابة" : "Prefer not to answer"}</option>
+                            <option value="">{lang === "ar"? "—": "—"}</option>
+                            <option value="yes">{lang === "ar"? "نعم": "Yes"}</option>
+                            <option value="no">{lang === "ar"? "لا": "No"}</option>
+                            <option value="not_sure">{lang === "ar"? "لست متأكداً": "Not sure"}</option>
+                            <option value="prefer_not_to_answer">{lang === "ar"? "أفضّل عدم الإجابة": "Prefer not to answer"}</option>
                           </select>
                         </div>
                       ))}
-                      <Field label={lang === "ar" ? "المصدر الرئيسي للمنتجات (اختياري)" : "Main source of products (optional)"}>
+                      <Field label={lang === "ar"? "المصدر الرئيسي للمنتجات (اختياري)": "Main source of products (optional)"}>
                         <Input
                           value={s.research.main_source_of_products}
                           onChange={(e) => setS((p) => ({ ...p, research: { ...p.research, main_source_of_products: e.target.value } }))}
-                          placeholder={lang === "ar" ? "مثلاً: بقّالة، صديق، إنترنت" : "e.g. shop, friend, online"}
+                          placeholder={lang === "ar"? "مثلاً: بقّالة، صديق، إنترنت": "e.g. shop, friend, online"}
                         />
                       </Field>
                     </div>
@@ -786,7 +770,7 @@ function Flow() {
 
         {step < 6 && (
           <div className="mt-6 flex items-center justify-between">
-            <Button variant="ghost" onClick={prev} disabled={step === 0} className="gap-1">
+            <Button variant="ghost"onClick={prev} disabled={step === 0} className="gap-1">
               <ArrowLeft className="h-4 w-4 rtl:rotate-180" /> {t.back}
             </Button>
             {step === 5 ? (
@@ -823,8 +807,8 @@ function YesNo({ label, value, onChange }: { label: string; value: boolean; onCh
     <div className="flex items-center justify-between gap-3 rounded-lg border p-3">
       <span className="text-sm">{label}</span>
       <div className="flex gap-1">
-        <Button type="button" size="sm" variant={value ? "default" : "outline"} onClick={() => onChange(true)}>{t.yes}</Button>
-        <Button type="button" size="sm" variant={!value ? "default" : "outline"} onClick={() => onChange(false)}>{t.no}</Button>
+        <Button type="button"size="sm"variant={value ? "default": "outline"} onClick={() => onChange(true)}>{t.yes}</Button>
+        <Button type="button"size="sm"variant={!value ? "default": "outline"} onClick={() => onChange(false)}>{t.no}</Button>
       </div>
     </div>
   );
@@ -875,7 +859,7 @@ function ResultView({
         },
       });
       setSavedFollow(value);
-      toast.success(lang === "ar" ? "تم حفظ تفضيل المتابعة" : "Follow-up preference saved");
+      toast.success(lang === "ar"? "تم حفظ تفضيل المتابعة": "Follow-up preference saved");
     } catch (e) {
       toast.error((e as Error).message);
     } finally {
@@ -886,38 +870,34 @@ function ResultView({
   function downloadSummary() {
     const isAr = lang === "ar";
     const now = new Date();
-    const dateStr = now.toLocaleDateString(isAr ? "ar-EG" : "en-GB", {
+    const dateStr = now.toLocaleDateString(isAr ? "ar-EG": "en-GB", {
       year: "numeric", month: "long", day: "numeric",
     });
-    const timeStr = now.toLocaleTimeString(isAr ? "ar-EG" : "en-GB", {
+    const timeStr = now.toLocaleTimeString(isAr ? "ar-EG": "en-GB", {
       hour: "2-digit", minute: "2-digit",
     });
     const ftndPct = ftnd ? (ftnd.total / 10) * 100 : 0;
     const nicPct = nic ? (nic.yes_count / 10) * 100 : 0;
     const followLabel = savedFollow
       ? followOptions.find((o) => o.v === savedFollow)?.label ?? savedFollow
-      : (isAr ? "لم يُختَر بعد" : "Not yet selected");
+      : (isAr ? "لم يُختَر بعد": "Not yet selected");
 
     const nextSteps: string[] = (() => {
       const base: string[] = [];
       if (result.urgent) {
         base.push(isAr
-          ? "التواصل الفوري مع خط الدعم أو أقرب مركز صحي — حالتك تستدعي مراجعة عاجلة."
-          : "Contact the support line or nearest health center immediately — your case needs urgent review.");
+          ? "التواصل الفوري مع خط الدعم أو أقرب مركز صحي — حالتك تستدعي مراجعة عاجلة.": "Contact the support line or nearest health center immediately — your case needs urgent review.");
       }
       if (result.doctorReviewNeeded) {
         base.push(isAr
-          ? "سيتم توجيه ملفك لمراجعة الطبيب وفق تفضيل التواصل المحدد."
-          : "Your file will be routed to a clinician using your chosen contact method.");
+          ? "سيتم توجيه ملفك لمراجعة الطبيب وفق تفضيل التواصل المحدد.": "Your file will be routed to a clinician using your chosen contact method.");
       }
       if (ftnd && ftnd.total >= 6) {
         base.push(isAr
-          ? "درجة اعتماد عالية — يُوصى بخطة إقلاع مدعومة دوائياً وسلوكياً."
-          : "High dependence score — a supported cessation plan (pharmacological + behavioral) is recommended.");
+          ? "درجة اعتماد عالية — يُوصى بخطة إقلاع مدعومة دوائياً وسلوكياً.": "High dependence score — a supported cessation plan (pharmacological + behavioral) is recommended.");
       } else if (ftnd && ftnd.total >= 4) {
         base.push(isAr
-          ? "اعتماد متوسط — دعم سلوكي منتظم ومتابعة أسبوعية."
-          : "Moderate dependence — structured behavioral support with weekly follow-up.");
+          ? "اعتماد متوسط — دعم سلوكي منتظم ومتابعة أسبوعية.": "Moderate dependence — structured behavioral support with weekly follow-up.");
       }
       if (result.cohort) {
         base.push(isAr
@@ -925,14 +905,13 @@ function ResultView({
           : `Your cohort (${result.cohort}) includes tailored educational content — watch for weekly messages.`);
       }
       base.push(isAr
-        ? "احتفظ بهذه الوثيقة كمرجع عند مراجعة الطبيب أو الصيدلي."
-        : "Keep this document as a reference when consulting your physician or pharmacist.");
+        ? "احتفظ بهذه الوثيقة كمرجع عند مراجعة الطبيب أو الصيدلي.": "Keep this document as a reference when consulting your physician or pharmacist.");
       return base;
     })();
 
     const logoUrl = `${window.location.origin}/aqla-logo.png`;
     const html = `<!doctype html>
-<html lang="${isAr ? "ar" : "en"}" dir="${isAr ? "rtl" : "ltr"}">
+<html lang="${isAr ? "ar": "en"}"dir="${isAr ? "rtl": "ltr"}">
 <head>
 <meta charset="utf-8" />
 <title>Aqla — ${result.participantCode}</title>
@@ -941,14 +920,14 @@ function ResultView({
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
-    font-family: ${isAr ? "'Segoe UI', 'Tahoma', 'Arial'" : "'Inter', 'Helvetica', 'Arial'"}, sans-serif;
+    font-family: ${isAr ? "'Segoe UI', 'Tahoma', 'Arial'": "'Inter', 'Helvetica', 'Arial'"}, sans-serif;
     color: #0f172a; background: #fff; font-size: 12px; line-height: 1.55;
   }
   .wrap { max-width: 780px; margin: 0 auto; padding: 8px; }
   header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 3px solid #007A5A; }
   header img { height: 44px; width: auto; object-fit: contain; }
   .brand { font-size: 20px; font-weight: 700; color: #007A5A; letter-spacing: .3px; }
-  .meta { text-align: ${isAr ? "left" : "right"}; font-size: 11px; color: #475569; }
+  .meta { text-align: ${isAr ? "left": "right"}; font-size: 11px; color: #475569; }
   h1 { font-size: 22px; margin: 20px 0 4px; color: #0f172a; }
   .subtitle { color: #64748b; font-size: 12px; margin-bottom: 18px; }
   .code-badge {
@@ -967,28 +946,28 @@ function ResultView({
   .score-num small { font-size: 12px; color: #94a3b8; font-weight: 500; }
   .bar { flex: 1; height: 12px; background: #e2e8f0; border-radius: 999px; overflow: hidden; position: relative; }
   .bar > span { display: block; height: 100%; background: linear-gradient(90deg, #10b981, #007A5A); border-radius: 999px; }
-  [dir="rtl"] .bar > span { margin-${isAr ? "right" : "left"}: 0; }
+  [dir="rtl"] .bar > span { margin-${isAr ? "right": "left"}: 0; }
   .score-cat { font-size: 11px; color: #475569; margin-top: 4px; }
   .cohort-box { padding: 14px; border-radius: 10px; background: linear-gradient(135deg, #ecfdf5, #f0fdfa); border: 1px solid #a7f3d0; }
   .cohort-letter { display: inline-block; width: 40px; height: 40px; line-height: 40px; text-align: center; font-size: 20px; font-weight: 800; background: #007A5A; color: #fff; border-radius: 50%; }
   .flag { padding: 12px 14px; border-radius: 10px; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; margin-top: 10px; }
-  ol.steps { padding-${isAr ? "right" : "left"}: 18px; margin: 8px 0 0; }
+  ol.steps { padding-${isAr ? "right": "left"}: 18px; margin: 8px 0 0; }
   ol.steps li { margin: 6px 0; }
   .disclaimer { margin-top: 24px; padding: 12px 14px; border-radius: 8px; background: #fffbeb; border: 1px solid #fde68a; color: #78350f; font-size: 11px; }
   footer { margin-top: 26px; padding-top: 14px; border-top: 1px solid #e2e8f0; font-size: 10px; color: #64748b; display: flex; justify-content: space-between; gap: 12px; }
   @media print { .noprint { display: none !important; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
-  .print-btn { position: fixed; top: 16px; ${isAr ? "left" : "right"}: 16px; background: #007A5A; color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(15,118,110,.3); }
+  .print-btn { position: fixed; top: 16px; ${isAr ? "left": "right"}: 16px; background: #007A5A; color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(15,118,110,.3); }
 </style>
 </head>
 <body>
-<button class="print-btn noprint" onclick="window.print()">${isAr ? " حفظ كـ PDF" : " Save as PDF"}</button>
+<button class="print-btn noprint"onclick="window.print()">${isAr ? "حفظ كـ PDF" : "Save as PDF"}</button>
 <div class="wrap">
   <header>
     <div style="display:flex; align-items:center; gap:12px;">
-      <img src="${logoUrl}" alt="Aqla" onerror="this.style.display='none'" />
+      <img src="${logoUrl}"alt="Aqla"onerror="this.style.display='none'" />
       <div>
-        <div class="brand">Aqla ${isAr ? "— لا تتّن" : ""}</div>
-        <div style="font-size:11px; color:#64748b;">${isAr ? "ملخّص تقييم النيكوتين" : "Nicotine Assessment Summary"}</div>
+        <div class="brand">Aqla ${isAr ? "— لا تتّن": ""}</div>
+        <div style="font-size:11px; color:#64748b;">${isAr ? "ملخّص تقييم النيكوتين": "Nicotine Assessment Summary"}</div>
       </div>
     </div>
     <div class="meta">
@@ -998,31 +977,31 @@ function ResultView({
     </div>
   </header>
 
-  <h1>${isAr ? "ملخّص التقييم الشخصي" : "Personal Assessment Summary"}</h1>
-  <div class="subtitle">${isAr ? "وثيقة تعليمية مخصّصة — ليست تشخيصاً طبياً" : "Personalised educational document — not a medical diagnosis"}</div>
+  <h1>${isAr ? "ملخّص التقييم الشخصي": "Personal Assessment Summary"}</h1>
+  <div class="subtitle">${isAr ? "وثيقة تعليمية مخصّصة — ليست تشخيصاً طبياً": "Personalised educational document — not a medical diagnosis"}</div>
 
   <div class="grid">
     <div class="card">
-      <div class="label">${isAr ? "رمز المشارك" : "Participant Code"}</div>
+      <div class="label">${isAr ? "رمز المشارك": "Participant Code"}</div>
       <div class="value"><span class="code-badge">${result.participantCode}</span></div>
     </div>
     <div class="card">
-      <div class="label">${isAr ? "المسار" : "Cohort"}</div>
+      <div class="label">${isAr ? "المسار": "Cohort"}</div>
       <div class="value"><span class="cohort-letter">${result.cohort}</span> &nbsp; <span style="color:#475569; font-weight:500;">${result.cohortReason}</span></div>
     </div>
     <div class="card">
-      <div class="label">${isAr ? "المنتجات المستخدمة" : "Products Used"}</div>
-      <div class="value">${productLabels.join(" • ") || "—"}</div>
+      <div class="label">${isAr ? "المنتجات المستخدمة": "Products Used"}</div>
+      <div class="value">${productLabels.join("• ") || "—"}</div>
     </div>
     <div class="card">
-      <div class="label">${isAr ? "مرحلة الجاهزية" : "Readiness Stage"}</div>
+      <div class="label">${isAr ? "مرحلة الجاهزية": "Readiness Stage"}</div>
       <div class="value">${readinessLabel}</div>
     </div>
   </div>
 
   ${ftnd ? `
   <section>
-    <h2>${isAr ? "درجة الاعتماد على السجائر (FTND)" : "Cigarette Dependence (FTND)"}</h2>
+    <h2>${isAr ? "درجة الاعتماد على السجائر (FTND)": "Cigarette Dependence (FTND)"}</h2>
     <div class="score-row">
       <div class="score-num">${ftnd.total}<small>/10</small></div>
       <div style="flex:1;">
@@ -1034,7 +1013,7 @@ function ResultView({
 
   ${nic ? `
   <section>
-    <h2>${isAr ? "التحكم في النيكوتين (HONC)" : "Nicotine Control (HONC)"}</h2>
+    <h2>${isAr ? "التحكم في النيكوتين (HONC)": "Nicotine Control (HONC)"}</h2>
     <div class="score-row">
       <div class="score-num">${nic.yes_count}<small>/10</small></div>
       <div style="flex:1;">
@@ -1045,35 +1024,34 @@ function ResultView({
   </section>` : ""}
 
   <section>
-    <h2>${isAr ? "تفضيل المتابعة" : "Follow-up Preference"}</h2>
-    <div class="card" style="background:#fff;">
+    <h2>${isAr ? "تفضيل المتابعة": "Follow-up Preference"}</h2>
+    <div class="card"style="background:#fff;">
       <div class="value">${followLabel}</div>
     </div>
   </section>
 
   ${result.urgent || result.doctorReviewNeeded ? `
   <section>
-    <h2>${isAr ? "تنبيهات هامة" : "Important Flags"}</h2>
-    ${result.urgent ? `<div class="flag"><strong> ${isAr ? "مراجعة عاجلة:" : "Urgent review:"}</strong> ${isAr ? "يرجى التواصل مع خط الدعم في أقرب وقت." : "Please contact the support line as soon as possible."}</div>` : ""}
-    ${result.doctorReviewNeeded ? `<div class="flag" style="background:#fef3c7; border-color:#fde68a; color:#78350f;"><strong> ${isAr ? "مراجعة الطبيب:" : "Clinician review:"}</strong> ${isAr ? "سيتم توجيه ملفك للمراجعة." : "Your file will be routed for review."}</div>` : ""}
+    <h2>${isAr ? "تنبيهات هامة": "Important Flags"}</h2>
+    ${result.urgent ? `<div class="flag"><strong> ${isAr ? "مراجعة عاجلة:": "Urgent review:"}</strong> ${isAr ? "يرجى التواصل مع خط الدعم في أقرب وقت.": "Please contact the support line as soon as possible."}</div>` : ""}
+    ${result.doctorReviewNeeded ? `<div class="flag"style="background:#fef3c7; border-color:#fde68a; color:#78350f;"><strong> ${isAr ? "مراجعة الطبيب:": "Clinician review:"}</strong> ${isAr ? "سيتم توجيه ملفك للمراجعة.": "Your file will be routed for review."}</div>` : ""}
   </section>` : ""}
 
   <section>
-    <h2>${isAr ? "الخطوات القادمة الموصى بها" : "Recommended Next Steps"}</h2>
+    <h2>${isAr ? "الخطوات القادمة الموصى بها": "Recommended Next Steps"}</h2>
     <ol class="steps">
       ${nextSteps.map((s) => `<li>${s}</li>`).join("")}
     </ol>
   </section>
 
   <div class="disclaimer">
-    <strong>${isAr ? "تنبيه:" : "Disclaimer:"}</strong>
+    <strong>${isAr ? "تنبيه:": "Disclaimer:"}</strong>
     ${isAr
-      ? "هذه الوثيقة تعليمية تلخّص إجاباتك خلال التقييم، وليست تشخيصاً طبياً ولا تُغني عن استشارة الطبيب أو الصيدلي المختص."
-      : "This is an educational summary of your assessment answers. It is not a medical diagnosis and does not replace consultation with a qualified physician or pharmacist."}
+      ? "هذه الوثيقة تعليمية تلخّص إجاباتك خلال التقييم، وليست تشخيصاً طبياً ولا تُغني عن استشارة الطبيب أو الصيدلي المختص.": "This is an educational summary of your assessment answers. It is not a medical diagnosis and does not replace consultation with a qualified physician or pharmacist."}
   </div>
 
   <footer>
-    <div>Aqla — ${isAr ? "منصة دعم الإقلاع عن النيكوتين" : "Nicotine Cessation Support Platform"}</div>
+    <div>Aqla — ${isAr ? "منصة دعم الإقلاع عن النيكوتين": "Nicotine Cessation Support Platform"}</div>
     <div>aqla1.com &nbsp;•&nbsp; ${result.participantCode}</div>
   </footer>
 </div>
@@ -1085,7 +1063,7 @@ function ResultView({
 
     const w = window.open("", "_blank", "width=900,height=1000");
     if (!w) {
-      toast.error(isAr ? "يرجى السماح بالنوافذ المنبثقة لتحميل الملخّص" : "Please allow pop-ups to download the summary");
+      toast.error(isAr ? "يرجى السماح بالنوافذ المنبثقة لتحميل الملخّص": "Please allow pop-ups to download the summary");
       return;
     }
     w.document.open();
@@ -1106,24 +1084,24 @@ function ResultView({
         <h2 className="mt-4 text-2xl font-bold">{t.resultTitle}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{result.cohortReason}</p>
         <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm text-primary font-medium">
-          {lang === "ar" ? "المسار" : "Cohort"} {result.cohort}
+          {lang === "ar"? "المسار": "Cohort"} {result.cohort}
         </div>
       </Card>
 
       <Card className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
         <div>
-          <div className="text-xs text-muted-foreground">{lang === "ar" ? "المنتجات" : "Products"}</div>
-          <div className="mt-0.5">{productLabels.join(" • ") || "—"}</div>
+          <div className="text-xs text-muted-foreground">{lang === "ar"? "المنتجات": "Products"}</div>
+          <div className="mt-0.5">{productLabels.join("• ") || "—"}</div>
         </div>
         <div>
-          <div className="text-xs text-muted-foreground">{lang === "ar" ? "الجاهزية" : "Readiness"}</div>
+          <div className="text-xs text-muted-foreground">{lang === "ar"? "الجاهزية": "Readiness"}</div>
           <div className="mt-0.5">{readinessLabel}</div>
         </div>
       </Card>
 
       {ftnd && (
         <Card className="p-6 text-center">
-          <div className="text-xs uppercase tracking-wider text-primary font-medium">{lang === "ar" ? "درجة الاعتماد على السجائر" : "Cigarette Dependence"}</div>
+          <div className="text-xs uppercase tracking-wider text-primary font-medium">{lang === "ar"? "درجة الاعتماد على السجائر": "Cigarette Dependence"}</div>
           <div className="my-3 text-6xl font-bold text-primary">{ftnd.total}<span className="text-2xl text-muted-foreground">/10</span></div>
           <Progress value={(ftnd.total / 10) * 100} className="h-3" />
           <div className="mt-3 text-sm font-medium">{ftnd.category}</div>
@@ -1133,7 +1111,7 @@ function ResultView({
 
       {nic && (
         <Card className="p-6 text-center">
-          <div className="text-xs uppercase tracking-wider text-secondary font-medium">{lang === "ar" ? "التحكم في النيكوتين" : "Nicotine Control"}</div>
+          <div className="text-xs uppercase tracking-wider text-secondary font-medium">{lang === "ar"? "التحكم في النيكوتين": "Nicotine Control"}</div>
           <div className="my-3 text-6xl font-bold text-secondary">{nic.yes_count}<span className="text-2xl text-muted-foreground">/10</span></div>
           <Progress value={(nic.yes_count / 10) * 100} className="h-3" />
           <div className="mt-3 text-sm font-medium">{nic.category}</div>
@@ -1144,21 +1122,17 @@ function ResultView({
         <Card className="border-warning bg-warning/10 p-4">
           <div className="text-sm font-semibold">{t.doctorReview}</div>
           <p className="mt-1 text-sm text-muted-foreground">
-            {lang === "ar"
-              ? "سيتم توجيه حالتك لمراجعة الطبيب وفقاً لتفضيلات التواصل."
-              : "Your case will be routed to clinician review using your preferred contact method."}
+            {lang === "ar"? "سيتم توجيه حالتك لمراجعة الطبيب وفقاً لتفضيلات التواصل.": "Your case will be routed to clinician review using your preferred contact method."}
           </p>
         </Card>
       )}
 
       <Card className="p-5">
         <h3 className="text-lg font-semibold">
-          {lang === "ar" ? "كيف تفضل أن ندعمك؟" : "How would you like us to support you?"}
+          {lang === "ar"? "كيف تفضل أن ندعمك؟": "How would you like us to support you?"}
         </h3>
         <p className="mt-1 text-sm text-muted-foreground">
-          {lang === "ar"
-            ? "اختر تفضيل المتابعة وسيتم حفظه فوراً."
-            : "Pick your follow-up preference — it will be saved immediately."}
+          {lang === "ar"? "اختر تفضيل المتابعة وسيتم حفظه فوراً.": "Pick your follow-up preference — it will be saved immediately."}
         </p>
         <RadioGroup
           className="mt-3"
@@ -1174,7 +1148,7 @@ function ResultView({
         </RadioGroup>
         {savedFollow && (
           <p className="mt-2 text-xs text-success font-medium">
-            {lang === "ar" ? "تم الحفظ ✓" : "Saved ✓"}
+            {lang === "ar"? "تم الحفظ ✓": "Saved ✓"}
           </p>
         )}
       </Card>

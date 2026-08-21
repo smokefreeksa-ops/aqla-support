@@ -22,10 +22,7 @@ export function AqlaEnginePdf({ result, resultId, userName, supportPersonName }:
   const today = new Date().toLocaleDateString("ar-SA");
   return (
     <div
-      id="aqla-engine-print-area"
-      dir="rtl"
-      className="hidden print:block bg-white text-slate-900 p-8 max-w-4xl mx-auto text-right"
-      style={{ fontFamily: "Tajawal, Cairo, system-ui, sans-serif" }}
+      id="aqla-engine-print-area"dir="rtl"className="hidden print:block bg-white text-slate-900 p-8 max-w-4xl mx-auto text-right"style={{ fontFamily: "Tajawal, Cairo, system-ui, sans-serif" }}
     >
       <div className="border-b-4 border-blue-900 pb-3 mb-5 flex items-start justify-between gap-4">
         <div>

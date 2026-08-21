@@ -87,10 +87,7 @@ describe("R1-1 lifetime timeline", () => {
 describe("R1-2 lapse and relapse protocols", () => {
   it("preserves the four graded protocols", () => {
     expect(gen().lapse_pathways.map((p) => p.id)).toEqual([
-      "one_puff",
-      "one_cigarette",
-      "one_day",
-      "regular_relapse",
+      "one_puff", "one_cigarette", "one_day", "regular_relapse",
     ]);
   });
 
@@ -178,8 +175,8 @@ describe("R1-8 legacy medication safety", () => {
 
   it("keeps medication wording out of every timeline section", () => {
     const text = gen()
-      .timeline.map((s) => `${s.title_ar} ${s.items.join(" ")}`)
-      .join(" ");
+      .timeline.map((s) => `${s.title_ar} ${s.items.join("")}`)
+      .join("");
     for (const term of ["نيكوتين بديل", "لصقة", "علكة النيكوتين", "varenicline", "bupropion"]) {
       expect(text).not.toContain(term);
     }
@@ -188,11 +185,7 @@ describe("R1-8 legacy medication safety", () => {
 
 describe("R1-9 emergency hold stops the assessment immediately", () => {
   const EMERGENCIES = [
-    "self_harm_risk",
-    "chest_pain_now",
-    "severe_breathlessness",
-    "coughing_blood",
-    "loss_of_consciousness",
+    "self_harm_risk", "chest_pain_now", "severe_breathlessness", "coughing_blood", "loss_of_consciousness",
   ];
 
   it("asks no further question once any emergency red flag is selected", () => {

@@ -72,14 +72,14 @@ function QuitPlanEmailsPage() {
       <header className="border-b bg-card">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <BackButton fallback="/admin" labelAr="لوحة الإدارة" labelEn="Admin" />
+            <BackButton fallback="/admin"labelAr="لوحة الإدارة"labelEn="Admin" />
             <div className="flex items-center gap-2 font-semibold">
               <Mail className="h-4 w-4 text-primary" />
               Quit Plan Email Delivery
             </div>
           </div>
-          <Button size="sm" variant="outline" onClick={() => refetch()} disabled={isFetching}>
-            <RefreshCw className={`h-4 w-4 mr-1 ${isFetching ? "animate-spin" : ""}`} /> Refresh
+          <Button size="sm"variant="outline" onClick={() => refetch()} disabled={isFetching}>
+            <RefreshCw className={`h-4 w-4 mr-1 ${isFetching ? "animate-spin": ""}`} /> Refresh
           </Button>
         </div>
       </header>
@@ -92,11 +92,11 @@ function QuitPlanEmailsPage() {
         )}
 
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-          <Stat label="Plans" value={totals?.plans ?? 0} icon={<Mail className="h-4 w-4" />} />
-          <Stat label="Total emails" value={totals?.emails ?? 0} icon={<Mail className="h-4 w-4" />} />
-          <Stat label="Sent" value={totals?.sent ?? 0} icon={<CheckCircle2 className="h-4 w-4 text-digital" />} />
-          <Stat label="Failed" value={totals?.failed ?? 0} icon={<XCircle className="h-4 w-4 text-destructive" />} />
-          <Stat label="Queued/other" value={totals?.queued ?? 0} icon={<Clock className="h-4 w-4 text-muted-foreground" />} />
+          <Stat label="Plans"value={totals?.plans ?? 0} icon={<Mail className="h-4 w-4" />} />
+          <Stat label="Total emails"value={totals?.emails ?? 0} icon={<Mail className="h-4 w-4" />} />
+          <Stat label="Sent"value={totals?.sent ?? 0} icon={<CheckCircle2 className="h-4 w-4 text-digital" />} />
+          <Stat label="Failed"value={totals?.failed ?? 0} icon={<XCircle className="h-4 w-4 text-destructive" />} />
+          <Stat label="Queued/other"value={totals?.queued ?? 0} icon={<Clock className="h-4 w-4 text-muted-foreground" />} />
         </div>
 
         <Card className="p-3 flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -174,16 +174,15 @@ function GroupRow({ group, expanded, onToggle }: { group: QuitPlanGroup; expande
       : group.failed > 0
         ? "Partial"
         : group.queued > 0 && group.sent === 0
-          ? "Queued"
-          : "Sent";
+          ? "Queued": "Sent";
   return (
     <>
       <tr className="border-t hover:bg-muted/30 cursor-pointer" onClick={onToggle}>
         <td className="px-3 py-2">
-          {expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+          {expanded ? <ChevronDown className="h-4 w-4"/> : <ChevronRight className="h-4 w-4" />}
         </td>
         <td className="px-3 py-2 font-mono text-xs">
-          <Link to="/quit-plan/$planToken" params={{ planToken: group.quit_plan_id }} className="hover:underline" onClick={(e) => e.stopPropagation()}>
+          <Link to="/quit-plan/$planToken"params={{ planToken: group.quit_plan_id }} className="hover:underline" onClick={(e) => e.stopPropagation()}>
             {group.quit_plan_id.slice(0, 8)}…
           </Link>
           {group.plan_created_at && (
@@ -193,13 +192,13 @@ function GroupRow({ group, expanded, onToggle }: { group: QuitPlanGroup; expande
         <td className="px-3 py-2">{group.plan_user_email ?? "—"}</td>
         <td className="px-3 py-2 whitespace-nowrap">{new Date(group.last_attempt_at).toLocaleString()}</td>
         <td className="px-3 py-2 text-center">{group.sent}</td>
-        <td className={`px-3 py-2 text-center ${group.failed > 0 ? "text-destructive font-semibold" : ""}`}>{group.failed}</td>
+        <td className={`px-3 py-2 text-center ${group.failed > 0 ? "text-destructive font-semibold": ""}`}>{group.failed}</td>
         <td className="px-3 py-2 text-center">{group.queued}</td>
         <td className="px-3 py-2">
-          {overall === "Sent" && <Badge className="bg-digital hover:bg-digital">Sent</Badge>}
-          {overall === "Partial" && <Badge className="bg-amber-500 hover:bg-amber-500">Partial</Badge>}
-          {overall === "Failed" && <Badge variant="destructive">Failed</Badge>}
-          {overall === "Queued" && <Badge variant="secondary">Queued</Badge>}
+          {overall === "Sent"&& <Badge className="bg-digital hover:bg-digital">Sent</Badge>}
+          {overall === "Partial"&& <Badge className="bg-amber-500 hover:bg-amber-500">Partial</Badge>}
+          {overall === "Failed"&& <Badge variant="destructive">Failed</Badge>}
+          {overall === "Queued"&& <Badge variant="secondary">Queued</Badge>}
         </td>
       </tr>
       {expanded && (

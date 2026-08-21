@@ -5,10 +5,7 @@ export const Route = createFileRoute("/privacy")({
   head: () => ({ meta: [{ title: "سياسة الخصوصية — Aqla" }] }),
   component: () => (
     <SimpleContentPage
-      titleAr="سياسة الخصوصية"
-      titleEn="Privacy Policy"
-      introAr="نحترم خصوصيتك. تشرح هذه الصفحة كيف تجمع منصة أقلع البيانات وتستخدمها."
-      introEn="We respect your privacy. This page explains how Aqla collects and uses data."
+      titleAr="سياسة الخصوصية"titleEn="Privacy Policy"introAr="نحترم خصوصيتك. تشرح هذه الصفحة كيف تجمع منصة أقلع البيانات وتستخدمها."introEn="We respect your privacy. This page explains how Aqla collects and uses data."
       sectionsAr={[
         { heading: "البيانات التي نجمعها", body: "بيانات تحليلية مجهولة عن زيارات الموقع، وإجابات اختيارية للتقييمات، ومعلومات اتصال فقط إذا اخترت تقديمها." },
         { heading: "البيانات الصحية", body: "لا نعرض أي بيانات صحية شخصية في المشاركات العامة. تُستخدم إجابات التقييمات لتقديم نتائج موجهة فقط." },

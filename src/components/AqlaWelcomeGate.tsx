@@ -10,32 +10,32 @@ import { ResearchBanner } from "@/components/ResearchBanner";
 import SaudiFlagWave from "@/components/SaudiFlagWave";
 
 
-type Mode = "choose" | "phone" | "email";
-type PhoneStep = "enter" | "verify";
-type EmailStep = "enter" | "sent";
+type Mode = "choose"| "phone"| "email";
+type PhoneStep = "enter"| "verify";
+type EmailStep = "enter"| "sent";
 
 const COUNTRY_CODES: Array<{ code: string; label: string }> = [
-  { code: "+966", label: " +966" },
-  { code: "+971", label: " +971" },
-  { code: "+965", label: " +965" },
-  { code: "+973", label: " +973" },
-  { code: "+974", label: " +974" },
-  { code: "+968", label: " +968" },
-  { code: "+20", label: " +20" },
-  { code: "+962", label: " +962" },
-  { code: "+90", label: " +90" },
-  { code: "+62", label: " +62" },
-  { code: "+60", label: " +60" },
-  { code: "+92", label: " +92" },
-  { code: "+44", label: " +44" },
-  { code: "+1", label: " +1" },
+  { code: "+966", label: "+966" },
+  { code: "+971", label: "+971" },
+  { code: "+965", label: "+965" },
+  { code: "+973", label: "+973" },
+  { code: "+974", label: "+974" },
+  { code: "+968", label: "+968" },
+  { code: "+20", label: "+20" },
+  { code: "+962", label: "+962" },
+  { code: "+90", label: "+90" },
+  { code: "+62", label: "+62" },
+  { code: "+60", label: "+60" },
+  { code: "+92", label: "+92" },
+  { code: "+44", label: "+44" },
+  { code: "+1", label: "+1" },
 ];
 
 const RESEND_COOLDOWN = 60;
 
 function savePostLoginRedirect() {
   try {
-    if (typeof window !== "undefined" && window.location.pathname !== "/") {
+    if (typeof window !== "undefined"&& window.location.pathname !== "/") {
       sessionStorage.setItem(
         "aqla_post_login_redirect",
         window.location.pathname + window.location.search,
@@ -194,10 +194,7 @@ export function AqlaWelcomeGate() {
 
   return (
     <div
-      dir="rtl"
-      lang="ar"
-      className="aqla-green-field fixed inset-0 z-[100] flex flex-col items-center overflow-y-auto text-[#f4f0e1]"
-      style={{ unicodeBidi: "plaintext" }}
+      dir="rtl"lang="ar"className="aqla-green-field fixed inset-0 z-[100] flex flex-col items-center overflow-y-auto text-[#f4f0e1]"style={{ unicodeBidi: "plaintext" }}
     >
       <SaudiFlagWave />
       {/* Dark scrim so the flag does not overpower the login card */}
@@ -210,13 +207,11 @@ export function AqlaWelcomeGate() {
       <div className="relative z-10 w-full max-w-xl rounded-3xl border border-[#c9a84c]/30 bg-black/20 px-6 py-9 text-center shadow-2xl sm:px-10 sm:py-12">
         <img
           src={aqlaLogo}
-          alt="شعار أقلع — Aqla Logo"
-          className="mx-auto mb-5 h-24 w-auto object-contain drop-shadow-[0_6px_32px_rgba(0,0,0,0.45)] sm:h-28"
+          alt="شعار أقلع — Aqla Logo"className="mx-auto mb-5 h-24 w-auto object-contain drop-shadow-[0_6px_32px_rgba(0,0,0,0.45)] sm:h-28"
         />
 
         <h1
-          className="text-center"
-          style={{ unicodeBidi: "plaintext" }}
+          className="text-center"style={{ unicodeBidi: "plaintext" }}
         >
           <span className="block text-3xl font-bold tracking-tight text-[#f6e7b8] sm:text-4xl">
             أقلع | Aqla
@@ -238,8 +233,7 @@ export function AqlaWelcomeGate() {
           </div>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
             <a
-              href="/try#kys-1"
-              className="group flex flex-col items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-4 text-center transition hover:border-[#c9a84c]/60 hover:bg-white/10 active:scale-[0.98]"
+              href="/try#kys-1"className="group flex flex-col items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-4 text-center transition hover:border-[#c9a84c]/60 hover:bg-white/10 active:scale-[0.98]"
             >
               <span className="text-[12px] font-semibold leading-tight text-[#f4f0e1]">
                 اختبر اعتمادك على النيكوتين
@@ -247,8 +241,7 @@ export function AqlaWelcomeGate() {
               <span className="text-[10px] font-semibold text-[#f6e7b8] group-hover:underline">ابدأ الآن ←</span>
             </a>
             <a
-              href="/try#kys-0"
-              className="group flex flex-col items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-4 text-center transition hover:border-[#c9a84c]/60 hover:bg-white/10 active:scale-[0.98]"
+              href="/try#kys-0"className="group flex flex-col items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-4 text-center transition hover:border-[#c9a84c]/60 hover:bg-white/10 active:scale-[0.98]"
             >
               <span className="text-[12px] font-semibold leading-tight text-[#f4f0e1]">
                 كم تنفق على التدخين؟
@@ -256,8 +249,7 @@ export function AqlaWelcomeGate() {
               <span className="text-[10px] font-semibold text-[#f6e7b8] group-hover:underline">ابدأ الآن ←</span>
             </a>
             <a
-              href="/try#kys-4"
-              className="group relative flex flex-col items-center gap-1.5 overflow-hidden rounded-xl border border-white/10 bg-white/5 px-3 py-4 text-center transition hover:border-[#c9a84c]/60 hover:bg-white/10 active:scale-[0.98]"
+              href="/try#kys-4"className="group relative flex flex-col items-center gap-1.5 overflow-hidden rounded-xl border border-white/10 bg-white/5 px-3 py-4 text-center transition hover:border-[#c9a84c]/60 hover:bg-white/10 active:scale-[0.98]"
             >
               <HexAnim />
               <span className="relative text-[12px] font-semibold leading-tight text-[#f4f0e1]">
@@ -279,7 +271,7 @@ export function AqlaWelcomeGate() {
           >
             {googleLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <GoogleMark />}
             <span style={{ unicodeBidi: "plaintext" }}>
-              {googleLoading ? "جارٍ التحويل…" : "الدخول باستخدام Google"}
+              {googleLoading ? "جارٍ التحويل…": "الدخول باستخدام Google"}
             </span>
           </button>
 
@@ -289,23 +281,19 @@ export function AqlaWelcomeGate() {
                 <button
                   type="button"
                   disabled
-                  aria-disabled="true"
-                  title="قريبًا"
-                  className="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-[#c9a84c]/25 bg-transparent px-4 py-2.5 text-sm font-semibold text-[#f4f0e1]/55 opacity-70"
+                  aria-disabled="true"title="قريبًا"className="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-[#c9a84c]/25 bg-transparent px-4 py-2.5 text-sm font-semibold text-[#f4f0e1]/55 opacity-70"
                 >
                   <Phone className="h-4 w-4" />
                   <span>الدخول برقم الجوال</span>
                 </button>
                 <span
-                  className="pointer-events-none absolute -top-2 end-2 rounded-full border border-[#c9a84c]/50 bg-black/70 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[#f6e7b8]"
-                  style={{ unicodeBidi: "plaintext" }}
+                  className="pointer-events-none absolute -top-2 end-2 rounded-full border border-[#c9a84c]/50 bg-black/70 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[#f6e7b8]"style={{ unicodeBidi: "plaintext" }}
                 >
                   قريبًا
                 </span>
               </div>
               <button
-                type="button"
-                onClick={() => setMode("email")}
+                type="button"onClick={() => setMode("email")}
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#c9a84c]/40 bg-transparent px-4 py-2.5 text-sm font-semibold text-[#f4f0e1] transition hover:bg-white/5"
               >
                 <Mail className="h-4 w-4" />
@@ -320,7 +308,7 @@ export function AqlaWelcomeGate() {
               {phoneStep === "enter" && (
                 <>
                   <label className="mb-1.5 block text-xs text-[#d6cda3]">رقم الجوال</label>
-                  <div className="flex gap-2" dir="ltr">
+                  <div className="flex gap-2"dir="ltr">
                     <select
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
@@ -333,20 +321,15 @@ export function AqlaWelcomeGate() {
                       ))}
                     </select>
                     <input
-                      type="tel"
-                      inputMode="numeric"
-                      autoComplete="tel"
+                      type="tel"inputMode="numeric"autoComplete="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      placeholder="5XXXXXXXX"
-                      className="flex-1 rounded-md border border-white/20 bg-white/95 px-3 py-2 text-sm text-[#0b3a25] placeholder:text-[#0b3a25]/40 focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/40"
-                      dir="ltr"
+                      placeholder="5XXXXXXXX"className="flex-1 rounded-md border border-white/20 bg-white/95 px-3 py-2 text-sm text-[#0b3a25] placeholder:text-[#0b3a25]/40 focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/40"dir="ltr"
                     />
                   </div>
                   <div className="mt-3 flex items-center justify-between gap-2">
                     <button
-                      type="button"
-                      onClick={() => setMode("choose")}
+                      type="button"onClick={() => setMode("choose")}
                       className="text-xs text-[#d6cda3] underline-offset-4 hover:underline"
                     >
                       رجوع
@@ -357,7 +340,7 @@ export function AqlaWelcomeGate() {
                       disabled={phoneLoading || !phone.trim()}
                       className="inline-flex items-center gap-2 rounded-md bg-[#c9a84c] px-4 py-2 text-sm font-semibold text-[#0b3a25] disabled:opacity-50"
                     >
-                      {phoneLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4 rotate-180" />}
+                      {phoneLoading ? <Loader2 className="h-4 w-4 animate-spin"/> : <ArrowRight className="h-4 w-4 rotate-180" />}
                       <span>إرسال رمز التحقق</span>
                     </button>
                   </div>
@@ -365,18 +348,14 @@ export function AqlaWelcomeGate() {
               )}
               {phoneStep === "verify" && (
                 <>
-                  <p className="mb-2 text-xs text-[#d6cda3]" dir="rtl" style={{ unicodeBidi: "plaintext" }}>
+                  <p className="mb-2 text-xs text-[#d6cda3]"dir="rtl"style={{ unicodeBidi: "plaintext" }}>
                     أدخل رمز التحقق المرسل إلى <span dir="ltr">{phoneFull}</span>
                   </p>
                   <input
-                    type="text"
-                    inputMode="numeric"
-                    autoComplete="one-time-code"
+                    type="text"inputMode="numeric"autoComplete="one-time-code"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
-                    placeholder="000000"
-                    className="w-full rounded-md border border-white/20 bg-white/95 px-3 py-2 text-center text-lg tracking-widest text-[#0b3a25] placeholder:text-[#0b3a25]/30 focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/40"
-                    dir="ltr"
+                    placeholder="000000"className="w-full rounded-md border border-white/20 bg-white/95 px-3 py-2 text-center text-lg tracking-widest text-[#0b3a25] placeholder:text-[#0b3a25]/30 focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/40"dir="ltr"
                   />
                   <div className="mt-3 flex items-center justify-between gap-2">
                     <button
@@ -421,18 +400,14 @@ export function AqlaWelcomeGate() {
                 <>
                   <label className="mb-1.5 block text-xs text-[#d6cda3]">البريد الإلكتروني</label>
                   <input
-                    type="email"
-                    autoComplete="email"
+                    type="email"autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="name@example.com"
-                    className="w-full rounded-md border border-white/20 bg-white/95 px-3 py-2 text-sm text-[#0b3a25] placeholder:text-[#0b3a25]/40 focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/40"
-                    dir="ltr"
+                    placeholder="name@example.com"className="w-full rounded-md border border-white/20 bg-white/95 px-3 py-2 text-sm text-[#0b3a25] placeholder:text-[#0b3a25]/40 focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/40"dir="ltr"
                   />
                   <div className="mt-3 flex items-center justify-between gap-2">
                     <button
-                      type="button"
-                      onClick={() => setMode("choose")}
+                      type="button"onClick={() => setMode("choose")}
                       className="text-xs text-[#d6cda3] underline-offset-4 hover:underline"
                     >
                       رجوع
@@ -443,7 +418,7 @@ export function AqlaWelcomeGate() {
                       disabled={emailLoading || !email.trim()}
                       className="inline-flex items-center gap-2 rounded-md bg-[#c9a84c] px-4 py-2 text-sm font-semibold text-[#0b3a25] disabled:opacity-50"
                     >
-                      {emailLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4 rotate-180" />}
+                      {emailLoading ? <Loader2 className="h-4 w-4 animate-spin"/> : <ArrowRight className="h-4 w-4 rotate-180" />}
                       <span>إرسال رابط الدخول</span>
                     </button>
                   </div>
@@ -451,7 +426,7 @@ export function AqlaWelcomeGate() {
               )}
               {emailStep === "sent" && (
                 <div className="space-y-3 text-right">
-                  <p className="text-sm text-[#f4f0e1]" dir="rtl" style={{ unicodeBidi: "plaintext" }}>
+                  <p className="text-sm text-[#f4f0e1]"dir="rtl"style={{ unicodeBidi: "plaintext" }}>
                     تم إرسال رابط الدخول إلى <span dir="ltr">{email}</span>. افتح الرسالة من جوالك أو جهازك لإكمال الدخول.
                   </p>
                   <div className="flex items-center justify-between gap-2">
@@ -480,10 +455,7 @@ export function AqlaWelcomeGate() {
         </div>
 
         <p
-          dir="rtl"
-          lang="ar"
-          className="mt-7 text-[12px] leading-relaxed text-[#cfc69a] sm:text-[13px]"
-          style={{ textAlign: "right", unicodeBidi: "plaintext" }}
+          dir="rtl"lang="ar"className="mt-7 text-[12px] leading-relaxed text-[#cfc69a] sm:text-[13px]"style={{ textAlign: "right", unicodeBidi: "plaintext" }}
         >
           في أقلع، نضع صحة الإنسان وجودة الحياة في قلب رسالتنا، ونسعى لجعل أول خطوة للإقلاع أسهل، وأقرب، وأكثر إنسانية — بما يتماشى مع مستهدفات رؤية المملكة 2030 بقيادة صاحب السمو الملكي الأمير محمد بن سلمان بن عبدالعزيز آل سعود، حفظه الله.‏
         </p>
@@ -499,11 +471,11 @@ export function AqlaWelcomeGate() {
 
 function GoogleMark() {
   return (
-    <svg viewBox="0 0 48 48" className="h-5 w-5" aria-hidden="true">
-      <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.8 32.6 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.9 6.1 29.7 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/>
-      <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16.1 19 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.9 6.1 29.7 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
-      <path fill="#4CAF50" d="M24 44c5.5 0 10.5-2.1 14.3-5.5l-6.6-5.4C29.6 34.7 26.9 36 24 36c-5.2 0-9.7-3.3-11.3-8l-6.5 5C9.4 39.6 16.1 44 24 44z"/>
-      <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.3 5.6l6.6 5.4C41 35.9 44 30.5 44 24c0-1.3-.1-2.3-.4-3.5z"/>
+    <svg viewBox="0 0 48 48"className="h-5 w-5"aria-hidden="true">
+      <path fill="#FFC107"d="M43.6 20.5H42V20H24v8h11.3C33.8 32.6 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.9 6.1 29.7 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/>
+      <path fill="#FF3D00"d="M6.3 14.7l6.6 4.8C14.7 16.1 19 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.9 6.1 29.7 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
+      <path fill="#4CAF50"d="M24 44c5.5 0 10.5-2.1 14.3-5.5l-6.6-5.4C29.6 34.7 26.9 36 24 36c-5.2 0-9.7-3.3-11.3-8l-6.5 5C9.4 39.6 16.1 44 24 44z"/>
+      <path fill="#1976D2"d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.3 5.6l6.6 5.4C41 35.9 44 30.5 44 24c0-1.3-.1-2.3-.4-3.5z"/>
     </svg>
   );
 }
@@ -533,12 +505,11 @@ function HexAnim() {
       `}</style>
       <svg
         aria-hidden
-        viewBox="0 0 100 100"
-        className="pointer-events-none absolute inset-0 h-full w-full opacity-60"
+        viewBox="0 0 100 100"className="pointer-events-none absolute inset-0 h-full w-full opacity-60"
       >
-        <polygon className="aqla-hex" points="20,18 28,14 36,18 36,26 28,30 20,26" fill="none" stroke="#c9a84c" strokeWidth="1.2" style={{ transformOrigin: "28px 22px" }} />
-        <polygon className="aqla-hex-2" points="72,20 80,16 88,20 88,28 80,32 72,28" fill="none" stroke="#f6e7b8" strokeWidth="1" style={{ transformOrigin: "80px 24px" }} />
-        <polygon className="aqla-hex-3" points="74,72 82,68 90,72 90,80 82,84 74,80" fill="none" stroke="#c9a84c" strokeWidth="1" style={{ transformOrigin: "82px 76px" }} />
+        <polygon className="aqla-hex"points="20,18 28,14 36,18 36,26 28,30 20,26"fill="none"stroke="#c9a84c"strokeWidth="1.2"style={{ transformOrigin: "28px 22px" }} />
+        <polygon className="aqla-hex-2"points="72,20 80,16 88,20 88,28 80,32 72,28"fill="none"stroke="#f6e7b8"strokeWidth="1"style={{ transformOrigin: "80px 24px" }} />
+        <polygon className="aqla-hex-3"points="74,72 82,68 90,72 90,80 82,84 74,80"fill="none"stroke="#c9a84c"strokeWidth="1"style={{ transformOrigin: "82px 76px" }} />
       </svg>
     </>
   );

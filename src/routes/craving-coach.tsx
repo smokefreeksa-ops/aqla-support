@@ -5,10 +5,7 @@ export const Route = createFileRoute("/craving-coach")({
   head: () => ({ meta: [{ title: "مدرب اللحظة — Aqla" }] }),
   component: () => (
     <SimpleContentPage
-      titleAr="مدرب اللحظة"
-      titleEn="Craving Coach"
-      introAr="دعم سريع للحظات الرغبة الشديدة، عبر تمارين تنفس قصيرة وتذكيرات هادئة."
-      introEn="Fast support for craving moments through short breathing exercises and calm reminders."
+      titleAr="مدرب اللحظة"titleEn="Craving Coach"introAr="دعم سريع للحظات الرغبة الشديدة، عبر تمارين تنفس قصيرة وتذكيرات هادئة."introEn="Fast support for craving moments through short breathing exercises and calm reminders."
       sectionsAr={[
         { heading: "تنفس 4-7-8", body: "استنشق 4 ثوانٍ، احبس النفس 7 ثوانٍ، أخرج الزفير 8 ثوانٍ. كرر 3-4 مرات." },
         { heading: "قاعدة الـ 5 دقائق", body: "الرغبة لا تستمر طويلًا. أجّل القرار 5 دقائق وغيّر مكانك أو نشاطك." },

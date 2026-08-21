@@ -58,17 +58,17 @@ function ProfilePage() {
         <CardContent className="space-y-4">
           <div className="space-y-1.5">
             <Label htmlFor="fullName">الاسم الكامل</Label>
-            <Input id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="الاسم كما سيظهر في الشهادة" />
+            <Input id="fullName"value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="الاسم كما سيظهر في الشهادة" />
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="city">المدينة</Label>
-            <Input id="city" value={city} onChange={(e) => setCity(e.target.value)} placeholder="مثال: جدة" />
+            <Input id="city"value={city} onChange={(e) => setCity(e.target.value)} placeholder="مثال: جدة" />
           </div>
           <div className="space-y-1.5">
             <Label>البريد الإلكتروني</Label>
             <Input value={data.profile.email ?? "—"} readOnly disabled />
           </div>
-          <Button onClick={onSave} disabled={saving}>{saving ? "جارٍ الحفظ…" : "حفظ التغييرات"}</Button>
+          <Button onClick={onSave} disabled={saving}>{saving ? "جارٍ الحفظ…": "حفظ التغييرات"}</Button>
         </CardContent>
       </Card>
     </div>

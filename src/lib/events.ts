@@ -5,20 +5,7 @@ import { trackEvent } from "@/lib/track-event";
  * Keep this list small and stable so the funnel stays comparable over time.
  */
 export type AqlaEvent =
-  | "page_visit"
-  | "study_banner_click"
-  | "signup_start"
-  | "signup_complete"
-  | "module_start"
-  | "module_complete"
-  | "assessment_start"
-  | "assessment_complete"
-  | "certificate_download"
-  | "poster_created"
-  | "sos_opened"
-  | "session_registered"
-  | "search_opened"
-  | "quick_action";
+  | "page_visit"| "study_banner_click"| "signup_start"| "signup_complete"| "module_start"| "module_complete"| "assessment_start"| "assessment_complete"| "certificate_download"| "poster_created"| "sos_opened"| "session_registered"| "search_opened"| "quick_action";
 
 export function track(event: AqlaEvent, label?: string) {
   trackEvent(event, label);

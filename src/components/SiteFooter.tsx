@@ -82,16 +82,15 @@ export function SiteFooter() {
         {/* Compact top row */}
         <div className="flex flex-col items-center gap-5 sm:flex-row sm:justify-between">
           <div className="flex items-center gap-3">
-            <img src={aqlaLogo} alt="Aqla" className="h-9 w-auto" />
+            <img src={aqlaLogo} alt="Aqla"className="h-9 w-auto" />
             <div className="text-[12px] leading-5 text-muted-foreground">
               <div className="font-medium text-foreground/80">
-                © {new Date().getFullYear()} {isAr ? "أقلع — Aqla" : "Aqla — أقلع"}
+                © {new Date().getFullYear()} {isAr ? "أقلع — Aqla": "Aqla — أقلع"}
               </div>
-              <div>{isAr ? "منصة مجانية للتوعية والدعم — ليست خدمة طوارئ" : "Free awareness & support platform — not emergency service"}</div>
+              <div>{isAr ? "منصة مجانية للتوعية والدعم — ليست خدمة طوارئ": "Free awareness & support platform — not emergency service"}</div>
               <div>
                 {isAr
-                  ? "بالانتساب إلى جامعة الملك عبدالعزيز — جدة، المملكة العربية السعودية"
-                  : "In affiliation with King Abdulaziz University — Jeddah, Saudi Arabia"}
+                  ? "بالانتساب إلى جامعة الملك عبدالعزيز — جدة، المملكة العربية السعودية": "In affiliation with King Abdulaziz University — Jeddah, Saudi Arabia"}
               </div>
             </div>
           </div>
@@ -108,18 +107,16 @@ export function SiteFooter() {
               className="inline-flex items-center gap-1 rounded-full border border-border/60 px-3 py-1 text-[12px] text-foreground/80 hover:border-primary hover:text-primary transition-colors"
               aria-expanded={open}
             >
-              {isAr ? "لمزيد من المعلومات" : "More information"}
-              <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`} />
+              {isAr ? "لمزيد من المعلومات": "More information"}
+              <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180": ""}`} />
             </button>
           </nav>
 
           <div className="flex items-center gap-2">
-            <a href={appRoutes.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
-               className="grid h-9 w-9 place-items-center rounded-full bg-primary/10 text-primary hover:bg-primary/20">
+            <a href={appRoutes.whatsapp} target="_blank"rel="noopener noreferrer"aria-label="WhatsApp"className="grid h-9 w-9 place-items-center rounded-full bg-primary/10 text-primary hover:bg-primary/20">
               <MessageCircle className="h-4 w-4" />
             </a>
-            <a href={appRoutes.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-               className="grid h-9 w-9 place-items-center rounded-full bg-primary/10 text-primary hover:bg-primary/20">
+            <a href={appRoutes.instagram} target="_blank"rel="noopener noreferrer"aria-label="Instagram"className="grid h-9 w-9 place-items-center rounded-full bg-primary/10 text-primary hover:bg-primary/20">
               <Instagram className="h-4 w-4" />
             </a>
           </div>
@@ -128,7 +125,7 @@ export function SiteFooter() {
         {/* Expandable full sitemap */}
         <div
           className={`grid overflow-hidden transition-[grid-template-rows] duration-500 ease-out ${
-            open ? "grid-rows-[1fr] mt-8" : "grid-rows-[0fr]"
+            open ? "grid-rows-[1fr] mt-8": "grid-rows-[0fr]"
           }`}
         >
           <div className="min-h-0">
@@ -148,8 +145,7 @@ export function SiteFooter() {
                               {label}
                             </Link>
                           ) : (
-                            <a href={l.href} target="_blank" rel="noopener noreferrer"
-                               className="text-[12.5px] text-foreground/70 hover:text-primary">
+                            <a href={l.href} target="_blank"rel="noopener noreferrer"className="text-[12.5px] text-foreground/70 hover:text-primary">
                               {label}
                             </a>
                           )}
@@ -165,8 +161,7 @@ export function SiteFooter() {
 
         <p className="mt-6 text-center text-[11px] leading-5 text-muted-foreground/80">
           {isAr
-            ? "لا نعرض بياناتك الصحية في المشاركات العامة. أقلع لا يقدم تشخيصًا أو علاجًا أو وصفة طبية."
-            : "We never expose your private health data in public shares. Aqla does not provide diagnosis, treatment, or prescriptions."}
+            ? "لا نعرض بياناتك الصحية في المشاركات العامة. أقلع لا يقدم تشخيصًا أو علاجًا أو وصفة طبية.": "We never expose your private health data in public shares. Aqla does not provide diagnosis, treatment, or prescriptions."}
         </p>
       </div>
     </footer>

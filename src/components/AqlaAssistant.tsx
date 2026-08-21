@@ -12,10 +12,10 @@ import aqlaLogo from "@/assets/aqla-logo.png";
 // those pages embed <AqlaCenterChat /> directly so there is no duplicate bot.
 const PUBLIC_PATHS = ["/faq"];
 
-type Msg = { role: "user" | "assistant"; content: string; buttons?: AqlaButton[] };
+type Msg = { role: "user"| "assistant"; content: string; buttons?: AqlaButton[] };
 
 export function AqlaAssistant() {
-  const [lang, setLang] = useState<"en" | "ar">("ar");
+  const [lang, setLang] = useState<"en"| "ar">("ar");
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Msg[]>([]);
@@ -44,7 +44,7 @@ export function AqlaAssistant() {
 
   useEffect(() => {
     const sync = () =>
-      setLang((document.documentElement.lang === "ar" ? "ar" : "en"));
+      setLang((document.documentElement.lang === "ar"? "ar": "en"));
     sync();
     const obs = new MutationObserver(sync);
     obs.observe(document.documentElement, { attributes: true, attributeFilter: ["lang", "dir"] });
@@ -57,9 +57,7 @@ export function AqlaAssistant() {
         {
           role: "assistant",
           content:
-            lang === "ar"
-              ? "مرحبًا، أنا مساعد أقلع التثقيفي المبني على توجيهات د. مالك. أستطيع مساعدتك بالمعلومات العامة، الإرشاد المبني على الأدلة، وطريقة استخدام المنصة. لا أقدم تشخيصًا أو علاجًا، ولا أغني عن مراجعة المختص. في حال وجود أعراض طارئة، اطلب الرعاية الطبية العاجلة."
-              : "Hello, I am Aqla’s AI education assistant based on Dr. Malik’s guidance. I can help with general education, evidence-based guidance, and using the platform. I do not provide diagnosis or treatment, and I am not a substitute for clinician review. For urgent symptoms, seek urgent medical care.",
+            lang === "ar"? "مرحبًا، أنا مساعد أقلع التثقيفي المبني على توجيهات د. مالك. أستطيع مساعدتك بالمعلومات العامة، الإرشاد المبني على الأدلة، وطريقة استخدام المنصة. لا أقدم تشخيصًا أو علاجًا، ولا أغني عن مراجعة المختص. في حال وجود أعراض طارئة، اطلب الرعاية الطبية العاجلة.": "Hello, I am Aqla’s AI education assistant based on Dr. Malik’s guidance. I can help with general education, evidence-based guidance, and using the platform. I do not provide diagnosis or treatment, and I am not a substitute for clinician review. For urgent symptoms, seek urgent medical care.",
         },
       ]);
     }
@@ -73,18 +71,17 @@ export function AqlaAssistant() {
 
   const isRTL = lang === "ar";
   const t = {
-    title: isRTL ? "مساعد أقلع التثقيفي" : "Aqla FAQ Helper",
-    placeholder: isRTL ? "اكتب سؤالك…" : "Type your question…",
+    title: isRTL ? "مساعد أقلع التثقيفي": "Aqla FAQ Helper",
+    placeholder: isRTL ? "اكتب سؤالك…": "Type your question…",
     disclaimer: isRTL
-      ? "معلومات تثقيفية فقط — ليست استشارة طبية."
-      : "Educational info only — not medical advice.",
-    open: isRTL ? "مساعد الأسئلة الشائعة" : "FAQ helper",
-    close: isRTL ? "إغلاق" : "Close",
-    reset: isRTL ? "إعادة موضع الأزرار" : "Reset position",
-    error: isRTL ? "تعذّر الاتصال بالمساعد حاليًا. يرجى المحاولة لاحقًا أو التواصل عبر واتساب." : "The assistant is currently unavailable. Please try again later or contact us through WhatsApp.",
+      ? "معلومات تثقيفية فقط — ليست استشارة طبية.": "Educational info only — not medical advice.",
+    open: isRTL ? "مساعد الأسئلة الشائعة": "FAQ helper",
+    close: isRTL ? "إغلاق": "Close",
+    reset: isRTL ? "إعادة موضع الأزرار": "Reset position",
+    error: isRTL ? "تعذّر الاتصال بالمساعد حاليًا. يرجى المحاولة لاحقًا أو التواصل عبر واتساب.": "The assistant is currently unavailable. Please try again later or contact us through WhatsApp.",
   };
 
-  function centerForPath(path: string): "general" | "quit_pathway" | "help_pathway" | "learn_train" | "challenge_pathway" {
+  function centerForPath(path: string): "general"| "quit_pathway"| "help_pathway"| "learn_train"| "challenge_pathway" {
     if (path.startsWith("/quit-pathway")) return "quit_pathway";
     if (path.startsWith("/help-pathway") || path.startsWith("/request-support")) return "help_pathway";
     if (path.startsWith("/learn-train") || path.startsWith("/learn") || path.startsWith("/training")) return "learn_train";
@@ -168,7 +165,7 @@ export function AqlaAssistant() {
             }}
             aria-label={t.open}
             title={t.open}
-            dir={isRTL ? "rtl" : "ltr"}
+            dir={isRTL ? "rtl": "ltr"}
             className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-shadow hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary/40 motion-reduce:transition-none"
           >
             <MessageCircle className="h-5 w-5 pointer-events-none" />
@@ -178,14 +175,13 @@ export function AqlaAssistant() {
 
       {open && (
         <div
-          dir={isRTL ? "rtl" : "ltr"}
+          dir={isRTL ? "rtl": "ltr"}
           lang={lang}
-          className="fixed bottom-[calc(24px+env(safe-area-inset-bottom,0px))] left-4 sm:left-6 flex w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-elegant"
-          style={{ height: "min(28rem, calc(100vh - 8rem))", zIndex: 50 }}
+          className="fixed bottom-[calc(24px+env(safe-area-inset-bottom,0px))] left-4 sm:left-6 flex w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-elegant"style={{ height: "min(28rem, calc(100vh - 8rem))", zIndex: 50 }}
         >
           <div className="flex items-center justify-between gap-2 border-b bg-primary px-3 py-2 text-primary-foreground">
             <div className="flex items-center gap-2">
-              <img src={aqlaLogo} alt="Aqla — أقلع logo" className="h-6 w-6 rounded-full bg-white object-contain p-0.5" />
+              <img src={aqlaLogo} alt="Aqla — أقلع logo"className="h-6 w-6 rounded-full bg-white object-contain p-0.5" />
               <span className="text-sm font-semibold">{t.title}</span>
             </div>
             <div className="flex items-center gap-1">
@@ -213,23 +209,22 @@ export function AqlaAssistant() {
             {messages.map((m, i) => (
               <div key={i} className="space-y-1">
                 <div
-                  dir={isRTL ? "rtl" : "ltr"}
-                  className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3 py-2 text-sm ${isRTL ? "text-right" : "text-left"} ${
-                    m.role === "user"
-                      ? `${isRTL ? "mr-auto" : "ml-auto"} bg-primary text-primary-foreground`
-                      : `${isRTL ? "ml-auto" : "mr-auto"} bg-muted text-foreground`
+                  dir={isRTL ? "rtl": "ltr"}
+                  className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3 py-2 text-sm ${isRTL ? "text-right": "text-left"} ${
+                    m.role === "user"? `${isRTL ? "mr-auto": "ml-auto"} bg-primary text-primary-foreground`
+                      : `${isRTL ? "ml-auto": "mr-auto"} bg-muted text-foreground`
                   }`}
                 >
                   {m.content}
                 </div>
                 {m.role === "assistant" && m.buttons && m.buttons.length > 0 && (
-                  <div className={`flex flex-wrap gap-2 ${isRTL ? "ml-auto flex-row-reverse justify-end" : "mr-auto justify-start"} max-w-[85%]`}>
+                  <div className={`flex flex-wrap gap-2 ${isRTL ? "ml-auto flex-row-reverse justify-end": "mr-auto justify-start"} max-w-[85%]`}>
                     {m.buttons.map((b, j) => (
                       <button
                         key={j}
                         type="button"
                         onClick={() => handleButton(b)}
-                         className={`rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary hover:bg-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/40 ${isRTL ? "text-right" : "text-left"}`}
+                         className={`rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary hover:bg-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/40 ${isRTL ? "text-right": "text-left"}`}
                       >
                         {b.label}
                       </button>
@@ -239,9 +234,9 @@ export function AqlaAssistant() {
               </div>
             ))}
             {sending && (
-              <div className={`flex items-center gap-2 text-xs text-muted-foreground ${isRTL ? "ml-auto" : "mr-auto"}`}>
+              <div className={`flex items-center gap-2 text-xs text-muted-foreground ${isRTL ? "ml-auto": "mr-auto"}`}>
                 <Loader2 className="h-3 w-3 animate-spin" />
-                {isRTL ? "يكتب…" : "Thinking…"}
+                {isRTL ? "يكتب…": "Thinking…"}
               </div>
             )}
           </div>
@@ -265,14 +260,13 @@ export function AqlaAssistant() {
                 }}
                 rows={1}
                 placeholder={t.placeholder}
-                dir={isRTL ? "rtl" : "ltr"}
-                className={`max-h-32 flex-1 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 ${isRTL ? "text-right" : "text-left"}`}
+                dir={isRTL ? "rtl": "ltr"}
+                className={`max-h-32 flex-1 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 ${isRTL ? "text-right": "text-left"}`}
               />
               <button
                 type="submit"
                 disabled={sending || !input.trim()}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground disabled:opacity-50"
-                aria-label={isRTL ? "إرسال" : "Send"}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground disabled:opacity-50"aria-label={isRTL ? "إرسال": "Send"}
               >
                 <Send className="h-4 w-4" />
               </button>

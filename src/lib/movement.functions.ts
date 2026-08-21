@@ -90,14 +90,7 @@ export const signCharter = createServerFn({ method: "POST" })
   });
 
 const ALLOWED_EVENTS = new Set([
-  "movement_page_viewed",
-  "aqla_index_viewed",
-  "trigger_map_completed",
-  "majlis_phrase_copied",
-  "movement_share_clicked",
-  "movement_share_whatsapp",
-  "movement_share_x",
-  "passport_share_clicked",
+  "movement_page_viewed", "aqla_index_viewed", "trigger_map_completed", "majlis_phrase_copied", "movement_share_clicked", "movement_share_whatsapp", "movement_share_x", "passport_share_clicked",
 ]);
 
 export const logMovementEvent = createServerFn({ method: "POST" })
@@ -123,14 +116,7 @@ export const logMovementEvent = createServerFn({ method: "POST" })
   });
 
 const ALLOWED_STAMPS = new Set([
-  "charter_signed",
-  "assessment_completed",
-  "quit_pledge_created",
-  "poster_created",
-  "quiz_completed",
-  "city_challenge_joined",
-  "volunteer_training_started",
-  "helped_someone",
+  "charter_signed", "assessment_completed", "quit_pledge_created", "poster_created", "quiz_completed", "city_challenge_joined", "volunteer_training_started", "helped_someone",
 ]);
 
 export const earnPassportStamp = createServerFn({ method: "POST" })

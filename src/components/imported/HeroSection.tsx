@@ -49,19 +49,17 @@ function PublicationCarousel({ onPublicationClick }: { onPublicationClick: () =>
   return (
     <div className="w-full max-w-lg mx-auto mt-8">
       <div className="flex items-center justify-center gap-2 mb-3">
-        <div className="h-px flex-1" style={{ background: "rgba(0,166,90,0.2)" }} />
+        <div className="h-px flex-1"style={{ background: "rgba(0,166,90,0.2)" }} />
         <span
-          className="text-xs font-semibold tracking-widest px-3"
-          style={{ color: "#34d399" }}
+          className="text-xs font-semibold tracking-widest px-3"style={{ color: "#34d399" }}
         >
           أحدث أبحاثنا المنشورة
         </span>
-        <div className="h-px flex-1" style={{ background: "rgba(0,166,90,0.2)" }} />
+        <div className="h-px flex-1"style={{ background: "rgba(0,166,90,0.2)" }} />
       </div>
       <a
         href={pub.url}
-        target="_blank"
-        rel="noopener noreferrer"
+        target="_blank"rel="noopener noreferrer"
         onClick={onPublicationClick}
         className="group flex items-start gap-3 w-full rounded-xl px-5 py-4 hover:scale-[1.02] transition"
         style={{
@@ -71,21 +69,19 @@ function PublicationCarousel({ onPublicationClick }: { onPublicationClick: () =>
           transition: "opacity 0.4s ease, transform 0.3s ease",
         }}
       >
-        <BookOpen className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: "#00A65A" }} />
+        <BookOpen className="w-5 h-5 flex-shrink-0 mt-0.5"style={{ color: "#00A65A" }} />
         <div className="flex-1 text-right">
           <p
-            className="text-sm font-semibold leading-snug mb-0.5 group-hover:underline"
-            style={{ color: "rgba(255,255,255,0.88)" }}
+            className="text-sm font-semibold leading-snug mb-0.5 group-hover:underline"style={{ color: "rgba(255,255,255,0.88)" }}
           >
             {pub.titleAr}
           </p>
-          <p className="text-xs" style={{ color: "rgba(255,255,255,0.70)" }}>
+          <p className="text-xs"style={{ color: "rgba(255,255,255,0.70)" }}>
             {pub.journal}
           </p>
         </div>
         <ExternalLink
-          className="w-4 h-4 flex-shrink-0 opacity-40 group-hover:opacity-80 transition-opacity mt-0.5"
-          style={{ color: "#00A65A" }}
+          className="w-4 h-4 flex-shrink-0 opacity-40 group-hover:opacity-80 transition-opacity mt-0.5"style={{ color: "#00A65A" }}
         />
       </a>
     </div>
@@ -154,7 +150,7 @@ export function LiveStatsBar({ compact = false }: { compact?: boolean }) {
           <div
             key={item.label}
             className={`flex items-center gap-2.5 px-5 py-3 flex-1 min-w-[110px] ${
-              i < items.length - 1 ? "border-l border-white/[0.07]" : ""
+              i < items.length - 1 ? "border-l border-white/[0.07]": ""
             }`}
           >
             <Icon className="w-4 h-4 flex-shrink-0" style={{ color: item.color }} />
@@ -166,8 +162,7 @@ export function LiveStatsBar({ compact = false }: { compact?: boolean }) {
                 {item.value.toLocaleString("ar-SA")}
               </div>
               <div
-                className="text-[10px] mt-0.5 leading-none"
-                style={{ color: "rgba(255,255,255,0.40)" }}
+                className="text-[10px] mt-0.5 leading-none"style={{ color: "rgba(255,255,255,0.40)" }}
               >
                 {item.label}
               </div>
@@ -193,7 +188,7 @@ function TypewriterHeadline() {
         }}
       >
         أقلع
-      </span>{" "}
+      </span>{""}
       <span>
         {displayed}
         {!done && <span className="typewriter-cursor" />}
@@ -226,14 +221,12 @@ function spotlightStyle(idx: number, active: number | null): React.CSSProperties
     transform: isActive
       ? "scale(1.20) translateY(-6px) translateZ(0)"
       : isIdle
-        ? "scale(1) translateZ(0)"
-        : "scale(0.92) translateZ(0)",
+        ? "scale(1) translateZ(0)": "scale(0.92) translateZ(0)",
     opacity: isActive ? 1 : isIdle ? 1 : 0.5,
     zIndex: isActive ? 50 : 1,
     position: "relative",
     boxShadow: isActive
-      ? "0 0 0 3px rgba(255,255,255,0.20), 0 20px 60px rgba(0,0,0,0.5)"
-      : "none",
+      ? "0 0 0 3px rgba(255,255,255,0.20), 0 20px 60px rgba(0,0,0,0.5)": "none",
     borderRadius: isActive ? "1rem" : undefined,
   };
 }
@@ -242,12 +235,7 @@ export default function HeroSection() {
   const track = useCallback(
     (
       eventType:
-        | "page_visit"
-        | "survey_click"
-        | "quit_intent"
-        | "training_click"
-        | "video_view"
-        | "publication_click",
+        | "page_visit"| "survey_click"| "quit_intent"| "training_click"| "video_view"| "publication_click",
     ) => {
       try {
         trackEvent("hero_" + eventType);
@@ -268,19 +256,15 @@ export default function HeroSection() {
 
   return (
     <section
-      id="home"
-      className="relative flex flex-col min-h-[92vh] items-center justify-center pt-24 pb-28 overflow-hidden"
-      style={{ background: "#020806" }}
+      id="home"className="relative flex flex-col min-h-[92vh] items-center justify-center pt-24 pb-28 overflow-hidden"style={{ background: "#020806" }}
     >
       <SaudiFlagWave />
       <div className="absolute inset-0 z-[1] pointer-events-none">
         <div
-          className="absolute top-1/2 left-1/2 h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.05) 45%, transparent 70%)" }}
+          className="absolute top-1/2 left-1/2 h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"style={{ background: "radial-gradient(circle, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.05) 45%, transparent 70%)" }}
         />
         <div
-          className="absolute inset-x-0 top-0 h-px"
-          style={{ background: "linear-gradient(to right, transparent, rgba(201,168,76,0.4), transparent)" }}
+          className="absolute inset-x-0 top-0 h-px"style={{ background: "linear-gradient(to right, transparent, rgba(201,168,76,0.4), transparent)" }}
         />
       </div>
       {/* Seamless bottom fade into the green page background */}
@@ -305,10 +289,7 @@ export default function HeroSection() {
 
         >
           {[
-            "top-0 left-0 border-t-2 border-l-2",
-            "top-0 right-0 border-t-2 border-r-2",
-            "bottom-0 left-0 border-b-2 border-l-2",
-            "bottom-0 right-0 border-b-2 border-r-2",
+            "top-0 left-0 border-t-2 border-l-2", "top-0 right-0 border-t-2 border-r-2", "bottom-0 left-0 border-b-2 border-l-2", "bottom-0 right-0 border-b-2 border-r-2",
           ].map((cls, i) => (
             <div
               key={i}
@@ -319,15 +300,14 @@ export default function HeroSection() {
 
           <div className="mb-6 flex justify-center" style={spotlightStyle(0, spotlight)}>
             <Link
-              to="/quit-pathway"
-              onClick={() => track("survey_click")}
+              to="/quit-pathway"onClick={() => track("survey_click")}
               className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full study-banner-flash cursor-pointer select-none"
             >
               <FlaskConical className="w-4 h-4 flex-shrink-0 text-white" />
               <span
                 className="font-bold text-white tracking-wide"
                 style={{
-                  fontSize: spotlight === 0 ? "1.1rem" : "0.875rem",
+                  fontSize: spotlight === 0 ? "1.1rem": "0.875rem",
                   transition: "font-size 0.5s ease",
                 }}
               >
@@ -339,16 +319,14 @@ export default function HeroSection() {
           <div className="mb-5 flex justify-center">
             <img
               src={aqlaLogo}
-              alt="شعار أقلع — Aqla Logo"
-              className="h-20 w-auto object-contain drop-shadow-[0_4px_24px_rgba(0,0,0,0.45)] sm:h-24 md:h-28"
+              alt="شعار أقلع — Aqla Logo"className="h-20 w-auto object-contain drop-shadow-[0_4px_24px_rgba(0,0,0,0.45)] sm:h-24 md:h-28"
             />
           </div>
 
           <TypewriterHeadline />
 
           <p
-            className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-8"
-            style={{ color: "rgba(255,255,255,0.72)" }}
+            className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-8"style={{ color: "rgba(255,255,255,0.72)" }}
           >
             منصة علمية متكاملة لدعم الإقلاع عن التدخين — مبنية على أحدث الأدلة السريرية
             وتجمع بين التقنية والرعاية الشخصية لتحقيق نتائج مستدامة.
@@ -357,17 +335,15 @@ export default function HeroSection() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-5">
             <div style={spotlightStyle(1, spotlight)}>
               <Link
-                to="/quit-pathway"
-                onClick={() => track("quit_intent")}
+                to="/quit-pathway"onClick={() => track("quit_intent")}
                 className="flex items-center justify-center font-bold rounded-xl text-white transition-colors duration-200 active:scale-95"
                 style={{
                   background: "linear-gradient(135deg, #00A65A 0%, #006C35 100%)",
                   boxShadow:
                     spotlight === 1
-                      ? "0 6px 36px rgba(0,166,90, 0.60)"
-                      : "0 4px 24px rgba(0,166,90, 0.40)",
-                  fontSize: spotlight === 1 ? "1.25rem" : "1rem",
-                  padding: spotlight === 1 ? "1rem 2.5rem" : "0.875rem 2rem",
+                      ? "0 6px 36px rgba(0,166,90, 0.60)": "0 4px 24px rgba(0,166,90, 0.40)",
+                  fontSize: spotlight === 1 ? "1.25rem": "1rem",
+                  padding: spotlight === 1 ? "1rem 2.5rem": "0.875rem 2rem",
                   transition:
                     "font-size 0.5s ease, padding 0.5s ease, box-shadow 0.5s ease",
                   whiteSpace: "nowrap",
@@ -379,21 +355,18 @@ export default function HeroSection() {
 
             <div style={spotlightStyle(2, spotlight)}>
               <Link
-                to="/learn-train"
-                onClick={() => track("training_click")}
+                to="/learn-train"onClick={() => track("training_click")}
                 className="flex items-center justify-center font-bold rounded-xl transition-colors duration-200 active:scale-95"
                 style={{
                   border:
                     spotlight === 2
-                      ? "2px solid rgba(167, 139, 250, 0.9)"
-                      : "2px solid rgba(167, 139, 250, 0.55)",
+                      ? "2px solid rgba(167, 139, 250, 0.9)": "2px solid rgba(167, 139, 250, 0.55)",
                   color: "#a78bfa",
                   background:
                     spotlight === 2
-                      ? "rgba(167, 139, 250, 0.18)"
-                      : "rgba(167, 139, 250, 0.08)",
-                  fontSize: spotlight === 2 ? "1.15rem" : "1rem",
-                  padding: spotlight === 2 ? "1rem 2rem" : "0.875rem 2rem",
+                      ? "rgba(167, 139, 250, 0.18)": "rgba(167, 139, 250, 0.08)",
+                  fontSize: spotlight === 2 ? "1.15rem": "1rem",
+                  padding: spotlight === 2 ? "1rem 2rem": "0.875rem 2rem",
                   transition:
                     "font-size 0.5s ease, padding 0.5s ease, border-color 0.5s ease, background 0.5s ease",
                   whiteSpace: "nowrap",
@@ -404,15 +377,12 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <p className="text-sm mb-4" style={{ color: "rgba(255,255,255,0.75)" }}>
+          <p className="text-sm mb-4"style={{ color: "rgba(255,255,255,0.75)" }}>
             مجاناً تماماً • مدعوم بالأدلة العلمية • ابدأ الآن
           </p>
 
           <a
-            href="https://www.youtube.com/@aqla_program"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => track("video_view")}
+            href="https://www.youtube.com/@aqla_program"target="_blank"rel="noopener noreferrer"onClick={() => track("video_view")}
             className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full text-sm font-semibold transition-all duration-200 active:scale-95"
             style={{
               border: "1px solid rgba(255,255,255,0.15)",
@@ -421,8 +391,7 @@ export default function HeroSection() {
             }}
           >
             <div
-              className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0"
-              style={{ background: "linear-gradient(135deg, #00A65A, #006C35)" }}
+              className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0"style={{ background: "linear-gradient(135deg, #00A65A, #006C35)" }}
             >
               <Play className="w-3.5 h-3.5 fill-white text-white ml-0.5" />
             </div>
@@ -474,9 +443,7 @@ export default function HeroSection() {
           if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
           else window.scrollBy({ top: window.innerHeight, behavior: "smooth" });
         }}
-        aria-label="مرر لأسفل"
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-10 cursor-pointer hover:text-white/70 transition-colors"
-        style={{ color: "rgba(255,255,255,0.35)", background: "transparent", border: "none" }}
+        aria-label="مرر لأسفل"className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-10 cursor-pointer hover:text-white/70 transition-colors"style={{ color: "rgba(255,255,255,0.35)", background: "transparent", border: "none" }}
       >
         <span className="text-xs">مرر لأسفل</span>
         <ChevronDown className="w-4 h-4" />

@@ -12,15 +12,7 @@ import {
 } from "lucide-react";
 
 type AgentTone =
-  | "emerald-command"
-  | "ivory-split"
-  | "moment-urgent"
-  | "warm-invite"
-  | "academic-teal"
-  | "clinical-bluegreen"
-  | "challenge-celebrate"
-  | "vape-modern"
-  | "sunrise-reset";
+  | "emerald-command"| "ivory-split"| "moment-urgent"| "warm-invite"| "academic-teal"| "clinical-bluegreen"| "challenge-celebrate"| "vape-modern"| "sunrise-reset";
 
 type Agent = {
   id: string;
@@ -184,7 +176,7 @@ const TONE_STYLES: Record<AgentTone, { card: string; chip: string; icon: string;
   },
 };
 
-export function AgentConstellation({ lang }: { lang: "ar" | "en" }) {
+export function AgentConstellation({ lang }: { lang: "ar"| "en" }) {
   return (
     <div className="relative">
       <div
@@ -217,7 +209,7 @@ export function AgentConstellation({ lang }: { lang: "ar" | "en" }) {
                   <span
                     className={`text-[10px] font-medium tracking-wider uppercase rounded-full px-2.5 py-1 ${tone.chip}`}
                   >
-                    {lang === "ar" ? "مساعد ذكي" : "AI agent"}
+                    {lang === "ar"? "مساعد ذكي": "AI agent"}
                   </span>
                 </div>
                 <h3 className="mt-4 text-lg font-semibold leading-tight">
@@ -227,7 +219,7 @@ export function AgentConstellation({ lang }: { lang: "ar" | "en" }) {
                   {lang === "ar" ? a.hintAr : a.hintEn}
                 </p>
                 <div className="mt-4 inline-flex items-center text-xs font-semibold opacity-90 group-hover:opacity-100">
-                  {lang === "ar" ? "افتح المساعد ←" : "Open agent →"}
+                  {lang === "ar"? "افتح المساعد ←": "Open agent →"}
                 </div>
               </div>
             </Link>

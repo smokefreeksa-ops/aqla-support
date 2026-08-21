@@ -31,7 +31,7 @@ function AcademyCertPage() {
     queryFn: () => verifyFn({ data: { code } }),
   });
 
-  const verifyUrl = typeof window !== "undefined" ? `${window.location.origin}/academy-certificate/${code}` : "";
+  const verifyUrl = typeof window !== "undefined"? `${window.location.origin}/academy-certificate/${code}` : "";
   const shareText = `أتممت وحدة من أكاديمية أقلع بنجاح — I completed an Aqla Academy module. Verify: ${verifyUrl}`;
   const copyLink = async () => {
     try { await navigator.clipboard.writeText(verifyUrl); toast.success("Link copied"); } catch { /* noop */ }
@@ -52,12 +52,12 @@ function AcademyCertPage() {
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-amber-50/30 to-emerald-50/30 print:bg-white">
       <header className="border-b bg-card/70 backdrop-blur print:hidden">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-          <Link to="/" className="font-semibold text-primary">Aqla — أقلع</Link>
+          <Link to="/"className="font-semibold text-primary">Aqla — أقلع</Link>
         </div>
       </header>
       <main className="mx-auto max-w-4xl px-4 py-8">
         <div className="mb-5">
-          <BackButton fallback="/certificates" labelAr="الشهادات" labelEn="Certificates" />
+          <BackButton fallback="/certificates"labelAr="الشهادات"labelEn="Certificates" />
         </div>
         {!found ? (
           <Card className="p-8 text-center">
@@ -109,15 +109,15 @@ function AcademyCertPage() {
                 <div className="flex items-center justify-between pt-4 text-xs text-stone-500 border-t">
                   <div>Verify: {SITE_URL.replace(/^https?:\/\//, "")}/academy-certificate/{code}</div>
                   <div className="text-right">
-                    <img alt="QR" src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(verifyUrl)}`} className="h-20 w-20" />
+                    <img alt="QR"src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(verifyUrl)}`} className="h-20 w-20" />
                   </div>
                 </div>
               </div>
             </Card>
             <div className="mt-4 flex flex-wrap gap-2 justify-center print:hidden">
               <Button onClick={() => window.print()}><Download className="me-2 h-4 w-4" />Download / Print</Button>
-              <Button variant="outline" onClick={shareOut}><Share2 className="me-2 h-4 w-4" />Share</Button>
-              <Button variant="outline" onClick={copyLink}><LinkIcon className="me-2 h-4 w-4" />Copy verification link</Button>
+              <Button variant="outline"onClick={shareOut}><Share2 className="me-2 h-4 w-4" />Share</Button>
+              <Button variant="outline"onClick={copyLink}><LinkIcon className="me-2 h-4 w-4" />Copy verification link</Button>
             </div>
             <div className="mt-3 text-center text-xs text-muted-foreground print:hidden flex items-center justify-center gap-1">
               <ShieldCheck className="h-3.5 w-3.5" /> Verified via Aqla certificate registry

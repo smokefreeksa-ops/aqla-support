@@ -58,9 +58,9 @@ export function SiteHeader() {
       <header dir={dir} className="border-b border-border/60 bg-card/95">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5">
         <Link to={appRoutes.home} className="flex shrink-0 items-center gap-2.5">
-          <img src={aqlaLogo} alt="Aqla — أقلع" className="h-9 w-auto object-contain sm:h-10" />
+          <img src={aqlaLogo} alt="Aqla — أقلع"className="h-9 w-auto object-contain sm:h-10" />
           <div className="hidden leading-tight sm:block">
-            <div className="text-sm font-semibold tracking-tight">{lang === "ar" ? "أقلع" : "Aqla"}</div>
+            <div className="text-sm font-semibold tracking-tight">{lang === "ar"? "أقلع": "Aqla"}</div>
             <div className="text-[10px] text-muted-foreground">Aqla — أقلع</div>
           </div>
         </Link>
@@ -83,47 +83,41 @@ export function SiteHeader() {
           <SearchTrigger />
 
           <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setLang(lang === "ar" ? "en" : "ar")}
-            className="gap-1.5 text-xs"
-            aria-label={lang === "ar" ? "Switch to English" : "التحويل إلى العربية"}
+            variant="ghost"size="sm"onClick={() => setLang(lang === "ar"? "en": "ar")}
+            className="gap-1.5 text-xs"aria-label={lang === "ar"? "Switch to English": "التحويل إلى العربية"}
           >
             <Languages className="h-3.5 w-3.5" />
-            {lang === "ar" ? "EN" : "ع"}
+            {lang === "ar"? "EN": "ع"}
           </Button>
           {!signedIn ? (
             <>
               <Link to={appRoutes.staffLogin} className="hidden sm:inline-flex">
-                <Button variant="outline" size="sm" className="text-xs">
-                  {lang === "ar" ? "دخول الموظفين" : "Staff"}
+                <Button variant="outline"size="sm"className="text-xs">
+                  {lang === "ar"? "دخول الموظفين": "Staff"}
                 </Button>
               </Link>
               <Link to={appRoutes.start} className="hidden md:inline-flex">
-                <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs">
-                  {lang === "ar" ? "ابدأ الآن" : "Start Now"}
+                <Button size="sm"className="bg-primary text-primary-foreground hover:bg-primary/90 text-xs">
+                  {lang === "ar"? "ابدأ الآن": "Start Now"}
                 </Button>
               </Link>
             </>
           ) : (
             <Button
-              variant="ghost"
-              size="sm"
+              variant="ghost"size="sm"
               onClick={() => void signOut()}
-              className="gap-1 text-xs"
-              aria-label={lang === "ar" ? "تسجيل الخروج" : "Sign out"}
+              className="gap-1 text-xs"aria-label={lang === "ar"? "تسجيل الخروج": "Sign out"}
             >
               <LogOut className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">{lang === "ar" ? "تسجيل الخروج" : "Sign out"}</span>
+              <span className="hidden sm:inline">{lang === "ar"? "تسجيل الخروج": "Sign out"}</span>
             </Button>
           )}
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="grid h-9 w-9 place-items-center rounded-md border border-border/60 xl:hidden"
-            aria-label={open ? "Close menu" : "Open menu"}
+            className="grid h-9 w-9 place-items-center rounded-md border border-border/60 xl:hidden"aria-label={open ? "Close menu": "Open menu"}
           >
-            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            {open ? <X className="h-4 w-4"/> : <Menu className="h-4 w-4" />}
           </button>
         </div>
       </div>
@@ -144,7 +138,7 @@ export function SiteHeader() {
               </Link>
             ))}
             <Link to={appRoutes.staffLogin} onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm text-foreground/85 hover:bg-primary/5 sm:hidden">
-              {lang === "ar" ? "دخول الموظفين" : "Staff Login"}
+              {lang === "ar"? "دخول الموظفين": "Staff Login"}
             </Link>
           </nav>
         </div>

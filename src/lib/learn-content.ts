@@ -1,7 +1,7 @@
 // Aqla Learn — static content (modules + question bank).
 // Kept in code for type-safety; admin editing is supported via DB tables for future iterations.
 
-export type Lang = "ar" | "en";
+export type Lang = "ar"| "en";
 
 export type LearnQuestion = {
   id: string;
@@ -44,14 +44,10 @@ export const LEARN_MODULES: LearnModule[] = [
     subtitle_ar: "فهم المكونات الأساسية والآثار على الجسم.",
     subtitle_en: "Understand the core substances and their effects on the body.",
     key_points_ar: [
-      "النيكوتين هو المادة الرئيسية التي تسبب الاعتماد.",
-      "دخان التبغ يحتوي على آلاف المواد الكيميائية، كثير منها ضار.",
-      "الإقلاع في أي عمر يحسّن الصحة على المدى القصير والطويل.",
+      "النيكوتين هو المادة الرئيسية التي تسبب الاعتماد.", "دخان التبغ يحتوي على آلاف المواد الكيميائية، كثير منها ضار.", "الإقلاع في أي عمر يحسّن الصحة على المدى القصير والطويل.",
     ],
     key_points_en: [
-      "Nicotine is the main substance that drives dependence.",
-      "Tobacco smoke contains thousands of chemicals, many harmful.",
-      "Quitting at any age improves short- and long-term health.",
+      "Nicotine is the main substance that drives dependence.", "Tobacco smoke contains thousands of chemicals, many harmful.", "Quitting at any age improves short- and long-term health.",
     ],
     did_you_know_ar: "خلال 20 دقيقة من آخر سيجارة يبدأ معدل ضربات القلب وضغط الدم بالعودة لمستوى أكثر طبيعية.",
     did_you_know_en: "Within 20 minutes of the last cigarette, heart rate and blood pressure begin returning toward normal.",
@@ -99,8 +95,8 @@ export const LEARN_MODULES: LearnModule[] = [
       },
       {
         id: "basics-5",
-        question_ar: "هل التدخين \"الخفيف\" آمن صحيًا؟",
-        question_en: "Is \"light\" smoking safe?",
+        question_ar: "هل التدخين \"الخفيف\"آمن صحيًا؟",
+        question_en: "Is \"light\"smoking safe?",
         options_ar: ["نعم، آمن تمامًا", "لا، حتى التدخين القليل يزيد المخاطر", "آمن للنساء فقط", "آمن في المساء فقط"],
         options_en: ["Yes, completely safe", "No, even light smoking raises risk", "Safe only for women", "Safe only in the evening"],
         correct: 1,
@@ -136,14 +132,10 @@ export const LEARN_MODULES: LearnModule[] = [
     subtitle_ar: "آلية الاعتماد وعلامات الانسحاب.",
     subtitle_en: "How dependence forms and what withdrawal looks like.",
     key_points_ar: [
-      "النيكوتين يحفز إفراز الدوبامين في دوائر المكافأة.",
-      "الانسحاب قد يشمل القلق والتركيز الضعيف والرغبة الشديدة.",
-      "أعراض الانسحاب مؤقتة وتقل خلال أسابيع.",
+      "النيكوتين يحفز إفراز الدوبامين في دوائر المكافأة.", "الانسحاب قد يشمل القلق والتركيز الضعيف والرغبة الشديدة.", "أعراض الانسحاب مؤقتة وتقل خلال أسابيع.",
     ],
     key_points_en: [
-      "Nicotine triggers dopamine release in reward circuits.",
-      "Withdrawal may include irritability, poor focus, and cravings.",
-      "Withdrawal symptoms are temporary and ease within weeks.",
+      "Nicotine triggers dopamine release in reward circuits.", "Withdrawal may include irritability, poor focus, and cravings.", "Withdrawal symptoms are temporary and ease within weeks.",
     ],
     did_you_know_ar: "معظم أعراض الانسحاب الجسدية تبلغ ذروتها خلال أول أسبوع وتخف بسرعة.",
     did_you_know_en: "Most physical withdrawal symptoms peak within the first week and ease quickly.",
@@ -228,14 +220,10 @@ export const LEARN_MODULES: LearnModule[] = [
     subtitle_ar: "ما تعرفه وما لا تعرفه عن الفيب.",
     subtitle_en: "What we know and what we do not yet know about vaping.",
     key_points_ar: [
-      "أغلب أجهزة الفيب تحتوي على نيكوتين، أحيانًا بتركيز عالٍ.",
-      "الفيب ليس \"بخار ماء\"؛ بل أيروسول يحتوي على مواد كيميائية.",
-      "السلامة طويلة المدى لا تزال قيد الدراسة.",
+      "أغلب أجهزة الفيب تحتوي على نيكوتين، أحيانًا بتركيز عالٍ.", "الفيب ليس \"بخار ماء\"؛ بل أيروسول يحتوي على مواد كيميائية.", "السلامة طويلة المدى لا تزال قيد الدراسة.",
     ],
     key_points_en: [
-      "Most vapes contain nicotine, sometimes in high concentrations.",
-      "Vape \"clouds\" are aerosols containing chemicals, not water vapor.",
-      "Long-term safety is still being studied.",
+      "Most vapes contain nicotine, sometimes in high concentrations.", "Vape \"clouds\"are aerosols containing chemicals, not water vapor.", "Long-term safety is still being studied.",
     ],
     did_you_know_ar: "بعض أجهزة الفيب تحتوي على نيكوتين يعادل عبوة سجائر كاملة في جهاز واحد.",
     did_you_know_en: "Some disposable vapes contain nicotine equivalent to a whole pack of cigarettes in one device.",
@@ -243,7 +231,7 @@ export const LEARN_MODULES: LearnModule[] = [
     questions: [
       {
         id: "vape-1",
-        question_ar: "هل ما يخرج من جهاز الفيب هو \"بخار ماء\" فقط؟",
+        question_ar: "هل ما يخرج من جهاز الفيب هو \"بخار ماء\"فقط؟",
         question_en: "Is what comes out of a vape just \"water vapor\"?",
         options_ar: ["نعم", "لا، هو أيروسول يحتوي على مواد كيميائية", "هو دخان عادي", "لا يحتوي على نيكوتين أبدًا"],
         options_en: ["Yes", "No, it is an aerosol with chemicals", "It is just smoke", "It never contains nicotine"],
@@ -320,14 +308,10 @@ export const LEARN_MODULES: LearnModule[] = [
     subtitle_ar: "ماذا تحتوي وما مخاطرها؟",
     subtitle_en: "What they contain and what to watch for.",
     key_points_ar: [
-      "تحتوي على نيكوتين بتركيزات متفاوتة وقد تكون مرتفعة.",
-      "قد تسبب تهيج اللثة ومشاكل في الفم.",
-      "يمكن أن تسبب اعتمادًا سريعًا.",
+      "تحتوي على نيكوتين بتركيزات متفاوتة وقد تكون مرتفعة.", "قد تسبب تهيج اللثة ومشاكل في الفم.", "يمكن أن تسبب اعتمادًا سريعًا.",
     ],
     key_points_en: [
-      "They contain nicotine in varying, sometimes high, strengths.",
-      "May irritate gums and cause mouth problems.",
-      "Can cause rapid dependence.",
+      "They contain nicotine in varying, sometimes high, strengths.", "May irritate gums and cause mouth problems.", "Can cause rapid dependence.",
     ],
     did_you_know_ar: "بعض الأكياس تحرر النيكوتين بسرعة، مما يجعل الاعتماد عليها سهل التطور.",
     did_you_know_en: "Some pouches deliver nicotine quickly, making dependence easy to develop.",
@@ -412,14 +396,10 @@ export const LEARN_MODULES: LearnModule[] = [
     subtitle_ar: "خرافات وحقائق حول الشيشة.",
     subtitle_en: "Myths and facts about hookah.",
     key_points_ar: [
-      "جلسة شيشة واحدة قد تعرّضك لكميات كبيرة من الدخان والمواد الضارة.",
-      "الماء لا يفلتر النيكوتين أو المواد السامة.",
-      "مشاركة الفم مع آخرين قد تنقل العدوى.",
+      "جلسة شيشة واحدة قد تعرّضك لكميات كبيرة من الدخان والمواد الضارة.", "الماء لا يفلتر النيكوتين أو المواد السامة.", "مشاركة الفم مع آخرين قد تنقل العدوى.",
     ],
     key_points_en: [
-      "One hookah session can expose you to large amounts of smoke and harmful chemicals.",
-      "Water does not filter nicotine or toxins.",
-      "Sharing mouthpieces can transmit infections.",
+      "One hookah session can expose you to large amounts of smoke and harmful chemicals.", "Water does not filter nicotine or toxins.", "Sharing mouthpieces can transmit infections.",
     ],
     did_you_know_ar: "جلسة شيشة واحدة قد تعادل التعرض لدخان عشرات السجائر من حيث الكمية المستنشقة.",
     did_you_know_en: "A single hookah session can equal inhaling dozens of cigarettes' worth of smoke by volume.",
@@ -504,14 +484,10 @@ export const LEARN_MODULES: LearnModule[] = [
     subtitle_ar: "كيف تتعرف على محفزاتك وتتعامل معها.",
     subtitle_en: "Identify triggers and respond to cravings.",
     key_points_ar: [
-      "معظم الرغبات الشديدة تستمر 3 إلى 5 دقائق فقط.",
-      "تغيير المكان والنشاط يساعد على تجاوز الرغبة.",
-      "تأجيل القرار خمس دقائق غالبًا ينجح.",
+      "معظم الرغبات الشديدة تستمر 3 إلى 5 دقائق فقط.", "تغيير المكان والنشاط يساعد على تجاوز الرغبة.", "تأجيل القرار خمس دقائق غالبًا ينجح.",
     ],
     key_points_en: [
-      "Most cravings last only 3 to 5 minutes.",
-      "Changing place and activity helps you ride out the urge.",
-      "Delaying the decision for 5 minutes often works.",
+      "Most cravings last only 3 to 5 minutes.", "Changing place and activity helps you ride out the urge.", "Delaying the decision for 5 minutes often works.",
     ],
     did_you_know_ar: "الرغبة الشديدة تشبه الموجة: ترتفع وتنخفض، ولا تستمر طويلًا.",
     did_you_know_en: "A craving is like a wave: it rises and falls, and does not last long.",
@@ -596,14 +572,10 @@ export const LEARN_MODULES: LearnModule[] = [
     subtitle_ar: "كيف تتعامل مع الانتكاسة بإيجابية.",
     subtitle_en: "How to handle a relapse constructively.",
     key_points_ar: [
-      "كثير من الناس يحتاجون عدة محاولات قبل الإقلاع النهائي.",
-      "الانتكاسة فرصة لتعلم ما الذي يحتاج تعديلًا.",
-      "العودة السريعة إلى الخطة أهم من الكمال.",
+      "كثير من الناس يحتاجون عدة محاولات قبل الإقلاع النهائي.", "الانتكاسة فرصة لتعلم ما الذي يحتاج تعديلًا.", "العودة السريعة إلى الخطة أهم من الكمال.",
     ],
     key_points_en: [
-      "Many people need several attempts before quitting for good.",
-      "Relapse is a chance to learn what needs adjustment.",
-      "Returning quickly to the plan matters more than perfection.",
+      "Many people need several attempts before quitting for good.", "Relapse is a chance to learn what needs adjustment.", "Returning quickly to the plan matters more than perfection.",
     ],
     did_you_know_ar: "كل محاولة إقلاع تزيد فرصة النجاح في المرات القادمة.",
     did_you_know_en: "Every quit attempt increases the chance of success on later attempts.",
@@ -671,8 +643,8 @@ export const LEARN_MODULES: LearnModule[] = [
       },
       {
         id: "rel-7",
-        question_ar: "هل الإقلاع \"مرة واحدة وللأبد\" مطلب واقعي؟",
-        question_en: "Is \"one-and-done\" quitting always realistic?",
+        question_ar: "هل الإقلاع \"مرة واحدة وللأبد\"مطلب واقعي؟",
+        question_en: "Is \"one-and-done\"quitting always realistic?",
         options_ar: ["نعم للجميع", "ليس بالضرورة؛ كثير يحتاجون محاولات", "فقط للرجال", "فقط لكبار السن"],
         options_en: ["Yes for everyone", "Not necessarily; many need multiple attempts", "Only for men", "Only for older adults"],
         correct: 1,
@@ -688,14 +660,10 @@ export const LEARN_MODULES: LearnModule[] = [
     subtitle_ar: "أثر الدخان على من حولك.",
     subtitle_en: "How smoke affects the people around you.",
     key_points_ar: [
-      "التدخين السلبي يضر الأطفال والحوامل بشكل خاص.",
-      "لا يوجد مستوى آمن من التعرض لدخان التبغ.",
-      "البيئات الخالية من التدخين تحمي الجميع.",
+      "التدخين السلبي يضر الأطفال والحوامل بشكل خاص.", "لا يوجد مستوى آمن من التعرض لدخان التبغ.", "البيئات الخالية من التدخين تحمي الجميع.",
     ],
     key_points_en: [
-      "Secondhand smoke especially harms children and pregnant women.",
-      "There is no safe level of exposure to tobacco smoke.",
-      "Smoke-free environments protect everyone.",
+      "Secondhand smoke especially harms children and pregnant women.", "There is no safe level of exposure to tobacco smoke.", "Smoke-free environments protect everyone.",
     ],
     did_you_know_ar: "أبخرة التدخين تبقى في الملابس والأثاث وتُسمى \"التدخين الثالث\".",
     did_you_know_en: "Smoke residue lingers on clothes and furniture — known as \"thirdhand smoke\".",
@@ -780,14 +748,10 @@ export const LEARN_MODULES: LearnModule[] = [
     subtitle_ar: "كن داعمًا بدون ضغط أو لوم.",
     subtitle_en: "Be supportive without pressure or blame.",
     key_points_ar: [
-      "الاستماع أهم من إعطاء المحاضرات.",
-      "تشجيع الخطوات الصغيرة فعّال.",
-      "احترم خياراته ولا تستخدم اللوم.",
+      "الاستماع أهم من إعطاء المحاضرات.", "تشجيع الخطوات الصغيرة فعّال.", "احترم خياراته ولا تستخدم اللوم.",
     ],
     key_points_en: [
-      "Listening matters more than lecturing.",
-      "Encouraging small steps is effective.",
-      "Respect their choices and avoid blame.",
+      "Listening matters more than lecturing.", "Encouraging small steps is effective.", "Respect their choices and avoid blame.",
     ],
     did_you_know_ar: "وجود شخص داعم يضاعف فرص نجاح الإقلاع.",
     did_you_know_en: "Having a supportive person can double the chance of successful quitting.",
@@ -872,17 +836,13 @@ export const LEARN_MODULES: LearnModule[] = [
     subtitle_ar: "افصل الحقيقة عن الخرافة.",
     subtitle_en: "Separate fact from fiction.",
     key_points_ar: [
-      "التدخين لا يقلل التوتر فعليًا على المدى الطويل.",
-      "السجائر \"الخفيفة\" ليست أكثر أمانًا.",
-      "النيكوتين لا يحسّن التركيز فعليًا، بل يخفف انسحابه.",
+      "التدخين لا يقلل التوتر فعليًا على المدى الطويل.", "السجائر \"الخفيفة\"ليست أكثر أمانًا.", "النيكوتين لا يحسّن التركيز فعليًا، بل يخفف انسحابه.",
     ],
     key_points_en: [
-      "Smoking does not truly reduce long-term stress.",
-      "\"Light\" cigarettes are not safer.",
-      "Nicotine does not really boost focus — it relieves its own withdrawal.",
+      "Smoking does not truly reduce long-term stress.", "\"Light\"cigarettes are not safer.", "Nicotine does not really boost focus — it relieves its own withdrawal.",
     ],
-    did_you_know_ar: "كثير من \"الفوائد\" التي يشعر بها المدخن هي في الواقع تخفيف لأعراض الانسحاب من النيكوتين.",
-    did_you_know_en: "Many \"benefits\" smokers feel are actually relief from nicotine withdrawal.",
+    did_you_know_ar: "كثير من \"الفوائد\"التي يشعر بها المدخن هي في الواقع تخفيف لأعراض الانسحاب من النيكوتين.",
+    did_you_know_en: "Many \"benefits\"smokers feel are actually relief from nicotine withdrawal.",
     sources: [sources.who, sources.cdc, sources.smokefree],
     questions: [
       {
@@ -897,8 +857,8 @@ export const LEARN_MODULES: LearnModule[] = [
       },
       {
         id: "my-2",
-        question_ar: "هل السجائر \"الخفيفة\" أقل ضررًا؟",
-        question_en: "Are \"light\" cigarettes less harmful?",
+        question_ar: "هل السجائر \"الخفيفة\"أقل ضررًا؟",
+        question_en: "Are \"light\"cigarettes less harmful?",
         options_ar: ["نعم", "لا، الضرر متشابه", "فقط للنساء", "فقط في الصباح"],
         options_en: ["Yes", "No, harm is similar", "Only for women", "Only in the morning"],
         correct: 1,
@@ -937,8 +897,8 @@ export const LEARN_MODULES: LearnModule[] = [
       },
       {
         id: "my-6",
-        question_ar: "هل النيكوتين \"طبيعي\" لذا فهو آمن؟",
-        question_en: "Is nicotine \"natural\" and therefore safe?",
+        question_ar: "هل النيكوتين \"طبيعي\"لذا فهو آمن؟",
+        question_en: "Is nicotine \"natural\"and therefore safe?",
         options_ar: ["نعم", "لا، الطبيعي لا يعني الآمن", "آمن للأطفال", "آمن في الحمل"],
         options_en: ["Yes", "No, natural does not mean safe", "Safe for kids", "Safe in pregnancy"],
         correct: 1,
@@ -947,8 +907,8 @@ export const LEARN_MODULES: LearnModule[] = [
       },
       {
         id: "my-7",
-        question_ar: "هل الإقلاع \"فجأة\" خطر دائمًا؟",
-        question_en: "Is quitting \"cold turkey\" always dangerous?",
+        question_ar: "هل الإقلاع \"فجأة\"خطر دائمًا؟",
+        question_en: "Is quitting \"cold turkey\"always dangerous?",
         options_ar: ["نعم", "لا، آمن لمعظم الناس مع خطة ودعم", "آمن فقط في المستشفى", "غير ممكن"],
         options_en: ["Yes", "No, it is safe for most people with a plan and support", "Only safe in hospital", "Impossible"],
         correct: 1,
@@ -984,12 +944,7 @@ export function computeBadge(score: number, completedModules: number, completedS
 }
 
 export const BADGE_LABELS: Record<string, { ar: string; en: string }> = {
-  "Awareness Starter": { ar: "مبتدئ الوعي", en: "Awareness Starter" },
-  "Myth Buster": { ar: "صائد الخرافات", en: "Myth Buster" },
-  "Trigger Expert": { ar: "خبير المحفزات", en: "Trigger Expert" },
-  "Quit Supporter": { ar: "داعم الإقلاع", en: "Quit Supporter" },
-  "Knowledge Champion": { ar: "بطل المعرفة", en: "Knowledge Champion" },
-  "Aqla Ambassador": { ar: "سفير أقلع", en: "Aqla Ambassador" },
+  "Awareness Starter": { ar: "مبتدئ الوعي", en: "Awareness Starter" }, "Myth Buster": { ar: "صائد الخرافات", en: "Myth Buster" }, "Trigger Expert": { ar: "خبير المحفزات", en: "Trigger Expert" }, "Quit Supporter": { ar: "داعم الإقلاع", en: "Quit Supporter" }, "Knowledge Champion": { ar: "بطل المعرفة", en: "Knowledge Champion" }, "Aqla Ambassador": { ar: "سفير أقلع", en: "Aqla Ambassador" },
 };
 
 export const WEEKLY_CHALLENGES = [

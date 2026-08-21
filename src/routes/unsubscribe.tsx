@@ -68,7 +68,7 @@ function UnsubscribePage() {
         {state.kind === "invalid" && (
           <>
             <h1 className="text-xl font-bold text-gray-900">Invalid link</h1>
-            <p className="mt-2 text-sm text-gray-600" dir="rtl">
+            <p className="mt-2 text-sm text-gray-600"dir="rtl">
               الرابط غير صالح أو منتهي الصلاحية.
             </p>
           </>
@@ -76,7 +76,7 @@ function UnsubscribePage() {
         {state.kind === "already" && (
           <>
             <h1 className="text-xl font-bold text-gray-900">Already unsubscribed</h1>
-            <p className="mt-2 text-sm text-gray-600" dir="rtl">
+            <p className="mt-2 text-sm text-gray-600"dir="rtl">
               تم إلغاء الاشتراك مسبقًا.
             </p>
           </>
@@ -84,7 +84,7 @@ function UnsubscribePage() {
         {state.kind === "ready" && (
           <>
             <h1 className="text-xl font-bold text-gray-900">Unsubscribe from Aqla emails?</h1>
-            <p className="mt-2 text-sm text-gray-600" dir="rtl">
+            <p className="mt-2 text-sm text-gray-600"dir="rtl">
               هل تريد إلغاء الاشتراك من رسائل أقلع؟
             </p>
             <button
@@ -98,7 +98,7 @@ function UnsubscribePage() {
         {state.kind === "success" && (
           <>
             <h1 className="text-xl font-bold text-ink-secondary">You've been unsubscribed</h1>
-            <p className="mt-2 text-sm text-gray-600" dir="rtl">
+            <p className="mt-2 text-sm text-gray-600"dir="rtl">
               تم إلغاء اشتراكك بنجاح. لن تصلك رسائل أخرى.
             </p>
           </>

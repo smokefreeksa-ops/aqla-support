@@ -19,15 +19,9 @@ export const Route = createFileRoute("/articles/nicotine-pouches")({
   }),
   component: () => (
     <ArticleScaffold
-      titleAr="أكياس النيكوتين: ما يقوله البحث"
-      titleEn="Nicotine pouches: what the research says"
-      intro="هيكل المقال جاهز، والمحتوى قيد الكتابة."
+      titleAr="أكياس النيكوتين: ما يقوله البحث"titleEn="Nicotine pouches: what the research says"intro="هيكل المقال جاهز، والمحتوى قيد الكتابة."
       sections={[
-        "ما هي أكياس النيكوتين",
-        "أنماط الاستخدام محليًا",
-        "ما تقوله الأدلة الحالية",
-        "الأسئلة التي لا تزال مفتوحة",
-        "شارك في دراسة أقلع",
+        "ما هي أكياس النيكوتين", "أنماط الاستخدام محليًا", "ما تقوله الأدلة الحالية", "الأسئلة التي لا تزال مفتوحة", "شارك في دراسة أقلع",
       ]}
     />
   ),

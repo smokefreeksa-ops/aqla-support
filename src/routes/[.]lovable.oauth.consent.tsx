@@ -18,7 +18,7 @@ type OAuthNamespace = {
 export const Route = createFileRoute("/.lovable/oauth/consent")({
   ssr: false,
   validateSearch: (s: Record<string, unknown>) => ({
-    authorization_id: typeof s.authorization_id === "string" ? s.authorization_id : "",
+    authorization_id: typeof s.authorization_id === "string"? s.authorization_id : "",
   }),
   beforeLoad: async ({ search, location }) => {
     if (!search.authorization_id) throw new Error("Missing authorization_id");
@@ -83,10 +83,10 @@ function Consent() {
         <p className="text-xs text-muted-foreground">
           This does not bypass Aqla's permissions or backend policies.
         </p>
-        {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
+        {error && <p role="alert"className="text-sm text-destructive">{error}</p>}
         <div className="flex gap-2 pt-2">
           <Button disabled={busy} onClick={() => decide(true)} className="flex-1">Approve</Button>
-          <Button disabled={busy} onClick={() => decide(false)} variant="outline" className="flex-1">
+          <Button disabled={busy} onClick={() => decide(false)} variant="outline"className="flex-1">
             Cancel connection
           </Button>
         </div>

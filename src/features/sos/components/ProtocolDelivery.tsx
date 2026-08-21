@@ -17,7 +17,7 @@ export function ProtocolDelivery({
     protocol.steps[0].seconds,
   );
   const [tapped, setTapped] = useState(false);
-  const [choice, setChoice] = useState<"water" | "walk" | null>(null);
+  const [choice, setChoice] = useState<"water"| "walk" | null>(null);
   const finishedRef = useRef(false);
 
   const step = protocol.steps[stepIdx];
@@ -63,23 +63,12 @@ export function ProtocolDelivery({
     <div className="flex flex-col items-center gap-6 text-center max-w-md w-full">
       {/* Progress ring */}
       <div className="relative h-20 w-20">
-        <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
+        <svg viewBox="0 0 100 100"className="h-full w-full -rotate-90">
           <circle
-            cx="50"
-            cy="50"
-            r="44"
-            stroke="rgba(255,255,255,0.12)"
-            strokeWidth="6"
-            fill="none"
+            cx="50"cy="50"r="44"stroke="rgba(255,255,255,0.12)"strokeWidth="6"fill="none"
           />
           <circle
-            cx="50"
-            cy="50"
-            r="44"
-            stroke="#ef4444"
-            strokeWidth="6"
-            fill="none"
-            strokeLinecap="round"
+            cx="50"cy="50"r="44"stroke="#ef4444"strokeWidth="6"fill="none"strokeLinecap="round"
             strokeDasharray={2 * Math.PI * 44}
             strokeDashoffset={2 * Math.PI * 44 * (1 - progress)}
             style={{ transition: "stroke-dashoffset 1s linear" }}
@@ -125,8 +114,8 @@ function StepVisual({
   secondsLeft: number;
   tapped: boolean;
   setTapped: (b: boolean) => void;
-  choice: "water" | "walk" | null;
-  setChoice: (c: "water" | "walk") => void;
+  choice: "water"| "walk" | null;
+  setChoice: (c: "water"| "walk") => void;
 }) {
   switch (step.visual) {
     case "still_center":
@@ -154,13 +143,9 @@ function StepVisual({
     }
     case "wave_reframe":
       return (
-        <svg viewBox="0 0 300 100" className="w-full h-24">
+        <svg viewBox="0 0 300 100"className="w-full h-24">
           <path
-            d="M0,50 C50,10 100,90 150,50 S250,10 300,50"
-            stroke="#ef4444"
-            strokeWidth="3"
-            fill="none"
-            opacity="0.9"
+            d="M0,50 C50,10 100,90 150,50 S250,10 300,50"stroke="#ef4444"strokeWidth="3"fill="none"opacity="0.9"
           />
         </svg>
       );
@@ -198,7 +183,7 @@ function StepVisual({
         <button
           onClick={() => setTapped(true)}
           className={`h-40 w-40 rounded-full text-white font-bold text-xl transition ${
-            tapped ? "scale-90 opacity-60" : "active:scale-95"
+            tapped ? "scale-90 opacity-60": "active:scale-95"
           }`}
           style={{
             backgroundImage:
@@ -206,7 +191,7 @@ function StepVisual({
             boxShadow: "0 0 60px -10px rgba(239,68,68,0.7)",
           }}
         >
-          {tapped ? "✓" : "المس"}
+          {tapped ? "✓": "المس"}
         </button>
       );
     case "choice":
@@ -215,7 +200,7 @@ function StepVisual({
           <button
             onClick={() => setChoice("water")}
             className={`rounded-2xl px-6 py-4 text-white font-semibold ${
-              choice === "water" ? "bg-red-600" : "bg-white/10 hover:bg-white/15"
+              choice === "water"? "bg-red-600": "bg-white/10 hover:bg-white/15"
             }`}
           >
              ماء
@@ -223,7 +208,7 @@ function StepVisual({
           <button
             onClick={() => setChoice("walk")}
             className={`rounded-2xl px-6 py-4 text-white font-semibold ${
-              choice === "walk" ? "bg-red-600" : "bg-white/10 hover:bg-white/15"
+              choice === "walk"? "bg-red-600": "bg-white/10 hover:bg-white/15"
             }`}
           >
              ١٠ خطوات

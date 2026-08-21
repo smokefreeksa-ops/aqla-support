@@ -70,7 +70,7 @@ export function CourseCard({ course, onStart }: { course: CourseView; onStart?: 
     <Card className="flex h-full flex-col overflow-hidden">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2">
-          <Badge variant="secondary" className="rounded-full text-[11px]">الوحدة {course.num}</Badge>
+          <Badge variant="secondary"className="rounded-full text-[11px]">الوحدة {course.num}</Badge>
           <span className={`rounded-full px-2.5 py-1 text-[11px] font-medium ${meta.className}`}>{meta.label}</span>
         </div>
         <CardTitle className="mt-2 text-[15px] leading-7">{course.titleAr}</CardTitle>
@@ -86,13 +86,13 @@ export function CourseCard({ course, onStart }: { course: CourseView; onStart?: 
           <Progress value={course.percent} className="h-1.5" />
         </div>
         <div className="mt-4 flex items-center gap-2">
-          <Button asChild size="sm" className="flex-1" onClick={() => { track("module_start", course.slug); onStart?.(course.slug); }}>
+          <Button asChild size="sm"className="flex-1"onClick={() => { track("module_start", course.slug); onStart?.(course.slug); }}>
             <Link to="/modules/$slug" params={{ slug: course.slug }}>
-              {course.status === "completed" ? "مراجعة الوحدة" : course.status === "in_progress" ? "متابعة" : "ابدأ الآن"}
+              {course.status === "completed"? "مراجعة الوحدة": course.status === "in_progress"? "متابعة": "ابدأ الآن"}
             </Link>
           </Button>
           {course.certificateCode && (
-            <Button asChild size="sm" variant="outline">
+            <Button asChild size="sm"variant="outline">
               <Link to="/academy-certificate/$code" params={{ code: course.certificateCode }}>الشهادة</Link>
             </Button>
           )}
@@ -121,7 +121,7 @@ export function FinalAssessmentCard({ model }: { model: LearnerModel }) {
         </p>
         <ul className="mt-3 space-y-1.5 text-[12.5px]">
           <li className="flex items-center gap-2">
-            {model.remaining === 0 ? <CheckCircle2 className="h-4 w-4 text-digital" /> : <Lock className="h-4 w-4 text-muted-foreground" />}
+            {model.remaining === 0 ? <CheckCircle2 className="h-4 w-4 text-digital"/> : <Lock className="h-4 w-4 text-muted-foreground" />}
             إكمال الوحدات ({model.completedModules}/{model.totalModules})
           </li>
           <li className="flex items-center gap-2">
@@ -132,14 +132,14 @@ export function FinalAssessmentCard({ model }: { model: LearnerModel }) {
         </ul>
         <div className="mt-4">
           {passed ? (
-            <Button asChild size="sm" variant="outline">
+            <Button asChild size="sm"variant="outline">
               <Link to="/dashboard/certificates">عرض شهادة البرنامج</Link>
             </Button>
           ) : (
             <Button asChild size="sm" disabled={locked}>
               <Link to="/academy">
                 <PlayCircle className="me-2 h-4 w-4" />
-                {locked ? "أكمل الوحدات لفتح التقييم" : model.examStatus === "retake" ? "إعادة المحاولة" : "ابدأ التقييم النهائي"}
+                {locked ? "أكمل الوحدات لفتح التقييم": model.examStatus === "retake"? "إعادة المحاولة": "ابدأ التقييم النهائي"}
               </Link>
             </Button>
           )}
@@ -166,13 +166,13 @@ export function CertificateCard({ cert }: { cert: LearnerModel["certificates"][n
               {cert.overall_score != null && ` · النتيجة ${cert.overall_score}%`}
             </p>
           </div>
-          <Award className={cert.is_valid ? "h-6 w-6 text-[#006C35]" : "h-6 w-6 text-muted-foreground"} />
+          <Award className={cert.is_valid ? "h-6 w-6 text-[#006C35]": "h-6 w-6 text-muted-foreground"} />
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           <Button asChild size="sm">
-            <Link to="/academy-certificate/$code" params={{ code: cert.certificate_code }} onClick={() => track("certificate_download", cert.certificate_code)}>عرض / تحميل PDF</Link>
+            <Link to="/academy-certificate/$code"params={{ code: cert.certificate_code }} onClick={() => track("certificate_download", cert.certificate_code)}>عرض / تحميل PDF</Link>
           </Button>
-          <Button size="sm" variant="outline" onClick={() => window.print()}>طباعة</Button>
+          <Button size="sm"variant="outline" onClick={() => window.print()}>طباعة</Button>
         </div>
       </CardContent>
     </Card>
@@ -185,7 +185,7 @@ export function SessionRow({ session }: { session: LearnerModel["sessions"][numb
   return (
     <div className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4">
       <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#006C35]/10 text-[#006C35]">
-        {session.session_type === "webinar" ? <Video className="h-4 w-4" /> : <CalendarDays className="h-4 w-4" />}
+        {session.session_type === "webinar"? <Video className="h-4 w-4"/> : <CalendarDays className="h-4 w-4" />}
       </div>
       <div className="min-w-0 flex-1">
         <h4 className="text-[14px] font-semibold">{session.title_ar}</h4>
@@ -195,8 +195,8 @@ export function SessionRow({ session }: { session: LearnerModel["sessions"][numb
         <p className="mt-1 text-[12px] text-muted-foreground">{formatDateTime(session.starts_at)}</p>
       </div>
       {session.join_url && (
-        <Button asChild size="sm" variant="outline">
-          <a href={session.join_url} target="_blank" rel="noopener noreferrer">انضمام</a>
+        <Button asChild size="sm"variant="outline">
+          <a href={session.join_url} target="_blank"rel="noopener noreferrer">انضمام</a>
         </Button>
       )}
     </div>

@@ -5,9 +5,7 @@ import { ShareButtons } from "@/components/ShareButtons";
 import { getAnonSessionId } from "@/lib/analytics";
 
 type ShareType =
-  | "pledge" | "quick-check" | "breath" | "cost" | "trigger"
-  | "readiness" | "knowledge" | "medal" | "poster" | "city"
-  | "passport" | "certificate";
+  | "pledge"| "quick-check"| "breath"| "cost"| "trigger"| "readiness"| "knowledge"| "medal"| "poster"| "city"| "passport"| "certificate";
 
 interface Props {
   shareType: ShareType;
@@ -107,7 +105,7 @@ export function ShareResult({
         shareUrl={url}
         textAr={messageAr}
         textEn={messageEn}
-        lang={isAr ? "ar" : "en"}
+        lang={isAr ? "ar": "en"}
       />
     </div>
   );

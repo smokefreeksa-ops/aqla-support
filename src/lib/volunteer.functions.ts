@@ -5,22 +5,11 @@ import { z } from "zod";
 import { sendAdminNotification, renderKeyValueHtml } from "./notifications.server";
 
 const INTERESTS = [
-  "awareness_campaigns",
-  "smoker_support",
-  "data_entry",
-  "follow_up_coordination",
-  "content_creation",
-  "events",
+  "awareness_campaigns", "smoker_support", "data_entry", "follow_up_coordination", "content_creation", "events",
 ] as const;
 
 const STATUSES = [
-  "new_applicant",
-  "awaiting_review",
-  "accepted_for_training",
-  "in_training",
-  "active_volunteer",
-  "needs_follow_up",
-  "not_accepted",
+  "new_applicant", "awaiting_review", "accepted_for_training", "in_training", "active_volunteer", "needs_follow_up", "not_accepted",
 ] as const;
 
 export const submitVolunteer = createServerFn({ method: "POST" })

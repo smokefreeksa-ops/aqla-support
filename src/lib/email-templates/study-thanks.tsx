@@ -22,7 +22,7 @@ const StudyThanksEmail = ({
   fullName = "صديقنا",
   surveyUrl = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM",
 }: Props) => (
-  <Html lang="ar" dir="rtl">
+  <Html lang="ar"dir="rtl">
     <Head />
     <Preview>شكرًا لمشاركتك في دراسة أقلع البحثية</Preview>
     <Body style={main}>
@@ -61,7 +61,7 @@ const container = { padding: "28px 26px", maxWidth: "560px" };
 const brand = { color: "#006C35", fontSize: "13px", fontWeight: 700 };
 const h1 = { fontSize: "21px", color: "#0b3a25", margin: "8px 0 12px" };
 const p = { fontSize: "15px", lineHeight: "26px", color: "#233" };
-const pEn = { fontSize: "13px", lineHeight: "22px", color: "#556", direction: "ltr" as const, textAlign: "left" as const };
+const pEn = { fontSize: "13px", lineHeight: "22px", color: "#556", direction: "ltr"as const, textAlign: "left" as const };
 const button = {
   backgroundColor: "#006C35",
   color: "#ffffff",

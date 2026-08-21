@@ -5,10 +5,7 @@ export const Route = createFileRoute("/sharing-policy")({
   head: () => ({ meta: [{ title: "سياسة المشاركة — Aqla" }] }),
   component: () => (
     <SimpleContentPage
-      titleAr="سياسة المشاركة"
-      titleEn="Sharing Policy"
-      introAr="القواعد التي تحكم البطاقات والشهادات القابلة للمشاركة العامة."
-      introEn="Rules governing publicly shareable cards and certificates."
+      titleAr="سياسة المشاركة"titleEn="Sharing Policy"introAr="القواعد التي تحكم البطاقات والشهادات القابلة للمشاركة العامة."introEn="Rules governing publicly shareable cards and certificates."
       sectionsAr={[
         { heading: "لا بيانات صحية شخصية", body: "البطاقات العامة لا تتضمن أي تفاصيل تقييم فردية، أو نتائج، أو معلومات تحدد الهوية." },
         { heading: "موافقة المستخدم", body: "تتم المشاركة فقط بناءً على طلب صريح من المستخدم. لا توجد مشاركة تلقائية." },

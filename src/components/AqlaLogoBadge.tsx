@@ -18,9 +18,7 @@ export function AqlaLogoBadge({ size = 56, className = "" }: Props) {
     >
       <img
         src={logo}
-        alt="Aqla — أقلع"
-        crossOrigin="anonymous"
-        className="w-full h-full object-contain"
+        alt="Aqla — أقلع"crossOrigin="anonymous"className="w-full h-full object-contain"
         onError={(e) => {
           // Fallback: render text mark instead of broken image
           const el = e.currentTarget;

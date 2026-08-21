@@ -5,10 +5,7 @@ export const Route = createFileRoute("/cookies")({
   head: () => ({ meta: [{ title: "سياسة ملفات الارتباط — Aqla" }] }),
   component: () => (
     <SimpleContentPage
-      titleAr="سياسة ملفات الارتباط"
-      titleEn="Cookie Policy"
-      introAr="نستخدم ملفات ارتباط ضرورية فقط لعمل المنصة وتحليلات مجهولة."
-      introEn="We use only essential cookies and anonymous analytics."
+      titleAr="سياسة ملفات الارتباط"titleEn="Cookie Policy"introAr="نستخدم ملفات ارتباط ضرورية فقط لعمل المنصة وتحليلات مجهولة."introEn="We use only essential cookies and anonymous analytics."
       sectionsAr={[
         { heading: "ملفات ضرورية", body: "تحفظ تفضيلاتك مثل اللغة وحالة الجلسة. لا يمكن تعطيلها دون التأثير على عمل الموقع." },
         { heading: "تحليلات مجهولة", body: "نقيس عدد الزيارات والصفحات الأكثر استخدامًا دون ربطها بأشخاص محددين." },

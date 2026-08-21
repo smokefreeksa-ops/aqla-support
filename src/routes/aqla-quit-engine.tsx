@@ -17,7 +17,7 @@ export const Route = createFileRoute("/aqla-quit-engine")({
 
 function Page() {
   return (
-    <main dir="rtl" className="min-h-screen bg-gradient-to-b from-blue-50 to-white print:bg-white">
+    <main dir="rtl"className="min-h-screen bg-gradient-to-b from-blue-50 to-white print:bg-white">
       <div className="max-w-3xl mx-auto px-4 pt-8 pb-2 text-right print:hidden">
         <h1 className="text-2xl md:text-3xl font-extrabold text-blue-900">
           اختبار الاعتماد وخطة الإقلاع الشخصية

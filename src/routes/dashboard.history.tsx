@@ -36,13 +36,13 @@ function HistoryPage() {
           <h1 className="text-xl font-bold">سجل التدريب</h1>
           <p className="mt-1 text-[13px] text-muted-foreground">سجل زمني كامل لتدريبك وشهاداتك.</p>
         </div>
-        <Button size="sm" variant="outline" onClick={() => window.print()}>
+        <Button size="sm"variant="outline" onClick={() => window.print()}>
           <Download className="me-2 h-4 w-4" /> تنزيل كشف التدريب
         </Button>
       </div>
 
       {entries.length === 0 ? (
-        <EmptyState title="لا يوجد نشاط تدريبي بعد" hint="ابدأ أول وحدة لتظهر هنا." />
+        <EmptyState title="لا يوجد نشاط تدريبي بعد"hint="ابدأ أول وحدة لتظهر هنا." />
       ) : (
         <ol className="space-y-2">
           {entries.map((e, i) => (

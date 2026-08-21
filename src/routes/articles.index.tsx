@@ -47,7 +47,7 @@ function ArticlesIndex() {
         ))}
       </ul>
       <p className="mt-8 text-[15px]">
-        <Link to="/" className="text-primary underline">
+        <Link to="/"className="text-primary underline">
           العودة إلى منصة أقلع
         </Link>
       </p>

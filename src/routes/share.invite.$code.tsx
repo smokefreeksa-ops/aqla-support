@@ -50,33 +50,32 @@ function Inner() {
       <SiteHeader />
       <main className="mx-auto max-w-2xl px-4 py-16 sm:py-24">
         <div className="mb-5">
-          <BackButton fallback="/" labelAr="الرئيسية" labelEn="Home" />
+          <BackButton fallback="/"labelAr="الرئيسية"labelEn="Home" />
         </div>
-        <Card className={`rounded-3xl p-8 text-center ${isAr ? "" : ""}`}>
+        <Card className={`rounded-3xl p-8 text-center ${isAr ? "": ""}`}>
           <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-            {isAr ? "دعوة شخصية" : "Personal invitation"}
+            {isAr ? "دعوة شخصية": "Personal invitation"}
           </p>
           <h1 className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
-            {isAr ? "أهلاً بك في أقلع" : "Welcome to Aqla"}
+            {isAr ? "أهلاً بك في أقلع": "Welcome to Aqla"}
           </h1>
           <p className="mt-4 text-[14.5px] leading-7 text-foreground/75">
             {isAr
-              ? "أحد أصدقائك دعاك للاطلاع على منصة أقلع — مساحة آمنة ومجانية لدعم الإقلاع عن التدخين والنيكوتين."
-              : "A friend invited you to Aqla — a free and safe space for smoking and nicotine cessation support."}
+              ? "أحد أصدقائك دعاك للاطلاع على منصة أقلع — مساحة آمنة ومجانية لدعم الإقلاع عن التدخين والنيكوتين.": "A friend invited you to Aqla — a free and safe space for smoking and nicotine cessation support."}
           </p>
           <p className="mt-3 text-xs text-muted-foreground">
-            {isAr ? "رمز الدعوة: " : "Invite code: "}
+            {isAr ? "رمز الدعوة: ": "Invite code: "}
             <span className="font-mono">{code}</span>
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link to="/start">
               <Button className="gap-2">
-                {isAr ? "ابدأ الآن" : "Start Now"}
+                {isAr ? "ابدأ الآن": "Start Now"}
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </Button>
             </Link>
             <Link to="/about">
-              <Button variant="outline">{isAr ? "تعرّف على أقلع" : "Learn about Aqla"}</Button>
+              <Button variant="outline">{isAr ? "تعرّف على أقلع": "Learn about Aqla"}</Button>
             </Link>
           </div>
         </Card>

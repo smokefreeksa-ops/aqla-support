@@ -3,14 +3,7 @@
 // Nicotine control: HONC-style yes/no count (0-10)
 
 export type ProductKey =
-  | "cigarettes"
-  | "vape"
-  | "shisha"
-  | "pouches"
-  | "smokeless"
-  | "multiple"
-  | "former"
-  | "non_user";
+  | "cigarettes"| "vape"| "shisha"| "pouches"| "smokeless"| "multiple"| "former"| "non_user";
 
 export interface FtndAnswers {
   q1: number; // time to first cigarette: 3=≤5min, 2=6-30, 1=31-60, 0=>60
@@ -35,7 +28,7 @@ export function scoreFtnd(a: FtndAnswers) {
 }
 
 export type NicotineAnswers = Record<
-  "q1" | "q2" | "q3" | "q4" | "q5" | "q6" | "q7" | "q8" | "q9" | "q10",
+  "q1"| "q2"| "q3"| "q4"| "q5"| "q6"| "q7"| "q8"| "q9"| "q10",
   boolean
 >;
 
@@ -52,7 +45,7 @@ export function scoreNicotineControl(a: NicotineAnswers) {
 // HONC-style loss-of-autonomy screening (10 yes/no items).
 // Not a validated HONC scale — labelled "HONC-style" in UI and exports.
 export type HoncAnswers = Record<
-  "q1" | "q2" | "q3" | "q4" | "q5" | "q6" | "q7" | "q8" | "q9" | "q10",
+  "q1"| "q2"| "q3"| "q4"| "q5"| "q6"| "q7"| "q8"| "q9"| "q10",
   boolean
 >;
 export function scoreHonc(a: HoncAnswers) {
@@ -76,7 +69,7 @@ export interface CohortInput {
 }
 
 export interface CohortResult {
-  cohort: "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H";
+  cohort: "A"| "B"| "C"| "D"| "E"| "F"| "G"| "H";
   reason: string;
   doctorReviewNeeded: boolean;
   urgent: boolean;
@@ -84,16 +77,7 @@ export interface CohortResult {
 
 const URGENT = new Set(["severe_chest_pain", "severe_sob", "coughing_blood"]);
 const HIGH_RISK = new Set([
-  "pregnancy",
-  "severe_withdrawal",
-  "mental_health",
-  "repeated_failed",
-  "multi_product",
-  "very_high_dependence",
-  "wants_medication",
-  "wants_alternatives",
-  "requests_clinician",
-  "under_18",
+  "pregnancy", "severe_withdrawal", "mental_health", "repeated_failed", "multi_product", "very_high_dependence", "wants_medication", "wants_alternatives", "requests_clinician", "under_18",
 ]);
 
 const READY_FOR_QUIT = new Set(["quit_now", "quit_prepare", "reduce_first"]);
@@ -115,7 +99,7 @@ export function assignCohort(i: CohortInput): CohortResult {
   const highDep = (i.ftnd ?? 0) >= 6; // FTND high band (6-7) or higher
   
   const otherRiskFlags = i.riskFlags.filter(
-    (f) => f !== "multi_product" && f !== "very_high_dependence",
+    (f) => f !== "multi_product"&& f !== "very_high_dependence",
   );
   const highDepPlusRisk = highDep && otherRiskFlags.length > 0;
 
@@ -153,7 +137,7 @@ export function assignCohort(i: CohortInput): CohortResult {
     };
   }
 
-  if (i.readiness === "discuss_alternatives" || i.riskFlags.includes("wants_alternatives")) {
+  if (i.readiness === "discuss_alternatives"|| i.riskFlags.includes("wants_alternatives")) {
     return {
       cohort: "E",
       reason: "Participant requests clinician counseling about nicotine alternatives.",
@@ -162,13 +146,11 @@ export function assignCohort(i: CohortInput): CohortResult {
     };
   }
 
-  if (i.readiness === "score_only" || i.readiness === "helping_someone") {
+  if (i.readiness === "score_only"|| i.readiness === "helping_someone") {
     return {
       cohort: "G",
       reason:
-        i.readiness === "helping_someone"
-          ? "Helping-someone session — score shared for educational support."
-          : "Score-only session — score shared and invitation to return later.",
+        i.readiness === "helping_someone"? "Helping-someone session — score shared for educational support.": "Score-only session — score shared and invitation to return later.",
       doctorReviewNeeded: false,
       urgent,
     };
@@ -197,8 +179,7 @@ export function assignCohort(i: CohortInput): CohortResult {
     return {
       cohort: "C",
       reason: highConcern
-        ? "High nicotine-control concern (vape / nicotine pouch / non-cigarette nicotine use) — clinician review recommended."
-        : "Vape / nicotine pouch / non-cigarette nicotine user with moderate nicotine-control concern.",
+        ? "High nicotine-control concern (vape / nicotine pouch / non-cigarette nicotine use) — clinician review recommended.": "Vape / nicotine pouch / non-cigarette nicotine user with moderate nicotine-control concern.",
       doctorReviewNeeded: highConcern,
       urgent,
     };
@@ -256,18 +237,11 @@ export interface PennStateEcigAnswers {
 export const PENN_STATE_ITEM_SCORES = {
   // Q1 — How many times per day do you usually use your e-cig?
   q1: {
-    "0": 0, // 0
-    "1-4": 0, // 1–4
-    "5-9": 1, // 5–9
-    "10-14": 2, // 10–14
-    "15+": 3, // 15+
+    "0": 0, // 0 "1-4": 0, // 1–4 "5-9": 1, // 5–9 "10-14": 2, // 10–14 "15+": 3, // 15+
   },
   // Q2 — How soon after waking?
   q2: {
-    ">60": 0,
-    "31-60": 1,
-    "6-30": 2,
-    "<=5": 3,
+    ">60": 0, "31-60": 1, "6-30": 2, "<=5": 3,
   },
   // Q3 — Do you vape now because it's really hard to quit?
   q3: { no: 0, yes: 1 },
@@ -292,7 +266,7 @@ export function scorePennStateEcig(a: PennStateEcigAnswers) {
 // Item-level scoring follows the published LWDS-11 (max ~39 across 11 items
 // with mixed 0–3 / 0–1 scales). We accept caller-provided integer item values.
 export type Lwds11Answers = Record<
-  "q1" | "q2" | "q3" | "q4" | "q5" | "q6" | "q7" | "q8" | "q9" | "q10" | "q11",
+  "q1"| "q2"| "q3"| "q4"| "q5"| "q6"| "q7"| "q8"| "q9"| "q10"| "q11",
   number
 >;
 export function scoreLwds11(a: Lwds11Answers) {
@@ -309,7 +283,7 @@ export function scoreLwds11(a: Lwds11Answers) {
 // 6 yes/no items. Score = count of yes. UI MUST label this غير معتمد and
 // stored row MUST set validated:false.
 export type OralNicotineAnswers = Record<
-  "q1" | "q2" | "q3" | "q4" | "q5" | "q6",
+  "q1"| "q2"| "q3"| "q4"| "q5"| "q6",
   boolean
 >;
 export function scoreOralNicotineAdapted(a: OralNicotineAnswers) {
@@ -323,11 +297,7 @@ export function scoreOralNicotineAdapted(a: OralNicotineAnswers) {
 
 // ---------- Instrument routing ----------
 export type Instrument =
-  | "ftnd_cigarettes"
-  | "ps_ecdi_vape"
-  | "ps_ndi_all_nicotine"
-  | "lwds11_waterpipe"
-  | "honc_youth";
+  | "ftnd_cigarettes"| "ps_ecdi_vape"| "ps_ndi_all_nicotine"| "lwds11_waterpipe"| "honc_youth";
 
 export function pickInstrument(product: string, opts?: { youthOrLossOfControl?: boolean }): Instrument {
   if (opts?.youthOrLossOfControl) return "honc_youth";
@@ -350,8 +320,8 @@ export function pickInstrument(product: string, opts?: { youthOrLossOfControl?: 
 // ---------- Risk-flag helper for assessments ----------
 // Maps instrument + band → boolean risk_flag for downstream referral logic.
 export function instrumentRiskFlag(instrument: Instrument, band: string): boolean {
-  if (instrument === "ftnd_cigarettes") return band === "high" || band === "very_high";
-  if (instrument === "ps_ecdi_vape") return band === "medium" || band === "high";
+  if (instrument === "ftnd_cigarettes") return band === "high"|| band === "very_high";
+  if (instrument === "ps_ecdi_vape") return band === "medium"|| band === "high";
   if (instrument === "lwds11_waterpipe") return band === "high";
   if (instrument === "ps_ndi_all_nicotine") return band === "high";
   if (instrument === "honc_youth") return band === "high";

@@ -41,7 +41,7 @@ function DataDictionaryPage() {
       <header className="border-b bg-card">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <BackButton fallback="/admin" labelAr="لوحة الإدارة" labelEn="Admin" />
+            <BackButton fallback="/admin"labelAr="لوحة الإدارة"labelEn="Admin" />
             <span className="font-semibold">Data Dictionary</span>
           </div>
         </div>
@@ -57,7 +57,7 @@ function DataDictionaryPage() {
             <Input placeholder="Search variable, question, section…" value={q} onChange={(e) => setQ(e.target.value)} />
           </div>
           <div className="mt-3 flex gap-2">
-            <Button size="sm" variant="outline" onClick={() => {
+            <Button size="sm"variant="outline" onClick={() => {
               const headers = ["section","variable","question","options","coding","required","source","triagePurpose","researchPurpose","inAnonymizedExport"] as const;
               const esc = (v: unknown) => {
                 const s = String(v ?? "").replace(/"/g, '""');
@@ -102,7 +102,7 @@ function DataDictionaryPage() {
                       <td className="p-2">{d.source}</td>
                       <td className="p-2">{d.triagePurpose}</td>
                       <td className="p-2">{d.researchPurpose}</td>
-                      <td className="p-2">{d.inAnonymizedExport ? "Yes" : "No"}</td>
+                      <td className="p-2">{d.inAnonymizedExport ? "Yes": "No"}</td>
                     </tr>
                   ))}
                 </tbody>

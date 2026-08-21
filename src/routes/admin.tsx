@@ -79,12 +79,12 @@ function NotificationsCard() {
         <Mail className="h-4 w-4 text-primary" />
         Email notifications
         <span className="ml-auto flex items-center gap-2">
-          <Button size="sm" variant="outline" onClick={() => refetch()} disabled={isFetching}>
-            <RefreshCw className={`h-3.5 w-3.5 ${isFetching ? "animate-spin" : ""}`} />
+          <Button size="sm"variant="outline" onClick={() => refetch()} disabled={isFetching}>
+            <RefreshCw className={`h-3.5 w-3.5 ${isFetching ? "animate-spin": ""}`} />
           </Button>
           <Button size="sm" onClick={handleTest} disabled={busy}>
             <Send className="h-3.5 w-3.5 mr-1" />
-            {busy ? "Sending…" : "Send test email"}
+            {busy ? "Sending…": "Send test email"}
           </Button>
         </span>
       </div>
@@ -110,10 +110,10 @@ function NotificationsCard() {
                 <td className="py-1.5 pr-3">{r.event_type}</td>
                 <td className="py-1.5 pr-3">{r.recipient_email ?? "—"}</td>
                 <td className="py-1.5 pr-3">
-                  <Badge variant={r.sent_status === "sent" ? "default" : "destructive"}>{r.sent_status}</Badge>
+                  <Badge variant={r.sent_status === "sent"? "default": "destructive"}>{r.sent_status}</Badge>
                 </td>
-                <td className="py-1.5 pr-3 max-w-[280px] truncate" title={r.provider_response ?? ""}>{r.provider_response ?? "—"}</td>
-                <td className="py-1.5 pr-3 max-w-[240px] truncate text-destructive" title={r.error_message ?? ""}>{r.error_message ?? "—"}</td>
+                <td className="py-1.5 pr-3 max-w-[280px] truncate"title={r.provider_response ?? ""}>{r.provider_response ?? "—"}</td>
+                <td className="py-1.5 pr-3 max-w-[240px] truncate text-destructive"title={r.error_message ?? ""}>{r.error_message ?? "—"}</td>
               </tr>
             ))}
           </tbody>
@@ -130,12 +130,12 @@ function AdminAnalyticsCard() {
   const { data: assist } = useQuery({ queryKey: ["assistant-status", "admin-card"], queryFn: () => assistFn(), staleTime: 60_000 });
 
   const items: { icon: React.ReactNode; label: string; value: number | string }[] = [
-    { icon: <Eye className="h-4 w-4" />, label: "Total visits", value: stats?.total_visits ?? 0 },
-    { icon: <Sun className="h-4 w-4" />, label: "Visits today", value: stats?.visits_today ?? 0 },
-    { icon: <ClipboardCheck className="h-4 w-4" />, label: "Assessments", value: stats?.total_assessments ?? 0 },
-    { icon: <Users className="h-4 w-4" />, label: "Volunteer applicants", value: stats?.volunteer_applicants ?? 0 },
-    { icon: <Stethoscope className="h-4 w-4" />, label: "Doctor-review cases", value: stats?.doctor_review_count ?? 0 },
-    { icon: <CalendarCheck className="h-4 w-4" />, label: "Follow-up visits", value: stats?.follow_up_visits_logged ?? 0 },
+    { icon: <Eye className="h-4 w-4"/>, label: "Total visits", value: stats?.total_visits ?? 0 },
+    { icon: <Sun className="h-4 w-4"/>, label: "Visits today", value: stats?.visits_today ?? 0 },
+    { icon: <ClipboardCheck className="h-4 w-4"/>, label: "Assessments", value: stats?.total_assessments ?? 0 },
+    { icon: <Users className="h-4 w-4"/>, label: "Volunteer applicants", value: stats?.volunteer_applicants ?? 0 },
+    { icon: <Stethoscope className="h-4 w-4"/>, label: "Doctor-review cases", value: stats?.doctor_review_count ?? 0 },
+    { icon: <CalendarCheck className="h-4 w-4"/>, label: "Follow-up visits", value: stats?.follow_up_visits_logged ?? 0 },
   ];
 
   return (
@@ -144,7 +144,7 @@ function AdminAnalyticsCard() {
         <BarChart3 className="h-4 w-4 text-primary" />
         Platform analytics
         <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-          Chatbot: {assist?.enabled ? "enabled" : "disabled"}
+          Chatbot: {assist?.enabled ? "enabled": "disabled"}
         </span>
       </div>
       <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
@@ -256,8 +256,7 @@ type Row = Awaited<ReturnType<typeof listParticipants>>["rows"][number];
 type VRow = Awaited<ReturnType<typeof listVolunteers>>["rows"][number];
 
 const VOL_STATUSES = [
-  "new_applicant","awaiting_review","accepted_for_training","in_training",
-  "active_volunteer","needs_follow_up","not_accepted",
+  "new_applicant","awaiting_review","accepted_for_training","in_training", "active_volunteer","needs_follow_up","not_accepted",
 ] as const;
 
 function AdminPage() {
@@ -284,13 +283,13 @@ function AdminPage() {
       <header className="border-b bg-card">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <Link to="/" className="flex items-center gap-2">
-              <img src={aqlaLogo} alt="Aqla — أقلع logo" className="h-[38px] w-auto object-contain sm:h-11" />
+            <Link to="/"className="flex items-center gap-2">
+              <img src={aqlaLogo} alt="Aqla — أقلع logo"className="h-[38px] w-auto object-contain sm:h-11" />
               <span className="font-semibold">Aqla — أقلع</span>
             </Link>
             <Badge variant="outline">{roles.join(", ") || "no role"}</Badge>
           </div>
-          <Button variant="ghost" size="sm" onClick={async () => { await supabase.auth.signOut(); nav({ to: "/auth" }); }}>
+          <Button variant="ghost"size="sm"onClick={async () => { await supabase.auth.signOut(); nav({ to: "/auth" }); }}>
             <LogOut className="h-4 w-4 mr-1" /> Sign out
           </Button>
         </div>
@@ -302,10 +301,10 @@ function AdminPage() {
         <NotificationsCard />
         <Tabs defaultValue="participants">
           <TabsList>
-            <TabsTrigger value="participants" className="gap-1.5"><HeartPulse className="h-4 w-4" />Quit Support</TabsTrigger>
-            <TabsTrigger value="volunteers" className="gap-1.5"><Users className="h-4 w-4" />Volunteers</TabsTrigger>
-            <TabsTrigger value="challenges" className="gap-1.5"><Trophy className="h-4 w-4" />Challenges</TabsTrigger>
-            <TabsTrigger value="posters" className="gap-1.5"><ImageIcon className="h-4 w-4" />Poster Studio</TabsTrigger>
+            <TabsTrigger value="participants"className="gap-1.5"><HeartPulse className="h-4 w-4" />Quit Support</TabsTrigger>
+            <TabsTrigger value="volunteers"className="gap-1.5"><Users className="h-4 w-4" />Volunteers</TabsTrigger>
+            <TabsTrigger value="challenges"className="gap-1.5"><Trophy className="h-4 w-4" />Challenges</TabsTrigger>
+            <TabsTrigger value="posters"className="gap-1.5"><ImageIcon className="h-4 w-4" />Poster Studio</TabsTrigger>
           </TabsList>
           <TabsContent value="participants">
             <ParticipantsPanel onRoles={setRoles} isPhysician={isPhysician} />
@@ -329,8 +328,7 @@ function AdminPage() {
 const PRODUCTS = ["cigarettes","vape","shisha","pouches","smokeless","multiple","former","non_user"];
 const READINESS_VALUES = ["quit_now","quit_prepare","reduce_first","not_ready_score","discuss_alternatives","score_only","helping_someone"];
 const DEP_CATS = [
-  "Very low cigarette dependence","Low cigarette dependence","Moderate cigarette dependence",
-  "High cigarette dependence","Very high cigarette dependence",
+  "Very low cigarette dependence","Low cigarette dependence","Moderate cigarette dependence", "High cigarette dependence","Very high cigarette dependence",
 ];
 
 function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) => void; isPhysician: boolean }) {
@@ -369,10 +367,7 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
 
   const [researchOnly, setResearchOnly] = useState(false);
   async function doExport(
-    type: "full" | "anonymized" | "cohort" | "follow_up_due" | "research"
-      | "baseline" | "follow_up_outcomes" | "product_use" | "youth_nicotine" | "city_summary"
-      | "dependence_items" | "readiness_quit_history" | "research_consent_only"
-      | "community_exposure",
+    type: "full"| "anonymized"| "cohort"| "follow_up_due"| "research"| "baseline"| "follow_up_outcomes"| "product_use"| "youth_nicotine"| "city_summary"| "dependence_items"| "readiness_quit_history"| "research_consent_only"| "community_exposure",
   ) {
     try {
       const r = await exportFn({ data: { type, cohort: cohort || undefined, researchConsentOnly: researchOnly || undefined } });
@@ -388,7 +383,7 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
           <Stat label="Total" value={statsData.total} />
           <Stat label="Today" value={statsData.today} />
-          <Stat label="Need Doctor" value={statsData.doctorReview} tone="warning" />
+          <Stat label="Need Doctor"value={statsData.doctorReview} tone="warning" />
           <Stat label="Pending Contact" value={statsData.pending} />
           <Stat label="Contacted" value={statsData.contacted} />
           <Stat label="Appointments" value={statsData.appointments} />
@@ -406,7 +401,7 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
           </div>
           <div className="w-32">
             <label className="text-xs text-muted-foreground">Cohort</label>
-            <Select value={cohort || "all"} onValueChange={(v) => setCohort(v === "all" ? "" : v)}>
+            <Select value={cohort || "all"} onValueChange={(v) => setCohort(v === "all"? "" : v)}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
@@ -416,27 +411,27 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
           </div>
           <div className="w-40">
             <label className="text-xs text-muted-foreground">Product</label>
-            <Select value={product || "all"} onValueChange={(v) => setProduct(v === "all" ? "" : v)}>
+            <Select value={product || "all"} onValueChange={(v) => setProduct(v === "all"? "" : v)}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
-                {PRODUCTS.map((p) => <SelectItem key={p} value={p}>{p.replace(/_/g, " ")}</SelectItem>)}
+                {PRODUCTS.map((p) => <SelectItem key={p} value={p}>{p.replace(/_/g, "")}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
           <div className="w-44">
             <label className="text-xs text-muted-foreground">Readiness</label>
-            <Select value={readiness || "all"} onValueChange={(v) => setReadiness(v === "all" ? "" : v)}>
+            <Select value={readiness || "all"} onValueChange={(v) => setReadiness(v === "all"? "" : v)}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
-                {READINESS_VALUES.map((r) => <SelectItem key={r} value={r}>{r.replace(/_/g, " ")}</SelectItem>)}
+                {READINESS_VALUES.map((r) => <SelectItem key={r} value={r}>{r.replace(/_/g, "")}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
           <div className="w-56">
             <label className="text-xs text-muted-foreground">Dependence category</label>
-            <Select value={depCategory || "all"} onValueChange={(v) => setDepCategory(v === "all" ? "" : v)}>
+            <Select value={depCategory || "all"} onValueChange={(v) => setDepCategory(v === "all"? "" : v)}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
@@ -456,26 +451,26 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
             <input type="checkbox" checked={drOnly} onChange={(e) => setDrOnly(e.target.checked)} />
             Doctor review only
           </label>
-          <Button onClick={refresh} variant="outline" size="sm"><RefreshCw className="h-4 w-4 mr-1" /> Apply</Button>
+          <Button onClick={refresh} variant="outline"size="sm"><RefreshCw className="h-4 w-4 mr-1" /> Apply</Button>
           {isPhysician && (
             <div className="ml-auto flex flex-wrap items-center gap-1">
               <label className="flex items-center gap-1 text-xs mr-2">
                 <input type="checkbox" checked={researchOnly} onChange={(e) => setResearchOnly(e.target.checked)} />
                 Research consent only
               </label>
-              <Button size="sm" variant="outline" onClick={() => doExport("full")}><Download className="h-4 w-4 mr-1" />Full</Button>
-              <Button size="sm" variant="outline" onClick={() => doExport("anonymized")}><Download className="h-4 w-4 mr-1" />Anonymized</Button>
-              <Button size="sm" variant="outline" onClick={() => doExport("cohort")} disabled={!cohort}><Download className="h-4 w-4 mr-1" />Cohort</Button>
-              <Button size="sm" variant="outline" onClick={() => doExport("follow_up_due")}><Download className="h-4 w-4 mr-1" />Follow-up due</Button>
-              <Button size="sm" variant="outline" onClick={() => doExport("baseline")}><Download className="h-4 w-4 mr-1" />Baseline</Button>
-              <Button size="sm" variant="outline" onClick={() => doExport("follow_up_outcomes")}><Download className="h-4 w-4 mr-1" />Outcomes</Button>
-              <Button size="sm" variant="outline" onClick={() => doExport("product_use")}><Download className="h-4 w-4 mr-1" />Product use</Button>
-              <Button size="sm" variant="outline" onClick={() => doExport("youth_nicotine")}><Download className="h-4 w-4 mr-1" />Youth</Button>
-              <Button size="sm" variant="outline" onClick={() => doExport("city_summary")}><Download className="h-4 w-4 mr-1" />City summary</Button>
-              <Button size="sm" variant="outline" onClick={() => doExport("dependence_items")}><Download className="h-4 w-4 mr-1" />Dependence items</Button>
-              <Button size="sm" variant="outline" onClick={() => doExport("readiness_quit_history")}><Download className="h-4 w-4 mr-1" />Readiness &amp; quit history</Button>
-              <Button size="sm" variant="outline" onClick={() => doExport("community_exposure")}><Download className="h-4 w-4 mr-1" />Community exposure</Button>
-              <Button size="sm" variant="outline" onClick={() => doExport("research_consent_only")}><Download className="h-4 w-4 mr-1" />Research consent only</Button>
+              <Button size="sm"variant="outline"onClick={() => doExport("full")}><Download className="h-4 w-4 mr-1" />Full</Button>
+              <Button size="sm"variant="outline"onClick={() => doExport("anonymized")}><Download className="h-4 w-4 mr-1" />Anonymized</Button>
+              <Button size="sm"variant="outline"onClick={() => doExport("cohort")} disabled={!cohort}><Download className="h-4 w-4 mr-1" />Cohort</Button>
+              <Button size="sm"variant="outline"onClick={() => doExport("follow_up_due")}><Download className="h-4 w-4 mr-1" />Follow-up due</Button>
+              <Button size="sm"variant="outline"onClick={() => doExport("baseline")}><Download className="h-4 w-4 mr-1" />Baseline</Button>
+              <Button size="sm"variant="outline"onClick={() => doExport("follow_up_outcomes")}><Download className="h-4 w-4 mr-1" />Outcomes</Button>
+              <Button size="sm"variant="outline"onClick={() => doExport("product_use")}><Download className="h-4 w-4 mr-1" />Product use</Button>
+              <Button size="sm"variant="outline"onClick={() => doExport("youth_nicotine")}><Download className="h-4 w-4 mr-1" />Youth</Button>
+              <Button size="sm"variant="outline"onClick={() => doExport("city_summary")}><Download className="h-4 w-4 mr-1" />City summary</Button>
+              <Button size="sm"variant="outline"onClick={() => doExport("dependence_items")}><Download className="h-4 w-4 mr-1" />Dependence items</Button>
+              <Button size="sm"variant="outline"onClick={() => doExport("readiness_quit_history")}><Download className="h-4 w-4 mr-1" />Readiness &amp; quit history</Button>
+              <Button size="sm"variant="outline"onClick={() => doExport("community_exposure")}><Download className="h-4 w-4 mr-1" />Community exposure</Button>
+              <Button size="sm"variant="outline"onClick={() => doExport("research_consent_only")}><Download className="h-4 w-4 mr-1" />Research consent only</Button>
             </div>
           )}
         </div>
@@ -512,14 +507,14 @@ function ParticipantsPanel({ onRoles, isPhysician }: { onRoles: (r: string[]) =>
                   <td className="p-2">{r.full_name}</td>
                   <td className="p-2">{r.mobile}</td>
                   <td className="p-2">{r.city ?? "—"}</td>
-                  <td className="p-2 text-xs">{(e.products ?? []).map((p) => p.replace(/_/g, " ")).join(", ") || "—"}</td>
+                  <td className="p-2 text-xs">{(e.products ?? []).map((p) => p.replace(/_/g, "")).join(", ") || "—"}</td>
                   <td className="p-2 font-medium">{scoreLabel}</td>
-                  <td className="p-2 text-xs">{e.readiness ? e.readiness.replace(/_/g, " ") : "—"}</td>
+                  <td className="p-2 text-xs">{e.readiness ? e.readiness.replace(/_/g, "") : "—"}</td>
                   <td className="p-2"><Badge>{r.cohort}</Badge></td>
                   <td className="p-2">{r.doctor_review_needed ? <Badge variant="destructive">Yes</Badge> : "—"}</td>
-                  <td className="p-2 text-xs">{e.followUp ? e.followUp.replace(/_/g, " ") : "—"}</td>
-                  <td className="p-2 text-xs">{r.contacted ? "contacted" : (r.follow_up_status ?? "new")}</td>
-                  <td className="p-2"><Button size="sm" variant="outline" onClick={() => setSelectedId(r.id)}>Open</Button></td>
+                  <td className="p-2 text-xs">{e.followUp ? e.followUp.replace(/_/g, "") : "—"}</td>
+                  <td className="p-2 text-xs">{r.contacted ? "contacted": (r.follow_up_status ?? "new")}</td>
+                  <td className="p-2"><Button size="sm"variant="outline" onClick={() => setSelectedId(r.id)}>Open</Button></td>
                 </tr>
               );
             })}
@@ -565,7 +560,7 @@ function VolunteersPanel() {
           <Stat label="Pending Contact" value={statsData.pending} />
           <Stat label="Contacted" value={statsData.contacted} />
           {Object.entries(statsData.byStatus).map(([k, v]) => (
-            <Stat key={k} label={k.replace(/_/g, " ")} value={v} tone="primary" />
+            <Stat key={k} label={k.replace(/_/g, "")} value={v} tone="primary" />
           ))}
         </div>
       )}
@@ -578,11 +573,11 @@ function VolunteersPanel() {
           </div>
           <div className="w-48">
             <label className="text-xs text-muted-foreground">Status</label>
-            <Select value={status || "all"} onValueChange={(v) => setStatus(v === "all" ? "" : v)}>
+            <Select value={status || "all"} onValueChange={(v) => setStatus(v === "all"? "" : v)}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
-                {VOL_STATUSES.map((s) => <SelectItem key={s} value={s}>{s.replace(/_/g, " ")}</SelectItem>)}
+                {VOL_STATUSES.map((s) => <SelectItem key={s} value={s}>{s.replace(/_/g, "")}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
@@ -590,7 +585,7 @@ function VolunteersPanel() {
             <label className="text-xs text-muted-foreground">City</label>
             <Input value={city} onChange={(e) => setCity(e.target.value)} placeholder="City…" />
           </div>
-          <Button onClick={refresh} variant="outline" size="sm"><RefreshCw className="h-4 w-4 mr-1" /> Apply</Button>
+          <Button onClick={refresh} variant="outline"size="sm"><RefreshCw className="h-4 w-4 mr-1" /> Apply</Button>
         </div>
       </Card>
 
@@ -621,9 +616,9 @@ function VolunteersPanel() {
                 <td className="p-2">{r.city ?? "—"}</td>
                 <td className="p-2">{r.affiliation ?? "—"}</td>
                 <td className="p-2 text-xs">{(interests[r.id] ?? []).join(", ") || "—"}</td>
-                <td className="p-2"><Badge variant="outline">{(r.status as string).replace(/_/g, " ")}</Badge></td>
-                <td className="p-2">{r.contacted ? "✓" : "—"}</td>
-                <td className="p-2"><Button size="sm" variant="outline" onClick={() => setSelectedId(r.id)}>Open</Button></td>
+                <td className="p-2"><Badge variant="outline">{(r.status as string).replace(/_/g, "")}</Badge></td>
+                <td className="p-2">{r.contacted ? "✓": "—"}</td>
+                <td className="p-2"><Button size="sm"variant="outline" onClick={() => setSelectedId(r.id)}>Open</Button></td>
               </tr>
             ))}
             {rows.length === 0 && <tr><td colSpan={9} className="p-8 text-center text-muted-foreground">No volunteer applications yet.</td></tr>}
@@ -646,7 +641,7 @@ function BreakdownCard({ title, data }: { title: string; data: Record<string, nu
       ) : (
         <ul className="space-y-1 text-sm">
           {items.map(([k, v]) => (
-            <li key={k} className="flex justify-between"><span className="truncate">{k.replace(/_/g, " ")}</span><span className="font-semibold">{v}</span></li>
+            <li key={k} className="flex justify-between"><span className="truncate">{k.replace(/_/g, "")}</span><span className="font-semibold">{v}</span></li>
           ))}
         </ul>
       )}
@@ -675,7 +670,7 @@ function VolunteerDrawer({ id, onClose }: { id: string; onClose: () => void }) {
             <div className="text-xs font-mono text-muted-foreground">{a.application_code}</div>
             <h2 className="text-xl font-semibold">{a.full_name}</h2>
           </div>
-          <Button size="sm" variant="ghost" onClick={onClose}>Close</Button>
+          <Button size="sm"variant="ghost" onClick={onClose}>Close</Button>
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
@@ -687,7 +682,7 @@ function VolunteerDrawer({ id, onClose }: { id: string; onClose: () => void }) {
           <Info label="Academic level">{a.academic_level ?? "—"}</Info>
           <Info label="Smoking status">{a.smoking_status ?? "—"}</Info>
           <Info label="Preferred contact">{a.preferred_contact}</Info>
-          <Info label="Interests">{(data.interests as string[]).map((i) => i.replace(/_/g, " ")).join(", ") || "—"}</Info>
+          <Info label="Interests">{(data.interests as string[]).map((i) => i.replace(/_/g, "")).join(", ") || "—"}</Info>
           <Info label="Availability">{a.availability ?? "—"}</Info>
         </div>
 
@@ -704,7 +699,7 @@ function VolunteerDrawer({ id, onClose }: { id: string; onClose: () => void }) {
             <Select value={a.status as string} onValueChange={async (v) => { await upd({ data: { id, status: v as never } }); toast.success("Status updated"); await reload(); }}>
               <SelectTrigger className="w-56"><SelectValue /></SelectTrigger>
               <SelectContent>
-                {VOL_STATUSES.map((s) => <SelectItem key={s} value={s}>{s.replace(/_/g, " ")}</SelectItem>)}
+                {VOL_STATUSES.map((s) => <SelectItem key={s} value={s}>{s.replace(/_/g, "")}</SelectItem>)}
               </SelectContent>
             </Select>
             <label className="flex items-center gap-2 text-sm">
@@ -739,7 +734,7 @@ function VolunteerDrawer({ id, onClose }: { id: string; onClose: () => void }) {
           <ul className="space-y-1 text-sm">
             {data.history.map((h) => (
               <li key={h.id} className="flex justify-between border-b py-1 last:border-0">
-                <span>{(h.status as string).replace(/_/g, " ")}</span>
+                <span>{(h.status as string).replace(/_/g, "")}</span>
                 <span className="text-xs text-muted-foreground">{new Date(h.created_at).toLocaleString()}</span>
               </li>
             ))}
@@ -752,11 +747,11 @@ function VolunteerDrawer({ id, onClose }: { id: string; onClose: () => void }) {
 }
 
 /* ---------------- Shared ---------------- */
-function Stat({ label, value, tone }: { label: string; value: number; tone?: "warning" | "primary" }) {
+function Stat({ label, value, tone }: { label: string; value: number; tone?: "warning"| "primary" }) {
   return (
     <Card className="p-3">
       <div className="text-xs text-muted-foreground capitalize">{label}</div>
-      <div className={`text-2xl font-bold ${tone === "warning" ? "text-warning" : tone === "primary" ? "text-primary" : ""}`}>{value}</div>
+      <div className={`text-2xl font-bold ${tone === "warning"? "text-warning": tone === "primary"? "text-primary": ""}`}>{value}</div>
     </Card>
   );
 }
@@ -781,7 +776,7 @@ function DetailDrawer({ id, onClose, isPhysician }: { id: string; onClose: () =>
             <div className="text-xs font-mono text-muted-foreground">{p.participant_code}</div>
             <h2 className="text-xl font-semibold">{p.full_name}</h2>
           </div>
-          <Button size="sm" variant="ghost" onClick={onClose}>Close</Button>
+          <Button size="sm"variant="ghost" onClick={onClose}>Close</Button>
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
@@ -790,7 +785,7 @@ function DetailDrawer({ id, onClose, isPhysician }: { id: string; onClose: () =>
           <Info label="Age">{p.age ?? "—"}</Info>
           <Info label="City">{p.city ?? "—"}</Info>
           <Info label="Cohort"><Badge>{p.cohort}</Badge></Info>
-          <Info label="Doctor review">{p.doctor_review_needed ? "Yes" : "No"}</Info>
+          <Info label="Doctor review">{p.doctor_review_needed ? "Yes": "No"}</Info>
           <Info label="Preferred contact">{p.preferred_contact}</Info>
           <Info label="Language">{p.preferred_language}</Info>
         </div>
@@ -830,7 +825,7 @@ function DetailDrawer({ id, onClose, isPhysician }: { id: string; onClose: () =>
             /> Escalate to doctor
           </label>
           <textarea className="w-full rounded border bg-background p-2 text-sm" rows={2}
-            placeholder="Receptionist notes" defaultValue={p.receptionist_notes ?? ""}
+            placeholder="Receptionist notes"defaultValue={p.receptionist_notes ?? ""}
             onBlur={async (e) => { await upd({ data: { id, receptionist_notes: e.target.value } }); toast.success("Notes saved"); }} />
         </Card>
 
@@ -847,7 +842,7 @@ function DetailDrawer({ id, onClose, isPhysician }: { id: string; onClose: () =>
                 ))}
                 {data.notes.length === 0 && <p className="text-xs text-muted-foreground">No notes yet.</p>}
               </div>
-              <textarea className="w-full rounded border bg-background p-2 text-sm" rows={3} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Add clinical note…" />
+              <textarea className="w-full rounded border bg-background p-2 text-sm"rows={3} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Add clinical note…" />
               <Button size="sm" onClick={async () => {
                 if (!note.trim()) return;
                 await addNote({ data: { participant_id: id, note } });
@@ -869,7 +864,7 @@ function DetailDrawer({ id, onClose, isPhysician }: { id: string; onClose: () =>
                 ))}
                 <label className="space-y-1">
                   <span className="text-xs text-muted-foreground">Quit date</span>
-                  <Input type="date" defaultValue={data.outcome?.quit_date ?? ""}
+                  <Input type="date"defaultValue={data.outcome?.quit_date ?? ""}
                     onBlur={async (e) => { await updOut({ data: { participant_id: id, quit_date: e.target.value || null } }); toast.success("Saved"); }} />
                 </label>
               </div>

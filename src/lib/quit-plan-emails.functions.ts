@@ -15,7 +15,7 @@ async function ensureAdmin(userId: string) {
 export type QuitPlanEmailRow = {
   id: string;
   quit_plan_id: string;
-  recipient_type: "user" | "admin";
+  recipient_type: "user"| "admin";
   email: string;
   subject: string;
   status: string;
@@ -86,7 +86,7 @@ export const listQuitPlanEmails = createServerFn({ method: "GET" })
       g.total += 1;
       const s = r.status.toLowerCase();
       if (s === "sent") g.sent += 1;
-      else if (s === "failed" || s === "error" || s === "bounced") g.failed += 1;
+      else if (s === "failed"|| s === "error"|| s === "bounced") g.failed += 1;
       else g.queued += 1;
       if (r.created_at > g.last_attempt_at) g.last_attempt_at = r.created_at;
     }

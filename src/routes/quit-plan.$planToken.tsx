@@ -32,11 +32,11 @@ function PlanRouter() {
 
   if (isLoading) {
     return (
-      <div dir="rtl" className="min-h-screen bg-background">
+      <div dir="rtl"className="min-h-screen bg-background">
         <SiteHeader />
         <main className="mx-auto max-w-3xl px-4 py-10 text-center text-sm text-muted-foreground">
         <div className="mb-5">
-          <BackButton fallback="/quit-plan" labelAr="خطة الإقلاع" labelEn="Quit plan" />
+          <BackButton fallback="/quit-plan"labelAr="خطة الإقلاع"labelEn="Quit plan" />
         </div>
           <Loader2 className="mx-auto h-6 w-6 animate-spin" /> جارٍ تحميل الخطة…
         </main>
@@ -47,7 +47,7 @@ function PlanRouter() {
 
   if (data?.isRelease1 && data.plan) {
     return (
-      <div dir="rtl" className="min-h-screen bg-background">
+      <div dir="rtl"className="min-h-screen bg-background">
         <SiteHeader />
         <ClinicalPlanPage plan={data.plan as ClinicalPlanJSON} planToken={planToken} />
         <SiteFooter />
@@ -72,7 +72,7 @@ function PlanPage() {
 
   const plan = data?.plan as { id: string; nickname: string | null; plan: QuitPlanJSON | null; email_sent_at: string | null } | null | undefined;
   const planJson = (plan?.plan ?? null) as QuitPlanJSON | null;
-  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+  const shareUrl = typeof window !== "undefined"? window.location.href : "";
 
 
   async function downloadPdf() {
@@ -103,7 +103,7 @@ function PlanPage() {
     }
   }
 
-  async function schedule(type: "24h" | "3d" | "7d" | "14d" | "28d") {
+  async function schedule(type: "24h"| "3d"| "7d"| "14d"| "28d") {
     try {
       const res = await remindFn({ data: { planToken, type, channel: "email" } });
       setReminderMsg(res.message);
@@ -114,7 +114,7 @@ function PlanPage() {
 
   if (isLoading) {
     return (
-      <div dir="rtl" className="min-h-screen bg-background">
+      <div dir="rtl"className="min-h-screen bg-background">
         <SiteHeader />
         <main className="mx-auto max-w-3xl px-4 py-10 text-center text-sm text-muted-foreground">
           <Loader2 className="mx-auto h-6 w-6 animate-spin" /> جارٍ تحميل الخطة…
@@ -126,7 +126,7 @@ function PlanPage() {
 
   if (!plan || !planJson) {
     return (
-      <div dir="rtl" className="min-h-screen bg-background">
+      <div dir="rtl"className="min-h-screen bg-background">
         <SiteHeader />
         <main className="mx-auto max-w-3xl px-4 py-10">
           <p className="text-sm">لم يتم العثور على الخطة.</p>
@@ -137,28 +137,27 @@ function PlanPage() {
   }
 
   return (
-    <div dir="rtl" className="min-h-screen bg-background">
+    <div dir="rtl"className="min-h-screen bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-10 space-y-6">
         <header className="space-y-2">
           <h1 className="text-2xl font-bold">خطة أقلع الشخصية — {planJson.identity.nickname}</h1>
           <p className="text-xs text-muted-foreground">
             {plan.email_sent_at
-              ? "تم إرسال نسخة إلى بريدك الإلكتروني."
-              : "تم إنشاء الخطة، لكن تعذر إرسال البريد الإلكتروني حاليًا. يمكنك تحميل الخطة PDF أو نسخ الرابط."}
+              ? "تم إرسال نسخة إلى بريدك الإلكتروني.": "تم إنشاء الخطة، لكن تعذر إرسال البريد الإلكتروني حاليًا. يمكنك تحميل الخطة PDF أو نسخ الرابط."}
           </p>
           <div className="flex flex-wrap gap-2 pt-2">
             <button onClick={downloadPdf} disabled={downloading} className="inline-flex items-center gap-2 rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground disabled:opacity-50">
-              {downloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+              {downloading ? <Loader2 className="h-4 w-4 animate-spin"/> : <Download className="h-4 w-4" />}
               تحميل خطة أقلع PDF
             </button>
             <button onClick={() => { navigator.clipboard.writeText(shareUrl); setReminderMsg("تم نسخ الرابط."); }} className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm">
               نسخ الرابط
             </button>
-            <a href="https://wa.me/966555096412" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm">
+            <a href="https://wa.me/966555096412"target="_blank"rel="noreferrer"className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm">
               <MessageCircle className="h-4 w-4" /> دعم واتساب
             </a>
-            <a href="mailto:smokefreeksa@gmail.com" className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm">
+            <a href="mailto:smokefreeksa@gmail.com"className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm">
               <Mail className="h-4 w-4" /> إيميل الدعم
             </a>
           </div>
@@ -172,7 +171,7 @@ function PlanPage() {
         <Section title="A. ملخص خطتك">
           <Row k="الاسم" v={planJson.identity.nickname} />
           <Row k="المدينة" v={planJson.identity.city} />
-          <Row k="تاريخ إنشاء الخطة" v={new Date(planJson.meta.generated_at).toLocaleString("ar-SA")} />
+          <Row k="تاريخ إنشاء الخطة"v={new Date(planJson.meta.generated_at).toLocaleString("ar-SA")} />
           <Row k="المنتج" v={planJson.use.product_ar} />
           {planJson.use.daily_use_pattern && <Row k="نمط الاستخدام اليومي" v={planJson.use.daily_use_pattern} />}
           {planJson.use.time_to_first_use && <Row k="أول استخدام بعد الاستيقاظ" v={planJson.use.time_to_first_use} />}
@@ -183,7 +182,7 @@ function PlanPage() {
           {!planJson.assessment.validated && <p className="text-xs text-amber-600">تقييم مكيّف (غير معتمد).</p>}
           <Row k="الهدف الحالي" v={planJson.goal.label_ar} />
           <Row k="الاستعداد" v={planJson.readiness.label_ar} />
-          <Row k="تاريخ البداية" v={planJson.dates.quit_or_reduce_date ?? "—"} />
+          <Row k="تاريخ البداية"v={planJson.dates.quit_or_reduce_date ?? "—"} />
           <Row k="طريقة المتابعة" v={planJson.followup_preference_ar} />
           <Cite text={planJson.summary_citation} />
         </Section>

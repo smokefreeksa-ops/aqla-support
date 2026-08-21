@@ -48,9 +48,9 @@ function EnLaTatten() {
 
       <h2 className="mt-10 text-xl font-semibold text-primary">Continue</h2>
       <ul className="mt-3 space-y-2 text-[15px] leading-7">
-        <li><Link to="/en" className="text-primary underline">Aqla in English</Link></li>
-        <li><Link to="/en/about" className="text-primary underline">About and founder</Link></li>
-        <li><Link to="/la-tatten" className="text-primary underline">الصفحة بالعربية</Link></li>
+        <li><Link to="/en"className="text-primary underline">Aqla in English</Link></li>
+        <li><Link to="/en/about"className="text-primary underline">About and founder</Link></li>
+        <li><Link to="/la-tatten"className="text-primary underline">الصفحة بالعربية</Link></li>
       </ul>
     </SeoPageShell>
   );

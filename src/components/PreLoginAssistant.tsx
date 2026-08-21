@@ -4,20 +4,14 @@ import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 import { chatWithAssistant } from "@/lib/assistant.functions";
 import { useDraggableWidget } from "@/hooks/use-draggable-widget";
 
-type Msg = { role: "user" | "assistant"; content: string };
+type Msg = { role: "user"| "assistant"; content: string };
 
 const BOT_NAME = "مساعد أقلع الذكي";
 const OPENING =
   "يا هلا والله \nأنا مساعد أقلع الذكي\nاسألني عن أقلع، أو خلّني أقول لك نكتة… ترا بتستانس والله.\nوإذا ما ودك تسجل الحين؟ ولا يهمك… حتى التسجيل يحتاج “نية إقلاع” شكله ";
 
 const STARTERS = [
-  "قل لي نكتة",
-  "وش فكرة أقلع؟",
-  "اختَر لي المسار المناسب",
-  "ليش أسجل؟",
-  "هل أقلع مجاني؟",
-  "من هو مؤسس أقلع؟",
-  "تواصل عبر واتساب",
+  "قل لي نكتة", "وش فكرة أقلع؟", "اختَر لي المسار المناسب", "ليش أسجل؟", "هل أقلع مجاني؟", "من هو مؤسس أقلع؟", "تواصل عبر واتساب",
 ];
 
 export function PreLoginAssistant() {
@@ -97,15 +91,14 @@ export function PreLoginAssistant() {
             launcher.onPointerDown(e);
           }}
         >
-          <div dir="rtl" className="flex flex-col items-end gap-1.5">
+          <div dir="rtl"className="flex flex-col items-end gap-1.5">
             <button
               type="button"
               onClick={() => {
                 if (movedRef.current || launcher.dragging) return;
                 setOpen(true);
               }}
-              dir="rtl"
-              className="inline-flex items-center gap-2 rounded-full bg-[#c9a84c] px-4 py-2.5 text-sm font-semibold text-[#0b3a25] shadow-lg transition hover:bg-[#d8b85f] focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/50"
+              dir="rtl"className="inline-flex items-center gap-2 rounded-full bg-[#c9a84c] px-4 py-2.5 text-sm font-semibold text-[#0b3a25] shadow-lg transition hover:bg-[#d8b85f] focus:outline-none focus:ring-2 focus:ring-[#c9a84c]/50"
             >
               <MessageCircle className="h-4 w-4" />
               <span style={{ unicodeBidi: "plaintext" }}>{BOT_NAME}</span>
@@ -116,18 +109,14 @@ export function PreLoginAssistant() {
 
       {open && (
         <div
-          dir="rtl"
-          lang="ar"
-          className="fixed bottom-[calc(24px+env(safe-area-inset-bottom,0px))] left-4 sm:left-6 flex w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#c9a84c]/40 bg-white text-foreground shadow-2xl"
-          style={{ height: "min(30rem, calc(100vh - 6rem))", zIndex: 120 }}
+          dir="rtl"lang="ar"className="fixed bottom-[calc(24px+env(safe-area-inset-bottom,0px))] left-4 sm:left-6 flex w-[min(22rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#c9a84c]/40 bg-white text-foreground shadow-2xl"style={{ height: "min(30rem, calc(100vh - 6rem))", zIndex: 120 }}
         >
           <div className="flex items-center justify-between gap-2 border-b bg-[#0b3a25] px-3 py-2 text-[#f4f0e1]">
-            <span className="text-sm font-semibold" style={{ unicodeBidi: "plaintext" }}>{BOT_NAME}</span>
+            <span className="text-sm font-semibold"style={{ unicodeBidi: "plaintext" }}>{BOT_NAME}</span>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              aria-label="إغلاق"
-              className="rounded p-1 hover:bg-white/10"
+              aria-label="إغلاق"className="rounded p-1 hover:bg-white/10"
             >
               <X className="h-4 w-4" />
             </button>
@@ -139,9 +128,7 @@ export function PreLoginAssistant() {
                 key={i}
                 dir="rtl"
                 className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3 py-2 text-sm text-right ${
-                  m.role === "user"
-                    ? "mr-auto bg-[#0b3a25] text-[#f4f0e1]"
-                    : "ml-auto bg-muted text-foreground"
+                  m.role === "user"? "mr-auto bg-[#0b3a25] text-[#f4f0e1]": "ml-auto bg-muted text-foreground"
                 }`}
                 style={{ unicodeBidi: "plaintext" }}
               >
@@ -154,14 +141,13 @@ export function PreLoginAssistant() {
               </div>
             )}
             {showStarters && (
-              <div dir="rtl" className="flex flex-wrap gap-1.5 pt-1">
+              <div dir="rtl"className="flex flex-wrap gap-1.5 pt-1">
                 {STARTERS.map((s) => (
                   <button
                     key={s}
                     type="button"
                     onClick={() => void sendText(s)}
-                    className="rounded-full border border-[#0b3a25]/20 bg-[#0b3a25]/5 px-3 py-1 text-xs text-[#0b3a25] transition hover:bg-[#0b3a25]/10"
-                    style={{ unicodeBidi: "plaintext" }}
+                    className="rounded-full border border-[#0b3a25]/20 bg-[#0b3a25]/5 px-3 py-1 text-xs text-[#0b3a25] transition hover:bg-[#0b3a25]/10"style={{ unicodeBidi: "plaintext" }}
                   >
                     {s}
                   </button>
@@ -188,15 +174,12 @@ export function PreLoginAssistant() {
                   }
                 }}
                 rows={1}
-                placeholder="اكتب رسالتك…"
-                dir="rtl"
-                className="max-h-32 flex-1 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm text-right focus:outline-none focus:ring-2 focus:ring-[#0b3a25]/30"
+                placeholder="اكتب رسالتك…"dir="rtl"className="max-h-32 flex-1 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm text-right focus:outline-none focus:ring-2 focus:ring-[#0b3a25]/30"
               />
               <button
                 type="submit"
                 disabled={sending || !input.trim()}
-                aria-label="إرسال"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-[#0b3a25] text-[#f4f0e1] disabled:opacity-50"
+                aria-label="إرسال"className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-[#0b3a25] text-[#f4f0e1] disabled:opacity-50"
               >
                 <Send className="h-4 w-4" />
               </button>

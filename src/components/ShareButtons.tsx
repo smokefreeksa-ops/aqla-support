@@ -6,7 +6,7 @@ interface Props {
   shareUrl: string;
   textAr?: string;
   textEn?: string;
-  lang?: "ar" | "en";
+  lang?: "ar"| "en";
   hashtags?: string[];
 }
 
@@ -20,8 +20,8 @@ export function ShareButtons({
   lang = "ar",
   hashtags = DEFAULT_HASHTAGS,
 }: Props) {
-  const text = (lang === "ar" ? textAr : textEn) ?? textAr ?? textEn ?? "";
-  const hashtagLine = hashtags.map((h) => `#${h}`).join(" ");
+  const text = (lang === "ar"? textAr : textEn) ?? textAr ?? textEn ?? "";
+  const hashtagLine = hashtags.map((h) => `#${h}`).join("");
 
   const xText = `${text}\n\n${shareUrl}\n\n${HANDLE}\n${hashtagLine}`.trim();
   const waText = `${text}\n\n${shareUrl}`.trim();
@@ -34,9 +34,9 @@ export function ShareButtons({
   async function copy() {
     try {
       await navigator.clipboard.writeText(copyText);
-      toast.success(lang === "ar" ? "تم النسخ" : "Copied");
+      toast.success(lang === "ar"? "تم النسخ": "Copied");
     } catch {
-      toast.error(lang === "ar" ? "تعذر النسخ" : "Could not copy");
+      toast.error(lang === "ar"? "تعذر النسخ": "Could not copy");
     }
   }
 
@@ -44,21 +44,21 @@ export function ShareButtons({
 
   return (
     <div className="flex flex-wrap gap-2 justify-center">
-      <Button size="sm" variant="outline" onClick={() => open(linkedInUrl)} className="gap-2">
+      <Button size="sm"variant="outline"onClick={() => open(linkedInUrl)} className="gap-2">
         <Linkedin className="h-4 w-4" />
-        {lang === "ar" ? "شارك في LinkedIn" : "Share on LinkedIn"}
+        {lang === "ar"? "شارك في LinkedIn": "Share on LinkedIn"}
       </Button>
-      <Button size="sm" variant="outline" onClick={() => open(xUrl)} className="gap-2">
+      <Button size="sm"variant="outline"onClick={() => open(xUrl)} className="gap-2">
         <Twitter className="h-4 w-4" />
-        {lang === "ar" ? "شارك على X" : "Share on X"}
+        {lang === "ar"? "شارك على X": "Share on X"}
       </Button>
-      <Button size="sm" variant="outline" onClick={() => open(waUrl)} className="gap-2 text-brand">
+      <Button size="sm"variant="outline"onClick={() => open(waUrl)} className="gap-2 text-brand">
         <MessageCircle className="h-4 w-4" />
         WhatsApp
       </Button>
-      <Button size="sm" variant="outline" onClick={copy} className="gap-2">
+      <Button size="sm"variant="outline"onClick={copy} className="gap-2">
         <LinkIcon className="h-4 w-4" />
-        {lang === "ar" ? "نسخ الرابط" : "Copy link"}
+        {lang === "ar"? "نسخ الرابط": "Copy link"}
       </Button>
     </div>
   );

@@ -30,7 +30,7 @@ export function computeHSI(a: EngineAnswers): number | undefined {
 export function computeAqlaIntensity(a: EngineAnswers): number {
   let s = 0;
   // first use within 30 min
-  if (a.first_use_after_waking === "lt_5" || a.first_use_after_waking === "6_30") s++;
+  if (a.first_use_after_waking === "lt_5"|| a.first_use_after_waking === "6_30") s++;
   // daily use
   const daily =
     (a.cigarettes_per_day && a.cigarettes_per_day !== "غير يومي" && a.cigarettes_per_day !== undefined) ||
@@ -41,7 +41,7 @@ export function computeAqlaIntensity(a: EngineAnswers): number {
     a.nicotine_pouch_frequency === "أكثر من 8";
   if (daily) s++;
   // more than one product
-  const realProducts = a.product_types.filter((p) => p !== "multiple" && p !== "relapse_prevention");
+  const realProducts = a.product_types.filter((p) => p !== "multiple"&& p !== "relapse_prevention");
   if (realProducts.length > 1 || a.mixed_use) s++;
   // strong craving (stress/anxiety triggers as proxy)
   if (a.triggers.includes("stress") || a.triggers.includes("anxiety")) s++;
@@ -56,7 +56,7 @@ export function computeAqlaIntensity(a: EngineAnswers): number {
     a.previous_quit_attempts !== "نعم، أكثر من 3 أشهر ثم عدت"
   ) s++;
   // all-day vape
-  if (a.vape_pattern === "طوال اليوم تقريبًا" || a.vape_pattern === "لا أعرف الكمية") s++;
+  if (a.vape_pattern === "طوال اليوم تقريبًا"|| a.vape_pattern === "لا أعرف الكمية") s++;
   // unable to complete one day nicotine-free (longest_abstinence < day)
   if (
     a.previous_quit_attempts === "نعم، أقل من 24 ساعة" ||
@@ -71,7 +71,7 @@ export function computeAqlaIntensity(a: EngineAnswers): number {
 }
 
 export function classifyDependence(a: EngineAnswers, intensity: number): DependenceCategory {
-  const realProducts = a.product_types.filter((p) => p !== "multiple" && p !== "relapse_prevention");
+  const realProducts = a.product_types.filter((p) => p !== "multiple"&& p !== "relapse_prevention");
   if (realProducts.length > 1 || a.mixed_use) return "complex_mixed";
   if (intensity >= 6) return "high";
   if (intensity >= 3) return "moderate";
@@ -118,13 +118,7 @@ export function topTriggerPatterns(a: EngineAnswers): string[] {
 
 export function requiresReferral(a: EngineAnswers): boolean {
   const refer: Array<typeof a.safety_flags[number]> = [
-    "pregnancy",
-    "under_18",
-    "cardiac",
-    "respiratory",
-    "medications",
-    "mental_health",
-    "seizures",
+    "pregnancy", "under_18", "cardiac", "respiratory", "medications", "mental_health", "seizures",
   ];
   return a.safety_flags.some((f) => refer.includes(f));
 }

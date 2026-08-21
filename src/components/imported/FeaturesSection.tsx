@@ -41,7 +41,7 @@ const features = [
 
 export default function FeaturesSection() {
   return (
-    <section id="features" className="saudi-map-section py-24 md:py-32">
+    <section id="features"className="saudi-map-section py-24 md:py-32">
       <div className="saudi-map-content container mx-auto px-4 md:px-6 max-w-7xl">
         <div className="mb-14 text-center">
           <div className="section-badge mb-5">

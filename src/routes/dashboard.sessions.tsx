@@ -26,7 +26,7 @@ function SessionsPage() {
       <section className="space-y-3">
         <h2 className="text-[15px] font-semibold">القادمة</h2>
         {upcoming.length === 0
-          ? <EmptyState title="لا توجد جلسات قادمة" hint="سيتم عرض الجلسات هنا فور جدولتها." />
+          ? <EmptyState title="لا توجد جلسات قادمة"hint="سيتم عرض الجلسات هنا فور جدولتها." />
           : upcoming.map((s) => <SessionRow key={s.id} session={s} />)}
       </section>
 

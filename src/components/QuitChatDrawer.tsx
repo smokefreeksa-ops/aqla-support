@@ -67,20 +67,17 @@ export function QuitChatDrawer({ open, onClose }: { open: boolean; onClose: () =
     <div
       dir="rtl"
       aria-hidden={!open}
-      className={`fixed inset-0 z-[500] ${open ? "" : "pointer-events-none opacity-0"} transition-opacity`}
+      className={`fixed inset-0 z-[500] ${open ? "": "pointer-events-none opacity-0"} transition-opacity`}
     >
       <button
-        type="button"
-        aria-label="إغلاق المحادثة"
+        type="button"aria-label="إغلاق المحادثة"
         onClick={onClose}
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
       />
       <div
-        role="dialog"
-        aria-modal="true"
-        aria-label="مساعد أقلع الذكي"
+        role="dialog"aria-modal="true"aria-label="مساعد أقلع الذكي"
         className={`absolute inset-x-0 bottom-0 mx-auto flex h-[88vh] max-w-2xl flex-col overflow-hidden rounded-t-3xl bg-background shadow-2xl transition-transform duration-300 sm:h-[85vh] ${
-          open ? "translate-y-0" : "translate-y-full"
+          open ? "translate-y-0": "translate-y-full"
         }`}
       >
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
@@ -91,10 +88,9 @@ export function QuitChatDrawer({ open, onClose }: { open: boolean; onClose: () =
           <button
             type="button"
             onClick={onClose}
-            aria-label="إغلاق"
-            className="grid h-9 w-9 place-items-center rounded-full text-foreground/70 transition-colors hover:bg-muted"
+            aria-label="إغلاق"className="grid h-9 w-9 place-items-center rounded-full text-foreground/70 transition-colors hover:bg-muted"
           >
-            <X className="h-5 w-5" aria-hidden="true" />
+            <X className="h-5 w-5"aria-hidden="true" />
           </button>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto p-3">

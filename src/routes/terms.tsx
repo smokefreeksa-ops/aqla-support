@@ -5,10 +5,7 @@ export const Route = createFileRoute("/terms")({
   head: () => ({ meta: [{ title: "شروط الاستخدام — Aqla" }] }),
   component: () => (
     <SimpleContentPage
-      titleAr="شروط الاستخدام"
-      titleEn="Terms of Use"
-      introAr="باستخدامك منصة أقلع فإنك توافق على الشروط التالية."
-      introEn="By using Aqla you agree to the following terms."
+      titleAr="شروط الاستخدام"titleEn="Terms of Use"introAr="باستخدامك منصة أقلع فإنك توافق على الشروط التالية."introEn="By using Aqla you agree to the following terms."
       sectionsAr={[
         { heading: "غرض المنصة", body: "أقلع منصة توعية ودعم للإقلاع عن التدخين والنيكوتين، وليست بديلًا عن الرعاية الطبية." },
         { heading: "الاستخدام المسؤول", body: "تعهد بعدم استخدام المنصة لأغراض غير قانونية أو لإيذاء الآخرين." },

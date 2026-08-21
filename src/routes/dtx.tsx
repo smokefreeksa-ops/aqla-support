@@ -39,8 +39,8 @@ type Pact = {
   ftnd_score: number | null;
   readiness_score: number | null;
 };
-type HaltKey = "hungry" | "angry" | "lonely" | "tired";
-type SlipKey = "work_stress" | "argument" | "social" | "boredom";
+type HaltKey = "hungry"| "angry"| "lonely"| "tired";
+type SlipKey = "work_stress"| "argument"| "social"| "boredom";
 
 // ============ COPY (ar) ============
 const HALT_LABELS: Record<HaltKey, string> = {
@@ -62,10 +62,7 @@ const SLIP_LABELS: Record<SlipKey, string> = {
   boredom: "ملل",
 };
 const DOPAMINE = [
-  "قم بتنفيذ 15 تمرين ضغط (Push-ups) أو إطالة الآن لضخ الدم.",
-  "اشرب 500 مل من الماء البارد جداً دفعة واحدة لغسل السموم.",
-  "اكتب 3 أشياء تمتن لوجودها في حياتك اليوم.",
-  "اغسل وجهك بماء مثلج فوراً لتفعيل العصب الحائر وتهدئة النبض.",
+  "قم بتنفيذ 15 تمرين ضغط (Push-ups) أو إطالة الآن لضخ الدم.", "اشرب 500 مل من الماء البارد جداً دفعة واحدة لغسل السموم.", "اكتب 3 أشياء تمتن لوجودها في حياتك اليوم.", "اغسل وجهك بماء مثلج فوراً لتفعيل العصب الحائر وتهدئة النبض.",
 ];
 const TRIGGERS = [
   { t: "ارتباط القهوة الصباحية", a: "إذن: سأشرب القهوة في غرفة مختلفة وأنا أقرأ، وسأكسر الرابط المكاني." },
@@ -96,7 +93,7 @@ function DtxPage() {
 
   if (isLoading) {
     return (
-      <div dir="rtl" className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center">
+      <div dir="rtl"className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center">
         <div className="text-slate-400 text-sm">جاري التحميل…</div>
       </div>
     );
@@ -105,7 +102,7 @@ function DtxPage() {
   const pact = (data?.pact as Pact | null) ?? null;
 
   return (
-    <div dir="rtl" className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 font-[system-ui,'Tajawal','Cairo',sans-serif]">
+    <div dir="rtl"className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 font-[system-ui,'Tajawal','Cairo',sans-serif]">
       <header className="sticky top-0 z-30 backdrop-blur-md bg-slate-950/70 border-b border-cyan-900/40">
         <div className="mx-auto max-w-5xl px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -114,7 +111,7 @@ function DtxPage() {
             </div>
             <span className="font-bold tracking-tight">أقلع · DTx</span>
           </div>
-          <Link to="/" className="text-xs text-cyan-400 hover:text-cyan-300">العودة للموقع ←</Link>
+          <Link to="/"className="text-xs text-cyan-400 hover:text-cyan-300">العودة للموقع ←</Link>
         </div>
       </header>
 
@@ -141,7 +138,7 @@ function DtxPage() {
 function PactWizard({ onDone }: { onDone: () => void }) {
   const savePact = useServerFn(dtxSavePact);
   const updateScores = useServerFn(dtxUpdateScores);
-  const [step, setStep] = useState<"pact" | "certificate" | "readiness" | "ftnd" | "done">("pact");
+  const [step, setStep] = useState<"pact"| "certificate"| "readiness"| "ftnd"| "done">("pact");
   const [form, setForm] = useState({
     full_name: "",
     quit_start_date: new Date().toISOString().slice(0, 10),
@@ -157,7 +154,7 @@ function PactWizard({ onDone }: { onDone: () => void }) {
   if (step === "pact") {
     const valid = form.full_name && form.reason_1 && form.reason_2 && form.quit_start_date;
     return (
-      <Card title="صناعة الميثاق السيادي" icon={<HandHeart className="h-5 w-5 text-cyan-400" />}>
+      <Card title="صناعة الميثاق السيادي"icon={<HandHeart className="h-5 w-5 text-cyan-400" />}>
         <div className="space-y-4">
           <Field label="اسمك الكريم">
             <Input value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })}
@@ -203,17 +200,17 @@ function PactWizard({ onDone }: { onDone: () => void }) {
 
   if (step === "certificate") {
     return (
-      <Card title="ميثاق التحرر العظيم" icon={<Sparkles className="h-5 w-5 text-amber-400" />}>
+      <Card title="ميثاق التحرر العظيم"icon={<Sparkles className="h-5 w-5 text-amber-400" />}>
         <div className="rounded-xl border border-cyan-500/40 bg-gradient-to-br from-slate-900 to-cyan-950/40 p-6 text-center space-y-3">
           <div className="text-amber-400 text-xs tracking-widest">CERTIFIED · موثّق</div>
           <h3 className="text-2xl font-extrabold">ميثاق التحرر العظيم</h3>
           <p className="text-sm leading-7 text-slate-200">
-            أنا الموقع أدناه <b className="text-cyan-300">{form.full_name}</b>، أقرر اليوم بتاريخ{" "}
+            أنا الموقع أدناه <b className="text-cyan-300">{form.full_name}</b>، أقرر اليوم بتاريخ{""}
             <b className="text-cyan-300">{form.quit_start_date}</b> أن أسترد حريتي وأكسجيني،
             وأتوقف نهائياً عن استهلاك أي منتج يحتوي على النيكوتين.
           </p>
           <p className="text-sm leading-7 text-slate-200">
-            قررت ذلك لأنني أستحق: <b className="text-cyan-300">{form.reason_1}</b> و{" "}
+            قررت ذلك لأنني أستحق: <b className="text-cyan-300">{form.reason_1}</b> و{""}
             <b className="text-cyan-300">{form.reason_2}</b>.
           </p>
           <p className="text-accent-green-light font-bold pt-2">تم التوقيع بنجاح. هذا العقد لا يقبل النقض.</p>
@@ -227,7 +224,7 @@ function PactWizard({ onDone }: { onDone: () => void }) {
 
   if (step === "readiness") {
     return (
-      <Card title="مقياس الجاهزية" icon={<Activity className="h-5 w-5 text-cyan-400" />}>
+      <Card title="مقياس الجاهزية"icon={<Activity className="h-5 w-5 text-cyan-400" />}>
         <p className="text-sm text-slate-300">على مقياس من 1 إلى 10، ما مدى استعدادك وقرارك الداخلي للإقلاع الآن؟</p>
         <div className="mt-6 mb-2 text-center text-4xl font-extrabold text-cyan-300">{readiness}</div>
         <Slider value={[readiness]} min={1} max={10} step={1} onValueChange={(v) => setReadiness(v[0])} />
@@ -253,7 +250,7 @@ function PactWizard({ onDone }: { onDone: () => void }) {
     ];
     const done = q1 !== null && q2 !== null;
     return (
-      <Card title="اختبار الاعتماد الكيميائي (FTND)" icon={<Activity className="h-5 w-5 text-cyan-400" />}>
+      <Card title="اختبار الاعتماد الكيميائي (FTND)"icon={<Activity className="h-5 w-5 text-cyan-400" />}>
         <div className="space-y-6">
           <RadioBlock label="متى تدخن سيجارتك الأولى (أو الفيب) بعد الاستيقاظ؟"
             opts={q1Opts} value={q1} onChange={setQ1} />
@@ -297,8 +294,7 @@ function RadioBlock({ label, opts, value, onChange }:
           <button key={o.v} type="button" onClick={() => onChange(o.v)}
             className={`text-right rounded-lg border px-3 py-2 text-sm transition ${
               value === o.v
-                ? "border-cyan-400 bg-cyan-500/10 text-cyan-200"
-                : "border-slate-700 bg-slate-900 hover:border-slate-500"
+                ? "border-cyan-400 bg-cyan-500/10 text-cyan-200": "border-slate-700 bg-slate-900 hover:border-slate-500"
             }`}>
             {o.l}
           </button>
@@ -348,10 +344,10 @@ function DtxDashboard({ pact, halt, slips, nrt, onChange }: {
       </div>
 
       {/* Live ROI Dashboard */}
-      <Section title="لوحة القيادة الحية" icon={<Activity className="h-5 w-5 text-cyan-400" />}>
+      <Section title="لوحة القيادة الحية"icon={<Activity className="h-5 w-5 text-cyan-400" />}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Stat label="مدة النقاء والحرية" value={`${e.d} يوم · ${e.h} ساعة · ${e.m} دقيقة`} accent="from-cyan-500 to-teal-400" />
-          <Stat label="المال المسترد" value={`${arabicMoney(monthlySaved)}`} accent="from-amber-400 to-orange-500" />
+          <Stat label="مدة النقاء والحرية"value={`${e.d} يوم · ${e.h} ساعة · ${e.m} دقيقة`} accent="from-cyan-500 to-teal-400" />
+          <Stat label="المال المسترد"value={`${arabicMoney(monthlySaved)}`} accent="from-amber-400 to-orange-500" />
         </div>
         <div className="mt-5 space-y-4">
           <Metric label="تطهير الدم من أول أكسيد الكربون (CO Washout)" pct={co} />
@@ -360,11 +356,11 @@ function DtxDashboard({ pact, halt, slips, nrt, onChange }: {
         </div>
       </Section>
 
-      <Section title="تحدي الـ 3 دقائق (كسر موجة الرغبة)" icon={<Wind className="h-5 w-5 text-cyan-400" />}>
+      <Section title="تحدي الـ 3 دقائق (كسر موجة الرغبة)"icon={<Wind className="h-5 w-5 text-cyan-400" />}>
         <BreathingChallenge />
       </Section>
 
-      <Section title="رادار المحفزات (البرمجة المسبقة)" icon={<Zap className="h-5 w-5 text-cyan-400" />}>
+      <Section title="رادار المحفزات (البرمجة المسبقة)"icon={<Zap className="h-5 w-5 text-cyan-400" />}>
         <div className="space-y-2">
           {TRIGGERS.map((t, i) => (
             <details key={i} className="rounded-lg border border-slate-800 bg-slate-900/60 px-4 py-3 group">
@@ -377,23 +373,23 @@ function DtxDashboard({ pact, halt, slips, nrt, onChange }: {
         </div>
       </Section>
 
-      <Section title="خوارزمية الدوبامين" icon={<Sparkles className="h-5 w-5 text-cyan-400" />}>
+      <Section title="خوارزمية الدوبامين"icon={<Sparkles className="h-5 w-5 text-cyan-400" />}>
         <DopamineGen />
       </Section>
 
-      <Section title="رادار التعافي (ماذا يحدث لجسدك الآن؟)" icon={<Activity className="h-5 w-5 text-accent-green-light" />}>
+      <Section title="رادار التعافي (ماذا يحدث لجسدك الآن؟)"icon={<Activity className="h-5 w-5 text-accent-green-light" />}>
         <RecoveryTimeline days={e.days} />
       </Section>
 
-      <Section title="مجدول البدائل الطبية (NRT)" icon={<CheckCircle2 className="h-5 w-5 text-accent-green-light" />}>
+      <Section title="مجدول البدائل الطبية (NRT)"icon={<CheckCircle2 className="h-5 w-5 text-accent-green-light" />}>
         <NrtTracker nrt={nrt} onChange={onChange} />
       </Section>
 
-      <Section title="تحليلاتي (أوقات الخطر العالية)" icon={<Activity className="h-5 w-5 text-amber-400" />}>
+      <Section title="تحليلاتي (أوقات الخطر العالية)"icon={<Activity className="h-5 w-5 text-amber-400" />}>
         <HaltHeatmap halt={halt} />
       </Section>
 
-      <Section title="محرك احتواء الزلات" icon={<AlertTriangle className="h-5 w-5 text-amber-400" />}>
+      <Section title="محرك احتواء الزلات"icon={<AlertTriangle className="h-5 w-5 text-amber-400" />}>
         <SlipIntercept slips={slips} onChange={onChange} />
       </Section>
 
@@ -451,7 +447,7 @@ function Metric({ label, pct }: { label: string; pct: number }) {
 function BreathingChallenge() {
   const [running, setRunning] = useState(false);
   const [secs, setSecs] = useState(180);
-  const [phase, setPhase] = useState<"in" | "hold" | "out">("in");
+  const [phase, setPhase] = useState<"in"| "hold"| "out">("in");
   const phaseLeftRef = useRef(4);
 
   useEffect(() => {
@@ -479,9 +475,9 @@ function BreathingChallenge() {
     }
   }, [secs, running]);
 
-  const phaseText = phase === "in" ? "شهيق عميق من الأنف..." : phase === "hold" ? "احبس أنفاسك..." : "زفير بطيء من الفم...";
-  const scale = phase === "in" ? "scale-100" : phase === "hold" ? "scale-100" : "scale-50";
-  const dur = phase === "in" ? "duration-[4000ms]" : phase === "hold" ? "duration-[7000ms]" : "duration-[8000ms]";
+  const phaseText = phase === "in"? "شهيق عميق من الأنف...": phase === "hold"? "احبس أنفاسك...": "زفير بطيء من الفم...";
+  const scale = phase === "in"? "scale-100": phase === "hold"? "scale-100": "scale-50";
+  const dur = phase === "in"? "duration-[4000ms]": phase === "hold"? "duration-[7000ms]": "duration-[8000ms]";
 
   return (
     <div className="flex flex-col items-center text-center">
@@ -492,7 +488,7 @@ function BreathingChallenge() {
       <div className="text-sm text-slate-300 min-h-[1.5rem]">{running ? phaseText : "ابدأ التحدي لكسر موجة الرغبة"}</div>
       <Button onClick={() => { setRunning(true); setSecs(180); setPhase("in"); phaseLeftRef.current = 4; }}
         disabled={running} className="mt-4 bg-cyan-600 hover:bg-cyan-500">
-        {running ? "جاري التنفس…" : "ابدأ التحدي"}
+        {running ? "جاري التنفس…": "ابدأ التحدي"}
       </Button>
     </div>
   );
@@ -530,9 +526,9 @@ function RecoveryTimeline({ days }: { days: number }) {
         const past = days > p.range[1];
         return (
           <li key={i} className={`rounded-xl border p-4 flex gap-3 ${
-            active ? "border-cyan-400 bg-cyan-500/10" : past ? "border-brand/40 bg-accent-green/5 opacity-80" : "border-slate-800 bg-slate-950/40 opacity-60"
+            active ? "border-cyan-400 bg-cyan-500/10": past ? "border-brand/40 bg-accent-green/5 opacity-80": "border-slate-800 bg-slate-950/40 opacity-60"
           }`}>
-            <div className={`mt-1 h-3 w-3 rounded-full ${active ? "bg-cyan-400 animate-pulse" : past ? "bg-accent-green" : "bg-slate-600"}`} />
+            <div className={`mt-1 h-3 w-3 rounded-full ${active ? "bg-cyan-400 animate-pulse": past ? "bg-accent-green": "bg-slate-600"}`} />
             <div>
               <div className="font-bold text-sm">{p.title}</div>
               <div className="text-sm text-slate-300 leading-7 mt-1">{p.text}</div>
@@ -587,7 +583,7 @@ function HaltHeatmap({ halt }: { halt: { trigger_type: HaltKey; created_at: stri
   const data = useMemo(() => {
     const counts: Record<HaltKey, number> = { hungry: 0, angry: 0, lonely: 0, tired: 0 };
     halt.forEach((h) => { counts[h.trigger_type] = (counts[h.trigger_type] || 0) + 1; });
-    return (Object.keys(counts) as HaltKey[]).map((k) => ({ name: HALT_LABELS[k].split(" ")[1] || HALT_LABELS[k], value: counts[k] }));
+    return (Object.keys(counts) as HaltKey[]).map((k) => ({ name: HALT_LABELS[k].split("")[1] || HALT_LABELS[k], value: counts[k] }));
   }, [halt]);
 
   if (halt.length === 0) {
@@ -595,17 +591,17 @@ function HaltHeatmap({ halt }: { halt: { trigger_type: HaltKey; created_at: stri
   }
   return (
     <div className="h-56">
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%"height="100%">
         <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-          <XAxis dataKey="name" tick={{ fill: "#94a3b8", fontSize: 12 }} />
+          <CartesianGrid strokeDasharray="3 3"stroke="#1e293b" />
+          <XAxis dataKey="name"tick={{ fill: "#94a3b8", fontSize: 12 }} />
           <YAxis tick={{ fill: "#94a3b8", fontSize: 12 }} allowDecimals={false} />
           <RTooltip contentStyle={{ background: "#0f172a", border: "1px solid #334155", color: "#e2e8f0" }} />
-          <Bar dataKey="value" fill="url(#dtxBar)" radius={[6, 6, 0, 0]} />
+          <Bar dataKey="value"fill="url(#dtxBar)" radius={[6, 6, 0, 0]} />
           <defs>
-            <linearGradient id="dtxBar" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#22d3ee" />
-              <stop offset="100%" stopColor="#0e7490" />
+            <linearGradient id="dtxBar"x1="0"y1="0"x2="0"y2="1">
+              <stop offset="0%"stopColor="#22d3ee" />
+              <stop offset="100%"stopColor="#0e7490" />
             </linearGradient>
           </defs>
         </BarChart>
@@ -622,14 +618,13 @@ function SlipIntercept({ slips, onChange }: { slips: { reason: SlipKey; created_
 
   return (
     <>
-      <Button onClick={() => setOpen(true)} variant="outline"
-        className="w-full border-amber-500/40 bg-amber-500/5 text-amber-200 hover:bg-amber-500/10">
+      <Button onClick={() => setOpen(true)} variant="outline"className="w-full border-amber-500/40 bg-amber-500/5 text-amber-200 hover:bg-amber-500/10">
         هل زلت قدمك ودخنت؟ (اضغط هنا ولا تحبط)
       </Button>
       <div className="mt-3 text-xs text-slate-400">عدد الزلات المسجلة: {slips.length}</div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent dir="rtl" className="bg-slate-900 border-slate-700 text-slate-100">
+        <DialogContent dir="rtl"className="bg-slate-900 border-slate-700 text-slate-100">
           <DialogHeader>
             <DialogTitle className="text-right">لا تجلد ذاتك. الزلة ليست سقوطاً.</DialogTitle>
           </DialogHeader>
@@ -641,7 +636,7 @@ function SlipIntercept({ slips, onChange }: { slips: { reason: SlipKey; created_
             <div className="grid grid-cols-2 gap-2">
               {(Object.keys(SLIP_LABELS) as SlipKey[]).map((k) => (
                 <button key={k} onClick={() => setReason(k)}
-                  className={`rounded-lg border px-3 py-2 text-sm ${reason === k ? "border-amber-400 bg-amber-500/10 text-amber-200" : "border-slate-700 bg-slate-950"}`}>
+                  className={`rounded-lg border px-3 py-2 text-sm ${reason === k ? "border-amber-400 bg-amber-500/10 text-amber-200": "border-slate-700 bg-slate-950"}`}>
                   {SLIP_LABELS[k]}
                 </button>
               ))}
@@ -676,7 +671,7 @@ function SosButton() {
         أنا على وشك الانهيار (طوارئ قصوى)
       </button>
       {open && (
-        <div className="fixed inset-0 z-[300] bg-black/95 backdrop-blur-lg flex items-center justify-center p-6" dir="rtl">
+        <div className="fixed inset-0 z-[300] bg-black/95 backdrop-blur-lg flex items-center justify-center p-6"dir="rtl">
           <div className="max-w-md w-full rounded-2xl border-2 border-red-500 bg-gradient-to-br from-red-950 to-black p-6 text-center space-y-4 animate-in zoom-in-95 duration-300">
             <Flame className="h-12 w-12 text-red-400 mx-auto" />
             <h2 className="text-2xl font-extrabold text-red-100">توقف فوراً! عقلك يخدعك الآن.</h2>
@@ -706,7 +701,7 @@ function HaltFab({ onLogged }: { onLogged: () => void }) {
          أواجه رغبة الآن!
       </button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent dir="rtl" className="bg-slate-900 border-slate-700 text-slate-100">
+        <DialogContent dir="rtl"className="bg-slate-900 border-slate-700 text-slate-100">
           <DialogHeader>
             <DialogTitle className="text-right">توقف لحظة. ماذا تشعر في جسدك الآن؟ (HALT)</DialogTitle>
           </DialogHeader>

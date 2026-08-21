@@ -16,12 +16,12 @@ import aqlaLogo from "@/assets/aqla-logo.png";
 import { ClinicalPlanView } from "@/components/clinical/ClinicalPlanView";
 
 type Msg = {
-  from: "bot" | "user";
+  from: "bot"| "user";
   text: string;
   quickReplies?: QuickReply[];
   multi?: QuickReply[];
-  actions?: { label: string; onClick: () => void; variant?: "primary" | "secondary"; icon?: "print" | "dashboard" }[];
-  input?: "text" | "email" | "number-row" | "number";
+  actions?: { label: string; onClick: () => void; variant?: "primary"| "secondary"; icon?: "print"| "dashboard" }[];
+  input?: "text"| "email"| "number-row"| "number";
   plan?: ClinicalPlanJSON;
 };
 type QuickReply = { label: string; value: string };
@@ -84,7 +84,7 @@ export function QuitChatConversation({
   const askQuestion = async (q: Question, a: ClinicalAnswers) => {
     setCurrent(q);
     const opts: Partial<Msg> = {};
-    if (q.kind === "choice" || q.kind === "notice") {
+    if (q.kind === "choice"|| q.kind === "notice") {
       opts.quickReplies = (q.choices ?? []).map((c) => ({ label: c.label_ar, value: c.value }));
     } else if (q.kind === "multi") {
       opts.multi = (q.choices ?? []).map((c) => ({ label: c.label_ar, value: c.value }));
@@ -111,13 +111,7 @@ export function QuitChatConversation({
       setTyping(false);
       onPlan(res.plan);
       const emailLine =
-        res.emailStatus === "sent"
-          ? "أرسلنا لك نسخة على بريدك الإلكتروني."
-          : res.emailStatus === "disabled_minor"
-            ? "لم نرسل نسخة بالبريد لأن الإرسال معطّل لمن هم دون 18 سنة."
-            : res.emailStatus === "not_requested"
-              ? "لم نرسل أي بريد لأنك لم توافق على ذلك."
-              : "لم نتمكن من إرسال البريد الآن، لكن خطتك محفوظة ومتاحة للعرض والتحميل.";
+        res.emailStatus === "sent"? "أرسلنا لك نسخة على بريدك الإلكتروني.": res.emailStatus === "disabled_minor"? "لم نرسل نسخة بالبريد لأن الإرسال معطّل لمن هم دون 18 سنة.": res.emailStatus === "not_requested"? "لم نرسل أي بريد لأنك لم توافق على ذلك.": "لم نتمكن من إرسال البريد الآن، لكن خطتك محفوظة ومتاحة للعرض والتحميل.";
 
       await say(
         res.plan.safety.suppress_plan
@@ -172,7 +166,7 @@ export function QuitChatConversation({
   const emergencyHold = async (a: ClinicalAnswers) => {
     setCurrent(null);
     setLocked(true);
-    const safety = evaluateSafety(a, a.jurisdiction === "SA" ? "SA" : "GENERIC");
+    const safety = evaluateSafety(a, a.jurisdiction === "SA"? "SA": "GENERIC");
     await say(
       `سلامتك الآن أهم من أي خطة.\n\n${safety.message_ar}\n\n${safety.actions_ar.join("\n")}`,
       {},
@@ -254,7 +248,7 @@ export function QuitChatConversation({
     if (id.startsWith("ftnd_q")) {
       return commit({ [id]: choice?.score ?? 0 } as Partial<ClinicalAnswers>, id);
     }
-    if (id === "ftnd_opt_in" || id === "money_opt_in" || id === "plan_email_consent") {
+    if (id === "ftnd_opt_in"|| id === "money_opt_in"|| id === "plan_email_consent") {
       return commit({ [id]: qr.value === "yes" } as Partial<ClinicalAnswers>, id);
     }
     return commit({ [id]: qr.value } as Partial<ClinicalAnswers>, id);
@@ -294,17 +288,15 @@ export function QuitChatConversation({
   };
 
   const last = messages[messages.length - 1];
-  const showText = !locked && last?.from === "bot" && (last.input === "text" || last.input === "email" || last.input === "number");
-  const showNumberRow = !locked && last?.from === "bot" && last.input === "number-row";
+  const showText = !locked && last?.from === "bot"&& (last.input === "text"|| last.input === "email"|| last.input === "number");
+  const showNumberRow = !locked && last?.from === "bot"&& last.input === "number-row";
   const showMulti = !locked && last?.from === "bot" && !!last.multi;
   const showQuick = !locked && last?.from === "bot" && !!last.quickReplies;
-  const inputType = last?.input === "email" ? "email" : last?.input === "number" ? "number" : "text";
+  const inputType = last?.input === "email"? "email": last?.input === "number"? "number": "text";
 
   return (
     <div
-      dir="rtl"
-      lang="ar"
-      className="text-right rounded-2xl border border-[#0b3a25]/15 bg-white shadow-sm flex flex-col h-[70vh] min-h-[520px] font-[IBM_Plex_Sans_Arabic,Tajawal,system-ui,sans-serif]"
+      dir="rtl"lang="ar"className="text-right rounded-2xl border border-[#0b3a25]/15 bg-white shadow-sm flex flex-col h-[70vh] min-h-[520px] font-[IBM_Plex_Sans_Arabic,Tajawal,system-ui,sans-serif]"
     >
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 sm:px-4 py-4 space-y-5">
         <AnimatePresence initial={false}>
@@ -314,20 +306,17 @@ export function QuitChatConversation({
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25 }}
-              dir="rtl"
-              className="flex justify-start"
+              dir="rtl"className="flex justify-start"
             >
               {m.from === "bot" ? (
                 <div className="flex items-start gap-2 sm:gap-3 max-w-[92%] sm:max-w-[86%] w-full">
                   <img
                     src={aqlaLogo}
-                    alt="مساعد أقلع"
-                    className="h-8 w-8 shrink-0 rounded-full bg-white object-contain p-0.5 ring-1 ring-[#0b3a25]/20"
+                    alt="مساعد أقلع"className="h-8 w-8 shrink-0 rounded-full bg-white object-contain p-0.5 ring-1 ring-[#0b3a25]/20"
                   />
                   <div className="min-w-0 flex-1">
                     <div
-                      className="inline-block rounded-2xl rounded-tr-md bg-[#0b3a25] text-white px-4 py-2.5 text-[14.5px] leading-7 whitespace-pre-wrap"
-                      style={{ unicodeBidi: "plaintext" }}
+                      className="inline-block rounded-2xl rounded-tr-md bg-[#0b3a25] text-white px-4 py-2.5 text-[14.5px] leading-7 whitespace-pre-wrap"style={{ unicodeBidi: "plaintext" }}
                     >
                       {m.text}
                     </div>
@@ -344,8 +333,7 @@ export function QuitChatConversation({
                     أنا
                   </div>
                   <div
-                    className="rounded-2xl rounded-tr-md bg-[#f2f8f4] text-[#12241b] ring-1 ring-[#0b3a25]/10 px-4 py-2.5 text-[14.5px] leading-7 whitespace-pre-wrap"
-                    style={{ unicodeBidi: "plaintext" }}
+                    className="rounded-2xl rounded-tr-md bg-[#f2f8f4] text-[#12241b] ring-1 ring-[#0b3a25]/10 px-4 py-2.5 text-[14.5px] leading-7 whitespace-pre-wrap"style={{ unicodeBidi: "plaintext" }}
                   >
                     {m.text}
                   </div>
@@ -356,14 +344,14 @@ export function QuitChatConversation({
         </AnimatePresence>
 
         {typing && (
-          <div dir="rtl" className="flex justify-start">
+          <div dir="rtl"className="flex justify-start">
             <div className="flex items-start gap-2 sm:gap-3">
-              <img src={aqlaLogo} alt="" className="h-8 w-8 rounded-full bg-white object-contain p-0.5 ring-1 ring-[#0b3a25]/20" />
+              <img src={aqlaLogo} alt=""className="h-8 w-8 rounded-full bg-white object-contain p-0.5 ring-1 ring-[#0b3a25]/20" />
               <div className="rounded-2xl rounded-tr-md bg-[#0b3a25]/90 px-4 py-3">
                 <div className="flex gap-1">
-                  <span className="h-1.5 w-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <span className="h-1.5 w-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <span className="h-1.5 w-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: "300ms" }} />
+                  <span className="h-1.5 w-1.5 rounded-full bg-white animate-bounce"style={{ animationDelay: "0ms" }} />
+                  <span className="h-1.5 w-1.5 rounded-full bg-white animate-bounce"style={{ animationDelay: "150ms" }} />
+                  <span className="h-1.5 w-1.5 rounded-full bg-white animate-bounce"style={{ animationDelay: "300ms" }} />
                 </div>
               </div>
             </div>
@@ -371,7 +359,7 @@ export function QuitChatConversation({
         )}
 
         {showQuick && (
-          <div dir="rtl" className="flex flex-wrap gap-2 justify-start pt-1">
+          <div dir="rtl"className="flex flex-wrap gap-2 justify-start pt-1">
             {last.quickReplies!.map((qr) => (
               <button
                 key={qr.value}
@@ -386,7 +374,7 @@ export function QuitChatConversation({
         )}
 
         {showNumberRow && (
-          <div dir="rtl" className="flex flex-wrap gap-2 justify-start pt-1">
+          <div dir="rtl"className="flex flex-wrap gap-2 justify-start pt-1">
             {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
               <button
                 key={n}
@@ -400,7 +388,7 @@ export function QuitChatConversation({
         )}
 
         {showMulti && (
-          <div dir="rtl" className="space-y-2 pt-1">
+          <div dir="rtl"className="space-y-2 pt-1">
             <div className="flex flex-wrap gap-2 justify-start">
               {last.multi!.map((qr) => {
                 const active = multiSel.includes(qr.value);
@@ -409,8 +397,7 @@ export function QuitChatConversation({
                     key={qr.value}
                     onClick={() =>
                       setMultiSel((s) =>
-                        qr.value === "none"
-                          ? s.includes("none")
+                        qr.value === "none"? s.includes("none")
                             ? []
                             : ["none"]
                           : s.includes(qr.value)
@@ -421,8 +408,7 @@ export function QuitChatConversation({
                     style={{ unicodeBidi: "plaintext" }}
                     className={`rounded-full px-4 py-1.5 text-sm font-medium shadow-sm transition-colors ${
                       active
-                        ? "bg-[#0b3a25] text-white ring-2 ring-[#c9a84c]"
-                        : "bg-[#f2f8f4] text-[#0b3a25] ring-1 ring-[#0b3a25]/20 hover:bg-[#e6f1ea]"
+                        ? "bg-[#0b3a25] text-white ring-2 ring-[#c9a84c]": "bg-[#f2f8f4] text-[#0b3a25] ring-1 ring-[#0b3a25]/20 hover:bg-[#e6f1ea]"
                     }`}
                   >
                     {qr.label}
@@ -443,9 +429,9 @@ export function QuitChatConversation({
         )}
 
         {last?.from === "bot" && last.actions && (
-          <div dir="rtl" className="pt-3 grid sm:grid-cols-2 gap-2">
+          <div dir="rtl"className="pt-3 grid sm:grid-cols-2 gap-2">
             {last.actions.map((a, i) => {
-              const Icon = a.icon === "print" ? Printer : a.icon === "dashboard" ? LayoutDashboard : null;
+              const Icon = a.icon === "print"? Printer : a.icon === "dashboard" ? LayoutDashboard : null;
               const base =
                 "flex items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-bold shadow-md transition-colors";
               const cls =
@@ -464,21 +450,19 @@ export function QuitChatConversation({
       </div>
 
       {showText && (
-        <div className="border-t border-[#0b3a25]/10 p-3 flex gap-2 items-center" dir="rtl">
+        <div className="border-t border-[#0b3a25]/10 p-3 flex gap-2 items-center"dir="rtl">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSendText()}
-            placeholder={inputType === "email" ? "example@email.com" : "اكتب هنا..."}
+            placeholder={inputType === "email"? "example@email.com": "اكتب هنا..."}
             type={inputType}
-            dir={inputType === "text" ? "rtl" : "ltr"}
-            lang="ar"
-            className="flex-1 rounded-full bg-[#f2f8f4] ring-1 ring-[#0b3a25]/10 px-4 py-2.5 text-sm text-[#0b3a25] placeholder:text-[#66756d] outline-none focus:ring-2 focus:ring-[#0b3a25]/40 text-start"
+            dir={inputType === "text"? "rtl": "ltr"}
+            lang="ar"className="flex-1 rounded-full bg-[#f2f8f4] ring-1 ring-[#0b3a25]/10 px-4 py-2.5 text-sm text-[#0b3a25] placeholder:text-[#66756d] outline-none focus:ring-2 focus:ring-[#0b3a25]/40 text-start"
           />
           <button
             onClick={handleSendText}
-            className="h-10 w-10 shrink-0 rounded-full bg-[#0b3a25] hover:bg-[#12543a] text-white grid place-content-center transition-colors"
-            aria-label="إرسال"
+            className="h-10 w-10 shrink-0 rounded-full bg-[#0b3a25] hover:bg-[#12543a] text-white grid place-content-center transition-colors"aria-label="إرسال"
           >
             <Send className="h-4 w-4 -scale-x-100" />
           </button>

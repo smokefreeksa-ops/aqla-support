@@ -53,7 +53,7 @@ function EnAbout() {
       </p>
 
       <p className="mt-8 text-[15px]">
-        <Link to="/about" className="text-primary underline">اقرأ الصفحة بالعربية — Arabic version</Link>
+        <Link to="/about"className="text-primary underline">اقرأ الصفحة بالعربية — Arabic version</Link>
       </p>
     </SeoPageShell>
   );

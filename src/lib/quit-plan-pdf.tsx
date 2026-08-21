@@ -88,7 +88,7 @@ export function QuitPlanPdf({
         <Row k="أداة التقييم المستخدمة" v={a.instrument_label_ar} />
         <Row k="نطاق النتيجة" v={`${a.band_ar} (مجموع ${a.total})`} />
         <Row k="الهدف" v={plan.goal.label_ar} />
-        <Row k="تاريخ البداية" v={plan.dates.quit_or_reduce_date ?? "—"} />
+        <Row k="تاريخ البداية"v={plan.dates.quit_or_reduce_date ?? "—"} />
         <Row k="طريقة المتابعة" v={plan.followup_preference_ar} />
         {!a.validated && <Text style={s.small}>ملاحظة: تقييم مكيّف (غير معتمد).</Text>}
         <Text style={s.cite}>{plan.summary_citation}</Text>

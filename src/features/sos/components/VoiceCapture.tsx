@@ -53,7 +53,7 @@ export function VoiceCapture({
           style={{ width: 180, height: 180 }}
         />
         <div className="relative text-white text-6xl font-bold tabular-nums">
-          {state.status === "requesting" ? "…" : state.secondsLeft}
+          {state.status === "requesting"? "…" : state.secondsLeft}
         </div>
       </div>
 
