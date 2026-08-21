@@ -435,9 +435,9 @@ export default function HeroSection() {
 
       <div className="relative z-10 flex flex-wrap items-center justify-center gap-3 px-4">
         {[
-          { emoji: "🧲", label: "اختبار الإدمان", hash: "#kys-1" },
-          { emoji: "💸", label: "عدّاد المال", hash: "#kys-0" },
-          { emoji: "🎯", label: "تحدي كسر عادة التدخين", hash: "#kys-4" },
+          { label: "اختبار الإدمان", hash: "#kys-1" },
+          { label: "عدّاد المال", hash: "#kys-0" },
+          { label: "تحدي كسر عادة التدخين", hash: "#kys-4" },
         ].map((item) => (
           <button
             key={item.hash}
