@@ -39,8 +39,8 @@ const PATHWAYS: Card[] = [
     cta: { ar: 'ابدأ مسار الإقلاع', en: 'Start the quit pathway' },
   },
   {
-    title: { ar: 'أكاديمية أقلع للتدريب والشهادات', en: 'Aqla Academy for Training and Certification' },
-    text: { ar: 'تعلم منظم يشمل الوحدات التعليمية، السيناريوهات، الاختبارات، ومسارات الشهادات القابلة للتحقق.', en: 'Structured learning with modules, scenarios, assessments and verifiable certificate pathways.' },
+    title: { ar: 'أكاديمية أقلع للتعلم والتدريب', en: 'Aqla Academy for Learning and Training' },
+    text: { ar: 'مكتبة ثنائية اللغة تقدم وحدات تعليمية وإرشادات عملية لفهم النيكوتين والمحـفزات والرغبة والانسحاب والسلامة والانتكاس.', en: 'A bilingual learning library with practical guidance on nicotine use, triggers, cravings, withdrawal, safety and relapse.' },
     href: '/aqla/academy',
     cta: { ar: 'ادخل الأكاديمية', en: 'Enter the academy' },
   },
@@ -258,13 +258,10 @@ export default function AqlaPublicLandingInstitutional({ signedIn, latestPlanId,
           <div className="aqla-card aqla-founder-layout">
             <div className="aqla-founder-mark"><Image src={LOGO_URL} alt="Aqla — أقلع" width={400} height={225} /><strong>{ar ? 'الدكتور مالك الذبياني' : 'Dr Malik Althobiani'}</strong><span>{ar ? 'مؤسس برنامج أقلع' : 'Founder of Aqla'}</span></div>
             <div className="aqla-founder-copy">
-              <p>{ar ? 'الدكتور مالك الذبياني باحث في أمراض الجهاز التنفسي، ومحاضر شرفي في جامعة كوليدج لندن في المملكة المتحدة ضمن قسم الطب في مستشفى رويال فري.' : 'Dr Malik Althobiani is a respiratory researcher and an Honorary Lecturer at University College London.'}</p>
+              <p>{ar ? 'الدكتور مالك الذبياني باحث في أمراض الجهاز التنفسي ومحاضر شرفي في جامعة كوليدج لندن.' : 'Dr Malik Althobiani is a respiratory researcher and an Honorary Lecturer at University College London.'}</p>
               <p>{ar ? 'حاصل على دكتوراه الفلسفة من جامعة كوليدج لندن عام ٢٠٢٤، مع خلفية أكاديمية في رعاية الجهاز التنفسي والعلاج التنفسي والصيدلة.' : 'He completed his PhD at University College London in 2024, with academic training in respiratory care, respiratory therapy and pharmacy.'}</p>
               <Link className="aqla-card-link" href="/info/about">{ar ? 'تعرف أكثر على المؤسس' : 'Learn more about the founder'}</Link>
             </div>
-          </div>
-          <div className="aqla-stat-row">
-            {[[ar ? 'الخبرة' : 'Experience', '0+'], [ar ? 'البحث' : 'Research', '0+'], [ar ? 'معدل النجاح' : 'Success rate', '0%'], [ar ? 'الأشخاص المدعومون' : 'People supported', '0+']].map(([label, value]) => <div className="aqla-stat" key={label}><strong>{value}</strong><span>{label}</span></div>)}
           </div>
         </div>
       </section>
@@ -278,9 +275,9 @@ export default function AqlaPublicLandingInstitutional({ signedIn, latestPlanId,
 
       <section className="aqla-section">
         <div className="aqla-section-inner">
-          <SectionHeading eyebrow={ar ? 'المسار التعليمي' : 'Learning pathway'} title={ar ? 'الوحدات التعليمية' : 'Learning modules'} text={ar ? 'منهج ثنائي اللغة مبني على مصادر منظمة الصحة العالمية ومراكز مكافحة الأمراض الأمريكية.' : 'A bilingual learning pathway informed by WHO and CDC sources.'} />
+          <SectionHeading eyebrow={ar ? 'المسار التعليمي' : 'Learning pathway'} title={ar ? 'الوحدات التعليمية' : 'Learning modules'} text={ar ? 'محتوى ثنائي اللغة مستند إلى مصادر منظمة الصحة العالمية ومراكز مكافحة الأمراض الأمريكية.' : 'Bilingual learning content informed by WHO and CDC sources.'} />
           <div className="aqla-grid three">
-            {MODULES.map((module) => <article className="aqla-card" key={module.no}><span className="aqla-card-number">{ar ? `الوحدة ${module.no}` : `Module ${module.no}`}</span><h3>{ar ? module.ar : module.en}</h3><p>{ar ? module.descAr : module.descEn}</p><div className="aqla-meta-row"><span>{module.mins} {ar ? 'دقيقة' : 'minutes'}</span><span>{ar ? '٨ أسئلة' : '8 questions'}</span></div><Link className="aqla-card-link" href="/aqla/academy">{ar ? 'ابدأ التعلم' : 'Start learning'}</Link></article>)}
+            {MODULES.map((module) => <article className="aqla-card" key={module.no}><span className="aqla-card-number">{ar ? `الوحدة ${module.no}` : `Module ${module.no}`}</span><h3>{ar ? module.ar : module.en}</h3><p>{ar ? module.descAr : module.descEn}</p><div className="aqla-meta-row"><span>{module.mins} {ar ? 'دقيقة' : 'minutes'}</span><span>{ar ? 'إرشادات عملية' : 'Practical guidance'}</span></div><Link className="aqla-card-link" href="/aqla/academy">{ar ? 'ابدأ التعلم' : 'Start learning'}</Link></article>)}
           </div>
         </div>
       </section>
@@ -296,13 +293,6 @@ export default function AqlaPublicLandingInstitutional({ signedIn, latestPlanId,
         <div className="aqla-section-inner"><div className="aqla-notice">{ar ? 'أقلع يقدم التوعية والدعم ولا يقدم تشخيصًا أو علاجًا أو وصفة طبية. اختيار بدائل النيكوتين أو أدوية الإقلاع أو جرعاتها يحتاج مراجعة مختص أو صيدلي.' : 'Aqla provides awareness and support and does not diagnose, prescribe or choose medication doses. Medication decisions require an appropriate clinician or pharmacist.'}</div></div>
       </section>
 
-      <section className="aqla-section" data-tone="strong">
-        <div className="aqla-section-inner">
-          <SectionHeading eyebrow={ar ? 'أثر أقلع' : 'Aqla impact'} title={ar ? 'مؤشرات مجمعة دون بيانات شخصية' : 'Aggregate indicators without personal data'} />
-          <div className="aqla-card aqla-research-card"><strong>0</strong><span>{ar ? 'المدن المشاركة' : 'Participating cities'}</span><p>{ar ? 'تعرض المؤشرات بشكل إجمالي فقط، وقد تتغير مع تحديث نظام التحليلات.' : 'Indicators are displayed only in aggregate and may change as analytics are updated.'}</p></div>
-        </div>
-      </section>
-
       <section className="aqla-final-cta">
         <h2>{ar ? 'ابدأ رحلتك مع أقلع' : 'Start your Aqla journey'}</h2>
         <p>{ar ? 'يمكنك تجربة الأدوات والخطة كضيف. إذا أردت الحفظ والمتابعة عبر البريد ولوحة أقلع، يمكنك إنشاء حساب في أي وقت.' : 'Use the tools and quit plan as a guest. Create an account at any time for saving, email follow-up and My Aqla.'}</p>
@@ -313,7 +303,7 @@ export default function AqlaPublicLandingInstitutional({ signedIn, latestPlanId,
     <footer className="aqla-footer-institutional">
       <div className="aqla-footer-inner">
         <div><strong>Aqla — أقلع</strong><div style={{ marginTop: 7, fontSize: 12 }}>{ar ? 'منصة للتوعية والدعم — ليست خدمة طوارئ' : 'Awareness and support platform — not an emergency service'}</div><div style={{ marginTop: 4, fontSize: 11 }}>{ar ? 'جدة، المملكة العربية السعودية' : 'Jeddah, Saudi Arabia'}</div></div>
-        <div className="aqla-footer-links"><Link href="/info/about">{ar ? 'عن أقلع' : 'About'}</Link><Link href="/aqla/community">{ar ? 'أثر أقلع' : 'Impact'}</Link><Link href="/info/contact">{ar ? 'تواصل معنا' : 'Contact'}</Link><Link href="/info/faq">{ar ? 'الأسئلة الشائعة' : 'FAQ'}</Link></div>
+        <div className="aqla-footer-links"><Link href="/info/about">{ar ? 'عن أقلع' : 'About'}</Link><Link href="/aqla/community">{ar ? 'أثر أقلع' : 'Impact'}</Link><Link href="/info/contact">{ar ? 'تواصل معنا' : 'Contact'}</Link><Link href="/info/faq">{ar ? 'الأسئلة الشائعة' : 'FAQ'}</Link><Link href="/info/privacy">{ar ? 'الخصوصية' : 'Privacy'}</Link><Link href="/info/terms">{ar ? 'الشروط' : 'Terms'}</Link><Link href="/info/medical-disclaimer">{ar ? 'التنبيه الطبي' : 'Medical disclaimer'}</Link><Link href="/info/accessibility">{ar ? 'إمكانية الوصول' : 'Accessibility'}</Link></div>
       </div>
       <div className="aqla-footer-note">{ar ? 'لا نعرض بياناتك الصحية في المشاركات العامة. أقلع لا يقدم تشخيصًا أو علاجًا أو وصفة طبية.' : 'Aqla does not expose health details in public sharing and does not provide diagnosis or prescriptions.'}</div>
     </footer>
