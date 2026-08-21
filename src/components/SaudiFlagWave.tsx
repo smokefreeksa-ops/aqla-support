@@ -6,7 +6,14 @@ export default function SaudiFlagWave() {
 
 
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+      style={{
+        filter: "blur(2px)",
+        transform: "scale(1.01)",
+      }}
+    >
       {/*
         The filtered content is a single flat green field, so the animated
         displacement produced no visible difference while costing a
