@@ -71,7 +71,7 @@ function PlanPdfV2({ plan, lang }: { plan: V2Plan; lang: 'ar' | 'en' }) {
       {result.ai_relapse_recovery ? <View style={styles.card}><Text style={styles.h2}>{ar ? 'إذا حدثت زلة' : 'If a slip happens'}</Text><Text>{result.ai_relapse_recovery}</Text></View> : null}
       <View style={styles.card}><Text style={styles.h2}>{ar ? 'الدعم والمتابعة' : 'Support and follow-up'}</Text><Text>{result.referral_message}</Text><List items={result.follow_up_schedule.map((item) => ar ? item.label_ar : item.label_en)} />{extra ? <Text style={styles.small}>{extra.communication.followup_email_opt_in ? (ar ? 'تم اختيار المتابعة عبر البريد.' : 'Email follow-up was selected.') : (ar ? 'لم يتم الاشتراك في المتابعة عبر البريد.' : 'Email follow-up was not selected.')}</Text> : null}</View>
       <Text style={styles.small}>{ar ? 'هذه الخطة أداة دعم سلوكي وتثقيفي وليست تشخيصًا طبيًا أو وصفة دوائية.' : 'This plan provides behavioural and educational support. It is not a medical diagnosis or prescription.'}</Text>
-      <Text style={styles.footer} fixed>أقلع — Aqla · Personal Quit Plan v2</Text>
+      <Text style={styles.footer} fixed>أقلع — Aqla · Personal Quit Plan</Text>
     </Page>
   </Document>
 }
