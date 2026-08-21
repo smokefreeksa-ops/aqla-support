@@ -75,7 +75,6 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
 
   const tools = [
     {
-      emoji: "💸",
       name: T("The Money Counter", "عدّاد المال", lang),
       desc: T(
         "See what smoking really costs you.",
@@ -85,7 +84,6 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
       time: T("~1 min", "≈ دقيقة", lang),
     },
     {
-      emoji: "🧲",
       name: T("The Grip Test", "اختبار القبضة", lang),
       desc: T(
         "How tight is nicotine's grip on you?",
@@ -95,7 +93,6 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
       time: T("~1 min", "≈ دقيقة", lang),
     },
     {
-      emoji: "🪞",
       name: T("The Mirror", "المرآة", lang),
       desc: T(
         "Which parts of you keep the smoke alive?",
@@ -105,7 +102,6 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
       time: T("~1 min", "≈ دقيقة", lang),
     },
     {
-      emoji: "🧭",
       name: T("The Compass", "البوصلة", lang),
       desc: T(
         "How ready are you to quit — really?",
@@ -115,7 +111,6 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
       time: T("~1 min", "≈ دقيقة", lang),
     },
     {
-      emoji: "🎯",
       name: T("Break the Smoking Habit Challenge", "تحدي كسر عادة التدخين", lang),
       desc: T(
         "30 seconds. Aim at lit cigarettes. Shatter more than glass.",
@@ -159,9 +154,6 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
           >
             <div className="w-full text-start p-5">
               <div className="flex items-start gap-3">
-                <div className="text-2xl" aria-hidden>
-                  {tool.emoji}
-                </div>
                 <div>
                   <div className="font-semibold text-base">{tool.name}</div>
                   <div className="text-sm opacity-75 mt-1">{tool.desc}</div>
@@ -297,9 +289,6 @@ export default function KnowYourSmokingSection({ standaloneTool }: { standaloneT
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3">
-                      <div className="text-2xl" aria-hidden>
-                        {tool.emoji}
-                      </div>
                       <div>
                         <div className="font-semibold text-base">
                           {tool.name}
