@@ -967,7 +967,7 @@ function Mirror({
   if (triggers.length > 0) {
     const list = triggers
       .map((i) => (lang === "ar" ? triggerOpts[i][1] : triggerOpts[i][0]))
-      .join("، ");
+      .join("،");
     insights.push(
       T(
         `Your triggers: ${list} — each is a learned pairing; plan a specific replacement for every one.`,

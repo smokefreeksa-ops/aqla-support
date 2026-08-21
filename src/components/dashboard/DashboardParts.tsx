@@ -127,7 +127,7 @@ export function FinalAssessmentCard({ model }: { model: LearnerModel }) {
           <li className="flex items-center gap-2">
             <FileText className="h-4 w-4 text-muted-foreground" />
             المحاولات السابقة: {model.examAttempts}
-            {model.latestExamScore != null && ` · آخر نتيجة ${model.latestExamScore}%`}
+            {model.latestExamScore != null && `· آخر نتيجة ${model.latestExamScore}%`}
           </li>
         </ul>
         <div className="mt-4">
@@ -163,7 +163,7 @@ export function CertificateCard({ cert }: { cert: LearnerModel["certificates"][n
             <h3 className="mt-1 text-[15px] font-semibold">{cert.module_slug ?? "برنامج أكاديمية أقلع"}</h3>
             <p className="mt-1 text-[12px] text-muted-foreground">
               صدرت في {formatDate(cert.issued_at)} · رقم {cert.certificate_code}
-              {cert.overall_score != null && ` · النتيجة ${cert.overall_score}%`}
+              {cert.overall_score != null && `· النتيجة ${cert.overall_score}%`}
             </p>
           </div>
           <Award className={cert.is_valid ? "h-6 w-6 text-[#006C35]" : "h-6 w-6 text-muted-foreground"} />

@@ -226,7 +226,7 @@ export function QuitChatConversation({
     startedRef.current = true;
     (async () => {
       await say(
-        "أهلاً بك في مركز أقلع الافتراضي لدعم الإقلاع. أنا مساعدك الذكي، ولست هنا لأعطيك وصفة طبية، بل لأرافقك خطوة بخطوة لبناء خطتك السلوكية الشخصية ",
+        "أهلاً بك في مركز أقلع الافتراضي لدعم الإقلاع. أنا مساعدك الذكي، ولست هنا لأعطيك وصفة طبية، بل لأرافقك خطوة بخطوة لبناء خطتك السلوكية الشخصية",
         {},
         500,
       );
@@ -286,7 +286,7 @@ export function QuitChatConversation({
     const q = current;
     const labels = multiSel
       .map((v) => (q.choices ?? []).find((c) => c.value === v)?.label_ar ?? v)
-      .join("، ");
+      .join("،");
     userSay(labels);
     const sel = [...multiSel];
     setMultiSel([]);

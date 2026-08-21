@@ -92,7 +92,7 @@ const AcademyCertificateEmail = ({
 export const template = {
   component: AcademyCertificateEmail,
   subject: (data: Record<string, any>) =>
-    ` Your Aqla Academy Certificate · شهادتك من أكاديمية أقلع`,
+    `Your Aqla Academy Certificate · شهادتك من أكاديمية أقلع`,
   displayName: "Academy Certificate",
   previewData: {
     fullName: "Ahmed Al-Otaibi",

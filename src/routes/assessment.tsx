@@ -981,7 +981,7 @@ function ResultView({
 </style>
 </head>
 <body>
-<button class="print-btn noprint" onclick="window.print()">${isAr ? " حفظ كـ PDF" : " Save as PDF"}</button>
+<button class="print-btn noprint" onclick="window.print()">${isAr ? "حفظ كـ PDF" : " Save as PDF"}</button>
 <div class="wrap">
   <header>
     <div style="display:flex; align-items:center; gap:12px;">
