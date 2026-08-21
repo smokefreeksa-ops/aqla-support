@@ -83,15 +83,46 @@ export function AqlaWelcomeGate() {
     return () => clearTimeout(t);
   }, [cooldown]);
 
+  // Native Google OAuth (uses Aqla's own Google client → the Google screen shows
+  // "أقلع / aqla1.com", never a third-party vendor name). If the Google client
+  // credentials are not configured yet, fall back to the hosted helper so sign-in
+  // keeps working.
+  async function nativeGoogleReady(): Promise<boolean> {
+    try {
+      const url = import.meta.env["VITE_SUPABASE_URL"] as string | undefined;
+      const key = import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] as string | undefined;
+      if (!url || !key) return false;
+      const res = await fetch(
+        `${url}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(window.location.origin)}`,
+        { headers: { apikey: key }, redirect: "manual" },
+      );
+      // opaqueredirect / 3xx means the provider is configured; 400 means missing secret
+      return res.type === "opaqueredirect" || res.status === 0 || (res.status >= 300 && res.status < 400);
+    } catch {
+      return false;
+    }
+  }
+
   async function signInWithGoogle() {
     setGoogleLoading(true);
     try {
       savePostLoginRedirect();
-      const result = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: { redirectTo: window.location.origin },
+      if (await nativeGoogleReady()) {
+        const result = await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: { redirectTo: window.location.origin },
+        });
+        if (result.error) {
+          toast.error("تعذّر تسجيل الدخول. حاول مرة أخرى.");
+          setGoogleLoading(false);
+        }
+        return;
+      }
+      const { lovable } = await import("@/integrations/lovable");
+      const fallback = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
       });
-      if (result.error) {
+      if (fallback.error) {
         toast.error("تعذّر تسجيل الدخول. حاول مرة أخرى.");
         setGoogleLoading(false);
       }
