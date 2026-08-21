@@ -1,39 +1,39 @@
-# Plan: Remove Lovable branding from the sign-in/authenticated experience
+# Remove the Lovable name and logo from Google sign-in
 
-## Goal
-Ensure end users never see a Lovable logo or Lovable brand mark during sign-in or while signed in. The app must feel fully owned by Aqla (أقلع) on its own domain.
+## What is actually happening
 
-## Current state observed
-- The app uses the Lovable Cloud auth wrapper (`src/integrations/lovable/index.ts`) to sign users in via Google.
-- The welcome/sign-in screen (`AqlaWelcomeGate.tsx`) currently calls `lovable.auth.signInWithOAuth("google")`.
-- Aqla favicon (`public/favicon.png`) and Aqla logo assets are already in place.
-- There is no PWA web-app manifest, so browsers/preview may fall back to a generic/platform icon.
-- The Lovable OAuth consent route (`src/routes/[.]lovable.oauth.consent.tsx`) exists but is normally shown only when a Lovable app requests authorization.
+The "Continue to Lovable" screen with the Lovable logo is Google's own consent screen. It shows the name and logo of the **OAuth app registered with Google** — which today is the shared managed OAuth app provided by the hosting platform, not your project. Nothing in the AQLA codebase can rename or restyle that screen; Google renders it from the OAuth client's registration.
 
-## Proposed changes
+So the only real fix is to sign in with **your own Google OAuth client**, registered under your brand. Then the screen reads "Continue to aqla1.com" (or "أقلع") with your logo — no Lovable anywhere.
 
-1. **Switch Google sign-in to native Supabase OAuth**
-   - Replace `lovable.auth.signInWithOAuth("google")` in `AqlaWelcomeGate.tsx` with `supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: window.location.origin } })`.
-   - Preserve the existing post-login redirect saving logic.
-   - Keep the Lovable integration file untouched for any Lovable-internal flows that still need it, but remove it from the user-facing sign-in path.
+## Step 1 — Register AQLA's own Google OAuth client (you do this once)
 
-2. **Add a proper PWA web manifest with Aqla branding**
-   - Create `public/site.webmanifest` (or `public/manifest.json`) pointing to `/aqla-logo.png` for icons, name "أقلع | Aqla", theme color `#006C35`, and background color `#0b3a25`.
-   - Reference the manifest in `src/routes/__root.tsx` head links so mobile browsers and "Add to Home Screen" use the Aqla icon instead of any fallback.
+In the Google Cloud Console for an AQLA-owned Google account:
 
-3. **Audit the OAuth consent route for platform branding**
-   - Review `src/routes/[.]lovable.oauth.consent.tsx` and ensure it uses only Aqla language ("Aqla — أقلع") and no Lovable logo or Lovable-specific wording.
-   - This route is required by Lovable MCP/OAuth, but its visible copy should be Aqla-branded.
+1. OAuth consent screen: App name `أقلع | Aqla`, upload the AQLA logo, support email on your domain, authorized domains `aqla1.com` and `lovable.app`, home page and privacy links on aqla1.com.
+2. Scopes: only `openid`, `userinfo.email`, `userinfo.profile`.
+3. Credentials → Create OAuth client ID → Web application. Add the callback URL shown in the backend Auth Settings under the Google provider as an authorized redirect URI, and add `https://aqla1.com`, `https://www.aqla1.com` as authorized JavaScript origins.
+4. Publish the consent screen (Production) so it is not stuck in "testing" mode.
+5. Paste the Client ID and Client Secret into the Google provider in the backend Auth Settings (Users → Authentication Settings → Sign in Methods → Google).
 
-4. **Confirm no Lovable badge/watermark is injected in the DOM**
-   - Search for any `iframe`, `.lovable-*`, or known Lovable preview CSS classes and add a defensive CSS rule in `src/styles.css` only if a Lovable DOM watermark is found and can be safely hidden without breaking the app.
-   - Note: browser-chrome branding seen in the Lovable builder preview (e.g., the Lovable extension icon) is outside the app and cannot be removed from the builder, but it is not visible to visitors on the published `aqla1.com` domain.
+Note: while the consent screen is unverified Google may show a warning; submitting it for verification with the AQLA logo removes that and gives the branded screen.
 
-5. **Verification**
-   - Test the sign-in button in the preview to confirm the redirect now lands on the native Google OAuth screen (no Lovable logo).
-   - Inspect the browser tab icon and mobile "Add to Home Screen" prompt to confirm it uses the Aqla logo.
-   - Run the existing test suite and build to ensure no auth flow regressions.
+## Step 2 — Code change on my side
 
-## Out of scope
-- Removing the Lovable Cloud auth integration file itself (`src/integrations/lovable/index.ts`) — it is auto-generated and may be needed by the platform; only its user-facing usage will be replaced.
-- Changing backend auth providers or Lovable Cloud configuration; the Supabase Google provider is already configured.
+Switch the Google button in `src/components/AqlaWelcomeGate.tsx` from the platform helper `lovable.auth.signInWithOAuth("google", …)` to the backend's native `supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: window.location.origin } })`. This routes the user straight through your own client credentials, so no intermediate platform-branded consent page appears at all.
+
+I will also:
+- Keep the existing loading state, error toasts, and Arabic copy identical.
+- Verify no other place still calls the platform OAuth helper.
+- Delete the now-unused platform consent route `src/routes/[.]lovable.oauth.consent.tsx` (this is the second screen from your earlier screenshots), so the branded intermediate page can no longer render.
+
+## Step 3 — Verify
+
+- Run the sign-in flow in a browser and confirm the only screens are the AQLA gate → Google account picker ("Continue to أقلع") → back to AQLA dashboard.
+- Confirm email/password and other sign-in paths still work.
+
+## Technical notes
+
+- Files touched: `src/components/AqlaWelcomeGate.tsx`, removal of `src/routes/[.]lovable.oauth.consent.tsx`. No database or schema changes.
+- The generated `src/integrations/lovable/` folder stays untouched; it just stops being used for Google.
+- Until Step 1 credentials are in place, Google sign-in will keep using the shared managed app, so the code change should land together with your credentials.
