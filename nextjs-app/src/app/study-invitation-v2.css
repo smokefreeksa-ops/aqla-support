@@ -1,18 +1,34 @@
-/* AQla study-first invitation — compact white/pink/blue overlay with AQla visible behind it. */
+/* AQla study-first invitation — compact centred modal with the AQla page clearly visible around it. */
 .study-v2-screen {
-  --study-modal-width: min(62vw, 940px);
-  --study-modal-height: min(76vh, 780px);
+  --study-modal-width: 45vw;
+  --study-modal-height: 60vh;
   position: fixed;
   inset: 0;
   z-index: 90;
   overflow: hidden;
   isolation: isolate;
-  /* Uniform translucent wash: no vignette or edge fade. */
-  background: rgba(245, 244, 252, .20);
-  /* Keep the underlying AQla page recognisable around every side of the card. */
-  backdrop-filter: blur(5px) saturate(90%);
-  -webkit-backdrop-filter: blur(5px) saturate(90%);
+  /* No global fade, vignette, or side blur. The website remains clearly visible. */
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   font-family: "IBM Plex Sans Arabic", "Tajawal", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* A tiny 2px blur exists only immediately behind/around the modal, never across the sides. */
+.study-v2-screen::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--study-modal-width) + 18px);
+  height: calc(var(--study-modal-height) + 18px);
+  transform: translate(-50%, -50%);
+  border-radius: 32px;
+  background: rgba(245, 244, 252, .05);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  pointer-events: none;
 }
 
 .study-v2-standalone {
@@ -21,26 +37,26 @@
 
 .study-v2-modal {
   position: absolute;
+  z-index: 2;
   left: 50%;
   top: 50%;
   width: var(--study-modal-width);
   height: var(--study-modal-height);
-  min-height: 600px;
   transform: translate(-50%, -50%);
   overflow: hidden;
   border: 0;
-  border-radius: 28px;
+  border-radius: 26px;
   background: #fff;
-  box-shadow: 0 18px 45px rgba(35, 42, 80, .13);
+  box-shadow: 0 16px 38px rgba(35, 42, 80, .12);
   color: #1657d9;
 }
 
 .study-v2-logo {
   position: absolute;
   z-index: 3;
-  left: 48px;
-  top: 30px;
-  width: 126px;
+  left: 34px;
+  top: 24px;
+  width: 108px;
   height: auto;
   object-fit: contain;
 }
@@ -48,13 +64,13 @@
 .study-v2-language {
   position: absolute;
   z-index: 4;
-  top: 44px;
-  right: 52px;
+  top: 34px;
+  right: 38px;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
   color: #7f8399;
-  font-size: 21px;
+  font-size: 19px;
   line-height: 1;
 }
 
@@ -76,7 +92,7 @@
 
 .study-v2-language > span {
   width: 1px;
-  height: 23px;
+  height: 21px;
   background: #b9bdcc;
 }
 
@@ -87,16 +103,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 104px 44px 68px;
+  padding: 76px 34px 54px;
   text-align: center;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .study-v2-headline {
   margin: 0;
   color: #f90862;
-  font-size: clamp(54px, 4.6vw, 72px);
+  font-size: clamp(42px, 3.55vw, 56px);
   font-weight: 800;
-  line-height: 1.08;
+  line-height: 1.05;
   letter-spacing: -.035em;
 }
 
@@ -106,47 +124,48 @@
 }
 
 .study-v2-explanation {
-  width: min(100%, 680px);
-  margin: 24px 0 0;
+  width: min(100%, 590px);
+  margin: 17px 0 0;
   color: #1657d9;
-  font-size: clamp(20px, 1.58vw, 25px);
+  font-size: clamp(16px, 1.24vw, 20px);
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.46;
 }
 
 .study-v2-incentive {
-  margin: 18px 0 0;
+  margin: 13px 0 0;
   color: #1657d9;
-  font-size: clamp(19px, 1.48vw, 23px);
+  font-size: clamp(15px, 1.16vw, 18px);
   font-weight: 500;
-  line-height: 1.45;
+  line-height: 1.42;
 }
 
 .study-v2-question {
-  margin: 21px 0 0;
+  margin: 15px 0 0;
   color: #1657d9;
-  font-size: clamp(25px, 1.95vw, 31px);
+  font-size: clamp(20px, 1.55vw, 24px);
   font-weight: 700;
-  line-height: 1.35;
+  line-height: 1.3;
 }
 
 .study-v2-primary {
-  width: min(520px, 70%);
-  min-height: 82px;
-  margin-top: 20px;
+  width: min(430px, 74%);
+  min-height: 62px;
+  margin-top: 15px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 auto;
   border: 0;
-  border-radius: 19px;
+  border-radius: 17px;
   background: #fc0a60;
   color: #fff;
-  padding: 12px 28px;
-  font-size: clamp(27px, 2.05vw, 32px);
+  padding: 10px 24px;
+  font-size: clamp(22px, 1.7vw, 27px);
   font-weight: 700;
   line-height: 1.2;
   text-decoration: none;
-  box-shadow: 0 10px 15px rgba(220, 0, 75, .25);
+  box-shadow: 0 9px 14px rgba(220, 0, 75, .22);
   transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
 }
 
@@ -154,7 +173,7 @@
 .study-v2-primary:focus-visible {
   background: #e90857;
   transform: translateY(-1px);
-  box-shadow: 0 12px 18px rgba(220, 0, 75, .28);
+  box-shadow: 0 11px 17px rgba(220, 0, 75, .26);
 }
 
 .study-v2-primary:focus-visible,
@@ -168,10 +187,10 @@
 .study-v2-close {
   position: absolute;
   z-index: 5;
-  left: calc(50% + min(31vw, 470px) + 18px);
-  top: calc(50% - min(38vh, 390px) - 18px);
-  width: 42px;
-  height: 42px;
+  left: calc(50% + 22.5vw + 16px);
+  top: calc(50% - 30vh - 16px);
+  width: 38px;
+  height: 38px;
   display: grid;
   place-items: center;
   padding: 0;
@@ -181,8 +200,8 @@
 }
 
 .study-v2-close svg {
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
   overflow: visible;
 }
 
@@ -196,8 +215,8 @@
 .study-v2-details-wrap {
   position: absolute;
   z-index: 6;
-  right: 26px;
-  bottom: 18px;
+  right: 22px;
+  bottom: 14px;
   direction: inherit;
 }
 
@@ -207,9 +226,9 @@
   border-bottom: 1px solid rgba(82, 103, 165, .22);
   background: transparent;
   color: #5267a5;
-  padding: 6px 4px 5px;
+  padding: 5px 3px 4px;
   font: inherit;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1.3;
 }
@@ -222,38 +241,38 @@
 .study-v2-details-panel {
   position: absolute;
   right: 0;
-  bottom: 41px;
-  width: 350px;
-  max-height: 280px;
+  bottom: 38px;
+  width: 320px;
+  max-height: min(260px, 44vh);
   overflow-y: auto;
   overscroll-behavior: contain;
   border: 1px solid #e4e7f0;
   border-radius: 14px;
   background: #fff;
   color: #39466e;
-  padding: 19px;
+  padding: 17px;
   box-shadow: 0 10px 30px rgba(35, 42, 80, .12);
   text-align: start;
 }
 
 .study-v2-details-panel h2 {
-  margin: 0 0 14px;
+  margin: 0 0 12px;
   color: #1657d9;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   line-height: 1.4;
 }
 
 .study-v2-details-panel section + section {
-  margin-top: 14px;
-  padding-top: 12px;
+  margin-top: 12px;
+  padding-top: 10px;
   border-top: 1px solid #eef0f6;
 }
 
 .study-v2-details-panel h3 {
   margin: 0 0 4px;
   color: #5267a5;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 1.5;
 }
@@ -261,129 +280,138 @@
 .study-v2-details-panel p {
   margin: 0;
   color: #5b6480;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
-  line-height: 1.7;
+  line-height: 1.65;
 }
 
-@media (max-height: 820px) and (min-width: 901px) {
-  .study-v2-screen {
-    --study-modal-height: calc(100vh - 80px);
-  }
-  .study-v2-modal { min-height: 560px; }
-  .study-v2-content { padding-top: 88px; }
-  .study-v2-headline { font-size: clamp(48px, 4.2vw, 64px); }
-  .study-v2-explanation { margin-top: 18px; font-size: clamp(18px, 1.45vw, 22px); }
-  .study-v2-incentive { margin-top: 13px; font-size: clamp(17px, 1.36vw, 21px); }
-  .study-v2-question { margin-top: 15px; font-size: clamp(23px, 1.8vw, 28px); }
-  .study-v2-primary { min-height: 72px; margin-top: 16px; font-size: clamp(24px, 1.9vw, 29px); }
-  .study-v2-close { top: 18px; }
+/* Short desktop windows keep the requested 60% height; content compacts instead of enlarging the modal. */
+@media (max-height: 800px) and (min-width: 901px) {
+  .study-v2-content { padding-top: 64px; padding-bottom: 46px; }
+  .study-v2-logo { top: 20px; width: 96px; }
+  .study-v2-language { top: 29px; }
+  .study-v2-headline { font-size: clamp(36px, 3.1vw, 48px); }
+  .study-v2-explanation { margin-top: 13px; font-size: clamp(14px, 1.08vw, 17px); }
+  .study-v2-incentive { margin-top: 10px; font-size: clamp(13px, 1vw, 16px); }
+  .study-v2-question { margin-top: 11px; font-size: clamp(18px, 1.38vw, 22px); }
+  .study-v2-primary { min-height: 54px; margin-top: 11px; font-size: clamp(19px, 1.48vw, 23px); }
 }
 
+/* Tablet: still clearly leaves AQla visible around all sides. */
 @media (max-width: 900px) {
   .study-v2-screen {
-    --study-modal-width: min(92vw, 720px);
-    --study-modal-height: min(88vh, 820px);
-    overflow-y: auto;
-    background: rgba(245, 244, 252, .18);
-    backdrop-filter: blur(4px) saturate(92%);
-    -webkit-backdrop-filter: blur(4px) saturate(92%);
+    --study-modal-width: 78vw;
+    --study-modal-height: 70vh;
+  }
+
+  .study-v2-screen::before {
+    width: calc(var(--study-modal-width) + 14px);
+    height: calc(var(--study-modal-height) + 14px);
+    border-radius: 29px;
   }
 
   .study-v2-modal {
-    min-height: 0;
-    border-radius: 24px;
-    overflow-y: auto;
+    border-radius: 23px;
   }
 
   .study-v2-logo {
-    left: 24px;
-    top: 24px;
-    width: 108px;
+    left: 22px;
+    top: 20px;
+    width: 96px;
   }
 
   .study-v2-language {
-    top: 31px;
-    right: 28px;
-    font-size: 20px;
+    top: 26px;
+    right: 24px;
+    font-size: 18px;
   }
 
-  .study-v2-language > span { height: 22px; }
+  .study-v2-language > span { height: 20px; }
 
   .study-v2-content {
-    min-height: 100%;
-    height: auto;
-    padding: 116px 24px 94px;
+    padding: 90px 22px 72px;
   }
 
   .study-v2-headline {
-    font-size: clamp(44px, 10vw, 56px);
+    font-size: clamp(38px, 8.5vw, 50px);
   }
 
   .study-v2-explanation {
-    width: min(100%, 620px);
-    margin-top: 24px;
-    font-size: clamp(19px, 4.6vw, 23px);
+    width: min(100%, 540px);
+    margin-top: 19px;
+    font-size: clamp(17px, 4vw, 21px);
   }
 
   .study-v2-incentive {
-    margin-top: 18px;
-    font-size: clamp(18px, 4.2vw, 22px);
+    margin-top: 15px;
+    font-size: clamp(16px, 3.7vw, 20px);
   }
 
   .study-v2-question {
-    margin-top: 22px;
-    font-size: clamp(24px, 5.5vw, 29px);
+    margin-top: 18px;
+    font-size: clamp(22px, 4.8vw, 27px);
   }
 
   .study-v2-primary {
-    width: min(100%, 520px);
-    min-height: 74px;
-    margin-top: 21px;
-    border-radius: 18px;
-    font-size: clamp(25px, 5.7vw, 30px);
+    width: min(100%, 440px);
+    min-height: 66px;
+    margin-top: 18px;
+    font-size: clamp(23px, 5vw, 28px);
   }
 
   .study-v2-close {
-    left: auto;
-    right: 2px;
-    top: 2px;
-    width: 36px;
-    height: 36px;
+    left: calc(50% + 39vw + 8px);
+    top: calc(50% - 35vh - 8px);
+    width: 34px;
+    height: 34px;
   }
 
-  .study-v2-close svg { width: 36px; height: 36px; }
+  .study-v2-close svg { width: 34px; height: 34px; }
   .study-v2-close path { stroke-width: 4.5; }
 
   .study-v2-details-wrap {
-    right: 24px;
-    bottom: 18px;
+    right: 20px;
+    bottom: 14px;
   }
 
   .study-v2-details-panel {
-    width: min(350px, calc(100vw - 88px));
-    max-height: min(290px, 40vh);
+    width: min(320px, 68vw);
+    max-height: min(270px, 38vh);
   }
 }
 
+/* Phones: deliberately not edge-to-edge. Roughly 7% of the website remains visible on each side. */
 @media (max-width: 520px) {
   .study-v2-screen {
-    --study-modal-width: calc(100vw - 28px);
-    --study-modal-height: calc(100vh - 64px);
+    --study-modal-width: 86vw;
+    --study-modal-height: 76vh;
   }
 
-  .study-v2-modal { border-radius: 21px; }
-  .study-v2-logo { left: 20px; top: 22px; width: 98px; }
-  .study-v2-language { right: 22px; top: 27px; font-size: 19px; gap: 9px; }
-  .study-v2-content { padding: 108px 18px 90px; }
-  .study-v2-headline { font-size: clamp(40px, 12vw, 52px); }
-  .study-v2-explanation { margin-top: 21px; font-size: clamp(17px, 5vw, 21px); line-height: 1.55; }
-  .study-v2-incentive { margin-top: 16px; font-size: clamp(16px, 4.7vw, 20px); }
-  .study-v2-question { margin-top: 19px; font-size: clamp(21px, 6vw, 27px); }
-  .study-v2-primary { min-height: 68px; margin-top: 19px; font-size: clamp(22px, 6.2vw, 28px); }
-  .study-v2-details-wrap { right: 20px; bottom: 15px; }
-  .study-v2-details-toggle { font-size: 15px; }
-  .study-v2-details-panel { width: min(330px, calc(100vw - 70px)); max-height: 42vh; padding: 17px; }
+  .study-v2-screen::before {
+    width: calc(var(--study-modal-width) + 10px);
+    height: calc(var(--study-modal-height) + 10px);
+    border-radius: 25px;
+  }
+
+  .study-v2-modal { border-radius: 20px; }
+  .study-v2-logo { left: 17px; top: 18px; width: 88px; }
+  .study-v2-language { right: 18px; top: 22px; font-size: 17px; gap: 8px; }
+  .study-v2-content { padding: 82px 16px 66px; }
+  .study-v2-headline { font-size: clamp(34px, 10.5vw, 44px); }
+  .study-v2-explanation { margin-top: 16px; font-size: clamp(15px, 4.5vw, 19px); line-height: 1.5; }
+  .study-v2-incentive { margin-top: 12px; font-size: clamp(14px, 4.2vw, 18px); }
+  .study-v2-question { margin-top: 15px; font-size: clamp(19px, 5.3vw, 24px); }
+  .study-v2-primary { min-height: 60px; margin-top: 15px; font-size: clamp(20px, 5.6vw, 25px); }
+  .study-v2-details-wrap { right: 16px; bottom: 12px; }
+  .study-v2-details-toggle { font-size: 13.5px; }
+  .study-v2-details-panel { width: min(290px, 74vw); max-height: 36vh; padding: 15px; }
+  .study-v2-close {
+    left: calc(50% + 43vw + 3px);
+    top: calc(50% - 38vh - 3px);
+    width: 30px;
+    height: 30px;
+  }
+  .study-v2-close svg { width: 30px; height: 30px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
