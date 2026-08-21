@@ -103,23 +103,14 @@ export default function StudyInvitation({ overlay = false }: { overlay?: boolean
   if (!visible) return null
 
   return (
-    <main
-      className={`study-v2-screen ${overlay ? 'study-v2-overlay' : 'study-v2-standalone'}`}
-      dir={t.dir}
-      lang={t.lang}
-      role="dialog"
-      aria-modal={overlay ? 'true' : undefined}
-      aria-label={t.dialogLabel}
-    >
+    <main className={`study-v2-screen ${overlay ? 'study-v2-overlay' : 'study-v2-standalone'}`} dir={t.dir} lang={t.lang} role="dialog" aria-modal={overlay ? 'true' : undefined} aria-label={t.dialogLabel}>
       <section className="study-v2-modal">
         <img src={LOGO_URL} alt="AQla — أقلع" className="study-v2-logo" />
-
         <div className="study-v2-language" dir="ltr" aria-label="Language">
           <button type="button" className={lang === 'ar' ? 'active' : ''} aria-pressed={lang === 'ar'} aria-label="العربية" onClick={() => setLang('ar')}>A</button>
           <span aria-hidden="true" />
           <button type="button" className={lang === 'en' ? 'active' : ''} aria-pressed={lang === 'en'} aria-label="English" onClick={() => setLang('en')}>E</button>
         </div>
-
         <div className="study-v2-content">
           <h1 className="study-v2-headline">{t.headline}</h1>
           <p className="study-v2-explanation"><span>{t.explanationTop}</span><span>{t.explanationBottom}</span></p>
@@ -127,7 +118,6 @@ export default function StudyInvitation({ overlay = false }: { overlay?: boolean
           <p className="study-v2-question">{t.question}</p>
           <a className="study-v2-primary" href={REDCAP_URL} target="_blank" rel="noopener noreferrer" onClick={dismiss}>{t.cta}</a>
         </div>
-
         <div className="study-v2-details-wrap" ref={detailsRef}>
           {detailsOpen ? (
             <div className="study-v2-details-panel" role="region" aria-label={t.details}>
@@ -142,10 +132,7 @@ export default function StudyInvitation({ overlay = false }: { overlay?: boolean
           <button type="button" className="study-v2-details-toggle" aria-expanded={detailsOpen} onClick={() => setDetailsOpen((open) => !open)}>{t.details} <span aria-hidden="true">{detailsOpen ? '▴' : '▾'}</span></button>
         </div>
       </section>
-
-      <button type="button" className="study-v2-close" aria-label={t.closeLabel} onClick={dismiss}>
-        <svg viewBox="0 0 44 44" aria-hidden="true"><path d="M8 8L36 36M36 8L8 36" /></svg>
-      </button>
+      <button type="button" className="study-v2-close" aria-label={t.closeLabel} onClick={dismiss}><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M8 8L36 36M36 8L8 36" /></svg></button>
     </main>
   )
 }
