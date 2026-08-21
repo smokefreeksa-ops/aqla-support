@@ -25,7 +25,7 @@ export function WelcomeHeader({ model }: { model: LearnerModel }) {
   return (
     <section className="rounded-3xl bg-gradient-to-l from-[#0A1A0E] via-[#0e4a30] to-[#006C35] p-6 text-white shadow-lg sm:p-8">
       <p className="text-[13px] text-white/70">{model.orgNameAr}</p>
-      <h1 className="mt-1 text-2xl font-bold sm:text-3xl">أهلاً {model.displayName} 👋</h1>
+      <h1 className="mt-1 text-2xl font-bold sm:text-3xl">أهلاً {model.displayName} </h1>
       <p className="mt-2 max-w-xl text-[13.5px] leading-7 text-white/80">
         تابع رحلتك التدريبية، أكمل وحداتك، واحصل على شهاداتك المعتمدة.
       </p>

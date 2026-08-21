@@ -136,8 +136,8 @@ function Inner() {
       }
       toast.success(
         trimmedEmail
-          ? (isAr ? "تم إصدار شهادتك وأُرسلت إلى بريدك 🎉" : "Certificate issued & emailed 🎉")
-          : (isAr ? "تم إصدار شهادتك 🎉" : "Certificate issued 🎉"),
+          ? (isAr ? "تم إصدار شهادتك وأُرسلت إلى بريدك " : "Certificate issued & emailed ")
+          : (isAr ? "تم إصدار شهادتك " : "Certificate issued "),
       );
       navigate({ to: "/academy-certificate/$code", params: { code: res.certificate_code } });
     } catch (e) {

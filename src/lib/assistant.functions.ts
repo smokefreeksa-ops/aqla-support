@@ -49,8 +49,8 @@ const APPROVED_OPENINGS: Record<CanonicalCenter, Partial<Record<Lang, string>>> 
     en: "Hello, I am Aqla's educational assistant. I do not diagnose, treat, or prescribe medication. How can I help?",
   },
   public_pre_login: {
-    ar: "يا هلا والله 👋\nأنا مساعد أقلع الذكي\nاسألني عن أقلع، أو خلّني أقول لك نكتة… ترا بتستانس والله.\nوإذا ما ودك تسجل الحين؟ ولا يهمك… حتى التسجيل يحتاج “نية إقلاع” شكله 😄",
-    en: "Hi! I'm Aqla Smart Assistant — happy to chat before you sign up. Ask me about Aqla, or let me tell you a joke… you'll enjoy it, trust us. Not ready to sign up? No worries… even signing up takes a 'quit intention' 😄",
+    ar: "يا هلا والله \nأنا مساعد أقلع الذكي\nاسألني عن أقلع، أو خلّني أقول لك نكتة… ترا بتستانس والله.\nوإذا ما ودك تسجل الحين؟ ولا يهمك… حتى التسجيل يحتاج “نية إقلاع” شكله ",
+    en: "Hi! I'm Aqla Smart Assistant — happy to chat before you sign up. Ask me about Aqla, or let me tell you a joke… you'll enjoy it, trust us. Not ready to sign up? No worries… even signing up takes a 'quit intention' ",
   },
   quit_pathway: {
     ar: "أهلًا بك في مركز أقلع الافتراضي لدعم الإقلاع. سأرشدك خطوة بخطوة لفهم استخدامك للتدخين أو النيكوتين، تقييم مستوى الاعتماد، بناء خطة مناسبة، ومتابعتك بطريقة آمنة. لن نعرض بياناتك الصحية في أي مشاركة عامة، ولن نقدم وصفات أو جرعات دوائية.",
