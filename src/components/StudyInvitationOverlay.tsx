@@ -22,6 +22,12 @@ const COPY: Record<Lang, {
   eyebrow: string;
   university: string;
   title: string;
+  panelHeadline: string;
+  panelBody1: string;
+  panelBody2: string;
+  panelIncentive: string;
+  panelQuestion: string;
+  panelCta: string;
   prizeSubtitle: string;
   participate: string;
   skip: string;
@@ -43,6 +49,7 @@ const COPY: Record<Lang, {
   confirmContinue: string;
   confirmBack: string;
 }> = {
+
   ar: {
     dir: "rtl",
     eyebrow: "دراسة علمية",
