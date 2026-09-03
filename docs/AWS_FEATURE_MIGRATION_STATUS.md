@@ -15,6 +15,7 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 - **MERGE** — capability exists in both; combine best logic into one AWS implementation.
 - **CORRECTED** — old implementation contained a clinical/technical issue that must not be copied unchanged.
 - **CODED** — implementation exists on staging branch but still requires deployment/runtime/end-to-end verification.
+- **CI VERIFIED** — route/lint/production-build/CloudFormation checks have passed for the code checkpoint.
 - **HOLD** — do not prioritise until governance/validation decision.
 - **DROP** — intentionally do not recreate as a separate system.
 
@@ -40,10 +41,13 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 | Capability | Status | Notes |
 |---|---|---|
 | Research-first gateway | KEEP-AWS | Preserve approved visual/research separation |
-| Simplified 8-step assessment | KEEP-AWS | Keep participant journey short |
+| Eight-stage participant assessment | KEEP-AWS | Participant journey stays bounded and understandable |
+| Adaptive product branching v3 | CI VERIFIED | Cigarette, vape, nicotine-pouch and mixed-use branches; relapse-prevention pathway retained |
+| Deterministic multidimensional triage v3 | CI VERIFIED | Exposure, behavioural pattern, mixed-product complexity, readiness, confidence, relapse vulnerability, support need, safety track and follow-up focus |
 | Single deterministic quit engine | KEEP-AWS | Do not recreate multiple legacy engines |
-| AI plan personalisation | KEEP-AWS | Deterministic safety/scoring remains authoritative |
-| Personal Digital Twin | KEEP-AWS | Longitudinal structured state |
+| AI plan personalisation | KEEP-AWS/EXPANDED | OpenAI receives minimised structured product profile + deterministic triage; cannot override scoring/safety/referral |
+| Personal Digital Twin | KEEP-AWS/EXPANDED | Adaptive assessment + triage stored separately as `TWIN#ADAPTIVE_TRIAGE` |
+| Secure adaptive follow-up | CI VERIFIED | SES email stays generic/privacy-safe; authenticated check-in reads saved triage focus |
 | Saved conversations | KEEP-AWS | Bounded recent context + structured Twin |
 | SOS/craving support | MERGE | Keep simple AWS UX; selectively port proven SOS protocols |
 | Relapse support | MERGE | Fold into OS/SOS/Twin rather than separate duplicated engine |
@@ -51,19 +55,36 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 | Voice assistant | MERGE | Keep AWS OS voice input; add server voice only if clear value |
 | Voice craving scan | HOLD | Experimental; do not migrate as clinical feature without validation |
 
-## Assessment and research instruments
+## Product-specific assessment / dependence
 
 | Capability | Status | Notes |
 |---|---|---|
-| HSI | KEEP-AWS | Already deterministic |
-| FTND six-item | CODED | Verified scorer exists; participant/research protocol activation remains |
-| PSECDI | CORRECTED/CODED | AWS scorer uses published 0–20 Penn State scoring; old simplified scorer not copied |
-| LWDS-11 | CORRECTED/CODED | 11 items × 0–3; threshold 10 retained; no invented severity bands |
+| Cigarette exact quantity + HSI | CODED | Exact day/week quantity collected; HSI band derived server-side; HSI remains deterministic |
+| FTND six-item | CODED FOUNDATION | Verified scorer exists; full FTND is not inferred from simplified assessment |
+| Vape product branch | CI VERIFIED v3 | Device type, use frequency, exact minutes after waking, night use, cravings and autonomy/withdrawal items |
+| PSECDI | CI VERIFIED v3 | Full Penn State score is calculated only when all required PSECDI items are collected; deterministic 0–20 scoring |
+| Nicotine-pouch product branch | CI VERIFIED v3 | Daily pouch count, optional strength/brand, multiple-at-once, strength switching, night use, cravings and difficulty cutting down |
+| Oral nicotine/pouch adapted screen | CI VERIFIED v3 / NON-VALIDATED | Six-item Aqla internal adapted screen; must never be represented as validated |
+| Mixed-product prioritisation | CI VERIFIED v3 | Asks which selected product would be hardest to go without and whether users substitute another nicotine product |
+| Shisha basic branch | KEEP-AWS | Session frequency and duration; LWDS-11 remains protocol/research-grade rather than silently inferred |
+| LWDS-11 | CODED FOUNDATION | 11 items × 0–3; threshold 10 retained; no invented severity bands |
 | HONC-style | CODED with label | Explicitly non-validated adapted wording unless exact validated version adopted |
-| Oral nicotine/pouch adapted screen | CODED with label | Explicitly non-validated |
-| Research Data Dictionary | CODED | AWS dictionary v1 + protected admin page |
-| Full AQla1 research extension | MIGRATE | Demographics/exposure/access/social context only when protocol requires |
-| Cohort A–H | MERGE | Preserve as derived research/admin variable if needed; do not expose as participant architecture |
+| Research Data Dictionary | CODED/EXPANDED | Core + Personal Plan v2 + Adaptive Assessment v3 dictionaries in protected admin page |
+
+## Personal Quit Plan v2/v3
+
+| Capability | Status | Notes |
+|---|---|---|
+| NHS concept audit | CODED | 20 concepts accounted for; useful concepts independently implemented without NHS wording/branding/assets |
+| Quit/change goal | CODED | Quit, reduce, maintain abstinence, explore |
+| Target quit/change date | CODED | Today/within 7/specific/not ready; date validation retained |
+| Spending/savings | CODED | Self-reported SAR only; no invented Saudi default price; reduction-aware savings |
+| Previous quit-support methods | CODED | Used to avoid blind repetition |
+| Treatment information interests | CODED | Education preference only; no medication dosing |
+| Preferred support channels | CODED | Aqla/clinician/pharmacist/family/peer/self-guided etc. |
+| Separate plan email consent | CODED | Plan-link email is not bundled with follow-up consent |
+| Separate follow-up email consent | CODED | Ongoing supportive email requires its own opt-in |
+| Adaptive triage displayed in plan | CI VERIFIED v3 | Priority product, support need and product-specific measure information shown with validation labels |
 
 ## Plan and document generation
 
@@ -71,18 +92,21 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 |---|---|---|
 | Saved quit plan | KEEP-AWS | DynamoDB + Cognito ownership |
 | Latest-plan pointer | KEEP-AWS | `PLAN#LATEST` |
-| AI bounded coaching | KEEP-AWS | Stronger than legacy approach |
+| AI bounded coaching | KEEP-AWS | Deterministic safety/scoring remains authoritative |
 | Client PDF | KEEP-AWS fallback | Browser PDF retained as fallback during staging |
 | Proper text PDF | CODED | Server-side React PDF endpoint with Arabic DejaVu font and account ownership |
 | Formal plan version lineage | CODED | Plan/assessment/clinical/scoring/follow-up/AI prompt provenance stored with new plans |
+| Adaptive-triage PDF section | NEXT | Visible authenticated plan has triage; add to server PDF after v3 runtime verification |
 
 ## Follow-up and communications
 
 | Capability | Status | Notes |
 |---|---|---|
 | Longitudinal cadence | KEEP-AWS | Day 1/3/7/14/21/30/60/90/6m/12m policy scaffold |
-| SES plan-ready email | KEEP-AWS | Privacy-preserving |
-| SES scheduled follow-up | KEEP-AWS | EventBridge/Lambda |
+| SES plan-ready email | RUNTIME VERIFIED | Real staging email delivered from `noreply@smokefreeksa.com` to a verified Cognito/Gmail account on 20 Aug 2026 |
+| SES scheduled follow-up | KEEP-AWS | EventBridge/Lambda; runtime delivery of a scheduled future check-in remains to verify |
+| Adaptive follow-up focus | CI VERIFIED v3 | Authenticated follow-up page reads Twin focus: maintain, mixed use, cravings, triggers, confidence, reduction or general |
+| Email privacy boundary | KEEP-AWS | Email does not contain sensitive plan/triage detail; secure link reveals adaptive focus after login |
 | Safety-hold communication gate | CODED | Immediate safety state suppresses routine plan email and routine scheduled follow-ups |
 | Unsubscribe | CODED | Opaque-token, privacy-safe unsubscribe workflow |
 | Suppression list | CODED | Hashed recipient suppression; reason/scope separated |
@@ -105,6 +129,7 @@ Principle: migrate useful product capability, not Lovable/Supabase-specific arch
 | Clinician longitudinal view | CODED MVP | Structured latest-plan + Personal Twin summary; no raw-chat overload |
 | Clinical audit trail | CODED MVP | Immutable DynamoDB audit events for staff CRM changes |
 | Research exports | CODED/GATED | Pseudonymised latest-plan CSV; admin-only and deny-by-default until deployment governance flag is enabled |
+| Adaptive fields in default research export | HOLD/EXCLUDED | New vape/pouch raw fields and internal adaptive triage are not automatically added to default export; protocol/governance decision required |
 | De-identification rules | CODED v1 | Direct identifiers, staff notes, safety flags, suppression data and internal support score excluded from default export |
 
 ### CRM scale rule
@@ -181,24 +206,21 @@ Use DynamoDB for high-scale participant journey state, conversations, current Tw
 
 Evaluate Aurora PostgreSQL for relational research datasets and future complex clinical/reporting workloads that need joins, cohort filtering and export-heavy SQL. Do not force every historic Supabase relational workload into DynamoDB if PostgreSQL remains the better data model.
 
-## Current migration order / checkpoint
+## Current verification checkpoint
 
-1. Research/validated scoring + AWS data dictionary — **CODED; runtime verification pending**.
-2. Clinical/admin participant CRM — **CODED MVP; runtime verification pending**.
-3. Proper server-side PDF + explicit version lineage — **CODED; runtime verification pending**.
-4. Communication governance — **CODED; AWS resource deployment/event verification pending**.
-5. Help Someone + tools + privacy-safe sharing — **CODED; CI/runtime verification pending**.
-6. Research export/de-identification — **CODED and deny-by-default; governance enablement + runtime verification pending**.
-7. Volunteer workflow + Poster Studio — **CODED MVP; CI/runtime verification pending**.
-8. Challenges/community/city layer — **CODED MVP; CI/runtime verification pending**.
-9. Academy learner UI/certificate end-to-end flow — **NEXT after verification checkpoint**.
-10. 100k bulk communications + WhatsApp — only after policy/consent controls and current migration are end-to-end verified.
+1. Personal Quit Plan v2 + SES plan-ready email — **CODED, CI VERIFIED at prior checkpoint, real staging email delivered**.
+2. Adaptive Assessment/Triage v3 — **CODED + CI VERIFIED in run #559 (`32413149325`); deployment/runtime verification pending**.
+3. Scheduled Day-1 follow-up email — **next runtime test after v3 deployment**.
+4. Core CRM/Twin/admin visibility — runtime verification after v3 plan submission.
+5. Academy learner UI/certificate flow — resume after adaptive core verification.
+6. 100k bulk communications + WhatsApp — only after current consent, suppression, follow-up and runtime pathways are fully verified.
 
 ## Production cutover rule
 
 A capability is not considered migrated merely because it compiles. Track separately:
 
 - CODED
+- CI VERIFIED
 - DEPLOYED
 - RUNTIME VERIFIED
 - END-TO-END VERIFIED

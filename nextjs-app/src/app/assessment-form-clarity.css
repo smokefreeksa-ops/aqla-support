@@ -1,0 +1,148 @@
+/* AQla adaptive assessment — high-visibility required-field system. */
+.qe-required-mark {
+  display: inline-block;
+  margin-inline-start: .22em;
+  color: #ff4d4f;
+  font-size: 1.18em;
+  font-weight: 900;
+  line-height: 1;
+  vertical-align: .02em;
+}
+
+.qe-required-legend {
+  margin: 12px auto 0;
+  color: #d7e7df;
+  font-size: 12px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.qe-required-legend .qe-required-mark { margin-inline: .18em; }
+
+.qe-question-block {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid rgba(188,216,201,.16);
+  border-radius: 16px;
+  background: rgba(1, 24, 16, .34);
+}
+
+.qe-question-block h3 {
+  margin: 0;
+  color: #f4fbf7;
+  font-size: 16px;
+  font-weight: 750;
+  line-height: 1.7;
+}
+
+.qe-field-hint,
+.qe-question-block > p {
+  margin: -2px 0 2px;
+  color: #c4d9ce;
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+
+.qe-question-block > input:not([type='checkbox']):not([type='radio']):not([type='range']),
+.qe-question-block > select,
+.qe-question-block label > input:not([type='checkbox']):not([type='radio']):not([type='range']),
+.qe-question-block label > select,
+.qe-input-grid input:not([type='checkbox']):not([type='radio']):not([type='range']),
+.qe-input-grid select,
+.qe-field {
+  width: 100%;
+  min-height: 58px;
+  outline: none;
+  border: 2px solid #78998c;
+  border-radius: 14px;
+  background: #f8fbf9;
+  color: #042f23;
+  padding: 0 16px;
+  font: inherit;
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.4;
+  text-align: start;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 6px 18px -15px rgba(0,0,0,.75);
+  transition: border-color .14s ease, box-shadow .14s ease, background .14s ease;
+}
+
+.qe-question-block > input::placeholder,
+.qe-question-block label > input::placeholder,
+.qe-input-grid input::placeholder,
+.qe-field::placeholder {
+  color: #657a70;
+  opacity: 1;
+  font-weight: 500;
+}
+
+.qe-question-block > input:not([type='checkbox']):not([type='radio']):not([type='range']):focus,
+.qe-question-block > select:focus,
+.qe-question-block label > input:not([type='checkbox']):not([type='radio']):not([type='range']):focus,
+.qe-question-block label > select:focus,
+.qe-input-grid input:not([type='checkbox']):not([type='radio']):not([type='range']):focus,
+.qe-input-grid select:focus,
+.qe-field:focus {
+  border-color: #d6b45f;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(214,180,95,.22), 0 10px 24px -18px rgba(0,0,0,.7);
+}
+
+.qe-question-block input[aria-invalid='true'],
+.qe-question-block select[aria-invalid='true'],
+.qe-input-grid input[aria-invalid='true'],
+.qe-input-grid select[aria-invalid='true'] {
+  border-color: #e5484d;
+  box-shadow: 0 0 0 4px rgba(229,72,77,.15);
+}
+
+.qe-input-grid label {
+  display: grid;
+  gap: 8px;
+  color: #e7f3ed;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.qe-input-grid label > span {
+  color: #edf7f2;
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.qe-question-block .qe-option-grid {
+  margin-top: 2px;
+}
+
+.qe-question-block .qe-chip {
+  border-color: rgba(205,225,215,.24);
+  background: rgba(0,0,0,.22);
+  color: #eff8f3;
+}
+
+.qe-question-block .qe-chip:hover {
+  border-color: rgba(214,180,95,.55);
+  background: rgba(255,255,255,.08);
+}
+
+.qe-question-block .qe-chip.active {
+  border-color: #d6b45f;
+  background: linear-gradient(135deg, #006c35, #0b5134);
+  color: #fff9e8;
+}
+
+@media (max-width: 700px) {
+  .qe-question-block { padding: 14px 12px; }
+  .qe-question-block > input:not([type='checkbox']):not([type='radio']):not([type='range']),
+  .qe-question-block > select,
+  .qe-question-block label > input:not([type='checkbox']):not([type='radio']):not([type='range']),
+  .qe-question-block label > select,
+  .qe-input-grid input:not([type='checkbox']):not([type='radio']):not([type='range']),
+  .qe-input-grid select,
+  .qe-field {
+    min-height: 60px;
+    font-size: 18px;
+  }
+}

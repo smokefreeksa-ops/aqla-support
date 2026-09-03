@@ -1,0 +1,135 @@
+/* Shared public-route theming. Loaded last so Light / Dim / Night remains consistent beyond the homepage. */
+
+.eng-page {
+  background: linear-gradient(180deg, var(--aq-bg) 0%, var(--aq-bg-deep) 100%);
+  color: var(--aq-text);
+}
+.eng-brand { color: var(--aq-text-strong); }
+.eng-card, .eng-stat, .eng-table, .eng-chip, .eng-nav a, .eng-btn, .eng-field input, .eng-field select, .eng-field textarea {
+  background: var(--aq-card);
+  color: var(--aq-text);
+  border-color: var(--aq-border);
+}
+.eng-card h1, .eng-card h2, .eng-card h3 { color: var(--aq-text-strong); }
+.eng-muted, .eng-footer { color: var(--aq-text-muted); }
+.eng-kicker { background: var(--aq-surface-strong); color: var(--aq-primary); }
+.eng-btn.primary, .eng-chip.active { background: var(--aq-primary); color: #fff; border-color: var(--aq-primary); }
+.eng-note, .eng-result, .eng-list li { background: var(--aq-surface); color: var(--aq-text); border-color: var(--aq-border); }
+.eng-note { border-inline-start-color: var(--aq-gold); }
+.eng-metric, .eng-stat strong, .eng-share-card strong { color: var(--aq-primary); }
+.eng-share-card { background: linear-gradient(150deg, var(--aq-surface), var(--aq-surface-strong)); border-color: var(--aq-border); color: var(--aq-text); }
+.eng-table th { background: var(--aq-surface-strong); color: var(--aq-text-muted); }
+.eng-table th, .eng-table td { border-bottom-color: var(--aq-border); }
+.eng-progress { background: var(--aq-surface-strong); }
+.eng-progress span { background: var(--aq-primary); }
+
+.qe-page, .qp-page {
+  color: var(--aq-text);
+  background:
+    radial-gradient(ellipse 88% 62% at 50% 4%, color-mix(in srgb, var(--aq-card-strong) 72%, transparent), transparent 62%),
+    linear-gradient(180deg, var(--aq-bg-deep) 0%, var(--aq-bg) 48%, var(--aq-bg-deep) 100%);
+}
+.qe-topbar, .qp-topbar { background: color-mix(in srgb, var(--aq-header) 94%, transparent); border-bottom-color: color-mix(in srgb, var(--aq-gold) 20%, transparent); }
+.qe-brand, .qp-brand { color: var(--aq-on-dark); }
+.qe-lang { color: var(--aq-on-dark); background: var(--aq-header-2); border-color: color-mix(in srgb, var(--aq-gold) 42%, transparent); }
+.qe-kicker, .qp-kicker, .qe-progress-meta strong { color: var(--aq-gold-strong); }
+.qe-intro h1, .qe-card h2, .qe-question-block h3, .qp-hero-card h1, .qp-card h2, .qp-metrics strong { color: var(--aq-text-strong); }
+.qe-intro p, .qe-progress-meta, .qe-range-ends, .qe-input-grid label, .qp-card p, .qp-hero-card > p, .qp-metrics small, .qp-metrics em { color: var(--aq-text-muted); }
+.qe-progress { background: var(--aq-surface-strong); }
+.qe-progress span { background: linear-gradient(90deg, var(--aq-primary), var(--aq-primary-hover), var(--aq-gold)); }
+.qe-card, .qp-card, .qp-hero-card { background: var(--aq-card); border-color: var(--aq-border); box-shadow: var(--aq-shadow); }
+.qe-card::before, .qp-hero-card::before { display: none; }
+.qe-chip, .qe-range-card, .qe-input-grid input, .qe-input-grid select, .qp-metrics > div, .qp-tags span, .qp-followups span, .qp-day-list li { background: var(--aq-surface); color: var(--aq-text); border-color: var(--aq-border); }
+.qe-chip:hover { background: var(--aq-surface-strong); border-color: var(--aq-border-strong); }
+.qe-chip.active { color: var(--aq-on-dark); border-color: var(--aq-primary); background: var(--aq-primary); }
+.qe-range-label { color: var(--aq-text-strong); }
+.qe-range-label span { background: var(--aq-surface-strong); color: var(--aq-gold-strong); }
+.qe-input-grid input, .qe-input-grid select { color: var(--aq-text-strong); }
+.qe-note, .qp-sync-warning, .qp-first-step { background: var(--aq-surface); color: var(--aq-text); border-color: var(--aq-border); }
+.qe-note.success, .qp-sync-ok { background: color-mix(in srgb, var(--aq-primary) 14%, var(--aq-surface)); color: var(--aq-text); border-color: color-mix(in srgb, var(--aq-primary) 40%, var(--aq-border)); }
+.qe-button.primary { background: var(--aq-primary); color: #fff; border-color: var(--aq-gold); }
+.qe-button.secondary { background: var(--aq-surface); color: var(--aq-text); border-color: var(--aq-border); }
+.qp-ai-summary { background: color-mix(in srgb, var(--aq-primary) 12%, var(--aq-surface)); border-color: color-mix(in srgb, var(--aq-primary) 35%, var(--aq-border)); }
+.qp-challenge { background: color-mix(in srgb, var(--aq-gold) 10%, var(--aq-surface)); border-color: color-mix(in srgb, var(--aq-gold) 38%, var(--aq-border)); }
+.qp-ai-summary span, .qp-challenge span, .qp-highlight { color: var(--aq-gold-strong); }
+.qp-ai-summary p, .qp-challenge strong, .qp-first-step { color: var(--aq-text); }
+
+.os-page {
+  --os-bg: var(--aq-bg);
+  --os-panel: color-mix(in srgb, var(--aq-surface) 94%, transparent);
+  --os-panel-soft: color-mix(in srgb, var(--aq-surface-strong) 86%, transparent);
+  --os-glass: color-mix(in srgb, var(--aq-surface) 68%, transparent);
+  --os-green: var(--aq-primary);
+  --os-green-bright: var(--aq-primary-hover);
+  --os-ink: var(--aq-text);
+  --os-muted: var(--aq-text-muted);
+  --os-gold: var(--aq-gold);
+  --os-border: color-mix(in srgb, var(--aq-border) 72%, transparent);
+  --os-border-strong: var(--aq-border-strong);
+  background: radial-gradient(circle at 68% 8%, color-mix(in srgb, var(--aq-primary) 16%, transparent), transparent 34%), var(--aq-bg);
+}
+.os-sidebar { background: linear-gradient(180deg, var(--aq-header), var(--aq-bg-deep)); }
+.os-new-chat { background: var(--aq-primary); color: #fff; border-color: color-mix(in srgb, var(--aq-gold) 35%, transparent); }
+.os-history-label, .os-history > p { color: var(--aq-text-muted); }
+.os-history button:hover, .os-history button.active { background: var(--aq-surface-strong); }
+
+/* AQla OS uses text controls rather than icon glyphs. */
+.os-mobile-menu,
+.os-sidebar-close {
+  width: auto;
+  min-width: 62px;
+  height: 42px;
+  padding-inline: 11px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.os-mic,
+.os-send {
+  width: auto;
+  min-width: 58px;
+  height: 42px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  line-height: 1;
+}
+.os-send { min-width: 66px; font-weight: 700; }
+
+.study-screen, .study-environment { background-color: var(--aq-bg-deep); }
+.study-environment { background-image: radial-gradient(ellipse 90% 70% at 50% 40%, color-mix(in srgb, var(--aq-card-strong) 80%, transparent) 0%, var(--aq-bg-deep) 74%, var(--aq-header) 100%); }
+.study-card { background: linear-gradient(180deg, color-mix(in srgb, var(--aq-card-strong) 92%, transparent), color-mix(in srgb, var(--aq-surface) 96%, transparent)); border-color: color-mix(in srgb, var(--aq-gold) 30%, transparent); }
+.study-title, .study-confirm > p { color: var(--aq-text-strong); }
+.study-university, .study-details-body, .study-tags span, .study-skip { color: var(--aq-text-muted); }
+.study-primary-button { background: var(--aq-primary); color: #fff; border-color: var(--aq-gold); }
+.study-secondary-button, .study-details summary { color: var(--aq-text); border-color: var(--aq-border); background: var(--aq-surface); }
+.study-details summary { list-style: none; }
+.study-details summary::-webkit-details-marker { display: none; }
+.study-language { background: var(--aq-header-2); color: var(--aq-on-dark); border-color: color-mix(in srgb, var(--aq-gold) 50%, transparent); }
+
+/* Status is communicated with headings and text, not pictograms. */
+.fu-success-mark { display: none !important; }
+
+html[data-aqla-theme='light'] .qe-topbar,
+html[data-aqla-theme='light'] .qp-topbar,
+html[data-aqla-theme='light'] .os-sidebar {
+  color: var(--aq-on-dark);
+}
+
+/* Text contrast is intentionally stronger than decorative contrast. */
+.aqla-site :focus-visible,
+.eng-page :focus-visible,
+.qe-page :focus-visible,
+.qp-page :focus-visible,
+.os-page :focus-visible {
+  outline: 3px solid var(--aq-gold);
+  outline-offset: 2px;
+}
+
+@media (max-width: 1080px) {
+  .aqla-mobile-nav .aqla-theme-control { display: inline-flex; }
+}

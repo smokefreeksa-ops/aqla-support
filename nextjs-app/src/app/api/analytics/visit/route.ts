@@ -14,14 +14,15 @@ export async function POST(request: NextRequest) {
 
   const existing = request.cookies.get(COOKIE)?.value?.trim()
   const visitorId = existing || randomUUID()
+  let visits: number | undefined
 
   try {
-    await recordVisit(visitorId)
+    visits = await recordVisit(visitorId)
   } catch (error) {
     console.error('Aqla visit analytics unavailable', error instanceof Error ? error.message : 'unknown')
   }
 
-  const response = NextResponse.json({ ok: true }, { headers: PRIVATE_HEADERS })
+  const response = NextResponse.json({ ok: true, visits }, { headers: PRIVATE_HEADERS })
   if (!existing) {
     response.cookies.set(COOKIE, visitorId, {
       httpOnly: true,

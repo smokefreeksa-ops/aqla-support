@@ -1,5 +1,7 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import AdaptiveTriagePlanCard from '@/components/AdaptiveTriagePlanCard'
+import PersonalPlanV2Extras from '@/components/PersonalPlanV2Extras'
 import QuitPlanResult from '@/components/QuitPlanResult'
 import { authCookies, verifyCognitoIdToken } from '@/lib/cognito'
 
@@ -38,13 +40,15 @@ export default async function PlanPage({ params, searchParams }: { params: Promi
       <div className="screen-only" style={{ position: 'fixed', insetInlineEnd: 18, bottom: 18, zIndex: 1200 }}>
         <a
           className="qe-button primary"
-          href={`/api/quit-engine/plan/${encodeURIComponent(planId)}/pdf?lang=${lang}`}
+          href={`/api/quit-engine/plan/${encodeURIComponent(planId)}/pdf-v2?lang=${lang}`}
           style={{ boxShadow: '0 10px 30px rgba(0,0,0,.24)' }}
         >
-          {lang === 'ar' ? 'PDF نصي' : 'Text PDF'}
+          {lang === 'ar' ? 'PDF الخطة' : 'Plan PDF'}
         </a>
       </div>
       <QuitPlanResult planId={planId} initialLang={lang} />
+      <AdaptiveTriagePlanCard planId={planId} lang={lang} />
+      <PersonalPlanV2Extras planId={planId} lang={lang} />
     </>
   )
 }
