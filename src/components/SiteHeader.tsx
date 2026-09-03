@@ -7,8 +7,8 @@ import { appRoutes } from "@/lib/app-routes";
 import { supabase } from "@/integrations/supabase/client";
 import { ResearchBanner } from "@/components/ResearchBanner";
 import { SearchTrigger } from "@/components/CommandPalette";
-import aqlaLogo from "@/assets/aqla-logo.png";
 
+const aqlaLogo = "/aqla-logo-2026.svg";
 
 
 type NavItem = { ar: string; en: string; to: string };
@@ -154,4 +154,3 @@ export function SiteHeader() {
     </div>
   );
 }
-
