@@ -392,241 +392,147 @@ export function StudyInvitationOverlay() {
             tabIndex={-1}
             dir={t.dir}
             lang={lang}
-            className="crystal-shell aqla-launch-panel relative flex max-h-[92%] w-full flex-col outline-none focus:outline-none focus-visible:outline-none"
+            className="relative mx-auto w-full max-w-[920px] overflow-hidden rounded-[32px] bg-white outline-none focus:outline-none focus-visible:outline-none md:h-[770px]"
             style={{
-              width: "min(95%, clamp(500px, 61vw, 860px))",
+              fontFamily: '"IBM Plex Sans Arabic", system-ui, sans-serif',
               transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
               transition: "transform 600ms cubic-bezier(0.22,1,0.36,1)",
             }}
           >
-            <div className="crystal-panel crystal-panel--map flex max-h-full min-h-0 flex-col">
+            {/* Logo — upper left */}
+            <img
+              src={aqlaLogo}
+              alt="شعار أقلع — Aqla Logo"
+              className="absolute left-5 top-5 h-[46px] w-auto object-contain md:left-10 md:top-7 md:h-[62px]"
+            />
 
-
-
-
-
-
-
-
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c9a84c]/50 to-transparent"
-        />
-
-        {/* Language switch */}
-        <div className={`absolute top-3 ${isRTL ? "left-3" : "right-3"} z-30`}>
-          <button
-            type="button"
-            onClick={() => setLang(lang === "ar" ? "en" : "ar")}
-            className="inline-flex h-8 min-w-[56px] items-center justify-center rounded-full border border-[#c9a84c]/60 bg-[#06381f] px-3.5 text-[11.5px] font-semibold tracking-wide text-[#faf1d8] shadow-[0_6px_16px_-8px_rgba(6,56,31,0.7)] transition-colors duration-300 hover:bg-[#0d4a2e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/70"
-            aria-label={lang === "ar" ? "Switch to English" : "التبديل إلى العربية"}
-          >
-
-            {t.langSwitchOther}
-          </button>
-        </div>
-
-        <div className="crystal-content relative z-20 min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-6 pb-8 pt-7 sm:gap-4 sm:px-10 sm:pb-10 sm:pt-9 flex">
-
-          {/* Logo */}
-          <div className="flex justify-center">
-            <span className="inline-flex items-center justify-center rounded-3xl bg-[#f7fdf9] px-7 py-4 shadow-[0_14px_36px_-16px_rgba(0,0,0,0.65)] ring-1 ring-[#c9a84c]/35">
-              <img
-                src={aqlaLogo}
-                alt="شعار أقلع — Aqla Logo"
-                className="h-[80px] w-auto object-contain sm:h-[104px]"
-              />
-            </span>
-          </div>
-
-
-
-
-          {/* Eyebrow */}
-          <div className="flex flex-col items-center gap-1.5 text-center">
-            <div className="flex items-center gap-2">
-              <span aria-hidden className="h-px w-6 bg-[#c9a84c]/60" />
-              <span className="text-[10.5px] font-semibold uppercase tracking-[0.3em] text-[#e6c97a]">
-                {t.eyebrow}
-              </span>
-              <span aria-hidden className="h-px w-6 bg-[#c9a84c]/60" />
-            </div>
-            <span className="text-[12px] font-normal tracking-wide text-[#bcd8c9]">
-              {t.university}
-            </span>
-          </div>
-
-          {step === "invite" ? (
-          <div key="invite" className="flex flex-col gap-3.5 sm:gap-4 animate-fade-in">
-          {/* Title */}
-          <h2
-            id="aqla-study-title"
-            className={`mx-auto max-w-[36ch] text-balance text-center font-bold tracking-tight text-[#f4fbf7] ${
-              isRTL
-                ? "text-[23px] leading-[1.75] sm:text-[27px] sm:leading-[1.72]"
-                : "text-[22px] leading-[1.55] sm:text-[26px]"
-            }`}
-          >
-            {t.title}
-          </h2>
-
-          {/* Prize subtitle */}
-          <p className="text-center text-[12.5px] font-semibold tracking-wide text-[#f0d98e] sm:text-[13.5px]">
-            {t.prizeSubtitle}
-          </p>
-
-
-          {/* Actions */}
-          <div className="-mx-3 flex flex-col gap-3 sm:-mx-5">
-            {/* Primary CTA — largest button on the panel */}
+            {/* Language switch — upper right */}
             <button
               type="button"
-              onClick={participate}
-              style={{
-                backgroundImage:
-                  "linear-gradient(135deg, #0d4a2e 0%, #06381f 52%, #0f5636 100%)",
-                boxShadow:
-                  "inset 0 0 0 1px rgba(201,168,76,0.9), inset 0 1px 0 rgba(255,244,214,0.28), inset 0 12px 20px -14px rgba(255,255,255,0.35), 0 14px 30px -12px rgba(6,56,31,0.55), 0 3px 8px -2px rgba(6,56,31,0.35)",
-              }}
-              className="group relative inline-flex min-h-[60px] w-full items-center justify-center overflow-hidden rounded-2xl px-5 text-[18px] font-bold text-[#faf1d8] transition-all duration-300 hover:-translate-y-px hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent motion-reduce:transition-none sm:min-h-[70px] sm:text-[20px]"
+              onClick={() => setLang(lang === "ar" ? "en" : "ar")}
+              aria-label={lang === "ar" ? "Switch to English" : "التبديل إلى العربية"}
+              dir="ltr"
+              className="absolute right-5 top-5 z-30 inline-flex items-center gap-[10px] text-[16px] font-semibold leading-none md:right-[43px] md:top-[40px] md:text-[20px]"
             >
-              <span
-                aria-hidden
-                className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-[1400ms] ease-out group-hover:translate-x-full"
-              />
-              <span className="relative">{t.participate}</span>
+              <span style={{ color: lang === "ar" ? "#FC0C61" : "#7F8399" }}>A</span>
+              <span aria-hidden className="block h-[20px] w-px bg-[#DADFEC] md:h-[25px]" />
+              <span style={{ color: lang === "en" ? "#FC0C61" : "#7F8399" }}>E</span>
             </button>
 
-            {/* Secondary CTA — Details */}
-            <button
-              type="button"
-              onClick={() => {
-                const next = !open;
-                setOpen(next);
-                if (next) {
-                  window.setTimeout(
-                    () => detailsRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }),
-                    260,
-                  );
-                }
-              }}
-              aria-expanded={open}
-              aria-controls="aqla-study-details"
-              className="inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-2xl border border-[#eaf6ef]/20 bg-[#eaf6ef]/[0.05] px-6 text-[14.5px] font-semibold text-[#eaf6ef] transition-all duration-300 hover:border-[#eaf6ef]/30 hover:bg-[#eaf6ef]/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eaf6ef]/25 motion-reduce:transition-none"
-            >
-              <span>{t.detailsToggle}</span>
-              <IconChevron open={open} />
-            </button>
-          </div>
+            {step === "invite" ? (
+              <div key="invite" className="px-6 pb-24 pt-24 text-center md:px-10 md:pb-0 md:pt-[104px]">
+                <h2
+                  id="aqla-study-title"
+                  className="m-0 text-[34px] font-semibold leading-[1.18] md:text-[56px]"
+                  style={{ color: "#FC0C61" }}
+                >
+                  {t.panelHeadline}
+                </h2>
 
+                <p
+                  className="mx-auto mt-6 max-w-[525px] text-[16px] font-normal leading-[1.45] md:mt-[29px] md:text-[23.5px]"
+                  style={{ color: "#1757D9" }}
+                >
+                  {t.panelBody1}
+                  <br className="hidden md:inline" />{" "}
+                  {t.panelBody2}
+                </p>
 
-          <div ref={detailsRef} className="mt-1.5 border-t border-[#eaf6ef]/10 pt-3">
-            <div
-              id="aqla-study-details"
-              role="region"
-              aria-hidden={!open}
-              className="grid overflow-hidden transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
-              style={{
-                gridTemplateRows: open ? "1fr" : "0fr",
-                opacity: open ? 1 : 0,
-              }}
-            >
-              <div className="min-h-0 overflow-hidden">
-                <div className="mt-3 max-h-[42vh] overflow-y-auto rounded-2xl border border-[#eaf6ef]/12 bg-[#eaf6ef]/[0.03] p-5">
-                  <h3 className="text-[14px] font-bold text-[#eaf6ef]">
-                    {t.detailsTitle}
-                  </h3>
-                  <p className="mt-3 text-[13.5px] leading-[1.85] text-[#cfe6da]">{t.p1}</p>
-                  <p className="mt-2 text-[13.5px] leading-[1.85] text-[#cfe6da]">{t.p2}</p>
-                  <p className="mt-2 text-[13.5px] leading-[1.85] text-[#cfe6da]">
-                    {t.ethicsApproval} <span className="font-semibold text-[#eaf6ef]">{t.ethicsNumber}</span>
+                <p
+                  className="mt-4 text-[15px] font-semibold leading-[1.4] md:mt-[21px] md:text-[22.5px]"
+                  style={{ color: "#1757D9" }}
+                >
+                  {t.panelIncentive}
+                </p>
+
+                <p
+                  className="mt-5 text-[20px] font-semibold leading-[1.25] md:mt-[23px] md:text-[29.5px]"
+                  style={{ color: "#1757D9" }}
+                >
+                  {t.panelQuestion}
+                </p>
+
+                <button
+                  type="button"
+                  onClick={participate}
+                  className="mx-auto mt-6 flex h-[60px] w-full max-w-[582px] items-center justify-center rounded-[18px] border-0 text-[20px] font-semibold text-white transition-opacity duration-300 hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FC0C61]/40 md:mt-[24px] md:h-[83px] md:w-[582px] md:rounded-[22px] md:text-[31px]"
+                  style={{
+                    backgroundColor: "#FC0C61",
+                    boxShadow: "0 14px 24px rgba(252, 12, 97, 0.18)",
+                  }}
+                >
+                  {t.panelCta}
+                </button>
+
+                {/* Study details — bottom right */}
+                <div
+                  ref={detailsRef}
+                  id="aqla-study-details"
+                  role="region"
+                  aria-hidden={!open}
+                  className="absolute inset-x-6 bottom-[62px] top-auto max-h-[240px] overflow-y-auto text-start transition-opacity duration-300 md:inset-x-[35px] md:top-[500px] md:max-h-[210px]"
+                  style={{
+                    opacity: open ? 1 : 0,
+                    pointerEvents: open ? "auto" : "none",
+                    display: open ? "block" : "none",
+                  }}
+                >
+                  <h3 className="text-[15px] font-semibold" style={{ color: "#1757D9" }}>{t.detailsTitle}</h3>
+                  <p className="mt-2 text-[13.5px] leading-[1.8]" style={{ color: "#5268A6" }}>{t.p1}</p>
+                  <p className="mt-2 text-[13.5px] leading-[1.8]" style={{ color: "#5268A6" }}>{t.p2}</p>
+                  <p className="mt-2 text-[13.5px] leading-[1.8]" style={{ color: "#5268A6" }}>
+                    {t.ethicsApproval} <span className="font-semibold">{t.ethicsNumber}</span>
                   </p>
-                  <p className="mt-2 text-[13.5px] leading-[1.85] text-[#cfe6da]">{t.contactInfo}</p>
-
-                  <ul className="mt-4 flex flex-wrap gap-1.5">
-                    {[t.voluntary, t.confidential, t.anonymous, t.prize].map((label, i) => (
-                      <li
-                        key={i}
-                        className="rounded-full border border-[#eaf6ef]/12 bg-[#eaf6ef]/[0.03] px-2.5 py-1 text-[11.5px] text-[#cfe6da]"
-                      >
-                        {label}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-4 flex items-center gap-2 text-[12.5px] text-[#cfe6da]">
-                    <span className="text-[#a8c4b5]">{t.contactLabel}</span>
-                    <a
-                      href="mailto:smokefreeksa@gmail.com"
-                      className="min-w-0 truncate font-semibold text-[#e6c97a] underline decoration-[#c9a84c]/50 underline-offset-2 transition-colors hover:decoration-[#c9a84c]"
-                    >
+                  <p className="mt-2 text-[13.5px] leading-[1.8]" style={{ color: "#5268A6" }}>
+                    {t.contactInfo}{" "}
+                    <a href="mailto:smokefreeksa@gmail.com" className="font-semibold underline underline-offset-2" style={{ color: "#1757D9" }}>
                       smokefreeksa@gmail.com
                     </a>
-                  </div>
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setOpen(!open)}
+                  aria-expanded={open}
+                  aria-controls="aqla-study-details"
+                  className="absolute bottom-5 right-5 inline-flex items-center gap-2 border-b border-[#DADFEC] pb-[3px] text-[16px] font-semibold leading-none md:bottom-[27px] md:right-[35px] md:text-[17.5px]"
+                  style={{ color: "#5268A6" }}
+                >
+                  <span>{t.detailsToggle}</span>
+                  <IconChevron open={open} />
+                </button>
+              </div>
+            ) : (
+              <div key="confirm" dir={t.dir} className="px-6 pb-16 pt-24 text-center md:px-10 md:pt-[140px]">
+                <p className="mx-auto max-w-[560px] text-[19px] font-semibold leading-[1.6] md:text-[26px]" style={{ color: "#1757D9" }}>
+                  {t.confirmMessage}
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    trackEvent("study_skip_join_study");
+                    participate();
+                  }}
+                  className="mx-auto mt-8 flex h-[60px] w-full max-w-[582px] items-center justify-center rounded-[18px] text-[20px] font-semibold text-white transition-opacity duration-300 hover:opacity-95 md:h-[83px] md:w-[582px] md:rounded-[22px] md:text-[31px]"
+                  style={{ backgroundColor: "#FC0C61", boxShadow: "0 14px 24px rgba(252, 12, 97, 0.18)" }}
+                >
+                  {t.confirmJoin}
+                </button>
+
+                <div className="mt-5 flex flex-col items-center gap-3">
+                  <button type="button" onClick={continueToSite} className="text-[16px] font-semibold" style={{ color: "#5268A6" }}>
+                    {t.confirmContinue}
+                  </button>
+                  <button type="button" onClick={goBackToPreviousPage} className="text-[15px] font-normal" style={{ color: "#7F8399" }}>
+                    {t.confirmBack}
+                  </button>
                 </div>
               </div>
-            </div>
-
-            {/* Weakest action — Skip stays below Details */}
-            <button
-              type="button"
-              onClick={openSkipConfirm}
-              className="mt-3 inline-flex min-h-[44px] w-full items-center justify-center rounded-full px-6 text-[13.5px] font-medium text-[#a8c4b5] underline-offset-4 transition-colors duration-300 hover:text-[#eaf6ef] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eaf6ef]/20 motion-reduce:transition-none"
-            >
-              {t.skip}
-            </button>
+            )}
           </div>
 
-          </div>
-          ) : (
-          <div key="confirm" dir={t.dir} className="flex flex-col gap-4 animate-fade-in">
-            <p className={`mx-auto max-w-[34ch] text-balance text-center font-semibold text-[#f4fbf7] ${
-              isRTL ? "text-[17px] leading-[1.9] sm:text-[19px]" : "text-[16.5px] leading-[1.6] sm:text-[18px]"
-            }`}>
-              {t.confirmMessage}
-            </p>
-
-            <div className="flex flex-col gap-2.5">
-              <button
-                type="button"
-                onClick={() => {
-                  trackEvent("study_skip_join_study");
-                  participate();
-                }}
-                style={{
-                  backgroundImage:
-                    "linear-gradient(135deg, #0d4a2e 0%, #06381f 52%, #0f5636 100%)",
-                  boxShadow:
-                    "inset 0 0 0 1px rgba(201,168,76,0.9), inset 0 1px 0 rgba(255,244,214,0.28), 0 12px 26px -14px rgba(6,56,31,0.55)",
-                }}
-                className="group relative inline-flex min-h-[52px] w-full items-center justify-center overflow-hidden rounded-2xl px-6 text-[15px] font-bold text-[#faf1d8] transition-all duration-300 hover:-translate-y-px hover:brightness-[1.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 motion-reduce:transition-none"
-              >
-                {t.confirmJoin}
-              </button>
-
-              <button
-                type="button"
-                onClick={continueToSite}
-                className="inline-flex min-h-[48px] w-full items-center justify-center rounded-2xl border border-[#eaf6ef]/25 bg-[#eaf6ef]/[0.04] px-6 text-[14px] font-semibold text-[#eaf6ef] transition-colors duration-300 hover:bg-[#eaf6ef]/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eaf6ef]/25 motion-reduce:transition-none"
-              >
-                {t.confirmContinue}
-              </button>
-
-              <button
-                type="button"
-                onClick={goBackToPreviousPage}
-                className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full px-6 text-[13px] font-medium text-[#a8c4b5] underline-offset-4 transition-colors duration-300 hover:text-[#eaf6ef] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eaf6ef]/20 motion-reduce:transition-none"
-              >
-                {t.confirmBack}
-              </button>
-            </div>
-          </div>
-          )}
-        </div>
-
-        </div>
-
-      </div>
       </div>
     </div>
   </div>
