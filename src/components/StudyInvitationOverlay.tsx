@@ -360,18 +360,18 @@ export function StudyInvitationOverlay() {
             ))}
         </div>
 
-        {/* Backdrop click closes */}
+        {/* Backdrop click opens the skip confirmation */}
         <button
           type="button"
           aria-label={isRTL ? "إغلاق" : "Close"}
-          onClick={close}
+          onClick={openSkipConfirm}
           className="absolute inset-0 z-[2] cursor-default"
         />
 
 
 
-          <div className="relative z-10 flex h-full flex-col">
-            <div className="relative z-20">
+          <div className="pointer-events-none relative z-10 flex h-full flex-col">
+            <div className="pointer-events-auto relative z-20">
               <ResearchBanner
                 onNavigate={() => {
                   persist();
@@ -379,6 +379,18 @@ export function StudyInvitationOverlay() {
                 }}
               />
             </div>
+            {/* External pink close — visible touch dismissal on all devices */}
+            <button
+              type="button"
+              onClick={openSkipConfirm}
+              aria-label={isRTL ? "إغلاق الدعوة" : "Close invitation"}
+              className="pointer-events-auto absolute right-4 z-30 flex h-11 w-11 items-center justify-center rounded-full bg-[#FC0C61] text-white shadow-[0_8px_20px_rgba(252,12,97,0.35)] transition-transform duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FC0C61]/50"
+              style={{ top: "calc(3.5rem + env(safe-area-inset-top, 0px))" }}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" className="h-5 w-5" aria-hidden>
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
             <div className="flex flex-1 items-center justify-center overflow-y-auto px-4 py-4 sm:px-6 sm:py-6">
 
 
