@@ -404,7 +404,7 @@ export function StudyInvitationOverlay() {
             tabIndex={-1}
             dir={t.dir}
             lang={lang}
-            className="relative mx-auto w-full max-w-[920px] overflow-hidden rounded-[32px] bg-white outline-none focus:outline-none focus-visible:outline-none md:h-[770px]"
+            className="pointer-events-auto relative mx-auto w-full max-w-[920px] overflow-hidden rounded-[32px] bg-white outline-none focus:outline-none focus-visible:outline-none md:h-[770px]"
             style={{
               fontFamily: '"IBM Plex Sans Arabic", system-ui, sans-serif',
               transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
