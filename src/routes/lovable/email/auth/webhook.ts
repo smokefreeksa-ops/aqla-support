@@ -12,12 +12,12 @@ import { EmailChangeEmail } from '@/lib/email-templates/email-change'
 import { ReauthenticationEmail } from '@/lib/email-templates/reauthentication'
 
 const EMAIL_SUBJECTS: Record<string, string> = {
-  signup: 'Confirm your email',
-  invite: "You've been invited",
-  magiclink: 'Your login link',
-  recovery: 'Reset your password',
-  email_change: 'Confirm your new email',
-  reauthentication: 'Your verification code',
+  signup: 'أكمل تسجيلك في أقلع | Confirm your email',
+  invite: 'دعوة للانضمام إلى أقلع | You have been invited',
+  magiclink: 'رابط الدخول إلى أقلع | Your sign-in link',
+  recovery: 'إعادة تعيين كلمة المرور | Reset your password',
+  email_change: 'تأكيد بريدك الجديد | Confirm your new email',
+  reauthentication: 'رمز التحقق | Your verification code',
 }
 
 // Template mapping
@@ -31,7 +31,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "Quit Pathway Support"
+const SITE_NAME = "أقلع | Aqla"
 const SENDER_DOMAIN = "notify.aqla1.com"
 const ROOT_DOMAIN = "aqla1.com"
 const FROM_DOMAIN = "aqla1.com"
