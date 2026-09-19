@@ -284,7 +284,7 @@ export function QuitChatConversation({
         500,
       );
       try {
-        const res = await startClinicalPlan({ data: { anonymousSessionId: anonId() } });
+        const res = await withRetry(() => startClinicalPlan({ data: { anonymousSessionId: anonId() } }));
         planIdRef.current = res.planId;
       } catch {
         await say("ملاحظة: تعذّر الاتصال بالخادم الآن، فلن تُحفظ خطتك تلقائيًا. تقدر تكمل وتطبعها.", {}, 300);
