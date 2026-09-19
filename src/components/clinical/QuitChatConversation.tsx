@@ -26,6 +26,21 @@ type Msg = {
 };
 type QuickReply = { label: string; value: string };
 
+/** Server calls can fail on cold starts or flaky mobile networks — retry briefly. */
+async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
+  let lastError: unknown;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      lastError = e;
+      if (i < attempts - 1) await new Promise((r) => setTimeout(r, 600 * (i + 1)));
+    }
+  }
+  throw lastError;
+}
+
+
 function anonId(): string {
   const k = "aqla_anon_session";
   let v = typeof window !== "undefined" ? localStorage.getItem(k) : null;
@@ -105,9 +120,16 @@ export function QuitChatConversation({
     setLocked(true);
     setTyping(true);
     try {
-      const res = await finalizeClinicalPlan({
-        data: { planId: planIdRef.current!, answers: a as Record<string, unknown> },
-      });
+      // The session may have started without a server plan row (offline / cold start).
+      if (!planIdRef.current) {
+        const started = await withRetry(() => startClinicalPlan({ data: { anonymousSessionId: anonId() } }));
+        planIdRef.current = started.planId;
+      }
+      const res = await withRetry(() =>
+        finalizeClinicalPlan({
+          data: { planId: planIdRef.current!, answers: a as Record<string, unknown> },
+        }),
+      );
       setTyping(false);
       onPlan(res.plan);
       const emailLine =
@@ -158,16 +180,47 @@ export function QuitChatConversation({
         },
       ]);
 
-    } catch (e) {
+    } catch {
+      // Offline fallback: build the exact same deterministic plan locally so the
+      // user is never left at a dead end. Nothing is saved server-side.
       setTyping(false);
-      setLocked(false);
-      await say(
-        `ما قدرنا نحفظ خطتك الآن بسبب مشكلة تقنية (${(e as Error).message}). جرّب مرة ثانية بعد قليل — إجاباتك ما زالت محفوظة في هذه الجلسة.`,
-        {},
-        200,
-      );
+      try {
+        const { generatePlan } = await import("@/lib/clinical/plan-engine");
+        const localPlan = generatePlan({ answers: a, planVersion: 1 });
+        onPlan(localPlan);
+        await say(
+          localPlan.safety.suppress_plan
+            ? "سلامتك أولًا — راجع التنبيه بالأسفل."
+            : `تمت خطتك يا ${localPlan.identity.nickname}. تعذّر الاتصال بالخادم، فلم نحفظها ولم نرسلها بالبريد — لكن تقدر تعرضها وتطبعها الآن.`,
+          { plan: localPlan },
+          300,
+        );
+        setMessages((m) => [
+          ...m,
+          {
+            from: "bot",
+            text: "تقدر تطبع خطتك الآن، أو تحاول حفظها مرة ثانية.",
+            actions: [
+              { label: "طباعة خطتي", onClick: () => window.print(), icon: "print" },
+              {
+                label: "إعادة المحاولة للحفظ",
+                onClick: () => void finish(a),
+                variant: "secondary",
+              },
+            ],
+          },
+        ]);
+      } catch {
+        setLocked(false);
+        await say(
+          "ما قدرنا نحفظ خطتك الآن بسبب مشكلة في الاتصال. جرّب مرة ثانية بعد قليل — إجاباتك ما زالت محفوظة في هذه الجلسة.",
+          {},
+          200,
+        );
+      }
     }
   };
+
 
   const emergencyHold = async (a: ClinicalAnswers) => {
     setCurrent(null);
