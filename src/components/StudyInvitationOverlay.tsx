@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
 import SaudiFlagWave from "@/components/SaudiFlagWave";
-import { ResearchBanner } from "@/components/ResearchBanner";
 import { trackEvent } from "@/lib/track-event";
 import aqlaLogo from "@/assets/aqla-logo-transparent.png";
 
@@ -375,14 +374,6 @@ export function StudyInvitationOverlay() {
 
 
           <div className="pointer-events-none relative z-10 flex h-full flex-col">
-            <div className="pointer-events-auto relative z-20">
-              <ResearchBanner
-                onNavigate={() => {
-                  persist();
-                  close();
-                }}
-              />
-            </div>
             <div className="flex flex-1 items-center justify-center overflow-y-auto px-4 py-4 sm:px-6 sm:py-6">
 
 
