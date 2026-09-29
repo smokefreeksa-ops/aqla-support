@@ -20,7 +20,7 @@ async function getServerEntry(): Promise<ServerEntry> {
 
 // Central production security headers, applied to every response (normal and
 // branded error pages). CSP is limited to the browser-facing origins the app
-// actually uses: Google Fonts, api.qrserver.com QR images, and Supabase
+// actually uses: Supabase
 // HTTPS/WSS auth/data/realtime traffic. No COOP/COEP/CORP (would break OAuth
 // and cross-origin resources); HSTS is left to the platform.
 const CONTENT_SECURITY_POLICY = [
@@ -31,10 +31,10 @@ const CONTENT_SECURITY_POLICY = [
   // TanStack/React production hydration injects inline bootstrap scripts.
   "script-src 'self' 'unsafe-inline'",
   // Inline styles + Google Fonts stylesheet.
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "font-src 'self' data: https://fonts.gstatic.com",
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self' data:",
   // Self/data/blob images + QR code image host.
-  "img-src 'self' data: blob: https://api.qrserver.com https://*.supabase.co",
+  "img-src 'self' data: blob: https://*.supabase.co",
   // Supabase auth/data/realtime over HTTPS and WebSocket.
   // Google Apps Script: /survey.html saves study answers to the study Google Sheet
   // (script.google.com redirects to script.googleusercontent.com).
