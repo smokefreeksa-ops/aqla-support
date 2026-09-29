@@ -73,11 +73,11 @@ const AcademyCertificateEmail = ({
 
           <Text style={small}>
             This certificate can be verified any time using the code above at
-            aqla1.com.
+            smokesfreeksa.com.
           </Text>
           <Text style={smallAr}>
             يمكن التحقق من هذه الشهادة في أي وقت باستخدام الرمز أعلاه عبر
-            aqla1.com.
+            smokesfreeksa.com.
           </Text>
         </Section>
 

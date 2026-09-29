@@ -1074,7 +1074,7 @@ function ResultView({
 
   <footer>
     <div>Aqla — ${isAr ? "منصة دعم الإقلاع عن النيكوتين" : "Nicotine Cessation Support Platform"}</div>
-    <div>aqla1.com &nbsp;•&nbsp; ${result.participantCode}</div>
+    <div>smokesfreeksa.com &nbsp;•&nbsp; ${result.participantCode}</div>
   </footer>
 </div>
 <script>
