@@ -77,6 +77,7 @@ export function brokeredPreviewStorage() {
       return localStorage.getItem(key);
     },
     setItem: (key: string, value: string) => {
+      localStorage.setItem(key, value);
       return request('lovable-preview-auth:set', key, value).then(() => undefined);
     },
     removeItem: (key: string) => {
