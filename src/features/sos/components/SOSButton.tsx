@@ -41,7 +41,7 @@ export function SOSButton({
       <Link
         to="/sos"
         onClick={() => track("sos_opened", "fab")}
-        aria-label="نجدة — أريد التدخين الآن"
+        aria-label="دعم فوري — Quick Support"
         className="aqla-sos-fab fixed z-[60] grid place-items-center h-14 w-14 sm:h-[72px] sm:w-[72px] rounded-full text-white select-none active:scale-95 transition-transform focus:outline-none focus-visible:ring-4 focus-visible:ring-red-300"
         style={{
           bottom: "calc(env(safe-area-inset-bottom, 0px) + 64px)",
@@ -53,8 +53,8 @@ export function SOSButton({
         }}
       >
         <span className="flex flex-col items-center leading-none">
-          <span className="text-[14px] font-extrabold tracking-tight">نجدة</span>
-          <span className="text-[9px] mt-0.5 opacity-90">SOS</span>
+          <span className="text-[11px] sm:text-[13px] font-extrabold tracking-tight">دعم فوري</span>
+          <span className="text-[8px] sm:text-[10px] mt-0.5 opacity-90 tracking-tight">Quick Support</span>
         </span>
       </Link>
     </>
