@@ -34,7 +34,7 @@ const CONTENT_SECURITY_POLICY = [
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' data: https://fonts.gstatic.com",
   // Self/data/blob images + QR code image host.
-  "img-src 'self' data: blob: https://api.qrserver.com",
+  "img-src 'self' data: blob: https://api.qrserver.com https://*.supabase.co",
   // Supabase auth/data/realtime over HTTPS and WebSocket.
   "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
   "media-src 'self' blob: data:",
