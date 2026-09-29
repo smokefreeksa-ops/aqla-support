@@ -4,24 +4,23 @@ import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 /**
- * Anonymous counter for the "Smoke-free Campus" awareness cards (/qarari).
- * Reuses the poster tables; rows are marked poster_type = "kau_awareness_m" | "kau_awareness_f".
- * Names typed on the cards never reach the server.
- *   GET  → { ok, count }            number of cards made so far
- *   POST → { action: "create", … } → { ok, number }   supporter number for this browser
+ * Anonymous count for KAU's "Smoke-Free University" cards (/kau).
+ * Reuses the poster tables with poster_type = "kau_smokefree".
+ * Names and photos stay on the visitor's device and never reach the server.
+ *   GET  → { ok, count }                         cards made so far
+ *   POST → { action: "create", … } → { ok, count }  once per browser
  *          { action: "save" | "share" | "x" | "whatsapp", … } → { ok }
  */
-const TYPE_PREFIX = "kau_awareness";
+const POSTER_TYPE = "kau_smokefree";
 
 const Body = z.object({
   action: z.enum(["create", "save", "share", "x", "whatsapp"]),
-  style: z.string().regex(/^[a-z]{2,16}$/),
+  design: z.string().regex(/^[a-z]{2,16}$/),
   size: z.enum(["x", "sq", "story"]).optional(),
-  gender: z.enum(["m", "f"]),
   lang: z.enum(["ar", "en"]).optional(),
   message: z
     .string()
-    .regex(/^[a-z0-9]{1,8}$/)
+    .regex(/^([a-z]{1,2}\d{1,2}|custom)$/)
     .optional(),
   sid: z.string().max(128).optional(),
 });
@@ -33,25 +32,23 @@ function json(body: unknown, status = 200): Response {
   });
 }
 
-async function countCards(upTo?: string): Promise<number> {
-  let query = supabaseAdmin
+async function countCards(): Promise<number> {
+  const { count, error } = await supabaseAdmin
     .from("poster_creations")
     .select("id", { count: "exact", head: true })
-    .like("poster_type", `${TYPE_PREFIX}%`);
-  if (upTo) query = query.lte("created_at", upTo);
-  const { count, error } = await query;
+    .eq("poster_type", POSTER_TYPE);
   if (error) throw error;
   return count ?? 0;
 }
 
-export const Route = createFileRoute("/api/qarari")({
+export const Route = createFileRoute("/api/kau-cards")({
   server: {
     handlers: {
       GET: async () => {
         try {
           return json({ ok: true, count: await countCards() });
         } catch (e) {
-          console.error("qarari count error", e);
+          console.error("kau-cards count error", e);
           return json({ ok: false }, 500);
         }
       },
@@ -62,34 +59,29 @@ export const Route = createFileRoute("/api/qarari")({
         } catch {
           return json({ ok: false, error: "bad_request" }, 400);
         }
-        const posterType = `${TYPE_PREFIX}_${body.gender}`;
         try {
           if (body.action === "create") {
-            const { data, error } = await supabaseAdmin
-              .from("poster_creations")
-              .insert({
-                poster_type: posterType,
-                template_name: body.style,
-                message_key: body.message ?? null,
-                language: body.lang ?? null,
-                export_size: body.size ?? null,
-                anonymous_session_id: body.sid ?? null,
-              })
-              .select("created_at")
-              .single();
+            const { error } = await supabaseAdmin.from("poster_creations").insert({
+              poster_type: POSTER_TYPE,
+              template_name: body.design,
+              message_key: body.message ?? null,
+              language: body.lang ?? null,
+              export_size: body.size ?? null,
+              anonymous_session_id: body.sid ?? null,
+            });
             if (error) throw error;
-            return json({ ok: true, number: await countCards(data.created_at) });
+            return json({ ok: true, count: await countCards() });
           }
           const { error } = await supabaseAdmin.from("poster_events").insert({
             event_type: `kau_${body.action}`,
-            poster_type: posterType,
-            template_name: body.style,
+            poster_type: POSTER_TYPE,
+            template_name: body.design,
             anonymous_session_id: body.sid ?? null,
           });
           if (error) throw error;
           return json({ ok: true });
         } catch (e) {
-          console.error("qarari save error", e);
+          console.error("kau-cards save error", e);
           return json({ ok: false }, 500);
         }
       },

@@ -3,8 +3,8 @@ import { useRouterState } from "@tanstack/react-router";
 
 import { track } from "@/lib/events";
 
-// KAU "Smoke-free Campus" awareness-card maker (static page, no sign-in).
-export const AWARENESS_CARD_URL = "/qarari";
+// KAU "Smoke-Free University" campaign page (static page, no sign-in).
+export const AWARENESS_CARD_URL = "/kau";
 const STORAGE_KEY = "aqla_awareness_fab_dismissed";
 
 /**
@@ -64,7 +64,7 @@ export function AwarenessCampaignButton() {
       style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 12px)" }}
     >
       <div
-        className="pointer-events-auto flex max-w-full items-center gap-1 rounded-full border border-[#52DBA8]/50 bg-[#062520]/95 py-1 pe-1 ps-1 shadow-[0_14px_30px_rgba(0,0,0,0.35)] backdrop-blur-md"
+        className="pointer-events-auto flex max-w-full items-center gap-1 rounded-full border border-[#52DBA8]/50 bg-[#06281F]/95 py-1 pe-1 ps-1 shadow-[0_14px_30px_rgba(0,0,0,0.35)] backdrop-blur-md"
         style={{ animation: "aqlaFabIn 500ms cubic-bezier(0.22,1,0.36,1)" }}
       >
         <style>{`@keyframes aqlaFabIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@media (prefers-reduced-motion: reduce){[style*="aqlaFabIn"]{animation:none!important}}`}</style>
@@ -75,14 +75,23 @@ export function AwarenessCampaignButton() {
         >
           <span
             aria-hidden
-            className="shrink-0 rounded-md border-2 border-dotted border-[#52DBA8] px-2 py-0.5 text-[13px] font-extrabold leading-tight text-[#F6F0E4]"
+            className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#E2B85E] text-[#06281F]"
           >
-            قراري
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              className="h-4 w-4"
+            >
+              <path d="M12 3v7M12 10c-2 0-3 1.5-4.5 3.5S5 21 5 21M12 10c2 0 3 1.5 4.5 3.5S19 21 19 21" />
+            </svg>
           </span>
           <span className="min-w-0 truncate">
-            <span className="text-[#52DBA8]">جامعة بلا تدخين</span>
+            <span className="text-[#5ADBA9]">جامعة بلا تدخين</span>
             <span className="mx-1.5 text-white/40">·</span>
-            صمّم بطاقتك<span className="hidden sm:inline"> التوعوية</span>
+            اصنع بطاقتك
           </span>
         </a>
         <button

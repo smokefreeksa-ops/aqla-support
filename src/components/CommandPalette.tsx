@@ -18,12 +18,27 @@ type Entry = { ar: string; en: string; to: string; group: string };
 
 const QUICK: Entry[] = [
   { ar: "متابعة التعلم", en: "Continue learning", to: "/dashboard/learning", group: "quick" },
-  { ar: "ابدأ التقييم النهائي", en: "Start final assessment", to: appRoutes.assessment, group: "quick" },
+  {
+    ar: "ابدأ التقييم النهائي",
+    en: "Start final assessment",
+    to: appRoutes.assessment,
+    group: "quick",
+  },
   { ar: "شهاداتي", en: "My certificates", to: "/dashboard/certificates", group: "quick" },
   { ar: "أنشئ بطاقة إنجازك", en: "Create your poster", to: "/poster-studio", group: "quick" },
   { ar: "دعم فوري للرغبة", en: "Craving SOS", to: appRoutes.cravingCoach, group: "quick" },
-  { ar: "شارك في الدراسة", en: "Join the study", to: "https://smokesfreeksa.com/survey.html", group: "quick" },
-  { ar: "جامعة بلا تدخين · صمّم بطاقتك التوعوية", en: "Smoke-free Campus · design your awareness card", to: "https://smokesfreeksa.com/qarari", group: "quick" },
+  {
+    ar: "شارك في الدراسة",
+    en: "Join the study",
+    to: "https://smokesfreeksa.com/survey.html",
+    group: "quick",
+  },
+  {
+    ar: "جامعة بلا تدخين · اصنع بطاقتك",
+    en: "Smoke-Free University · create your card",
+    to: "https://smokesfreeksa.com/kau",
+    group: "quick",
+  },
 ];
 
 const PAGES: Entry[] = [
@@ -93,7 +108,11 @@ export function CommandPalette() {
 
   const render = (list: Entry[]) =>
     list.map((e) => (
-      <CommandItem key={`${e.group}-${e.to}-${e.en}`} value={`${e.ar} ${e.en}`} onSelect={() => go(e)}>
+      <CommandItem
+        key={`${e.group}-${e.to}-${e.en}`}
+        value={`${e.ar} ${e.en}`}
+        onSelect={() => go(e)}
+      >
         <span dir="rtl">{e.ar}</span>
         <span className="ms-auto text-xs text-muted-foreground">{e.en}</span>
       </CommandItem>

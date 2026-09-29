@@ -48,11 +48,11 @@ export function ResearchBanner({ onNavigate }: { onNavigate?: () => void } = {})
             className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-[#062520] px-2.5 py-1 text-[10px] font-bold text-white ring-1 ring-[#52DBA8]/70 transition-colors hover:bg-[#0A3930] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:text-[11px]"
           >
             <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#52DBA8]" />
-            <span className="text-[#52DBA8]">جامعة بلا تدخين</span>
+            <span className="text-[#5ADBA9]">جامعة بلا تدخين</span>
             <span aria-hidden className="text-white/40">
               ·
             </span>
-            صمّم بطاقتك التوعوية
+            اصنع بطاقتك
           </a>
 
           <button

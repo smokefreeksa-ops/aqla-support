@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 
-// Short, shareable address for the KAU "Smoke-free Campus" awareness-card maker.
-// The page itself is the static file public/qarari.html (no sign-in needed).
-export const Route = createFileRoute("/qarari")({
+// Short, shareable address for KAU's "Smoke-Free University" campaign page (no sign-in).
+// The page itself is the static file public/kau.html.
+export const Route = createFileRoute("/kau")({
   server: {
     handlers: {
       GET: async ({ request }) => {
-        const target = new URL("/qarari.html", request.url);
+        const target = new URL("/kau.html", request.url);
         target.search = new URL(request.url).search;
         return new Response(null, {
           status: 302,
