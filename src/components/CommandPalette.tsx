@@ -22,7 +22,7 @@ const QUICK: Entry[] = [
   { ar: "شهاداتي", en: "My certificates", to: "/dashboard/certificates", group: "quick" },
   { ar: "أنشئ بطاقة إنجازك", en: "Create your poster", to: "/poster-studio", group: "quick" },
   { ar: "دعم فوري للرغبة", en: "Craving SOS", to: appRoutes.cravingCoach, group: "quick" },
-  { ar: "شارك في الدراسة", en: "Join the study", to: "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM", group: "quick" },
+  { ar: "شارك في الدراسة", en: "Join the study", to: "https://smokesfreeksa.com/survey.html", group: "quick" },
 ];
 
 const PAGES: Entry[] = [

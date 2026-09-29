@@ -1,0 +1,2562 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<script>
+/* ==========================================================================
+   ONE SETTING — only needed when this page is hosted outside Google
+   (GitHub Pages, a KAU web server, …). Paste your Apps Script "Web app" link
+   (it ends in /exec) between the quotes. Leave it as it is in the Apps Script copy.
+   ========================================================================== */
+var API_URL = 'https://script.google.com/macros/s/AKfycbwFRS6qYmr24LlcWMGbmEHxO4sUXhy1a4D8p_wPeEHaPxxFLmuVpTL2j9L7lm8q9xoBnQ/exec';
+</script>
+<base target="_top">
+<title>Nicotine Pouch Study | دراسة أظرف النيكوتين</title>
+<meta name="description" content="King Abdulaziz University research survey — about 5–7 minutes, confidential. | استبيان بحثي — جامعة الملك عبدالعزيز">
+<meta property="og:title" content="Nicotine Pouch Use and Cigarette Abstinence | استخدام أظرف النيكوتين والامتناع عن تدخين السجائر">
+<meta property="og:description" content="King Abdulaziz University research survey — about 5–7 minutes, confidential. | استبيان بحثي من جامعة الملك عبدالعزيز — ٥-٧ دقائق، سري">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23006C35'/%3E%3Cpath d='M14 28l18-10 18 10-18 10z' fill='none' stroke='%23fff' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M22 33v9c0 2 4.5 5 10 5s10-3 10-5v-9' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#004D26">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================ TOKENS */
+:root{
+  --green-flag:#006C35; --green-deep:#004D26; --green-night:#00331A; --green-mid:#1B8A4F;
+  --green-soft:#E8F3EC; --green-mist:#F4F9F6; --white:#FFFFFF; --ink:#14231B; --ink-soft:#4F6358;
+  --line:#D5E3DA; --error:#B42318; --gold:#C8A24A;
+  --ring:rgba(0,108,53,.22);
+  --font-en:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-ar:'IBM Plex Sans Arabic','Tajawal',system-ui,-apple-system,'Segoe UI',Tahoma,Arial,sans-serif;
+  --fs-en:16px; --fs-ar:17.5px; --lh-en:1.5; --lh-ar:1.75;
+  --gutter:28px; --card-pad:40px; --radius:20px; --opt-radius:14px;
+  --shadow:0 1px 2px rgba(0,51,26,.05),0 6px 16px rgba(0,51,26,.06),0 24px 48px -12px rgba(0,51,26,.10);
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--green-mist);color:var(--ink);font-family:var(--font-en);font-size:var(--fs-en);line-height:var(--lh-en);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+[lang="ar"]{font-family:var(--font-ar);font-size:var(--fs-ar);line-height:var(--lh-ar)}
+[lang="en"]{font-family:var(--font-en)}
+button,input,select,textarea{font:inherit;color:inherit}
+strong{font-weight:700}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid rgba(0,108,53,.55);outline-offset:2px}
+
+/* ============================================================ BILINGUAL GRID */
+.bi{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:var(--gutter);position:relative}
+.bi::before{content:"";position:absolute;left:50%;top:3px;bottom:3px;width:1px;background:var(--line);transform:translateX(-.5px);pointer-events:none}
+.bi.no-rule::before{display:none}
+.bi>.en{grid-column:1;text-align:left;min-width:0;overflow-wrap:anywhere}
+.bi>.ar{grid-column:2;text-align:right;min-width:0;overflow-wrap:anywhere}
+
+/* ============================================================ HEADER */
+.site-header{position:sticky;top:0;z-index:30;color:#fff}
+.hdr{position:relative;background:linear-gradient(120deg,var(--green-deep) 0%,var(--green-night) 100%);overflow:hidden}
+.hdr::before{content:"";position:absolute;inset:0;opacity:.07;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1'%3E%3Cpath d='M28 6l6.4 15.6L50 28l-15.6 6.4L28 50l-6.4-15.6L6 28l15.6-6.4z'/%3E%3Cpath d='M12.4 12.4h31.2v31.2H12.4z' transform='rotate(45 28 28)'/%3E%3Ccircle cx='28' cy='28' r='5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:56px 56px}
+.hdr::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--gold) 18%,var(--gold) 82%,transparent 100%);opacity:.9}
+.hdr-inner{position:relative;max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;
+  padding:18px 24px 20px;transition:padding .25s var(--ease)}
+.site-header.compact .hdr-inner{padding:10px 24px 12px}
+.uni{display:flex;align-items:center;gap:10px;font-weight:600;letter-spacing:.1px;min-width:0}
+.uni.en{justify-content:flex-start;font-size:15px}
+.uni.ar{justify-content:flex-end;font-size:16.5px;line-height:1.5}
+.uni .mark{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.uni .mark svg{width:16px;height:16px}
+.hdr-title{display:flex;align-items:center;gap:14px;font-size:13px;color:rgba(255,255,255,.82);white-space:nowrap}
+.hdr-title .ar{font-size:14px;line-height:1.4}
+.hdr-title .dot{width:4px;height:4px;border-radius:50%;background:var(--gold)}
+.progress-wrap{background:rgba(244,249,246,.94);-webkit-backdrop-filter:saturate(1.4) blur(10px);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line);color:var(--ink-soft);
+  transition:opacity .25s var(--ease)}
+.progress-wrap[hidden]{display:none}
+.progress-inner{max-width:880px;margin:0 auto;padding:9px 20px 11px}
+.progress-labels{font-size:12.5px;font-weight:500;margin-bottom:7px}
+.progress-labels [lang="ar"]{font-size:13.5px;line-height:1.4}
+.progress-labels.bi::before{display:none}
+.track{height:5px;border-radius:99px;background:#DCE9E1;overflow:hidden}
+.fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--green-mid),var(--green-flag));transition:width .5s var(--ease)}
+
+/* ============================================================ LAYOUT */
+main{flex:1;width:100%;padding:32px 20px 40px}
+.card{max-width:880px;margin:0 auto;background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(213,227,218,.7);overflow:clip;scroll-margin-top:110px}
+.view{padding:var(--card-pad) var(--card-pad) 12px;outline:none}
+.view.enter-fwd{animation:enterFwd .26s var(--ease) both}
+.view.enter-back{animation:enterBack .26s var(--ease) both}
+.view.enter-fade{animation:enterFade .3s var(--ease) both}
+@keyframes enterFwd{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+@keyframes enterBack{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+@keyframes enterFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ============================================================ SCREEN HEADING */
+.screen-title{margin:0 0 10px;font-weight:700;color:var(--green-deep)}
+.screen-title .en{font-size:22px;line-height:1.3;letter-spacing:0}
+.screen-title .ar{font-size:23px;line-height:1.55}
+.screen-title .en::after,.screen-title .ar::after{content:"";display:block;width:36px;height:3px;border-radius:3px;background:var(--green-flag);margin-top:12px}
+.screen-title .ar::after{margin-left:auto}
+
+/* ============================================================ QUESTIONS */
+.q-wrap{display:grid;grid-template-rows:1fr;opacity:1;transition:grid-template-rows .34s var(--ease),opacity .26s var(--ease)}
+.q-wrap.is-hidden{grid-template-rows:0fr;opacity:0}
+.q-inner{min-height:0;overflow:hidden;margin:0 -8px;padding:0 8px}
+.q-wrap.is-hidden .q-inner{visibility:hidden;transition:visibility 0s .34s}
+.no-anim,.no-anim *{transition:none!important}
+.q{border:0;margin:0;padding:26px 0;min-width:0}
+.q-wrap.sep .q{border-top:1px solid var(--line)}
+.q-legend{float:left;width:100%;padding:0;margin:0 0 14px;color:var(--ink)}
+.q-legend+*{clear:both}
+.q>*:not(.q-legend){clear:both}
+.q-title .en{font-weight:600;font-size:16.5px;line-height:1.5}
+.q-title .ar{font-weight:600;font-size:18px;line-height:1.75}
+.req{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green-flag);vertical-align:middle;position:relative;top:-2px;margin:0 7px;box-shadow:0 0 0 3px rgba(0,108,53,.12)}
+.q-note{margin:-6px 0 14px;color:var(--ink-soft)}
+.q-note .en{font-size:14px;line-height:1.5}
+.q-note .ar{font-size:15px;line-height:1.7}
+.stem{margin:22px 0 4px;padding:16px 18px;border-radius:16px;background:var(--green-soft);color:var(--green-deep);font-weight:600}
+.stem .en{font-size:15.5px}
+.stem .ar{font-size:17px}
+.stem.bi::before{background:rgba(0,108,53,.18)}
+.matrix-item .q{padding:20px 0}
+
+/* Option cards */
+.opts{display:grid;gap:10px}
+.opt{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr);align-items:center;column-gap:16px;min-height:54px;padding:12px 16px;
+  background:var(--white);border:1.5px solid var(--line);border-radius:var(--opt-radius);cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;
+  transition:border-color .18s var(--ease),background-color .18s var(--ease),box-shadow .18s var(--ease),transform .12s var(--ease)}
+.opt input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+.opt .o-en{grid-column:1;text-align:left;font-size:15.5px;line-height:1.45;font-weight:500;min-width:0;overflow-wrap:anywhere}
+.opt .o-ar{grid-column:3;text-align:right;font-size:17px;line-height:1.6;font-weight:500;min-width:0;overflow-wrap:anywhere}
+.opt .ind{grid-column:2;justify-self:center;width:24px;height:24px;border-radius:50%;border:2px solid #A9C2B3;background:#fff;display:grid;place-items:center;
+  transition:all .18s var(--ease)}
+.opt.cb .ind{border-radius:7px}
+.opt .ind svg{width:14px;height:14px;opacity:0;transform:scale(.4);transition:all .2s var(--ease)}
+@media (hover:hover){
+  .opt:hover{border-color:#9CC3AD;box-shadow:0 6px 16px -8px rgba(0,77,38,.25);transform:translateY(-1px)}
+}
+.opt:active{transform:scale(.985)}
+.opt.is-selected{border-color:var(--green-flag);background:var(--green-soft);box-shadow:0 0 0 1px var(--green-flag) inset}
+.opt.is-selected .ind{background:var(--green-flag);border-color:var(--green-flag)}
+.opt.is-selected .ind svg{opacity:1;transform:scale(1)}
+.opt:has(input:focus-visible){box-shadow:0 0 0 4px var(--ring);border-color:var(--green-flag)}
+.opt.kbd-focus{box-shadow:0 0 0 4px var(--ring);border-color:var(--green-flag)}
+.q.has-error .opt{border-color:rgba(180,35,24,.45)}
+.q.has-error .opt.is-selected{border-color:var(--green-flag)}
+
+/* Inputs */
+.field-wrap{position:relative}
+.field{display:block;width:100%;min-height:56px;padding:14px 18px;border:1.5px solid var(--line);border-radius:var(--opt-radius);background:#fff;
+  font-family:var(--font-en);font-size:18px;font-weight:600;color:var(--ink);text-align:center;letter-spacing:.3px;
+  transition:border-color .18s var(--ease),box-shadow .18s var(--ease);-webkit-appearance:none;appearance:none}
+.field.left{text-align:left;font-weight:500;font-size:17px}
+.field:focus{outline:none;border-color:var(--green-flag);box-shadow:0 0 0 4px var(--ring)}
+textarea.field{min-height:150px;resize:vertical;text-align:start;font-weight:400;font-size:16px;line-height:1.6;padding:14px 16px;font-family:var(--font-en),var(--font-ar)}
+.ph{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 18px;pointer-events:none;color:#8CA497;font-weight:400;transition:opacity .15s}
+.ph.top{align-items:flex-start;padding-top:15px}
+.ph .en{font-size:15px}
+.ph .ar{font-size:16px;line-height:1.5}
+.field-wrap.has-value .ph{opacity:0}
+.q.has-error .field{border-color:var(--error)}
+.q.has-error .field:focus{box-shadow:0 0 0 4px rgba(180,35,24,.15)}
+.select{text-align:left;font-weight:500;font-size:16.5px;padding-right:48px;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23006C35' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 18px center}
+.select.is-empty{color:#6F877A;font-weight:400}
+.counter{margin-top:8px;color:var(--ink-soft);font-size:13px}
+.counter [lang="ar"]{font-size:14px}
+.counter.over{color:var(--error)}
+
+/* Errors */
+.err{margin-top:12px;color:var(--error);font-weight:500}
+.err:empty{display:none;margin:0}
+.err .en{font-size:14px;line-height:1.45}
+.err .ar{font-size:15px;line-height:1.6}
+.err .bi::before{background:rgba(180,35,24,.25)}
+.err-ic{display:inline-block;width:15px;height:15px;vertical-align:-2px;margin:0 6px 0 0}
+.err .ar .err-ic{margin:0 0 0 6px}
+
+/* ============================================================ NAVIGATION + BUTTONS */
+.navbar{position:sticky;bottom:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px var(--card-pad) 22px;
+  background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+.navbar[hidden]{display:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:0 22px;border-radius:14px;border:1.5px solid transparent;cursor:pointer;
+  font-weight:600;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:background-color .18s var(--ease),border-color .18s var(--ease),box-shadow .18s var(--ease),transform .12s var(--ease),opacity .18s}
+.btn [lang="en"]{font-size:15.5px}
+.btn [lang="ar"]{font-size:16.5px;line-height:1.2}
+.btn .sep{width:1px;height:18px;background:currentColor;opacity:.3}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--green-flag);color:#fff;box-shadow:0 8px 18px -8px rgba(0,108,53,.6)}
+@media (hover:hover){.btn-primary:hover{background:var(--green-deep)}.btn-outline:hover{background:var(--green-soft)}}
+.btn-primary:active{background:var(--green-deep)}
+.btn-outline{background:#fff;color:var(--green-deep);border-color:#B7D1C1}
+.btn[disabled]{opacity:.6;cursor:not-allowed;transform:none}
+.btn .spinner{display:none;width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .8s linear infinite}
+.btn.btn-outline .spinner{border-color:rgba(0,77,38,.25);border-top-color:var(--green-deep)}
+.btn.is-busy .spinner{display:inline-block}
+.btn.is-busy .lbl{opacity:.85}
+.btn .lbl{display:inline-flex;align-items:center;gap:12px}
+.btn .lbl,.btn .lbl *,.btn .spinner{pointer-events:none}  /* taps always land on the button itself */
+.btn-lg{min-height:60px;padding:0 40px;border-radius:16px}
+.btn-lg [lang="en"]{font-size:17px}
+.btn-lg [lang="ar"]{font-size:18.5px}
+#nextBtn{min-width:180px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============================================================ SPECIAL SCREENS */
+.center{text-align:center}
+.welcome{padding:12px 0 30px}
+.welcome .gold{width:56px;height:3px;border-radius:3px;background:var(--gold);margin:0 auto 26px}
+.w-title{margin:0 0 22px;color:var(--green-deep);font-weight:700}
+.w-title .en{font-size:27px;line-height:1.28;letter-spacing:-.1px}
+.w-title .ar{font-size:27px;line-height:1.55}
+.big-q{margin:0 0 26px;padding:26px 24px;border-radius:18px;background:linear-gradient(180deg,var(--green-soft),#F3F9F5);border:1px solid #D3E8DB;color:var(--green-flag);font-weight:600}
+.big-q .en{font-size:21px;line-height:1.4}
+.big-q .ar{font-size:23px;line-height:1.65}
+.big-q.bi::before{background:rgba(0,108,53,.2)}
+.w-meta{color:var(--ink-soft);margin-bottom:10px}
+.w-meta .en{font-size:15.5px}
+.w-meta .ar{font-size:16.5px}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:22px 0 30px}
+.chip{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);font-weight:500;min-width:0}
+.chip svg{flex:none;width:20px;height:20px;color:var(--green-mid)}
+.chip .t{display:flex;justify-content:space-between;gap:10px;flex:1;min-width:0}
+.chip .t [lang="en"]{font-size:14px}
+.chip .t [lang="ar"]{font-size:15px;line-height:1.5;text-align:right}
+.actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.end{padding:28px 0 36px;text-align:center}
+.end .icon{width:92px;height:92px;margin:0 auto 26px}
+.end h2{margin:0 0 14px;color:var(--green-deep);font-weight:700}
+.end h2 .en{font-size:24px;line-height:1.35}
+.end h2 .ar{font-size:25px;line-height:1.55}
+.end .msg{color:var(--ink-soft);margin-bottom:26px}
+.end .msg .en{font-size:16px}
+.end .msg .ar{font-size:17px}
+.check-circle{stroke:var(--green-flag);stroke-width:3.5;fill:none;stroke-dasharray:252;stroke-dashoffset:252;animation:draw .7s var(--ease) .1s forwards}
+.check-bg{fill:var(--green-soft);transform-origin:center;animation:pop .5s var(--ease) both}
+.check-mark{stroke:var(--green-flag);stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;animation:draw .45s var(--ease) .65s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.end.err-view h2{color:var(--error)}
+
+/* ============================================================ FOOTER */
+footer{padding:4px 20px 28px;color:var(--ink-soft)}
+footer .bi{max-width:880px;margin:0 auto}
+footer .en{font-size:13px}
+footer .ar{font-size:14px}
+footer .bi::before{background:#C9DBD0}
+
+/* ============================================================ RESPONSIVE */
+@media (max-width:760px){
+  .hdr-title{display:none}
+  .hdr-inner{grid-template-columns:1fr 1fr;padding:14px 16px 16px}
+  .site-header.compact .hdr-inner{padding:9px 16px 11px}
+}
+@media (max-width:600px){
+  :root{--fs-en:14.5px;--fs-ar:16px;--gutter:18px;--card-pad:20px;--radius:18px}
+  main{padding:16px 10px 20px}
+  .uni.en{font-size:13px}.uni.ar{font-size:14px}
+  .uni .mark{display:none}
+  .progress-inner{padding:8px 14px 10px}
+  .screen-title .en{font-size:18px}.screen-title .ar{font-size:19px}
+  .q{padding:22px 0}
+  .q-title .en{font-size:15px}.q-title .ar{font-size:16.5px}
+  .q-note .en{font-size:13px}.q-note .ar{font-size:14px}
+  .opt{column-gap:10px;padding:11px 12px;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);min-height:52px}
+  .opt .o-en{font-size:14px}.opt .o-ar{font-size:15.5px;line-height:1.55}
+  .opt .ind{width:22px;height:22px}
+  .navbar{padding:12px var(--card-pad) calc(14px + env(safe-area-inset-bottom))}
+  .btn{padding:0 16px;gap:9px}
+  #nextBtn{min-width:0;flex:1}
+  .w-title .en{font-size:20px}.w-title .ar{font-size:21px}
+  .big-q{padding:18px 16px}
+  .big-q .en{font-size:17px}.big-q .ar{font-size:18.5px}
+  .chips{grid-template-columns:1fr}
+  .btn-lg{width:100%}
+  .end h2 .en{font-size:19px}.end h2 .ar{font-size:20px}
+  .ph{padding:0 14px}.ph .en{font-size:13.5px}.ph .ar{font-size:14.5px}
+}
+@media (max-width:370px){
+  :root{--fs-en:13.5px;--fs-ar:15px;--gutter:12px;--card-pad:14px}
+  main{padding:12px 6px 16px}
+  .opt{column-gap:8px;padding:10px 10px}
+  .opt .o-en{font-size:13px}.opt .o-ar{font-size:14.5px}
+  .q-title .en{font-size:14px}.q-title .ar{font-size:15.5px}
+  .btn [lang="en"]{font-size:14px}.btn [lang="ar"]{font-size:15px}
+  .btn{padding:0 12px;gap:7px}
+  .screen-title .en{font-size:16.5px}.screen-title .ar{font-size:17.5px}
+  .ph .en{font-size:12.5px}.ph .ar{font-size:13.5px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0s!important;transition-duration:.001ms!important;transition-delay:0s!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<header class="site-header" id="siteHeader">
+  <div class="hdr">
+    <div class="hdr-inner">
+      <div class="uni en" lang="en" dir="ltr"><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-5 9 5-9 5-9-5z"/><path d="M7 12v4.5c0 1 2.2 2.5 5 2.5s5-1.5 5-2.5V12"/></svg></span><span id="uniEn"></span></div>
+      <div class="hdr-title" aria-hidden="true"><span lang="en" dir="ltr" id="hdrTitleEn"></span><span class="dot"></span><span class="ar" lang="ar" dir="rtl" id="hdrTitleAr"></span></div>
+      <div class="uni ar" lang="ar" dir="rtl"><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-5 9 5-9 5-9-5z"/><path d="M7 12v4.5c0 1 2.2 2.5 5 2.5s5-1.5 5-2.5V12"/></svg></span><span id="uniAr"></span></div>
+    </div>
+  </div>
+  <div class="progress-wrap" id="progressWrap" hidden>
+    <div class="progress-inner">
+      <div class="progress-labels bi" aria-hidden="true"><span class="en" lang="en" dir="ltr" id="progEn"></span><span class="ar" lang="ar" dir="rtl" id="progAr"></span></div>
+      <div class="track" role="progressbar" id="progressBar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Survey progress / تقدم الاستبيان"><div class="fill" id="progressFill"></div></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="card" id="card">
+    <div class="view" id="view" tabindex="-1" aria-live="off"></div>
+    <nav class="navbar" id="navbar" hidden aria-label="Survey navigation">
+      <button type="button" class="btn btn-outline" id="backBtn"><span class="lbl"><span lang="en">Back</span><span class="sep" aria-hidden="true"></span><span lang="ar" dir="rtl">السابق</span></span><span class="spinner" aria-hidden="true"></span></button>
+      <button type="button" class="btn btn-primary" id="nextBtn"><span class="spinner" aria-hidden="true"></span><span class="lbl" id="nextLbl"></span></button>
+    </nav>
+  </div>
+</main>
+
+<footer>
+  <div class="bi"><span class="en" lang="en" dir="ltr" id="footEn"></span><span class="ar" lang="ar" dir="rtl" id="footAr"></span></div>
+</footer>
+
+<script type="application/json" id="appConfig"><?!= configJson ?></script>
+<script>
+/* Page texts. Inside Google they come from CONFIG in Code.gs; outside Google these defaults
+   show first and are replaced by the live CONFIG a moment later. */
+var DEFAULT_CONFIG = {
+ "institution_en": "King Abdulaziz University",
+ "institution_ar": "جامعة الملك عبدالعزيز",
+ "title_en": "Nicotine Pouch Use and Cigarette Abstinence",
+ "title_ar": "استخدام أظرف النيكوتين والامتناع عن تدخين السجائر",
+ "question_en": "Does Nicotine Pouch Use Support Cigarette Cessation?",
+ "question_ar": "هل يساعد استخدام أظرف النيكوتين على التوقف عن تدخين السجائر؟",
+ "intro_en": "This survey takes about 5–7 minutes. All responses are confidential.",
+ "intro_ar": "يستغرق هذا الاستبيان نحو ٥-٧ دقائق. جميع الإجابات سرية",
+ "footer_en": "Your answers are confidential.",
+ "footer_ar": "إجاباتك سرية.",
+ "prize_en": "500 SAR",
+ "prize_ar": "٥٠٠ ريال",
+ "max_text": 2000
+};
+var APP_CONFIG = (function () {
+  try {
+    var t = document.getElementById('appConfig').textContent.trim();
+    return t.charAt(0) === '{' ? JSON.parse(t) : null;
+  } catch (e) { return null; }
+})();
+var CONFIG_FROM_GOOGLE = !!APP_CONFIG;
+if (!APP_CONFIG) APP_CONFIG = DEFAULT_CONFIG;
+
+/* ==========================================================================
+   QUESTIONNAIRE DEFINITION — single source of truth.
+   Code.gs reads this same block to re-run the logic and build the Codebook.
+   Keep it valid JSON between the two markers.
+   ========================================================================== */
+var SURVEY = /*SURVEY_JSON_START*/
+{
+ "screens": [
+  {"id": "consent", "num": 1, "title_ar": "الموافقة على المشاركة", "title_en": "Consent to Participate"},
+  {"id": "age", "num": 2, "title_ar": "العمر", "title_en": "Age"},
+  {"id": "screen", "num": 3, "title_ar": "أسئلة أساسية", "title_en": "Screening Questions"},
+  {"id": "never_pouch", "num": 4, "title_ar": "منتجات التبغ والنيكوتين", "title_en": "Tobacco & Nicotine Products"},
+  {"id": "demo", "num": 5, "title_ar": "المعلومات الأساسية", "title_en": "Demographic Information"},
+  {"id": "smoke", "num": 6, "title_ar": "حالة تدخين السجائر", "title_en": "Cigarette Smoking Status"},
+  {"id": "ftnd", "num": 7, "title_ar": "درجة الاعتماد على السجائر - اختبار فاجرستروم", "title_en": "Cigarette Nicotine Dependence - Fagerström Test (FTND)"},
+  {"id": "quit", "num": 8, "title_ar": "محاولات الإقلاع", "title_en": "Quit Attempts"},
+  {"id": "lapse", "num": 9, "title_ar": "الانتكاس بعد الإقلاع والامتناع", "title_en": "Post-Quit Lapse & Abstinence"},
+  {"id": "other", "num": 10, "title_ar": "منتجات التبغ والنيكوتين الأخرى", "title_en": "Other Tobacco and Nicotine Products"},
+  {"id": "pouch", "num": 11, "title_ar": "حالة استخدام أظرف النيكوتين", "title_en": "Nicotine Pouch Status"},
+  {"id": "pouch_dep", "num": 12, "title_ar": "درجة الاعتماد الحالية على أظرف النيكوتين", "title_en": "Current Nicotine-Pouch Dependence"},
+  {"id": "reason", "num": 13, "title_ar": "أسباب الاستخدام والأهداف", "title_en": "Reasons for Use & Goals"},
+  {"id": "perception", "num": 14, "title_ar": "دور الأظرف في الإقلاع عن التدخين", "title_en": "Smoking Cessation Support - Perceptions"},
+  {"id": "safety", "num": 15, "title_ar": "السلامة والأعراض والعلامات التجارية", "title_en": "Safety, Symptoms & Brands"},
+  {"id": "wellbeing", "num": 16, "title_ar": "الرفاه العام", "title_en": "Wellbeing", "stem_ar": "خلال الأسبوعين الماضيين، كم مرة أزعجتك أيٌّ من المشكلات التالية؟", "stem_en": "Over the last 2 weeks, how often have you been bothered by any of the following problems?"},
+  {"id": "followup", "num": 17, "title_ar": "المتابعة والسحب على الجائزة", "title_en": "Follow-up & Prize Draw"},
+  {"id": "comments", "num": 18, "title_ar": "ملاحظات إضافية", "title_en": "Additional Comments"}
+ ],
+ "questions": [
+  {
+    "n": 1,
+    "var": "consent",
+    "screen": "consent",
+    "type": "radio",
+    "required": true,
+    "label_en": "I agree to participate in this questionnaire",
+    "label_ar": "أوافق على المشاركة في الاستبيان",
+    "choices": [
+      {"code": "1", "ar": "أوافق", "en": "I agree"},
+      {"code": "0", "ar": "لا أوافق", "en": "I don't agree"}
+    ],
+    "logic": ""
+  },
+  {
+    "n": 2,
+    "var": "age_years",
+    "screen": "age",
+    "type": "text",
+    "required": true,
+    "label_en": "What is your age (years)?",
+    "label_ar": "كم عمرك الآن بالسنوات؟",
+    "note_en": "Enter your age in years",
+    "note_ar": "أدخل عمرك بالسنوات",
+    "validation": {"type": "integer", "min": 0, "max": 100},
+    "logic": "[consent] = '1'"
+  },
+  {
+    "n": 3,
+    "var": "cig100",
+    "screen": "screen",
+    "type": "radio",
+    "required": true,
+    "label_en": "Have you ever smoked 100 cigarettes or more (the equivalent of 5 packs) in your lifetime?",
+    "label_ar": "هل سبق أن دخنت ١٠٠ سيجارة أو أكثر، أي ما يعادل ٥ علب خلال حياتك؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18"
+  },
+  {
+    "n": 4,
+    "var": "ever_pouch",
+    "screen": "screen",
+    "type": "radio",
+    "required": true,
+    "label_en": "Have you ever, even once, used a nicotine pouch?",
+    "label_ar": "هل سبق لك، ولو لمرة واحدة، استخدام أظرف النيكوتين؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> ''"
+  },
+  {
+    "n": 5,
+    "var": "dzrt_primary_brand",
+    "screen": "screen",
+    "type": "radio",
+    "required": true,
+    "label_en": "Is DZRT the nicotine-pouch brand you currently use most often, or the brand you used most often before you stopped?",
+    "label_ar": "هل دزرت هي العلامة التجارية لأظرف النيكوتين التي تستخدمها غالباً حالياً، أو التي كنت تستخدمها غالباً قبل أن تتوقف؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 6,
+    "var": "no_pouch_other_ever",
+    "screen": "never_pouch",
+    "type": "checkbox",
+    "required": true,
+    "label_en": "Have you ever used any of the following tobacco or nicotine products, even once? Select all that apply.",
+    "label_ar": "هل سبق لك استخدام أي من منتجات التبغ أو النيكوتين التالية، ولو لمرة واحدة؟ اختر كل ما ينطبق.",
+    "choices": [
+      {"code": "1", "ar": "السجائر الإلكترونية أو الفيب", "en": "Electronic cigarettes or vaping products"},
+      {"code": "2", "ar": "الشيشة أو النرجيلة", "en": "Shisha or waterpipe"},
+      {"code": "3", "ar": "منتجات التبغ المسخّن، مثل آيكوس", "en": "Heated tobacco products, such as IQOS"},
+      {"code": "4", "ar": "التبغ غير المدخّن أو الشمّة", "en": "Smokeless tobacco or shammah"},
+      {"code": "5", "ar": "السيجار أو الغليون", "en": "Cigars or pipes"},
+      {"code": "6", "ar": "علكة أو لصقات أو أقراص استحلاب أو بخاخات النيكوتين", "en": "Nicotine gum, patches, lozenges, or sprays"},
+      {"code": "7", "ar": "لم أستخدم أياً منها", "en": "None of these"}
+    ],
+    "exclusive": "7",
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] = '1' and [ever_pouch] = '0'",
+    "logic_redcap_original": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '0'",
+    "research_note": "COMPARISON ARM. Denominator: cig100 = 1 AND ever_pouch = 0. Never-pouch ever-smokers only. Not a general-population measure; do not pool with never-smokers."
+  },
+  {
+    "n": 7,
+    "var": "no_pouch_other_30d",
+    "screen": "never_pouch",
+    "type": "checkbox",
+    "required": true,
+    "label_en": "During the past 30 days, which of the following tobacco or nicotine products have you used? Select all that apply.",
+    "label_ar": "خلال الثلاثين يوماً الماضية، أي من منتجات التبغ أو النيكوتين التالية استخدمت؟ اختر كل ما ينطبق.",
+    "choices": [
+      {"code": "1", "ar": "السجائر الإلكترونية أو الفيب", "en": "Electronic cigarettes or vaping products"},
+      {"code": "2", "ar": "الشيشة أو النرجيلة", "en": "Shisha or waterpipe"},
+      {"code": "3", "ar": "منتجات التبغ المسخّن، مثل آيكوس", "en": "Heated tobacco products, such as IQOS"},
+      {"code": "4", "ar": "التبغ غير المدخّن أو الشمّة", "en": "Smokeless tobacco or shammah"},
+      {"code": "5", "ar": "السيجار أو الغليون", "en": "Cigars or pipes"},
+      {"code": "6", "ar": "علكة أو لصقات أو أقراص استحلاب أو بخاخات النيكوتين", "en": "Nicotine gum, patches, lozenges, or sprays"},
+      {"code": "7", "ar": "لم أستخدم أياً منها خلال الثلاثين يوماً الماضية", "en": "None of these during the past 30 days"}
+    ],
+    "exclusive": "7",
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] = '1' and [ever_pouch] = '0'",
+    "logic_redcap_original": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '0'",
+    "research_note": "COMPARISON ARM. Denominator: cig100 = 1 AND ever_pouch = 0. Never-pouch ever-smokers only. Not a general-population measure; do not pool with never-smokers."
+  },
+  {
+    "n": 8,
+    "var": "pouch_aware",
+    "screen": "never_pouch",
+    "type": "radio",
+    "required": true,
+    "label_en": "Before this survey, had you ever heard of nicotine pouches?",
+    "label_ar": "قبل هذا الاستبيان، هل سبق لك أن سمعت عن أظرف النيكوتين؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] = '1' and [ever_pouch] = '0'",
+    "logic_redcap_original": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '0'",
+    "research_note": "COMPARISON ARM. Denominator: cig100 = 1 AND ever_pouch = 0. Never-pouch ever-smokers only. Not a general-population measure; do not pool with never-smokers."
+  },
+  {
+    "n": 9,
+    "var": "pouch_never_reason",
+    "screen": "never_pouch",
+    "type": "radio",
+    "required": true,
+    "label_en": "What is the main reason you have never used nicotine pouches? Select one answer.",
+    "label_ar": "ما السبب الرئيسي لعدم استخدامك أظرف النيكوتين حتى الآن؟ اختر إجابة واحدة",
+    "note_en": "Asked only of ever-smokers who have never used nicotine pouches",
+    "note_ar": "يُسأل فقط للمدخنين الذين لم يستخدموا أظرف النيكوتين مطلقاً",
+    "choices": [
+      {"code": "1", "ar": "لست مهتماً باستخدامها", "en": "I am not interested in using them"},
+      {"code": "2", "ar": "لدي مخاوف بشأن آثارها الصحية", "en": "I am concerned about their health effects"},
+      {"code": "3", "ar": "يصعب الحصول عليها", "en": "They are difficult to obtain"},
+      {"code": "4", "ar": "تكلفتها مرتفعة", "en": "They are too expensive"},
+      {"code": "5", "ar": "لأسباب دينية أو اجتماعية", "en": "For religious or social reasons"},
+      {"code": "6", "ar": "لم أفكر في استخدامها من قبل", "en": "I have never considered using them"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] = '1' and [ever_pouch] = '0' and [pouch_aware] = '1'",
+    "logic_redcap_original": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '0' and [pouch_aware] = '1'",
+    "research_note": "COMPARISON ARM. Denominator cig100 is 1, ever_pouch is 0, pouch_aware is 1. Never-pouch ever-smokers aware of pouches. Not a general-population measure."
+  },
+  {
+    "n": 10,
+    "var": "pouch_susceptible",
+    "screen": "never_pouch",
+    "type": "radio",
+    "required": true,
+    "label_en": "How likely are you to try nicotine pouches in the next 12 months?",
+    "label_ar": "ما مدى احتمالية أن تجرب أظرف النيكوتين خلال الاثني عشر شهراً القادمة؟",
+    "note_en": "Asked only of ever-smokers who have never used nicotine pouches",
+    "note_ar": "يُسأل فقط للمدخنين الذين لم يستخدموا أظرف النيكوتين مطلقاً",
+    "choices": [
+      {"code": "1", "ar": "غير محتمل جداً", "en": "Very unlikely"},
+      {"code": "2", "ar": "غير محتمل", "en": "Unlikely"},
+      {"code": "3", "ar": "غير متأكد", "en": "Not sure"},
+      {"code": "4", "ar": "محتمل", "en": "Likely"},
+      {"code": "5", "ar": "محتمل جداً", "en": "Very likely"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] = '1' and [ever_pouch] = '0'",
+    "logic_redcap_original": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '0'",
+    "research_note": "COMPARISON ARM. Denominator: cig100 = 1 AND ever_pouch = 0. Susceptibility among never-pouch ever-smokers only. Not a general-population susceptibility measure; do not pool with never-smokers."
+  },
+  {
+    "n": 11,
+    "var": "sex",
+    "screen": "demo",
+    "type": "radio",
+    "required": true,
+    "label_en": "Sex?",
+    "label_ar": "الجنس",
+    "choices": [
+      {"code": "1", "ar": "ذكر", "en": "Male"},
+      {"code": "2", "ar": "أنثى", "en": "Female"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> ''"
+  },
+  {
+    "n": 12,
+    "var": "education",
+    "screen": "demo",
+    "type": "radio",
+    "required": true,
+    "label_en": "Highest education level",
+    "label_ar": "أعلى مستوى تعليمي",
+    "choices": [
+      {"code": "1", "ar": "أقل من الثانوية", "en": "Less than high school"},
+      {"code": "2", "ar": "ثانوية", "en": "High school"},
+      {"code": "3", "ar": "دبلوم", "en": "Diploma"},
+      {"code": "4", "ar": "بكالوريوس", "en": "Bachelor's"},
+      {"code": "5", "ar": "دراسات عليا", "en": "Postgraduate"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> ''"
+  },
+  {
+    "n": 13,
+    "var": "employment",
+    "screen": "demo",
+    "type": "radio",
+    "required": true,
+    "label_en": "Employment status",
+    "label_ar": "الحالة الوظيفية",
+    "choices": [
+      {"code": "1", "ar": "طالب", "en": "Student"},
+      {"code": "2", "ar": "موظف حكومي", "en": "Government employee"},
+      {"code": "3", "ar": "موظف في القطاع الخاص", "en": "Private sector employee"},
+      {"code": "4", "ar": "عاطل عن العمل", "en": "Unemployed"},
+      {"code": "5", "ar": "صاحب عمل (أعمال حرة)", "en": "Employer (self-employed)"},
+      {"code": "6", "ar": "متقاعد", "en": "Retired"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> ''"
+  },
+  {
+    "n": 14,
+    "var": "region",
+    "screen": "demo",
+    "type": "dropdown",
+    "required": true,
+    "label_en": "Which administrative region do you currently live in?",
+    "label_ar": "في أي منطقة إدارية تقيم حالياً؟",
+    "choices": [
+      {"code": "1", "ar": "الرياض", "en": "Riyadh"},
+      {"code": "2", "ar": "مكة المكرمة", "en": "Makkah"},
+      {"code": "3", "ar": "المدينة المنورة", "en": "Madinah"},
+      {"code": "4", "ar": "المنطقة الشرقية", "en": "Eastern Province"},
+      {"code": "5", "ar": "القصيم", "en": "Qassim"},
+      {"code": "6", "ar": "عسير", "en": "Asir"},
+      {"code": "7", "ar": "تبوك", "en": "Tabuk"},
+      {"code": "8", "ar": "حائل", "en": "Hail"},
+      {"code": "9", "ar": "الحدود الشمالية", "en": "Northern Borders"},
+      {"code": "10", "ar": "جازان", "en": "Jazan"},
+      {"code": "11", "ar": "نجران", "en": "Najran"},
+      {"code": "12", "ar": "الباحة", "en": "Al-Bahah"},
+      {"code": "13", "ar": "الجوف", "en": "Al-Jouf"},
+      {"code": "14", "ar": "خارج المملكة العربية السعودية", "en": "Outside Saudi Arabia"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> ''"
+  },
+  {
+    "n": 15,
+    "var": "attention_check",
+    "screen": "demo",
+    "type": "radio",
+    "required": true,
+    "label_en": "To confirm you are following the questionnaire carefully, please select number (1)",
+    "label_ar": "لتأكيد أنك تقرأ الاستبيان بعناية يرجى اختيار الرقم (١)",
+    "choices": [
+      {"code": "2", "ar": "٢", "en": "2"},
+      {"code": "1", "ar": "١", "en": "1"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> ''"
+  },
+  {
+    "n": 16,
+    "var": "smoke_status_now",
+    "screen": "smoke",
+    "type": "radio",
+    "required": true,
+    "label_en": "Do you currently smoke cigarettes every day, some days, or not at all?",
+    "label_ar": "هل تدخن السجائر حالياً كل يوم، أو بعض الأيام، أو لا تدخن إطلاقاً؟",
+    "choices": [
+      {"code": "1", "ar": "كل يوم", "en": "Every day"},
+      {"code": "2", "ar": "بعض الأيام", "en": "Some days"},
+      {"code": "3", "ar": "لا أدخن إطلاقاً", "en": "Not at all"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1'"
+  },
+  {
+    "n": 17,
+    "var": "smoke_quit_when",
+    "screen": "smoke",
+    "type": "radio",
+    "required": true,
+    "label_en": "How long has it been since you completely quit smoking cigarettes?",
+    "label_ar": "منذ متى أقلعت تماماً عن تدخين السجائر؟",
+    "choices": [
+      {"code": "1", "ar": "أقل من ٧ أيام", "en": "Less than 7 days"},
+      {"code": "2", "ar": "٧ إلى ٢٩ يوماً", "en": "7-29 days"},
+      {"code": "3", "ar": "شهر إلى أقل من ٣ أشهر", "en": "1 to less than 3 months"},
+      {"code": "4", "ar": "٣ إلى أقل من ٦ أشهر", "en": "3 to less than 6 months"},
+      {"code": "5", "ar": "٦ إلى ١٢ شهراً", "en": "6-12 months"},
+      {"code": "6", "ar": "أكثر من ١٢ شهراً", "en": "More than 12 months"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1' and [smoke_status_now] = '3'"
+  },
+  {
+    "n": 18,
+    "var": "cigs_per_day_prequit",
+    "screen": "smoke",
+    "type": "text",
+    "required": true,
+    "label_en": "Before you quit completely, on days when you smoked, how many cigarettes did you usually smoke per day?",
+    "label_ar": "قبل أن تقلع تماماً، في الأيام التي كنت تدخن فيها، كم سيجارة كنت تدخن عادةً في اليوم؟",
+    "validation": {"type": "integer", "min": 1, "max": 200},
+    "logic": "[consent] = '1' and [cig100] = '1' and [smoke_status_now] = '3'"
+  },
+  {
+    "n": 19,
+    "var": "smoke_start_age",
+    "screen": "smoke",
+    "type": "dropdown",
+    "required": true,
+    "label_en": "At what age did you start smoking cigarettes regularly?",
+    "label_ar": "في أي عمر بدأت تدخين السجائر بانتظام؟",
+    "choices": [
+
+    ],
+    "range": [8, 80],
+    "logic": "[consent] = '1' and [cig100] = '1'"
+  },
+  {
+    "n": 20,
+    "var": "smoke_years",
+    "screen": "smoke",
+    "type": "dropdown",
+    "required": true,
+    "label_en": "For how many years have you smoked cigarettes regularly?",
+    "label_ar": "كم سنة دخنت السجائر بانتظام؟",
+    "choices": [
+      {"code": "0", "ar": "أقل من سنة", "en": "Less than 1 year"}
+    ],
+    "range": [1, 82],
+    "logic": "[consent] = '1' and [cig100] = '1'"
+  },
+  {
+    "n": 21,
+    "var": "cigs_per_day",
+    "screen": "smoke",
+    "type": "text",
+    "required": true,
+    "label_en": "On average, how many **cigarettes** do you smoke per day? Enter a number.",
+    "label_ar": "في المتوسط، كم **سيجارة** تدخن في اليوم؟ (أدخل رقماً)",
+    "validation": {"type": "integer", "min": 0, "max": 100},
+    "logic": "[consent] = '1' and [cig100] = '1' and ([smoke_status_now] = '1' or [smoke_status_now] = '2')"
+  },
+  {
+    "n": 22,
+    "var": "smoke_days_30d",
+    "screen": "smoke",
+    "type": "text",
+    "required": true,
+    "label_en": "During the past 30 days, on how many days did you smoke cigarettes? 0-30",
+    "label_ar": "خلال الثلاثين يوماً الماضية، في كم يوماً دخنت السجائر؟ (٠-٣٠)",
+    "validation": {"type": "integer", "min": 0, "max": 30},
+    "logic": "[consent] = '1' and [cig100] = '1' and [smoke_status_now] = '2'"
+  },
+  {
+    "n": 23,
+    "var": "cig_ftnd_ttf",
+    "screen": "ftnd",
+    "type": "radio",
+    "required": true,
+    "label_en": "How soon after you wake up do you smoke your first cigarette?",
+    "label_ar": "بعد الاستيقاظ، كم من الوقت يستغرق عادةً حتى تدخن أول سيجارة؟",
+    "choices": [
+      {"code": "3", "ar": "خلال ٥ دقائق", "en": "Within 5 minutes"},
+      {"code": "2", "ar": "من ٦ إلى ٣٠ دقيقة", "en": "6-30 minutes"},
+      {"code": "1", "ar": "من ٣١ إلى ٦٠ دقيقة", "en": "31-60 minutes"},
+      {"code": "0", "ar": "بعد أكثر من ٦٠ دقيقة", "en": "After 60 minutes"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1' and ([smoke_status_now] = '1' or [smoke_status_now] = '2')"
+  },
+  {
+    "n": 24,
+    "var": "cig_ftnd_forbid",
+    "screen": "ftnd",
+    "type": "radio",
+    "required": true,
+    "label_en": "Do you find it difficult to refrain from smoking in places where it is forbidden?",
+    "label_ar": "هل تجد صعوبة في الامتناع عن التدخين في الأماكن التي يُمنع فيها التدخين؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1' and ([smoke_status_now] = '1' or [smoke_status_now] = '2')"
+  },
+  {
+    "n": 25,
+    "var": "cig_ftnd_hardest",
+    "screen": "ftnd",
+    "type": "radio",
+    "required": true,
+    "label_en": "Which cigarette would you hate most to give up?",
+    "label_ar": "أي سيجارة سيكون من الأصعب عليك التخلي عنها؟",
+    "choices": [
+      {"code": "1", "ar": "الأولى في الصباح", "en": "The first one in the morning"},
+      {"code": "0", "ar": "أي سيجارة أخرى", "en": "Any other"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1' and ([smoke_status_now] = '1' or [smoke_status_now] = '2')"
+  },
+  {
+    "n": 26,
+    "var": "cig_ftnd_cpd",
+    "screen": "ftnd",
+    "type": "calc",
+    "required": false,
+    "label_en": "Cigarettes per day score (auto-calculated)",
+    "label_ar": "درجة عدد السجائر يومياً (تُحسب تلقائياً)",
+    "logic": "[consent] = '1' and [cig100] = '1' and ([smoke_status_now] = '1' or [smoke_status_now] = '2')",
+    "calc": "if([cigs_per_day] = \"\", \"\", if([cigs_per_day] < 11, 0, if([cigs_per_day] < 21, 1, if([cigs_per_day] < 31, 2, 3))))"
+  },
+  {
+    "n": 27,
+    "var": "cig_ftnd_morning",
+    "screen": "ftnd",
+    "type": "radio",
+    "required": true,
+    "label_en": "Do you smoke more frequently during the first hours after waking than during the rest of the day?",
+    "label_ar": "هل تدخن أكثر خلال الساعات الأولى بعد الاستيقاظ مقارنةً ببقية اليوم؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1' and ([smoke_status_now] = '1' or [smoke_status_now] = '2')"
+  },
+  {
+    "n": 28,
+    "var": "cig_ftnd_ill",
+    "screen": "ftnd",
+    "type": "radio",
+    "required": true,
+    "label_en": "Do you smoke even if you are so ill that you are in bed most of the day?",
+    "label_ar": "هل تدخن حتى عندما تكون مريضاً حتى لو كنت ملازمًا للسرير؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1' and ([smoke_status_now] = '1' or [smoke_status_now] = '2')"
+  },
+  {
+    "n": 29,
+    "var": "cig_ftnd_score",
+    "screen": "ftnd",
+    "type": "calc",
+    "required": false,
+    "label_en": "FTND score (cigarettes)",
+    "label_ar": "درجة FTND للسجائر",
+    "note_en": "Auto-calculated",
+    "note_ar": "0-10، تُحسب تلقائياً",
+    "logic": "[consent] = '1' and [cig100] = '1' and ([smoke_status_now] = '1' or [smoke_status_now] = '2')",
+    "calc": "[cig_ftnd_ttf] + [cig_ftnd_forbid] + [cig_ftnd_hardest] + [cig_ftnd_cpd] + [cig_ftnd_morning] + [cig_ftnd_ill]"
+  },
+  {
+    "n": 30,
+    "var": "quit_attempts",
+    "screen": "quit",
+    "type": "radio",
+    "required": true,
+    "label_en": "How many serious attempts have you made to quit cigarette smoking, staying abstinent for at least one full day?",
+    "label_ar": "كم مرة حاولت بجدية الإقلاع عن تدخين السجائر وتوقفت عن التدخين ليوم كامل على الأقل",
+    "choices": [
+      {"code": "0", "ar": "لم أحاول سابقاً", "en": "No previous attempts"},
+      {"code": "1", "ar": "مرة واحدة", "en": "Once"},
+      {"code": "2", "ar": "مرتان", "en": "Twice"},
+      {"code": "3", "ar": "٣-٥ مرات", "en": "3-5 times"},
+      {"code": "4", "ar": "٦-١٠ مرات", "en": "6-10 times"},
+      {"code": "5", "ar": "أكثر من ١٠ مرات", "en": "More than 10 times"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1'"
+  },
+  {
+    "n": 31,
+    "var": "quit_methods",
+    "screen": "quit",
+    "type": "checkbox",
+    "required": true,
+    "label_en": "In previous quit attempts (before this attempt), which methods did you use?",
+    "label_ar": "في محاولات الإقلاع السابقة (قبل هذه المحاولة)، ما الطرق التي استخدمتها؟",
+    "choices": [
+      {"code": "1", "ar": "أظرف النيكوتين", "en": "Nicotine pouches"},
+      {"code": "2", "ar": "لاصقات أو علكة نيكوتين", "en": "Nicotine patches or gum"},
+      {"code": "3", "ar": "بدون مساعدة (إقلاع مفاجئ)", "en": "No assistance (cold turkey)"},
+      {"code": "4", "ar": "السجائر الإلكترونية/الفيب", "en": "E-cigarettes or vaping"},
+      {"code": "5", "ar": "أدوية بوصفة (فارينيكلين/بوبروبيون)", "en": "Prescription medication (varenicline or bupropion)"},
+      {"code": "6", "ar": "تطبيق جوال", "en": "Mobile app"}
+    ],
+    "exclusive": "3",
+    "logic": "[consent] = '1' and [cig100] = '1' and [quit_attempts] >= '1' and [quit_attempts] <= '5'"
+  },
+  {
+    "n": 32,
+    "var": "quit_outcome",
+    "screen": "quit",
+    "type": "radio",
+    "required": true,
+    "label_en": "What was the outcome of your most recent serious attempt to quit cigarette smoking?",
+    "label_ar": "ما نتيجة أحدث محاولة جادة للإقلاع عن تدخين السجائر؟",
+    "choices": [
+      {"code": "1", "ar": "لم أتوقف عن التدخين", "en": "I did not stop smoking"},
+      {"code": "2", "ar": "توقفت لأقل من ٧ أيام ثم عدت إلى التدخين", "en": "I stopped for less than 7 days and returned to smoking"},
+      {"code": "3", "ar": "توقفت من ٧ إلى ٢٩ يوماً ثم عدت إلى التدخين", "en": "I stopped for 7-29 days and returned to smoking"},
+      {"code": "4", "ar": "توقفت من ٣٠ إلى ٨٩ يوماً ثم عدت إلى التدخين", "en": "I stopped for 30-89 days and returned to smoking"},
+      {"code": "5", "ar": "توقفت لمدة ٩٠ يوماً أو أكثر ثم عدت إلى التدخين", "en": "I stopped for 90 days or more and returned to smoking"},
+      {"code": "6", "ar": "أقلعت عن تدخين السجائر تماماً وما زلت ممتنعاً حتى الآن", "en": "I quit cigarette smoking completely and remain abstinent to date"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1' and [quit_attempts] >= '1' and [quit_attempts] <= '5'"
+  },
+  {
+    "n": 33,
+    "var": "pouch_latest_quit",
+    "screen": "quit",
+    "type": "radio",
+    "required": true,
+    "label_en": "During your most recent serious attempt to quit cigarette smoking, did you use nicotine pouches to help you quit or reduce smoking?",
+    "label_ar": "خلال أحدث محاولة جادة للإقلاع عن تدخين السجائر، هل استخدمت أظرف النيكوتين للمساعدة على الإقلاع أو تقليل التدخين؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1' and [ever_pouch] = '1' and [quit_attempts] >= '1' and [quit_attempts] <= '5'"
+  },
+  {
+    "n": 34,
+    "var": "postquit_cigs",
+    "screen": "lapse",
+    "type": "radio",
+    "required": true,
+    "label_en": "Since you quit smoking cigarettes, approximately how many cigarettes have you smoked in total (including even a single puff)?",
+    "label_ar": "منذ أن توقفت عن تدخين السجائر، كم عدد السجائر التي قمت بتدخينها إجمالاً (بما في ذلك حتى نفخة واحدة)؟",
+    "choices": [
+      {"code": "0", "ar": "ولا حتى نفخة واحدة", "en": "Not even a puff"},
+      {"code": "1", "ar": "١-٥ سجائر إجمالاً", "en": "1-5 cigarettes total"},
+      {"code": "2", "ar": "٦-١٠ سجائر إجمالاً", "en": "6-10 cigarettes total"},
+      {"code": "3", "ar": "١١-٢٠ سيجارة إجمالاً", "en": "11-20 cigarettes total"},
+      {"code": "4", "ar": "أكثر من ٢٠ سيجارة", "en": "More than 20 cigarettes"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1' and [ever_pouch] = '1' and [smoke_status_now] = '3'"
+  },
+  {
+    "n": 35,
+    "var": "cig_abst_7d",
+    "screen": "lapse",
+    "type": "radio",
+    "required": true,
+    "label_en": "During the past 7 days, have you been completely abstinent from cigarette smoking, including not even a single puff?",
+    "label_ar": "خلال الأيام السبعة الماضية، هل امتنعت تماماً عن تدخين السجائر، حتى عن نفخة واحدة؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1'"
+  },
+  {
+    "n": 36,
+    "var": "cig_abst_30d",
+    "screen": "lapse",
+    "type": "radio",
+    "required": true,
+    "label_en": "During the past 30 days, have you been completely abstinent from cigarette smoking, including not even a single puff?",
+    "label_ar": "خلال الثلاثين يوماً الماضية، هل امتنعت تماماً عن تدخين السجائر، حتى عن نفخة واحدة؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1'"
+  },
+  {
+    "n": 37,
+    "var": "quit_confidence",
+    "screen": "lapse",
+    "type": "text",
+    "required": true,
+    "label_en": "From 0 to 10, how confident are you that you can stay off cigarettes over the next 6 months? 0 = not at all confident, 10 = completely confident",
+    "label_ar": "من ٠ إلى ١٠، ما مدى ثقتك في قدرتك على الامتناع عن تدخين السجائر خلال الأشهر الستة القادمة؟ (٠ = غير واثق إطلاقاً، ١٠ = واثق تماماً)",
+    "validation": {"type": "integer", "min": 0, "max": 10},
+    "logic": "[consent] = '1' and [cig100] = '1'"
+  },
+  {
+    "n": 38,
+    "var": "quit_intention",
+    "screen": "lapse",
+    "type": "radio",
+    "required": true,
+    "label_en": "Are you seriously planning to quit smoking cigarettes completely?",
+    "label_ar": "هل تخطط بجدية للإقلاع تماماً عن تدخين السجائر؟",
+    "choices": [
+      {"code": "1", "ar": "نعم، خلال الثلاثين يوماً القادمة", "en": "Yes, within the next 30 days"},
+      {"code": "2", "ar": "نعم، خلال الأشهر الستة القادمة، ولكن ليس خلال الثلاثين يوماً القادمة", "en": "Yes, within the next 6 months, but not within the next 30 days"},
+      {"code": "3", "ar": "لا، ليس خلال الأشهر الستة القادمة", "en": "No, not within the next 6 months"},
+      {"code": "4", "ar": "غير متأكد", "en": "Not sure"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1' and ([smoke_status_now] = '1' or [smoke_status_now] = '2')"
+  },
+  {
+    "n": 39,
+    "var": "other_products",
+    "screen": "other",
+    "type": "checkbox",
+    "required": true,
+    "label_en": "During the past 30 days, which of the following products have you used? Select all that apply.",
+    "label_ar": "خلال الثلاثين يوماً الماضية، أيٌّ من المنتجات التالية استخدمت؟ (اختر كل ما ينطبق)",
+    "choices": [
+      {"code": "1", "ar": "الشيشة (النرجيلة)", "en": "Shisha (waterpipe)"},
+      {"code": "2", "ar": "السيجار أو الغليون", "en": "Cigars or pipe"},
+      {"code": "3", "ar": "التبغ غير المدخّن (الشمّة)", "en": "Smokeless tobacco (shammah)"},
+      {"code": "4", "ar": "التبغ المسخّن (مثل آيكوس)", "en": "Heated tobacco (e.g., IQOS)"},
+      {"code": "5", "ar": "السجائر الإلكترونية / الفيب", "en": "E-cigarettes / vapes"},
+      {"code": "7", "ar": "علكة أو لصقات أو أقراص استحلاب أو بخاخات النيكوتين", "en": "Nicotine gum, patches, lozenges, or sprays"},
+      {"code": "6", "ar": "لم أستخدم أياً منها", "en": "None of these"}
+    ],
+    "exclusive": "6",
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 40,
+    "var": "pouch_status_now",
+    "screen": "pouch",
+    "type": "radio",
+    "required": true,
+    "label_en": "Do you currently use nicotine pouches every day, some days, or not at all?",
+    "label_ar": "هل تستخدم أظرف النيكوتين حالياً كل يوم، أو بعض الأيام، أو لا تستخدمها إطلاقاً؟",
+    "choices": [
+      {"code": "1", "ar": "كل يوم", "en": "Every day"},
+      {"code": "2", "ar": "بعض الأيام", "en": "Some days"},
+      {"code": "3", "ar": "لا أستخدمها إطلاقاً", "en": "Not at all"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 41,
+    "var": "pouch_quit_when",
+    "screen": "pouch",
+    "type": "radio",
+    "required": true,
+    "label_en": "How long has it been since you completely stopped using nicotine pouches?",
+    "label_ar": "منذ متى توقفت تماماً عن استخدام أظرف النيكوتين؟",
+    "choices": [
+      {"code": "1", "ar": "أقل من ٣ أشهر", "en": "Less than 3 months"},
+      {"code": "2", "ar": "٣ إلى أقل من ٦ أشهر", "en": "3 to less than 6 months"},
+      {"code": "3", "ar": "٦ إلى ١٢ شهراً", "en": "6-12 months"},
+      {"code": "4", "ar": "أكثر من ١٢ شهراً", "en": "More than 12 months"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1' and [pouch_status_now] = '3'"
+  },
+  {
+    "n": 42,
+    "var": "pouch_quit_sequence",
+    "screen": "pouch",
+    "type": "radio",
+    "required": true,
+    "label_en": "Relative to the most recent time you completely quit smoking cigarettes, when did you first start using nicotine pouches?",
+    "label_ar": "بالنسبة إلى آخر مرة أقلعت فيها تماماً عن تدخين السجائر، متى بدأت استخدام أظرف النيكوتين لأول مرة؟",
+    "note_en": "\"Around the time\" means within approximately one month before or after quitting.",
+    "note_ar": "يقصد بـ«الفترة نفسها تقريباً» خلال نحو شهر واحد قبل الإقلاع أو بعده.",
+    "choices": [
+      {"code": "1", "ar": "بدأت استخدام الأظرف قبل الإقلاع عن السجائر", "en": "I started using pouches before quitting cigarettes"},
+      {"code": "2", "ar": "بدأت استخدام الأظرف في الفترة نفسها تقريباً التي أقلعت فيها", "en": "I started using pouches around the time I quit cigarettes"},
+      {"code": "3", "ar": "بدأت استخدام الأظرف بعد الإقلاع عن السجائر", "en": "I started using pouches after quitting cigarettes"},
+      {"code": "4", "ar": "لا أتذكر", "en": "I do not remember"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] = '1' and [smoke_status_now] = '3' and [ever_pouch] = '1' and [pouch_status_now] <> ''"
+  },
+  {
+    "n": 43,
+    "var": "pouch_days_30d",
+    "screen": "pouch",
+    "type": "dropdown",
+    "required": true,
+    "label_en": "During the past 30 days, on how many days did you use nicotine pouches? Select a number from 0 to 30.",
+    "label_ar": "خلال الثلاثين يومًا الماضية، في كم يومًا استخدمت أظرف النيكوتين؟ اختر رقمًا من 0 إلى 30",
+    "choices": [
+
+    ],
+    "range": [0, 30],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 44,
+    "var": "pouch_start_age",
+    "screen": "pouch",
+    "type": "dropdown",
+    "required": true,
+    "label_en": "At what age did you first start using nicotine pouches?",
+    "label_ar": "في أي عمر بدأت استخدام أظرف النيكوتين لأول مرة؟",
+    "choices": [
+
+    ],
+    "range": [8, 80],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 45,
+    "var": "pouch_duration",
+    "screen": "pouch",
+    "type": "radio",
+    "required": true,
+    "label_en": "What is the total length of time that you have used nicotine pouches?",
+    "label_ar": "ما إجمالي المدة التي استخدمت خلالها أظرف النيكوتين؟",
+    "choices": [
+      {"code": "1", "ar": "أقل من شهر", "en": "Less than 1 month"},
+      {"code": "2", "ar": "١-٣ أشهر", "en": "1-3 months"},
+      {"code": "3", "ar": "٤-٦ أشهر", "en": "4-6 months"},
+      {"code": "4", "ar": "٧-١٢ شهراً", "en": "7-12 months"},
+      {"code": "5", "ar": "١ إلى ٣ سنوات", "en": "1 to 3 years"},
+      {"code": "6", "ar": "أكثر من ٣ سنوات", "en": "More than 3 years"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 46,
+    "var": "pouches_per_day",
+    "screen": "pouch",
+    "type": "radio",
+    "required": true,
+    "label_en": "On days when you use or used nicotine pouches, how many **individual pouches** do or did you usually use per day? A pouch is a single sachet, not a can.",
+    "label_ar": "في الأيام التي تستخدم أو كنت تستخدم فيها أظرف النيكوتين، كم **ظرفاً** تستخدم أو كنت تستخدم عادةً في اليوم؟ (الظرف هو الكيس الصغير المفرد، وليس العلبة)",
+    "choices": [
+      {"code": "1", "ar": "١-٣ أظرف", "en": "1-3 pouches"},
+      {"code": "2", "ar": "٤-٦ أظرف", "en": "4-6 pouches"},
+      {"code": "3", "ar": "٧-٩ أظرف", "en": "7-9 pouches"},
+      {"code": "4", "ar": "١٠-١٤ ظرفاً", "en": "10-14 pouches"},
+      {"code": "5", "ar": "١٥-١٩ ظرفاً", "en": "15-19 pouches"},
+      {"code": "6", "ar": "٢٠-٢٩ ظرفاً", "en": "20-29 pouches"},
+      {"code": "7", "ar": "٣٠ ظرفاً أو أكثر", "en": "30 or more pouches"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 47,
+    "var": "pouch_strength",
+    "screen": "pouch",
+    "type": "radio",
+    "required": true,
+    "label_en": "What nicotine strength (mg per pouch) do you use or did you use?",
+    "label_ar": "ما قوة النيكوتين في كل ظرف من الأظرف التي تستخدمها أو كنت تستخدمها؟",
+    "choices": [
+      {"code": "3", "ar": "٣ ملجم", "en": "3 mg"},
+      {"code": "6", "ar": "٦ ملجم", "en": "6 mg"},
+      {"code": "10", "ar": "١٠ ملجم", "en": "10 mg"},
+      {"code": "11", "ar": "أكثر من ١٠ ملجم", "en": "More than 10 mg"},
+      {"code": "99", "ar": "لا أعلم", "en": "I don't know"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 48,
+    "var": "pouch_dep_ttf",
+    "screen": "pouch_dep",
+    "type": "radio",
+    "required": true,
+    "label_en": "How soon after you wake up do you use your first nicotine pouch?",
+    "label_ar": "بعد الاستيقاظ، بعد كم من الوقت تستخدم أول ظرف نيكوتين؟",
+    "choices": [
+      {"code": "3", "ar": "خلال ٥ دقائق", "en": "Within 5 minutes"},
+      {"code": "2", "ar": "٦-٣٠ دقيقة", "en": "6-30 minutes"},
+      {"code": "1", "ar": "٣١-٦٠ دقيقة", "en": "31-60 minutes"},
+      {"code": "0", "ar": "بعد أكثر من ٦٠ دقيقة", "en": "After 60 minutes"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1' and ([pouch_status_now] = '1' or [pouch_status_now] = '2')"
+  },
+  {
+    "n": 49,
+    "var": "pouch_dep_forbid",
+    "screen": "pouch_dep",
+    "type": "radio",
+    "required": true,
+    "label_en": "Do you find it difficult to refrain from using nicotine pouches in places where their use is not allowed, such as work?",
+    "label_ar": "هل تجد صعوبة في الامتناع عن استخدام أظرف النيكوتين في الأماكن التي يُمنع فيها استخدامها، مثل العمل؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1' and ([pouch_status_now] = '1' or [pouch_status_now] = '2')"
+  },
+  {
+    "n": 50,
+    "var": "pouch_dep_hardest",
+    "screen": "pouch_dep",
+    "type": "radio",
+    "required": true,
+    "label_en": "Which nicotine pouch would be the hardest to give up?",
+    "label_ar": "أي ظرف نيكوتين سيكون من الأصعب عليك التخلي عنه؟",
+    "choices": [
+      {"code": "1", "ar": "الأولى في الصباح", "en": "The first one in the morning"},
+      {"code": "0", "ar": "أي ظرف آخر", "en": "Any other pouch"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1' and ([pouch_status_now] = '1' or [pouch_status_now] = '2')"
+  },
+  {
+    "n": 51,
+    "var": "pouch_dep_morning",
+    "screen": "pouch_dep",
+    "type": "radio",
+    "required": true,
+    "label_en": "Do you use nicotine more frequently during the first hours after awakening than during the rest of the day?",
+    "label_ar": "هل تستخدم النيكوتين أكثر خلال الساعات الأولى بعد الاستيقاظ مقارنةً ببقية اليوم؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1' and ([pouch_status_now] = '1' or [pouch_status_now] = '2')"
+  },
+  {
+    "n": 52,
+    "var": "pouch_dep_ill",
+    "screen": "pouch_dep",
+    "type": "radio",
+    "required": true,
+    "label_en": "Do you use nicotine pouches even if you are so ill that you are in bed most of the day?",
+    "label_ar": "هل تستخدم أظرف النيكوتين حتى لو كنت مريضاً لدرجة البقاء في السرير معظم اليوم؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1' and ([pouch_status_now] = '1' or [pouch_status_now] = '2')"
+  },
+  {
+    "n": 53,
+    "var": "pouch_dep_score",
+    "screen": "pouch_dep",
+    "type": "calc",
+    "required": false,
+    "label_en": "Current exploratory adapted nicotine-pouch dependence score",
+    "label_ar": "درجة الاعتماد الحالية الاستكشافية المعدلة على أظرف النيكوتين",
+    "note_en": "0-7. Exploratory five-item Fagerström-based score adapted from FTND/FTND-ST concepts. This is not the original six-item FTND-ST, and no validated severity cut-offs are available.",
+    "note_ar": "٠-٧. درجة استكشافية مكوّنة من خمسة بنود ومعدّلة بالاستناد إلى مفاهيم FTND وFTND-ST. ليست اختبار FTND-ST الأصلي ذي الستة بنود، ولا توجد لها حدود معتمدة لتصنيف شدة الاعتماد.",
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1' and ([pouch_status_now] = '1' or [pouch_status_now] = '2')",
+    "calc": "if([consent]=\"1\" and [age_years]>=18 and [cig100]<>\"\" and [ever_pouch]=\"1\" and ([pouch_status_now]=\"1\" or [pouch_status_now]=\"2\") and [pouch_dep_ttf]<>\"\" and [pouch_dep_forbid]<>\"\" and [pouch_dep_hardest]<>\"\" and [pouch_dep_morning]<>\"\" and [pouch_dep_ill]<>\"\",[pouch_dep_ttf]+[pouch_dep_forbid]+[pouch_dep_hardest]+[pouch_dep_morning]+[pouch_dep_ill],\"\")"
+  },
+  {
+    "n": 54,
+    "var": "pouch_start_reason",
+    "screen": "reason",
+    "type": "radio",
+    "required": true,
+    "label_en": "What was the main reason you first started using nicotine pouches? Select one answer.",
+    "label_ar": "ما السبب الرئيسي الذي دفعك إلى بدء استخدام أظرف النيكوتين؟ اختر إجابة واحدة",
+    "choices": [
+      {"code": "1", "ar": "للإقلاع تماماً عن تدخين السجائر", "en": "To quit smoking cigarettes completely"},
+      {"code": "2", "ar": "لتقليل عدد السجائر التي أدخنها", "en": "To reduce the number of cigarettes I smoke"},
+      {"code": "3", "ar": "لاستخدامها في الأماكن التي لا يُسمح فيها بالتدخين", "en": "To use them in places where smoking is not allowed"},
+      {"code": "4", "ar": "لأنني اعتقدت أنها أقل ضرراً من السجائر", "en": "Because I believed they were less harmful than cigarettes"},
+      {"code": "5", "ar": "بدافع الفضول أو التجربة", "en": "Out of curiosity or to try them"},
+      {"code": "6", "ar": "للحصول على النيكوتين دون تدخين", "en": "To use nicotine without smoking"},
+      {"code": "7", "ar": "للتعامل مع التوتر أو تحسين المزاج", "en": "To manage stress or improve my mood"},
+      {"code": "8", "ar": "لأن أصدقاء أو زملاء لي يستخدمونها", "en": "Because my friends or colleagues use them"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 55,
+    "var": "current_use_group",
+    "screen": "reason",
+    "type": "radio",
+    "required": true,
+    "label_en": "Compared with before you started nicotine pouches, what happened to your cigarette smoking? Choose one.",
+    "label_ar": "مقارنةً بما قبل بدء استخدام أظرف النيكوتين، ماذا حدث لتدخينك للسجائر؟ (اختر خياراً واحداً)",
+    "choices": [
+      {"code": "1", "ar": "توقفت تماماً عن تدخين السجائر", "en": "Stopped smoking completely"},
+      {"code": "2", "ar": "قللت عدد السجائر دون التوقف تماماً", "en": "Reduced but did not stop completely"},
+      {"code": "3", "ar": "لم يحدث تغير واضح", "en": "No clear change"},
+      {"code": "4", "ar": "زاد تدخيني", "en": "Increased"},
+      {"code": "5", "ar": "توقفت في البداية ثم عدت للتدخين", "en": "Stopped initially but later resumed"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 56,
+    "var": "pouch_goal",
+    "screen": "reason",
+    "type": "radio",
+    "required": true,
+    "label_en": "What is your ultimate goal regarding nicotine pouches?",
+    "label_ar": "ما هدفك النهائي بشأن أظرف النيكوتين؟",
+    "choices": [
+      {"code": "1", "ar": "الإقلاع عن التدخين والإقلاع عن استخدام أظرف النيكوتين", "en": "Stay quit: no cigarettes and no nicotine products"},
+      {"code": "2", "ar": "الإقلاع عن التدخين ولكن أرغب في الاستمرار في استخدام أظرف النيكوتين", "en": "Stay quit from cigarettes but continue nicotine pouches"},
+      {"code": "3", "ar": "أرغب في الإقلاع عن استخدام أظرف النيكوتين في المستقبل ولكن ليس الآن", "en": "Quit eventually but not ready yet"},
+      {"code": "4", "ar": "لا أرغب حالياً في الإقلاع عن استخدام أظرف النيكوتين ولا أخطط لذلك", "en": "No plans to quit"},
+      {"code": "5", "ar": "لقد توقفت بالفعل عن استخدام أظرف النيكوتين", "en": "I have already stopped using nicotine pouches"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 57,
+    "var": "pouch_help_quit",
+    "screen": "perception",
+    "type": "radio",
+    "required": true,
+    "label_en": "Compared with nicotine gum or patches, how helpful do you think nicotine pouches are in supporting a quit attempt for cigarette smoking?",
+    "label_ar": "بالمقارنة مع علكة أو لصقات النيكوتين، إلى أي مدى تعتقد أن أظرف النيكوتين مفيدة لدعم محاولة الإقلاع عن تدخين السجائر؟",
+    "choices": [
+      {"code": "1", "ar": "أقل فائدة بكثير", "en": "Much less helpful"},
+      {"code": "2", "ar": "أقل فائدة نوعاً ما", "en": "Somewhat less helpful"},
+      {"code": "3", "ar": "مماثلة في الفائدة", "en": "Equally helpful"},
+      {"code": "4", "ar": "أكثر فائدة نوعاً ما", "en": "Somewhat more helpful"},
+      {"code": "5", "ar": "أكثر فائدة بكثير", "en": "Much more helpful"},
+      {"code": "6", "ar": "لا أعلم", "en": "Don't know"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] <> ''"
+  },
+  {
+    "n": 58,
+    "var": "pouch_help_craving",
+    "screen": "perception",
+    "type": "radio",
+    "required": true,
+    "label_en": "Based on your personal experience, how much did nicotine pouches help you manage cravings to smoke cigarettes?",
+    "label_ar": "بناءً على تجربتك الشخصية، إلى أي مدى ساعدتك أظرف النيكوتين في التعامل مع الرغبة في تدخين السجائر؟",
+    "choices": [
+      {"code": "5", "ar": "ساعدتني كثيراً جداً", "en": "Helped me very much"},
+      {"code": "4", "ar": "ساعدتني كثيراً", "en": "Helped me a lot"},
+      {"code": "3", "ar": "ساعدتني إلى حد ما", "en": "Helped me moderately"},
+      {"code": "2", "ar": "ساعدتني قليلاً", "en": "Helped me slightly"},
+      {"code": "1", "ar": "لم تساعدني إطلاقاً", "en": "Did not help me at all"},
+      {"code": "99", "ar": "لا ينطبق", "en": "Not applicable"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 59,
+    "var": "craving_compare",
+    "screen": "perception",
+    "type": "radio",
+    "required": true,
+    "label_en": "Based on your personal experience, how does the strength of craving/urge for nicotine pouches compare to the craving/urge to smoke cigarettes?",
+    "label_ar": "بناءً على تجربتك الشخصية، كيف تقارن شدة الرغبة أو الاشتياق (الرغبة الشديدة) لاستخدام أظرف النيكوتين بشدة الرغبة أو الاشتياق لتدخين السجائر؟",
+    "choices": [
+      {"code": "1", "ar": "أضعف بكثير مع أظرف النيكوتين", "en": "Much weaker with nicotine pouches"},
+      {"code": "2", "ar": "أضعف قليلاً مع أظرف النيكوتين", "en": "Slightly weaker with nicotine pouches"},
+      {"code": "3", "ar": "متشابهة تقريباً", "en": "About the same"},
+      {"code": "4", "ar": "أقوى قليلاً مع أظرف النيكوتين", "en": "Slightly stronger with nicotine pouches"},
+      {"code": "5", "ar": "أقوى بكثير مع أظرف النيكوتين", "en": "Much stronger with nicotine pouches"},
+      {"code": "99", "ar": "لا ينطبق (لم أشعر برغبة أو اشتياق)", "en": "Not applicable (I did not experience cravings)"}
+    ],
+    "logic": "[consent] = '1' and [cig100] = '1' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 60,
+    "var": "harm_relative",
+    "screen": "perception",
+    "type": "radio",
+    "required": true,
+    "label_en": "Compared with smoking cigarettes, how harmful do you think nicotine pouches are?",
+    "label_ar": "بالمقارنة مع تدخين السجائر، إلى أي مدى تعتقد أن أظرف النيكوتين ضارة؟",
+    "choices": [
+      {"code": "1", "ar": "أقل ضرراً بكثير", "en": "Much less harmful"},
+      {"code": "2", "ar": "أقل ضرراً نوعاً ما", "en": "Somewhat less harmful"},
+      {"code": "3", "ar": "مماثلة في الضرر", "en": "Equally harmful"},
+      {"code": "4", "ar": "أكثر ضرراً نوعاً ما", "en": "Somewhat more harmful"},
+      {"code": "5", "ar": "أكثر ضرراً بكثير", "en": "Much more harmful"},
+      {"code": "99", "ar": "لا أعلم", "en": "Don't know"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] <> ''"
+  },
+  {
+    "n": 61,
+    "var": "pouch_addictive",
+    "screen": "perception",
+    "type": "radio",
+    "required": true,
+    "label_en": "Compared with smoking cigarettes, how addictive do you think nicotine pouches are?",
+    "label_ar": "بالمقارنة مع تدخين السجائر، إلى أي مدى تعتقد أن أظرف النيكوتين تسبب الإدمان؟",
+    "choices": [
+      {"code": "1", "ar": "أقل إدماناً بكثير", "en": "Much less addictive"},
+      {"code": "2", "ar": "أقل إدماناً نوعاً ما", "en": "Somewhat less addictive"},
+      {"code": "3", "ar": "مماثلة في الإدمان", "en": "Equally addictive"},
+      {"code": "4", "ar": "أكثر إدماناً نوعاً ما", "en": "Somewhat more addictive"},
+      {"code": "5", "ar": "أكثر إدماناً بكثير", "en": "Much more addictive"},
+      {"code": "6", "ar": "لا أعلم", "en": "Don't know"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] <> ''"
+  },
+  {
+    "n": 62,
+    "var": "resp_change",
+    "screen": "perception",
+    "type": "radio",
+    "required": true,
+    "label_en": "Compared with before you started using nicotine pouches, how have your respiratory symptoms - cough, phlegm, breathlessness - changed?",
+    "label_ar": "مقارنةً بما قبل بدء استخدام أظرف النيكوتين، كيف تغيّرت أعراضك التنفسية (السعال، البلغم، ضيق النفس)؟",
+    "choices": [
+      {"code": "1", "ar": "تحسّنت كثيراً", "en": "Much improved"},
+      {"code": "2", "ar": "تحسّنت قليلاً", "en": "Slightly improved"},
+      {"code": "3", "ar": "لم تتغيّر", "en": "No change"},
+      {"code": "4", "ar": "ساءت قليلاً", "en": "Slightly worse"},
+      {"code": "5", "ar": "ساءت كثيراً", "en": "Much worse"},
+      {"code": "99", "ar": "لا ينطبق (لم تكن لدي أعراض تنفسية)", "en": "Not applicable (I had no respiratory symptoms)"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 63,
+    "var": "oral_change",
+    "screen": "perception",
+    "type": "radio",
+    "required": true,
+    "label_en": "Compared with before you started using nicotine pouches, how has the health of your mouth and gums changed?",
+    "label_ar": "مقارنةً بما قبل بدء استخدام أظرف النيكوتين، كيف تغيّرت صحة فمك ولثتك؟",
+    "choices": [
+      {"code": "1", "ar": "تحسّنت كثيراً", "en": "Much improved"},
+      {"code": "2", "ar": "تحسّنت قليلاً", "en": "Slightly improved"},
+      {"code": "3", "ar": "لم تتغيّر", "en": "No change"},
+      {"code": "4", "ar": "ساءت قليلاً", "en": "Slightly worse"},
+      {"code": "5", "ar": "ساءت كثيراً", "en": "Much worse"},
+      {"code": "99", "ar": "لا ينطبق (لم تكن لدي مشاكل في الفم أو اللثة)", "en": "Not applicable (I had no mouth or gum problems)"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 64,
+    "var": "symptoms",
+    "screen": "safety",
+    "type": "checkbox",
+    "required": true,
+    "label_en": "Which of the following symptoms have you experienced after using nicotine pouches? Select all that apply.",
+    "label_ar": "أي من الأعراض التالية شعرت بها بعد استخدام أظرف النيكوتين؟ (اختر كل ما ينطبق)",
+    "choices": [
+      {"code": "1", "ar": "مشاكل الجهاز التنفسي: سعال، ضيق التنفس، ألم الصدر، البلغم، أو صفير", "en": "Respiratory issues: cough, shortness of breath, chest pain, phlegm, or wheezing"},
+      {"code": "2", "ar": "مشاكل الفم والحلق: تقرحات الفم، تهيج اللثة، أو جفاف الفم", "en": "Oral and throat issues: mouth ulcers, blisters, gum irritation, or dry mouth"},
+      {"code": "3", "ar": "مشاكل الجهاز الهضمي: اضطراب المعدة، غثيان، قيء، أو إسهال", "en": "Digestive issues: upset stomach, nausea, vomiting, or diarrhea"},
+      {"code": "4", "ar": "أعراض القلب والدورة الدموية: زيادة معدل ضربات القلب (خفقان)، ارتفاع ضغط الدم، أو برودة في اليدين والقدمين", "en": "Cardiovascular and circulatory symptoms: increased heart rate (palpitations), elevated blood pressure, or cold hands and feet"},
+      {"code": "5", "ar": "الأعراض العصبية والمزاجية: صداع، دوخة، قلق، أو تهيج مزاجي", "en": "Neurological and mood changes: headache, dizziness, anxiety, or irritability"},
+      {"code": "7", "ar": "اضطراب النوم: صعوبة في النوم، نوم متقطع، أو نعاس أثناء النهار", "en": "Sleep problems: difficulty falling asleep, disturbed sleep, or daytime drowsiness"},
+      {"code": "6", "ar": "لم أشعر بأي أعراض", "en": "I have not experienced any symptoms"}
+    ],
+    "exclusive": "6",
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 65,
+    "var": "dzrt_brand_group",
+    "screen": "safety",
+    "type": "radio",
+    "required": true,
+    "label_en": "Have you ever used any nicotine-pouch brand other than DZRT?",
+    "label_ar": "هل سبق أن استخدمت أي علامة تجارية لأظرف النيكوتين غير دزرت؟",
+    "choices": [
+      {"code": "1", "ar": "لا، استخدمت دزرت فقط", "en": "No, I have used DZRT only"},
+      {"code": "2", "ar": "نعم، استخدمت دزرت وعلامات تجارية أخرى", "en": "Yes, I have used DZRT and other brands"},
+      {"code": "3", "ar": "لم أستخدم دزرت؛ استخدمت علامات تجارية أخرى فقط", "en": "I have not used DZRT; I have used other brands only"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1'"
+  },
+  {
+    "n": 66,
+    "var": "pouch_brands",
+    "screen": "safety",
+    "type": "checkbox",
+    "required": true,
+    "label_en": "Which pouch brands do you use or did you use? Select all that apply.",
+    "label_ar": "ما هي العلامات/الأنواع التي تستخدمها أو كنت تستخدمها؟ (اختر كل ما ينطبق)",
+    "choices": [
+      {"code": "1", "ar": "دزرت", "en": "DZRT"},
+      {"code": "2", "ar": "زين", "en": "ZYN"},
+      {"code": "3", "ar": "فيلو", "en": "VELO"},
+      {"code": "4", "ar": "بابلو", "en": "PABLO"},
+      {"code": "5", "ar": "كيلا", "en": "KILLA"},
+      {"code": "6", "ar": "سايبيريا", "en": "Siberia"},
+      {"code": "7", "ar": "آيسبيرغ", "en": "ICEBERG"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] = '1' and ([dzrt_brand_group] = '2' or [dzrt_brand_group] = '3')"
+  },
+  {
+    "n": 67,
+    "var": "phq2_1",
+    "screen": "wellbeing",
+    "type": "radio",
+    "required": true,
+    "label_en": "Little interest or pleasure in doing things",
+    "label_ar": "قلة الاهتمام أو الاستمتاع بالقيام بالأشياء",
+    "choices": [
+      {"code": "0", "ar": "أبداً", "en": "Not at all"},
+      {"code": "1", "ar": "عدة أيام", "en": "Several days"},
+      {"code": "2", "ar": "أكثر من نصف الأيام", "en": "More than half the days"},
+      {"code": "3", "ar": "تقريباً كل يوم", "en": "Nearly every day"}
+    ],
+    "matrix": "phqgad",
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] <> ''"
+  },
+  {
+    "n": 68,
+    "var": "phq2_2",
+    "screen": "wellbeing",
+    "type": "radio",
+    "required": true,
+    "label_en": "Feeling down, depressed, or hopeless",
+    "label_ar": "الشعور بالإحباط أو الاكتئاب أو فقدان الأمل",
+    "choices": [
+      {"code": "0", "ar": "أبداً", "en": "Not at all"},
+      {"code": "1", "ar": "عدة أيام", "en": "Several days"},
+      {"code": "2", "ar": "أكثر من نصف الأيام", "en": "More than half the days"},
+      {"code": "3", "ar": "تقريباً كل يوم", "en": "Nearly every day"}
+    ],
+    "matrix": "phqgad",
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] <> ''"
+  },
+  {
+    "n": 69,
+    "var": "gad2_1",
+    "screen": "wellbeing",
+    "type": "radio",
+    "required": true,
+    "label_en": "Feeling nervous, anxious, or on edge",
+    "label_ar": "الشعور بالتوتر أو القلق أو التوتر الشديد",
+    "choices": [
+      {"code": "0", "ar": "أبداً", "en": "Not at all"},
+      {"code": "1", "ar": "عدة أيام", "en": "Several days"},
+      {"code": "2", "ar": "أكثر من نصف الأيام", "en": "More than half the days"},
+      {"code": "3", "ar": "تقريباً كل يوم", "en": "Nearly every day"}
+    ],
+    "matrix": "phqgad",
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] <> ''"
+  },
+  {
+    "n": 70,
+    "var": "gad2_2",
+    "screen": "wellbeing",
+    "type": "radio",
+    "required": true,
+    "label_en": "Not being able to stop or control worrying",
+    "label_ar": "عدم القدرة على إيقاف القلق أو السيطرة عليه",
+    "choices": [
+      {"code": "0", "ar": "أبداً", "en": "Not at all"},
+      {"code": "1", "ar": "عدة أيام", "en": "Several days"},
+      {"code": "2", "ar": "أكثر من نصف الأيام", "en": "More than half the days"},
+      {"code": "3", "ar": "تقريباً كل يوم", "en": "Nearly every day"}
+    ],
+    "matrix": "phqgad",
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] <> ''"
+  },
+  {
+    "n": 71,
+    "var": "phq2_score",
+    "screen": "wellbeing",
+    "type": "calc",
+    "required": false,
+    "label_en": "PHQ-2 score",
+    "label_ar": "درجة PHQ-2",
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] <> ''",
+    "calc": "[phq2_1] + [phq2_2]"
+  },
+  {
+    "n": 72,
+    "var": "gad2_score",
+    "screen": "wellbeing",
+    "type": "calc",
+    "required": false,
+    "label_en": "GAD-2 score",
+    "label_ar": "درجة GAD-2",
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] <> ''",
+    "calc": "[gad2_1] + [gad2_2]"
+  },
+  {
+    "n": 73,
+    "var": "recontact",
+    "screen": "followup",
+    "type": "radio",
+    "required": true,
+    "label_en": "Do you agree that we may contact you after 3, 6 and 12 months to invite you to complete short follow-up surveys?",
+    "label_ar": "هل تسمح لنا بإعادة التواصل معك بعد ٣ و٦ و١٢ شهراً لدعوتك لاستكمال استبيانات قصيرة للمتابعة؟",
+    "choices": [
+      {"code": "1", "ar": "نعم، أوافق", "en": "Yes, I agree"},
+      {"code": "0", "ar": "لا، لا أوافق", "en": "No, I don't agree"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] <> ''"
+  },
+  {
+    "n": 74,
+    "var": "prize_draw",
+    "screen": "followup",
+    "type": "radio",
+    "required": true,
+    "label_en": "Would you like to enter the {PRIZE_EN} prize draw? This is optional and entirely separate from follow-up consent.",
+    "label_ar": "هل ترغب في الدخول في السحب على جائزة {PRIZE_AR}؟ (اختياري، ومستقل تماماً عن موافقتك على المتابعة)",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": "[consent] = '1' and [age_years] >= 18 and [cig100] <> '' and [ever_pouch] <> ''"
+  },
+  {
+    "n": 75,
+    "var": "contact_email",
+    "screen": "followup",
+    "type": "text",
+    "required": true,
+    "label_en": "Please enter your email address.",
+    "label_ar": "يرجى إدخال بريدك الإلكتروني",
+    "note_en": "Required for study administration and communication",
+    "note_ar": "مطلوب لإدارة المشاركة والتواصل",
+    "validation": {"type": "email"},
+    "identifier": true,
+    "logic": "[consent] = '1' and [age_years] >= 18 and ([recontact] = '1' or [prize_draw] = '1')",
+    "logic_redcap_original": "[consent] = '1' and [age_years] >= 18"
+  },
+  {
+    "n": 76,
+    "var": "contact_phone1",
+    "screen": "followup",
+    "type": "text",
+    "required": true,
+    "label_en": "Please enter your mobile phone number",
+    "label_ar": "يرجى إدخال رقم هاتفك الجوال",
+    "note_en": "Example: 05XXXXXXXX or +9665XXXXXXXX",
+    "note_ar": "مثال: 05XXXXXXXX أو +9665XXXXXXXX",
+    "validation": {"type": "phone_sa"},
+    "identifier": true,
+    "logic": "[consent] = '1' and [age_years] >= 18 and ([recontact] = '1' or [prize_draw] = '1')",
+    "logic_redcap_original": "(none)"
+  },
+  {
+    "n": 77,
+    "var": "additional_comments",
+    "screen": "comments",
+    "type": "notes",
+    "required": false,
+    "label_en": "Do you have any additional comments about your experience using nicotine pouches? You may include any symptoms or effects you noticed.",
+    "label_ar": "هل لديك أي ملاحظات إضافية حول تجربتك مع استخدام أظرف النيكوتين؟ يمكنك ذكر أي أعراض أو آثار لاحظتها بالتفصيل",
+    "logic": "[consent] = '1' and [age_years] >= 18 and [ever_pouch] = '1'",
+    "logic_redcap_original": "[ever_pouch] = '1'"
+  }
+ ],
+ "analysis": [
+  {
+    "var": "record_id",
+    "type": "system",
+    "label_ar": "معرّف السجل",
+    "label_en": "Study Record ID",
+    "system": true
+  },
+  {
+    "var": "ana_smoke3",
+    "type": "calc",
+    "label_ar": "حالة التدخين المشتقة",
+    "label_en": "Derived smoking status: 1 never-established, 2 current, 3 former",
+    "system": true,
+    "calc": "if([consent]=\"1\" and [age_years]>=18 and [cig100]<>\"\",if([cig100]=\"0\",1,if([cig100]=\"1\" and ([smoke_status_now]=\"1\" or [smoke_status_now]=\"2\"),2,if([cig100]=\"1\" and [smoke_status_now]=\"3\",3,\"\"))),\"\")"
+  },
+  {
+    "var": "ana_pouch3",
+    "type": "calc",
+    "label_ar": "حالة استخدام أظرف النيكوتين المشتقة",
+    "label_en": "Derived pouch status: 1 never, 2 current, 3 former",
+    "system": true,
+    "calc": "if([consent]=\"1\" and [age_years]>=18 and [ever_pouch]<>\"\",if([ever_pouch]=\"0\",1,if([ever_pouch]=\"1\" and ([pouch_status_now]=\"1\" or [pouch_status_now]=\"2\"),2,if([ever_pouch]=\"1\" and [pouch_status_now]=\"3\",3,\"\"))),\"\")"
+  },
+  {
+    "var": "ana_group9",
+    "type": "calc",
+    "label_ar": "التصنيف التساعي للتدخين واستخدام الأظرف",
+    "label_en": "Nine-group smoking-by-pouch classification",
+    "system": true,
+    "calc": "if([consent]=\"1\" and [age_years]>=18 and [cig100]<>\"\" and [ever_pouch]<>\"\",if([cig100]=\"0\" and [ever_pouch]=\"0\",1,if([cig100]=\"0\" and [ever_pouch]=\"1\" and ([pouch_status_now]=\"1\" or [pouch_status_now]=\"2\"),2,if([cig100]=\"0\" and [ever_pouch]=\"1\" and [pouch_status_now]=\"3\",3,if([cig100]=\"1\" and ([smoke_status_now]=\"1\" or [smoke_status_now]=\"2\") and [ever_pouch]=\"0\",4,if([cig100]=\"1\" and ([smoke_status_now]=\"1\" or [smoke_status_now]=\"2\") and [ever_pouch]=\"1\" and ([pouch_status_now]=\"1\" or [pouch_status_now]=\"2\"),5,if([cig100]=\"1\" and ([smoke_status_now]=\"1\" or [smoke_status_now]=\"2\") and [ever_pouch]=\"1\" and [pouch_status_now]=\"3\",6,if([cig100]=\"1\" and [smoke_status_now]=\"3\" and [ever_pouch]=\"0\",7,if([cig100]=\"1\" and [smoke_status_now]=\"3\" and [ever_pouch]=\"1\" and ([pouch_status_now]=\"1\" or [pouch_status_now]=\"2\"),8,if([cig100]=\"1\" and [smoke_status_now]=\"3\" and [ever_pouch]=\"1\" and [pouch_status_now]=\"3\",9,\"\"))))))))),\"\")",
+    "research_note": "1 = Never-established smoker / never pouch 2 = Never-established smoker / current pouch 3 = Never-established smoker / former pouch 4 = Current smoker / never pouch 5 = Current smoker / current pouch 6 = Current smoker / former pouch 7 = Former smoker / never pouch 8 = Former smoker / current pouch 9 = Former smoker / former pouch"
+  },
+  {
+    "var": "ana_attention",
+    "type": "calc",
+    "label_ar": "اجتياز سؤال الانتباه",
+    "label_en": "Attention check: 1 passed, 0 failed",
+    "system": true,
+    "calc": "if([consent]=\"1\" and [age_years]>=18 and [attention_check]<>\"\",if([attention_check]=\"1\",1,0),\"\")",
+    "research_note": "Flag only. Do not automatically delete participants who fail the attention check. Conduct the predefined sensitivity analysis with and without failed records."
+  }
+ ]
+}
+/*SURVEY_JSON_END*/;
+var SCREENS = SURVEY.screens;
+var QUESTIONS = SURVEY.questions;
+
+/* ==========================================================================
+   REDCap LOGIC ENGINE  (identical copy in Index.html and Code.gs)
+   Tokenizer + recursive-descent parser + evaluator. No eval / new Function.
+   Supports: [var]  [var(code)]  'text' "text"  numbers  = == <> != < <= > >=
+             and or not  && ||  ( )  + - * /  if(cond, a, b)  true false
+   ========================================================================== */
+var RedcapLogic = (function () {
+  'use strict';
+
+  var DIGIT_MAP = {};
+  (function () {
+    var i;
+    for (i = 0; i < 10; i++) {
+      DIGIT_MAP[String.fromCharCode(0x0660 + i)] = String(i); // Arabic-Indic
+      DIGIT_MAP[String.fromCharCode(0x06F0 + i)] = String(i); // Persian / Urdu
+    }
+    DIGIT_MAP['٫'] = '.'; // Arabic decimal separator
+  })();
+
+  /** Convert Arabic-Indic and Persian digits to Western digits. */
+  function normalizeDigits(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/[٠-٩۰-۹٫]/g, function (c) { return DIGIT_MAP[c]; });
+  }
+
+  /** Western digits -> Arabic-Indic digits (for display in the Arabic column). */
+  function toArabicDigits(s) {
+    return String(s).replace(/[0-9]/g, function (d) { return String.fromCharCode(0x0660 + Number(d)); });
+  }
+
+  // ---------------------------------------------------------------- tokenizer
+  function tokenize(src) {
+    var tokens = [], i = 0, n = src.length, c, m, rest;
+    while (i < n) {
+      c = src.charAt(i);
+      if (/\s/.test(c)) { i++; continue; }
+      rest = src.slice(i);
+      if (c === '[') {
+        m = /^\[\s*([A-Za-z_][A-Za-z0-9_]*)\s*(?:\(\s*([A-Za-z0-9_\-]+)\s*\))?\s*\]/.exec(rest);
+        if (!m) throw new Error('Bad field reference at ' + i + ' in: ' + src);
+        tokens.push({ t: 'field', v: m[1], code: m[2] === undefined ? null : m[2] });
+        i += m[0].length; continue;
+      }
+      if (c === '"' || c === "'") {
+        var j = src.indexOf(c, i + 1);
+        if (j < 0) throw new Error('Unclosed string in: ' + src);
+        tokens.push({ t: 'str', v: src.slice(i + 1, j) });
+        i = j + 1; continue;
+      }
+      m = /^(\d+\.?\d*|\.\d+)/.exec(rest);
+      if (m) { tokens.push({ t: 'num', v: m[1] }); i += m[1].length; continue; }
+      m = /^(<>|!=|<=|>=|==|&&|\|\||[=<>+\-*\/(),])/.exec(rest);
+      if (m) {
+        var op = m[1];
+        if (op === '&&') op = 'and';
+        if (op === '||') op = 'or';
+        if (op === '==') op = '=';
+        if (op === '!=') op = '<>';
+        tokens.push({ t: 'op', v: op }); i += m[1].length; continue;
+      }
+      m = /^[A-Za-z_]+/.exec(rest);
+      if (m) {
+        var w = m[0].toLowerCase();
+        if (w === 'and' || w === 'or' || w === 'not' || w === 'if' || w === 'true' || w === 'false') {
+          tokens.push({ t: 'kw', v: w }); i += m[0].length; continue;
+        }
+        throw new Error('Unknown word "' + m[0] + '" in: ' + src);
+      }
+      throw new Error('Unexpected character "' + c + '" in: ' + src);
+    }
+    return tokens;
+  }
+
+  // ---------------------------------------------------------------- parser
+  function parse(src) {
+    var toks = tokenize(src), p = 0;
+    function peek() { return toks[p]; }
+    function isOp(v) { var k = toks[p]; return k && k.t === 'op' && k.v === v; }
+    function isKw(v) { var k = toks[p]; return k && k.t === 'kw' && k.v === v; }
+    function expect(v) {
+      var k = toks[p];
+      if (!k || k.v !== v) throw new Error('Expected "' + v + '" in: ' + src);
+      p++;
+    }
+    function parseOr() {
+      var left = parseAnd();
+      while (isKw('or')) { p++; left = { k: 'or', a: left, b: parseAnd() }; }
+      return left;
+    }
+    function parseAnd() {
+      var left = parseNot();
+      while (isKw('and')) { p++; left = { k: 'and', a: left, b: parseNot() }; }
+      return left;
+    }
+    function parseNot() {
+      if (isKw('not')) { p++; return { k: 'not', a: parseNot() }; }
+      return parseCmp();
+    }
+    var CMP = { '=': 1, '<>': 1, '<': 1, '<=': 1, '>': 1, '>=': 1 };
+    function parseCmp() {
+      var left = parseAdd(), k = peek();
+      if (k && k.t === 'op' && CMP[k.v]) { p++; return { k: 'cmp', op: k.v, a: left, b: parseAdd() }; }
+      return left;
+    }
+    function parseAdd() {
+      var left = parseMul();
+      while (isOp('+') || isOp('-')) { var op = toks[p++].v; left = { k: 'arith', op: op, a: left, b: parseMul() }; }
+      return left;
+    }
+    function parseMul() {
+      var left = parseUnary();
+      while (isOp('*') || isOp('/')) { var op = toks[p++].v; left = { k: 'arith', op: op, a: left, b: parseUnary() }; }
+      return left;
+    }
+    function parseUnary() {
+      if (isOp('-')) { p++; return { k: 'neg', a: parseUnary() }; }
+      if (isOp('+')) { p++; return parseUnary(); }
+      return parsePrimary();
+    }
+    function parsePrimary() {
+      var k = peek();
+      if (!k) throw new Error('Unexpected end of logic: ' + src);
+      if (k.t === 'num') { p++; return { k: 'lit', v: k.v }; }
+      if (k.t === 'str') { p++; return { k: 'lit', v: k.v }; }
+      if (k.t === 'field') { p++; return { k: 'field', v: k.v, code: k.code }; }
+      if (k.t === 'kw' && (k.v === 'true' || k.v === 'false')) { p++; return { k: 'bool', v: k.v === 'true' }; }
+      if (k.t === 'kw' && k.v === 'if') {
+        p++; expect('(');
+        var c = parseOr(); expect(',');
+        var a = parseOr(); expect(',');
+        var b = parseOr(); expect(')');
+        return { k: 'if', c: c, a: a, b: b };
+      }
+      if (isOp('(')) { p++; var e = parseOr(); expect(')'); return e; }
+      throw new Error('Unexpected token "' + k.v + '" in: ' + src);
+    }
+    var ast = parseOr();
+    if (p !== toks.length) throw new Error('Unexpected trailing tokens in: ' + src);
+    return ast;
+  }
+
+  var AST_CACHE = {};
+  function compile(src) {
+    if (!Object.prototype.hasOwnProperty.call(AST_CACHE, src)) AST_CACHE[src] = parse(src);
+    return AST_CACHE[src];
+  }
+
+  // ---------------------------------------------------------------- evaluator
+  var NUM_RE = /^[\-+]?(\d+\.?\d*|\.\d+)$/;
+  function isBlank(v) { return v === null || v === undefined || (typeof v === 'string' && v.trim() === ''); }
+  function asScalar(v) { return typeof v === 'boolean' ? (v ? 1 : 0) : v; }
+  function looksNum(v) {
+    v = asScalar(v);
+    if (typeof v === 'number') return isFinite(v);
+    return !isBlank(v) && NUM_RE.test(String(v).trim());
+  }
+  function truthy(v) {
+    if (typeof v === 'boolean') return v;
+    if (isBlank(v)) return false;
+    if (looksNum(v)) return Number(v) !== 0;
+    return true;
+  }
+  function eq(a, b) {
+    a = asScalar(a); b = asScalar(b);
+    var ab = isBlank(a), bb = isBlank(b);
+    if (ab || bb) return ab && bb;
+    if (looksNum(a) && looksNum(b)) return Number(a) === Number(b);
+    return String(a) === String(b);
+  }
+  function rel(op, a, b) {
+    a = asScalar(a); b = asScalar(b);
+    if (isBlank(a) || isBlank(b)) return false;           // REDCap: comparison with blank is false
+    var x, y;
+    if (looksNum(a) && looksNum(b)) { x = Number(a); y = Number(b); }
+    else if (!looksNum(a) && !looksNum(b)) { x = String(a); y = String(b); }
+    else return false;                                     // text vs number: never true
+    if (op === '<') return x < y;
+    if (op === '<=') return x <= y;
+    if (op === '>') return x > y;
+    return x >= y;
+  }
+  function arith(op, a, b) {
+    a = asScalar(a); b = asScalar(b);
+    if (!looksNum(a) || !looksNum(b)) return '';           // any blank input -> blank result
+    var x = Number(a), y = Number(b), r;
+    if (op === '+') r = x + y;
+    else if (op === '-') r = x - y;
+    else if (op === '*') r = x * y;
+    else { if (y === 0) return ''; r = x / y; }
+    return Math.round(r * 1e10) / 1e10;
+  }
+
+  function evalNode(node, getVal) {
+    switch (node.k) {
+      case 'lit': return node.v;
+      case 'bool': return node.v;
+      case 'field': return getVal(node.v, node.code);
+      case 'or': return truthy(evalNode(node.a, getVal)) || truthy(evalNode(node.b, getVal));
+      case 'and': return truthy(evalNode(node.a, getVal)) && truthy(evalNode(node.b, getVal));
+      case 'not': return !truthy(evalNode(node.a, getVal));
+      case 'cmp':
+        var a = evalNode(node.a, getVal), b = evalNode(node.b, getVal);
+        if (node.op === '=') return eq(a, b);
+        if (node.op === '<>') return !eq(a, b);
+        return rel(node.op, a, b);
+      case 'arith': return arith(node.op, evalNode(node.a, getVal), evalNode(node.b, getVal));
+      case 'neg': var v = evalNode(node.a, getVal); return looksNum(v) ? -Number(v) : '';
+      case 'if': return truthy(evalNode(node.c, getVal)) ? evalNode(node.a, getVal) : evalNode(node.b, getVal);
+    }
+    throw new Error('Unknown node ' + node.k);
+  }
+
+  function evaluate(src, getVal) { return evalNode(compile(src), getVal); }
+  function test(src, getVal) { return (!src || !String(src).trim()) ? true : truthy(evaluate(src, getVal)); }
+
+  // ---------------------------------------------------------------- survey engine
+  /** Full list of choices for a question (explicit choices + numeric range). */
+  function expandChoices(q) {
+    var out = (q.choices || []).slice(), i;
+    if (q.range) for (i = q.range[0]; i <= q.range[1]; i++) out.push({ code: String(i), ar: String(i), en: String(i), numeric: true });
+    return out;
+  }
+
+  function hasValue(q, answers) {
+    var v = answers[q.var];
+    if (q.type === 'checkbox') return Array.isArray(v) && v.length > 0;
+    return !isBlank(v);
+  }
+
+  function makeGetter(survey, answers, calcs) {
+    var byVar = survey._byVar;
+    return function (name, code) {
+      var q = byVar[name];
+      if (calcs && Object.prototype.hasOwnProperty.call(calcs, name)) return calcs[name];
+      var v = answers[name];
+      if (code !== null && code !== undefined) {               // [var(code)] -> '1' / '0'
+        return (Array.isArray(v) && v.indexOf(String(code)) >= 0) ? '1' : '0';
+      }
+      if (q && q.type === 'checkbox') return '';
+      return isBlank(v) ? '' : String(v).trim();
+    };
+  }
+
+  /** Index the survey once (adds _byVar, _all). */
+  function prepare(survey) {
+    if (survey._byVar) return survey;
+    var byVar = {};
+    survey.questions.forEach(function (q) { byVar[q.var] = q; });
+    (survey.analysis || []).forEach(function (q) { byVar[q.var] = q; });
+    survey._byVar = byVar;
+    // compile everything up-front so a typo fails loudly
+    survey.questions.forEach(function (q) { if (q.logic) compile(q.logic); if (q.calc) compile(q.calc); });
+    (survey.analysis || []).forEach(function (q) { if (q.calc) compile(q.calc); });
+    return survey;
+  }
+
+  /**
+   * Re-evaluate all branching logic.
+   * opts.clear = true  -> hidden answers are erased, repeating until nothing changes (REDCap behaviour).
+   * Returns { visible: {var: bool}, calcs: {var: number|''}, cleared: [vars] }.
+   */
+  function apply(survey, answers, opts) {
+    prepare(survey);
+    var clear = !opts || opts.clear !== false;
+    var visible = {}, cleared = [], guard = 0, changed, calcs;
+    do {
+      changed = false;
+      calcs = computeCalcs(survey, answers, visible);
+      var get = makeGetter(survey, answers, calcs);
+      survey.questions.forEach(function (q) {
+        var vis = test(q.logic, get);
+        visible[q.var] = vis;
+        if (!vis && clear && q.type !== 'calc' && hasValue(q, answers)) {
+          answers[q.var] = q.type === 'checkbox' ? [] : '';
+          cleared.push(q.var);
+          changed = true;
+        }
+      });
+    } while (changed && ++guard < 200);
+    calcs = computeCalcs(survey, answers, visible);
+    return { visible: visible, calcs: calcs, cleared: cleared };
+  }
+
+  /** Calculated fields, in definition order (a calc may use an earlier calc). */
+  function computeCalcs(survey, answers, visibleHint) {
+    var calcs = {};
+    var list = survey.questions.filter(function (q) { return q.type === 'calc'; })
+      .concat((survey.analysis || []).filter(function (q) { return q.type === 'calc'; }));
+    list.forEach(function (q) {
+      var get = makeGetter(survey, answers, calcs);
+      var val = '';
+      if (test(q.logic, get)) {
+        var r = evaluate(q.calc, get);
+        if (typeof r === 'boolean') r = r ? 1 : 0;
+        val = looksNum(r) ? Number(r) : '';
+      }
+      calcs[q.var] = val;
+    });
+    return calcs;
+  }
+
+  return {
+    normalizeDigits: normalizeDigits, toArabicDigits: toArabicDigits,
+    tokenize: tokenize, parse: parse, evaluate: evaluate, test: test, truthy: truthy,
+    expandChoices: expandChoices, hasValue: hasValue, isBlank: isBlank,
+    prepare: prepare, apply: apply, computeCalcs: computeCalcs
+  };
+})();
+/* =========================== END REDCap LOGIC ENGINE ====================== */
+
+/* ==========================================================================
+   APPLICATION
+   ========================================================================== */
+(function () {
+  'use strict';
+  var RL = RedcapLogic;
+  var CFG = APP_CONFIG || {};
+  var IN_GOOGLE = typeof google !== 'undefined' && google.script && google.script.run;
+  var MAX_TEXT = CFG.max_text || 2000;
+
+  // CONFIG placeholders (prize amount) are filled in when a question is drawn
+  function fill(s) { return String(s || '').split('{PRIZE_EN}').join(CFG.prize_en || '').split('{PRIZE_AR}').join(CFG.prize_ar || ''); }
+  RL.prepare(SURVEY);
+  var BYVAR = SURVEY._byVar;
+  var SCREEN_QS = SCREENS.map(function (s) { return QUESTIONS.filter(function (q) { return q.screen === s.id && q.type !== 'calc'; }); });
+  var FOLLOWUP_IDX = SCREENS.map(function (s) { return s.id; }).indexOf('followup');
+  var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var state = { view: 'welcome', idx: -1, answers: {}, vis: {}, startedAt: null, inFlight: false, done: false, lastPayload: null, busyBtn: null };
+  QUESTIONS.forEach(function (q) { if (q.type !== 'calc') state.answers[q.var] = q.type === 'checkbox' ? [] : ''; });
+
+  // --- DOM helpers ----------------------------------------------------------
+  var $ = function (id) { return document.getElementById(id); };
+  var VIEW = $('view'), NAV = $('navbar'), BACK = $('backBtn'), NEXT = $('nextBtn'), CARD = $('card'), HEADER = $('siteHeader');
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function rich(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'); }
+  function ar(n) { return RL.toArabicDigits(n); }
+  function h(tag, attrs, html) {
+    var e = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      var v = attrs[k];
+      if (v === false || v === null || v === undefined) return;
+      if (k === 'class') e.className = v; else e.setAttribute(k, v === true ? '' : v);
+    });
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  }
+  function biHTML(en, arr, cls, tagEn) {
+    tagEn = tagEn || 'span';
+    return '<' + tagEn + ' class="bi ' + (cls || '') + '"><span class="en" lang="en" dir="ltr">' + en + '</span><span class="ar" lang="ar" dir="rtl">' + arr + '</span></' + tagEn + '>';
+  }
+  var ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  var ICON_ERR = '<svg class="err-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 7.5v5.5M12 16.6v.1"/></svg>';
+
+  // --- static text ----------------------------------------------------------
+  function applyConfigText() {
+    $('uniEn').textContent = CFG.institution_en || '';
+    $('uniAr').textContent = CFG.institution_ar || '';
+    $('hdrTitleEn').textContent = CFG.title_en || '';
+    $('hdrTitleAr').textContent = CFG.title_ar || '';
+    $('footEn').textContent = CFG.footer_en || '';
+    $('footAr').textContent = CFG.footer_ar || '';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-cfg]'), function (el) {
+      el.textContent = CFG[el.getAttribute('data-cfg')] || '';
+    });
+  }
+  applyConfigText();
+
+  // --- messages ---------------------------------------------------------------
+  var MSG = {
+    required: { en: 'This question is required.', ar: 'هذا السؤال مطلوب.' },
+    integer: function (min, max) { return { en: 'Please enter a whole number between ' + min + ' and ' + max + '.', ar: 'يرجى إدخال رقم صحيح بين ' + ar(min) + ' و ' + ar(max) + '.' }; },
+    email: { en: 'Please enter a valid email address, e.g. name@example.com.', ar: 'يرجى إدخال بريد إلكتروني صحيح، مثل name@example.com.' },
+    phone: { en: 'Please enter a valid Saudi mobile number: 05XXXXXXXX or +9665XXXXXXXX.', ar: 'يرجى إدخال رقم جوال سعودي صحيح: 05XXXXXXXX أو +9665XXXXXXXX.' },
+    length: { en: 'Please keep your text under ' + MAX_TEXT.toLocaleString('en-US') + ' characters.', ar: 'يرجى ألا يتجاوز النص ' + ar(MAX_TEXT) + ' حرف.' },
+    network: { en: 'We could not save your answers. Please check your connection and try again. Nothing has been lost.', ar: 'تعذّر حفظ إجاباتك. يرجى التحقق من الاتصال والمحاولة مرة أخرى. لم تُفقد أي إجابة.' },
+    noHost: { en: 'The survey is not connected to its data sheet yet. Please contact the research team.', ar: 'الاستبيان غير مرتبط بعد بجدول البيانات. يرجى التواصل مع فريق البحث.' }
+  };
+
+  // --- value normalisation (mirrors Code.gs) ---------------------------------
+  function normalizePhone(v) {
+    var s = RL.normalizeDigits(v).replace(/[\s\-().]/g, '');
+    var m = /^(?:05|9665|\+9665|009665)(\d{8})$/.exec(s);
+    return m ? '+9665' + m[1] : null;
+  }
+  var EMAIL_RE = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/;
+
+  function validateQ(q) {
+    var v = state.answers[q.var];
+    var blank = q.type === 'checkbox' ? !(v && v.length) : RL.isBlank(v);
+    if (blank) return q.required ? MSG.required : null;
+    var val = q.validation;
+    if (q.type === 'notes' && String(v).length > MAX_TEXT) return MSG.length;
+    if (!val) return null;
+    var s = String(v).trim();
+    if (val.type === 'integer') {
+      if (!/^-?\d+$/.test(s) || Number(s) < val.min || Number(s) > val.max) return MSG.integer(val.min, val.max);
+    } else if (val.type === 'email') {
+      if (!EMAIL_RE.test(s.toLowerCase()) || s.length > 254) return MSG.email;
+    } else if (val.type === 'phone_sa') {
+      if (!normalizePhone(s)) return MSG.phone;
+    }
+    return null;
+  }
+
+  // --- logic ----------------------------------------------------------------
+  function evaluate(clear) {
+    var res = RL.apply(SURVEY, state.answers, { clear: clear !== false });
+    state.vis = res.visible;
+    return res;
+  }
+  function applicable(i) { return SCREEN_QS[i].some(function (q) { return state.vis[q.var]; }); }
+  function findNext(i) { for (var j = i + 1; j < SCREENS.length; j++) if (applicable(j)) return j; return -1; }
+  function findPrev(i) { for (var j = i - 1; j >= 0; j--) if (applicable(j)) return j; return -1; }
+  function isEligibleSoFar() {
+    var a = state.answers;
+    return a.consent === '1' && /^\d+$/.test(String(a.age_years).trim()) && Number(a.age_years) >= 18;
+  }
+
+  // --- rendering: question --------------------------------------------------
+  function placeholderFor(q) {
+    var v = q.validation || {};
+    if (v.type === 'integer') return { en: 'Number ' + v.min + '–' + v.max, ar: 'رقم ' + ar(v.min) + '–' + ar(v.max) };
+    if (v.type === 'email') return { en: 'name@example.com', ar: 'البريد الإلكتروني' };
+    if (v.type === 'phone_sa') return { en: '05XXXXXXXX', ar: 'رقم الجوال' };
+    if (q.type === 'notes') return { en: 'Type here (optional)', ar: 'اكتب هنا (اختياري)' };
+    return { en: 'Type your answer', ar: 'اكتب إجابتك' };
+  }
+
+  function renderQuestion(q) {
+    var id = 'q_' + q.var, lg = id + '_lg', errId = id + '_err', noteId = id + '_note';
+    var wrap = h('div', { class: 'q-wrap' + (q.matrix ? ' matrix-item' : ''), 'data-var': q.var });
+    var inner = h('div', { class: 'q-inner' });
+    var fs = h('fieldset', { class: 'q', id: id, 'aria-describedby': (q.note_en ? noteId + ' ' : '') + errId });
+    var reqEn = q.required ? '<span class="req" aria-hidden="true"></span><span class="sr-only"> (required)</span>' : '';
+    var reqAr = q.required ? '<span class="req" aria-hidden="true"></span><span class="sr-only"> (مطلوب)</span>' : '';
+    var html = '<legend class="q-legend" id="' + lg + '">' + biHTML(rich(fill(q.label_en)) + reqEn, rich(fill(q.label_ar)) + reqAr, 'q-title') + '</legend>';
+    if (q.note_en || q.note_ar) html += '<div class="bi q-note" id="' + noteId + '"><span class="en" lang="en" dir="ltr">' + esc(q.note_en || '') + '</span><span class="ar" lang="ar" dir="rtl">' + esc(q.note_ar || '') + '</span></div>';
+
+    if (q.type === 'radio' || q.type === 'checkbox') {
+      var cb = q.type === 'checkbox';
+      html += '<div class="opts">';
+      RL.expandChoices(q).forEach(function (c) {
+        var iid = id + '__' + c.code;
+        html += '<label class="opt' + (cb ? ' cb' : '') + '" for="' + iid + '">' +
+          '<input type="' + (cb ? 'checkbox' : 'radio') + '" id="' + iid + '" name="' + q.var + '" value="' + esc(c.code) + '">' +
+          '<span class="o-en" lang="en" dir="ltr">' + esc(c.en) + '</span>' +
+          '<span class="ind" aria-hidden="true">' + ICON_CHECK + '</span>' +
+          '<span class="o-ar" lang="ar" dir="rtl">' + esc(c.ar) + '</span></label>';
+      });
+      html += '</div>';
+    } else if (q.type === 'dropdown') {
+      html += '<select class="field select is-empty" id="' + id + '_in" name="' + q.var + '" aria-labelledby="' + lg + '" aria-describedby="' + errId + '"' + (q.required ? ' aria-required="true"' : '') + '>';
+      html += '<option value="">Select — اختر</option>';
+      RL.expandChoices(q).forEach(function (c) {
+        html += '<option value="' + esc(c.code) + '">' + esc(c.numeric ? c.code : c.en + ' — ' + c.ar) + '</option>';
+      });
+      html += '</select>';
+    } else { // text / notes
+      var val = q.validation || {}, ph = placeholderFor(q), isNotes = q.type === 'notes';
+      var attrs = ' id="' + id + '_in" name="' + q.var + '" aria-labelledby="' + lg + '" aria-describedby="' + errId + '"' + (q.required ? ' aria-required="true"' : '');
+      html += '<div class="field-wrap">';
+      if (isNotes) {
+        html += '<textarea class="field" dir="auto" rows="5" maxlength="' + MAX_TEXT + '"' + attrs + '></textarea>';
+      } else if (val.type === 'integer') {
+        html += '<input class="field" type="text" inputmode="numeric" autocomplete="off" dir="ltr" maxlength="6"' + attrs + '>';
+      } else if (val.type === 'email') {
+        html += '<input class="field left" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" dir="ltr" maxlength="254"' + attrs + '>';
+      } else if (val.type === 'phone_sa') {
+        html += '<input class="field left" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" maxlength="20"' + attrs + '>';
+      } else {
+        html += '<input class="field left" type="text" dir="auto" maxlength="' + MAX_TEXT + '"' + attrs + '>';
+      }
+      html += '<div class="ph' + (isNotes ? ' top' : '') + '" aria-hidden="true"><span lang="en" dir="ltr">' + esc(ph.en) + '</span><span lang="ar" dir="rtl">' + esc(ph.ar) + '</span></div></div>';
+      if (isNotes) html += '<div class="bi no-rule counter" id="' + id + '_cnt" aria-live="polite"><span class="en" lang="en" dir="ltr"></span><span class="ar" lang="ar" dir="rtl"></span></div>';
+    }
+    html += '<div class="err" id="' + errId + '" aria-live="polite"></div>';
+    fs.innerHTML = html;
+    inner.appendChild(fs); wrap.appendChild(inner);
+    return wrap;
+  }
+
+  function renderScreen(i) {
+    var s = SCREENS[i];
+    var frag = document.createDocumentFragment();
+    var head = h('h2', { class: 'screen-title bi no-rule', id: 'scrTitle' }, '<span class="en" lang="en" dir="ltr">' + esc(s.title_en) + '</span><span class="ar" lang="ar" dir="rtl">' + esc(s.title_ar) + '</span>');
+    frag.appendChild(head);
+    var stemDone = false;
+    SCREEN_QS[i].forEach(function (q) {
+      if (q.matrix && !stemDone && (s.stem_en || s.stem_ar)) {
+        stemDone = true;
+        var st = h('div', { class: 'q-wrap stem-wrap', 'data-matrix': q.matrix });
+        st.innerHTML = '<div class="q-inner"><div class="stem bi" id="stem_' + q.matrix + '"><span class="en" lang="en" dir="ltr">' + esc(s.stem_en) + '</span><span class="ar" lang="ar" dir="rtl">' + esc(s.stem_ar) + '</span></div></div>';
+        frag.appendChild(st);
+      }
+      frag.appendChild(renderQuestion(q));
+    });
+    return frag;
+  }
+
+  // --- sync DOM with answers ------------------------------------------------
+  function syncQuestion(v) {
+    var q = BYVAR[v], val = state.answers[v];
+    var inputs = VIEW.querySelectorAll('[name="' + v + '"]');
+    if (!inputs.length) return;
+    if (q.type === 'radio' || q.type === 'checkbox') {
+      Array.prototype.forEach.call(inputs, function (inp) {
+        inp.checked = q.type === 'checkbox' ? (val || []).indexOf(inp.value) >= 0 : inp.value === val;
+        inp.closest('.opt').classList.toggle('is-selected', inp.checked);
+      });
+    } else {
+      var inp = inputs[0];
+      if (inp.value !== (val || '')) inp.value = val || '';
+      if (q.type === 'dropdown') inp.classList.toggle('is-empty', !inp.value);
+      else refreshField(inp, q);
+    }
+  }
+  function refreshField(inp, q) {
+    var wrap = inp.closest('.field-wrap');
+    if (wrap) wrap.classList.toggle('has-value', inp.value.length > 0);
+    if (q.type === 'notes') {
+      var cnt = $('q_' + q.var + '_cnt');
+      if (cnt) {
+        var n = inp.value.length;
+        cnt.children[0].textContent = n.toLocaleString('en-US') + ' / ' + MAX_TEXT.toLocaleString('en-US') + ' characters';
+        cnt.children[1].textContent = ar(n) + ' / ' + ar(MAX_TEXT) + ' حرف';
+        cnt.classList.toggle('over', n > MAX_TEXT);
+      }
+    }
+  }
+
+  function refreshVisibility(instant) {
+    var wraps = VIEW.querySelectorAll('.q-wrap[data-var]');
+    if (instant) VIEW.classList.add('no-anim');
+    var firstShown = false;
+    Array.prototype.forEach.call(VIEW.querySelectorAll('.q-wrap'), function (w) {
+      var show;
+      if (w.hasAttribute('data-var')) show = !!state.vis[w.getAttribute('data-var')];
+      else {
+        var grp = w.getAttribute('data-matrix');
+        show = QUESTIONS.some(function (q) { return q.matrix === grp && state.vis[q.var]; });
+      }
+      w.classList.toggle('is-hidden', !show);
+      if (show) { w.removeAttribute('inert'); w.removeAttribute('aria-hidden'); }
+      else { w.setAttribute('inert', ''); w.setAttribute('aria-hidden', 'true'); }
+      var isStemFollower = w.previousElementSibling && w.previousElementSibling.classList.contains('stem-wrap');
+      w.classList.toggle('sep', show && firstShown && !w.classList.contains('stem-wrap') && !isStemFollower);
+      if (show) firstShown = true;
+    });
+    if (instant) { void VIEW.offsetHeight; requestAnimationFrame(function () { VIEW.classList.remove('no-anim'); }); }
+    return wraps;
+  }
+
+  function updateProgress() {
+    var wrap = $('progressWrap');
+    if (state.view !== 'screen') { wrap.hidden = true; return; }
+    wrap.hidden = false;
+    var list = []; for (var i = 0; i < SCREENS.length; i++) if (applicable(i)) list.push(i);
+    var pos = list.indexOf(state.idx) + 1; if (pos < 1) pos = 1;
+    var total = Math.max(list.length, pos);
+    $('progEn').textContent = 'Section ' + pos + ' of ' + total;
+    $('progAr').textContent = 'القسم ' + ar(pos) + ' من ' + ar(total);
+    var pct = Math.round(pos / total * 100);
+    $('progressFill').style.width = pct + '%';
+    var bar = $('progressBar');
+    bar.setAttribute('aria-valuenow', String(pct));
+    bar.setAttribute('aria-valuetext', 'Section ' + pos + ' of ' + total + ' / القسم ' + ar(pos) + ' من ' + ar(total));
+  }
+
+  function setNextLabel() {
+    var last = state.view === 'screen' && state.idx >= FOLLOWUP_IDX && findNext(state.idx) === -1 && isEligibleSoFar();
+    var mode = last ? '1' : '0';
+    if (NEXT.getAttribute('data-submit') === mode && $('nextLbl').firstChild) return;   // unchanged: never rebuild under a finger
+    $('nextLbl').innerHTML = last
+      ? '<span lang="en">Submit</span><span class="sep" aria-hidden="true"></span><span lang="ar" dir="rtl">إرسال</span>'
+      : '<span lang="en">Next</span><span class="sep" aria-hidden="true"></span><span lang="ar" dir="rtl">التالي</span>';
+    NEXT.setAttribute('data-submit', last ? '1' : '0');
+  }
+
+  // --- errors ---------------------------------------------------------------
+  function showError(v, msg) {
+    var e = $('q_' + v + '_err'), fs = $('q_' + v);
+    if (!e || !fs) return;
+    e.innerHTML = biHTML(ICON_ERR + esc(msg.en), ICON_ERR + esc(msg.ar), '', 'div');
+    fs.classList.add('has-error');
+    Array.prototype.forEach.call(fs.querySelectorAll('input,select,textarea'), function (x) { x.setAttribute('aria-invalid', 'true'); });
+  }
+  function clearError(v) {
+    var e = $('q_' + v + '_err'), fs = $('q_' + v);
+    if (!e || !fs || !fs.classList.contains('has-error')) return;
+    e.innerHTML = ''; fs.classList.remove('has-error');
+    Array.prototype.forEach.call(fs.querySelectorAll('[aria-invalid]'), function (x) { x.removeAttribute('aria-invalid'); });
+  }
+  function validateScreen(i, show) {
+    var first = null;
+    SCREEN_QS[i].forEach(function (q) {
+      if (!state.vis[q.var]) return;
+      var m = validateQ(q);
+      if (m) { if (show) showError(q.var, m); if (!first) first = q; }
+      else if (show) clearError(q.var);
+    });
+    return first;
+  }
+  function focusQuestion(q) {
+    var fs = $('q_' + q.var);
+    if (!fs) return;
+    var hh = HEADER.offsetHeight + 16;
+    var y = fs.getBoundingClientRect().top + window.pageYOffset - hh;
+    window.scrollTo({ top: Math.max(0, y), behavior: REDUCED ? 'auto' : 'smooth' });
+    var target = fs.querySelector('input:not([type=radio]):not([type=checkbox]),select,textarea') || fs.querySelector('input');
+    if (target) setTimeout(function () { try { target.focus({ preventScroll: true }); } catch (e) { target.focus(); } }, REDUCED ? 0 : 350);
+  }
+
+  // --- commit after any change ------------------------------------------------
+  function commit(v, clear) {
+    var res = evaluate(clear);
+    res.cleared.forEach(syncQuestion);
+    refreshVisibility(false);
+    updateProgress();
+    setNextLabel();
+    if (v) clearError(v);
+  }
+
+  // --- event handling (delegated) ---------------------------------------------
+  function isNumericLike(q) { return q.validation && (q.validation.type === 'integer' || q.validation.type === 'email' || q.validation.type === 'phone_sa'); }
+  VIEW.addEventListener('change', function (e) {
+    var t = e.target, v = t.name, q = BYVAR[v];
+    if (!q) return;
+    if (q.type === 'radio') {
+      state.answers[v] = t.value;
+      syncQuestion(v);
+    } else if (q.type === 'checkbox') {
+      var boxes = VIEW.querySelectorAll('input[name="' + v + '"]');
+      if (t.checked && q.exclusive) {
+        Array.prototype.forEach.call(boxes, function (b) {
+          if (t.value === q.exclusive ? b !== t : b.value === q.exclusive) b.checked = false;
+        });
+      }
+      state.answers[v] = Array.prototype.filter.call(boxes, function (b) { return b.checked; }).map(function (b) { return b.value; });
+      syncQuestion(v);
+    } else if (q.type === 'dropdown') {
+      state.answers[v] = t.value;
+      t.classList.toggle('is-empty', !t.value);
+    } else {
+      var val = t.value;
+      if (isNumericLike(q)) val = RL.normalizeDigits(val);
+      val = val.trim();
+      if (q.validation && q.validation.type === 'email') val = val.toLowerCase();
+      if (q.validation && q.validation.type === 'integer') val = val.replace(/\s+/g, '');
+      if (t.value !== val && q.type !== 'notes') t.value = val;
+      state.answers[v] = q.type === 'notes' ? t.value.trim() : val;
+      refreshField(t, q);
+    }
+    commit(v, true);
+  });
+  VIEW.addEventListener('input', function (e) {
+    var t = e.target, v = t.name, q = BYVAR[v];
+    if (!q || (q.type !== 'text' && q.type !== 'notes')) return;
+    if (isNumericLike(q)) {
+      var conv = RL.normalizeDigits(t.value);
+      if (conv !== t.value) {
+        var pos = null;
+        try { pos = t.selectionStart; } catch (err) { pos = null; }
+        t.value = conv;
+        if (pos !== null) { try { t.setSelectionRange(pos, pos); } catch (err2) { /* email inputs do not support selection */ } }
+      }
+    }
+    state.answers[v] = t.value.trim();
+    refreshField(t, q);
+    commit(v, false);                         // show/hide instantly; answers are cleared on commit (blur / Next)
+  });
+  VIEW.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'radio' && e.target.type !== 'checkbox') {
+      e.preventDefault(); e.target.blur(); onNext();
+    }
+  });
+
+  // --- navigation -------------------------------------------------------------
+  function scrollToCard() {
+    CARD.style.scrollMarginTop = (HEADER.offsetHeight + 14) + 'px';
+    var top = CARD.getBoundingClientRect().top + window.pageYOffset - HEADER.offsetHeight - 14;
+    if (window.pageYOffset > top) window.scrollTo({ top: Math.max(0, top), behavior: REDUCED ? 'auto' : 'smooth' });
+  }
+  function animateView(dir) {
+    VIEW.classList.remove('enter-fwd', 'enter-back', 'enter-fade');
+    if (REDUCED) return;
+    void VIEW.offsetWidth;
+    VIEW.classList.add(dir === 'back' ? 'enter-back' : dir === 'fade' ? 'enter-fade' : 'enter-fwd');
+  }
+  function goScreen(i, dir) {
+    state.view = 'screen'; state.idx = i;
+    evaluate(true);
+    VIEW.innerHTML = '';
+    VIEW.appendChild(renderScreen(i));
+    SCREEN_QS[i].forEach(function (q) { syncQuestion(q.var); });
+    refreshVisibility(true);
+    NAV.hidden = false;
+    BACK.disabled = false; NEXT.disabled = false;
+    updateProgress(); setNextLabel();
+    animateView(dir);
+    scrollToCard();
+    try { VIEW.focus({ preventScroll: true }); } catch (e) { /* older browsers */ }
+  }
+
+  function onNext() {
+    if (state.inFlight || state.view !== 'screen') return;
+    // commit any field that still has focus
+    var ae = document.activeElement;
+    if (ae && ae.name && BYVAR[ae.name] && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA')) ae.dispatchEvent(new Event('change', { bubbles: true }));
+    evaluate(true);
+    SCREEN_QS[state.idx].forEach(function (q) { syncQuestion(q.var); });
+    refreshVisibility(false);
+    var bad = validateScreen(state.idx, true);
+    if (bad) { focusQuestion(bad); return; }
+    var a = state.answers;
+    if (a.consent === '0') return finishIneligible('ineligible_no_consent');
+    if (a.consent === '1' && /^\d+$/.test(String(a.age_years)) && Number(a.age_years) < 18) return finishIneligible('ineligible_under18');
+    var nxt = findNext(state.idx);
+    if (nxt === -1) { if (isEligibleSoFar()) submit(); return; }
+    goScreen(nxt, 'fwd');
+  }
+  function onBack() {
+    if (state.inFlight) return;
+    var ae = document.activeElement;
+    if (ae && ae.name && BYVAR[ae.name] && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA')) ae.dispatchEvent(new Event('change', { bubbles: true }));
+    evaluate(true);
+    var prv = findPrev(state.idx);
+    if (prv === -1) showWelcome('back'); else goScreen(prv, 'back');
+  }
+  NEXT.addEventListener('click', onNext);
+  BACK.addEventListener('click', onBack);
+
+  // --- special views ----------------------------------------------------------
+  function specialView(html, dir) {
+    NAV.hidden = true;
+    VIEW.innerHTML = html;
+    updateProgress();
+    animateView(dir || 'fade');
+    scrollToCard();
+  }
+  function showWelcome(dir) {
+    state.view = 'welcome';
+    specialView(
+      '<section class="welcome" aria-labelledby="wTitle"><div class="gold" aria-hidden="true"></div>' +
+      '<h1 class="w-title bi no-rule" id="wTitle"><span class="en" lang="en" dir="ltr" data-cfg="title_en">' + esc(CFG.title_en) + '</span><span class="ar" lang="ar" dir="rtl" data-cfg="title_ar">' + esc(CFG.title_ar) + '</span></h1>' +
+      '<p class="big-q bi" style="margin-top:0"><span class="en" lang="en" dir="ltr" data-cfg="question_en">' + esc(CFG.question_en) + '</span><span class="ar" lang="ar" dir="rtl" data-cfg="question_ar">' + esc(CFG.question_ar) + '</span></p>' +
+      '<p class="w-meta bi" style="margin-top:0"><span class="en" lang="en" dir="ltr" data-cfg="intro_en">' + esc(CFG.intro_en) + '</span><span class="ar" lang="ar" dir="rtl" data-cfg="intro_ar">' + esc(CFG.intro_ar) + '</span></p>' +
+      '<div class="chips" aria-hidden="true">' +
+        '<div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="t"><span lang="en">5–7 minutes</span><span lang="ar" dir="rtl">٥–٧ دقائق</span></span></div>' +
+        '<div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg><span class="t"><span lang="en">Confidential</span><span lang="ar" dir="rtl">سرية تامة</span></span></div>' +
+      '</div>' +
+      '<div class="actions"><button type="button" class="btn btn-primary btn-lg" id="startBtn"><span class="lbl"><span lang="en">Start</span><span class="sep" aria-hidden="true"></span><span lang="ar" dir="rtl">ابدأ</span></span></button></div></section>', dir);
+    $('startBtn').addEventListener('click', function () {
+      if (!state.startedAt) state.startedAt = Date.now();
+      evaluate(true);
+      goScreen(0, 'fwd');
+    });
+  }
+  function endView(kind, titleEn, titleAr, msgEn, msgAr, buttons) {
+    var icon;
+    if (kind === 'ok') icon = '<svg class="icon" viewBox="0 0 92 92" aria-hidden="true"><circle class="check-bg" cx="46" cy="46" r="44"/><circle class="check-circle" cx="46" cy="46" r="40"/><path class="check-mark" d="M29 47.5l11 11 23-24"/></svg>';
+    else if (kind === 'err') icon = '<svg class="icon" viewBox="0 0 92 92" aria-hidden="true"><circle cx="46" cy="46" r="44" fill="#FDECEA"/><path d="M46 27v24M46 62v1" stroke="#B42318" stroke-width="6" stroke-linecap="round"/></svg>';
+    else icon = '<svg class="icon" viewBox="0 0 92 92" aria-hidden="true"><circle cx="46" cy="46" r="44" fill="#E8F3EC"/><path d="M31 50c3 7 9 11 15 11s12-4 15-11M34 37h.1M58 37h.1" stroke="#006C35" stroke-width="5" stroke-linecap="round" fill="none"/></svg>';
+    return '<section class="end' + (kind === 'err' ? ' err-view' : '') + '" role="status" aria-live="polite">' + icon +
+      '<h2 class="bi no-rule"><span class="en" lang="en" dir="ltr">' + esc(titleEn) + '</span><span class="ar" lang="ar" dir="rtl">' + esc(titleAr) + '</span></h2>' +
+      (msgEn || msgAr ? '<p class="msg bi" style="margin-top:0"><span class="en" lang="en" dir="ltr">' + esc(msgEn) + '</span><span class="ar" lang="ar" dir="rtl">' + esc(msgAr) + '</span></p>' : '') +
+      (buttons ? '<div class="actions">' + buttons + '</div>' : '') + '</section>';
+  }
+  function showIneligible() {
+    state.view = 'ineligible';
+    specialView(endView('info', 'Thank you for your time.', 'شكراً لوقتك.', '', ''));
+  }
+  function showThanks() {
+    state.view = 'thanks';
+    specialView(endView('ok', 'Thank you very much for your participation.', 'شكراً جزيلاً لمشاركتك.',
+      'Your answers have been recorded successfully.', 'تم تسجيل إجاباتك بنجاح.'));
+  }
+  function showSaveError(res) {
+    state.view = 'error';
+    var field = res && res.field && BYVAR[res.field] ? res.field : null;
+    var btns = '<button type="button" class="btn btn-primary" id="retryBtn"><span class="spinner" aria-hidden="true"></span><span class="lbl"><span lang="en">Try again</span><span class="sep" aria-hidden="true"></span><span lang="ar" dir="rtl">حاول مرة أخرى</span></span></button>';
+    if (field) btns = '<button type="button" class="btn btn-outline" id="reviewBtn"><span class="lbl"><span lang="en">Review answers</span><span class="sep" aria-hidden="true"></span><span lang="ar" dir="rtl">مراجعة الإجابات</span></span></button>' + btns;
+    specialView(endView('err', 'Your answers were not saved yet', 'لم تُحفظ إجاباتك بعد',
+      (res && res.message_en) || MSG.network.en, (res && res.message_ar) || MSG.network.ar, btns));
+    $('retryBtn').addEventListener('click', function () { send(state.lastPayload, $('retryBtn')); });
+    if (field) $('reviewBtn').addEventListener('click', function () {
+      var q = BYVAR[field], i = SCREENS.map(function (s) { return s.id; }).indexOf(q.screen);
+      goScreen(i, 'back');
+      var m = validateQ(q); if (m) showError(field, m);
+      focusQuestion(q);
+    });
+  }
+
+  // --- saving -------------------------------------------------------------------
+  function setBusy(btn, on) {
+    if (!btn) return;
+    btn.classList.toggle('is-busy', on);
+    btn.disabled = on;
+    btn.setAttribute('aria-busy', on ? 'true' : 'false');
+    if (btn === NEXT) BACK.disabled = on;
+  }
+  function hostAvailable() { return !!(IN_GOOGLE || (typeof API_URL === 'string' && /^https:\/\//.test(API_URL))); }
+  /** Send one payload to Code.gs. Inside Google: google.script.run. Outside: POST to the /exec link. */
+  function callServer(payload, onOk, onFail) {
+    if (IN_GOOGLE) {
+      google.script.run.withSuccessHandler(onOk).withFailureHandler(onFail).submitResponse(payload);
+      return;
+    }
+    var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 60000) : null;
+    fetch(API_URL, {
+      method: 'POST', redirect: 'follow', cache: 'no-store', signal: ctrl ? ctrl.signal : undefined,
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },   // "simple" request: no CORS pre-flight
+      body: JSON.stringify(payload)
+    }).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function (res) { if (timer) clearTimeout(timer); onOk(res); },
+            function (err) { if (timer) clearTimeout(timer); onFail(err); });
+  }
+  /** Outside Google: load the live CONFIG texts (also wakes the server up before the first save). */
+  function loadLiveConfig() {
+    if (IN_GOOGLE || CONFIG_FROM_GOOGLE || !hostAvailable()) return;
+    fetch(API_URL + (API_URL.indexOf('?') < 0 ? '?' : '&') + 'action=config', { redirect: 'follow', cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (res) {
+        if (!res || !res.ok || !res.config) return;
+        Object.keys(res.config).forEach(function (k) { CFG[k] = res.config[k]; });
+        applyConfigText();
+      }, function () { /* defaults stay; saving will still be tried */ });
+  }
+  function buildPayload(kind, status) {
+    var out = {};
+    if (kind === 'ineligible') {
+      out.consent = state.answers.consent || '';
+      out.age_years = state.answers.consent === '1' ? (state.answers.age_years || '') : '';
+    } else {
+      QUESTIONS.forEach(function (q) {
+        if (q.type === 'calc') return;
+        var v = state.answers[q.var];
+        if (!state.vis[q.var]) { out[q.var] = q.type === 'checkbox' ? [] : ''; return; }
+        if (q.type === 'checkbox') out[q.var] = (v || []).slice();
+        else if (q.validation && q.validation.type === 'phone_sa') out[q.var] = normalizePhone(v) || String(v || '').trim();
+        else if (q.validation && q.validation.type === 'email') out[q.var] = String(v || '').trim().toLowerCase();
+        else out[q.var] = String(v == null ? '' : v).trim();
+      });
+    }
+    return { kind: kind, client_status: status || 'complete', answers: out, started_at: state.startedAt || Date.now(), user_agent: navigator.userAgent || '' };
+  }
+  function send(payload, btn) {
+    if (state.inFlight || state.done) return;
+    if (!hostAvailable()) { showSaveError({ message_en: MSG.noHost.en, message_ar: MSG.noHost.ar }); return; }
+    state.inFlight = true; state.busyBtn = btn || NEXT; setBusy(state.busyBtn, true);
+    callServer(payload, function (res) {
+      state.inFlight = false; setBusy(state.busyBtn, false);
+      if (res && res.ok) { state.done = true; showThanks(); }
+      else showSaveError(res || {});
+    }, function () {
+      state.inFlight = false; setBusy(state.busyBtn, false);
+      showSaveError({});
+    });
+  }
+  function submit() {
+    evaluate(true);
+    for (var i = 0; i < SCREENS.length; i++) {
+      if (!applicable(i)) continue;
+      var bad = validateScreen(i, false);
+      if (bad) { goScreen(i, 'back'); validateScreen(i, true); focusQuestion(bad); return; }
+    }
+    state.lastPayload = buildPayload('complete');
+    send(state.lastPayload, NEXT);
+  }
+  function finishIneligible(status) {
+    var payload = buildPayload('ineligible', status);
+    showIneligible();
+    if (!hostAvailable() || state.done) return;
+    state.done = true;
+    var tries = 0;
+    (function attempt() {
+      tries++;
+      callServer(payload,
+        function (res) { if (!(res && res.ok) && tries < 4) setTimeout(attempt, 1500 * tries); },
+        function () { if (tries < 4) setTimeout(attempt, 1500 * tries); });
+    })();
+  }
+
+  // --- header compacts on scroll -----------------------------------------------
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () {
+      // hysteresis: the header shrinks at 48px and grows back only near the top, so it can never flicker
+      var y = window.pageYOffset, c = HEADER.classList.contains('compact');
+      if (!c && y > 48) HEADER.classList.add('compact');
+      else if (c && y < 4) HEADER.classList.remove('compact');
+      ticking = false;
+    });
+  }, { passive: true });
+
+  // --- test hook (read-only view of state; harmless in production) ---------------
+  window.__survey = { state: state, evaluate: evaluate, applicable: applicable };
+
+  showWelcome('fade');
+  loadLiveConfig();
+})();
+</script>
+</body>
+</html>

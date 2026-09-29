@@ -8,10 +8,8 @@ import { ProtocolDelivery } from "./ProtocolDelivery";
 import { SOSComplete } from "./SOSComplete";
 import { PROTOCOLS } from "../sos.protocols";
 
-const REDCAP_URL =
-  typeof import.meta !== "undefined"
-    ? (import.meta.env as Record<string, string | undefined>).VITE_REDCAP_STUDY_URL
-    : undefined;
+// Study survey page (public/survey.html)
+const REDCAP_URL: string | undefined = "https://smokesfreeksa.com/survey.html";
 
 export function SOSScreen() {
   const machine = useSOSMachine();

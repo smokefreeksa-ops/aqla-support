@@ -36,7 +36,9 @@ const CONTENT_SECURITY_POLICY = [
   // Self/data/blob images + QR code image host.
   "img-src 'self' data: blob: https://api.qrserver.com https://*.supabase.co",
   // Supabase auth/data/realtime over HTTPS and WebSocket.
-  "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
+  // Google Apps Script: /survey.html saves study answers to the study Google Sheet
+  // (script.google.com redirects to script.googleusercontent.com).
+  "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://script.google.com https://script.googleusercontent.com",
   "media-src 'self' blob: data:",
   "worker-src 'self' blob:",
   "manifest-src 'self'",
