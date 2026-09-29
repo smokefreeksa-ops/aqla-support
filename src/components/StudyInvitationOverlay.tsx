@@ -375,14 +375,6 @@ export function StudyInvitationOverlay() {
 
 
           <div className="pointer-events-none relative z-10 flex h-full flex-col">
-            <div className="pointer-events-auto relative z-20">
-              <ResearchBanner
-                onNavigate={() => {
-                  persist();
-                  close();
-                }}
-              />
-            </div>
             <div className="flex flex-1 items-center justify-center overflow-y-auto px-4 py-4 sm:px-6 sm:py-6">
 
 
