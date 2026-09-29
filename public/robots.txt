@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aqla1.com/sitemap.xml
+Sitemap: https://smokesfreeksa.com/sitemap.xml

@@ -20,7 +20,7 @@ interface Props {
 
 const WelcomeEmail = ({
   fullName = "صديقنا",
-  dashboardUrl = "https://aqla1.com/dashboard",
+  dashboardUrl = "https://smokesfreeksa.com/dashboard",
 }: Props) => (
   <Html lang="ar" dir="rtl">
     <Head />
@@ -55,7 +55,7 @@ export const template = {
   component: WelcomeEmail,
   subject: "أهلاً بك في أقلع · Welcome to Aqla",
   displayName: "Welcome / ترحيب",
-  previewData: { fullName: "محمد", dashboardUrl: "https://aqla1.com/dashboard" },
+  previewData: { fullName: "محمد", dashboardUrl: "https://smokesfreeksa.com/dashboard" },
 } satisfies TemplateEntry;
 
 const main = { backgroundColor: "#ffffff", fontFamily: "Tahoma, Arial, sans-serif" };

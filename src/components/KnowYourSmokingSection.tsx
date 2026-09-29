@@ -2444,7 +2444,7 @@ function Stat({
 }
 
 /* --------------------------- Share your result --------------------------- */
-const SHARE_URL = "https://aqla1.com";
+const SHARE_URL = "https://smokesfreeksa.com";
 function ShareScore({
   lang,
   headline,

@@ -14,8 +14,8 @@ import {
 
 export const AQLA_GREEN = '#006C35'
 export const AQLA_GREEN_LIGHT = '#00A65A'
-export const AQLA_LOGO_URL = 'https://aqla1.com/aqla-logo.png'
-export const AQLA_SITE_URL = 'https://aqla1.com'
+export const AQLA_LOGO_URL = 'https://smokesfreeksa.com/aqla-logo.png'
+export const AQLA_SITE_URL = 'https://smokesfreeksa.com'
 
 /**
  * Shared Arabic-first (RTL) branded shell for all Aqla authentication emails.

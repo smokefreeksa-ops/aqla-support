@@ -1573,7 +1573,7 @@ export const MODULES: Module[] = [
       },
     ],
     sources: [
-      { label: "Aqla Volunteer Playbook", url: "https://aqla1.com/" },
+      { label: "Aqla Volunteer Playbook", url: "https://smokesfreeksa.com/" },
       { label: "Saudi MoH 937", url: "https://www.moh.gov.sa/" },
     ],
     quiz: M7,

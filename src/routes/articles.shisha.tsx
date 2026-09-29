@@ -12,10 +12,10 @@ export const Route = createFileRoute("/articles/shisha")({
       { property: "og:title", content: "الإقلاع عن المعسل والشيشة" },
       { property: "og:description", content: "خصوصية الإقلاع عن الشيشة في السياق السعودي." },
       { property: "og:type", content: "article" },
-      { property: "og:url", content: "https://aqla1.com/articles/shisha" },
+      { property: "og:url", content: "https://smokesfreeksa.com/articles/shisha" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://aqla1.com/articles/shisha" }],
+    links: [{ rel: "canonical", href: "https://smokesfreeksa.com/articles/shisha" }],
   }),
   component: () => (
     <ArticleScaffold
