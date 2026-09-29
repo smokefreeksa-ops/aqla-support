@@ -28,7 +28,7 @@ const AcademyCertificateEmail = ({
   moduleTitleAr = "وحدة أكاديمية أقلع",
   score = 100,
   certificateCode = "AQLA-AC-XXXXXXXX",
-  certificateUrl = "https://aqla1.com",
+  certificateUrl = "https://smokesfreeksa.com",
 }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
@@ -73,11 +73,11 @@ const AcademyCertificateEmail = ({
 
           <Text style={small}>
             This certificate can be verified any time using the code above at
-            aqla1.com.
+            smokesfreeksa.com.
           </Text>
           <Text style={smallAr}>
             يمكن التحقق من هذه الشهادة في أي وقت باستخدام الرمز أعلاه عبر
-            aqla1.com.
+            smokesfreeksa.com.
           </Text>
         </Section>
 
@@ -100,7 +100,7 @@ export const template = {
     moduleTitleAr: "أساسيات الإقلاع عن التبغ",
     score: 92,
     certificateCode: "AQLA-AC-A3F9K2QP",
-    certificateUrl: "https://aqla1.com/academy-certificate/AQLA-AC-A3F9K2QP",
+    certificateUrl: "https://smokesfreeksa.com/academy-certificate/AQLA-AC-A3F9K2QP",
   },
 } satisfies TemplateEntry;
 

@@ -29,7 +29,7 @@ function randomCode(len = 10) {
 const SITE_NAME = "aqla-support";
 const SENDER_DOMAIN = "notify.aqla1.com";
 const FROM_DOMAIN = "aqla1.com";
-const PUBLIC_SITE_URL = "https://aqla1.com";
+const PUBLIC_SITE_URL = "https://smokesfreeksa.com";
 
 function generateToken(): string {
   const bytes = new Uint8Array(32);

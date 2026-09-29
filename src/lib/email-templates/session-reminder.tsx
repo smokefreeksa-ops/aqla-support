@@ -24,7 +24,7 @@ const SessionReminderEmail = ({
   fullName = "صديقنا",
   sessionTitle = "جلسة أقلع المباشرة",
   sessionTime = "قريبًا",
-  joinUrl = "https://aqla1.com/dashboard/sessions",
+  joinUrl = "https://smokesfreeksa.com/dashboard/sessions",
 }: Props) => (
   <Html lang="ar" dir="rtl">
     <Head />

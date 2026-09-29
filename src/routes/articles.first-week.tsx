@@ -13,10 +13,10 @@ export const Route = createFileRoute("/articles/first-week")({
       { property: "og:title", content: "كيف تقلع عن التدخين: خطة الأسبوع الأول" },
       { property: "og:description", content: "خطة عملية لأول سبعة أيام بعد قرار الإقلاع." },
       { property: "og:type", content: "article" },
-      { property: "og:url", content: "https://aqla1.com/articles/first-week" },
+      { property: "og:url", content: "https://smokesfreeksa.com/articles/first-week" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://aqla1.com/articles/first-week" }],
+    links: [{ rel: "canonical", href: "https://smokesfreeksa.com/articles/first-week" }],
   }),
   component: () => (
     <ArticleScaffold

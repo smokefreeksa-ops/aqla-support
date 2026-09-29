@@ -12,10 +12,10 @@ export const Route = createFileRoute("/articles/nicotine-pouches")({
       { property: "og:title", content: "أكياس النيكوتين: ما يقوله البحث" },
       { property: "og:description", content: "ما تقوله الدراسات عن أظرف النيكوتين." },
       { property: "og:type", content: "article" },
-      { property: "og:url", content: "https://aqla1.com/articles/nicotine-pouches" },
+      { property: "og:url", content: "https://smokesfreeksa.com/articles/nicotine-pouches" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://aqla1.com/articles/nicotine-pouches" }],
+    links: [{ rel: "canonical", href: "https://smokesfreeksa.com/articles/nicotine-pouches" }],
   }),
   component: () => (
     <ArticleScaffold

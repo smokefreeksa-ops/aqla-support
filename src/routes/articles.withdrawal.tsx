@@ -13,10 +13,10 @@ export const Route = createFileRoute("/articles/withdrawal")({
       { property: "og:title", content: "أعراض انسحاب النيكوتين وكم تستمر" },
       { property: "og:description", content: "ما الذي يحدث بعد التوقف ومتى تخفّ الأعراض." },
       { property: "og:type", content: "article" },
-      { property: "og:url", content: "https://aqla1.com/articles/withdrawal" },
+      { property: "og:url", content: "https://smokesfreeksa.com/articles/withdrawal" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://aqla1.com/articles/withdrawal" }],
+    links: [{ rel: "canonical", href: "https://smokesfreeksa.com/articles/withdrawal" }],
   }),
   component: () => (
     <ArticleScaffold

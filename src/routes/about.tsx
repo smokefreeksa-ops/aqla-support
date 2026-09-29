@@ -24,14 +24,14 @@ export const Route = createFileRoute("/about")({
           "أقلع مبادرة مجتمعية مجانية تجمع التقييم الرقمي وتوجيه الدعم والمتابعة المنظمة — بقيادة د. مالك الذبياني.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://aqla1.com/about" },
+      { property: "og:url", content: "https://smokesfreeksa.com/about" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      { rel: "canonical", href: "https://aqla1.com/about" },
-      { rel: "alternate", hreflang: "ar", href: "https://aqla1.com/about" },
-      { rel: "alternate", hreflang: "en", href: "https://aqla1.com/en/about" },
-      { rel: "alternate", hreflang: "x-default", href: "https://aqla1.com/about" },
+      { rel: "canonical", href: "https://smokesfreeksa.com/about" },
+      { rel: "alternate", hreflang: "ar", href: "https://smokesfreeksa.com/about" },
+      { rel: "alternate", hreflang: "en", href: "https://smokesfreeksa.com/en/about" },
+      { rel: "alternate", hreflang: "x-default", href: "https://smokesfreeksa.com/about" },
     ],
     scripts: [
       {
@@ -55,7 +55,7 @@ export const Route = createFileRoute("/about")({
             "https://www.linkedin.com/in/malik-althobiani",
             "https://althobiani.com",
           ],
-          worksFor: { "@type": "Organization", name: "أقلع", url: "https://aqla1.com" },
+          worksFor: { "@type": "Organization", name: "أقلع", url: "https://smokesfreeksa.com" },
         }),
       },
     ],
