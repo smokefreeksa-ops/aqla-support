@@ -2,7 +2,6 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ChevronDown, Languages, Menu, X, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useLang } from "@/lib/i18n";
 import { appRoutes } from "@/lib/app-routes";
 import { supabase } from "@/integrations/supabase/client";
@@ -82,23 +81,19 @@ export function SiteHeader() {
           {NAV.map((group) => {
             const active = group.items.some((item) => isActive(item.to));
             return (
-              <DropdownMenu key={group.en}>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" aria-current={active ? "page" : undefined} className={`gap-1 px-2.5 text-[13px] font-medium hover:bg-primary/5 hover:text-primary data-[state=open]:bg-primary/5 data-[state=open]:text-primary ${active ? "text-primary font-semibold" : "text-foreground/75"}`}>
+              <details key={group.en} className="group relative" onKeyDown={(event) => { if (event.key === "Escape") { event.currentTarget.open = false; event.currentTarget.querySelector("summary")?.focus(); } }} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) event.currentTarget.open = false; }}>
+                <summary aria-current={active ? "page" : undefined} className={`flex cursor-pointer list-none items-center gap-1 rounded-md px-2.5 py-1.5 text-[13px] font-medium hover:bg-primary/5 hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring group-open:bg-primary/5 group-open:text-primary [&::-webkit-details-marker]:hidden ${active ? "text-primary font-semibold" : "text-foreground/75"}`}>
                     {lang === "ar" ? group.ar : group.en}
                     <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" dir={dir} className="min-w-48">
+                </summary>
+                <div dir={dir} className="absolute start-0 top-full z-50 mt-1 min-w-48 rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md">
                   {group.items.map((item) => (
-                    <DropdownMenuItem key={item.to} asChild className={isActive(item.to) ? "bg-primary/5 font-semibold text-primary" : ""}>
-                      <Link to={item.to} aria-current={isActive(item.to) ? "page" : undefined} className="cursor-pointer">
+                      <Link key={item.to} to={item.to} aria-current={isActive(item.to) ? "page" : undefined} className={`block rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent focus-visible:bg-accent ${isActive(item.to) ? "bg-primary/5 font-semibold text-primary" : ""}`}>
                         {lang === "ar" ? item.ar : item.en}
                       </Link>
-                    </DropdownMenuItem>
                   ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+                </div>
+              </details>
             );
           })}
         </nav>
