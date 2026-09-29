@@ -17,6 +17,7 @@ import { AqlaAuthGate } from "@/components/AqlaAuthGate";
 import { SOSButton } from "@/features/sos/components/SOSButton";
 import { StudyInvitationOverlay } from "@/components/StudyInvitationOverlay";
 import { KauSurveyInvitation } from "@/components/KauSurveyInvitation";
+import { AwarenessCampaignButton } from "@/components/AwarenessCampaignButton";
 import { CommandPalette } from "@/components/CommandPalette";
 import { QuickPlanDock } from "@/components/QuickPlanDock";
 import { BackButton } from "@/components/BackButton";
@@ -232,6 +233,7 @@ function RootComponent() {
       </AqlaAuthGate>
       <StudyInvitationOverlay />
       <KauSurveyInvitation />
+      <AwarenessCampaignButton />
       <CommandPalette />
       <QuickPlanDock />
       <Toaster richColors position="top-center" />

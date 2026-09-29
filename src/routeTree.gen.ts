@@ -31,6 +31,7 @@ import { Route as QuitPlanRouteImport } from './routes/quit-plan'
 import { Route as QuitPathwayRouteImport } from './routes/quit-pathway'
 import { Route as QuitChatRouteImport } from './routes/quit-chat'
 import { Route as QuitCenterRouteImport } from './routes/quit-center'
+import { Route as QarariRouteImport } from './routes/qarari'
 import { Route as ProfessionalLibraryRouteImport } from './routes/professional-library'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PosterStudioRouteImport } from './routes/poster-studio'
@@ -90,6 +91,7 @@ import { Route as ArticlesWithdrawalRouteImport } from './routes/articles.withdr
 import { Route as ArticlesShishaRouteImport } from './routes/articles.shisha'
 import { Route as ArticlesNicotinePouchesRouteImport } from './routes/articles.nicotine-pouches'
 import { Route as ArticlesFirstWeekRouteImport } from './routes/articles.first-week'
+import { Route as ApiQarariRouteImport } from './routes/api.qarari'
 import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
 import { Route as AdminAqlaQuitEngineRouteImport } from './routes/admin.aqla-quit-engine'
@@ -216,6 +218,11 @@ const QuitChatRoute = QuitChatRouteImport.update({
 const QuitCenterRoute = QuitCenterRouteImport.update({
   id: '/quit-center',
   path: '/quit-center',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QarariRoute = QarariRouteImport.update({
+  id: '/qarari',
+  path: '/qarari',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfessionalLibraryRoute = ProfessionalLibraryRouteImport.update({
@@ -513,6 +520,11 @@ const ArticlesFirstWeekRoute = ArticlesFirstWeekRouteImport.update({
   path: '/first-week',
   getParentRoute: () => ArticlesRoute,
 } as any)
+const ApiQarariRoute = ApiQarariRouteImport.update({
+  id: '/api/qarari',
+  path: '/api/qarari',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminQuitPlanEmailsRoute = AdminQuitPlanEmailsRouteImport.update({
   id: '/quit-plan-emails',
   path: '/quit-plan-emails',
@@ -642,6 +654,7 @@ export interface FileRoutesByFullPath {
   '/poster-studio': typeof PosterStudioRoute
   '/privacy': typeof PrivacyRoute
   '/professional-library': typeof ProfessionalLibraryRoute
+  '/qarari': typeof QarariRoute
   '/quit-center': typeof QuitCenterRoute
   '/quit-chat': typeof QuitChatRoute
   '/quit-pathway': typeof QuitPathwayRoute
@@ -670,6 +683,7 @@ export interface FileRoutesByFullPath {
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
+  '/api/qarari': typeof ApiQarariRoute
   '/articles/first-week': typeof ArticlesFirstWeekRoute
   '/articles/nicotine-pouches': typeof ArticlesNicotinePouchesRoute
   '/articles/shisha': typeof ArticlesShishaRoute
@@ -739,6 +753,7 @@ export interface FileRoutesByTo {
   '/poster-studio': typeof PosterStudioRoute
   '/privacy': typeof PrivacyRoute
   '/professional-library': typeof ProfessionalLibraryRoute
+  '/qarari': typeof QarariRoute
   '/quit-center': typeof QuitCenterRoute
   '/quit-chat': typeof QuitChatRoute
   '/quit-pathway': typeof QuitPathwayRoute
@@ -765,6 +780,7 @@ export interface FileRoutesByTo {
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
+  '/api/qarari': typeof ApiQarariRoute
   '/articles/first-week': typeof ArticlesFirstWeekRoute
   '/articles/nicotine-pouches': typeof ArticlesNicotinePouchesRoute
   '/articles/shisha': typeof ArticlesShishaRoute
@@ -838,6 +854,7 @@ export interface FileRoutesById {
   '/poster-studio': typeof PosterStudioRoute
   '/privacy': typeof PrivacyRoute
   '/professional-library': typeof ProfessionalLibraryRoute
+  '/qarari': typeof QarariRoute
   '/quit-center': typeof QuitCenterRoute
   '/quit-chat': typeof QuitChatRoute
   '/quit-pathway': typeof QuitPathwayRoute
@@ -866,6 +883,7 @@ export interface FileRoutesById {
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
+  '/api/qarari': typeof ApiQarariRoute
   '/articles/first-week': typeof ArticlesFirstWeekRoute
   '/articles/nicotine-pouches': typeof ArticlesNicotinePouchesRoute
   '/articles/shisha': typeof ArticlesShishaRoute
@@ -940,6 +958,7 @@ export interface FileRouteTypes {
     | '/poster-studio'
     | '/privacy'
     | '/professional-library'
+    | '/qarari'
     | '/quit-center'
     | '/quit-chat'
     | '/quit-pathway'
@@ -968,6 +987,7 @@ export interface FileRouteTypes {
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
+    | '/api/qarari'
     | '/articles/first-week'
     | '/articles/nicotine-pouches'
     | '/articles/shisha'
@@ -1037,6 +1057,7 @@ export interface FileRouteTypes {
     | '/poster-studio'
     | '/privacy'
     | '/professional-library'
+    | '/qarari'
     | '/quit-center'
     | '/quit-chat'
     | '/quit-pathway'
@@ -1063,6 +1084,7 @@ export interface FileRouteTypes {
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
+    | '/api/qarari'
     | '/articles/first-week'
     | '/articles/nicotine-pouches'
     | '/articles/shisha'
@@ -1135,6 +1157,7 @@ export interface FileRouteTypes {
     | '/poster-studio'
     | '/privacy'
     | '/professional-library'
+    | '/qarari'
     | '/quit-center'
     | '/quit-chat'
     | '/quit-pathway'
@@ -1163,6 +1186,7 @@ export interface FileRouteTypes {
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
+    | '/api/qarari'
     | '/articles/first-week'
     | '/articles/nicotine-pouches'
     | '/articles/shisha'
@@ -1236,6 +1260,7 @@ export interface RootRouteChildren {
   PosterStudioRoute: typeof PosterStudioRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfessionalLibraryRoute: typeof ProfessionalLibraryRoute
+  QarariRoute: typeof QarariRoute
   QuitCenterRoute: typeof QuitCenterRoute
   QuitChatRoute: typeof QuitChatRoute
   QuitPathwayRoute: typeof QuitPathwayRoute
@@ -1261,6 +1286,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AcademyCertificateCodeRoute: typeof AcademyCertificateCodeRoute
+  ApiQarariRoute: typeof ApiQarariRoute
   CertificateCodeRoute: typeof CertificateCodeRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   ModulesSlugRoute: typeof ModulesSlugRoute
@@ -1430,6 +1456,13 @@ declare module '@tanstack/react-router' {
       path: '/quit-center'
       fullPath: '/quit-center'
       preLoaderRoute: typeof QuitCenterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/qarari': {
+      id: '/qarari'
+      path: '/qarari'
+      fullPath: '/qarari'
+      preLoaderRoute: typeof QarariRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/professional-library': {
@@ -1845,6 +1878,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArticlesFirstWeekRouteImport
       parentRoute: typeof ArticlesRoute
     }
+    '/api/qarari': {
+      id: '/api/qarari'
+      path: '/api/qarari'
+      fullPath: '/api/qarari'
+      preLoaderRoute: typeof ApiQarariRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/quit-plan-emails': {
       id: '/admin/quit-plan-emails'
       path: '/quit-plan-emails'
@@ -2117,6 +2157,7 @@ const rootRouteChildren: RootRouteChildren = {
   PosterStudioRoute: PosterStudioRoute,
   PrivacyRoute: PrivacyRoute,
   ProfessionalLibraryRoute: ProfessionalLibraryRoute,
+  QarariRoute: QarariRoute,
   QuitCenterRoute: QuitCenterRoute,
   QuitChatRoute: QuitChatRoute,
   QuitPathwayRoute: QuitPathwayRoute,
@@ -2143,6 +2184,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AcademyCertificateCodeRoute: AcademyCertificateCodeRoute,
+  ApiQarariRoute: ApiQarariRoute,
   CertificateCodeRoute: CertificateCodeRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   ModulesSlugRoute: ModulesSlugRoute,

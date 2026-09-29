@@ -23,6 +23,7 @@ const entries: SitemapEntry[] = [
   { path: "/en/la-tatten", changefreq: "monthly", priority: "0.6" },
   { path: "/en/articles", changefreq: "weekly", priority: "0.6" },
   { path: "/impact", changefreq: "weekly", priority: "0.6" },
+  { path: "/qarari.html", changefreq: "weekly", priority: "0.7" },
   { path: "/faq", changefreq: "monthly", priority: "0.6" },
   { path: "/contact", changefreq: "monthly", priority: "0.6" },
   { path: "/quit-pathway", changefreq: "monthly", priority: "0.7" },

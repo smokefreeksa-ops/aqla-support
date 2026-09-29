@@ -23,6 +23,7 @@ const QUICK: Entry[] = [
   { ar: "أنشئ بطاقة إنجازك", en: "Create your poster", to: "/poster-studio", group: "quick" },
   { ar: "دعم فوري للرغبة", en: "Craving SOS", to: appRoutes.cravingCoach, group: "quick" },
   { ar: "شارك في الدراسة", en: "Join the study", to: "https://smokesfreeksa.com/survey.html", group: "quick" },
+  { ar: "جامعة بلا تدخين · صمّم بطاقتك التوعوية", en: "Smoke-free Campus · design your awareness card", to: "https://smokesfreeksa.com/qarari", group: "quick" },
 ];
 
 const PAGES: Entry[] = [
