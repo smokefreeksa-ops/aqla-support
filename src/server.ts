@@ -18,11 +18,63 @@ async function getServerEntry(): Promise<ServerEntry> {
   return serverEntryPromise;
 }
 
-function brandedErrorResponse(): Response {
-  return new Response(renderErrorPage(), {
-    status: 500,
-    headers: { "content-type": "text/html; charset=utf-8" },
+// Central production security headers, applied to every response (normal and
+// branded error pages). CSP is limited to the browser-facing origins the app
+// actually uses: Google Fonts, api.qrserver.com QR images, and Supabase
+// HTTPS/WSS auth/data/realtime traffic. No COOP/COEP/CORP (would break OAuth
+// and cross-origin resources); HSTS is left to the platform.
+const CONTENT_SECURITY_POLICY = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'self'",
+  // TanStack/React production hydration injects inline bootstrap scripts.
+  "script-src 'self' 'unsafe-inline'",
+  // Inline styles + Google Fonts stylesheet.
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  // Self/data/blob images + QR code image host.
+  "img-src 'self' data: blob: https://api.qrserver.com",
+  // Supabase auth/data/realtime over HTTPS and WebSocket.
+  "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
+  "media-src 'self' blob: data:",
+  "worker-src 'self' blob:",
+  "manifest-src 'self'",
+  // Auth is redirect-based (no external frames needed).
+  "frame-src 'none'",
+  "form-action 'self'",
+].join("; ");
+
+const SECURITY_HEADERS: Record<string, string> = {
+  "content-security-policy": CONTENT_SECURITY_POLICY,
+  "x-frame-options": "SAMEORIGIN",
+  "x-content-type-options": "nosniff",
+  "referrer-policy": "strict-origin-when-cross-origin",
+  // Microphone/camera stay available for voice features; only clearly unused
+  // sensitive capabilities are disabled.
+  "permissions-policy": "geolocation=(), payment=(), usb=(), browsing-topics=()",
+  "x-permitted-cross-domain-policies": "none",
+};
+
+function withSecurityHeaders(response: Response): Response {
+  const headers = new Headers(response.headers);
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+    if (!headers.has(name)) headers.set(name, value);
+  }
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
   });
+}
+
+function brandedErrorResponse(): Response {
+  return withSecurityHeaders(
+    new Response(renderErrorPage(), {
+      status: 500,
+      headers: { "content-type": "text/html; charset=utf-8" },
+    }),
+  );
 }
 
 function isCatastrophicSsrErrorBody(body: string, responseStatus: number): boolean {
