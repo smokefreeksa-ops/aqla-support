@@ -4,6 +4,7 @@ import { usePublicImpactStats } from "@/lib/use-impact-stats";
 import { QuitChatDrawer } from "@/components/QuitChatDrawer";
 
 import { track } from "@/lib/events";
+import { AWARENESS_CARD_URL } from "@/components/AwarenessCampaignButton";
 
 export const RESEARCH_REDCAP_URL = "https://smokesfreeksa.com/survey.html";
 
@@ -39,6 +40,19 @@ export function ResearchBanner({ onNavigate }: { onNavigate?: () => void } = {})
             className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-white px-2.5 py-1 text-[10px] font-bold text-red-700 ring-1 ring-white/60 transition-colors hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:text-[11px]"
           >
             شارك الآن في الدراسة
+          </a>
+
+          <a
+            href={AWARENESS_CARD_URL}
+            onClick={() => track("quick_action", "awareness_card_banner")}
+            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-[#062520] px-2.5 py-1 text-[10px] font-bold text-white ring-1 ring-[#52DBA8]/70 transition-colors hover:bg-[#0A3930] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:text-[11px]"
+          >
+            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#52DBA8]" />
+            <span className="text-[#5ADBA9]">جامعة بلا تدخين</span>
+            <span aria-hidden className="text-white/40">
+              ·
+            </span>
+            اصنع بطاقتك
           </a>
 
           <button

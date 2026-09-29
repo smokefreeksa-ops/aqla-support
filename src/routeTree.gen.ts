@@ -42,6 +42,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as LearnTrainRouteImport } from './routes/learn-train'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as LaTattenRouteImport } from './routes/la-tatten'
+import { Route as KauRouteImport } from './routes/kau'
 import { Route as InviteFriendsRouteImport } from './routes/invite-friends'
 import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as HelpPathwayRouteImport } from './routes/help-pathway'
@@ -90,6 +91,7 @@ import { Route as ArticlesWithdrawalRouteImport } from './routes/articles.withdr
 import { Route as ArticlesShishaRouteImport } from './routes/articles.shisha'
 import { Route as ArticlesNicotinePouchesRouteImport } from './routes/articles.nicotine-pouches'
 import { Route as ArticlesFirstWeekRouteImport } from './routes/articles.first-week'
+import { Route as ApiKauCardsRouteImport } from './routes/api.kau-cards'
 import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
 import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
 import { Route as AdminAqlaQuitEngineRouteImport } from './routes/admin.aqla-quit-engine'
@@ -271,6 +273,11 @@ const LearnRoute = LearnRouteImport.update({
 const LaTattenRoute = LaTattenRouteImport.update({
   id: '/la-tatten',
   path: '/la-tatten',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KauRoute = KauRouteImport.update({
+  id: '/kau',
+  path: '/kau',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InviteFriendsRoute = InviteFriendsRouteImport.update({
@@ -513,6 +520,11 @@ const ArticlesFirstWeekRoute = ArticlesFirstWeekRouteImport.update({
   path: '/first-week',
   getParentRoute: () => ArticlesRoute,
 } as any)
+const ApiKauCardsRoute = ApiKauCardsRouteImport.update({
+  id: '/api/kau-cards',
+  path: '/api/kau-cards',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminQuitPlanEmailsRoute = AdminQuitPlanEmailsRouteImport.update({
   id: '/quit-plan-emails',
   path: '/quit-plan-emails',
@@ -631,6 +643,7 @@ export interface FileRoutesByFullPath {
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
   '/invite-friends': typeof InviteFriendsRoute
+  '/kau': typeof KauRoute
   '/la-tatten': typeof LaTattenRoute
   '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
@@ -670,6 +683,7 @@ export interface FileRoutesByFullPath {
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
+  '/api/kau-cards': typeof ApiKauCardsRoute
   '/articles/first-week': typeof ArticlesFirstWeekRoute
   '/articles/nicotine-pouches': typeof ArticlesNicotinePouchesRoute
   '/articles/shisha': typeof ArticlesShishaRoute
@@ -728,6 +742,7 @@ export interface FileRoutesByTo {
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
   '/invite-friends': typeof InviteFriendsRoute
+  '/kau': typeof KauRoute
   '/la-tatten': typeof LaTattenRoute
   '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
@@ -765,6 +780,7 @@ export interface FileRoutesByTo {
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
+  '/api/kau-cards': typeof ApiKauCardsRoute
   '/articles/first-week': typeof ArticlesFirstWeekRoute
   '/articles/nicotine-pouches': typeof ArticlesNicotinePouchesRoute
   '/articles/shisha': typeof ArticlesShishaRoute
@@ -827,6 +843,7 @@ export interface FileRoutesById {
   '/help-pathway': typeof HelpPathwayRoute
   '/impact': typeof ImpactRoute
   '/invite-friends': typeof InviteFriendsRoute
+  '/kau': typeof KauRoute
   '/la-tatten': typeof LaTattenRoute
   '/learn': typeof LearnRoute
   '/learn-train': typeof LearnTrainRoute
@@ -866,6 +883,7 @@ export interface FileRoutesById {
   '/admin/aqla-quit-engine': typeof AdminAqlaQuitEngineRoute
   '/admin/data-dictionary': typeof AdminDataDictionaryRoute
   '/admin/quit-plan-emails': typeof AdminQuitPlanEmailsRoute
+  '/api/kau-cards': typeof ApiKauCardsRoute
   '/articles/first-week': typeof ArticlesFirstWeekRoute
   '/articles/nicotine-pouches': typeof ArticlesNicotinePouchesRoute
   '/articles/shisha': typeof ArticlesShishaRoute
@@ -929,6 +947,7 @@ export interface FileRouteTypes {
     | '/help-pathway'
     | '/impact'
     | '/invite-friends'
+    | '/kau'
     | '/la-tatten'
     | '/learn'
     | '/learn-train'
@@ -968,6 +987,7 @@ export interface FileRouteTypes {
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
+    | '/api/kau-cards'
     | '/articles/first-week'
     | '/articles/nicotine-pouches'
     | '/articles/shisha'
@@ -1026,6 +1046,7 @@ export interface FileRouteTypes {
     | '/help-pathway'
     | '/impact'
     | '/invite-friends'
+    | '/kau'
     | '/la-tatten'
     | '/learn'
     | '/learn-train'
@@ -1063,6 +1084,7 @@ export interface FileRouteTypes {
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
+    | '/api/kau-cards'
     | '/articles/first-week'
     | '/articles/nicotine-pouches'
     | '/articles/shisha'
@@ -1124,6 +1146,7 @@ export interface FileRouteTypes {
     | '/help-pathway'
     | '/impact'
     | '/invite-friends'
+    | '/kau'
     | '/la-tatten'
     | '/learn'
     | '/learn-train'
@@ -1163,6 +1186,7 @@ export interface FileRouteTypes {
     | '/admin/aqla-quit-engine'
     | '/admin/data-dictionary'
     | '/admin/quit-plan-emails'
+    | '/api/kau-cards'
     | '/articles/first-week'
     | '/articles/nicotine-pouches'
     | '/articles/shisha'
@@ -1225,6 +1249,7 @@ export interface RootRouteChildren {
   HelpPathwayRoute: typeof HelpPathwayRoute
   ImpactRoute: typeof ImpactRoute
   InviteFriendsRoute: typeof InviteFriendsRoute
+  KauRoute: typeof KauRoute
   LaTattenRoute: typeof LaTattenRoute
   LearnRoute: typeof LearnRoute
   LearnTrainRoute: typeof LearnTrainRoute
@@ -1261,6 +1286,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AcademyCertificateCodeRoute: typeof AcademyCertificateCodeRoute
+  ApiKauCardsRoute: typeof ApiKauCardsRoute
   CertificateCodeRoute: typeof CertificateCodeRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   ModulesSlugRoute: typeof ModulesSlugRoute
@@ -1507,6 +1533,13 @@ declare module '@tanstack/react-router' {
       path: '/la-tatten'
       fullPath: '/la-tatten'
       preLoaderRoute: typeof LaTattenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kau': {
+      id: '/kau'
+      path: '/kau'
+      fullPath: '/kau'
+      preLoaderRoute: typeof KauRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/invite-friends': {
@@ -1845,6 +1878,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ArticlesFirstWeekRouteImport
       parentRoute: typeof ArticlesRoute
     }
+    '/api/kau-cards': {
+      id: '/api/kau-cards'
+      path: '/api/kau-cards'
+      fullPath: '/api/kau-cards'
+      preLoaderRoute: typeof ApiKauCardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/quit-plan-emails': {
       id: '/admin/quit-plan-emails'
       path: '/quit-plan-emails'
@@ -2106,6 +2146,7 @@ const rootRouteChildren: RootRouteChildren = {
   HelpPathwayRoute: HelpPathwayRoute,
   ImpactRoute: ImpactRoute,
   InviteFriendsRoute: InviteFriendsRoute,
+  KauRoute: KauRoute,
   LaTattenRoute: LaTattenRoute,
   LearnRoute: LearnRoute,
   LearnTrainRoute: LearnTrainRoute,
@@ -2143,6 +2184,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AcademyCertificateCodeRoute: AcademyCertificateCodeRoute,
+  ApiKauCardsRoute: ApiKauCardsRoute,
   CertificateCodeRoute: CertificateCodeRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   ModulesSlugRoute: ModulesSlugRoute,
