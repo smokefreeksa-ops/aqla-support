@@ -12,7 +12,7 @@ import aqlaLogo from "@/assets/aqla-logo-transparent.png";
 
 // Background now rendered by SaudiFlagWave.
 
-const REDCAP_URL = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM";
+const REDCAP_URL = "https://script.google.com/macros/s/AKfycbwFRS6qYmr24LlcWMGbmEHxO4sUXhy1a4D8p_wPeEHaPxxFLmuVpTL2j9L7lm8q9xoBnQ/exec";
 const STORAGE_KEY = "aqla_study_overlay_dismissed";
 
 type Lang = "ar" | "en";
