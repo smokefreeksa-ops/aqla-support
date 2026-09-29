@@ -53,8 +53,8 @@ export function SOSButton({
         }}
       >
         <span className="flex flex-col items-center leading-none">
-          <span className="text-[10px] sm:text-[13px] font-extrabold tracking-tight">دعم فوري</span>
-          <span className="text-[7px] sm:text-[10px] mt-0.5 opacity-90 tracking-tight">Quick Support</span>
+          <span className="text-[9px] sm:text-[13px] font-extrabold tracking-tight">دعم فوري</span>
+          <span className="text-[6.5px] sm:text-[10px] mt-0.5 opacity-90 tracking-tight">Quick Support</span>
         </span>
       </Link>
     </>
