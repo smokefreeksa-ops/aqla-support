@@ -8,6 +8,7 @@ import { verifyCertificate } from "@/lib/training.functions";
 import { ShieldCheck, Download, Share2, Link as LinkIcon, BadgeCheck, XCircle } from "lucide-react";
 import { SITE_URL } from "@/lib/site";
 import { BackButton } from "@/components/BackButton";
+import { useQrDataUrl } from "@/lib/use-qr-data-url";
 
 export const Route = createFileRoute("/certificate/$code")({
   head: ({ params }) => ({
@@ -28,6 +29,7 @@ function CertificatePage() {
   });
 
   const verifyUrl = typeof window !== "undefined" ? `${window.location.origin}/certificate/${code}` : "";
+  const qrSrc = useQrDataUrl(verifyUrl, 90);
   const shareText = `I completed the Aqla Volunteer Smoking and Nicotine Cessation Support Training. Verify: ${verifyUrl}`;
 
   async function copyLink() {
@@ -121,7 +123,7 @@ function CertificatePage() {
                   <div className="text-right">
                     <img
                       alt="QR"
-                      src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(verifyUrl)}`}
+                      src={qrSrc || undefined}
                       className="h-20 w-20"
                     />
                   </div>

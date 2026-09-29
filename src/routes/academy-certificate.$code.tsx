@@ -8,6 +8,7 @@ import { verifyAcademyCertificate } from "@/lib/academy-certificate.functions";
 import { BadgeCheck, Download, Share2, Link as LinkIcon, ShieldCheck, XCircle } from "lucide-react";
 import { SITE_URL } from "@/lib/site";
 import { BackButton } from "@/components/BackButton";
+import { useQrDataUrl } from "@/lib/use-qr-data-url";
 
 export const Route = createFileRoute("/academy-certificate/$code")({
   head: ({ params }) => ({
@@ -32,6 +33,7 @@ function AcademyCertPage() {
   });
 
   const verifyUrl = typeof window !== "undefined" ? `${window.location.origin}/academy-certificate/${code}` : "";
+  const qrSrc = useQrDataUrl(verifyUrl, 90);
   const shareText = `أتممت وحدة من أكاديمية أقلع بنجاح — I completed an Aqla Academy module. Verify: ${verifyUrl}`;
   const copyLink = async () => {
     try { await navigator.clipboard.writeText(verifyUrl); toast.success("Link copied"); } catch { /* noop */ }
@@ -109,7 +111,7 @@ function AcademyCertPage() {
                 <div className="flex items-center justify-between pt-4 text-xs text-stone-500 border-t">
                   <div>Verify: {SITE_URL.replace(/^https?:\/\//, "")}/academy-certificate/{code}</div>
                   <div className="text-right">
-                    <img alt="QR" src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(verifyUrl)}`} className="h-20 w-20" />
+                    <img alt="QR" src={qrSrc || undefined} className="h-20 w-20" />
                   </div>
                 </div>
               </div>
