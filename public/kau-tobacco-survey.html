@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<script>
+/* ==========================================================================
+   ONE SETTING — only needed when this page is hosted outside Google
+   (GitHub Pages, a KAU web server, …). Paste your Apps Script "Web app" link
+   (it ends in /exec) between the quotes. Leave it as it is in the Apps Script copy.
+   ========================================================================== */
+var API_URL = 'https://script.google.com/macros/s/AKfycbxPaiGaOTUb0N7CocTTaLXU2jdB4VJPTIJ5KqIUEwWvtgrxGuc3WZ-4pDvu0ELhgN2x/exec';
+</script>
+<base target="_top">
+<title>KAU Tobacco &amp; Nicotine Needs Assessment | تقييم احتياجات التبغ والنيكوتين</title>
+<meta name="description" content="Health Promotion Center, King Abdulaziz University — about 5–7 minutes; no name or email is requested. | مركز تعزيز الصحة — جامعة الملك عبدالعزيز">
+<meta property="og:title" content="تقييم احتياجات طلاب ومنسوبي جامعة الملك عبدالعزيز المتعلقة بالتبغ والنيكوتين وخدمات الإقلاع">
+<meta property="og:description" content="Health Promotion Center — King Abdulaziz University · 5–7 minutes · No name or email address is requested | مركز تعزيز الصحة — جامعة الملك عبدالعزيز · 5–7 دقائق">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23006C35'/%3E%3Cpath d='M14 28l18-10 18 10-18 10z' fill='none' stroke='%23fff' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M22 33v9c0 2 4.5 5 10 5s10-3 10-5v-9' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#004D26">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================ TOKENS */
+:root{
+  --green-flag:#006C35; --green-deep:#004D26; --green-night:#00331A; --green-mid:#1B8A4F;
+  --green-soft:#E8F3EC; --green-mist:#F4F9F6; --white:#FFFFFF; --ink:#14231B; --ink-soft:#4F6358;
+  --line:#D5E3DA; --error:#B42318; --gold:#C8A24A;
+  --ring:rgba(0,108,53,.22);
+  --font-en:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-ar:'IBM Plex Sans Arabic','Tajawal',system-ui,-apple-system,'Segoe UI',Tahoma,Arial,sans-serif;
+  --fs-en:16px; --fs-ar:17.5px; --lh-en:1.5; --lh-ar:1.75;
+  --gutter:28px; --card-pad:40px; --radius:20px; --opt-radius:14px;
+  --shadow:0 1px 2px rgba(0,51,26,.05),0 6px 16px rgba(0,51,26,.06),0 24px 48px -12px rgba(0,51,26,.10);
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--green-mist);color:var(--ink);font-family:var(--font-en);font-size:var(--fs-en);line-height:var(--lh-en);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+[lang="ar"]{font-family:var(--font-ar);font-size:var(--fs-ar);line-height:var(--lh-ar)}
+[lang="en"]{font-family:var(--font-en)}
+button,input,select,textarea{font:inherit;color:inherit}
+strong{font-weight:700}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid rgba(0,108,53,.55);outline-offset:2px}
+
+/* ============================================================ BILINGUAL GRID */
+.bi{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:var(--gutter);position:relative}
+.bi::before{content:"";position:absolute;left:50%;top:3px;bottom:3px;width:1px;background:var(--line);transform:translateX(-.5px);pointer-events:none}
+.bi.no-rule::before{display:none}
+.bi>.en{grid-column:1;text-align:left;min-width:0;overflow-wrap:anywhere}
+.bi>.ar{grid-column:2;text-align:right;min-width:0;overflow-wrap:anywhere}
+
+/* ============================================================ HEADER */
+.site-header{position:sticky;top:0;z-index:30;color:#fff}
+.hdr{position:relative;background:linear-gradient(120deg,var(--green-deep) 0%,var(--green-night) 100%);overflow:hidden}
+.hdr::before{content:"";position:absolute;inset:0;opacity:.07;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1'%3E%3Cpath d='M28 6l6.4 15.6L50 28l-15.6 6.4L28 50l-6.4-15.6L6 28l15.6-6.4z'/%3E%3Cpath d='M12.4 12.4h31.2v31.2H12.4z' transform='rotate(45 28 28)'/%3E%3Ccircle cx='28' cy='28' r='5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:56px 56px}
+.hdr::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--gold) 18%,var(--gold) 82%,transparent 100%);opacity:.9}
+.hdr-inner{position:relative;max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;
+  padding:18px 24px 20px;transition:padding .25s var(--ease)}
+.site-header.compact .hdr-inner{padding:10px 24px 12px}
+.uni{display:flex;align-items:center;gap:10px;font-weight:600;letter-spacing:.1px;min-width:0}
+.uni.en{justify-content:flex-start;font-size:15px}
+.uni.ar{justify-content:flex-end;font-size:16.5px;line-height:1.5}
+.uni .mark{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.uni .mark svg{width:16px;height:16px}
+.hdr-title{display:flex;align-items:center;gap:14px;font-size:13px;color:rgba(255,255,255,.82);white-space:nowrap}
+.hdr-title .ar{font-size:14px;line-height:1.4}
+.hdr-title .dot{width:4px;height:4px;border-radius:50%;background:var(--gold)}
+.progress-wrap{background:rgba(244,249,246,.94);-webkit-backdrop-filter:saturate(1.4) blur(10px);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line);color:var(--ink-soft);
+  transition:opacity .25s var(--ease)}
+.progress-wrap[hidden]{display:none}
+.progress-inner{max-width:880px;margin:0 auto;padding:9px 20px 11px}
+.progress-labels{font-size:12.5px;font-weight:500;margin-bottom:7px}
+.progress-labels [lang="ar"]{font-size:13.5px;line-height:1.4}
+.progress-labels.bi::before{display:none}
+.track{height:5px;border-radius:99px;background:#DCE9E1;overflow:hidden}
+.fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--green-mid),var(--green-flag));transition:width .5s var(--ease)}
+
+/* ============================================================ LAYOUT */
+main{flex:1;width:100%;padding:32px 20px 40px}
+.card{max-width:880px;margin:0 auto;background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(213,227,218,.7);overflow:clip;scroll-margin-top:110px}
+.view{padding:var(--card-pad) var(--card-pad) 12px;outline:none}
+.view.enter-fwd{animation:enterFwd .26s var(--ease) both}
+.view.enter-back{animation:enterBack .26s var(--ease) both}
+.view.enter-fade{animation:enterFade .3s var(--ease) both}
+@keyframes enterFwd{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+@keyframes enterBack{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+@keyframes enterFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ============================================================ SCREEN HEADING */
+.screen-title{margin:0 0 10px;font-weight:700;color:var(--green-deep)}
+.screen-title .en{font-size:22px;line-height:1.3;letter-spacing:0}
+.screen-title .ar{font-size:23px;line-height:1.55}
+.screen-title .en::after,.screen-title .ar::after{content:"";display:block;width:36px;height:3px;border-radius:3px;background:var(--green-flag);margin-top:12px}
+.screen-title .ar::after{margin-left:auto}
+
+/* ============================================================ QUESTIONS */
+.q-wrap{display:grid;grid-template-rows:1fr;opacity:1;transition:grid-template-rows .34s var(--ease),opacity .26s var(--ease)}
+.q-wrap.is-hidden{grid-template-rows:0fr;opacity:0}
+.q-inner{min-height:0;overflow:hidden;margin:0 -8px;padding:0 8px}
+.q-wrap.is-hidden .q-inner{visibility:hidden;transition:visibility 0s .34s}
+.no-anim,.no-anim *{transition:none!important}
+.q{border:0;margin:0;padding:26px 0;min-width:0}
+.q-wrap.sep .q{border-top:1px solid var(--line)}
+.q-legend{float:left;width:100%;padding:0;margin:0 0 14px;color:var(--ink)}
+.q-legend+*{clear:both}
+.q>*:not(.q-legend){clear:both}
+.q-title .en{font-weight:600;font-size:16.5px;line-height:1.5}
+.q-title .ar{font-weight:600;font-size:18px;line-height:1.75}
+.req{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green-flag);vertical-align:middle;position:relative;top:-2px;margin:0 7px;box-shadow:0 0 0 3px rgba(0,108,53,.12)}
+.q-note{margin:-6px 0 14px;color:var(--ink-soft)}
+.q-note .en{font-size:14px;line-height:1.5}
+.q-note .ar{font-size:15px;line-height:1.7}
+.stem{margin:22px 0 4px;padding:16px 18px;border-radius:16px;background:var(--green-soft);color:var(--green-deep);font-weight:600}
+.stem .en{font-size:15.5px}
+.stem .ar{font-size:17px}
+.stem.bi::before{background:rgba(0,108,53,.18)}
+.matrix-item .q{padding:20px 0}
+
+/* Option cards */
+.opts{display:grid;gap:10px}
+.opt{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr);align-items:center;column-gap:16px;min-height:54px;padding:12px 16px;
+  background:var(--white);border:1.5px solid var(--line);border-radius:var(--opt-radius);cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;
+  transition:border-color .18s var(--ease),background-color .18s var(--ease),box-shadow .18s var(--ease),transform .12s var(--ease)}
+.opt input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+.opt .o-en{grid-column:1;text-align:left;font-size:15.5px;line-height:1.45;font-weight:500;min-width:0;overflow-wrap:anywhere}
+.opt .o-ar{grid-column:3;text-align:right;font-size:17px;line-height:1.6;font-weight:500;min-width:0;overflow-wrap:anywhere}
+.opt .ind{grid-column:2;justify-self:center;width:24px;height:24px;border-radius:50%;border:2px solid #A9C2B3;background:#fff;display:grid;place-items:center;
+  transition:all .18s var(--ease)}
+.opt.cb .ind{border-radius:7px}
+.opt .ind svg{width:14px;height:14px;opacity:0;transform:scale(.4);transition:all .2s var(--ease)}
+@media (hover:hover){
+  .opt:hover{border-color:#9CC3AD;box-shadow:0 6px 16px -8px rgba(0,77,38,.25);transform:translateY(-1px)}
+}
+.opt:active{transform:scale(.985)}
+.opt.is-selected{border-color:var(--green-flag);background:var(--green-soft);box-shadow:0 0 0 1px var(--green-flag) inset}
+.opt.is-selected .ind{background:var(--green-flag);border-color:var(--green-flag)}
+.opt.is-selected .ind svg{opacity:1;transform:scale(1)}
+.opt:has(input:focus-visible){box-shadow:0 0 0 4px var(--ring);border-color:var(--green-flag)}
+.opt.kbd-focus{box-shadow:0 0 0 4px var(--ring);border-color:var(--green-flag)}
+.q.has-error .opt{border-color:rgba(180,35,24,.45)}
+.q.has-error .opt.is-selected{border-color:var(--green-flag)}
+
+/* Inputs */
+.field-wrap{position:relative}
+.field{display:block;width:100%;min-height:56px;padding:14px 18px;border:1.5px solid var(--line);border-radius:var(--opt-radius);background:#fff;
+  font-family:var(--font-en);font-size:18px;font-weight:600;color:var(--ink);text-align:center;letter-spacing:.3px;
+  transition:border-color .18s var(--ease),box-shadow .18s var(--ease);-webkit-appearance:none;appearance:none}
+.field.left{text-align:left;font-weight:500;font-size:17px}
+.field:focus{outline:none;border-color:var(--green-flag);box-shadow:0 0 0 4px var(--ring)}
+textarea.field{min-height:150px;resize:vertical;text-align:start;font-weight:400;font-size:16px;line-height:1.6;padding:14px 16px;font-family:var(--font-en),var(--font-ar)}
+.ph{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 18px;pointer-events:none;color:#8CA497;font-weight:400;transition:opacity .15s}
+.ph.top{align-items:flex-start;padding-top:15px}
+.ph .en{font-size:15px}
+.ph .ar{font-size:16px;line-height:1.5}
+.field-wrap.has-value .ph{opacity:0}
+.q.has-error .field{border-color:var(--error)}
+.q.has-error .field:focus{box-shadow:0 0 0 4px rgba(180,35,24,.15)}
+.select{text-align:left;font-weight:500;font-size:16.5px;padding-right:48px;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23006C35' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 18px center}
+.select.is-empty{color:#6F877A;font-weight:400}
+.counter{margin-top:8px;color:var(--ink-soft);font-size:13px}
+.counter [lang="ar"]{font-size:14px}
+.counter.over{color:var(--error)}
+
+/* Errors */
+.err{margin-top:12px;color:var(--error);font-weight:500}
+.err:empty{display:none;margin:0}
+.err .en{font-size:14px;line-height:1.45}
+.err .ar{font-size:15px;line-height:1.6}
+.err .bi::before{background:rgba(180,35,24,.25)}
+.err-ic{display:inline-block;width:15px;height:15px;vertical-align:-2px;margin:0 6px 0 0}
+.err .ar .err-ic{margin:0 0 0 6px}
+
+/* ============================================================ NAVIGATION + BUTTONS */
+.navbar{position:sticky;bottom:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px var(--card-pad) 22px;
+  background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+.navbar[hidden]{display:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:0 22px;border-radius:14px;border:1.5px solid transparent;cursor:pointer;
+  font-weight:600;white-space:nowrap;-webkit-tap-highlight-color:transparent;transition:background-color .18s var(--ease),border-color .18s var(--ease),box-shadow .18s var(--ease),transform .12s var(--ease),opacity .18s}
+.btn [lang="en"]{font-size:15.5px}
+.btn [lang="ar"]{font-size:16.5px;line-height:1.2}
+.btn .sep{width:1px;height:18px;background:currentColor;opacity:.3}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--green-flag);color:#fff;box-shadow:0 8px 18px -8px rgba(0,108,53,.6)}
+@media (hover:hover){.btn-primary:hover{background:var(--green-deep)}.btn-outline:hover{background:var(--green-soft)}}
+.btn-primary:active{background:var(--green-deep)}
+.btn-outline{background:#fff;color:var(--green-deep);border-color:#B7D1C1}
+.btn[disabled]{opacity:.6;cursor:not-allowed;transform:none}
+.btn .spinner{display:none;width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .8s linear infinite}
+.btn.btn-outline .spinner{border-color:rgba(0,77,38,.25);border-top-color:var(--green-deep)}
+.btn.is-busy .spinner{display:inline-block}
+.btn.is-busy .lbl{opacity:.85}
+.btn .lbl{display:inline-flex;align-items:center;gap:12px}
+.btn .lbl,.btn .lbl *,.btn .spinner{pointer-events:none}  /* taps always land on the button itself */
+.btn-lg{min-height:60px;padding:0 40px;border-radius:16px}
+.btn-lg [lang="en"]{font-size:17px}
+.btn-lg [lang="ar"]{font-size:18.5px}
+#nextBtn{min-width:180px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============================================================ SPECIAL SCREENS */
+.center{text-align:center}
+.welcome{padding:12px 0 30px}
+.welcome .gold{width:56px;height:3px;border-radius:3px;background:var(--gold);margin:0 auto 26px}
+.w-title{margin:0 0 22px;color:var(--green-deep);font-weight:700}
+.w-title .en{font-size:27px;line-height:1.28;letter-spacing:-.1px}
+.w-title .ar{font-size:27px;line-height:1.55}
+.big-q{margin:0 0 26px;padding:26px 24px;border-radius:18px;background:linear-gradient(180deg,var(--green-soft),#F3F9F5);border:1px solid #D3E8DB;color:var(--green-flag);font-weight:600}
+.big-q .en{font-size:21px;line-height:1.4}
+.big-q .ar{font-size:23px;line-height:1.65}
+.big-q.bi::before{background:rgba(0,108,53,.2)}
+.w-meta{color:var(--ink-soft);margin-bottom:10px}
+.w-unit{margin:0 0 22px;color:var(--green-mid);font-weight:600}
+.w-unit .en{font-size:14px;line-height:1.55}
+.w-unit .ar{font-size:15.5px;line-height:1.7}
+.w-lead{margin:0 0 8px;padding:22px 24px;border-radius:18px;background:linear-gradient(180deg,var(--green-soft),#F3F9F5);border:1px solid #D3E8DB;color:var(--green-deep);font-weight:500}
+.w-lead .en{font-size:16.5px;line-height:1.6}
+.w-lead .ar{font-size:18px;line-height:1.8}
+.w-lead.bi::before{background:rgba(0,108,53,.2)}
+.chip .t.wrap{flex-direction:row;align-items:flex-start}
+.chip .t.wrap [lang]{flex:1 1 50%}
+.screen-intro{margin:4px 0 6px;color:var(--ink-soft)}
+.screen-intro .en{font-size:15px;line-height:1.55}
+.screen-intro .ar{font-size:16.5px;line-height:1.75}
+.after-box{margin:4px auto 26px;max-width:720px;padding:18px 20px;border-radius:16px;background:var(--green-mist);border:1px solid var(--line);text-align:start}
+.after-box .en{font-size:15px;line-height:1.6}
+.after-box .ar{font-size:16.5px;line-height:1.75}
+a.btn{text-decoration:none}
+.w-meta .en{font-size:15.5px}
+.w-meta .ar{font-size:16.5px}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:22px 0 30px}
+.chip{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);font-weight:500;min-width:0}
+.chip svg{flex:none;width:20px;height:20px;color:var(--green-mid)}
+.chip .t{display:flex;justify-content:space-between;gap:10px;flex:1;min-width:0}
+.chip .t [lang="en"]{font-size:14px}
+.chip .t [lang="ar"]{font-size:15px;line-height:1.5;text-align:right}
+.actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.end{padding:28px 0 36px;text-align:center}
+.end .icon{width:92px;height:92px;margin:0 auto 26px}
+.end h2{margin:0 0 14px;color:var(--green-deep);font-weight:700}
+.end h2 .en{font-size:24px;line-height:1.35}
+.end h2 .ar{font-size:25px;line-height:1.55}
+.end .msg{color:var(--ink-soft);margin-bottom:26px}
+.end .msg .en{font-size:16px}
+.end .msg .ar{font-size:17px}
+.check-circle{stroke:var(--green-flag);stroke-width:3.5;fill:none;stroke-dasharray:252;stroke-dashoffset:252;animation:draw .7s var(--ease) .1s forwards}
+.check-bg{fill:var(--green-soft);transform-origin:center;animation:pop .5s var(--ease) both}
+.check-mark{stroke:var(--green-flag);stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;animation:draw .45s var(--ease) .65s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.end.err-view h2{color:var(--error)}
+
+/* ============================================================ FOOTER */
+footer{padding:4px 20px 28px;color:var(--ink-soft)}
+footer .bi{max-width:880px;margin:0 auto}
+footer .en{font-size:13px}
+footer .ar{font-size:14px}
+footer .bi::before{background:#C9DBD0}
+
+/* ============================================================ RESPONSIVE */
+@media (max-width:760px){
+  .hdr-title{display:none}
+  .hdr-inner{grid-template-columns:1fr 1fr;padding:14px 16px 16px}
+  .site-header.compact .hdr-inner{padding:9px 16px 11px}
+}
+@media (max-width:600px){
+  :root{--fs-en:14.5px;--fs-ar:16px;--gutter:18px;--card-pad:20px;--radius:18px}
+  main{padding:16px 10px 20px}
+  .uni.en{font-size:13px}.uni.ar{font-size:14px}
+  .uni .mark{display:none}
+  .progress-inner{padding:8px 14px 10px}
+  .screen-title .en{font-size:18px}.screen-title .ar{font-size:19px}
+  .q{padding:22px 0}
+  .q-title .en{font-size:15px}.q-title .ar{font-size:16.5px}
+  .q-note .en{font-size:13px}.q-note .ar{font-size:14px}
+  .opt{column-gap:10px;padding:11px 12px;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);min-height:52px}
+  .opt .o-en{font-size:14px}.opt .o-ar{font-size:15.5px;line-height:1.55}
+  .opt .ind{width:22px;height:22px}
+  .navbar{padding:12px var(--card-pad) calc(14px + env(safe-area-inset-bottom))}
+  .btn{padding:0 16px;gap:9px}
+  #nextBtn{min-width:0;flex:1}
+  .w-title .en{font-size:20px}.w-title .ar{font-size:21px}
+  .big-q{padding:18px 16px}
+  .w-lead{padding:16px 14px}
+  .w-lead .en{font-size:14.5px}.w-lead .ar{font-size:16px}
+  .w-unit .en{font-size:12.5px}.w-unit .ar{font-size:13.5px}
+  .screen-intro .en{font-size:13.5px}.screen-intro .ar{font-size:15px}
+  .after-box{padding:14px 12px}
+  .big-q .en{font-size:17px}.big-q .ar{font-size:18.5px}
+  .chips{grid-template-columns:1fr}
+  .btn-lg{width:100%}
+  .end h2 .en{font-size:19px}.end h2 .ar{font-size:20px}
+  .ph{padding:0 14px}.ph .en{font-size:13.5px}.ph .ar{font-size:14.5px}
+}
+@media (max-width:370px){
+  :root{--fs-en:13.5px;--fs-ar:15px;--gutter:12px;--card-pad:14px}
+  main{padding:12px 6px 16px}
+  .opt{column-gap:8px;padding:10px 10px}
+  .opt .o-en{font-size:13px}.opt .o-ar{font-size:14.5px}
+  .q-title .en{font-size:14px}.q-title .ar{font-size:15.5px}
+  .btn [lang="en"]{font-size:14px}.btn [lang="ar"]{font-size:15px}
+  .btn{padding:0 12px;gap:7px}
+  .screen-title .en{font-size:16.5px}.screen-title .ar{font-size:17.5px}
+  .ph .en{font-size:12.5px}.ph .ar{font-size:13.5px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0s!important;transition-duration:.001ms!important;transition-delay:0s!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<header class="site-header" id="siteHeader">
+  <div class="hdr">
+    <div class="hdr-inner">
+      <div class="uni en" lang="en" dir="ltr"><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-5 9 5-9 5-9-5z"/><path d="M7 12v4.5c0 1 2.2 2.5 5 2.5s5-1.5 5-2.5V12"/></svg></span><span id="uniEn"></span></div>
+      <div class="hdr-title" aria-hidden="true"><span lang="en" dir="ltr" id="hdrTitleEn"></span><span class="dot"></span><span class="ar" lang="ar" dir="rtl" id="hdrTitleAr"></span></div>
+      <div class="uni ar" lang="ar" dir="rtl"><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-5 9 5-9 5-9-5z"/><path d="M7 12v4.5c0 1 2.2 2.5 5 2.5s5-1.5 5-2.5V12"/></svg></span><span id="uniAr"></span></div>
+    </div>
+  </div>
+  <div class="progress-wrap" id="progressWrap" hidden>
+    <div class="progress-inner">
+      <div class="progress-labels bi" aria-hidden="true"><span class="en" lang="en" dir="ltr" id="progEn"></span><span class="ar" lang="ar" dir="rtl" id="progAr"></span></div>
+      <div class="track" role="progressbar" id="progressBar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Survey progress / تقدم الاستبيان"><div class="fill" id="progressFill"></div></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="card" id="card">
+    <div class="view" id="view" tabindex="-1" aria-live="off"></div>
+    <nav class="navbar" id="navbar" hidden aria-label="Survey navigation">
+      <button type="button" class="btn btn-outline" id="backBtn"><span class="lbl"><span lang="en">Back</span><span class="sep" aria-hidden="true"></span><span lang="ar" dir="rtl">السابق</span></span><span class="spinner" aria-hidden="true"></span></button>
+      <button type="button" class="btn btn-primary" id="nextBtn"><span class="spinner" aria-hidden="true"></span><span class="lbl" id="nextLbl"></span></button>
+    </nav>
+  </div>
+</main>
+
+<footer>
+  <div class="bi"><span class="en" lang="en" dir="ltr" id="footEn"></span><span class="ar" lang="ar" dir="rtl" id="footAr"></span></div>
+</footer>
+
+<script type="application/json" id="appConfig"><?!= configJson ?></script>
+<script>
+/* Page texts. Inside Google they come from CONFIG in Code.gs; outside Google these defaults
+   show first and are replaced by the live CONFIG a moment later. */
+var DEFAULT_CONFIG = {
+ "institution_en": "King Abdulaziz University",
+ "institution_ar": "جامعة الملك عبدالعزيز",
+ "unit1_en": "Health Promotion Center — King Abdulaziz University",
+ "unit1_ar": "مركز تعزيز الصحة — جامعة الملك عبدالعزيز",
+ "unit2_en": "Tobacco Control and Drug Prevention Unit",
+ "unit2_ar": "وحدة مكافحة التدخين والوقاية من المخدرات",
+ "title_en": "Assessment of KAU Student and Staff Needs Related to Tobacco, Nicotine and Cessation Services",
+ "title_ar": "تقييم احتياجات طلاب ومنسوبي جامعة الملك عبدالعزيز المتعلقة بالتبغ والنيكوتين وخدمات الإقلاع",
+ "header_title_en": "Tobacco & Nicotine Needs Assessment",
+ "header_title_ar": "تقييم احتياجات التبغ والنيكوتين",
+ "intro_en": "This assessment examines tobacco and nicotine use, awareness of relevant services and regulations, and cessation needs to inform the development of University services and programmes.",
+ "intro_ar": "يهدف هذا التقييم إلى التعرف على أنماط استخدام التبغ والنيكوتين، ومدى المعرفة بالخدمات واللوائح ذات العلاقة، واحتياجات الإقلاع؛ بما يسهم في تطوير خدمات وبرامج الجامعة.",
+ "time_en": "Estimated time: 5–7 minutes",
+ "time_ar": "المدة المتوقعة: 5–7 دقائق",
+ "anon_en": "You will not be asked to enter your name or email address.",
+ "anon_ar": "لن يُطلب منك إدخال اسمك أو بريدك الإلكتروني.",
+ "footer_en": "No name or email address is requested",
+ "footer_ar": "لا يطلب الاستبيان اسمك أو بريدك الإلكتروني",
+ "after_en": "If you use tobacco or nicotine and would like cessation support, visit Aqla: https://aqla1.com",
+ "after_ar": "إذا كنت تستخدم التبغ أو النيكوتين وترغب في دعم للإقلاع، يمكنك زيارة منصة أقلع: https://aqla1.com",
+ "after_url": "https://aqla1.com",
+ "after_btn_en": "Visit Aqla",
+ "after_btn_ar": "زيارة منصة أقلع",
+ "max_text": 2000
+};
+var APP_CONFIG = (function () {
+  try {
+    var t = document.getElementById('appConfig').textContent.trim();
+    return t.charAt(0) === '{' ? JSON.parse(t) : null;
+  } catch (e) { return null; }
+})();
+var CONFIG_FROM_GOOGLE = !!APP_CONFIG;
+if (!APP_CONFIG) APP_CONFIG = DEFAULT_CONFIG;
+
+/* ==========================================================================
+   QUESTIONNAIRE DEFINITION — single source of truth.
+   Code.gs reads this same block to re-run the logic and build the Codebook.
+   Keep it valid JSON between the two markers.
+   ========================================================================== */
+var SURVEY = /*SURVEY_JSON_START*/
+{
+ "meta": {"eligible": "[age18] = '1' and [consent] = '1'", "stop": [{"logic": "[age18] = '0'", "status": "ineligible_under18"}, {"logic": "[consent] = '0'", "status": "ineligible_no_consent"}], "stop_vars": ["age18", "consent"]},
+ "screens": [
+  {"id": "eligibility", "title_ar": "الأهلية", "title_en": "Eligibility", "intro_ar": "يرجى الإجابة عن سؤال الأهلية قبل المتابعة.", "intro_en": "Please answer the eligibility question before continuing.", "num": 1},
+  {"id": "consent", "title_ar": "المشاركة والخصوصية", "title_en": "Participation and privacy", "intro_ar": "المشاركة طوعية. يستغرق الاستبيان نحو 5–7 دقائق. لا يطلب الاستبيان اسمك أو بريدك الإلكتروني. ستستخدم البيانات المجهولة لتطوير خدمات الوحدة وللبحث العلمي بعد استكمال الموافقات النظامية والأخلاقية. يمكنك ترك أي سؤال غير إلزامي أو التوقف في أي وقت.", "intro_en": "Participation is voluntary. The survey takes about 5–7 minutes. It does not ask for your name or email address. Anonymous data will be used to improve Unit services and for scientific research after the required institutional and ethics approvals are in place. You may skip any non-required item or stop at any time.", "num": 2},
+  {"id": "relationship", "title_ar": "علاقتك بالجامعة", "title_en": "Your relationship with the University", "num": 3},
+  {"id": "use", "title_ar": "استخدام التبغ والنيكوتين", "title_en": "Tobacco and nicotine use", "intro_ar": "الأسئلة التالية عن الاستخدام الحالي. لا توجد إجابة صحيحة أو خاطئة.", "intro_en": "The following questions are about current use. There are no right or wrong answers.", "num": 4},
+  {"id": "quitting", "title_ar": "الإقلاع والدعم", "title_en": "Quitting and support", "num": 5},
+  {"id": "policy", "title_ar": "سياسة مكافحة التدخين في الجامعة", "title_en": "University Smoking Control Policy", "num": 6},
+  {"id": "awareness", "title_ar": "معرفة المركز والوحدة وخدمات الإقلاع", "title_en": "Awareness of the Center, Unit and cessation services", "num": 7},
+  {"id": "knowledge", "title_ar": "المعرفة والتصورات", "title_en": "Knowledge and perceptions", "num": 8},
+  {"id": "channels", "title_ar": "قنوات التواصل", "title_en": "Communication channels", "num": 9}
+ ],
+ "questions": [
+  {
+    "n": 1,
+    "var": "age18",
+    "screen": "eligibility",
+    "type": "radio",
+    "required": true,
+    "label_en": "Are you 18 years of age or older?",
+    "label_ar": "هل عمرك 18 سنة أو أكثر؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": ""
+  },
+  {
+    "n": 2,
+    "var": "consent",
+    "screen": "consent",
+    "type": "radio",
+    "required": true,
+    "label_en": "Do you agree to take part?",
+    "label_ar": "هل توافق على المشاركة؟",
+    "choices": [
+      {"code": "1", "ar": "أوافق على المشاركة", "en": "I agree to take part"},
+      {"code": "0", "ar": "لا أوافق", "en": "I do not agree"}
+    ],
+    "logic": "[age18] = '1'"
+  },
+  {
+    "n": 3,
+    "var": "role",
+    "screen": "relationship",
+    "type": "radio",
+    "required": true,
+    "label_en": "What is your main role at King Abdulaziz University?",
+    "label_ar": "ما صفتك الأساسية في جامعة الملك عبدالعزيز؟",
+    "choices": [
+      {"code": "1", "ar": "طالب/طالبة بكالوريوس", "en": "Undergraduate student"},
+      {"code": "2", "ar": "طالب/طالبة دراسات عليا", "en": "Postgraduate student"},
+      {"code": "3", "ar": "عضو هيئة تدريس أو من في حكمهم", "en": "Faculty or equivalent academic staff"},
+      {"code": "4", "ar": "موظف/موظفة إداري/ة", "en": "Administrative staff"},
+      {"code": "5", "ar": "ممارس/ة صحي/ة أو موظف/ة في الخدمات الصحية", "en": "Healthcare professional or health-services staff"},
+      {"code": "6", "ar": "موظف/ة آخر/ى", "en": "Other University staff"},
+      {"code": "7", "ar": "أخرى", "en": "Other"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 4,
+    "var": "age_group",
+    "screen": "relationship",
+    "type": "radio",
+    "required": true,
+    "label_en": "What is your age group?",
+    "label_ar": "ما فئتك العمرية؟",
+    "choices": [
+      {"code": "1", "ar": "18–24 سنة", "en": "18–24 years"},
+      {"code": "2", "ar": "25–34 سنة", "en": "25–34 years"},
+      {"code": "3", "ar": "35–44 سنة", "en": "35–44 years"},
+      {"code": "4", "ar": "45–54 سنة", "en": "45–54 years"},
+      {"code": "5", "ar": "55 سنة فأكثر", "en": "55 years or older"},
+      {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 5,
+    "var": "sex",
+    "screen": "relationship",
+    "type": "radio",
+    "required": true,
+    "label_en": "Sex",
+    "label_ar": "الجنس",
+    "choices": [
+      {"code": "1", "ar": "ذكر", "en": "Male"},
+      {"code": "2", "ar": "أنثى", "en": "Female"},
+      {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 6,
+    "var": "sector",
+    "screen": "relationship",
+    "type": "radio",
+    "required": true,
+    "label_en": "Which sector best describes where you are based in the University?",
+    "label_ar": "أي قطاع يصف موقعك في الجامعة بصورة أفضل؟",
+    "choices": [
+      {"code": "1", "ar": "الكليات الصحية", "en": "Health colleges"},
+      {"code": "2", "ar": "العلوم والهندسة والحاسب والتخصصات التقنية", "en": "Science, engineering, computing or technical fields"},
+      {"code": "3", "ar": "الأعمال والاقتصاد والقانون", "en": "Business, economics or law"},
+      {"code": "4", "ar": "العلوم الإنسانية والاجتماعية والتربية", "en": "Humanities, social sciences or education"},
+      {"code": "5", "ar": "المستشفى الجامعي أو الخدمات الصحية", "en": "University hospital or health services"},
+      {"code": "6", "ar": "الإدارة المركزية أو الخدمات المساندة", "en": "Central administration or support services"},
+      {"code": "7", "ar": "أخرى", "en": "Other"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 7,
+    "var": "burned_status",
+    "screen": "use",
+    "type": "radio",
+    "required": true,
+    "label_en": "Do you currently smoke any burned tobacco product, such as cigarettes or waterpipe/shisha, daily, less than daily, or not at all?",
+    "label_ar": "هل تستخدم حاليًا أي منتج تبغ يُحرق عند الاستخدام، مثل السجائر أو الشيشة، يوميًا أو أقل من يومي أو لا تستخدمه حاليًا؟",
+    "choices": [
+      {"code": "1", "ar": "يوميًا", "en": "Daily"},
+      {"code": "2", "ar": "أقل من يومي", "en": "Less than daily"},
+      {"code": "3", "ar": "لا أستخدمه حاليًا", "en": "Not at all currently"},
+      {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 8,
+    "var": "burned_products",
+    "screen": "use",
+    "type": "checkbox",
+    "required": true,
+    "label_en": "Which burned tobacco products do you currently use? Select all that apply.",
+    "label_ar": "ما منتجات التبغ المحروق التي تستخدمها حاليًا؟ اختر كل ما ينطبق.",
+    "choices": [
+      {"code": "1", "ar": "السجائر المصنعة", "en": "Manufactured cigarettes"},
+      {"code": "2", "ar": "الشيشة/المعسل", "en": "Waterpipe/shisha"},
+      {"code": "3", "ar": "السيجار أو الغليون أو منتجات تبغ أخرى تُحرق", "en": "Cigars, pipe or other burned tobacco"},
+      {"code": "4", "ar": "منتج تبغ محروق آخر", "en": "Another burned tobacco product"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1' and ([burned_status] = '1' or [burned_status] = '2')"
+  },
+  {
+    "n": 9,
+    "var": "ecig_status",
+    "screen": "use",
+    "type": "radio",
+    "required": true,
+    "label_en": "Do you currently use electronic cigarettes or vaping devices daily, less than daily, or not at all?",
+    "label_ar": "هل تستخدم حاليًا السجائر الإلكترونية أو أجهزة الفيب يوميًا، أقل من يومي، أم لا تستخدمها حاليًا؟",
+    "choices": [
+      {"code": "1", "ar": "يوميًا", "en": "Daily"},
+      {"code": "2", "ar": "أقل من يومي", "en": "Less than daily"},
+      {"code": "3", "ar": "لا أستخدمه حاليًا", "en": "Not at all currently"},
+      {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 10,
+    "var": "pouch_status",
+    "screen": "use",
+    "type": "radio",
+    "required": true,
+    "label_en": "Do you currently use oral nicotine pouches daily, less than daily, or not at all?",
+    "label_ar": "هل تستخدم حاليًا أكياس النيكوتين الفموية يوميًا، أقل من يومي، أم لا تستخدمها حاليًا؟",
+    "choices": [
+      {"code": "1", "ar": "يوميًا", "en": "Daily"},
+      {"code": "2", "ar": "أقل من يومي", "en": "Less than daily"},
+      {"code": "3", "ar": "لا أستخدمه حاليًا", "en": "Not at all currently"},
+      {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 11,
+    "var": "htp_status",
+    "screen": "use",
+    "type": "radio",
+    "required": true,
+    "label_en": "Do you currently use heated tobacco products daily, less than daily, or not at all?",
+    "label_ar": "هل تستخدم حاليًا منتجات التبغ المُسخّن يوميًا، أقل من يومي، أم لا تستخدمها حاليًا؟",
+    "choices": [
+      {"code": "1", "ar": "يوميًا", "en": "Daily"},
+      {"code": "2", "ar": "أقل من يومي", "en": "Less than daily"},
+      {"code": "3", "ar": "لا أستخدمه حاليًا", "en": "Not at all currently"},
+      {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 12,
+    "var": "cigs_per_day",
+    "screen": "use",
+    "type": "text",
+    "required": true,
+    "label_en": "On days when you smoke cigarettes, how many manufactured cigarettes do you usually smoke in a day?",
+    "label_ar": "في الأيام التي تدخن فيها السجائر، كم سيجارة مصنعة تدخن عادة في اليوم؟",
+    "validation": {"type": "integer", "min": 1, "max": 100},
+    "logic": "[age18] = '1' and [consent] = '1' and ([burned_status] = '1' or [burned_status] = '2') and [burned_products(1)] = '1'"
+  },
+  {
+    "n": 13,
+    "var": "cig_ttf",
+    "screen": "use",
+    "type": "radio",
+    "required": true,
+    "label_en": "How soon after waking do you usually smoke your first cigarette?",
+    "label_ar": "بعد الاستيقاظ من النوم، متى تدخن أول سيجارة عادة؟",
+    "choices": [
+      {"code": "3", "ar": "خلال 5 دقائق", "en": "Within 5 minutes"},
+      {"code": "2", "ar": "خلال 6–30 دقيقة", "en": "6–30 minutes"},
+      {"code": "1", "ar": "خلال 31–60 دقيقة", "en": "31–60 minutes"},
+      {"code": "0", "ar": "بعد أكثر من 60 دقيقة", "en": "More than 60 minutes"},
+      {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1' and ([burned_status] = '1' or [burned_status] = '2') and [burned_products(1)] = '1'"
+  },
+  {
+    "n": 14,
+    "var": "shisha_sessions_week",
+    "screen": "use",
+    "type": "text",
+    "required": true,
+    "label_en": "In a usual week, approximately how many waterpipe/shisha sessions do you smoke?",
+    "label_ar": "في أسبوع معتاد، كم جلسة شيشة/معسل تدخن تقريبًا؟",
+    "validation": {"type": "integer", "min": 0, "max": 70},
+    "logic": "[age18] = '1' and [consent] = '1' and ([burned_status] = '1' or [burned_status] = '2') and [burned_products(2)] = '1'"
+  },
+  {
+    "n": 15,
+    "var": "ecig_days_30d",
+    "screen": "use",
+    "type": "text",
+    "required": true,
+    "label_en": "During the past 30 days, on how many days did you use an electronic cigarette or vaping device?",
+    "label_ar": "خلال آخر 30 يومًا، في كم يوم استخدمت السيجارة الإلكترونية أو الفيب؟",
+    "validation": {"type": "integer", "min": 0, "max": 30},
+    "logic": "[age18] = '1' and [consent] = '1' and ([ecig_status] = '1' or [ecig_status] = '2')"
+  },
+  {
+    "n": 16,
+    "var": "pouches_per_day",
+    "screen": "use",
+    "type": "text",
+    "required": true,
+    "label_en": "On days when you use nicotine pouches, how many pouches do you usually use in a day?",
+    "label_ar": "في الأيام التي تستخدم فيها أكياس النيكوتين، كم كيسًا تستخدم عادة في اليوم؟",
+    "validation": {"type": "integer", "min": 1, "max": 100},
+    "logic": "[age18] = '1' and [consent] = '1' and ([pouch_status] = '1' or [pouch_status] = '2')"
+  },
+  {
+    "n": 17,
+    "var": "hsi_score",
+    "screen": "use",
+    "type": "calc",
+    "required": false,
+    "label_en": "Heaviness of Smoking Index (HSI, 0–6; auto-calculated)",
+    "label_ar": "مؤشر شدة التدخين (HSI، من 0 إلى 6؛ يُحسب تلقائيًا)",
+    "calc": "if([cig_ttf] = \"\" or [cig_ttf] = \"99\" or [cigs_per_day] = \"\", \"\", [cig_ttf] + if([cigs_per_day] < 11, 0, if([cigs_per_day] < 21, 1, if([cigs_per_day] < 31, 2, 3))))",
+    "logic": "[age18] = '1' and [consent] = '1' and ([burned_status] = '1' or [burned_status] = '2') and [burned_products(1)] = '1'",
+    "research_note": "Time to first cigarette (0–3) + cigarettes per day (0–10 = 0, 11–20 = 1, 21–30 = 2, 31+ = 3). Blank if either item is missing or \"Prefer not to answer\"."
+  },
+  {
+    "n": 18,
+    "var": "quit_attempt_12m",
+    "screen": "quitting",
+    "type": "radio",
+    "required": true,
+    "label_en": "During the past 12 months, have you tried to stop using tobacco or nicotine?",
+    "label_ar": "خلال آخر 12 شهرًا، هل حاولت التوقف عن استخدام التبغ أو النيكوتين؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"},
+      {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1' and (([burned_status] = '1' or [burned_status] = '2') or ([ecig_status] = '1' or [ecig_status] = '2') or ([pouch_status] = '1' or [pouch_status] = '2') or ([htp_status] = '1' or [htp_status] = '2'))"
+  },
+  {
+    "n": 19,
+    "var": "quit_stage",
+    "screen": "quitting",
+    "type": "radio",
+    "required": true,
+    "label_en": "Which statement best describes your current thinking about quitting?",
+    "label_ar": "أي عبارة تصف تفكيرك الحالي بشأن الإقلاع بصورة أفضل؟",
+    "choices": [
+      {"code": "1", "ar": "أخطط للإقلاع خلال الشهر القادم", "en": "I plan to quit within the next month"},
+      {"code": "2", "ar": "أفكر في الإقلاع خلال 12 شهرًا القادمة", "en": "I am thinking about quitting within the next 12 months"},
+      {"code": "3", "ar": "سأقلع يومًا ما، لكن ليس خلال 12 شهرًا القادمة", "en": "I will quit someday, but not within the next 12 months"},
+      {"code": "4", "ar": "لا أفكر في الإقلاع حاليًا", "en": "I am not interested in quitting at present"},
+      {"code": "98", "ar": "لا أعرف", "en": "Don't know"},
+      {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1' and (([burned_status] = '1' or [burned_status] = '2') or ([ecig_status] = '1' or [ecig_status] = '2') or ([pouch_status] = '1' or [pouch_status] = '2') or ([htp_status] = '1' or [htp_status] = '2'))"
+  },
+  {
+    "n": 20,
+    "var": "quit_methods",
+    "screen": "quitting",
+    "type": "checkbox",
+    "required": true,
+    "label_en": "During your most recent quit attempt in the past 12 months, which methods did you use? Select all that apply.",
+    "label_ar": "في آخر محاولة للإقلاع خلال 12 شهرًا الماضية، ما الوسائل التي استخدمتها؟ اختر كل ما ينطبق.",
+    "choices": [
+      {"code": "1", "ar": "استشارة أو عيادة للإقلاع", "en": "Counselling or a cessation clinic"},
+      {"code": "2", "ar": "بدائل النيكوتين مثل اللصقات أو العلكة", "en": "Nicotine replacement therapy such as patches or gum"},
+      {"code": "3", "ar": "دواء موصوف للمساعدة على الإقلاع", "en": "Prescription medication for quitting"},
+      {"code": "4", "ar": "دعم هاتفي أو رقمي", "en": "Telephone or digital support"},
+      {"code": "5", "ar": "حاولت دون مساعدة", "en": "Tried to quit without assistance"},
+      {"code": "6", "ar": "طريقة أخرى", "en": "Another method"}
+    ],
+    "exclusive": "5",
+    "logic": "[age18] = '1' and [consent] = '1' and (([burned_status] = '1' or [burned_status] = '2') or ([ecig_status] = '1' or [ecig_status] = '2') or ([pouch_status] = '1' or [pouch_status] = '2') or ([htp_status] = '1' or [htp_status] = '2')) and [quit_attempt_12m] = '1'"
+  },
+  {
+    "n": 21,
+    "var": "support_wanted",
+    "screen": "quitting",
+    "type": "checkbox",
+    "required": true,
+    "label_en": "If you wanted to quit, which types of support might you use? Select all that apply.",
+    "label_ar": "إذا رغبت في الإقلاع، ما أنواع الدعم التي قد تستخدمها؟ اختر كل ما ينطبق.",
+    "choices": [
+      {"code": "1", "ar": "عيادة متخصصة للإقلاع", "en": "Specialist cessation clinic"},
+      {"code": "2", "ar": "استشارة من ممارس صحي", "en": "Advice from a healthcare professional"},
+      {"code": "3", "ar": "أدوية أو بدائل نيكوتين بعد التقييم المناسب", "en": "Medication or nicotine replacement after appropriate assessment"},
+      {"code": "4", "ar": "متابعة رقمية أو رسائل قصيرة", "en": "Digital follow-up or brief messages"},
+      {"code": "5", "ar": "دعم هاتفي", "en": "Telephone support"},
+      {"code": "6", "ar": "مواد مساعدة ذاتية موثوقة", "en": "Evidence-based self-help materials"},
+      {"code": "7", "ar": "لا أحتاج أيًا من ذلك", "en": "I would not use any of these"}
+    ],
+    "exclusive": "7",
+    "logic": "[age18] = '1' and [consent] = '1' and (([burned_status] = '1' or [burned_status] = '2') or ([ecig_status] = '1' or [ecig_status] = '2') or ([pouch_status] = '1' or [pouch_status] = '2') or ([htp_status] = '1' or [htp_status] = '2'))"
+  },
+  {
+    "n": 22,
+    "var": "support_info",
+    "screen": "quitting",
+    "type": "radio",
+    "required": true,
+    "label_en": "Would you currently like to know how to access support to quit?",
+    "label_ar": "هل ترغب حاليًا في معرفة كيفية الحصول على دعم للإقلاع؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "2", "ar": "ربما لاحقًا", "en": "Maybe later"},
+      {"code": "0", "ar": "لا", "en": "No"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1' and (([burned_status] = '1' or [burned_status] = '2') or ([ecig_status] = '1' or [ecig_status] = '2') or ([pouch_status] = '1' or [pouch_status] = '2') or ([htp_status] = '1' or [htp_status] = '2'))"
+  },
+  {
+    "n": 23,
+    "var": "policy_aware",
+    "screen": "policy",
+    "type": "radio",
+    "required": true,
+    "label_en": "Before receiving the invitation to this survey, how familiar were you with the King Abdulaziz University Smoking Control Regulations?",
+    "label_ar": "قبل استلام دعوة المشاركة في هذا الاستبيان، إلى أي مدى كنت تعرف بوجود لائحة مكافحة التدخين بجامعة الملك عبدالعزيز؟",
+    "choices": [
+      {"code": "1", "ar": "لم أكن أعرف بوجودها", "en": "I had not heard of it"},
+      {"code": "2", "ar": "كنت أعرف بوجودها لكن لا أعرف تفاصيلها", "en": "I knew it existed but did not know the details"},
+      {"code": "3", "ar": "كنت أعرف بعض أحكامها", "en": "I knew some of its rules"},
+      {"code": "4", "ar": "كنت أعرفها جيدًا", "en": "I knew it well"},
+      {"code": "98", "ar": "غير متأكد", "en": "Not sure"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 24,
+    "var": "policy_content",
+    "screen": "policy",
+    "type": "radio",
+    "required": true,
+    "label_en": "Which statement, to the best of your knowledge, describes what the Smoking Control Regulations stipulate regarding tobacco use at the University?",
+    "label_ar": "أي عبارة تصف، حسب علمك، ما تنص عليه لائحة مكافحة التدخين بشأن تعاطي التبغ ومشتقاته في الجامعة؟",
+    "choices": [
+      {"code": "1", "ar": "يُحظر تعاطي التبغ ومشتقاته في داخل الجامعة في جميع المباني المغلقة والوحدات والمرافق التابعة لها", "en": "Tobacco and its derivatives are prohibited within the University in all enclosed buildings, units and their associated facilities"},
+      {"code": "2", "ar": "يُسمح بتعاطي التبغ في بعض الأماكن الداخلية", "en": "Smoking is allowed in some indoor areas"},
+      {"code": "3", "ar": "لا توجد أحكام محددة بهذا الشأن", "en": "There is no specific rule"},
+      {"code": "98", "ar": "لا أعرف", "en": "I don't know"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 25,
+    "var": "seen_indoor_30d",
+    "screen": "policy",
+    "type": "radio",
+    "required": true,
+    "label_en": "During the past 30 days, did you notice tobacco or tobacco-product use inside any enclosed University building, unit, or associated facility while you were there?",
+    "label_ar": "خلال آخر 30 يوماً، هل لاحظت تعاطي التبغ أو مشتقاته داخل أي من المباني المغلقة أو الوحدات أو المرافق التابعة للجامعة أثناء وجودك فيها؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"},
+      {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 26,
+    "var": "seen_outdoor_30d",
+    "screen": "policy",
+    "type": "radio",
+    "required": true,
+    "label_en": "During the past 30 days, did you notice tobacco or tobacco-product use in outdoor areas covered by the Regulations, including within 35 metres of University building doors or ground-floor windows, or in areas intended for entry, gathering, sitting or passage?",
+    "label_ar": "خلال آخر 30 يوماً، هل لاحظت تعاطي التبغ أو مشتقاته في الأماكن الخارجية المشمولة باللائحة، بما في ذلك ضمن مسافة (35) متراً من أبواب مباني الجامعة أو نوافذ الدور الأرضي، أو في الأماكن المهيأة للدخول أو الاجتماع أو الجلوس أو مرور الناس؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"},
+      {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 27,
+    "var": "policy_support",
+    "screen": "policy",
+    "type": "radio",
+    "required": true,
+    "label_en": "Do you support the implementation of the Smoking Control Regulations prohibiting tobacco and its derivatives in the areas covered by the Regulations within the University?",
+    "label_ar": "هل تؤيد تطبيق أحكام لائحة مكافحة التدخين التي تحظر تعاطي التبغ ومشتقاته في الأماكن المشمولة باللائحة داخل الجامعة؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"},
+      {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 28,
+    "var": "aware_hpc",
+    "screen": "awareness",
+    "type": "radio",
+    "required": true,
+    "label_en": "Before receiving today’s email, had you heard of the Health Promotion Center at King Abdulaziz University?",
+    "label_ar": "هل سبق أن سمعت عن مركز تعزيز الصحة بجامعة الملك عبدالعزيز؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"},
+      {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 29,
+    "var": "aware_unit",
+    "screen": "awareness",
+    "type": "radio",
+    "required": true,
+    "label_en": "Before receiving today’s email, had you heard of the Tobacco Control and Drug Prevention Unit?",
+    "label_ar": "هل سبق أن سمعت عن وحدة مكافحة التدخين والوقاية من المخدرات؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"},
+      {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 30,
+    "var": "aware_service",
+    "screen": "awareness",
+    "type": "radio",
+    "required": true,
+    "label_en": "Before receiving today’s email, were you aware of a service or clinic that University members could use for help to quit smoking?",
+    "label_ar": "هل كنت تعرف بوجود خدمة أو عيادة يمكن لمنسوبي الجامعة التوجه إليها للحصول على دعم للإقلاع عن التدخين؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"},
+      {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 31,
+    "var": "know_where_start",
+    "screen": "awareness",
+    "type": "radio",
+    "required": true,
+    "label_en": "Before receiving today’s email, if you or someone you know wanted help to quit tobacco or nicotine, would you have known where to start within the University?",
+    "label_ar": "لو أردت أنت أو شخص تعرفه المساعدة على الإقلاع عن التدخين أو النيكوتين، هل كنت تعرف أين تبدأ داخل الجامعة؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"},
+      {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 32,
+    "var": "used_service",
+    "screen": "awareness",
+    "type": "radio",
+    "required": true,
+    "label_en": "Have you ever used a smoking-cessation service provided by the University or University Hospital?",
+    "label_ar": "هل سبق لك استخدام أي خدمة للإقلاع عن التدخين تابعة للجامعة أو المستشفى الجامعي؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"},
+      {"code": "98", "ar": "غير متأكد", "en": "Not sure"},
+      {"code": "97", "ar": "لا ينطبق عليّ", "en": "Not applicable"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 33,
+    "var": "service_satisfaction",
+    "screen": "awareness",
+    "type": "radio",
+    "required": true,
+    "label_en": "Overall, how satisfied were you with the service you used?",
+    "label_ar": "بشكل عام، ما مدى رضاك عن الخدمة التي استخدمتها؟",
+    "choices": [
+      {"code": "1", "ar": "غير راضٍ جدًا", "en": "Very dissatisfied"},
+      {"code": "2", "ar": "غير راضٍ", "en": "Dissatisfied"},
+      {"code": "3", "ar": "محايد", "en": "Neither satisfied nor dissatisfied"},
+      {"code": "4", "ar": "راضٍ", "en": "Satisfied"},
+      {"code": "5", "ar": "راضٍ جدًا", "en": "Very satisfied"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1' and [used_service] = '1'"
+  },
+  {
+    "n": 34,
+    "var": "smoking_harm",
+    "screen": "knowledge",
+    "type": "radio",
+    "required": true,
+    "label_en": "Based on what you know or believe, does smoking tobacco cause serious illness?",
+    "label_ar": "بناءً على ما تعرفه أو تعتقده، هل يسبب تدخين التبغ أمراضًا خطيرة؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"},
+      {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 35,
+    "var": "shs_harm",
+    "screen": "knowledge",
+    "type": "radio",
+    "required": true,
+    "label_en": "Based on what you know or believe, does breathing other people's smoke cause serious illness in non-smokers?",
+    "label_ar": "بناءً على ما تعرفه أو تعتقده، هل يسبب استنشاق دخان الآخرين أمراضًا خطيرة لغير المدخنين؟",
+    "choices": [
+      {"code": "1", "ar": "نعم", "en": "Yes"},
+      {"code": "0", "ar": "لا", "en": "No"},
+      {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 36,
+    "var": "ecig_harm",
+    "screen": "knowledge",
+    "type": "radio",
+    "required": true,
+    "label_en": "Compared with smoking cigarettes, how harmful do you think regular e-cigarette/vape use is to health?",
+    "label_ar": "مقارنةً بتدخين السجائر، كيف ترى الضرر الصحي الناتج عن الاستخدام المنتظم للسجائر الإلكترونية/الفيب؟",
+    "choices": [
+      {"code": "1", "ar": "أقل بكثير", "en": "Much less harmful"},
+      {"code": "2", "ar": "أقل", "en": "Less harmful"},
+      {"code": "3", "ar": "بنفس الدرجة تقريبًا", "en": "About as harmful"},
+      {"code": "4", "ar": "أكثر", "en": "More harmful"},
+      {"code": "5", "ar": "أكثر بكثير", "en": "Much more harmful"},
+      {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 37,
+    "var": "pouch_harm",
+    "screen": "knowledge",
+    "type": "radio",
+    "required": true,
+    "label_en": "Compared with smoking cigarettes, how harmful do you think regular nicotine-pouch use is to health?",
+    "label_ar": "مقارنةً بتدخين السجائر، كيف ترى الضرر الصحي الناتج عن الاستخدام المنتظم لأكياس النيكوتين؟",
+    "choices": [
+      {"code": "1", "ar": "أقل بكثير", "en": "Much less harmful"},
+      {"code": "2", "ar": "أقل", "en": "Less harmful"},
+      {"code": "3", "ar": "بنفس الدرجة تقريبًا", "en": "About as harmful"},
+      {"code": "4", "ar": "أكثر", "en": "More harmful"},
+      {"code": "5", "ar": "أكثر بكثير", "en": "Much more harmful"},
+      {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  },
+  {
+    "n": 38,
+    "var": "info_channels",
+    "screen": "channels",
+    "type": "checkbox",
+    "required": true,
+    "label_en": "Through which channels would you prefer to receive information from the Unit about tobacco, nicotine and cessation services? Select all that apply.",
+    "label_ar": "ما القنوات التي تفضل أن تصلك من خلالها معلومات الوحدة عن التبغ والنيكوتين وخدمات الإقلاع؟ اختر كل ما ينطبق.",
+    "choices": [
+      {"code": "1", "ar": "البريد الإلكتروني الجامعي", "en": "University email"},
+      {"code": "2", "ar": "بوابة الجامعة", "en": "University portal"},
+      {"code": "3", "ar": "الشاشات الرقمية داخل الجامعة", "en": "Digital screens on campus"},
+      {"code": "4", "ar": "منصة X", "en": "X"},
+      {"code": "5", "ar": "قنوات الأندية والطلاب", "en": "Student clubs and student channels"},
+      {"code": "6", "ar": "واتساب إذا كان عبر قناة رسمية", "en": "WhatsApp if provided through an official channel"},
+      {"code": "7", "ar": "قناة أخرى", "en": "Another channel"}
+    ],
+    "logic": "[age18] = '1' and [consent] = '1'"
+  }
+ ],
+ "analysis": [
+  {
+    "var": "record_id",
+    "type": "system",
+    "label_en": "Record ID",
+    "label_ar": "معرّف السجل"
+  },
+  {
+    "var": "ana_current_any",
+    "type": "calc",
+    "label_en": "Current use of any tobacco or nicotine product: 1 yes, 0 no",
+    "label_ar": "استخدام حالي لأي منتج تبغ أو نيكوتين: 1 نعم، 0 لا",
+    "calc": "if([age18] = '1' and [consent] = '1', if(([burned_status] = '1' or [burned_status] = '2' or [ecig_status] = '1' or [ecig_status] = '2' or [pouch_status] = '1' or [pouch_status] = '2' or [htp_status] = '1' or [htp_status] = '2'), 1, if(([burned_status] = '3' and [ecig_status] = '3' and [pouch_status] = '3' and [htp_status] = '3'), 0, \"\")), \"\")",
+    "research_note": "Blank when no product is used currently but at least one status is \"Prefer not to answer\"."
+  },
+  {
+    "var": "ana_n_products",
+    "type": "calc",
+    "label_en": "Number of product types used currently (0–4: burned, e-cigarette, pouch, heated)",
+    "label_ar": "عدد أنواع المنتجات المستخدمة حاليًا (0–4)",
+    "calc": "if([age18] = '1' and [consent] = '1' and [burned_status] <> '' and [ecig_status] <> '' and [pouch_status] <> '' and [htp_status] <> '', if(([burned_status] = '1' or [burned_status] = '2'), 1, 0) + if(([ecig_status] = '1' or [ecig_status] = '2'), 1, 0) + if(([pouch_status] = '1' or [pouch_status] = '2'), 1, 0) + if(([htp_status] = '1' or [htp_status] = '2'), 1, 0), \"\")",
+    "research_note": "Counts products used daily or less than daily; \"Prefer not to answer\" counts as not current."
+  },
+  {
+    "var": "ana_role_group",
+    "type": "calc",
+    "label_en": "Role group: 1 student, 2 staff, 3 other",
+    "label_ar": "الفئة: 1 طالب، 2 منسوب، 3 أخرى",
+    "calc": "if([age18] = '1' and [consent] = '1' and [role] <> '', if([role] = '1' or [role] = '2', 1, if([role] = '7', 3, 2)), \"\")"
+  }
+ ]
+}
+/*SURVEY_JSON_END*/;
+var SCREENS = SURVEY.screens;
+var QUESTIONS = SURVEY.questions;
+
+/* ==========================================================================
+   REDCap LOGIC ENGINE  (identical copy in Index.html and Code.gs)
+   Tokenizer + recursive-descent parser + evaluator. No eval / new Function.
+   Supports: [var]  [var(code)]  'text' "text"  numbers  = == <> != < <= > >=
+             and or not  && ||  ( )  + - * /  if(cond, a, b)  true false
+   ========================================================================== */
+var RedcapLogic = (function () {
+  'use strict';
+
+  var DIGIT_MAP = {};
+  (function () {
+    var i;
+    for (i = 0; i < 10; i++) {
+      DIGIT_MAP[String.fromCharCode(0x0660 + i)] = String(i); // Arabic-Indic
+      DIGIT_MAP[String.fromCharCode(0x06F0 + i)] = String(i); // Persian / Urdu
+    }
+    DIGIT_MAP['٫'] = '.'; // Arabic decimal separator
+  })();
+
+  /** Convert Arabic-Indic and Persian digits to Western digits. */
+  function normalizeDigits(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/[٠-٩۰-۹٫]/g, function (c) { return DIGIT_MAP[c]; });
+  }
+
+  /** Western digits -> Arabic-Indic digits (for display in the Arabic column). */
+  function toArabicDigits(s) {
+    return String(s).replace(/[0-9]/g, function (d) { return String.fromCharCode(0x0660 + Number(d)); });
+  }
+
+  // ---------------------------------------------------------------- tokenizer
+  function tokenize(src) {
+    var tokens = [], i = 0, n = src.length, c, m, rest;
+    while (i < n) {
+      c = src.charAt(i);
+      if (/\s/.test(c)) { i++; continue; }
+      rest = src.slice(i);
+      if (c === '[') {
+        m = /^\[\s*([A-Za-z_][A-Za-z0-9_]*)\s*(?:\(\s*([A-Za-z0-9_\-]+)\s*\))?\s*\]/.exec(rest);
+        if (!m) throw new Error('Bad field reference at ' + i + ' in: ' + src);
+        tokens.push({ t: 'field', v: m[1], code: m[2] === undefined ? null : m[2] });
+        i += m[0].length; continue;
+      }
+      if (c === '"' || c === "'") {
+        var j = src.indexOf(c, i + 1);
+        if (j < 0) throw new Error('Unclosed string in: ' + src);
+        tokens.push({ t: 'str', v: src.slice(i + 1, j) });
+        i = j + 1; continue;
+      }
+      m = /^(\d+\.?\d*|\.\d+)/.exec(rest);
+      if (m) { tokens.push({ t: 'num', v: m[1] }); i += m[1].length; continue; }
+      m = /^(<>|!=|<=|>=|==|&&|\|\||[=<>+\-*\/(),])/.exec(rest);
+      if (m) {
+        var op = m[1];
+        if (op === '&&') op = 'and';
+        if (op === '||') op = 'or';
+        if (op === '==') op = '=';
+        if (op === '!=') op = '<>';
+        tokens.push({ t: 'op', v: op }); i += m[1].length; continue;
+      }
+      m = /^[A-Za-z_]+/.exec(rest);
+      if (m) {
+        var w = m[0].toLowerCase();
+        if (w === 'and' || w === 'or' || w === 'not' || w === 'if' || w === 'true' || w === 'false') {
+          tokens.push({ t: 'kw', v: w }); i += m[0].length; continue;
+        }
+        throw new Error('Unknown word "' + m[0] + '" in: ' + src);
+      }
+      throw new Error('Unexpected character "' + c + '" in: ' + src);
+    }
+    return tokens;
+  }
+
+  // ---------------------------------------------------------------- parser
+  function parse(src) {
+    var toks = tokenize(src), p = 0;
+    function peek() { return toks[p]; }
+    function isOp(v) { var k = toks[p]; return k && k.t === 'op' && k.v === v; }
+    function isKw(v) { var k = toks[p]; return k && k.t === 'kw' && k.v === v; }
+    function expect(v) {
+      var k = toks[p];
+      if (!k || k.v !== v) throw new Error('Expected "' + v + '" in: ' + src);
+      p++;
+    }
+    function parseOr() {
+      var left = parseAnd();
+      while (isKw('or')) { p++; left = { k: 'or', a: left, b: parseAnd() }; }
+      return left;
+    }
+    function parseAnd() {
+      var left = parseNot();
+      while (isKw('and')) { p++; left = { k: 'and', a: left, b: parseNot() }; }
+      return left;
+    }
+    function parseNot() {
+      if (isKw('not')) { p++; return { k: 'not', a: parseNot() }; }
+      return parseCmp();
+    }
+    var CMP = { '=': 1, '<>': 1, '<': 1, '<=': 1, '>': 1, '>=': 1 };
+    function parseCmp() {
+      var left = parseAdd(), k = peek();
+      if (k && k.t === 'op' && CMP[k.v]) { p++; return { k: 'cmp', op: k.v, a: left, b: parseAdd() }; }
+      return left;
+    }
+    function parseAdd() {
+      var left = parseMul();
+      while (isOp('+') || isOp('-')) { var op = toks[p++].v; left = { k: 'arith', op: op, a: left, b: parseMul() }; }
+      return left;
+    }
+    function parseMul() {
+      var left = parseUnary();
+      while (isOp('*') || isOp('/')) { var op = toks[p++].v; left = { k: 'arith', op: op, a: left, b: parseUnary() }; }
+      return left;
+    }
+    function parseUnary() {
+      if (isOp('-')) { p++; return { k: 'neg', a: parseUnary() }; }
+      if (isOp('+')) { p++; return parseUnary(); }
+      return parsePrimary();
+    }
+    function parsePrimary() {
+      var k = peek();
+      if (!k) throw new Error('Unexpected end of logic: ' + src);
+      if (k.t === 'num') { p++; return { k: 'lit', v: k.v }; }
+      if (k.t === 'str') { p++; return { k: 'lit', v: k.v }; }
+      if (k.t === 'field') { p++; return { k: 'field', v: k.v, code: k.code }; }
+      if (k.t === 'kw' && (k.v === 'true' || k.v === 'false')) { p++; return { k: 'bool', v: k.v === 'true' }; }
+      if (k.t === 'kw' && k.v === 'if') {
+        p++; expect('(');
+        var c = parseOr(); expect(',');
+        var a = parseOr(); expect(',');
+        var b = parseOr(); expect(')');
+        return { k: 'if', c: c, a: a, b: b };
+      }
+      if (isOp('(')) { p++; var e = parseOr(); expect(')'); return e; }
+      throw new Error('Unexpected token "' + k.v + '" in: ' + src);
+    }
+    var ast = parseOr();
+    if (p !== toks.length) throw new Error('Unexpected trailing tokens in: ' + src);
+    return ast;
+  }
+
+  var AST_CACHE = {};
+  function compile(src) {
+    if (!Object.prototype.hasOwnProperty.call(AST_CACHE, src)) AST_CACHE[src] = parse(src);
+    return AST_CACHE[src];
+  }
+
+  // ---------------------------------------------------------------- evaluator
+  var NUM_RE = /^[\-+]?(\d+\.?\d*|\.\d+)$/;
+  function isBlank(v) { return v === null || v === undefined || (typeof v === 'string' && v.trim() === ''); }
+  function asScalar(v) { return typeof v === 'boolean' ? (v ? 1 : 0) : v; }
+  function looksNum(v) {
+    v = asScalar(v);
+    if (typeof v === 'number') return isFinite(v);
+    return !isBlank(v) && NUM_RE.test(String(v).trim());
+  }
+  function truthy(v) {
+    if (typeof v === 'boolean') return v;
+    if (isBlank(v)) return false;
+    if (looksNum(v)) return Number(v) !== 0;
+    return true;
+  }
+  function eq(a, b) {
+    a = asScalar(a); b = asScalar(b);
+    var ab = isBlank(a), bb = isBlank(b);
+    if (ab || bb) return ab && bb;
+    if (looksNum(a) && looksNum(b)) return Number(a) === Number(b);
+    return String(a) === String(b);
+  }
+  function rel(op, a, b) {
+    a = asScalar(a); b = asScalar(b);
+    if (isBlank(a) || isBlank(b)) return false;           // REDCap: comparison with blank is false
+    var x, y;
+    if (looksNum(a) && looksNum(b)) { x = Number(a); y = Number(b); }
+    else if (!looksNum(a) && !looksNum(b)) { x = String(a); y = String(b); }
+    else return false;                                     // text vs number: never true
+    if (op === '<') return x < y;
+    if (op === '<=') return x <= y;
+    if (op === '>') return x > y;
+    return x >= y;
+  }
+  function arith(op, a, b) {
+    a = asScalar(a); b = asScalar(b);
+    if (!looksNum(a) || !looksNum(b)) return '';           // any blank input -> blank result
+    var x = Number(a), y = Number(b), r;
+    if (op === '+') r = x + y;
+    else if (op === '-') r = x - y;
+    else if (op === '*') r = x * y;
+    else { if (y === 0) return ''; r = x / y; }
+    return Math.round(r * 1e10) / 1e10;
+  }
+
+  function evalNode(node, getVal) {
+    switch (node.k) {
+      case 'lit': return node.v;
+      case 'bool': return node.v;
+      case 'field': return getVal(node.v, node.code);
+      case 'or': return truthy(evalNode(node.a, getVal)) || truthy(evalNode(node.b, getVal));
+      case 'and': return truthy(evalNode(node.a, getVal)) && truthy(evalNode(node.b, getVal));
+      case 'not': return !truthy(evalNode(node.a, getVal));
+      case 'cmp':
+        var a = evalNode(node.a, getVal), b = evalNode(node.b, getVal);
+        if (node.op === '=') return eq(a, b);
+        if (node.op === '<>') return !eq(a, b);
+        return rel(node.op, a, b);
+      case 'arith': return arith(node.op, evalNode(node.a, getVal), evalNode(node.b, getVal));
+      case 'neg': var v = evalNode(node.a, getVal); return looksNum(v) ? -Number(v) : '';
+      case 'if': return truthy(evalNode(node.c, getVal)) ? evalNode(node.a, getVal) : evalNode(node.b, getVal);
+    }
+    throw new Error('Unknown node ' + node.k);
+  }
+
+  function evaluate(src, getVal) { return evalNode(compile(src), getVal); }
+  function test(src, getVal) { return (!src || !String(src).trim()) ? true : truthy(evaluate(src, getVal)); }
+
+  // ---------------------------------------------------------------- survey engine
+  /** Full list of choices for a question (explicit choices + numeric range). */
+  function expandChoices(q) {
+    var out = (q.choices || []).slice(), i;
+    if (q.range) for (i = q.range[0]; i <= q.range[1]; i++) out.push({ code: String(i), ar: String(i), en: String(i), numeric: true });
+    return out;
+  }
+
+  function hasValue(q, answers) {
+    var v = answers[q.var];
+    if (q.type === 'checkbox') return Array.isArray(v) && v.length > 0;
+    return !isBlank(v);
+  }
+
+  function makeGetter(survey, answers, calcs) {
+    var byVar = survey._byVar;
+    return function (name, code) {
+      var q = byVar[name];
+      if (calcs && Object.prototype.hasOwnProperty.call(calcs, name)) return calcs[name];
+      var v = answers[name];
+      if (code !== null && code !== undefined) {               // [var(code)] -> '1' / '0'
+        return (Array.isArray(v) && v.indexOf(String(code)) >= 0) ? '1' : '0';
+      }
+      if (q && q.type === 'checkbox') return '';
+      return isBlank(v) ? '' : String(v).trim();
+    };
+  }
+
+  /** Index the survey once (adds _byVar, _all). */
+  function prepare(survey) {
+    if (survey._byVar) return survey;
+    var byVar = {};
+    survey.questions.forEach(function (q) { byVar[q.var] = q; });
+    (survey.analysis || []).forEach(function (q) { byVar[q.var] = q; });
+    survey._byVar = byVar;
+    // compile everything up-front so a typo fails loudly
+    survey.questions.forEach(function (q) { if (q.logic) compile(q.logic); if (q.calc) compile(q.calc); });
+    (survey.analysis || []).forEach(function (q) { if (q.calc) compile(q.calc); });
+    return survey;
+  }
+
+  /**
+   * Re-evaluate all branching logic.
+   * opts.clear = true  -> hidden answers are erased, repeating until nothing changes (REDCap behaviour).
+   * Returns { visible: {var: bool}, calcs: {var: number|''}, cleared: [vars] }.
+   */
+  function apply(survey, answers, opts) {
+    prepare(survey);
+    var clear = !opts || opts.clear !== false;
+    var visible = {}, cleared = [], guard = 0, changed, calcs;
+    do {
+      changed = false;
+      calcs = computeCalcs(survey, answers, visible);
+      var get = makeGetter(survey, answers, calcs);
+      survey.questions.forEach(function (q) {
+        var vis = test(q.logic, get);
+        visible[q.var] = vis;
+        if (!vis && clear && q.type !== 'calc' && hasValue(q, answers)) {
+          answers[q.var] = q.type === 'checkbox' ? [] : '';
+          cleared.push(q.var);
+          changed = true;
+        }
+      });
+    } while (changed && ++guard < 200);
+    calcs = computeCalcs(survey, answers, visible);
+    return { visible: visible, calcs: calcs, cleared: cleared };
+  }
+
+  /** Calculated fields, in definition order (a calc may use an earlier calc). */
+  function computeCalcs(survey, answers, visibleHint) {
+    var calcs = {};
+    var list = survey.questions.filter(function (q) { return q.type === 'calc'; })
+      .concat((survey.analysis || []).filter(function (q) { return q.type === 'calc'; }));
+    list.forEach(function (q) {
+      var get = makeGetter(survey, answers, calcs);
+      var val = '';
+      if (test(q.logic, get)) {
+        var r = evaluate(q.calc, get);
+        if (typeof r === 'boolean') r = r ? 1 : 0;
+        val = looksNum(r) ? Number(r) : '';
+      }
+      calcs[q.var] = val;
+    });
+    return calcs;
+  }
+
+  /** Evaluate one logic string against the current answers (calculated fields included). */
+  function check(survey, answers, src) {
+    prepare(survey);
+    return test(src, makeGetter(survey, answers, computeCalcs(survey, answers)));
+  }
+
+  return {
+    check: check,
+    normalizeDigits: normalizeDigits, toArabicDigits: toArabicDigits,
+    tokenize: tokenize, parse: parse, evaluate: evaluate, test: test, truthy: truthy,
+    expandChoices: expandChoices, hasValue: hasValue, isBlank: isBlank,
+    prepare: prepare, apply: apply, computeCalcs: computeCalcs
+  };
+})();
+/* =========================== END REDCap LOGIC ENGINE ====================== */
+
+/* ==========================================================================
+   APPLICATION
+   ========================================================================== */
+(function () {
+  'use strict';
+  var RL = RedcapLogic;
+  var CFG = APP_CONFIG || {};
+  var IN_GOOGLE = typeof google !== 'undefined' && google.script && google.script.run;
+  var MAX_TEXT = CFG.max_text || 2000;
+
+  // CONFIG placeholders (prize amount) are filled in when a question is drawn
+  function fill(s) { return String(s || '').split('{PRIZE_EN}').join(CFG.prize_en || '').split('{PRIZE_AR}').join(CFG.prize_ar || ''); }
+  RL.prepare(SURVEY);
+  var BYVAR = SURVEY._byVar;
+  var SCREEN_QS = SCREENS.map(function (s) { return QUESTIONS.filter(function (q) { return q.screen === s.id && q.type !== 'calc'; }); });
+  var META = SURVEY.meta || {};
+  var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var state = { view: 'welcome', idx: -1, answers: {}, vis: {}, startedAt: null, inFlight: false, done: false, lastPayload: null, busyBtn: null };
+  QUESTIONS.forEach(function (q) { if (q.type !== 'calc') state.answers[q.var] = q.type === 'checkbox' ? [] : ''; });
+
+  // --- DOM helpers ----------------------------------------------------------
+  var $ = function (id) { return document.getElementById(id); };
+  var VIEW = $('view'), NAV = $('navbar'), BACK = $('backBtn'), NEXT = $('nextBtn'), CARD = $('card'), HEADER = $('siteHeader');
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function rich(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'); }
+  function ar(n) { return RL.toArabicDigits(n); }
+  function h(tag, attrs, html) {
+    var e = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      var v = attrs[k];
+      if (v === false || v === null || v === undefined) return;
+      if (k === 'class') e.className = v; else e.setAttribute(k, v === true ? '' : v);
+    });
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  }
+  function biHTML(en, arr, cls, tagEn) {
+    tagEn = tagEn || 'span';
+    return '<' + tagEn + ' class="bi ' + (cls || '') + '"><span class="en" lang="en" dir="ltr">' + en + '</span><span class="ar" lang="ar" dir="rtl">' + arr + '</span></' + tagEn + '>';
+  }
+  var ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  var ICON_ERR = '<svg class="err-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 7.5v5.5M12 16.6v.1"/></svg>';
+
+  // --- static text ----------------------------------------------------------
+  function applyConfigText() {
+    $('uniEn').textContent = CFG.institution_en || '';
+    $('uniAr').textContent = CFG.institution_ar || '';
+    $('hdrTitleEn').textContent = CFG.header_title_en || CFG.title_en || '';
+    $('hdrTitleAr').textContent = CFG.header_title_ar || CFG.title_ar || '';
+    $('footEn').textContent = CFG.footer_en || '';
+    $('footAr').textContent = CFG.footer_ar || '';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-cfg]'), function (el) {
+      el.textContent = CFG[el.getAttribute('data-cfg')] || '';
+    });
+  }
+  applyConfigText();
+
+  // --- messages ---------------------------------------------------------------
+  var MSG = {
+    required: { en: 'This question is required.', ar: 'هذا السؤال مطلوب.' },
+    integer: function (min, max) { return { en: 'Please enter a whole number between ' + min + ' and ' + max + '.', ar: 'يرجى إدخال رقم صحيح بين ' + ar(min) + ' و ' + ar(max) + '.' }; },
+    email: { en: 'Please enter a valid email address, e.g. name@example.com.', ar: 'يرجى إدخال بريد إلكتروني صحيح، مثل name@example.com.' },
+    phone: { en: 'Please enter a valid Saudi mobile number: 05XXXXXXXX or +9665XXXXXXXX.', ar: 'يرجى إدخال رقم جوال سعودي صحيح: 05XXXXXXXX أو +9665XXXXXXXX.' },
+    length: { en: 'Please keep your text under ' + MAX_TEXT.toLocaleString('en-US') + ' characters.', ar: 'يرجى ألا يتجاوز النص ' + ar(MAX_TEXT) + ' حرف.' },
+    network: { en: 'We could not save your answers. Please check your connection and try again. Nothing has been lost.', ar: 'تعذّر حفظ إجاباتك. يرجى التحقق من الاتصال والمحاولة مرة أخرى. لم تُفقد أي إجابة.' },
+    noHost: { en: 'The survey is not connected to its data sheet yet. Please contact the research team.', ar: 'الاستبيان غير مرتبط بعد بجدول البيانات. يرجى التواصل مع فريق البحث.' }
+  };
+
+  // --- value normalisation (mirrors Code.gs) ---------------------------------
+  function normalizePhone(v) {
+    var s = RL.normalizeDigits(v).replace(/[\s\-().]/g, '');
+    var m = /^(?:05|9665|\+9665|009665)(\d{8})$/.exec(s);
+    return m ? '+9665' + m[1] : null;
+  }
+  var EMAIL_RE = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/;
+
+  function validateQ(q) {
+    var v = state.answers[q.var];
+    var blank = q.type === 'checkbox' ? !(v && v.length) : RL.isBlank(v);
+    if (blank) return q.required ? MSG.required : null;
+    var val = q.validation;
+    if (q.type === 'notes' && String(v).length > MAX_TEXT) return MSG.length;
+    if (!val) return null;
+    var s = String(v).trim();
+    if (val.type === 'integer') {
+      if (!/^-?\d+$/.test(s) || Number(s) < val.min || Number(s) > val.max) return MSG.integer(val.min, val.max);
+    } else if (val.type === 'email') {
+      if (!EMAIL_RE.test(s.toLowerCase()) || s.length > 254) return MSG.email;
+    } else if (val.type === 'phone_sa') {
+      if (!normalizePhone(s)) return MSG.phone;
+    }
+    return null;
+  }
+
+  // --- logic ----------------------------------------------------------------
+  function evaluate(clear) {
+    var res = RL.apply(SURVEY, state.answers, { clear: clear !== false });
+    state.vis = res.visible;
+    return res;
+  }
+  function applicable(i) { return SCREEN_QS[i].some(function (q) { return state.vis[q.var]; }); }
+  function findNext(i) { for (var j = i + 1; j < SCREENS.length; j++) if (applicable(j)) return j; return -1; }
+  function findPrev(i) { for (var j = i - 1; j >= 0; j--) if (applicable(j)) return j; return -1; }
+  function isEligibleSoFar() { return !!META.eligible && RL.check(SURVEY, state.answers, META.eligible); }
+  /** First stop rule that applies (e.g. under 18, no consent), or null. */
+  function stopStatus() {
+    var rules = META.stop || [];
+    for (var i = 0; i < rules.length; i++) if (RL.check(SURVEY, state.answers, rules[i].logic)) return rules[i].status;
+    return null;
+  }
+
+  // --- rendering: question --------------------------------------------------
+  function placeholderFor(q) {
+    var v = q.validation || {};
+    if (v.type === 'integer') return { en: 'Number ' + v.min + '–' + v.max, ar: 'رقم ' + ar(v.min) + '–' + ar(v.max) };
+    if (v.type === 'email') return { en: 'name@example.com', ar: 'البريد الإلكتروني' };
+    if (v.type === 'phone_sa') return { en: '05XXXXXXXX', ar: 'رقم الجوال' };
+    if (q.type === 'notes') return { en: 'Type here (optional)', ar: 'اكتب هنا (اختياري)' };
+    return { en: 'Type your answer', ar: 'اكتب إجابتك' };
+  }
+
+  function renderQuestion(q) {
+    var id = 'q_' + q.var, lg = id + '_lg', errId = id + '_err', noteId = id + '_note';
+    var wrap = h('div', { class: 'q-wrap' + (q.matrix ? ' matrix-item' : ''), 'data-var': q.var });
+    var inner = h('div', { class: 'q-inner' });
+    var fs = h('fieldset', { class: 'q', id: id, 'aria-describedby': (q.note_en ? noteId + ' ' : '') + errId });
+    var reqEn = q.required ? '<span class="req" aria-hidden="true"></span><span class="sr-only"> (required)</span>' : '';
+    var reqAr = q.required ? '<span class="req" aria-hidden="true"></span><span class="sr-only"> (مطلوب)</span>' : '';
+    var html = '<legend class="q-legend" id="' + lg + '">' + biHTML(rich(fill(q.label_en)) + reqEn, rich(fill(q.label_ar)) + reqAr, 'q-title') + '</legend>';
+    if (q.note_en || q.note_ar) html += '<div class="bi q-note" id="' + noteId + '"><span class="en" lang="en" dir="ltr">' + esc(q.note_en || '') + '</span><span class="ar" lang="ar" dir="rtl">' + esc(q.note_ar || '') + '</span></div>';
+
+    if (q.type === 'radio' || q.type === 'checkbox') {
+      var cb = q.type === 'checkbox';
+      html += '<div class="opts">';
+      RL.expandChoices(q).forEach(function (c) {
+        var iid = id + '__' + c.code;
+        html += '<label class="opt' + (cb ? ' cb' : '') + '" for="' + iid + '">' +
+          '<input type="' + (cb ? 'checkbox' : 'radio') + '" id="' + iid + '" name="' + q.var + '" value="' + esc(c.code) + '">' +
+          '<span class="o-en" lang="en" dir="ltr">' + esc(c.en) + '</span>' +
+          '<span class="ind" aria-hidden="true">' + ICON_CHECK + '</span>' +
+          '<span class="o-ar" lang="ar" dir="rtl">' + esc(c.ar) + '</span></label>';
+      });
+      html += '</div>';
+    } else if (q.type === 'dropdown') {
+      html += '<select class="field select is-empty" id="' + id + '_in" name="' + q.var + '" aria-labelledby="' + lg + '" aria-describedby="' + errId + '"' + (q.required ? ' aria-required="true"' : '') + '>';
+      html += '<option value="">Select — اختر</option>';
+      RL.expandChoices(q).forEach(function (c) {
+        html += '<option value="' + esc(c.code) + '">' + esc(c.numeric ? c.code : c.en + ' — ' + c.ar) + '</option>';
+      });
+      html += '</select>';
+    } else { // text / notes
+      var val = q.validation || {}, ph = placeholderFor(q), isNotes = q.type === 'notes';
+      var attrs = ' id="' + id + '_in" name="' + q.var + '" aria-labelledby="' + lg + '" aria-describedby="' + errId + '"' + (q.required ? ' aria-required="true"' : '');
+      html += '<div class="field-wrap">';
+      if (isNotes) {
+        html += '<textarea class="field" dir="auto" rows="5" maxlength="' + MAX_TEXT + '"' + attrs + '></textarea>';
+      } else if (val.type === 'integer') {
+        html += '<input class="field" type="text" inputmode="numeric" autocomplete="off" dir="ltr" maxlength="6"' + attrs + '>';
+      } else if (val.type === 'email') {
+        html += '<input class="field left" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" dir="ltr" maxlength="254"' + attrs + '>';
+      } else if (val.type === 'phone_sa') {
+        html += '<input class="field left" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" maxlength="20"' + attrs + '>';
+      } else {
+        html += '<input class="field left" type="text" dir="auto" maxlength="' + MAX_TEXT + '"' + attrs + '>';
+      }
+      html += '<div class="ph' + (isNotes ? ' top' : '') + '" aria-hidden="true"><span lang="en" dir="ltr">' + esc(ph.en) + '</span><span lang="ar" dir="rtl">' + esc(ph.ar) + '</span></div></div>';
+      if (isNotes) html += '<div class="bi no-rule counter" id="' + id + '_cnt" aria-live="polite"><span class="en" lang="en" dir="ltr"></span><span class="ar" lang="ar" dir="rtl"></span></div>';
+    }
+    html += '<div class="err" id="' + errId + '" aria-live="polite"></div>';
+    fs.innerHTML = html;
+    inner.appendChild(fs); wrap.appendChild(inner);
+    return wrap;
+  }
+
+  function renderScreen(i) {
+    var s = SCREENS[i];
+    var frag = document.createDocumentFragment();
+    var head = h('h2', { class: 'screen-title bi no-rule', id: 'scrTitle' }, '<span class="en" lang="en" dir="ltr">' + esc(s.title_en) + '</span><span class="ar" lang="ar" dir="rtl">' + esc(s.title_ar) + '</span>');
+    frag.appendChild(head);
+    if (s.intro_en || s.intro_ar) frag.appendChild(h('p', { class: 'screen-intro bi no-rule' }, '<span class="en" lang="en" dir="ltr">' + esc(s.intro_en || '') + '</span><span class="ar" lang="ar" dir="rtl">' + esc(s.intro_ar || '') + '</span>'));
+    var stemDone = false;
+    SCREEN_QS[i].forEach(function (q) {
+      if (q.matrix && !stemDone && (s.stem_en || s.stem_ar)) {
+        stemDone = true;
+        var st = h('div', { class: 'q-wrap stem-wrap', 'data-matrix': q.matrix });
+        st.innerHTML = '<div class="q-inner"><div class="stem bi" id="stem_' + q.matrix + '"><span class="en" lang="en" dir="ltr">' + esc(s.stem_en) + '</span><span class="ar" lang="ar" dir="rtl">' + esc(s.stem_ar) + '</span></div></div>';
+        frag.appendChild(st);
+      }
+      frag.appendChild(renderQuestion(q));
+    });
+    return frag;
+  }
+
+  // --- sync DOM with answers ------------------------------------------------
+  function syncQuestion(v) {
+    var q = BYVAR[v], val = state.answers[v];
+    var inputs = VIEW.querySelectorAll('[name="' + v + '"]');
+    if (!inputs.length) return;
+    if (q.type === 'radio' || q.type === 'checkbox') {
+      Array.prototype.forEach.call(inputs, function (inp) {
+        inp.checked = q.type === 'checkbox' ? (val || []).indexOf(inp.value) >= 0 : inp.value === val;
+        inp.closest('.opt').classList.toggle('is-selected', inp.checked);
+      });
+    } else {
+      var inp = inputs[0];
+      if (inp.value !== (val || '')) inp.value = val || '';
+      if (q.type === 'dropdown') inp.classList.toggle('is-empty', !inp.value);
+      else refreshField(inp, q);
+    }
+  }
+  function refreshField(inp, q) {
+    var wrap = inp.closest('.field-wrap');
+    if (wrap) wrap.classList.toggle('has-value', inp.value.length > 0);
+    if (q.type === 'notes') {
+      var cnt = $('q_' + q.var + '_cnt');
+      if (cnt) {
+        var n = inp.value.length;
+        cnt.children[0].textContent = n.toLocaleString('en-US') + ' / ' + MAX_TEXT.toLocaleString('en-US') + ' characters';
+        cnt.children[1].textContent = ar(n) + ' / ' + ar(MAX_TEXT) + ' حرف';
+        cnt.classList.toggle('over', n > MAX_TEXT);
+      }
+    }
+  }
+
+  function refreshVisibility(instant) {
+    var wraps = VIEW.querySelectorAll('.q-wrap[data-var]');
+    if (instant) VIEW.classList.add('no-anim');
+    var firstShown = false;
+    Array.prototype.forEach.call(VIEW.querySelectorAll('.q-wrap'), function (w) {
+      var show;
+      if (w.hasAttribute('data-var')) show = !!state.vis[w.getAttribute('data-var')];
+      else {
+        var grp = w.getAttribute('data-matrix');
+        show = QUESTIONS.some(function (q) { return q.matrix === grp && state.vis[q.var]; });
+      }
+      w.classList.toggle('is-hidden', !show);
+      if (show) { w.removeAttribute('inert'); w.removeAttribute('aria-hidden'); }
+      else { w.setAttribute('inert', ''); w.setAttribute('aria-hidden', 'true'); }
+      var isStemFollower = w.previousElementSibling && w.previousElementSibling.classList.contains('stem-wrap');
+      w.classList.toggle('sep', show && firstShown && !w.classList.contains('stem-wrap') && !isStemFollower);
+      if (show) firstShown = true;
+    });
+    if (instant) { void VIEW.offsetHeight; requestAnimationFrame(function () { VIEW.classList.remove('no-anim'); }); }
+    return wraps;
+  }
+
+  function updateProgress() {
+    var wrap = $('progressWrap');
+    if (state.view !== 'screen') { wrap.hidden = true; return; }
+    wrap.hidden = false;
+    var list = []; for (var i = 0; i < SCREENS.length; i++) if (applicable(i)) list.push(i);
+    var pos = list.indexOf(state.idx) + 1; if (pos < 1) pos = 1;
+    var total = Math.max(list.length, pos);
+    $('progEn').textContent = 'Section ' + pos + ' of ' + total;
+    $('progAr').textContent = 'القسم ' + ar(pos) + ' من ' + ar(total);
+    var pct = Math.round(pos / total * 100);
+    $('progressFill').style.width = pct + '%';
+    var bar = $('progressBar');
+    bar.setAttribute('aria-valuenow', String(pct));
+    bar.setAttribute('aria-valuetext', 'Section ' + pos + ' of ' + total + ' / القسم ' + ar(pos) + ' من ' + ar(total));
+  }
+
+  function setNextLabel() {
+    var last = state.view === 'screen' && findNext(state.idx) === -1 && isEligibleSoFar();
+    var mode = last ? '1' : '0';
+    if (NEXT.getAttribute('data-submit') === mode && $('nextLbl').firstChild) return;   // unchanged: never rebuild under a finger
+    $('nextLbl').innerHTML = last
+      ? '<span lang="en">Submit</span><span class="sep" aria-hidden="true"></span><span lang="ar" dir="rtl">إرسال</span>'
+      : '<span lang="en">Next</span><span class="sep" aria-hidden="true"></span><span lang="ar" dir="rtl">التالي</span>';
+    NEXT.setAttribute('data-submit', last ? '1' : '0');
+  }
+
+  // --- errors ---------------------------------------------------------------
+  function showError(v, msg) {
+    var e = $('q_' + v + '_err'), fs = $('q_' + v);
+    if (!e || !fs) return;
+    e.innerHTML = biHTML(ICON_ERR + esc(msg.en), ICON_ERR + esc(msg.ar), '', 'div');
+    fs.classList.add('has-error');
+    Array.prototype.forEach.call(fs.querySelectorAll('input,select,textarea'), function (x) { x.setAttribute('aria-invalid', 'true'); });
+  }
+  function clearError(v) {
+    var e = $('q_' + v + '_err'), fs = $('q_' + v);
+    if (!e || !fs || !fs.classList.contains('has-error')) return;
+    e.innerHTML = ''; fs.classList.remove('has-error');
+    Array.prototype.forEach.call(fs.querySelectorAll('[aria-invalid]'), function (x) { x.removeAttribute('aria-invalid'); });
+  }
+  function validateScreen(i, show) {
+    var first = null;
+    SCREEN_QS[i].forEach(function (q) {
+      if (!state.vis[q.var]) return;
+      var m = validateQ(q);
+      if (m) { if (show) showError(q.var, m); if (!first) first = q; }
+      else if (show) clearError(q.var);
+    });
+    return first;
+  }
+  function focusQuestion(q) {
+    var fs = $('q_' + q.var);
+    if (!fs) return;
+    var hh = HEADER.offsetHeight + 16;
+    var y = fs.getBoundingClientRect().top + window.pageYOffset - hh;
+    window.scrollTo({ top: Math.max(0, y), behavior: REDUCED ? 'auto' : 'smooth' });
+    var target = fs.querySelector('input:not([type=radio]):not([type=checkbox]),select,textarea') || fs.querySelector('input');
+    if (target) setTimeout(function () { try { target.focus({ preventScroll: true }); } catch (e) { target.focus(); } }, REDUCED ? 0 : 350);
+  }
+
+  // --- commit after any change ------------------------------------------------
+  function commit(v, clear) {
+    var res = evaluate(clear);
+    res.cleared.forEach(syncQuestion);
+    refreshVisibility(false);
+    updateProgress();
+    setNextLabel();
+    if (v) clearError(v);
+  }
+
+  // --- event handling (delegated) ---------------------------------------------
+  function isNumericLike(q) { return q.validation && (q.validation.type === 'integer' || q.validation.type === 'email' || q.validation.type === 'phone_sa'); }
+  VIEW.addEventListener('change', function (e) {
+    var t = e.target, v = t.name, q = BYVAR[v];
+    if (!q) return;
+    if (q.type === 'radio') {
+      state.answers[v] = t.value;
+      syncQuestion(v);
+    } else if (q.type === 'checkbox') {
+      var boxes = VIEW.querySelectorAll('input[name="' + v + '"]');
+      if (t.checked && q.exclusive) {
+        Array.prototype.forEach.call(boxes, function (b) {
+          if (t.value === q.exclusive ? b !== t : b.value === q.exclusive) b.checked = false;
+        });
+      }
+      state.answers[v] = Array.prototype.filter.call(boxes, function (b) { return b.checked; }).map(function (b) { return b.value; });
+      syncQuestion(v);
+    } else if (q.type === 'dropdown') {
+      state.answers[v] = t.value;
+      t.classList.toggle('is-empty', !t.value);
+    } else {
+      var val = t.value;
+      if (isNumericLike(q)) val = RL.normalizeDigits(val);
+      val = val.trim();
+      if (q.validation && q.validation.type === 'email') val = val.toLowerCase();
+      if (q.validation && q.validation.type === 'integer') val = val.replace(/\s+/g, '');
+      if (t.value !== val && q.type !== 'notes') t.value = val;
+      state.answers[v] = q.type === 'notes' ? t.value.trim() : val;
+      refreshField(t, q);
+    }
+    commit(v, true);
+  });
+  VIEW.addEventListener('input', function (e) {
+    var t = e.target, v = t.name, q = BYVAR[v];
+    if (!q || (q.type !== 'text' && q.type !== 'notes')) return;
+    if (isNumericLike(q)) {
+      var conv = RL.normalizeDigits(t.value);
+      if (conv !== t.value) {
+        var pos = null;
+        try { pos = t.selectionStart; } catch (err) { pos = null; }
+        t.value = conv;
+        if (pos !== null) { try { t.setSelectionRange(pos, pos); } catch (err2) { /* email inputs do not support selection */ } }
+      }
+    }
+    state.answers[v] = t.value.trim();
+    refreshField(t, q);
+    commit(v, false);                         // show/hide instantly; answers are cleared on commit (blur / Next)
+  });
+  VIEW.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'radio' && e.target.type !== 'checkbox') {
+      e.preventDefault(); e.target.blur(); onNext();
+    }
+  });
+
+  // --- navigation -------------------------------------------------------------
+  function scrollToCard() {
+    CARD.style.scrollMarginTop = (HEADER.offsetHeight + 14) + 'px';
+    var top = CARD.getBoundingClientRect().top + window.pageYOffset - HEADER.offsetHeight - 14;
+    if (window.pageYOffset > top) window.scrollTo({ top: Math.max(0, top), behavior: REDUCED ? 'auto' : 'smooth' });
+  }
+  function animateView(dir) {
+    VIEW.classList.remove('enter-fwd', 'enter-back', 'enter-fade');
+    if (REDUCED) return;
+    void VIEW.offsetWidth;
+    VIEW.classList.add(dir === 'back' ? 'enter-back' : dir === 'fade' ? 'enter-fade' : 'enter-fwd');
+  }
+  function goScreen(i, dir) {
+    state.view = 'screen'; state.idx = i;
+    evaluate(true);
+    VIEW.innerHTML = '';
+    VIEW.appendChild(renderScreen(i));
+    SCREEN_QS[i].forEach(function (q) { syncQuestion(q.var); });
+    refreshVisibility(true);
+    NAV.hidden = false;
+    BACK.disabled = false; NEXT.disabled = false;
+    updateProgress(); setNextLabel();
+    animateView(dir);
+    scrollToCard();
+    try { VIEW.focus({ preventScroll: true }); } catch (e) { /* older browsers */ }
+  }
+
+  function onNext() {
+    if (state.inFlight || state.view !== 'screen') return;
+    // commit any field that still has focus
+    var ae = document.activeElement;
+    if (ae && ae.name && BYVAR[ae.name] && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA')) ae.dispatchEvent(new Event('change', { bubbles: true }));
+    evaluate(true);
+    SCREEN_QS[state.idx].forEach(function (q) { syncQuestion(q.var); });
+    refreshVisibility(false);
+    var bad = validateScreen(state.idx, true);
+    if (bad) { focusQuestion(bad); return; }
+    var a = state.answers;
+    var stop = stopStatus();
+    if (stop) return finishIneligible(stop);
+    var nxt = findNext(state.idx);
+    if (nxt === -1) { if (isEligibleSoFar()) submit(); return; }
+    goScreen(nxt, 'fwd');
+  }
+  function onBack() {
+    if (state.inFlight) return;
+    var ae = document.activeElement;
+    if (ae && ae.name && BYVAR[ae.name] && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA')) ae.dispatchEvent(new Event('change', { bubbles: true }));
+    evaluate(true);
+    var prv = findPrev(state.idx);
+    if (prv === -1) showWelcome('back'); else goScreen(prv, 'back');
+  }
+  NEXT.addEventListener('click', onNext);
+  BACK.addEventListener('click', onBack);
+
+  // --- special views ----------------------------------------------------------
+  function specialView(html, dir) {
+    NAV.hidden = true;
+    VIEW.innerHTML = html;
+    updateProgress();
+    animateView(dir || 'fade');
+    scrollToCard();
+  }
+  function showWelcome(dir) {
+    state.view = 'welcome';
+    specialView(
+      '<section class="welcome" aria-labelledby="wTitle"><div class="gold" aria-hidden="true"></div>' +
+      '<p class="w-unit bi no-rule" style="margin-top:0"><span class="en" lang="en" dir="ltr"><span data-cfg="unit1_en">' + esc(CFG.unit1_en) + '</span><br><span data-cfg="unit2_en">' + esc(CFG.unit2_en) + '</span></span><span class="ar" lang="ar" dir="rtl"><span data-cfg="unit1_ar">' + esc(CFG.unit1_ar) + '</span><br><span data-cfg="unit2_ar">' + esc(CFG.unit2_ar) + '</span></span></p>' +
+      '<h1 class="w-title bi no-rule" id="wTitle"><span class="en" lang="en" dir="ltr" data-cfg="title_en">' + esc(CFG.title_en) + '</span><span class="ar" lang="ar" dir="rtl" data-cfg="title_ar">' + esc(CFG.title_ar) + '</span></h1>' +
+      '<p class="w-lead bi" style="margin-top:0"><span class="en" lang="en" dir="ltr" data-cfg="intro_en">' + esc(CFG.intro_en) + '</span><span class="ar" lang="ar" dir="rtl" data-cfg="intro_ar">' + esc(CFG.intro_ar) + '</span></p>' +
+      '<div class="chips">' +
+        '<div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="t wrap"><span lang="en" data-cfg="time_en">' + esc(CFG.time_en) + '</span><span lang="ar" dir="rtl" data-cfg="time_ar">' + esc(CFG.time_ar) + '</span></span></div>' +
+        '<div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg><span class="t wrap"><span lang="en" data-cfg="anon_en">' + esc(CFG.anon_en) + '</span><span lang="ar" dir="rtl" data-cfg="anon_ar">' + esc(CFG.anon_ar) + '</span></span></div>' +
+      '</div>' +
+      '<div class="actions"><button type="button" class="btn btn-primary btn-lg" id="startBtn"><span class="lbl"><span lang="en">Start</span><span class="sep" aria-hidden="true"></span><span lang="ar" dir="rtl">ابدأ</span></span></button></div></section>', dir);
+    $('startBtn').addEventListener('click', function () {
+      if (!state.startedAt) state.startedAt = Date.now();
+      evaluate(true);
+      goScreen(0, 'fwd');
+    });
+  }
+  function endView(kind, titleEn, titleAr, msgEn, msgAr, buttons, extraHtml) {
+    var icon;
+    if (kind === 'ok') icon = '<svg class="icon" viewBox="0 0 92 92" aria-hidden="true"><circle class="check-bg" cx="46" cy="46" r="44"/><circle class="check-circle" cx="46" cy="46" r="40"/><path class="check-mark" d="M29 47.5l11 11 23-24"/></svg>';
+    else if (kind === 'err') icon = '<svg class="icon" viewBox="0 0 92 92" aria-hidden="true"><circle cx="46" cy="46" r="44" fill="#FDECEA"/><path d="M46 27v24M46 62v1" stroke="#B42318" stroke-width="6" stroke-linecap="round"/></svg>';
+    else icon = '<svg class="icon" viewBox="0 0 92 92" aria-hidden="true"><circle cx="46" cy="46" r="44" fill="#E8F3EC"/><path d="M31 50c3 7 9 11 15 11s12-4 15-11M34 37h.1M58 37h.1" stroke="#006C35" stroke-width="5" stroke-linecap="round" fill="none"/></svg>';
+    return '<section class="end' + (kind === 'err' ? ' err-view' : '') + '" role="status" aria-live="polite">' + icon +
+      '<h2 class="bi no-rule"><span class="en" lang="en" dir="ltr">' + esc(titleEn) + '</span><span class="ar" lang="ar" dir="rtl">' + esc(titleAr) + '</span></h2>' +
+      (msgEn || msgAr ? '<p class="msg bi" style="margin-top:0"><span class="en" lang="en" dir="ltr">' + esc(msgEn) + '</span><span class="ar" lang="ar" dir="rtl">' + esc(msgAr) + '</span></p>' : '') +
+      (extraHtml || '') + (buttons ? '<div class="actions">' + buttons + '</div>' : '') + '</section>';
+  }
+  function showIneligible() {
+    state.view = 'ineligible';
+    specialView(endView('info', 'Thank you for your time.', 'شكراً لوقتك.', '', ''));
+  }
+  function showThanks() {
+    state.view = 'thanks';
+    var extra = CFG.after_en || CFG.after_ar
+      ? '<div class="after-box bi"><span class="en" lang="en" dir="ltr">' + esc(CFG.after_en) + '</span><span class="ar" lang="ar" dir="rtl">' + esc(CFG.after_ar) + '</span></div>'
+      : '';
+    var link = CFG.after_url
+      ? '<a class="btn btn-primary" href="' + esc(CFG.after_url) + '" target="_blank" rel="noopener"><span class="lbl"><span lang="en">' + esc(CFG.after_btn_en || 'Visit') + '</span><span class="sep" aria-hidden="true"></span><span lang="ar" dir="rtl">' + esc(CFG.after_btn_ar || 'زيارة') + '</span></span></a>'
+      : '';
+    specialView(endView('ok', 'Thank you very much for your participation.', 'شكراً جزيلاً لمشاركتك.',
+      'Your answers have been recorded successfully.', 'تم تسجيل إجاباتك بنجاح.', link, extra));
+  }
+  function showSaveError(res) {
+    state.view = 'error';
+    var field = res && res.field && BYVAR[res.field] ? res.field : null;
+    var btns = '<button type="button" class="btn btn-primary" id="retryBtn"><span class="spinner" aria-hidden="true"></span><span class="lbl"><span lang="en">Try again</span><span class="sep" aria-hidden="true"></span><span lang="ar" dir="rtl">حاول مرة أخرى</span></span></button>';
+    if (field) btns = '<button type="button" class="btn btn-outline" id="reviewBtn"><span class="lbl"><span lang="en">Review answers</span><span class="sep" aria-hidden="true"></span><span lang="ar" dir="rtl">مراجعة الإجابات</span></span></button>' + btns;
+    specialView(endView('err', 'Your answers were not saved yet', 'لم تُحفظ إجاباتك بعد',
+      (res && res.message_en) || MSG.network.en, (res && res.message_ar) || MSG.network.ar, btns));
+    $('retryBtn').addEventListener('click', function () { send(state.lastPayload, $('retryBtn')); });
+    if (field) $('reviewBtn').addEventListener('click', function () {
+      var q = BYVAR[field], i = SCREENS.map(function (s) { return s.id; }).indexOf(q.screen);
+      goScreen(i, 'back');
+      var m = validateQ(q); if (m) showError(field, m);
+      focusQuestion(q);
+    });
+  }
+
+  // --- saving -------------------------------------------------------------------
+  function setBusy(btn, on) {
+    if (!btn) return;
+    btn.classList.toggle('is-busy', on);
+    btn.disabled = on;
+    btn.setAttribute('aria-busy', on ? 'true' : 'false');
+    if (btn === NEXT) BACK.disabled = on;
+  }
+  function hostAvailable() { return !!(IN_GOOGLE || (typeof API_URL === 'string' && /^https:\/\//.test(API_URL))); }
+  /** Send one payload to Code.gs. Inside Google: google.script.run. Outside: POST to the /exec link. */
+  function callServer(payload, onOk, onFail) {
+    if (IN_GOOGLE) {
+      google.script.run.withSuccessHandler(onOk).withFailureHandler(onFail).submitResponse(payload);
+      return;
+    }
+    var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 60000) : null;
+    fetch(API_URL, {
+      method: 'POST', redirect: 'follow', cache: 'no-store', signal: ctrl ? ctrl.signal : undefined,
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },   // "simple" request: no CORS pre-flight
+      body: JSON.stringify(payload)
+    }).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function (res) { if (timer) clearTimeout(timer); onOk(res); },
+            function (err) { if (timer) clearTimeout(timer); onFail(err); });
+  }
+  /** Outside Google: load the live CONFIG texts (also wakes the server up before the first save). */
+  function loadLiveConfig() {
+    if (IN_GOOGLE || CONFIG_FROM_GOOGLE || !hostAvailable()) return;
+    fetch(API_URL + (API_URL.indexOf('?') < 0 ? '?' : '&') + 'action=config', { redirect: 'follow', cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (res) {
+        if (!res || !res.ok || !res.config) return;
+        Object.keys(res.config).forEach(function (k) { CFG[k] = res.config[k]; });
+        applyConfigText();
+      }, function () { /* defaults stay; saving will still be tried */ });
+  }
+  function buildPayload(kind, status) {
+    var out = {};
+    if (kind === 'ineligible') {
+      (META.stop_vars || []).forEach(function (v) { out[v] = state.vis[v] ? (state.answers[v] || '') : ''; });
+    } else {
+      QUESTIONS.forEach(function (q) {
+        if (q.type === 'calc') return;
+        var v = state.answers[q.var];
+        if (!state.vis[q.var]) { out[q.var] = q.type === 'checkbox' ? [] : ''; return; }
+        if (q.type === 'checkbox') out[q.var] = (v || []).slice();
+        else if (q.validation && q.validation.type === 'phone_sa') out[q.var] = normalizePhone(v) || String(v || '').trim();
+        else if (q.validation && q.validation.type === 'email') out[q.var] = String(v || '').trim().toLowerCase();
+        else out[q.var] = String(v == null ? '' : v).trim();
+      });
+    }
+    return { kind: kind, client_status: status || 'complete', answers: out, started_at: state.startedAt || Date.now(), user_agent: navigator.userAgent || '' };
+  }
+  function send(payload, btn) {
+    if (state.inFlight || state.done) return;
+    if (!hostAvailable()) { showSaveError({ message_en: MSG.noHost.en, message_ar: MSG.noHost.ar }); return; }
+    state.inFlight = true; state.busyBtn = btn || NEXT; setBusy(state.busyBtn, true);
+    callServer(payload, function (res) {
+      state.inFlight = false; setBusy(state.busyBtn, false);
+      if (res && res.ok) { state.done = true; showThanks(); }
+      else showSaveError(res || {});
+    }, function () {
+      state.inFlight = false; setBusy(state.busyBtn, false);
+      showSaveError({});
+    });
+  }
+  function submit() {
+    evaluate(true);
+    for (var i = 0; i < SCREENS.length; i++) {
+      if (!applicable(i)) continue;
+      var bad = validateScreen(i, false);
+      if (bad) { goScreen(i, 'back'); validateScreen(i, true); focusQuestion(bad); return; }
+    }
+    state.lastPayload = buildPayload('complete');
+    send(state.lastPayload, NEXT);
+  }
+  function finishIneligible(status) {
+    var payload = buildPayload('ineligible', status);
+    showIneligible();
+    if (!hostAvailable() || state.done) return;
+    state.done = true;
+    var tries = 0;
+    (function attempt() {
+      tries++;
+      callServer(payload,
+        function (res) { if (!(res && res.ok) && tries < 4) setTimeout(attempt, 1500 * tries); },
+        function () { if (tries < 4) setTimeout(attempt, 1500 * tries); });
+    })();
+  }
+
+  // --- header compacts on scroll -----------------------------------------------
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () {
+      // hysteresis: the header shrinks at 48px and grows back only near the top, so it can never flicker
+      var y = window.pageYOffset, c = HEADER.classList.contains('compact');
+      if (!c && y > 48) HEADER.classList.add('compact');
+      else if (c && y < 4) HEADER.classList.remove('compact');
+      ticking = false;
+    });
+  }, { passive: true });
+
+  // --- test hook (read-only view of state; harmless in production) ---------------
+  window.__survey = { state: state, evaluate: evaluate, applicable: applicable };
+
+  showWelcome('fade');
+  loadLiveConfig();
+})();
+</script>
+</body>
+</html>

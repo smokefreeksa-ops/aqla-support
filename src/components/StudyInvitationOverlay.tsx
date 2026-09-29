@@ -136,6 +136,16 @@ function IconChevron({ open }: { open: boolean }) {
 
 // Background now rendered by SaudiFlagWave.
 
+type OverlayWindow = Window & { __aqlaStudyOverlayOpen?: boolean; __aqlaStudyLeaving?: boolean };
+
+/** Tell panels waiting behind this one (KauSurveyInvitation) whether it is on screen. */
+function announceStudyOverlay(open: boolean) {
+  try {
+    (window as OverlayWindow).__aqlaStudyOverlayOpen = open;
+    if (!open) window.dispatchEvent(new Event("aqla:study-overlay-closed"));
+  } catch { /* ignore */ }
+}
+
 export function StudyInvitationOverlay() {
   const [visible, setVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -187,6 +197,7 @@ export function StudyInvitationOverlay() {
     }
 
     visibleRef.current = true;
+    announceStudyOverlay(true);
     setVisible(true);
   }, []);
 
@@ -206,6 +217,7 @@ export function StudyInvitationOverlay() {
         // Reopen it without adding another entry or starting a loop.
         pushedRef.current = true;
         visibleRef.current = true;
+        announceStudyOverlay(true);
         setVisible(true);
         return;
       }
@@ -217,6 +229,7 @@ export function StudyInvitationOverlay() {
         visibleRef.current = false;
         persist();
         setVisible(false);
+        announceStudyOverlay(false);
       }
     };
 
@@ -284,6 +297,7 @@ export function StudyInvitationOverlay() {
     pushedRef.current = false;
     visibleRef.current = false;
     setVisible(false);
+    announceStudyOverlay(false);
   }
   function participate() {
     window.open(REDCAP_URL, "_blank", "noopener,noreferrer");
@@ -315,6 +329,7 @@ export function StudyInvitationOverlay() {
     trackEvent("study_skip_go_back");
     persist();
     dismissingRef.current = true;
+    try { (window as OverlayWindow).__aqlaStudyLeaving = true; } catch { /* ignore */ }
     try {
       // Step past our temporary overlay entry to the real previous page.
       window.history.go(pushedRef.current ? -2 : -1);

@@ -16,6 +16,7 @@ import { AqlaAssistant } from "@/components/AqlaAssistant";
 import { AqlaAuthGate } from "@/components/AqlaAuthGate";
 import { SOSButton } from "@/features/sos/components/SOSButton";
 import { StudyInvitationOverlay } from "@/components/StudyInvitationOverlay";
+import { KauSurveyInvitation } from "@/components/KauSurveyInvitation";
 import { CommandPalette } from "@/components/CommandPalette";
 import { QuickPlanDock } from "@/components/QuickPlanDock";
 import { BackButton } from "@/components/BackButton";
@@ -230,6 +231,7 @@ function RootComponent() {
         <SOSButton hidden={onSosRoute} />
       </AqlaAuthGate>
       <StudyInvitationOverlay />
+      <KauSurveyInvitation />
       <CommandPalette />
       <QuickPlanDock />
       <Toaster richColors position="top-center" />
