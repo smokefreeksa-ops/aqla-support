@@ -348,6 +348,9 @@ export function StudyInvitationOverlay() {
         <div className="pointer-events-none absolute inset-0 z-[1] opacity-[0.14] mix-blend-soft-light">
           <SaudiFlagWave />
         </div>
+        {/* Slightly darker, softer backdrop so the card stays the focus */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-[3] bg-black/20" />
+
         {/* Launch light streaks */}
         <div aria-hidden className="pointer-events-none absolute inset-0 z-[5] overflow-hidden">
           {launching &&
@@ -379,23 +382,24 @@ export function StudyInvitationOverlay() {
                 }}
               />
             </div>
-            {/* External pink close — visible touch dismissal on all devices */}
-            <button
-              type="button"
-              onClick={openSkipConfirm}
-              aria-label={isRTL ? "إغلاق الدعوة" : "Close invitation"}
-              className="pointer-events-auto absolute right-4 z-30 flex h-11 w-11 items-center justify-center rounded-full bg-[#FC0C61] text-white shadow-[0_8px_20px_rgba(252,12,97,0.35)] transition-transform duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FC0C61]/50"
-              style={{ top: "calc(3.5rem + env(safe-area-inset-top, 0px))" }}
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" className="h-5 w-5" aria-hidden>
-                <path d="M6 6l12 12M18 6L6 18" />
-              </svg>
-            </button>
             <div className="flex flex-1 items-center justify-center overflow-y-auto px-4 py-4 sm:px-6 sm:py-6">
 
 
 
           {/* Modal */}
+          <div className="relative">
+            {/* Standalone hot-pink close — just outside the card's upper-right corner */}
+            <button
+              type="button"
+              onClick={openSkipConfirm}
+              aria-label={isRTL ? "إغلاق الدعوة" : "Close invitation"}
+              className="pointer-events-auto absolute -right-2 -top-3 z-40 flex h-9 w-9 items-center justify-center text-[#FC0C61] transition-transform duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FC0C61]/40 md:-right-11 md:-top-4"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" className="h-6 w-6" aria-hidden>
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+
           <div
             ref={dialogRef}
             role="dialog"
@@ -404,7 +408,7 @@ export function StudyInvitationOverlay() {
             tabIndex={-1}
             dir={t.dir}
             lang={lang}
-            className="pointer-events-auto relative mx-auto w-full max-w-[920px] overflow-hidden rounded-[32px] bg-white outline-none focus:outline-none focus-visible:outline-none md:h-[770px]"
+            className="pointer-events-auto relative mx-auto w-full max-w-[920px] overflow-hidden rounded-[32px] bg-white outline-none focus:outline-none focus-visible:outline-none md:max-w-[690px] md:h-[520px]"
             style={{
               fontFamily: '"IBM Plex Sans Arabic", system-ui, sans-serif',
               transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
@@ -415,7 +419,7 @@ export function StudyInvitationOverlay() {
             <img
               src={aqlaLogo}
               alt="شعار أقلع — Aqla Logo"
-              className="absolute left-5 top-5 h-[46px] w-auto object-contain md:left-10 md:top-7 md:h-[62px]"
+              className="absolute left-5 top-5 h-[46px] w-auto object-contain md:left-6 md:top-5 md:h-[40px]"
             />
 
             {/* Language switch — upper right */}
@@ -424,25 +428,25 @@ export function StudyInvitationOverlay() {
               onClick={() => setLang(lang === "ar" ? "en" : "ar")}
               aria-label={lang === "ar" ? "Switch to English" : "التبديل إلى العربية"}
               dir="ltr"
-              className="absolute right-5 top-5 z-30 inline-flex items-center gap-[10px] text-[16px] font-semibold leading-none md:right-[43px] md:top-[40px] md:text-[20px]"
+              className="absolute right-5 top-5 z-30 inline-flex items-center gap-[10px] text-[16px] font-semibold leading-none md:right-6 md:top-5 md:text-[15px]"
             >
               <span style={{ color: lang === "ar" ? "#FC0C61" : "#7F8399" }}>A</span>
-              <span aria-hidden className="block h-[20px] w-px bg-[#DADFEC] md:h-[25px]" />
+              <span aria-hidden className="block h-[20px] w-px bg-[#DADFEC] md:h-[18px]" />
               <span style={{ color: lang === "en" ? "#FC0C61" : "#7F8399" }}>E</span>
             </button>
 
             {step === "invite" ? (
-              <div key="invite" className="px-6 pb-24 pt-24 text-center md:px-10 md:pb-0 md:pt-[104px]">
+              <div key="invite" className="px-6 pb-24 pt-24 text-center md:px-8 md:pb-0 md:pt-[76px]">
                 <h2
                   id="aqla-study-title"
-                  className="m-0 text-[34px] font-semibold leading-[1.18] md:text-[56px]"
+                  className="m-0 text-[34px] font-semibold leading-[1.18] md:text-[43px]"
                   style={{ color: "#FC0C61" }}
                 >
                   {t.panelHeadline}
                 </h2>
 
                 <p
-                  className="mx-auto mt-6 max-w-[525px] text-[16px] font-normal leading-[1.45] md:mt-[29px] md:text-[23.5px]"
+                  className="mx-auto mt-6 max-w-[525px] text-[16px] font-normal leading-[1.45] md:mt-4 md:max-w-[520px] md:text-[18px]"
                   style={{ color: "#1757D9" }}
                 >
                   {t.panelBody1}
@@ -451,14 +455,14 @@ export function StudyInvitationOverlay() {
                 </p>
 
                 <p
-                  className="mt-4 text-[15px] font-semibold leading-[1.4] md:mt-[21px] md:text-[22.5px]"
+                  className="mt-4 text-[15px] font-semibold leading-[1.4] md:mt-3 md:text-[17px]"
                   style={{ color: "#1757D9" }}
                 >
                   {t.panelIncentive}
                 </p>
 
                 <p
-                  className="mt-5 text-[20px] font-semibold leading-[1.25] md:mt-[23px] md:text-[29.5px]"
+                  className="mt-5 text-[20px] font-semibold leading-[1.25] md:mt-3 md:text-[23px]"
                   style={{ color: "#1757D9" }}
                 >
                   {t.panelQuestion}
@@ -467,7 +471,7 @@ export function StudyInvitationOverlay() {
                 <button
                   type="button"
                   onClick={participate}
-                  className="mx-auto mt-6 flex h-[60px] w-full max-w-[582px] items-center justify-center rounded-[18px] border-0 text-[20px] font-semibold text-white transition-opacity duration-300 hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FC0C61]/40 md:mt-[24px] md:h-[83px] md:w-[582px] md:rounded-[22px] md:text-[31px]"
+                  className="mx-auto mt-6 flex h-[60px] w-full max-w-[582px] items-center justify-center rounded-[18px] border-0 text-[20px] font-semibold text-white transition-opacity duration-300 hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FC0C61]/40 md:mt-5 md:h-[64px] md:w-[440px] md:rounded-[18px] md:text-[23.5px]"
                   style={{
                     backgroundColor: "#FC0C61",
                     boxShadow: "0 14px 24px rgba(252, 12, 97, 0.18)",
@@ -482,7 +486,7 @@ export function StudyInvitationOverlay() {
                   id="aqla-study-details"
                   role="region"
                   aria-hidden={!open}
-                  className="absolute inset-x-6 bottom-[62px] top-auto max-h-[240px] overflow-y-auto text-start transition-opacity duration-300 md:inset-x-[35px] md:top-[500px] md:max-h-[210px]"
+                  className="absolute inset-x-6 bottom-[62px] top-auto max-h-[240px] overflow-y-auto text-start transition-opacity duration-300 md:inset-x-7 md:top-auto md:bottom-[46px] md:max-h-[96px]"
                   style={{
                     opacity: open ? 1 : 0,
                     pointerEvents: open ? "auto" : "none",
@@ -508,7 +512,7 @@ export function StudyInvitationOverlay() {
                   onClick={() => setOpen(!open)}
                   aria-expanded={open}
                   aria-controls="aqla-study-details"
-                  className="absolute bottom-5 right-5 inline-flex items-center gap-2 border-b border-[#DADFEC] pb-[3px] text-[16px] font-semibold leading-none md:bottom-[27px] md:right-[35px] md:text-[17.5px]"
+                  className="absolute bottom-5 right-5 inline-flex items-center gap-2 border-b border-[#DADFEC] pb-[3px] text-[16px] font-semibold leading-none md:bottom-3 md:right-6 md:text-[14px]"
                   style={{ color: "#5268A6" }}
                 >
                   <span>{t.detailsToggle}</span>
@@ -516,8 +520,8 @@ export function StudyInvitationOverlay() {
                 </button>
               </div>
             ) : (
-              <div key="confirm" dir={t.dir} className="px-6 pb-16 pt-24 text-center md:px-10 md:pt-[140px]">
-                <p className="mx-auto max-w-[560px] text-[19px] font-semibold leading-[1.6] md:text-[26px]" style={{ color: "#1757D9" }}>
+              <div key="confirm" dir={t.dir} className="px-6 pb-16 pt-24 text-center md:px-8 md:pt-[110px]">
+                <p className="mx-auto max-w-[560px] text-[19px] font-semibold leading-[1.6] md:text-[20px]" style={{ color: "#1757D9" }}>
                   {t.confirmMessage}
                 </p>
 
@@ -527,7 +531,7 @@ export function StudyInvitationOverlay() {
                     trackEvent("study_skip_join_study");
                     participate();
                   }}
-                  className="mx-auto mt-8 flex h-[60px] w-full max-w-[582px] items-center justify-center rounded-[18px] text-[20px] font-semibold text-white transition-opacity duration-300 hover:opacity-95 md:h-[83px] md:w-[582px] md:rounded-[22px] md:text-[31px]"
+                  className="mx-auto mt-8 flex h-[60px] w-full max-w-[582px] items-center justify-center rounded-[18px] text-[20px] font-semibold text-white transition-opacity duration-300 hover:opacity-95 md:h-[64px] md:w-[440px] md:rounded-[18px] md:text-[23.5px]"
                   style={{ backgroundColor: "#FC0C61", boxShadow: "0 14px 24px rgba(252, 12, 97, 0.18)" }}
                 >
                   {t.confirmJoin}
@@ -543,6 +547,7 @@ export function StudyInvitationOverlay() {
                 </div>
               </div>
             )}
+          </div>
           </div>
 
       </div>
