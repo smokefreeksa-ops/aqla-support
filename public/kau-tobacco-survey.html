@@ -393,9 +393,9 @@ if (!APP_CONFIG) APP_CONFIG = DEFAULT_CONFIG;
    ========================================================================== */
 var SURVEY = /*SURVEY_JSON_START*/
 {
- "meta": {"eligible": "[age18] = '1' and [consent] = '1'", "stop": [{"logic": "[age18] = '0'", "status": "ineligible_under18"}, {"logic": "[consent] = '0'", "status": "ineligible_no_consent"}], "stop_vars": ["age18", "consent"]},
+ "meta": {"eligible": "[age18] = '1'", "stop": [{"logic": "[age18] = '0'", "status": "ineligible_under18"}], "stop_vars": ["age18"]},
  "screens": [
-  {"id": "eligibility", "title_ar": "الأهلية", "title_en": "Eligibility", "intro_ar": "يرجى الإجابة عن سؤال الأهلية قبل المتابعة.", "intro_en": "Please answer the eligibility question before continuing.", "num": 1},
+  {"id": "eligibility", "title_ar": "المشاركة والأهلية", "title_en": "Participation and eligibility", "intro_ar": "المشاركة طوعية. يستغرق الاستبيان نحو 5–7 دقائق. لا يطلب الاستبيان اسمك أو بريدك الإلكتروني. ستستخدم البيانات المجهولة لتطوير خدمات الوحدة وللبحث العلمي بعد استكمال الموافقات النظامية والأخلاقية. يمكنك ترك أي سؤال غير إلزامي أو التوقف في أي وقت. يرجى الإجابة عن سؤال الأهلية قبل المتابعة.", "intro_en": "Participation is voluntary. The survey takes about 5–7 minutes. It does not ask for your name or email address. Anonymous data will be used to improve Unit services and for scientific research after the required institutional and ethics approvals are in place. You may skip any non-required item or stop at any time. Please answer the eligibility question before continuing.", "num": 1},
   {"id": "consent", "title_ar": "المشاركة والخصوصية", "title_en": "Participation and privacy", "intro_ar": "المشاركة طوعية. يستغرق الاستبيان نحو 5–7 دقائق. لا يطلب الاستبيان اسمك أو بريدك الإلكتروني. ستستخدم البيانات المجهولة لتطوير خدمات الوحدة وللبحث العلمي بعد استكمال الموافقات النظامية والأخلاقية. يمكنك ترك أي سؤال غير إلزامي أو التوقف في أي وقت.", "intro_en": "Participation is voluntary. The survey takes about 5–7 minutes. It does not ask for your name or email address. Anonymous data will be used to improve Unit services and for scientific research after the required institutional and ethics approvals are in place. You may skip any non-required item or stop at any time.", "num": 2},
   {"id": "relationship", "title_ar": "علاقتك بالجامعة", "title_en": "Your relationship with the University", "num": 3},
   {"id": "use", "title_ar": "استخدام التبغ والنيكوتين", "title_en": "Tobacco and nicotine use", "intro_ar": "الأسئلة التالية عن الاستخدام الحالي. لا توجد إجابة صحيحة أو خاطئة.", "intro_en": "The following questions are about current use. There are no right or wrong answers.", "num": 4},
@@ -432,7 +432,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "1", "ar": "أوافق على المشاركة", "en": "I agree to take part"},
       {"code": "0", "ar": "لا أوافق", "en": "I do not agree"}
     ],
-    "logic": "[age18] = '1'"
+    "logic": "false"
   },
   {
     "n": 3,
@@ -451,7 +451,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "6", "ar": "موظف/ة آخر/ى", "en": "Other University staff"},
       {"code": "7", "ar": "أخرى", "en": "Other"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 4,
@@ -469,7 +469,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "5", "ar": "55 سنة فأكثر", "en": "55 years or older"},
       {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 5,
@@ -484,7 +484,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "2", "ar": "أنثى", "en": "Female"},
       {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 6,
@@ -519,7 +519,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "3", "ar": "لا أستخدمه حاليًا", "en": "Not at all currently"},
       {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 8,
@@ -535,7 +535,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "3", "ar": "السيجار أو الغليون أو منتجات تبغ أخرى تُحرق", "en": "Cigars, pipe or other burned tobacco"},
       {"code": "4", "ar": "منتج تبغ محروق آخر", "en": "Another burned tobacco product"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1' and ([burned_status] = '1' or [burned_status] = '2')"
+    "logic": "[age18] = '1' and ([burned_status] = '1' or [burned_status] = '2')"
   },
   {
     "n": 9,
@@ -551,7 +551,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "3", "ar": "لا أستخدمه حاليًا", "en": "Not at all currently"},
       {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 10,
@@ -567,7 +567,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "3", "ar": "لا أستخدمه حاليًا", "en": "Not at all currently"},
       {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 11,
@@ -583,7 +583,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "3", "ar": "لا أستخدمه حاليًا", "en": "Not at all currently"},
       {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 12,
@@ -594,7 +594,7 @@ var SURVEY = /*SURVEY_JSON_START*/
     "label_en": "On days when you smoke cigarettes, how many manufactured cigarettes do you usually smoke in a day?",
     "label_ar": "في الأيام التي تدخن فيها السجائر، كم سيجارة مصنعة تدخن عادة في اليوم؟",
     "validation": {"type": "integer", "min": 1, "max": 100},
-    "logic": "[age18] = '1' and [consent] = '1' and ([burned_status] = '1' or [burned_status] = '2') and [burned_products(1)] = '1'"
+    "logic": "[age18] = '1' and ([burned_status] = '1' or [burned_status] = '2') and [burned_products(1)] = '1'"
   },
   {
     "n": 13,
@@ -611,7 +611,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "0", "ar": "بعد أكثر من 60 دقيقة", "en": "More than 60 minutes"},
       {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1' and ([burned_status] = '1' or [burned_status] = '2') and [burned_products(1)] = '1'"
+    "logic": "[age18] = '1' and ([burned_status] = '1' or [burned_status] = '2') and [burned_products(1)] = '1'"
   },
   {
     "n": 14,
@@ -622,7 +622,7 @@ var SURVEY = /*SURVEY_JSON_START*/
     "label_en": "In a usual week, approximately how many waterpipe/shisha sessions do you smoke?",
     "label_ar": "في أسبوع معتاد، كم جلسة شيشة/معسل تدخن تقريبًا؟",
     "validation": {"type": "integer", "min": 0, "max": 70},
-    "logic": "[age18] = '1' and [consent] = '1' and ([burned_status] = '1' or [burned_status] = '2') and [burned_products(2)] = '1'"
+    "logic": "[age18] = '1' and ([burned_status] = '1' or [burned_status] = '2') and [burned_products(2)] = '1'"
   },
   {
     "n": 15,
@@ -633,7 +633,7 @@ var SURVEY = /*SURVEY_JSON_START*/
     "label_en": "During the past 30 days, on how many days did you use an electronic cigarette or vaping device?",
     "label_ar": "خلال آخر 30 يومًا، في كم يوم استخدمت السيجارة الإلكترونية أو الفيب؟",
     "validation": {"type": "integer", "min": 0, "max": 30},
-    "logic": "[age18] = '1' and [consent] = '1' and ([ecig_status] = '1' or [ecig_status] = '2')"
+    "logic": "[age18] = '1' and ([ecig_status] = '1' or [ecig_status] = '2')"
   },
   {
     "n": 16,
@@ -644,7 +644,7 @@ var SURVEY = /*SURVEY_JSON_START*/
     "label_en": "On days when you use nicotine pouches, how many pouches do you usually use in a day?",
     "label_ar": "في الأيام التي تستخدم فيها أكياس النيكوتين، كم كيسًا تستخدم عادة في اليوم؟",
     "validation": {"type": "integer", "min": 1, "max": 100},
-    "logic": "[age18] = '1' and [consent] = '1' and ([pouch_status] = '1' or [pouch_status] = '2')"
+    "logic": "[age18] = '1' and ([pouch_status] = '1' or [pouch_status] = '2')"
   },
   {
     "n": 17,
@@ -655,7 +655,7 @@ var SURVEY = /*SURVEY_JSON_START*/
     "label_en": "Heaviness of Smoking Index (HSI, 0–6; auto-calculated)",
     "label_ar": "مؤشر شدة التدخين (HSI، من 0 إلى 6؛ يُحسب تلقائيًا)",
     "calc": "if([cig_ttf] = \"\" or [cig_ttf] = \"99\" or [cigs_per_day] = \"\", \"\", [cig_ttf] + if([cigs_per_day] < 11, 0, if([cigs_per_day] < 21, 1, if([cigs_per_day] < 31, 2, 3))))",
-    "logic": "[age18] = '1' and [consent] = '1' and ([burned_status] = '1' or [burned_status] = '2') and [burned_products(1)] = '1'",
+    "logic": "[age18] = '1' and ([burned_status] = '1' or [burned_status] = '2') and [burned_products(1)] = '1'",
     "research_note": "Time to first cigarette (0–3) + cigarettes per day (0–10 = 0, 11–20 = 1, 21–30 = 2, 31+ = 3). Blank if either item is missing or \"Prefer not to answer\"."
   },
   {
@@ -671,7 +671,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "0", "ar": "لا", "en": "No"},
       {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1' and (([burned_status] = '1' or [burned_status] = '2') or ([ecig_status] = '1' or [ecig_status] = '2') or ([pouch_status] = '1' or [pouch_status] = '2') or ([htp_status] = '1' or [htp_status] = '2'))"
+    "logic": "[age18] = '1' and (([burned_status] = '1' or [burned_status] = '2') or ([ecig_status] = '1' or [ecig_status] = '2') or ([pouch_status] = '1' or [pouch_status] = '2') or ([htp_status] = '1' or [htp_status] = '2'))"
   },
   {
     "n": 19,
@@ -689,7 +689,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "98", "ar": "لا أعرف", "en": "Don't know"},
       {"code": "99", "ar": "أفضل عدم الإجابة", "en": "Prefer not to answer"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1' and (([burned_status] = '1' or [burned_status] = '2') or ([ecig_status] = '1' or [ecig_status] = '2') or ([pouch_status] = '1' or [pouch_status] = '2') or ([htp_status] = '1' or [htp_status] = '2'))"
+    "logic": "[age18] = '1' and (([burned_status] = '1' or [burned_status] = '2') or ([ecig_status] = '1' or [ecig_status] = '2') or ([pouch_status] = '1' or [pouch_status] = '2') or ([htp_status] = '1' or [htp_status] = '2'))"
   },
   {
     "n": 20,
@@ -708,7 +708,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "6", "ar": "طريقة أخرى", "en": "Another method"}
     ],
     "exclusive": "5",
-    "logic": "[age18] = '1' and [consent] = '1' and (([burned_status] = '1' or [burned_status] = '2') or ([ecig_status] = '1' or [ecig_status] = '2') or ([pouch_status] = '1' or [pouch_status] = '2') or ([htp_status] = '1' or [htp_status] = '2')) and [quit_attempt_12m] = '1'"
+    "logic": "[age18] = '1' and (([burned_status] = '1' or [burned_status] = '2') or ([ecig_status] = '1' or [ecig_status] = '2') or ([pouch_status] = '1' or [pouch_status] = '2') or ([htp_status] = '1' or [htp_status] = '2')) and [quit_attempt_12m] = '1'"
   },
   {
     "n": 21,
@@ -728,7 +728,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "7", "ar": "لا أحتاج أيًا من ذلك", "en": "I would not use any of these"}
     ],
     "exclusive": "7",
-    "logic": "[age18] = '1' and [consent] = '1' and (([burned_status] = '1' or [burned_status] = '2') or ([ecig_status] = '1' or [ecig_status] = '2') or ([pouch_status] = '1' or [pouch_status] = '2') or ([htp_status] = '1' or [htp_status] = '2'))"
+    "logic": "[age18] = '1' and (([burned_status] = '1' or [burned_status] = '2') or ([ecig_status] = '1' or [ecig_status] = '2') or ([pouch_status] = '1' or [pouch_status] = '2') or ([htp_status] = '1' or [htp_status] = '2'))"
   },
   {
     "n": 22,
@@ -743,7 +743,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "2", "ar": "ربما لاحقًا", "en": "Maybe later"},
       {"code": "0", "ar": "لا", "en": "No"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1' and (([burned_status] = '1' or [burned_status] = '2') or ([ecig_status] = '1' or [ecig_status] = '2') or ([pouch_status] = '1' or [pouch_status] = '2') or ([htp_status] = '1' or [htp_status] = '2'))"
+    "logic": "[age18] = '1' and (([burned_status] = '1' or [burned_status] = '2') or ([ecig_status] = '1' or [ecig_status] = '2') or ([pouch_status] = '1' or [pouch_status] = '2') or ([htp_status] = '1' or [htp_status] = '2'))"
   },
   {
     "n": 23,
@@ -760,7 +760,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "4", "ar": "كنت أعرفها جيدًا", "en": "I knew it well"},
       {"code": "98", "ar": "غير متأكد", "en": "Not sure"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 24,
@@ -776,7 +776,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "3", "ar": "لا توجد أحكام محددة بهذا الشأن", "en": "There is no specific rule"},
       {"code": "98", "ar": "لا أعرف", "en": "I don't know"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 25,
@@ -791,7 +791,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "0", "ar": "لا", "en": "No"},
       {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 26,
@@ -806,7 +806,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "0", "ar": "لا", "en": "No"},
       {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 27,
@@ -821,7 +821,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "0", "ar": "لا", "en": "No"},
       {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 28,
@@ -836,7 +836,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "0", "ar": "لا", "en": "No"},
       {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 29,
@@ -851,7 +851,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "0", "ar": "لا", "en": "No"},
       {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 30,
@@ -866,7 +866,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "0", "ar": "لا", "en": "No"},
       {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 31,
@@ -881,7 +881,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "0", "ar": "لا", "en": "No"},
       {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 32,
@@ -897,7 +897,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "98", "ar": "غير متأكد", "en": "Not sure"},
       {"code": "97", "ar": "لا ينطبق عليّ", "en": "Not applicable"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 33,
@@ -914,7 +914,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "4", "ar": "راضٍ", "en": "Satisfied"},
       {"code": "5", "ar": "راضٍ جدًا", "en": "Very satisfied"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1' and [used_service] = '1'"
+    "logic": "[age18] = '1' and [used_service] = '1'"
   },
   {
     "n": 34,
@@ -929,7 +929,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "0", "ar": "لا", "en": "No"},
       {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 35,
@@ -944,7 +944,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "0", "ar": "لا", "en": "No"},
       {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 36,
@@ -962,7 +962,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "5", "ar": "أكثر بكثير", "en": "Much more harmful"},
       {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 37,
@@ -980,7 +980,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "5", "ar": "أكثر بكثير", "en": "Much more harmful"},
       {"code": "98", "ar": "لا أعرف", "en": "Don't know"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   },
   {
     "n": 38,
@@ -999,7 +999,7 @@ var SURVEY = /*SURVEY_JSON_START*/
       {"code": "6", "ar": "واتساب إذا كان عبر قناة رسمية", "en": "WhatsApp if provided through an official channel"},
       {"code": "7", "ar": "قناة أخرى", "en": "Another channel"}
     ],
-    "logic": "[age18] = '1' and [consent] = '1'"
+    "logic": "[age18] = '1'"
   }
  ],
  "analysis": [
@@ -1014,7 +1014,7 @@ var SURVEY = /*SURVEY_JSON_START*/
     "type": "calc",
     "label_en": "Current use of any tobacco or nicotine product: 1 yes, 0 no",
     "label_ar": "استخدام حالي لأي منتج تبغ أو نيكوتين: 1 نعم، 0 لا",
-    "calc": "if([age18] = '1' and [consent] = '1', if(([burned_status] = '1' or [burned_status] = '2' or [ecig_status] = '1' or [ecig_status] = '2' or [pouch_status] = '1' or [pouch_status] = '2' or [htp_status] = '1' or [htp_status] = '2'), 1, if(([burned_status] = '3' and [ecig_status] = '3' and [pouch_status] = '3' and [htp_status] = '3'), 0, \"\")), \"\")",
+    "calc": "if([age18] = '1', if(([burned_status] = '1' or [burned_status] = '2' or [ecig_status] = '1' or [ecig_status] = '2' or [pouch_status] = '1' or [pouch_status] = '2' or [htp_status] = '1' or [htp_status] = '2'), 1, if(([burned_status] = '3' and [ecig_status] = '3' and [pouch_status] = '3' and [htp_status] = '3'), 0, \"\")), \"\")",
     "research_note": "Blank when no product is used currently but at least one status is \"Prefer not to answer\"."
   },
   {
@@ -1022,7 +1022,7 @@ var SURVEY = /*SURVEY_JSON_START*/
     "type": "calc",
     "label_en": "Number of product types used currently (0–4: burned, e-cigarette, pouch, heated)",
     "label_ar": "عدد أنواع المنتجات المستخدمة حاليًا (0–4)",
-    "calc": "if([age18] = '1' and [consent] = '1' and [burned_status] <> '' and [ecig_status] <> '' and [pouch_status] <> '' and [htp_status] <> '', if(([burned_status] = '1' or [burned_status] = '2'), 1, 0) + if(([ecig_status] = '1' or [ecig_status] = '2'), 1, 0) + if(([pouch_status] = '1' or [pouch_status] = '2'), 1, 0) + if(([htp_status] = '1' or [htp_status] = '2'), 1, 0), \"\")",
+    "calc": "if([age18] = '1' and [burned_status] <> '' and [ecig_status] <> '' and [pouch_status] <> '' and [htp_status] <> '', if(([burned_status] = '1' or [burned_status] = '2'), 1, 0) + if(([ecig_status] = '1' or [ecig_status] = '2'), 1, 0) + if(([pouch_status] = '1' or [pouch_status] = '2'), 1, 0) + if(([htp_status] = '1' or [htp_status] = '2'), 1, 0), \"\")",
     "research_note": "Counts products used daily or less than daily; \"Prefer not to answer\" counts as not current."
   },
   {
@@ -1030,7 +1030,7 @@ var SURVEY = /*SURVEY_JSON_START*/
     "type": "calc",
     "label_en": "Role group: 1 student, 2 staff, 3 other",
     "label_ar": "الفئة: 1 طالب، 2 منسوب، 3 أخرى",
-    "calc": "if([age18] = '1' and [consent] = '1' and [role] <> '', if([role] = '1' or [role] = '2', 1, if([role] = '7', 3, 2)), \"\")"
+    "calc": "if([age18] = '1' and [role] <> '', if([role] = '1' or [role] = '2', 1, if([role] = '7', 3, 2)), \"\")"
   }
  ]
 }
