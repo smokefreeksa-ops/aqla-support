@@ -33,6 +33,7 @@ function AcademyCertPage() {
   });
 
   const verifyUrl = typeof window !== "undefined" ? `${window.location.origin}/academy-certificate/${code}` : "";
+  const qrSrc = useQrDataUrl(verifyUrl, 90);
   const shareText = `أتممت وحدة من أكاديمية أقلع بنجاح — I completed an Aqla Academy module. Verify: ${verifyUrl}`;
   const copyLink = async () => {
     try { await navigator.clipboard.writeText(verifyUrl); toast.success("Link copied"); } catch { /* noop */ }

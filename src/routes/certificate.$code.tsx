@@ -29,6 +29,7 @@ function CertificatePage() {
   });
 
   const verifyUrl = typeof window !== "undefined" ? `${window.location.origin}/certificate/${code}` : "";
+  const qrSrc = useQrDataUrl(verifyUrl, 90);
   const shareText = `I completed the Aqla Volunteer Smoking and Nicotine Cessation Support Training. Verify: ${verifyUrl}`;
 
   async function copyLink() {
