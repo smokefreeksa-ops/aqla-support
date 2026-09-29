@@ -173,6 +173,7 @@ section.block { padding-block: 56px; }
 .info h3 { margin: 0 0 8px; font: 700 19px/1.35 var(--f-disp); color: var(--green); }
 .info p { margin: 0; font-size: 15px; }
 .plain { margin: 18px 0 0; font-weight: 700; }
+.nrt { margin: 8px 0 0; max-width: 80ch; color: var(--sub); font-size: 14.5px; border-inline-start: 3px solid var(--gold); padding-inline-start: 12px; }
 .sources { margin: 10px 0 0; font-size: 12.5px; color: var(--sub); }
 .sources a { color: var(--sub); }
 .quit .box { background: var(--green-deep); color: var(--on-dark); border-radius: 20px; padding: 34px clamp(18px, 4vw, 42px); display: grid; gap: 12px; }
@@ -344,10 +345,13 @@ html { scroll-behavior: smooth; }
       <p class="intro" data-t="learnIntro"></p>
       <div class="cards4" id="infos"></div>
       <p class="plain" data-t="learnPlain"></p>
+      <p class="nrt" data-t="nrt"></p>
       <p class="sources"><span data-t="sourcesLabel"></span>
         <a href="https://www.who.int/news-room/fact-sheets/detail/tobacco" target="_blank" rel="noopener" data-t="src1"></a> ·
         <a href="https://extranet.who.int/fctcapps/fctcapps/fctc/kh/wts/faq" target="_blank" rel="noopener" data-t="src2"></a> ·
+        <a href="https://www.who.int/news-room/questions-and-answers/item/tobacco-e-cigarettes" target="_blank" rel="noopener" data-t="src5"></a> ·
         <a href="https://www.who.int/news/item/15-05-2026-who-warns-nicotine-pouch-brands-targeting-youth-as-sales-surge" target="_blank" rel="noopener" data-t="src3"></a> ·
+        <a href="https://www.who.int/activities/quitting-tobacco" target="_blank" rel="noopener" data-t="src6"></a> ·
         <a href="https://www.who.int/news-room/questions-and-answers/item/tobacco-health-benefits-of-smoking-cessation" target="_blank" rel="noopener" data-t="src4"></a>
       </p>
     </div>
@@ -358,6 +362,7 @@ html { scroll-behavior: smooth; }
       <div class="box">
         <h2 data-t="quitTitle"></h2>
         <p data-t="quitText"></p>
+        <p data-t="quitHow"></p>
         <p class="evidence" data-t="quitEvidence"></p>
         <div class="ctas"><a class="btn btn-gold" id="quitLink" href="https://smokesfreeksa.com/quit-pathway" data-t="ctaQuit"></a></div>
         <p class="again" data-t="again"></p>
@@ -450,7 +455,7 @@ const QARARI_DATA = (() => {
     { id: 'h5', tab: 'health', ar: 'قراري لصحتي.', en: 'My decision, for my health.' },
     { id: 'a1', tab: 'aware', ar: 'النكهة لا تعني غياب المخاطر الصحية.', en: 'Flavour does not mean the health risks are gone.' },
     { id: 'a2', tab: 'aware', ar: 'اعرف ما تستخدمه… واتخذ قرارك عن معرفة.', en: 'Know what you use, and decide with knowledge.' },
-    { id: 'a3', tab: 'aware', ar: 'لا يوجد منتج تبغ أو نيكوتين آمن.', en: 'No tobacco or nicotine product is safe.' },
+    { id: 'a3', tab: 'aware', ar: 'كل أشكال التبغ ضارة… ولا يوجد مستوى آمن للتعرّض له.', en: 'All forms of tobacco are harmful. There is no safe level of exposure.' },
     { id: 'a4', tab: 'aware', ar: 'الوعي يبدأ بالمعلومة الصحيحة.', en: 'Awareness starts with the right information.' },
     { id: 'q1', tab: 'quit', ar: 'الإقلاع قد يكون صعباً… والدعم يصنع فرقاً.', en: 'Quitting can be hard, and support makes a difference.' },
     { id: 'q2', tab: 'quit', ar: 'هل تفكر في الإقلاع؟ ابدأ بخطوة اليوم.', en: 'Thinking about quitting? Take a first step today.' },
@@ -1445,7 +1450,7 @@ const QarariCards = (() => {
 
   const T = {
     ar: {
-      uni: 'جامعة الملك عبدالعزيز', unit: 'مركز تعزيز الصحة · وحدة مكافحة التدخين والوقاية من المخدرات',
+      uni: 'جامعة الملك عبدالعزيز', unit: 'مركز تعزيز الصحة بالتعاون مع وحدة مكافحة التدخين والوقاية من المخدرات',
       brand: 'جامعة بلا تدخين', brandSub: 'Smoke-Free University',
       tagline: 'معاً نحو بيئة جامعية صحية بلا تدخين',
       lead: 'شارك في تعزيز بيئة جامعية صحية. اختر رسالتك، صمّم بطاقتك، وشارك الوعي مع مجتمعك الجامعي.',
@@ -1453,7 +1458,7 @@ const QarariCards = (() => {
       live: n => 'شارك حتى الآن ' + C.arNum(n),
       aboutTitle: 'جامعة بلا تدخين… مسؤولية مشتركة',
       aboutText: 'مبادرة لتعزيز بيئة جامعية صحية، ونشر الوعي، ودعم من يرغب في الإقلاع عن التدخين.',
-      who: ['الطلاب والطالبات', 'أعضاء هيئة التدريس', 'الموظفين', 'الزوار'],
+      who: ['الطلاب والطالبات', 'أعضاء هيئة التدريس', 'الموظفون', 'الزوار'],
       makeKicker: 'اصنع بطاقتك', makeTitle: 'شارك رسالتك لجامعة بلا تدخين',
       makeText: 'اختر تصميماً ورسالة تناسبك، ويمكنك إضافة اسمك أو صورتك إذا رغبت.',
       makeTextCustom: 'اختر تصميماً ورسالة تناسبك، أو اكتب رسالتك بنفسك. ويمكنك إضافة اسمك أو صورتك إذا رغبت.',
@@ -1470,32 +1475,34 @@ const QarariCards = (() => {
       cardLang: 'لغة البطاقة:',
       s4: 'أضف اسمك — اختياري', nameLabel: 'الاسم', showName: 'إظهار اسمي على البطاقة',
       s5: 'بطاقتك جاهزة', share: 'مشاركة', save: 'حفظ البطاقة',
-      xHint: 'زر «مشاركة» يفتح قائمة المشاركة في جوالك (سناب شات، إنستغرام، الرسائل…). زر X يفتح منشوراً جاهزاً؛ أرفق معه البطاقة التي حفظتها.',
-      privacy: 'خصوصيتك مهمة لنا. تُنشأ بطاقتك على جهازك، ولا نحتفظ باسمك أو صورتك. نحسب عدد البطاقات فقط، دون أي بيانات شخصية.',
+      xHint: 'على الأجهزة والمتصفحات الداعمة، يفتح زر «مشاركة» قائمة المشاركة في جهازك، وقد تظهر تطبيقات مثل سناب شات وإنستغرام والرسائل بحسب التطبيقات المثبتة. وإذا لم تكن مشاركة الصورة مدعومة، احفظ البطاقة وشاركها من جهازك. زر X يفتح منشوراً جاهزاً؛ أرفق معه البطاقة التي حفظتها.',
+      privacy: 'خصوصيتك مهمة لنا. تُنشأ بطاقتك على جهازك، ولا نرسل اسمك أو صورتك إلى خادمنا. ولقياس استخدام الحملة، نسجّل بصورة مجهولة إنشاء البطاقات ومشاركتها مع بيانات عامة هي: التصميم والمقاس واللغة والرسالة المختارة، دون أي بيانات تعريف شخصية.',
       cap: 'معاينة مباشرة',
       learnTitle: 'اعرف أكثر', learnIntro: 'المعلومة الصحيحة تساعدك على اتخاذ قرارات صحية أفضل.',
-      learnPlain: 'تختلف هذه المنتجات في طريقة استخدامها، لكن لا يوجد منها منتج آمن.',
-      sourcesLabel: 'المصادر: ', src1: 'منظمة الصحة العالمية — التبغ', src2: 'منظمة الصحة العالمية — الشيشة', src3: 'منظمة الصحة العالمية — أكياس النيكوتين', src4: 'منظمة الصحة العالمية — فوائد الإقلاع',
+      learnPlain: 'تختلف هذه المنتجات في طريقة استخدامها ومستويات الضرر المرتبطة بها، لكن لا يُعد أيٌّ منها خالياً من المخاطر.',
+      nrt: 'أما بدائل النيكوتين العلاجية (مثل اللصقات والعلكة الطبية) فتختلف عن هذه المنتجات؛ إذ تُستخدم علاجاً معتمداً لفترة محددة، وبإرشاد مختص، للمساعدة على الإقلاع.',
+      sourcesLabel: 'المصادر — منظمة الصحة العالمية: ', src1: 'التبغ والنيكوتين', src2: 'الشيشة', src5: 'السجائر الإلكترونية', src3: 'أكياس النيكوتين', src6: 'الإقلاع عن التبغ', src4: 'الفوائد الصحية للإقلاع',
       quitTitle: 'تفكر في الإقلاع؟',
       quitText: 'لست مضطراً لبدء رحلة الإقلاع وحدك. إذا كنت تفكر في الإقلاع عن التدخين أو استخدام منتجات النيكوتين، يمكنك الوصول إلى الدعم المناسب.',
-      quitEvidence: 'الإرشاد والعلاج الدوائي يمكن أن يرفعا فرص نجاح الإقلاع إلى أكثر من الضعف. — منظمة الصحة العالمية',
+      quitHow: 'الدعم الفعّال يجمع بين الإرشاد السلوكي والعلاج الدوائي المعتمد بإشراف مختص، ويساعدك على وضع خطة تناسبك وتحديد موعد للبدء.',
+      quitEvidence: 'يمكن للإرشاد والعلاج الدوائي أن يرفعا فرصة نجاح مستخدم التبغ في الإقلاع إلى أكثر من الضعف. — منظمة الصحة العالمية',
       again: 'بدأت من قبل وعدت للتدخين؟ يمكنك البدء من جديد.',
       commitTitle: 'التزامنا ببيئة جامعية صحية',
       commitText: 'تعمل جامعة الملك عبدالعزيز على تعزيز بيئة جامعية صحية، ونشر الوعي بمخاطر التدخين، ودعم أفراد المجتمع الجامعي الراغبين في الإقلاع.',
-      law: 'ويحظر نظام مكافحة التدخين في المملكة (المادة السابعة) التدخين في المؤسسات التعليمية.',
-      footUnit: 'مركز تعزيز الصحة · وحدة مكافحة التدخين والوقاية من المخدرات',
+      law: 'وتنص المادة السابعة من نظام مكافحة التدخين، الصادر بالمرسوم الملكي رقم (م/56) وتاريخ 28/7/1436هـ، على منع التدخين في المؤسسات التعليمية.',
+      footUnit: 'مركز تعزيز الصحة بالتعاون مع وحدة مكافحة التدخين والوقاية من المخدرات',
       sheetTitle: 'بطاقتك جاهزة', sheetHow: 'على الجوال: اضغط مطوّلاً على الصورة ثم اختر «حفظ الصورة». على الكمبيوتر: زر الفأرة الأيمن ثم «حفظ الصورة باسم».',
       download: 'تنزيل', close: 'إغلاق',
       post: 'هذه رسالتي لجامعة بلا تدخين.\nشارك أنت أيضاً في تعزيز بيئة جامعية صحية.',
       infos: [
-        ['التدخين', 'حرق التبغ يُنتج دخاناً يحتوي على آلاف المواد الكيميائية، منها مواد مسبّبة للسرطان. ولا يوجد مستوى آمن للتعرّض للتبغ، ولا للدخان الذي يستنشقه من حول المدخّن.'],
-        ['الشيشة', 'الشيشة ليست أخف ضرراً من السجائر. الماء لا يُنقّي الدخان من المواد السامة، وجلسة واحدة مدتها ساعة قد تعني استنشاق دخان يفوق بكثير ما في سيجارة واحدة، والنكهات لا تغيّر ذلك.'],
-        ['السجائر الإلكترونية', 'تسخّن سائلاً يحتوي غالباً على النيكوتين والمنكّهات لتكوين رذاذ يُستنشق. وهي ضارة بالصحة وليست آمنة؛ فالنيكوتين يسبب الإدمان ويؤثر في نمو الدماغ لدى صغار السن.'],
-        ['أكياس النيكوتين', 'أكياس صغيرة توضع بين الشفة واللثة وتطلق النيكوتين عبر بطانة الفم دون دخان. غياب الدخان لا يعني غياب الضرر؛ فالنيكوتين شديد الإدمان ويرفع خطر أمراض القلب والأوعية الدموية.'],
+        ['التدخين', 'يحتوي دخان التبغ على أكثر من ٧٠٠٠ مادة كيميائية، منها ٦٩ على الأقل معروفة بأنها مسبّبة للسرطان. جميع أشكال استخدام التبغ ضارة، ولا يوجد مستوى آمن للتعرّض لدخان التبغ غير المباشر.'],
+        ['الشيشة', 'الشيشة ليست بديلاً آمناً للسجائر. الماء لا يزيل المواد السامة من الدخان، وقد تتضمن جلسة نموذجية مدتها ساعة استنشاق حجم من الدخان يعادل نحو ١٠٠–٢٠٠ ضعف حجم الدخان المستنشق من سيجارة واحدة. والنكهات لا تجعل الشيشة آمنة.'],
+        ['السجائر الإلكترونية', 'تسخّن سائلاً قد يحتوي على النيكوتين والمنكّهات ومواد أخرى لتكوين رذاذ يُستنشق، وقد وُجد النيكوتين في بعض المنتجات المسوّقة بأنها خالية منه. وهي ضارة بالصحة وليست آمنة؛ فالنيكوتين شديد الإدمان، ويمكن أن يؤثر في تطور الدماغ لدى الأطفال والمراهقين والشباب.'],
+        ['أكياس النيكوتين', 'أكياس صغيرة توضع بين الشفة واللثة ويُمتص النيكوتين عبر بطانة الفم دون دخان. غياب الدخان لا يعني غياب الضرر؛ فالنيكوتين شديد الإدمان وله آثار على القلب والأوعية الدموية، وما تزال الآثار الصحية طويلة المدى لأكياس النيكوتين قيد الدراسة.'],
       ],
     },
     en: {
-      uni: 'King Abdulaziz University', unit: 'Health Promotion Center · Tobacco Control and Drug Prevention Unit',
+      uni: 'King Abdulaziz University', unit: 'Health Promotion Center, in collaboration with the Tobacco Control and Drug Prevention Unit',
       brand: 'Smoke-Free University', brandSub: 'جامعة بلا تدخين',
       tagline: 'Together towards a healthy, smoke-free university',
       lead: 'Help promote a healthier university environment. Choose your message, create your card, and share awareness across our university community.',
@@ -1520,28 +1527,30 @@ const QarariCards = (() => {
       cardLang: 'Card language:',
       s4: 'Add your name (optional)', nameLabel: 'Name', showName: 'Show my name on the card',
       s5: 'Your card is ready', share: 'Share', save: 'Save card',
-      xHint: '"Share" opens your phone’s share menu (Snapchat, Instagram, Messages…). The X button opens a ready post; attach the card you saved.',
-      privacy: 'Your privacy matters. Your card is made on your device, and we do not keep your name or photo. We only count how many cards are made, with no personal data.',
+      xHint: 'On supported devices and browsers, "Share" opens your device’s share menu; apps such as Snapchat, Instagram or Messages may appear, depending on what is installed. If sharing an image is not supported, save the card and share it from your device. The X button opens a ready post; attach the card you saved.',
+      privacy: 'Your privacy matters. Your card is made on your device, and your name and photo are never sent to our server. To measure the campaign, we anonymously record when cards are made and shared, with general details only: design, size, language and the message chosen. No personally identifying data is collected.',
       cap: 'Live preview',
       learnTitle: 'Learn more', learnIntro: 'The right information helps you make better decisions about your health.',
-      learnPlain: 'These products are used in different ways, but none of them is safe.',
-      sourcesLabel: 'Sources: ', src1: 'WHO — Tobacco', src2: 'WHO — Waterpipe', src3: 'WHO — Nicotine pouches', src4: 'WHO — Benefits of quitting',
+      learnPlain: 'These products differ in how they are used and in the level of harm linked to them, but none of them is free of risk.',
+      nrt: 'Medicinal nicotine replacement (such as patches and gum) is different: it is an approved treatment, used for a limited time with professional guidance, to help people quit.',
+      sourcesLabel: 'Sources — World Health Organization: ', src1: 'Tobacco and nicotine', src2: 'Waterpipe', src5: 'E-cigarettes', src3: 'Nicotine pouches', src6: 'Quitting tobacco', src4: 'Health benefits of quitting',
       quitTitle: 'Thinking about quitting?',
       quitText: 'You don’t have to start quitting on your own. If you are thinking about quitting smoking or nicotine products, support is available.',
-      quitEvidence: 'Counselling and medication can more than double the chance of quitting successfully. — World Health Organization',
+      quitHow: 'Effective support combines behavioural counselling with approved medication under professional guidance, and helps you make a plan that suits you and set a start date.',
+      quitEvidence: 'Counselling and medication can more than double a tobacco user’s chance of quitting successfully. — World Health Organization',
       again: 'Started before and went back to smoking? You can start again.',
       commitTitle: 'Our commitment to a healthy university',
       commitText: 'King Abdulaziz University works to promote a healthy university environment, raise awareness of the risks of smoking, and support members of the university community who want to quit.',
-      law: 'Saudi Arabia’s Anti-Smoking Law (Article 7) prohibits smoking in educational institutions.',
-      footUnit: 'Health Promotion Center · Tobacco Control and Drug Prevention Unit',
+      law: 'Article 7 of the Anti-Smoking Law, issued by Royal Decree No. (M/56) dated 28/7/1436 AH, prohibits smoking in educational institutions.',
+      footUnit: 'Health Promotion Center, in collaboration with the Tobacco Control and Drug Prevention Unit',
       sheetTitle: 'Your card is ready', sheetHow: 'On a phone: press and hold the image, then choose "Save image". On a computer: right-click, then "Save image as".',
       download: 'Download', close: 'Close',
       post: 'This is my message for a smoke-free university.\nJoin in and help promote a healthier university environment.',
       infos: [
-        ['Smoking', 'Burning tobacco produces smoke containing thousands of chemicals, including substances that cause cancer. There is no safe level of exposure to tobacco, or to the smoke breathed in by people nearby.'],
-        ['Shisha', 'Shisha is not less harmful than cigarettes. The water does not filter out the toxic substances, a one-hour session can mean inhaling far more smoke than one cigarette, and flavours do not change that.'],
-        ['E-cigarettes', 'They heat a liquid, usually containing nicotine and flavourings, into an aerosol that is inhaled. They are harmful and not safe: nicotine is addictive and affects brain development in young people.'],
-        ['Nicotine pouches', 'Small pouches placed between the lip and gum that release nicotine through the lining of the mouth, without smoke. No smoke does not mean no harm: nicotine is highly addictive and increases cardiovascular risk.'],
+        ['Smoking', 'Tobacco smoke contains more than 7,000 chemicals, at least 69 of which are known to cause cancer. All forms of tobacco use are harmful, and there is no safe level of exposure to second-hand tobacco smoke.'],
+        ['Shisha', 'Shisha is not a safe alternative to cigarettes. The water does not remove the toxic substances from the smoke, and a typical one-hour session can involve inhaling about 100–200 times the volume of smoke inhaled from one cigarette. Flavours do not make shisha safe.'],
+        ['E-cigarettes', 'They heat a liquid that may contain nicotine, flavourings and other substances into an aerosol that is inhaled; nicotine has been found in some products marketed as nicotine-free. They are harmful and not safe: nicotine is highly addictive and can affect brain development in children, adolescents and young adults.'],
+        ['Nicotine pouches', 'Small pouches placed between the lip and gum; nicotine is absorbed through the lining of the mouth, without smoke. No smoke does not mean no harm: nicotine is highly addictive and affects the heart and blood vessels, and the long-term health effects of nicotine pouches are still being studied.'],
       ],
     },
   };
@@ -1735,10 +1744,9 @@ const QarariCards = (() => {
   const API = window.QARARI_API === undefined ? '/api/kau-cards' : window.QARARI_API;
   const net = { count: 0, registered: false };
   const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* private mode */ } } };
-  let sid = store.get('kau_sf_sid');
-  if (!sid) { sid = Math.random().toString(36).slice(2) + Date.now().toString(36); store.set('kau_sf_sid', sid); }
+
   net.registered = store.get('kau_sf_counted') === '1';
-  const payload = action => ({ action, design: st.design, size: st.size, lang: st.lang, message: st.messageId, sid });
+  const payload = action => ({ action, design: st.design, size: st.size, lang: st.lang, message: st.messageId });
   function send(action) {
     if (!API) return;
     try { fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload(action)), keepalive: true }).catch(() => {}); } catch (e) { /* ignore */ }
