@@ -30,10 +30,10 @@ const CONTENT_SECURITY_POLICY = [
   "frame-ancestors 'self'",
   // TanStack/React production hydration injects inline bootstrap scripts.
   "script-src 'self' 'unsafe-inline'",
-  // Inline styles + Google Fonts stylesheet.
+  // Inline styles (fonts are self-hosted).
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
-  // Self/data/blob images + QR code image host.
+  // Self/data/blob images (QR codes generated locally) + Supabase Storage share images.
   "img-src 'self' data: blob: https://*.supabase.co",
   // Supabase auth/data/realtime over HTTPS and WebSocket.
   // Google Apps Script: /survey.html saves study answers to the study Google Sheet

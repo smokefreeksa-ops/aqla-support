@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Copy, Linkedin, MessageCircle, Twitter, QrCode, Download, Share2 } from "lucide-react";
 import { trackEvent } from "@/lib/track-event";
 import { SITE_URL } from "@/lib/site";
+import { useQrDataUrl } from "@/lib/use-qr-data-url";
 
 export const Route = createFileRoute("/invite-friends")({
   head: () => ({
@@ -67,13 +68,7 @@ function Inner() {
     "Join me on Aqla — a free, safe space for smoking and nicotine cessation support supervised by specialists.";
   const message = isAr ? messageAr : messageEn;
 
-  const qrSrc = useMemo(
-    () =>
-      shareLandingUrl
-        ? `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(shareLandingUrl)}`
-        : "",
-    [shareLandingUrl]
-  );
+  const qrSrc = useQrDataUrl(shareLandingUrl, 240);
 
   async function copy() {
     if (!referralUrl) return;
