@@ -59,8 +59,6 @@ export function AqlaWelcomeGate() {
   const [mode, setMode] = useState<Mode>("choose");
 
 
-  // Google
-  const [googleLoading, setGoogleLoading] = useState(false);
 
   // Phone state
   const [country, setCountry] = useState("+966");
@@ -83,55 +81,6 @@ export function AqlaWelcomeGate() {
     return () => clearTimeout(t);
   }, [cooldown]);
 
-  // Native Google OAuth (uses Aqla's own Google client → the Google screen shows
-  // "أقلع / aqla1.com", never a third-party vendor name). If the Google client
-  // credentials are not configured yet, fall back to the hosted helper so sign-in
-  // keeps working.
-  async function nativeGoogleReady(): Promise<boolean> {
-    try {
-      const url = import.meta.env["VITE_SUPABASE_URL"] as string | undefined;
-      const key = import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] as string | undefined;
-      if (!url || !key) return false;
-      const res = await fetch(
-        `${url}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(window.location.origin)}`,
-        { headers: { apikey: key }, redirect: "manual" },
-      );
-      // opaqueredirect / 3xx means the provider is configured; 400 means missing secret
-      return res.type === "opaqueredirect" || res.status === 0 || (res.status >= 300 && res.status < 400);
-    } catch {
-      return false;
-    }
-  }
-
-  async function signInWithGoogle() {
-    setGoogleLoading(true);
-    try {
-      savePostLoginRedirect();
-      if (await nativeGoogleReady()) {
-        const result = await supabase.auth.signInWithOAuth({
-          provider: "google",
-          options: { redirectTo: window.location.origin },
-        });
-        if (result.error) {
-          toast.error("تعذّر تسجيل الدخول. حاول مرة أخرى.");
-          setGoogleLoading(false);
-        }
-        return;
-      }
-      const { lovable } = await import("@/integrations/lovable");
-      const fallback = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
-      });
-      if (fallback.error) {
-        toast.error("تعذّر تسجيل الدخول. حاول مرة أخرى.");
-        setGoogleLoading(false);
-      }
-    } catch (e) {
-      console.error(e);
-      toast.error("حدث خطأ غير متوقع. حاول مرة أخرى.");
-      setGoogleLoading(false);
-    }
-  }
 
   async function sendPhoneOtp() {
     const full = normalizePhone(country, phone);
@@ -148,7 +97,7 @@ export function AqlaWelcomeGate() {
         if (msg.includes("rate") || msg.includes("limit")) {
           toast.error("يرجى الانتظار قليلًا قبل طلب رمز جديد.");
         } else if (msg.includes("sms") || msg.includes("provider") || msg.includes("not enabled")) {
-          toast.error("خدمة الرسائل النصية غير مفعّلة حاليًا. الرجاء استخدام Google أو البريد الإلكتروني.");
+          toast.error("خدمة الرسائل النصية غير مفعّلة حاليًا. الرجاء استخدام البريد الإلكتروني.");
         } else {
           toast.error("تعذّر إرسال رمز التحقق. حاول مرة أخرى.");
         }
@@ -302,19 +251,6 @@ export function AqlaWelcomeGate() {
 
         {/* === Login options === */}
         <div className="mt-6 space-y-3">
-          {/* Google — always visible & prominent */}
-          <button
-            type="button"
-            onClick={() => void signInWithGoogle()}
-            disabled={googleLoading}
-            className="inline-flex w-full items-center justify-center gap-3 rounded-xl border border-[#c9a84c]/50 bg-white px-6 py-3 text-base font-semibold text-[#0b3a25] shadow-md transition hover:bg-[#fdf8e6] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {googleLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <GoogleMark />}
-            <span style={{ unicodeBidi: "plaintext" }}>
-              {googleLoading ? "جارٍ التحويل…" : "الدخول باستخدام Google"}
-            </span>
-          </button>
-
           {mode === "choose" && (
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
               <div className="relative">
@@ -529,16 +465,6 @@ export function AqlaWelcomeGate() {
   );
 }
 
-function GoogleMark() {
-  return (
-    <svg viewBox="0 0 48 48" className="h-5 w-5" aria-hidden="true">
-      <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.8 32.6 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.9 6.1 29.7 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/>
-      <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16.1 19 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.9 6.1 29.7 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
-      <path fill="#4CAF50" d="M24 44c5.5 0 10.5-2.1 14.3-5.5l-6.6-5.4C29.6 34.7 26.9 36 24 36c-5.2 0-9.7-3.3-11.3-8l-6.5 5C9.4 39.6 16.1 44 24 44z"/>
-      <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.3 5.6l6.6 5.4C41 35.9 44 30.5 44 24c0-1.3-.1-2.3-.4-3.5z"/>
-    </svg>
-  );
-}
 
 function HexAnim() {
   return (
