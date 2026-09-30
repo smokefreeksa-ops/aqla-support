@@ -97,7 +97,7 @@ export function AqlaWelcomeGate() {
         if (msg.includes("rate") || msg.includes("limit")) {
           toast.error("يرجى الانتظار قليلًا قبل طلب رمز جديد.");
         } else if (msg.includes("sms") || msg.includes("provider") || msg.includes("not enabled")) {
-          toast.error("خدمة الرسائل النصية غير مفعّلة حاليًا. الرجاء استخدام Google أو البريد الإلكتروني.");
+          toast.error("خدمة الرسائل النصية غير مفعّلة حاليًا. الرجاء استخدام البريد الإلكتروني.");
         } else {
           toast.error("تعذّر إرسال رمز التحقق. حاول مرة أخرى.");
         }
