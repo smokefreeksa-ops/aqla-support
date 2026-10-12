@@ -29,7 +29,7 @@ export const Route = createFileRoute("/")({
           "أقلع (Aqla): منصة سعودية مجانية للإقلاع عن التدخين والنيكوتين — تقييم الاعتماد، خطة إقلاع شخصية، متابعة، أكاديمية تدريب وشهادات، ومجتمع التحديات.",
       },
       { property: "og:title", content: "أقلع — منصة الإقلاع عن التدخين | Aqla" },
-      { property: "og:description", content: "أقلع — أربعة مسارات: الإقلاع، الأكاديمية، المساعدة، التحديات." },
+      { property: "og:description", content: "أقلع: منصة صحية سعودية مجانية لدعم الإقلاع عن التدخين والنيكوتين — لا تبيع منتجات التبغ ولا تروّج لها. Aqla: free smoking and nicotine cessation support; no tobacco products sold or promoted." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://smokesfreeksa.com/" },
       { property: "og:image", content: "https://smokesfreeksa.com/og-aqla-v9.jpg" },
