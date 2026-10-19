@@ -63,7 +63,7 @@ export const Route = createFileRoute("/share/$type/$id")({
       <div>
         <AqlaLogoBadge size={64} className="mx-auto mb-4" />
         <h1 className="text-xl font-semibold">حدث خطأ</h1>
-        <p className="text-sm text-muted-foreground mt-1">{error.message}</p>
+        <p className="text-sm text-muted-foreground mt-1">{error instanceof Error ? error.message : String(error)}</p>
         <Link to="/" className="mt-4 inline-block">
           <Button>الرئيسية</Button>
         </Link>
