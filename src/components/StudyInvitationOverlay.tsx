@@ -415,7 +415,7 @@ export function StudyInvitationOverlay() {
             tabIndex={-1}
             dir={t.dir}
             lang={lang}
-            className="pointer-events-auto relative mx-auto w-full max-w-[920px] overflow-hidden rounded-[32px] bg-white outline-none focus:outline-none focus-visible:outline-none md:max-w-[690px] md:h-[520px]"
+            className="pointer-events-auto relative mx-auto w-full max-w-[920px] max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain rounded-[32px] bg-white outline-none focus:outline-none focus-visible:outline-none md:max-w-[690px] md:min-h-[520px]"
             style={{
               fontFamily: '"IBM Plex Sans Arabic", system-ui, sans-serif',
               transform: mounted ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
@@ -443,7 +443,7 @@ export function StudyInvitationOverlay() {
             </button>
 
             {step === "invite" ? (
-              <div key="invite" className="px-6 pb-24 pt-24 text-center md:px-8 md:pb-0 md:pt-[76px]">
+              <div key="invite" className="flex flex-col px-6 pb-6 pt-24 text-center md:min-h-[520px] md:px-8 md:pb-4 md:pt-[76px]">
                 <h2
                   id="aqla-study-title"
                   className="m-0 text-[34px] font-semibold leading-[1.18] md:text-[43px]"
@@ -493,7 +493,7 @@ export function StudyInvitationOverlay() {
                   id="aqla-study-details"
                   role="region"
                   aria-hidden={!open}
-                  className="absolute inset-x-6 bottom-[62px] top-auto max-h-[240px] overflow-y-auto text-start transition-opacity duration-300 md:inset-x-7 md:top-auto md:bottom-[46px] md:max-h-[96px]"
+                  className="order-last mt-4 break-words text-start transition-opacity duration-300"
                   style={{
                     opacity: open ? 1 : 0,
                     pointerEvents: open ? "auto" : "none",
@@ -519,7 +519,7 @@ export function StudyInvitationOverlay() {
                   onClick={() => setOpen(!open)}
                   aria-expanded={open}
                   aria-controls="aqla-study-details"
-                  className="absolute bottom-5 right-5 inline-flex items-center gap-2 border-b border-[#DADFEC] pb-[3px] text-[16px] font-semibold leading-none md:bottom-3 md:right-6 md:text-[14px]"
+                  className="mt-6 inline-flex items-center gap-2 ltr:self-end border-b md:mt-auto rtl:self-start border-[#DADFEC] pb-[3px] text-[16px] font-semibold leading-none md:text-[14px]"
                   style={{ color: "#5268A6" }}
                 >
                   <span>{t.detailsToggle}</span>
