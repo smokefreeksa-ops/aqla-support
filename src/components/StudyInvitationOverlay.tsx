@@ -519,7 +519,7 @@ export function StudyInvitationOverlay() {
                   onClick={() => setOpen(!open)}
                   aria-expanded={open}
                   aria-controls="aqla-study-details"
-                  className="mt-6 inline-flex items-center gap-2 self-end border-b md:mt-auto border-[#DADFEC] pb-[3px] text-[16px] font-semibold leading-none md:text-[14px]"
+                  className="mt-6 inline-flex items-center gap-2 ltr:self-end border-b md:mt-auto rtl:self-start border-[#DADFEC] pb-[3px] text-[16px] font-semibold leading-none md:text-[14px]"
                   style={{ color: "#5268A6" }}
                 >
                   <span>{t.detailsToggle}</span>
