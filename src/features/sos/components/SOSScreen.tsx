@@ -9,7 +9,7 @@ import { SOSComplete } from "./SOSComplete";
 import { PROTOCOLS } from "../sos.protocols";
 
 // Study survey page (public/survey.html)
-const REDCAP_URL: string | undefined = "https://smokesfreeksa.com/survey.html";
+const REDCAP_URL: string | undefined = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM";
 
 export function SOSScreen() {
   const machine = useSOSMachine();
