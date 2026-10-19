@@ -9,385 +9,110 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WhenToSeekHelpRouteImport } from './routes/when-to-seek-help'
-import { Route as VolunteerRouteImport } from './routes/volunteer'
-import { Route as VoiceCravingScanRouteImport } from './routes/voice-craving-scan'
-import { Route as UpdatesRouteImport } from './routes/updates'
-import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
-import { Route as TryRouteImport } from './routes/try'
-import { Route as TrainingRouteImport } from './routes/training'
-import { Route as ToolsRouteImport } from './routes/tools'
-import { Route as TermsRouteImport } from './routes/terms'
-import { Route as SupportInviteRouteImport } from './routes/support-invite'
-import { Route as StartRouteImport } from './routes/start'
-import { Route as SosRouteImport } from './routes/sos'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as ShopRouteImport } from './routes/shop'
-import { Route as SharingPolicyRouteImport } from './routes/sharing-policy'
-import { Route as SafetyGuidanceRouteImport } from './routes/safety-guidance'
-import { Route as RequestSupportRouteImport } from './routes/request-support'
-import { Route as RelapseSupportRouteImport } from './routes/relapse-support'
-import { Route as QuitPlanRouteImport } from './routes/quit-plan'
-import { Route as QuitPathwayRouteImport } from './routes/quit-pathway'
-import { Route as QuitChatRouteImport } from './routes/quit-chat'
-import { Route as QuitCenterRouteImport } from './routes/quit-center'
-import { Route as ProfessionalLibraryRouteImport } from './routes/professional-library'
-import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as PosterStudioRouteImport } from './routes/poster-studio'
-import { Route as PointsMedalsRouteImport } from './routes/points-medals'
-import { Route as MovementRouteImport } from './routes/movement'
-import { Route as MedicalDisclaimerRouteImport } from './routes/medical-disclaimer'
-import { Route as McpRouteImport } from './routes/mcp'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as LearnTrainRouteImport } from './routes/learn-train'
-import { Route as LearnRouteImport } from './routes/learn'
-import { Route as LaTattenRouteImport } from './routes/la-tatten'
-import { Route as KauRouteImport } from './routes/kau'
-import { Route as InviteFriendsRouteImport } from './routes/invite-friends'
-import { Route as ImpactRouteImport } from './routes/impact'
-import { Route as HelpPathwayRouteImport } from './routes/help-pathway'
-import { Route as FaqRouteImport } from './routes/faq'
-import { Route as EnRouteImport } from './routes/en'
-import { Route as DtxRouteImport } from './routes/dtx'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as CravingCoachRouteImport } from './routes/craving-coach'
-import { Route as CookiesRouteImport } from './routes/cookies'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CommunityChallengesRouteImport } from './routes/community-challenges'
-import { Route as CityChallengeRouteImport } from './routes/city-challenge'
-import { Route as ChallengesRouteImport } from './routes/challenges'
-import { Route as ChallengePathwayRouteImport } from './routes/challenge-pathway'
-import { Route as CertificatesRouteImport } from './routes/certificates'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AssessmentRouteImport } from './routes/assessment'
-import { Route as ArticlesRouteImport } from './routes/articles'
-import { Route as AqlaVoiceChatRouteImport } from './routes/aqla-voice-chat'
-import { Route as AqlaQuitEngineRouteImport } from './routes/aqla-quit-engine'
-import { Route as AdminRouteImport } from './routes/admin'
-import { Route as AcademyRouteImport } from './routes/academy'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as TryIndexRouteImport } from './routes/try.index'
-import { Route as QuitPlanIndexRouteImport } from './routes/quit-plan.index'
-import { Route as EnIndexRouteImport } from './routes/en.index'
-import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
-import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
-import { Route as TryShootRouteImport } from './routes/try.shoot'
-import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planToken'
-import { Route as ModulesSlugRouteImport } from './routes/modules.$slug'
-import { Route as EnLaTattenRouteImport } from './routes/en.la-tatten'
-import { Route as EnArticlesRouteImport } from './routes/en.articles'
-import { Route as EnAboutRouteImport } from './routes/en.about'
-import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
-import { Route as DashboardSessionsRouteImport } from './routes/dashboard.sessions'
-import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
-import { Route as DashboardPathsRouteImport } from './routes/dashboard.paths'
-import { Route as DashboardLearningRouteImport } from './routes/dashboard.learning'
-import { Route as DashboardHistoryRouteImport } from './routes/dashboard.history'
-import { Route as DashboardCertificatesRouteImport } from './routes/dashboard.certificates'
-import { Route as DashboardCatalogueRouteImport } from './routes/dashboard.catalogue'
-import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
-import { Route as ArticlesWithdrawalRouteImport } from './routes/articles.withdrawal'
-import { Route as ArticlesShishaRouteImport } from './routes/articles.shisha'
-import { Route as ArticlesNicotinePouchesRouteImport } from './routes/articles.nicotine-pouches'
-import { Route as ArticlesFirstWeekRouteImport } from './routes/articles.first-week'
-import { Route as ApiKauCardsRouteImport } from './routes/api.kau-cards'
-import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
-import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
-import { Route as AdminAqlaQuitEngineRouteImport } from './routes/admin.aqla-quit-engine'
-import { Route as AcademyCertificateCodeRouteImport } from './routes/academy-certificate.$code'
-import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AcademyRouteImport } from './routes/academy'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AqlaQuitEngineRouteImport } from './routes/aqla-quit-engine'
+import { Route as AqlaVoiceChatRouteImport } from './routes/aqla-voice-chat'
+import { Route as ArticlesRouteImport } from './routes/articles'
+import { Route as AssessmentRouteImport } from './routes/assessment'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CertificatesRouteImport } from './routes/certificates'
+import { Route as ChallengePathwayRouteImport } from './routes/challenge-pathway'
+import { Route as ChallengesRouteImport } from './routes/challenges'
+import { Route as CityChallengeRouteImport } from './routes/city-challenge'
+import { Route as CommunityChallengesRouteImport } from './routes/community-challenges'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CookiesRouteImport } from './routes/cookies'
+import { Route as CravingCoachRouteImport } from './routes/craving-coach'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DtxRouteImport } from './routes/dtx'
+import { Route as EnRouteImport } from './routes/en'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as HelpPathwayRouteImport } from './routes/help-pathway'
+import { Route as ImpactRouteImport } from './routes/impact'
+import { Route as InviteFriendsRouteImport } from './routes/invite-friends'
+import { Route as KauRouteImport } from './routes/kau'
+import { Route as LaTattenRouteImport } from './routes/la-tatten'
+import { Route as LearnRouteImport } from './routes/learn'
+import { Route as LearnTrainRouteImport } from './routes/learn-train'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as McpRouteImport } from './routes/mcp'
+import { Route as MedicalDisclaimerRouteImport } from './routes/medical-disclaimer'
+import { Route as MovementRouteImport } from './routes/movement'
+import { Route as PointsMedalsRouteImport } from './routes/points-medals'
+import { Route as PosterStudioRouteImport } from './routes/poster-studio'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ProfessionalLibraryRouteImport } from './routes/professional-library'
+import { Route as QuitCenterRouteImport } from './routes/quit-center'
+import { Route as QuitChatRouteImport } from './routes/quit-chat'
+import { Route as QuitPathwayRouteImport } from './routes/quit-pathway'
+import { Route as QuitPlanRouteImport } from './routes/quit-plan'
+import { Route as RelapseSupportRouteImport } from './routes/relapse-support'
+import { Route as RequestSupportRouteImport } from './routes/request-support'
+import { Route as SafetyGuidanceRouteImport } from './routes/safety-guidance'
+import { Route as SharingPolicyRouteImport } from './routes/sharing-policy'
+import { Route as ShopRouteImport } from './routes/shop'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SosRouteImport } from './routes/sos'
+import { Route as StartRouteImport } from './routes/start'
+import { Route as SupportInviteRouteImport } from './routes/support-invite'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as ToolsRouteImport } from './routes/tools'
+import { Route as TrainingRouteImport } from './routes/training'
+import { Route as TryRouteImport } from './routes/try'
+import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
+import { Route as UpdatesRouteImport } from './routes/updates'
+import { Route as VoiceCravingScanRouteImport } from './routes/voice-craving-scan'
+import { Route as VolunteerRouteImport } from './routes/volunteer'
+import { Route as WhenToSeekHelpRouteImport } from './routes/when-to-seek-help'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
-import { Route as ShareInviteCodeRouteImport } from './routes/share.invite.$code'
-import { Route as ShareTypeIdRouteImport } from './routes/share.$type.$id'
-import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
-import { Route as AqlaQuitEngineResultResultIdRouteImport } from './routes/aqla-quit-engine.result.$resultId'
-import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as AcademyCertificateCodeRouteImport } from './routes/academy-certificate.$code'
+import { Route as AdminAqlaQuitEngineRouteImport } from './routes/admin.aqla-quit-engine'
+import { Route as AdminDataDictionaryRouteImport } from './routes/admin.data-dictionary'
+import { Route as AdminQuitPlanEmailsRouteImport } from './routes/admin.quit-plan-emails'
+import { Route as ApiKauCardsRouteImport } from './routes/api.kau-cards'
+import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
+import { Route as ArticlesFirstWeekRouteImport } from './routes/articles.first-week'
+import { Route as ArticlesNicotinePouchesRouteImport } from './routes/articles.nicotine-pouches'
+import { Route as ArticlesShishaRouteImport } from './routes/articles.shisha'
+import { Route as ArticlesWithdrawalRouteImport } from './routes/articles.withdrawal'
+import { Route as CertificateCodeRouteImport } from './routes/certificate.$code'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardCatalogueRouteImport } from './routes/dashboard.catalogue'
+import { Route as DashboardCertificatesRouteImport } from './routes/dashboard.certificates'
+import { Route as DashboardHistoryRouteImport } from './routes/dashboard.history'
+import { Route as DashboardLearningRouteImport } from './routes/dashboard.learning'
+import { Route as DashboardPathsRouteImport } from './routes/dashboard.paths'
+import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
+import { Route as DashboardSessionsRouteImport } from './routes/dashboard.sessions'
+import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as EnIndexRouteImport } from './routes/en.index'
+import { Route as EnAboutRouteImport } from './routes/en.about'
+import { Route as EnArticlesRouteImport } from './routes/en.articles'
+import { Route as EnLaTattenRouteImport } from './routes/en.la-tatten'
+import { Route as ModulesSlugRouteImport } from './routes/modules.$slug'
+import { Route as QuitPlanIndexRouteImport } from './routes/quit-plan.index'
+import { Route as QuitPlanPlanTokenRouteImport } from './routes/quit-plan.$planToken'
+import { Route as TryIndexRouteImport } from './routes/try.index'
+import { Route as TryShootRouteImport } from './routes/try.shoot'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
-import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
-import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
-import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
-import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as AqlaQuitEngineResultResultIdRouteImport } from './routes/aqla-quit-engine.result.$resultId'
+import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
+import { Route as ShareTypeIdRouteImport } from './routes/share.$type.$id'
+import { Route as ShareInviteCodeRouteImport } from './routes/share.invite.$code'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
+import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
+import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 
-const WhenToSeekHelpRoute = WhenToSeekHelpRouteImport.update({
-  id: '/when-to-seek-help',
-  path: '/when-to-seek-help',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VolunteerRoute = VolunteerRouteImport.update({
-  id: '/volunteer',
-  path: '/volunteer',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VoiceCravingScanRoute = VoiceCravingScanRouteImport.update({
-  id: '/voice-craving-scan',
-  path: '/voice-craving-scan',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UpdatesRoute = UpdatesRouteImport.update({
-  id: '/updates',
-  path: '/updates',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UnsubscribeRoute = UnsubscribeRouteImport.update({
-  id: '/unsubscribe',
-  path: '/unsubscribe',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TryRoute = TryRouteImport.update({
-  id: '/try',
-  path: '/try',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TrainingRoute = TrainingRouteImport.update({
-  id: '/training',
-  path: '/training',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ToolsRoute = ToolsRouteImport.update({
-  id: '/tools',
-  path: '/tools',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TermsRoute = TermsRouteImport.update({
-  id: '/terms',
-  path: '/terms',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SupportInviteRoute = SupportInviteRouteImport.update({
-  id: '/support-invite',
-  path: '/support-invite',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StartRoute = StartRouteImport.update({
-  id: '/start',
-  path: '/start',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SosRoute = SosRouteImport.update({
-  id: '/sos',
-  path: '/sos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ShopRoute = ShopRouteImport.update({
-  id: '/shop',
-  path: '/shop',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SharingPolicyRoute = SharingPolicyRouteImport.update({
-  id: '/sharing-policy',
-  path: '/sharing-policy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SafetyGuidanceRoute = SafetyGuidanceRouteImport.update({
-  id: '/safety-guidance',
-  path: '/safety-guidance',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RequestSupportRoute = RequestSupportRouteImport.update({
-  id: '/request-support',
-  path: '/request-support',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RelapseSupportRoute = RelapseSupportRouteImport.update({
-  id: '/relapse-support',
-  path: '/relapse-support',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const QuitPlanRoute = QuitPlanRouteImport.update({
-  id: '/quit-plan',
-  path: '/quit-plan',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const QuitPathwayRoute = QuitPathwayRouteImport.update({
-  id: '/quit-pathway',
-  path: '/quit-pathway',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const QuitChatRoute = QuitChatRouteImport.update({
-  id: '/quit-chat',
-  path: '/quit-chat',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const QuitCenterRoute = QuitCenterRouteImport.update({
-  id: '/quit-center',
-  path: '/quit-center',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfessionalLibraryRoute = ProfessionalLibraryRouteImport.update({
-  id: '/professional-library',
-  path: '/professional-library',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PosterStudioRoute = PosterStudioRouteImport.update({
-  id: '/poster-studio',
-  path: '/poster-studio',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PointsMedalsRoute = PointsMedalsRouteImport.update({
-  id: '/points-medals',
-  path: '/points-medals',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MovementRoute = MovementRouteImport.update({
-  id: '/movement',
-  path: '/movement',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MedicalDisclaimerRoute = MedicalDisclaimerRouteImport.update({
-  id: '/medical-disclaimer',
-  path: '/medical-disclaimer',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const McpRoute = McpRouteImport.update({
-  id: '/mcp',
-  path: '/mcp',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LearnTrainRoute = LearnTrainRouteImport.update({
-  id: '/learn-train',
-  path: '/learn-train',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LearnRoute = LearnRouteImport.update({
-  id: '/learn',
-  path: '/learn',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LaTattenRoute = LaTattenRouteImport.update({
-  id: '/la-tatten',
-  path: '/la-tatten',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KauRoute = KauRouteImport.update({
-  id: '/kau',
-  path: '/kau',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InviteFriendsRoute = InviteFriendsRouteImport.update({
-  id: '/invite-friends',
-  path: '/invite-friends',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ImpactRoute = ImpactRouteImport.update({
-  id: '/impact',
-  path: '/impact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HelpPathwayRoute = HelpPathwayRouteImport.update({
-  id: '/help-pathway',
-  path: '/help-pathway',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FaqRoute = FaqRouteImport.update({
-  id: '/faq',
-  path: '/faq',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EnRoute = EnRouteImport.update({
-  id: '/en',
-  path: '/en',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DtxRoute = DtxRouteImport.update({
-  id: '/dtx',
-  path: '/dtx',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CravingCoachRoute = CravingCoachRouteImport.update({
-  id: '/craving-coach',
-  path: '/craving-coach',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CookiesRoute = CookiesRouteImport.update({
-  id: '/cookies',
-  path: '/cookies',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CommunityChallengesRoute = CommunityChallengesRouteImport.update({
-  id: '/community-challenges',
-  path: '/community-challenges',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CityChallengeRoute = CityChallengeRouteImport.update({
-  id: '/city-challenge',
-  path: '/city-challenge',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ChallengesRoute = ChallengesRouteImport.update({
-  id: '/challenges',
-  path: '/challenges',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ChallengePathwayRoute = ChallengePathwayRouteImport.update({
-  id: '/challenge-pathway',
-  path: '/challenge-pathway',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CertificatesRoute = CertificatesRouteImport.update({
-  id: '/certificates',
-  path: '/certificates',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AssessmentRoute = AssessmentRouteImport.update({
-  id: '/assessment',
-  path: '/assessment',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ArticlesRoute = ArticlesRouteImport.update({
-  id: '/articles',
-  path: '/articles',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AqlaVoiceChatRoute = AqlaVoiceChatRouteImport.update({
-  id: '/aqla-voice-chat',
-  path: '/aqla-voice-chat',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AqlaQuitEngineRoute = AqlaQuitEngineRouteImport.update({
-  id: '/aqla-quit-engine',
-  path: '/aqla-quit-engine',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AcademyRoute = AcademyRouteImport.update({
-  id: '/academy',
-  path: '/academy',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -395,139 +120,306 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AcademyRoute = AcademyRouteImport.update({
+  id: '/academy',
+  path: '/academy',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TryIndexRoute = TryIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => TryRoute,
-} as any)
-const QuitPlanIndexRoute = QuitPlanIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => QuitPlanRoute,
-} as any)
-const EnIndexRoute = EnIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => EnRoute,
-} as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const ArticlesIndexRoute = ArticlesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ArticlesRoute,
-} as any)
-const TryShootRoute = TryShootRouteImport.update({
-  id: '/shoot',
-  path: '/shoot',
-  getParentRoute: () => TryRoute,
-} as any)
-const QuitPlanPlanTokenRoute = QuitPlanPlanTokenRouteImport.update({
-  id: '/$planToken',
-  path: '/$planToken',
-  getParentRoute: () => QuitPlanRoute,
-} as any)
-const ModulesSlugRoute = ModulesSlugRouteImport.update({
-  id: '/modules/$slug',
-  path: '/modules/$slug',
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EnLaTattenRoute = EnLaTattenRouteImport.update({
-  id: '/la-tatten',
-  path: '/la-tatten',
-  getParentRoute: () => EnRoute,
+const AqlaQuitEngineRoute = AqlaQuitEngineRouteImport.update({
+  id: '/aqla-quit-engine',
+  path: '/aqla-quit-engine',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const EnArticlesRoute = EnArticlesRouteImport.update({
+const AqlaVoiceChatRoute = AqlaVoiceChatRouteImport.update({
+  id: '/aqla-voice-chat',
+  path: '/aqla-voice-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArticlesRoute = ArticlesRouteImport.update({
   id: '/articles',
   path: '/articles',
-  getParentRoute: () => EnRoute,
-} as any)
-const EnAboutRoute = EnAboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => EnRoute,
-} as any)
-const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
-  id: '/email/unsubscribe',
-  path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardSessionsRoute = DashboardSessionsRouteImport.update({
-  id: '/sessions',
-  path: '/sessions',
-  getParentRoute: () => DashboardRoute,
+const AssessmentRoute = AssessmentRouteImport.update({
+  id: '/assessment',
+  path: '/assessment',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardProfileRoute = DashboardProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => DashboardRoute,
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardPathsRoute = DashboardPathsRouteImport.update({
-  id: '/paths',
-  path: '/paths',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardLearningRoute = DashboardLearningRouteImport.update({
-  id: '/learning',
-  path: '/learning',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardHistoryRoute = DashboardHistoryRouteImport.update({
-  id: '/history',
-  path: '/history',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardCertificatesRoute = DashboardCertificatesRouteImport.update({
+const CertificatesRoute = CertificatesRouteImport.update({
   id: '/certificates',
   path: '/certificates',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardCatalogueRoute = DashboardCatalogueRouteImport.update({
-  id: '/catalogue',
-  path: '/catalogue',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const CertificateCodeRoute = CertificateCodeRouteImport.update({
-  id: '/certificate/$code',
-  path: '/certificate/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ArticlesWithdrawalRoute = ArticlesWithdrawalRouteImport.update({
-  id: '/withdrawal',
-  path: '/withdrawal',
-  getParentRoute: () => ArticlesRoute,
-} as any)
-const ArticlesShishaRoute = ArticlesShishaRouteImport.update({
-  id: '/shisha',
-  path: '/shisha',
-  getParentRoute: () => ArticlesRoute,
-} as any)
-const ArticlesNicotinePouchesRoute = ArticlesNicotinePouchesRouteImport.update({
-  id: '/nicotine-pouches',
-  path: '/nicotine-pouches',
-  getParentRoute: () => ArticlesRoute,
-} as any)
-const ArticlesFirstWeekRoute = ArticlesFirstWeekRouteImport.update({
-  id: '/first-week',
-  path: '/first-week',
-  getParentRoute: () => ArticlesRoute,
-} as any)
-const ApiKauCardsRoute = ApiKauCardsRouteImport.update({
-  id: '/api/kau-cards',
-  path: '/api/kau-cards',
+const ChallengePathwayRoute = ChallengePathwayRouteImport.update({
+  id: '/challenge-pathway',
+  path: '/challenge-pathway',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminQuitPlanEmailsRoute = AdminQuitPlanEmailsRouteImport.update({
-  id: '/quit-plan-emails',
-  path: '/quit-plan-emails',
+const ChallengesRoute = ChallengesRouteImport.update({
+  id: '/challenges',
+  path: '/challenges',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CityChallengeRoute = CityChallengeRouteImport.update({
+  id: '/city-challenge',
+  path: '/city-challenge',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityChallengesRoute = CommunityChallengesRouteImport.update({
+  id: '/community-challenges',
+  path: '/community-challenges',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CookiesRoute = CookiesRouteImport.update({
+  id: '/cookies',
+  path: '/cookies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CravingCoachRoute = CravingCoachRouteImport.update({
+  id: '/craving-coach',
+  path: '/craving-coach',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DtxRoute = DtxRouteImport.update({
+  id: '/dtx',
+  path: '/dtx',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnRoute = EnRouteImport.update({
+  id: '/en',
+  path: '/en',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpPathwayRoute = HelpPathwayRouteImport.update({
+  id: '/help-pathway',
+  path: '/help-pathway',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImpactRoute = ImpactRouteImport.update({
+  id: '/impact',
+  path: '/impact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InviteFriendsRoute = InviteFriendsRouteImport.update({
+  id: '/invite-friends',
+  path: '/invite-friends',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KauRoute = KauRouteImport.update({
+  id: '/kau',
+  path: '/kau',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LaTattenRoute = LaTattenRouteImport.update({
+  id: '/la-tatten',
+  path: '/la-tatten',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnTrainRoute = LearnTrainRouteImport.update({
+  id: '/learn-train',
+  path: '/learn-train',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MedicalDisclaimerRoute = MedicalDisclaimerRouteImport.update({
+  id: '/medical-disclaimer',
+  path: '/medical-disclaimer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MovementRoute = MovementRouteImport.update({
+  id: '/movement',
+  path: '/movement',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PointsMedalsRoute = PointsMedalsRouteImport.update({
+  id: '/points-medals',
+  path: '/points-medals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PosterStudioRoute = PosterStudioRouteImport.update({
+  id: '/poster-studio',
+  path: '/poster-studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfessionalLibraryRoute = ProfessionalLibraryRouteImport.update({
+  id: '/professional-library',
+  path: '/professional-library',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuitCenterRoute = QuitCenterRouteImport.update({
+  id: '/quit-center',
+  path: '/quit-center',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuitChatRoute = QuitChatRouteImport.update({
+  id: '/quit-chat',
+  path: '/quit-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuitPathwayRoute = QuitPathwayRouteImport.update({
+  id: '/quit-pathway',
+  path: '/quit-pathway',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuitPlanRoute = QuitPlanRouteImport.update({
+  id: '/quit-plan',
+  path: '/quit-plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RelapseSupportRoute = RelapseSupportRouteImport.update({
+  id: '/relapse-support',
+  path: '/relapse-support',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RequestSupportRoute = RequestSupportRouteImport.update({
+  id: '/request-support',
+  path: '/request-support',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SafetyGuidanceRoute = SafetyGuidanceRouteImport.update({
+  id: '/safety-guidance',
+  path: '/safety-guidance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SharingPolicyRoute = SharingPolicyRouteImport.update({
+  id: '/sharing-policy',
+  path: '/sharing-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SosRoute = SosRouteImport.update({
+  id: '/sos',
+  path: '/sos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StartRoute = StartRouteImport.update({
+  id: '/start',
+  path: '/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupportInviteRoute = SupportInviteRouteImport.update({
+  id: '/support-invite',
+  path: '/support-invite',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsRoute = ToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrainingRoute = TrainingRouteImport.update({
+  id: '/training',
+  path: '/training',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TryRoute = TryRouteImport.update({
+  id: '/try',
+  path: '/try',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UpdatesRoute = UpdatesRouteImport.update({
+  id: '/updates',
+  path: '/updates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VoiceCravingScanRoute = VoiceCravingScanRouteImport.update({
+  id: '/voice-craving-scan',
+  path: '/voice-craving-scan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VolunteerRoute = VolunteerRouteImport.update({
+  id: '/volunteer',
+  path: '/volunteer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WhenToSeekHelpRoute = WhenToSeekHelpRouteImport.update({
+  id: '/when-to-seek-help',
+  path: '/when-to-seek-help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AcademyCertificateCodeRoute = AcademyCertificateCodeRouteImport.update({
+  id: '/academy-certificate/$code',
+  path: '/academy-certificate/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAqlaQuitEngineRoute = AdminAqlaQuitEngineRouteImport.update({
+  id: '/aqla-quit-engine',
+  path: '/aqla-quit-engine',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminDataDictionaryRoute = AdminDataDictionaryRouteImport.update({
@@ -535,31 +427,156 @@ const AdminDataDictionaryRoute = AdminDataDictionaryRouteImport.update({
   path: '/data-dictionary',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminAqlaQuitEngineRoute = AdminAqlaQuitEngineRouteImport.update({
-  id: '/aqla-quit-engine',
-  path: '/aqla-quit-engine',
+const AdminQuitPlanEmailsRoute = AdminQuitPlanEmailsRouteImport.update({
+  id: '/quit-plan-emails',
+  path: '/quit-plan-emails',
   getParentRoute: () => AdminRoute,
 } as any)
-const AcademyCertificateCodeRoute = AcademyCertificateCodeRouteImport.update({
-  id: '/academy-certificate/$code',
-  path: '/academy-certificate/$code',
+const ApiKauCardsRoute = ApiKauCardsRouteImport.update({
+  id: '/api/kau-cards',
+  path: '/api/kau-cards',
   getParentRoute: () => rootRouteImport,
 } as any)
-const Char91DotwellKnownChar93OauthProtectedResourceRoute =
-  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
-    id: '/.well-known/oauth-protected-resource',
-    path: '/.well-known/oauth-protected-resource',
+const ArticlesIndexRoute = ArticlesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ArticlesRoute,
+} as any)
+const ArticlesFirstWeekRoute = ArticlesFirstWeekRouteImport.update({
+  id: '/first-week',
+  path: '/first-week',
+  getParentRoute: () => ArticlesRoute,
+} as any)
+const ArticlesNicotinePouchesRoute = ArticlesNicotinePouchesRouteImport.update({
+  id: '/nicotine-pouches',
+  path: '/nicotine-pouches',
+  getParentRoute: () => ArticlesRoute,
+} as any)
+const ArticlesShishaRoute = ArticlesShishaRouteImport.update({
+  id: '/shisha',
+  path: '/shisha',
+  getParentRoute: () => ArticlesRoute,
+} as any)
+const ArticlesWithdrawalRoute = ArticlesWithdrawalRouteImport.update({
+  id: '/withdrawal',
+  path: '/withdrawal',
+  getParentRoute: () => ArticlesRoute,
+} as any)
+const CertificateCodeRoute = CertificateCodeRouteImport.update({
+  id: '/certificate/$code',
+  path: '/certificate/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardCatalogueRoute = DashboardCatalogueRouteImport.update({
+  id: '/catalogue',
+  path: '/catalogue',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardCertificatesRoute = DashboardCertificatesRouteImport.update({
+  id: '/certificates',
+  path: '/certificates',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardHistoryRoute = DashboardHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardLearningRoute = DashboardLearningRouteImport.update({
+  id: '/learning',
+  path: '/learning',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardPathsRoute = DashboardPathsRouteImport.update({
+  id: '/paths',
+  path: '/paths',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardProfileRoute = DashboardProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSessionsRoute = DashboardSessionsRouteImport.update({
+  id: '/sessions',
+  path: '/sessions',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
+  id: '/email/unsubscribe',
+  path: '/email/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnIndexRoute = EnIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnAboutRoute = EnAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnArticlesRoute = EnArticlesRouteImport.update({
+  id: '/articles',
+  path: '/articles',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnLaTattenRoute = EnLaTattenRouteImport.update({
+  id: '/la-tatten',
+  path: '/la-tatten',
+  getParentRoute: () => EnRoute,
+} as any)
+const ModulesSlugRoute = ModulesSlugRouteImport.update({
+  id: '/modules/$slug',
+  path: '/modules/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuitPlanIndexRoute = QuitPlanIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => QuitPlanRoute,
+} as any)
+const QuitPlanPlanTokenRoute = QuitPlanPlanTokenRouteImport.update({
+  id: '/$planToken',
+  path: '/$planToken',
+  getParentRoute: () => QuitPlanRoute,
+} as any)
+const TryIndexRoute = TryIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TryRoute,
+} as any)
+const TryShootRoute = TryShootRouteImport.update({
+  id: '/shoot',
+  path: '/shoot',
+  getParentRoute: () => TryRoute,
+} as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
-const Char91DotmcpChar93ListToolsRoute =
-  Char91DotmcpChar93ListToolsRouteImport.update({
-    id: '/.mcp/list-tools',
-    path: '/.mcp/list-tools',
-    getParentRoute: () => rootRouteImport,
+const AqlaQuitEngineResultResultIdRoute =
+  AqlaQuitEngineResultResultIdRouteImport.update({
+    id: '/result/$resultId',
+    path: '/result/$resultId',
+    getParentRoute: () => AqlaQuitEngineRoute,
   } as any)
-const ShareInviteCodeRoute = ShareInviteCodeRouteImport.update({
-  id: '/share/invite/$code',
-  path: '/share/invite/$code',
+const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
+  id: '/lovable/email/suppression',
+  path: '/lovable/email/suppression',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShareTypeIdRoute = ShareTypeIdRouteImport.update({
@@ -567,32 +584,25 @@ const ShareTypeIdRoute = ShareTypeIdRouteImport.update({
   path: '/share/$type/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
-  id: '/lovable/email/suppression',
-  path: '/lovable/email/suppression',
+const ShareInviteCodeRoute = ShareInviteCodeRouteImport.update({
+  id: '/share/invite/$code',
+  path: '/share/invite/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AqlaQuitEngineResultResultIdRoute =
-  AqlaQuitEngineResultResultIdRouteImport.update({
-    id: '/result/$resultId',
-    path: '/result/$resultId',
-    getParentRoute: () => AqlaQuitEngineRoute,
-  } as any)
-const Char91DotmcpChar93InvokeToolToolRoute =
-  Char91DotmcpChar93InvokeToolToolRouteImport.update({
-    id: '/.mcp/invoke-tool/$tool',
-    path: '/.mcp/invoke-tool/$tool',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
-  id: '/.lovable/oauth/consent',
-  path: '/.lovable/oauth/consent',
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LovableEmailTransactionalSendRoute =
-  LovableEmailTransactionalSendRouteImport.update({
-    id: '/lovable/email/transactional/send',
-    path: '/lovable/email/transactional/send',
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailQueueProcessRoute =
+  LovableEmailQueueProcessRouteImport.update({
+    id: '/lovable/email/queue/process',
+    path: '/lovable/email/queue/process',
     getParentRoute: () => rootRouteImport,
   } as any)
 const LovableEmailTransactionalPreviewRoute =
@@ -601,22 +611,12 @@ const LovableEmailTransactionalPreviewRoute =
     path: '/lovable/email/transactional/preview',
     getParentRoute: () => rootRouteImport,
   } as any)
-const LovableEmailQueueProcessRoute =
-  LovableEmailQueueProcessRouteImport.update({
-    id: '/lovable/email/queue/process',
-    path: '/lovable/email/queue/process',
+const LovableEmailTransactionalSendRoute =
+  LovableEmailTransactionalSendRouteImport.update({
+    id: '/lovable/email/transactional/send',
+    path: '/lovable/email/transactional/send',
     getParentRoute: () => rootRouteImport,
   } as any)
-const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
-  id: '/lovable/email/auth/webhook',
-  path: '/lovable/email/auth/webhook',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
-  id: '/lovable/email/auth/preview',
-  path: '/lovable/email/auth/preview',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -1304,396 +1304,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/when-to-seek-help': {
-      id: '/when-to-seek-help'
-      path: '/when-to-seek-help'
-      fullPath: '/when-to-seek-help'
-      preLoaderRoute: typeof WhenToSeekHelpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/volunteer': {
-      id: '/volunteer'
-      path: '/volunteer'
-      fullPath: '/volunteer'
-      preLoaderRoute: typeof VolunteerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/voice-craving-scan': {
-      id: '/voice-craving-scan'
-      path: '/voice-craving-scan'
-      fullPath: '/voice-craving-scan'
-      preLoaderRoute: typeof VoiceCravingScanRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/updates': {
-      id: '/updates'
-      path: '/updates'
-      fullPath: '/updates'
-      preLoaderRoute: typeof UpdatesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/unsubscribe': {
-      id: '/unsubscribe'
-      path: '/unsubscribe'
-      fullPath: '/unsubscribe'
-      preLoaderRoute: typeof UnsubscribeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/try': {
-      id: '/try'
-      path: '/try'
-      fullPath: '/try'
-      preLoaderRoute: typeof TryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/training': {
-      id: '/training'
-      path: '/training'
-      fullPath: '/training'
-      preLoaderRoute: typeof TrainingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tools': {
-      id: '/tools'
-      path: '/tools'
-      fullPath: '/tools'
-      preLoaderRoute: typeof ToolsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/terms': {
-      id: '/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof TermsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/support-invite': {
-      id: '/support-invite'
-      path: '/support-invite'
-      fullPath: '/support-invite'
-      preLoaderRoute: typeof SupportInviteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/start': {
-      id: '/start'
-      path: '/start'
-      fullPath: '/start'
-      preLoaderRoute: typeof StartRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sos': {
-      id: '/sos'
-      path: '/sos'
-      fullPath: '/sos'
-      preLoaderRoute: typeof SosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/shop': {
-      id: '/shop'
-      path: '/shop'
-      fullPath: '/shop'
-      preLoaderRoute: typeof ShopRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sharing-policy': {
-      id: '/sharing-policy'
-      path: '/sharing-policy'
-      fullPath: '/sharing-policy'
-      preLoaderRoute: typeof SharingPolicyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/safety-guidance': {
-      id: '/safety-guidance'
-      path: '/safety-guidance'
-      fullPath: '/safety-guidance'
-      preLoaderRoute: typeof SafetyGuidanceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/request-support': {
-      id: '/request-support'
-      path: '/request-support'
-      fullPath: '/request-support'
-      preLoaderRoute: typeof RequestSupportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/relapse-support': {
-      id: '/relapse-support'
-      path: '/relapse-support'
-      fullPath: '/relapse-support'
-      preLoaderRoute: typeof RelapseSupportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/quit-plan': {
-      id: '/quit-plan'
-      path: '/quit-plan'
-      fullPath: '/quit-plan'
-      preLoaderRoute: typeof QuitPlanRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/quit-pathway': {
-      id: '/quit-pathway'
-      path: '/quit-pathway'
-      fullPath: '/quit-pathway'
-      preLoaderRoute: typeof QuitPathwayRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/quit-chat': {
-      id: '/quit-chat'
-      path: '/quit-chat'
-      fullPath: '/quit-chat'
-      preLoaderRoute: typeof QuitChatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/quit-center': {
-      id: '/quit-center'
-      path: '/quit-center'
-      fullPath: '/quit-center'
-      preLoaderRoute: typeof QuitCenterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/professional-library': {
-      id: '/professional-library'
-      path: '/professional-library'
-      fullPath: '/professional-library'
-      preLoaderRoute: typeof ProfessionalLibraryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/poster-studio': {
-      id: '/poster-studio'
-      path: '/poster-studio'
-      fullPath: '/poster-studio'
-      preLoaderRoute: typeof PosterStudioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/points-medals': {
-      id: '/points-medals'
-      path: '/points-medals'
-      fullPath: '/points-medals'
-      preLoaderRoute: typeof PointsMedalsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/movement': {
-      id: '/movement'
-      path: '/movement'
-      fullPath: '/movement'
-      preLoaderRoute: typeof MovementRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/medical-disclaimer': {
-      id: '/medical-disclaimer'
-      path: '/medical-disclaimer'
-      fullPath: '/medical-disclaimer'
-      preLoaderRoute: typeof MedicalDisclaimerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mcp': {
-      id: '/mcp'
-      path: '/mcp'
-      fullPath: '/mcp'
-      preLoaderRoute: typeof McpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/learn-train': {
-      id: '/learn-train'
-      path: '/learn-train'
-      fullPath: '/learn-train'
-      preLoaderRoute: typeof LearnTrainRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/learn': {
-      id: '/learn'
-      path: '/learn'
-      fullPath: '/learn'
-      preLoaderRoute: typeof LearnRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/la-tatten': {
-      id: '/la-tatten'
-      path: '/la-tatten'
-      fullPath: '/la-tatten'
-      preLoaderRoute: typeof LaTattenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/kau': {
-      id: '/kau'
-      path: '/kau'
-      fullPath: '/kau'
-      preLoaderRoute: typeof KauRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/invite-friends': {
-      id: '/invite-friends'
-      path: '/invite-friends'
-      fullPath: '/invite-friends'
-      preLoaderRoute: typeof InviteFriendsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/impact': {
-      id: '/impact'
-      path: '/impact'
-      fullPath: '/impact'
-      preLoaderRoute: typeof ImpactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/help-pathway': {
-      id: '/help-pathway'
-      path: '/help-pathway'
-      fullPath: '/help-pathway'
-      preLoaderRoute: typeof HelpPathwayRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/faq': {
-      id: '/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof FaqRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/en': {
-      id: '/en'
-      path: '/en'
-      fullPath: '/en'
-      preLoaderRoute: typeof EnRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dtx': {
-      id: '/dtx'
-      path: '/dtx'
-      fullPath: '/dtx'
-      preLoaderRoute: typeof DtxRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/craving-coach': {
-      id: '/craving-coach'
-      path: '/craving-coach'
-      fullPath: '/craving-coach'
-      preLoaderRoute: typeof CravingCoachRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cookies': {
-      id: '/cookies'
-      path: '/cookies'
-      fullPath: '/cookies'
-      preLoaderRoute: typeof CookiesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/community-challenges': {
-      id: '/community-challenges'
-      path: '/community-challenges'
-      fullPath: '/community-challenges'
-      preLoaderRoute: typeof CommunityChallengesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/city-challenge': {
-      id: '/city-challenge'
-      path: '/city-challenge'
-      fullPath: '/city-challenge'
-      preLoaderRoute: typeof CityChallengeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/challenges': {
-      id: '/challenges'
-      path: '/challenges'
-      fullPath: '/challenges'
-      preLoaderRoute: typeof ChallengesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/challenge-pathway': {
-      id: '/challenge-pathway'
-      path: '/challenge-pathway'
-      fullPath: '/challenge-pathway'
-      preLoaderRoute: typeof ChallengePathwayRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/certificates': {
-      id: '/certificates'
-      path: '/certificates'
-      fullPath: '/certificates'
-      preLoaderRoute: typeof CertificatesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/assessment': {
-      id: '/assessment'
-      path: '/assessment'
-      fullPath: '/assessment'
-      preLoaderRoute: typeof AssessmentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/articles': {
-      id: '/articles'
-      path: '/articles'
-      fullPath: '/articles'
-      preLoaderRoute: typeof ArticlesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/aqla-voice-chat': {
-      id: '/aqla-voice-chat'
-      path: '/aqla-voice-chat'
-      fullPath: '/aqla-voice-chat'
-      preLoaderRoute: typeof AqlaVoiceChatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/aqla-quit-engine': {
-      id: '/aqla-quit-engine'
-      path: '/aqla-quit-engine'
-      fullPath: '/aqla-quit-engine'
-      preLoaderRoute: typeof AqlaQuitEngineRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/academy': {
-      id: '/academy'
-      path: '/academy'
-      fullPath: '/academy'
-      preLoaderRoute: typeof AcademyRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -1703,221 +1318,396 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/academy': {
+      id: '/academy'
+      path: '/academy'
+      fullPath: '/academy'
+      preLoaderRoute: typeof AcademyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/try/': {
-      id: '/try/'
-      path: '/'
-      fullPath: '/try/'
-      preLoaderRoute: typeof TryIndexRouteImport
-      parentRoute: typeof TryRoute
-    }
-    '/quit-plan/': {
-      id: '/quit-plan/'
-      path: '/'
-      fullPath: '/quit-plan/'
-      preLoaderRoute: typeof QuitPlanIndexRouteImport
-      parentRoute: typeof QuitPlanRoute
-    }
-    '/en/': {
-      id: '/en/'
-      path: '/'
-      fullPath: '/en/'
-      preLoaderRoute: typeof EnIndexRouteImport
-      parentRoute: typeof EnRoute
-    }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/articles/': {
-      id: '/articles/'
-      path: '/'
-      fullPath: '/articles/'
-      preLoaderRoute: typeof ArticlesIndexRouteImport
-      parentRoute: typeof ArticlesRoute
-    }
-    '/try/shoot': {
-      id: '/try/shoot'
-      path: '/shoot'
-      fullPath: '/try/shoot'
-      preLoaderRoute: typeof TryShootRouteImport
-      parentRoute: typeof TryRoute
-    }
-    '/quit-plan/$planToken': {
-      id: '/quit-plan/$planToken'
-      path: '/$planToken'
-      fullPath: '/quit-plan/$planToken'
-      preLoaderRoute: typeof QuitPlanPlanTokenRouteImport
-      parentRoute: typeof QuitPlanRoute
-    }
-    '/modules/$slug': {
-      id: '/modules/$slug'
-      path: '/modules/$slug'
-      fullPath: '/modules/$slug'
-      preLoaderRoute: typeof ModulesSlugRouteImport
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/en/la-tatten': {
-      id: '/en/la-tatten'
-      path: '/la-tatten'
-      fullPath: '/en/la-tatten'
-      preLoaderRoute: typeof EnLaTattenRouteImport
-      parentRoute: typeof EnRoute
-    }
-    '/en/articles': {
-      id: '/en/articles'
-      path: '/articles'
-      fullPath: '/en/articles'
-      preLoaderRoute: typeof EnArticlesRouteImport
-      parentRoute: typeof EnRoute
-    }
-    '/en/about': {
-      id: '/en/about'
-      path: '/about'
-      fullPath: '/en/about'
-      preLoaderRoute: typeof EnAboutRouteImport
-      parentRoute: typeof EnRoute
-    }
-    '/email/unsubscribe': {
-      id: '/email/unsubscribe'
-      path: '/email/unsubscribe'
-      fullPath: '/email/unsubscribe'
-      preLoaderRoute: typeof EmailUnsubscribeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/sessions': {
-      id: '/dashboard/sessions'
-      path: '/sessions'
-      fullPath: '/dashboard/sessions'
-      preLoaderRoute: typeof DashboardSessionsRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/profile': {
-      id: '/dashboard/profile'
-      path: '/profile'
-      fullPath: '/dashboard/profile'
-      preLoaderRoute: typeof DashboardProfileRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/paths': {
-      id: '/dashboard/paths'
-      path: '/paths'
-      fullPath: '/dashboard/paths'
-      preLoaderRoute: typeof DashboardPathsRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/learning': {
-      id: '/dashboard/learning'
-      path: '/learning'
-      fullPath: '/dashboard/learning'
-      preLoaderRoute: typeof DashboardLearningRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/history': {
-      id: '/dashboard/history'
-      path: '/history'
-      fullPath: '/dashboard/history'
-      preLoaderRoute: typeof DashboardHistoryRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/certificates': {
-      id: '/dashboard/certificates'
-      path: '/certificates'
-      fullPath: '/dashboard/certificates'
-      preLoaderRoute: typeof DashboardCertificatesRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/catalogue': {
-      id: '/dashboard/catalogue'
-      path: '/catalogue'
-      fullPath: '/dashboard/catalogue'
-      preLoaderRoute: typeof DashboardCatalogueRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/certificate/$code': {
-      id: '/certificate/$code'
-      path: '/certificate/$code'
-      fullPath: '/certificate/$code'
-      preLoaderRoute: typeof CertificateCodeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/articles/withdrawal': {
-      id: '/articles/withdrawal'
-      path: '/withdrawal'
-      fullPath: '/articles/withdrawal'
-      preLoaderRoute: typeof ArticlesWithdrawalRouteImport
-      parentRoute: typeof ArticlesRoute
-    }
-    '/articles/shisha': {
-      id: '/articles/shisha'
-      path: '/shisha'
-      fullPath: '/articles/shisha'
-      preLoaderRoute: typeof ArticlesShishaRouteImport
-      parentRoute: typeof ArticlesRoute
-    }
-    '/articles/nicotine-pouches': {
-      id: '/articles/nicotine-pouches'
-      path: '/nicotine-pouches'
-      fullPath: '/articles/nicotine-pouches'
-      preLoaderRoute: typeof ArticlesNicotinePouchesRouteImport
-      parentRoute: typeof ArticlesRoute
-    }
-    '/articles/first-week': {
-      id: '/articles/first-week'
-      path: '/first-week'
-      fullPath: '/articles/first-week'
-      preLoaderRoute: typeof ArticlesFirstWeekRouteImport
-      parentRoute: typeof ArticlesRoute
-    }
-    '/api/kau-cards': {
-      id: '/api/kau-cards'
-      path: '/api/kau-cards'
-      fullPath: '/api/kau-cards'
-      preLoaderRoute: typeof ApiKauCardsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/quit-plan-emails': {
-      id: '/admin/quit-plan-emails'
-      path: '/quit-plan-emails'
-      fullPath: '/admin/quit-plan-emails'
-      preLoaderRoute: typeof AdminQuitPlanEmailsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/data-dictionary': {
-      id: '/admin/data-dictionary'
-      path: '/data-dictionary'
-      fullPath: '/admin/data-dictionary'
-      preLoaderRoute: typeof AdminDataDictionaryRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/aqla-quit-engine': {
-      id: '/admin/aqla-quit-engine'
+    '/aqla-quit-engine': {
+      id: '/aqla-quit-engine'
       path: '/aqla-quit-engine'
-      fullPath: '/admin/aqla-quit-engine'
-      preLoaderRoute: typeof AdminAqlaQuitEngineRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/academy-certificate/$code': {
-      id: '/academy-certificate/$code'
-      path: '/academy-certificate/$code'
-      fullPath: '/academy-certificate/$code'
-      preLoaderRoute: typeof AcademyCertificateCodeRouteImport
+      fullPath: '/aqla-quit-engine'
+      preLoaderRoute: typeof AqlaQuitEngineRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.well-known/oauth-protected-resource': {
-      id: '/.well-known/oauth-protected-resource'
-      path: '/.well-known/oauth-protected-resource'
-      fullPath: '/.well-known/oauth-protected-resource'
-      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+    '/aqla-voice-chat': {
+      id: '/aqla-voice-chat'
+      path: '/aqla-voice-chat'
+      fullPath: '/aqla-voice-chat'
+      preLoaderRoute: typeof AqlaVoiceChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/articles': {
+      id: '/articles'
+      path: '/articles'
+      fullPath: '/articles'
+      preLoaderRoute: typeof ArticlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment': {
+      id: '/assessment'
+      path: '/assessment'
+      fullPath: '/assessment'
+      preLoaderRoute: typeof AssessmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/certificates': {
+      id: '/certificates'
+      path: '/certificates'
+      fullPath: '/certificates'
+      preLoaderRoute: typeof CertificatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/challenge-pathway': {
+      id: '/challenge-pathway'
+      path: '/challenge-pathway'
+      fullPath: '/challenge-pathway'
+      preLoaderRoute: typeof ChallengePathwayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/challenges': {
+      id: '/challenges'
+      path: '/challenges'
+      fullPath: '/challenges'
+      preLoaderRoute: typeof ChallengesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/city-challenge': {
+      id: '/city-challenge'
+      path: '/city-challenge'
+      fullPath: '/city-challenge'
+      preLoaderRoute: typeof CityChallengeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community-challenges': {
+      id: '/community-challenges'
+      path: '/community-challenges'
+      fullPath: '/community-challenges'
+      preLoaderRoute: typeof CommunityChallengesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cookies': {
+      id: '/cookies'
+      path: '/cookies'
+      fullPath: '/cookies'
+      preLoaderRoute: typeof CookiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/craving-coach': {
+      id: '/craving-coach'
+      path: '/craving-coach'
+      fullPath: '/craving-coach'
+      preLoaderRoute: typeof CravingCoachRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dtx': {
+      id: '/dtx'
+      path: '/dtx'
+      fullPath: '/dtx'
+      preLoaderRoute: typeof DtxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en': {
+      id: '/en'
+      path: '/en'
+      fullPath: '/en'
+      preLoaderRoute: typeof EnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help-pathway': {
+      id: '/help-pathway'
+      path: '/help-pathway'
+      fullPath: '/help-pathway'
+      preLoaderRoute: typeof HelpPathwayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/impact': {
+      id: '/impact'
+      path: '/impact'
+      fullPath: '/impact'
+      preLoaderRoute: typeof ImpactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invite-friends': {
+      id: '/invite-friends'
+      path: '/invite-friends'
+      fullPath: '/invite-friends'
+      preLoaderRoute: typeof InviteFriendsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kau': {
+      id: '/kau'
+      path: '/kau'
+      fullPath: '/kau'
+      preLoaderRoute: typeof KauRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/la-tatten': {
+      id: '/la-tatten'
+      path: '/la-tatten'
+      fullPath: '/la-tatten'
+      preLoaderRoute: typeof LaTattenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn-train': {
+      id: '/learn-train'
+      path: '/learn-train'
+      fullPath: '/learn-train'
+      preLoaderRoute: typeof LearnTrainRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/medical-disclaimer': {
+      id: '/medical-disclaimer'
+      path: '/medical-disclaimer'
+      fullPath: '/medical-disclaimer'
+      preLoaderRoute: typeof MedicalDisclaimerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/movement': {
+      id: '/movement'
+      path: '/movement'
+      fullPath: '/movement'
+      preLoaderRoute: typeof MovementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/points-medals': {
+      id: '/points-medals'
+      path: '/points-medals'
+      fullPath: '/points-medals'
+      preLoaderRoute: typeof PointsMedalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/poster-studio': {
+      id: '/poster-studio'
+      path: '/poster-studio'
+      fullPath: '/poster-studio'
+      preLoaderRoute: typeof PosterStudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/professional-library': {
+      id: '/professional-library'
+      path: '/professional-library'
+      fullPath: '/professional-library'
+      preLoaderRoute: typeof ProfessionalLibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quit-center': {
+      id: '/quit-center'
+      path: '/quit-center'
+      fullPath: '/quit-center'
+      preLoaderRoute: typeof QuitCenterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quit-chat': {
+      id: '/quit-chat'
+      path: '/quit-chat'
+      fullPath: '/quit-chat'
+      preLoaderRoute: typeof QuitChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quit-pathway': {
+      id: '/quit-pathway'
+      path: '/quit-pathway'
+      fullPath: '/quit-pathway'
+      preLoaderRoute: typeof QuitPathwayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quit-plan': {
+      id: '/quit-plan'
+      path: '/quit-plan'
+      fullPath: '/quit-plan'
+      preLoaderRoute: typeof QuitPlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/relapse-support': {
+      id: '/relapse-support'
+      path: '/relapse-support'
+      fullPath: '/relapse-support'
+      preLoaderRoute: typeof RelapseSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/request-support': {
+      id: '/request-support'
+      path: '/request-support'
+      fullPath: '/request-support'
+      preLoaderRoute: typeof RequestSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/safety-guidance': {
+      id: '/safety-guidance'
+      path: '/safety-guidance'
+      fullPath: '/safety-guidance'
+      preLoaderRoute: typeof SafetyGuidanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sharing-policy': {
+      id: '/sharing-policy'
+      path: '/sharing-policy'
+      fullPath: '/sharing-policy'
+      preLoaderRoute: typeof SharingPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sos': {
+      id: '/sos'
+      path: '/sos'
+      fullPath: '/sos'
+      preLoaderRoute: typeof SosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/start': {
+      id: '/start'
+      path: '/start'
+      fullPath: '/start'
+      preLoaderRoute: typeof StartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/support-invite': {
+      id: '/support-invite'
+      path: '/support-invite'
+      fullPath: '/support-invite'
+      preLoaderRoute: typeof SupportInviteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools': {
+      id: '/tools'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof ToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/training': {
+      id: '/training'
+      path: '/training'
+      fullPath: '/training'
+      preLoaderRoute: typeof TrainingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/try': {
+      id: '/try'
+      path: '/try'
+      fullPath: '/try'
+      preLoaderRoute: typeof TryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/updates': {
+      id: '/updates'
+      path: '/updates'
+      fullPath: '/updates'
+      preLoaderRoute: typeof UpdatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/voice-craving-scan': {
+      id: '/voice-craving-scan'
+      path: '/voice-craving-scan'
+      fullPath: '/voice-craving-scan'
+      preLoaderRoute: typeof VoiceCravingScanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/volunteer': {
+      id: '/volunteer'
+      path: '/volunteer'
+      fullPath: '/volunteer'
+      preLoaderRoute: typeof VolunteerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/when-to-seek-help': {
+      id: '/when-to-seek-help'
+      path: '/when-to-seek-help'
+      fullPath: '/when-to-seek-help'
+      preLoaderRoute: typeof WhenToSeekHelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.mcp/list-tools': {
@@ -1927,25 +1717,228 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/share/invite/$code': {
-      id: '/share/invite/$code'
-      path: '/share/invite/$code'
-      fullPath: '/share/invite/$code'
-      preLoaderRoute: typeof ShareInviteCodeRouteImport
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/share/$type/$id': {
-      id: '/share/$type/$id'
-      path: '/share/$type/$id'
-      fullPath: '/share/$type/$id'
-      preLoaderRoute: typeof ShareTypeIdRouteImport
+    '/academy-certificate/$code': {
+      id: '/academy-certificate/$code'
+      path: '/academy-certificate/$code'
+      fullPath: '/academy-certificate/$code'
+      preLoaderRoute: typeof AcademyCertificateCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/suppression': {
-      id: '/lovable/email/suppression'
-      path: '/lovable/email/suppression'
-      fullPath: '/lovable/email/suppression'
-      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
+    '/admin/aqla-quit-engine': {
+      id: '/admin/aqla-quit-engine'
+      path: '/aqla-quit-engine'
+      fullPath: '/admin/aqla-quit-engine'
+      preLoaderRoute: typeof AdminAqlaQuitEngineRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/data-dictionary': {
+      id: '/admin/data-dictionary'
+      path: '/data-dictionary'
+      fullPath: '/admin/data-dictionary'
+      preLoaderRoute: typeof AdminDataDictionaryRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/quit-plan-emails': {
+      id: '/admin/quit-plan-emails'
+      path: '/quit-plan-emails'
+      fullPath: '/admin/quit-plan-emails'
+      preLoaderRoute: typeof AdminQuitPlanEmailsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/api/kau-cards': {
+      id: '/api/kau-cards'
+      path: '/api/kau-cards'
+      fullPath: '/api/kau-cards'
+      preLoaderRoute: typeof ApiKauCardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/articles/': {
+      id: '/articles/'
+      path: '/'
+      fullPath: '/articles/'
+      preLoaderRoute: typeof ArticlesIndexRouteImport
+      parentRoute: typeof ArticlesRoute
+    }
+    '/articles/first-week': {
+      id: '/articles/first-week'
+      path: '/first-week'
+      fullPath: '/articles/first-week'
+      preLoaderRoute: typeof ArticlesFirstWeekRouteImport
+      parentRoute: typeof ArticlesRoute
+    }
+    '/articles/nicotine-pouches': {
+      id: '/articles/nicotine-pouches'
+      path: '/nicotine-pouches'
+      fullPath: '/articles/nicotine-pouches'
+      preLoaderRoute: typeof ArticlesNicotinePouchesRouteImport
+      parentRoute: typeof ArticlesRoute
+    }
+    '/articles/shisha': {
+      id: '/articles/shisha'
+      path: '/shisha'
+      fullPath: '/articles/shisha'
+      preLoaderRoute: typeof ArticlesShishaRouteImport
+      parentRoute: typeof ArticlesRoute
+    }
+    '/articles/withdrawal': {
+      id: '/articles/withdrawal'
+      path: '/withdrawal'
+      fullPath: '/articles/withdrawal'
+      preLoaderRoute: typeof ArticlesWithdrawalRouteImport
+      parentRoute: typeof ArticlesRoute
+    }
+    '/certificate/$code': {
+      id: '/certificate/$code'
+      path: '/certificate/$code'
+      fullPath: '/certificate/$code'
+      preLoaderRoute: typeof CertificateCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/catalogue': {
+      id: '/dashboard/catalogue'
+      path: '/catalogue'
+      fullPath: '/dashboard/catalogue'
+      preLoaderRoute: typeof DashboardCatalogueRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/certificates': {
+      id: '/dashboard/certificates'
+      path: '/certificates'
+      fullPath: '/dashboard/certificates'
+      preLoaderRoute: typeof DashboardCertificatesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/history': {
+      id: '/dashboard/history'
+      path: '/history'
+      fullPath: '/dashboard/history'
+      preLoaderRoute: typeof DashboardHistoryRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/learning': {
+      id: '/dashboard/learning'
+      path: '/learning'
+      fullPath: '/dashboard/learning'
+      preLoaderRoute: typeof DashboardLearningRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/paths': {
+      id: '/dashboard/paths'
+      path: '/paths'
+      fullPath: '/dashboard/paths'
+      preLoaderRoute: typeof DashboardPathsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/profile': {
+      id: '/dashboard/profile'
+      path: '/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof DashboardProfileRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/sessions': {
+      id: '/dashboard/sessions'
+      path: '/sessions'
+      fullPath: '/dashboard/sessions'
+      preLoaderRoute: typeof DashboardSessionsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/email/unsubscribe': {
+      id: '/email/unsubscribe'
+      path: '/email/unsubscribe'
+      fullPath: '/email/unsubscribe'
+      preLoaderRoute: typeof EmailUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/': {
+      id: '/en/'
+      path: '/'
+      fullPath: '/en/'
+      preLoaderRoute: typeof EnIndexRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/about': {
+      id: '/en/about'
+      path: '/about'
+      fullPath: '/en/about'
+      preLoaderRoute: typeof EnAboutRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/articles': {
+      id: '/en/articles'
+      path: '/articles'
+      fullPath: '/en/articles'
+      preLoaderRoute: typeof EnArticlesRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/la-tatten': {
+      id: '/en/la-tatten'
+      path: '/la-tatten'
+      fullPath: '/en/la-tatten'
+      preLoaderRoute: typeof EnLaTattenRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/modules/$slug': {
+      id: '/modules/$slug'
+      path: '/modules/$slug'
+      fullPath: '/modules/$slug'
+      preLoaderRoute: typeof ModulesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quit-plan/': {
+      id: '/quit-plan/'
+      path: '/'
+      fullPath: '/quit-plan/'
+      preLoaderRoute: typeof QuitPlanIndexRouteImport
+      parentRoute: typeof QuitPlanRoute
+    }
+    '/quit-plan/$planToken': {
+      id: '/quit-plan/$planToken'
+      path: '/$planToken'
+      fullPath: '/quit-plan/$planToken'
+      preLoaderRoute: typeof QuitPlanPlanTokenRouteImport
+      parentRoute: typeof QuitPlanRoute
+    }
+    '/try/': {
+      id: '/try/'
+      path: '/'
+      fullPath: '/try/'
+      preLoaderRoute: typeof TryIndexRouteImport
+      parentRoute: typeof TryRoute
+    }
+    '/try/shoot': {
+      id: '/try/shoot'
+      path: '/shoot'
+      fullPath: '/try/shoot'
+      preLoaderRoute: typeof TryShootRouteImport
+      parentRoute: typeof TryRoute
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/aqla-quit-engine/result/$resultId': {
@@ -1955,39 +1948,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AqlaQuitEngineResultResultIdRouteImport
       parentRoute: typeof AqlaQuitEngineRoute
     }
-    '/.mcp/invoke-tool/$tool': {
-      id: '/.mcp/invoke-tool/$tool'
-      path: '/.mcp/invoke-tool/$tool'
-      fullPath: '/.mcp/invoke-tool/$tool'
-      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+    '/lovable/email/suppression': {
+      id: '/lovable/email/suppression'
+      path: '/lovable/email/suppression'
+      fullPath: '/lovable/email/suppression'
+      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.lovable/oauth/consent': {
-      id: '/.lovable/oauth/consent'
-      path: '/.lovable/oauth/consent'
-      fullPath: '/.lovable/oauth/consent'
-      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+    '/share/$type/$id': {
+      id: '/share/$type/$id'
+      path: '/share/$type/$id'
+      fullPath: '/share/$type/$id'
+      preLoaderRoute: typeof ShareTypeIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/transactional/send': {
-      id: '/lovable/email/transactional/send'
-      path: '/lovable/email/transactional/send'
-      fullPath: '/lovable/email/transactional/send'
-      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
+    '/share/invite/$code': {
+      id: '/share/invite/$code'
+      path: '/share/invite/$code'
+      fullPath: '/share/invite/$code'
+      preLoaderRoute: typeof ShareInviteCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/transactional/preview': {
-      id: '/lovable/email/transactional/preview'
-      path: '/lovable/email/transactional/preview'
-      fullPath: '/lovable/email/transactional/preview'
-      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/lovable/email/queue/process': {
-      id: '/lovable/email/queue/process'
-      path: '/lovable/email/queue/process'
-      fullPath: '/lovable/email/queue/process'
-      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/auth/webhook': {
@@ -1997,11 +1983,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/lovable/email/auth/preview': {
-      id: '/lovable/email/auth/preview'
-      path: '/lovable/email/auth/preview'
-      fullPath: '/lovable/email/auth/preview'
-      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+    '/lovable/email/queue/process': {
+      id: '/lovable/email/queue/process'
+      path: '/lovable/email/queue/process'
+      fullPath: '/lovable/email/queue/process'
+      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/send': {
+      id: '/lovable/email/transactional/send'
+      path: '/lovable/email/transactional/send'
+      fullPath: '/lovable/email/transactional/send'
+      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
