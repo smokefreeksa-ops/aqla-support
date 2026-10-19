@@ -6,7 +6,7 @@ import { QuitChatDrawer } from "@/components/QuitChatDrawer";
 import { track } from "@/lib/events";
 import { AWARENESS_CARD_URL } from "@/components/AwarenessCampaignButton";
 
-export const RESEARCH_REDCAP_URL = "https://smokesfreeksa.com/survey.html";
+export const RESEARCH_REDCAP_URL = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM";
 
 function formatCount(n: number): string {
   return new Intl.NumberFormat("ar-EG").format(n);

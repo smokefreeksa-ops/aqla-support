@@ -30,7 +30,7 @@ const QUICK: Entry[] = [
   {
     ar: "شارك في الدراسة",
     en: "Join the study",
-    to: "https://smokesfreeksa.com/survey.html",
+    to: "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM",
     group: "quick",
   },
   {

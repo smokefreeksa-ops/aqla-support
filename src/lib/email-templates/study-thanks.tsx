@@ -20,7 +20,7 @@ interface Props {
 
 const StudyThanksEmail = ({
   fullName = "صديقنا",
-  surveyUrl = "https://smokesfreeksa.com/survey.html",
+  surveyUrl = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM",
 }: Props) => (
   <Html lang="ar" dir="rtl">
     <Head />

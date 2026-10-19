@@ -12,7 +12,7 @@ import aqlaLogo from "@/assets/aqla-logo-transparent.png";
 // Background now rendered by SaudiFlagWave.
 
 // Study survey (bilingual baseline questionnaire, saves to the study Google Sheet)
-const REDCAP_URL = "https://smokesfreeksa.com/survey.html";
+const REDCAP_URL = "https://redcap.kau.edu.sa/surveys/?s=FLJKYNNLYEA7HXAM";
 const STORAGE_KEY = "aqla_study_overlay_dismissed";
 
 type Lang = "ar" | "en";
