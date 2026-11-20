@@ -69,6 +69,30 @@ export function QuitChatDrawer({ open, onClose }: { open: boolean; onClose: () =
     };
   }, [open, onClose]);
 
+  // iOS Safari does not shrink the layout viewport for the on-screen keyboard,
+  // so size and lift the panel from window.visualViewport to keep the input
+  // row and send button above the keyboard.
+  const [vvStyle, setVvStyle] = useState<{ height?: number; bottom?: number }>({});
+  useEffect(() => {
+    if (!open || typeof window === "undefined" || !window.visualViewport) return;
+    const vv = window.visualViewport;
+    const update = () => {
+      const covered = Math.max(0, window.innerHeight - (vv.offsetTop + vv.height));
+      const keyboard = covered > 80;
+      setVvStyle({
+        height: Math.round(keyboard ? vv.height - 8 : vv.height * (window.innerWidth >= 640 ? 0.85 : 0.88)),
+        bottom: keyboard ? Math.round(covered) : 0,
+      });
+    };
+    update();
+    vv.addEventListener("resize", update);
+    vv.addEventListener("scroll", update);
+    return () => {
+      vv.removeEventListener("resize", update);
+      vv.removeEventListener("scroll", update);
+    };
+  }, [open]);
+
   if (!mounted || typeof document === "undefined") return null;
 
   return createPortal(
@@ -87,6 +111,7 @@ export function QuitChatDrawer({ open, onClose }: { open: boolean; onClose: () =
         role="dialog"
         aria-modal="true"
         aria-label="مساعد أقلع الذكي"
+        style={vvStyle.height ? { height: vvStyle.height, bottom: vvStyle.bottom } : undefined}
         className={`absolute inset-x-0 bottom-0 mx-auto flex h-[88dvh] max-w-2xl flex-col overflow-hidden rounded-t-3xl bg-background shadow-2xl transition-transform duration-300 sm:h-[85dvh] ${
           open ? "translate-y-0" : "translate-y-full"
         }`}

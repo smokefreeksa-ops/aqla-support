@@ -156,6 +156,12 @@ async def main(supporter_answer):
         assert await dialog.is_visible() and page.url == ORIGIN + "/"
         print("PASS: all three chat actions fit; sharing keeps the drawer open and uses the saved plan link.")
 
+        # The in-chat PDF button navigates to the saved plan page from the mobile drawer.
+        await pdf.click()
+        await page.wait_for_url("**/quit-plan/**", timeout=30000)
+        await page.get_by_role("button", name="تحميل خطتي PDF", exact=True).wait_for(timeout=60000)
+        print("PASS: in-drawer PDF button opens the plan page, which shows its PDF button.")
+
         await page.goto(plan_link)
         plan_share = page.get_by_role("button", name="أرسل خطتي على واتساب", exact=True)
         await plan_share.wait_for(timeout=60000)

@@ -49,7 +49,11 @@ export function ClinicalPlanPage({ plan, planToken }: { plan: ClinicalPlanJSON; 
         import("@/lib/clinical/clinical-plan-pdf"),
       ]);
 
-      const blob = await pdf(<ClinicalPlanPdf plan={plan} />).toBlob();
+      // Never hang silently: give up after 30s and fall back to printing.
+      const blob = await Promise.race([
+        pdf(<ClinicalPlanPdf plan={plan} />).toBlob(),
+        new Promise<never>((_, reject) => setTimeout(() => reject(new Error("pdf timeout")), 30000)),
+      ]);
 
 
       const url = URL.createObjectURL(blob);
@@ -61,8 +65,13 @@ export function ClinicalPlanPage({ plan, planToken }: { plan: ClinicalPlanJSON; 
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 4000);
     } catch (e) {
-      console.error(e);
-      setMsg("تعذّر إنشاء ملف PDF حاليًا. حاول مرة أخرى.");
+      console.error("[clinical-plan-pdf] generation failed, falling back to print", e);
+      try {
+        window.print();
+      } catch (printErr) {
+        console.error("[clinical-plan-pdf] print fallback failed", printErr);
+        setMsg("تعذّر إنشاء ملف PDF حاليًا. حاول مرة أخرى.");
+      }
     } finally {
       setDownloading(false);
     }
@@ -79,10 +88,11 @@ export function ClinicalPlanPage({ plan, planToken }: { plan: ClinicalPlanJSON; 
           <button
             onClick={downloadPdf}
             disabled={downloading}
+            aria-busy={downloading}
             className="inline-flex items-center gap-2 rounded-md bg-[#006C35] px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
           >
             {downloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-            تحميل خطتي PDF
+            {downloading ? "جاري تجهيز الملف..." : "تحميل خطتي PDF"}
           </button>
           <button
             onClick={() => {

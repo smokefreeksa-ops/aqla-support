@@ -29,7 +29,7 @@ const CONTENT_SECURITY_POLICY = [
   "object-src 'none'",
   "frame-ancestors 'self'",
   // TanStack/React production hydration injects inline bootstrap scripts.
-  "script-src 'self' 'unsafe-inline'",
+  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
   // Inline styles (fonts are self-hosted).
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
@@ -38,7 +38,7 @@ const CONTENT_SECURITY_POLICY = [
   // Supabase auth/data/realtime over HTTPS and WebSocket.
   // Google Apps Script: /survey.html saves study answers to the study Google Sheet
   // (script.google.com redirects to script.googleusercontent.com).
-  "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://script.google.com https://script.googleusercontent.com",
+  "connect-src 'self' data: https://*.supabase.co wss://*.supabase.co https://script.google.com https://script.googleusercontent.com",
   "media-src 'self' blob: data:",
   "worker-src 'self' blob:",
   "manifest-src 'self'",
