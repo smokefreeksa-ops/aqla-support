@@ -1,3 +1,4 @@
+import { useModalOpen } from "@/lib/modal-open";
 import { useEffect, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
@@ -38,8 +39,9 @@ export function AwarenessCampaignButton() {
       timers.forEach((t) => window.clearTimeout(t));
     };
   }, []);
+  const modalOpen = useModalOpen();
 
-  if (!ready || hidden) return null;
+  if (!ready || hidden || modalOpen) return null;
   if (
     pathname.startsWith("/quit-plan/") ||
     pathname === "/sos" ||

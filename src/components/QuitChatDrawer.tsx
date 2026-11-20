@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
+import { setModalOpen } from "@/lib/modal-open";
 import { QuitChatConversation } from "@/components/clinical/QuitChatConversation";
 
 /**
@@ -13,6 +15,12 @@ export function QuitChatDrawer({ open, onClose }: { open: boolean; onClose: () =
 
   useEffect(() => {
     if (open) setMounted(true);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    setModalOpen(true);
+    return () => setModalOpen(false);
   }, [open]);
 
   // History-aware modal: opening pushes exactly one temporary entry so the
@@ -61,9 +69,9 @@ export function QuitChatDrawer({ open, onClose }: { open: boolean; onClose: () =
     };
   }, [open, onClose]);
 
-  if (!mounted) return null;
+  if (!mounted || typeof document === "undefined") return null;
 
-  return (
+  return createPortal(
     <div
       dir="rtl"
       aria-hidden={!open}
@@ -79,7 +87,7 @@ export function QuitChatDrawer({ open, onClose }: { open: boolean; onClose: () =
         role="dialog"
         aria-modal="true"
         aria-label="مساعد أقلع الذكي"
-        className={`absolute inset-x-0 bottom-0 mx-auto flex h-[88vh] max-w-2xl flex-col overflow-hidden rounded-t-3xl bg-background shadow-2xl transition-transform duration-300 sm:h-[85vh] ${
+        className={`absolute inset-x-0 bottom-0 mx-auto flex h-[88dvh] max-w-2xl flex-col overflow-hidden rounded-t-3xl bg-background shadow-2xl transition-transform duration-300 sm:h-[85dvh] ${
           open ? "translate-y-0" : "translate-y-full"
         }`}
       >
@@ -97,7 +105,7 @@ export function QuitChatDrawer({ open, onClose }: { open: boolean; onClose: () =
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto p-3">
+        <div className="min-h-0 flex-1 p-3">
           <QuitChatConversation
             onPlan={() => {}}
             onBeforeNavigate={() => {
@@ -109,6 +117,7 @@ export function QuitChatDrawer({ open, onClose }: { open: boolean; onClose: () =
           />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

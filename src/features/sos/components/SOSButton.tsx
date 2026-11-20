@@ -1,3 +1,4 @@
+import { useModalOpen } from "@/lib/modal-open";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { track } from "@/lib/events";
@@ -20,8 +21,9 @@ export function SOSButton({
     mq.addEventListener?.("change", h);
     return () => mq.removeEventListener?.("change", h);
   }, []);
+  const modalOpen = useModalOpen();
 
-  if (hidden) return null;
+  if (hidden || modalOpen) return null;
 
   return (
     <>

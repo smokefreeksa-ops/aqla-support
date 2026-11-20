@@ -55,7 +55,9 @@ function QuitChatPage() {
               محادثة تفاعلية لبناء خطتك الشخصية للتحرر من النيكوتين. دعم سلوكي فقط — بدون محتوى دوائي.
             </p>
           </header>
-          <QuitChatConversation onPlan={setPlan} />
+          <div className="h-[70vh] min-h-[520px]">
+            <QuitChatConversation onPlan={setPlan} />
+          </div>
         </main>
         <SiteFooter />
       </div>

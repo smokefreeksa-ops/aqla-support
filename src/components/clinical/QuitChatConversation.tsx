@@ -357,7 +357,7 @@ export function QuitChatConversation({
     <div
       dir="rtl"
       lang="ar"
-      className="text-right rounded-2xl border border-[#0b3a25]/15 bg-white shadow-sm flex flex-col h-[70vh] min-h-[520px] font-[IBM_Plex_Sans_Arabic,Tajawal,system-ui,sans-serif]"
+      className="text-right rounded-2xl border border-[#0b3a25]/15 bg-white shadow-sm flex flex-col h-full min-h-0 font-[IBM_Plex_Sans_Arabic,Tajawal,system-ui,sans-serif]"
     >
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 sm:px-4 py-4 space-y-5">
         <AnimatePresence initial={false}>
@@ -517,7 +517,7 @@ export function QuitChatConversation({
       </div>
 
       {showText && (
-        <div className="border-t border-[#0b3a25]/10 p-3 flex gap-2 items-center" dir="rtl">
+        <div className="shrink-0 border-t border-[#0b3a25]/10 p-3 flex gap-2 items-center" dir="rtl" style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom, 0px))" }}>
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}

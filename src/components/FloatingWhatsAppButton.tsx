@@ -1,3 +1,4 @@
+import { useModalOpen } from "@/lib/modal-open";
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "@tanstack/react-router";
 import { Phone, MessageCircle, X } from "lucide-react";
@@ -36,9 +37,11 @@ export function FloatingWhatsAppButton({ forceVisible = false }: { forceVisible?
     window.addEventListener("mousedown", handleClick);
     return () => window.removeEventListener("mousedown", handleClick);
   }, [menuOpen]);
+  const modalOpen = useModalOpen();
 
   const pathname = location.pathname;
   const isPublic = ["/", "/about", "/assessment", "/volunteer", "/request-support", "/city-challenge", "/challenges", "/learn-train", "/poster-studio", "/impact"].includes(pathname);
+  if (modalOpen) return null;
   if (!forceVisible && !isPublic) return null;
 
   const handlePointerDown = (e: React.PointerEvent) => {
