@@ -28,7 +28,8 @@ export function ClinicalPlanPage({ plan, planToken }: { plan: ClinicalPlanJSON; 
       const res = await sendPlanEmail({ data: { planToken, email: email.trim(), consent: true } });
       setMsg(res.message);
       if (res.ok) setShowEmail(false);
-    } catch {
+    } catch (err) {
+      console.error("[clinical-plan-email] request failed", err);
       setMsg("تعذر إرسال البريد الآن، حاول لاحقًا.");
     } finally {
       setSending(false);

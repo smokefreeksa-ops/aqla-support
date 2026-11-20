@@ -76,8 +76,16 @@ export function QuitChatConversation({
   const scrollRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
 
-  useEffect(() => {
+  const scrollToBottom = () => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+  };
+  const focusScrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => {
+    if (focusScrollTimer.current) clearTimeout(focusScrollTimer.current);
+  }, []);
+
+  useEffect(() => {
+    scrollToBottom();
   }, [messages, typing]);
 
   const say = async (text: string, opts: Partial<Msg> = {}, delay = 900) => {
@@ -357,9 +365,10 @@ export function QuitChatConversation({
     <div
       dir="rtl"
       lang="ar"
-      className="text-right rounded-2xl border border-[#0b3a25]/15 bg-white shadow-sm flex flex-col h-full min-h-0 font-[IBM_Plex_Sans_Arabic,Tajawal,system-ui,sans-serif]"
+      className="text-right rounded-2xl border border-[#0b3a25]/15 bg-white shadow-sm flex flex-col h-full min-h-0 min-w-0 overflow-hidden font-[IBM_Plex_Sans_Arabic,Tajawal,system-ui,sans-serif]"
     >
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 sm:px-4 py-4 space-y-5">
+      <div ref={scrollRef} className="flex flex-1 flex-col overflow-y-auto px-3 sm:px-4 py-4">
+        <div className="mt-auto space-y-5">
         <AnimatePresence initial={false}>
           {messages.map((m, i) => (
             <motion.div
@@ -496,11 +505,11 @@ export function QuitChatConversation({
         )}
 
         {last?.from === "bot" && last.actions && (
-          <div dir="rtl" className="pt-3 grid sm:grid-cols-2 gap-2">
+          <div dir="rtl" className="min-w-0 pt-3 grid sm:grid-cols-2 gap-2">
             {last.actions.map((a, i) => {
               const Icon = a.icon === "print" ? Printer : a.icon === "dashboard" ? LayoutDashboard : null;
               const base =
-                "flex items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-bold shadow-md transition-colors";
+                "min-w-0 whitespace-normal break-words flex items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-bold shadow-md transition-colors";
               const cls =
                 a.variant === "secondary"
                   ? `${base} border-2 border-[#0b3a25] text-[#0b3a25] bg-white hover:bg-[#f2f8f4]`
@@ -514,6 +523,7 @@ export function QuitChatConversation({
             })}
           </div>
         )}
+        </div>
       </div>
 
       {showText && (
@@ -522,11 +532,16 @@ export function QuitChatConversation({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSendText()}
+            onFocus={() => {
+              scrollToBottom();
+              if (focusScrollTimer.current) clearTimeout(focusScrollTimer.current);
+              focusScrollTimer.current = setTimeout(scrollToBottom, 300);
+            }}
             placeholder={inputType === "email" ? "example@email.com" : "اكتب هنا..."}
             type={inputType}
             dir={inputType === "text" ? "rtl" : "ltr"}
             lang="ar"
-            className="flex-1 rounded-full bg-[#f2f8f4] ring-1 ring-[#0b3a25]/10 px-4 py-2.5 text-sm text-[#0b3a25] placeholder:text-[#66756d] outline-none focus:ring-2 focus:ring-[#0b3a25]/40 text-start"
+            className="min-w-0 flex-1 rounded-full bg-[#f2f8f4] ring-1 ring-[#0b3a25]/10 px-4 py-2.5 text-sm text-[#0b3a25] placeholder:text-[#66756d] outline-none focus:ring-2 focus:ring-[#0b3a25]/40 text-start"
           />
           <button
             onClick={handleSendText}

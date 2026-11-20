@@ -138,6 +138,23 @@ export async function sendPlanEmailViaQueue(
 ): Promise<{ status: EmailStatus; error: string | null }> {
   const normalized = to.toLowerCase();
   const messageId = crypto.randomUUID();
+  let logged = false;
+  const logFailure = async (reason: string) => {
+    console.error("[clinical-plan-email] send failed", { idempotencyKey, reason });
+    if (logged) return;
+    logged = true;
+    try {
+      await supabaseAdmin.from("email_send_log").insert({
+        message_id: messageId,
+        template_name: EMAIL_LABEL,
+        recipient_email: normalized,
+        status: "failed",
+        error_message: reason.slice(0, 300),
+      });
+    } catch (logErr) {
+      console.error("[clinical-plan-email] could not write failure log", logErr);
+    }
+  };
 
   try {
     const { data: suppressed, error: supErr } = await supabaseAdmin
@@ -145,16 +162,26 @@ export async function sendPlanEmailViaQueue(
       .select("id")
       .eq("email", normalized)
       .maybeSingle();
-    if (supErr) return { status: "provider_unavailable", error: "suppression check failed" };
-    if (suppressed) return { status: "failed", error: "email_suppressed" };
+    if (supErr) {
+      await logFailure(`suppression check failed: ${supErr.message}`);
+      return { status: "provider_unavailable", error: "suppression check failed" };
+    }
+    if (suppressed) {
+      await logFailure("email_suppressed");
+      return { status: "failed", error: "email_suppressed" };
+    }
 
     // Unsubscribe token (one per address) — required by the queue processor.
     let unsubscribeToken: string;
-    const { data: existing } = await supabaseAdmin
+    const { data: existing, error: tokErr } = await supabaseAdmin
       .from("email_unsubscribe_tokens")
       .select("token")
       .eq("email", normalized)
       .maybeSingle();
+    if (tokErr) {
+      await logFailure(`unsubscribe token lookup failed: ${tokErr.message}`);
+      return { status: "provider_unavailable", error: tokErr.message.slice(0, 300) };
+    }
     if (existing?.token) {
       unsubscribeToken = existing.token as string;
     } else {
@@ -172,12 +199,13 @@ export async function sendPlanEmailViaQueue(
 
     const html = planEmailHtml(plan, planUrl);
 
-    await supabaseAdmin.from("email_send_log").insert({
+    const { error: pendErr } = await supabaseAdmin.from("email_send_log").insert({
       message_id: messageId,
       template_name: EMAIL_LABEL,
       recipient_email: normalized,
       status: "pending",
     });
+    if (pendErr) console.error("[clinical-plan-email] pending log insert failed", { idempotencyKey, error: pendErr.message });
 
     const { error: enqueueError } = await supabaseAdmin.rpc("enqueue_email", {
       queue_name: "transactional_emails",
@@ -198,18 +226,13 @@ export async function sendPlanEmailViaQueue(
     });
 
     if (enqueueError) {
-      await supabaseAdmin.from("email_send_log").insert({
-        message_id: messageId,
-        template_name: EMAIL_LABEL,
-        recipient_email: normalized,
-        status: "failed",
-        error_message: "Failed to enqueue email",
-      });
+      await logFailure(`Failed to enqueue email: ${enqueueError.message}`);
       return { status: "provider_unavailable", error: enqueueError.message.slice(0, 300) };
     }
 
     return { status: "sent", error: null };
   } catch (e) {
+    await logFailure(`exception: ${(e as Error).message}`);
     return { status: "provider_unavailable", error: (e as Error).message.slice(0, 300) };
   }
 }
@@ -350,7 +373,10 @@ export async function getClinicalPlanByToken(planToken: string, version?: number
     .select("id, plan_token, plan, plan_version, status, email_status, created_at")
     .eq("plan_token", planToken)
     .maybeSingle();
-  if (error) throw new Error(error.message);
+  if (error) {
+    console.error("[clinical-plan-email] plan lookup failed", { error: error.message });
+    throw new Error(error.message);
+  }
   if (!row) return { plan: null as ClinicalPlanJSON | null, planVersion: null, emailStatus: null, isRelease1: false };
 
   const { data: versionRow } = await supabaseAdmin
@@ -441,7 +467,7 @@ export async function resendClinicalPlanEmail(planToken: string, email: string) 
     `clinical-plan-${row.id}-v${planVersion}-resend-${Date.now()}`,
   );
 
-  await supabaseAdmin
+  const { error: updErr } = await supabaseAdmin
     .from("quit_plans")
     .update({
       email: normalized,
@@ -452,8 +478,10 @@ export async function resendClinicalPlanEmail(planToken: string, email: string) 
       email_sent_at: result.status === "sent" ? new Date().toISOString() : null,
     })
     .eq("id", row.id as string);
+  if (updErr) console.error("[clinical-plan-email] plan row update failed", { planId: row.id, error: updErr.message });
 
   if (result.status !== "sent") {
+    console.error("[clinical-plan-email] not sent", { planId: row.id, status: result.status, error: result.error });
     return {
       ok: false,
       message: result.error === "email_suppressed"

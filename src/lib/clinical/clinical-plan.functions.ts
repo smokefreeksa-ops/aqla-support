@@ -88,5 +88,10 @@ export const emailClinicalPlan = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     const { resendClinicalPlanEmail } = await import("./clinical-plan.server");
-    return resendClinicalPlanEmail(data.planToken, data.email);
+    try {
+      return await resendClinicalPlanEmail(data.planToken, data.email);
+    } catch (e) {
+      console.error("[clinical-plan-email] emailClinicalPlan threw", { error: (e as Error).message });
+      throw e;
+    }
   });
