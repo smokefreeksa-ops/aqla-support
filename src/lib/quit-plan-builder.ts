@@ -518,7 +518,7 @@ export function buildQuitPlan(intake: QuitPlanIntake, score: QuitPlanScore): Qui
       "متابعة بعد 28 يوم.",
     ],
     contact: {
-      whatsapp: "https://wa.me/966555096412",
+      whatsapp: "https://wa.me/966542298004",
       email: "smokefreeksa@gmail.com",
       site: SITE_URL,
     },
@@ -526,7 +526,7 @@ export function buildQuitPlan(intake: QuitPlanIntake, score: QuitPlanScore): Qui
       { label: "تعديل الخطة", href: `${SITE_URL}/quit-pathway` },
       { label: "تحميل PDF", href: "سيظهر زر التحميل في صفحة الخطة" },
       { label: "إرسال الخطة إلى البريد", href: "يتم إرسال رابط الخطة بعد إنشائها إذا كان الإرسال مفعّلًا" },
-      { label: "تواصل واتساب/اتصال", href: "https://wa.me/966555096412" },
+      { label: "تواصل واتساب/اتصال", href: "https://wa.me/966542298004" },
       { label: "طلب مراجعة مختص", href: "mailto:smokefreeksa@gmail.com" },
     ],
     references: REFERENCES.map((r) => ({ id: r.id, full: r.full })),

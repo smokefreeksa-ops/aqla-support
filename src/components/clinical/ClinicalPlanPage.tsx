@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Download, Loader2, Copy, Mail, MessageCircle } from "lucide-react";
+import { Download, Loader2, Copy, Mail, MessageCircle, Phone } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { ClinicalPlanView } from "@/components/clinical/ClinicalPlanView";
 import { emailClinicalPlan } from "@/lib/clinical/clinical-plan.functions";
 import type { ClinicalPlanJSON } from "@/lib/clinical/types";
 import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/lib/track-event";
+import { AQLA_SUPPORT_PHONE, whatsappLink, telLink } from "@/lib/contact-numbers";
 
 /**
  * Release 1 plan page body. Renders the EXACT stored immutable plan_json and
@@ -112,6 +113,30 @@ ${planUrl}`;
             className="inline-flex h-auto min-w-0 items-center gap-2 whitespace-normal rounded-md border border-[#cfe3d7] bg-white px-4 py-2 text-sm font-normal text-inherit shadow-none"
           >
             <MessageCircle className="h-4 w-4" /> أرسل خطتي على واتساب
+          </Button>
+        </div>
+        <div className="flex min-w-0 flex-wrap items-center gap-2 pt-2">
+          <span className="text-sm">تحتاج مساعدة في تطبيق خطتك؟</span>
+          <Button
+            variant="outline"
+            onClick={() => {
+              const url = whatsappLink(AQLA_SUPPORT_PHONE, "السلام عليكم، أرغب في دعم للإقلاع عن التدخين أو النيكوتين.");
+              window.open(url, "_blank", "noopener,noreferrer");
+              trackEvent("plan_support_whatsapp");
+            }}
+            className="inline-flex h-auto min-w-0 max-w-full items-center gap-2 whitespace-normal break-words rounded-md border border-[#cfe3d7] bg-white px-4 py-2 text-sm font-normal text-inherit shadow-none"
+          >
+            <MessageCircle className="h-4 w-4" /> تواصل مع فريق أقلع على واتساب
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => {
+              window.location.href = telLink(AQLA_SUPPORT_PHONE);
+              trackEvent("plan_support_call");
+            }}
+            className="inline-flex h-auto min-w-0 max-w-full items-center gap-2 whitespace-normal break-words rounded-md border border-[#cfe3d7] bg-white px-4 py-2 text-sm font-normal text-inherit shadow-none"
+          >
+            <Phone className="h-4 w-4" /> اتصال مباشر
           </Button>
         </div>
         {showEmail && (

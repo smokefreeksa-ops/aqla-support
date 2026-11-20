@@ -50,6 +50,7 @@ async def main():
         await page.goto(ORIGIN)
         await page.evaluate("sessionStorage.setItem('aqla_study_overlay_dismissed','1')")
         await page.reload()
+        await page.wait_for_timeout(2000)
         await page.get_by_role("button", name="ابدأ خطة الإقلاع السريعة مع د. مالك", exact=True).click()
         dialog = page.get_by_role("dialog", name="مساعد أقلع الذكي")
         await dialog.wait_for()
@@ -119,6 +120,34 @@ async def main():
         await page.screenshot(path=str(ARTIFACTS / "plan-actions.png"))
         await assert_share(page, plan_share, page.url)
         print("PASS: plan-page action fits 390×844; WhatsApp text has a blank line and URL-only third line.")
+        support = page.get_by_role("button", name="تواصل مع فريق أقلع على واتساب", exact=True)
+        call = page.get_by_role("button", name="اتصال مباشر", exact=True)
+        await assert_fits(page, [support, call])
+        await page.screenshot(path=str(ARTIFACTS / "plan-support.png"))
+        async with page.expect_popup() as popup_info:
+            await support.click()
+        popup = await popup_info.value
+        await popup.wait_for_load_state()
+        url = urlparse(popup.url)
+        assert url.netloc == "wa.me" and url.path == "/966" + "542298004"
+        message = parse_qs(url.query)["text"][0]
+        assert not any(c.isascii() and c.isalnum() for c in message)
+        assert "http" not in message and "/quit-plan/" not in message
+        assert plan_link.split("/")[-1] not in message
+        for personal_answer in ["اختبار المشاركة", "جدة", "لا أحد"]:
+            assert personal_answer not in message
+        assert len((await page.evaluate("window.__shareCalls"))[-1]) == 3
+        assert (await page.evaluate("window.__shareCalls"))[-1][1:] == ["_blank", "noopener,noreferrer"]
+        await popup.close()
+        print("PASS: support row fits; team message contains no URL, token, nickname, answers, Latin letters or digits.")
+        session = await context.new_cdp_session(page)
+        await session.send("Page.enable")
+        navigation_requests = []
+        session.on("Page.frameRequestedNavigation", lambda event: navigation_requests.append(event["url"]))
+        await call.click()
+        await page.wait_for_timeout(500)
+        assert "tel:+966" + "542298004" in navigation_requests
+        print("PASS: direct call requests the official business phone link.")
         await browser.close()
 
 

@@ -155,7 +155,7 @@ function PlanPage() {
             <button onClick={() => { navigator.clipboard.writeText(shareUrl); setReminderMsg("تم نسخ الرابط."); }} className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm">
               نسخ الرابط
             </button>
-            <a href="https://wa.me/966555096412" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm">
+            <a href="https://wa.me/966542298004" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm">
               <MessageCircle className="h-4 w-4" /> دعم واتساب
             </a>
             <a href="mailto:smokefreeksa@gmail.com" className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm">
