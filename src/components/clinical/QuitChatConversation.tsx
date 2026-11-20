@@ -154,6 +154,8 @@ export function QuitChatConversation({
       const emailLine =
         res.emailStatus === "sent"
           ? "أرسلنا لك نسخة على بريدك الإلكتروني."
+          : res.emailStatus === "queued"
+            ? "جاري إرسال نسخة إلى بريدك الإلكتروني، تصلك خلال دقائق."
           : res.emailStatus === "disabled_minor"
             ? "لم نرسل نسخة بالبريد لأن الإرسال معطّل لمن هم دون 18 سنة."
             : res.emailStatus === "not_requested"

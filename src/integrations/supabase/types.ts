@@ -3217,6 +3217,7 @@ export type Database = {
           created_at: string
           dependence_status: string | null
           email: string | null
+          email_message_id: string | null
           email_sent_at: string | null
           email_status: string
           followup_schedule: Json
@@ -3262,6 +3263,7 @@ export type Database = {
           created_at?: string
           dependence_status?: string | null
           email?: string | null
+          email_message_id?: string | null
           email_sent_at?: string | null
           email_status?: string
           followup_schedule?: Json
@@ -3307,6 +3309,7 @@ export type Database = {
           created_at?: string
           dependence_status?: string | null
           email?: string | null
+          email_message_id?: string | null
           email_sent_at?: string | null
           email_status?: string
           followup_schedule?: Json

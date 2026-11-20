@@ -135,7 +135,7 @@ export async function sendPlanEmailViaQueue(
   plan: ClinicalPlanJSON,
   planUrl: string,
   idempotencyKey: string,
-): Promise<{ status: EmailStatus; error: string | null }> {
+): Promise<{ status: EmailStatus; error: string | null; messageId: string }> {
   const normalized = to.toLowerCase();
   const messageId = crypto.randomUUID();
   let logged = false;
@@ -164,11 +164,11 @@ export async function sendPlanEmailViaQueue(
       .maybeSingle();
     if (supErr) {
       await logFailure(`suppression check failed: ${supErr.message}`);
-      return { status: "provider_unavailable", error: "suppression check failed" };
+      return { status: "provider_unavailable", error: "suppression check failed", messageId };
     }
     if (suppressed) {
       await logFailure("email_suppressed");
-      return { status: "failed", error: "email_suppressed" };
+      return { status: "failed", error: "email_suppressed", messageId };
     }
 
     // Unsubscribe token (one per address) — required by the queue processor.
@@ -180,7 +180,7 @@ export async function sendPlanEmailViaQueue(
       .maybeSingle();
     if (tokErr) {
       await logFailure(`unsubscribe token lookup failed: ${tokErr.message}`);
-      return { status: "provider_unavailable", error: tokErr.message.slice(0, 300) };
+      return { status: "provider_unavailable", error: tokErr.message.slice(0, 300), messageId };
     }
     if (existing?.token) {
       unsubscribeToken = existing.token as string;
@@ -227,13 +227,13 @@ export async function sendPlanEmailViaQueue(
 
     if (enqueueError) {
       await logFailure(`Failed to enqueue email: ${enqueueError.message}`);
-      return { status: "provider_unavailable", error: enqueueError.message.slice(0, 300) };
+      return { status: "provider_unavailable", error: enqueueError.message.slice(0, 300), messageId };
     }
 
-    return { status: "sent", error: null };
+    return { status: "queued", error: null, messageId };
   } catch (e) {
     await logFailure(`exception: ${(e as Error).message}`);
-    return { status: "provider_unavailable", error: (e as Error).message.slice(0, 300) };
+    return { status: "provider_unavailable", error: (e as Error).message.slice(0, 300), messageId };
   }
 }
 
@@ -291,6 +291,7 @@ export async function finalizeClinicalPlanRow(planId: string, answers: ClinicalA
       ? "consented_pending"
       : "not_requested";
   let emailError: string | null = null;
+  let emailMessageId: string | null = null;
 
   const { error } = await supabaseAdmin
     .from("quit_plans")
@@ -344,6 +345,7 @@ export async function finalizeClinicalPlanRow(planId: string, answers: ClinicalA
       );
       emailStatus = result.status;
       emailError = result.error;
+      emailMessageId = result.messageId;
     } else {
       emailStatus = "failed";
       emailError = "consent not persisted";
@@ -354,6 +356,7 @@ export async function finalizeClinicalPlanRow(planId: string, answers: ClinicalA
       .update({
         email_status: emailStatus,
         email_sent_at: emailStatus === "sent" ? new Date().toISOString() : null,
+        email_message_id: emailMessageId,
       })
       .eq("id", planId);
   }
@@ -370,7 +373,7 @@ export async function finalizeClinicalPlanRow(planId: string, answers: ClinicalA
 export async function getClinicalPlanByToken(planToken: string, version?: number) {
   const { data: row, error } = await supabaseAdmin
     .from("quit_plans")
-    .select("id, plan_token, plan, plan_version, status, email_status, created_at")
+    .select("id, plan_token, plan, plan_version, status, email_status, email_message_id, created_at")
     .eq("plan_token", planToken)
     .maybeSingle();
   if (error) {
@@ -378,6 +381,35 @@ export async function getClinicalPlanByToken(planToken: string, version?: number
     throw new Error(error.message);
   }
   if (!row) return { plan: null as ClinicalPlanJSON | null, planVersion: null, emailStatus: null, isRelease1: false };
+
+  let resolvedEmailStatus = (row.email_status ?? null) as string | null;
+  let resolvedEmailError: string | null = null;
+  if (resolvedEmailStatus === "queued" && row.email_message_id) {
+    try {
+      const { data: logRow } = await supabaseAdmin
+        .from("email_send_log")
+        .select("status, error_message")
+        .eq("message_id", row.email_message_id as string)
+        .in("status", ["sent", "failed"])
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (logRow?.status === "sent") {
+        await supabaseAdmin
+          .from("quit_plans")
+          .update({ email_status: "sent", email_sent_at: new Date().toISOString() })
+          .eq("id", row.id as string);
+        resolvedEmailStatus = "sent";
+      } else if (logRow?.status === "failed") {
+        await supabaseAdmin.from("quit_plans").update({ email_status: "failed" }).eq("id", row.id as string);
+        resolvedEmailStatus = "failed";
+        resolvedEmailError = (logRow.error_message as string | null) ?? null;
+        console.error("[clinical-plan-email] queued send failed", { planId: row.id, error: resolvedEmailError });
+      }
+    } catch (e) {
+      console.error("[clinical-plan-email] reconcile failed", { planId: row.id, error: (e as Error).message });
+    }
+  }
 
   const { data: versionRow } = await supabaseAdmin
     .from("quit_plan_versions")
@@ -395,7 +427,8 @@ export async function getClinicalPlanByToken(planToken: string, version?: number
     plan: isRelease1 ? planJson : null,
     legacyPlan: isRelease1 ? null : planJson,
     planVersion: (versionRow?.plan_version ?? row.plan_version ?? null) as number | null,
-    emailStatus: (row.email_status ?? null) as string | null,
+    emailStatus: resolvedEmailStatus,
+    emailError: resolvedEmailError,
     isRelease1,
   };
 }
@@ -476,11 +509,12 @@ export async function resendClinicalPlanEmail(planToken: string, email: string) 
       plan_email_consent_version: PLAN_EMAIL_CONSENT_VERSION,
       email_status: result.status,
       email_sent_at: result.status === "sent" ? new Date().toISOString() : null,
+      email_message_id: result.messageId,
     })
     .eq("id", row.id as string);
   if (updErr) console.error("[clinical-plan-email] plan row update failed", { planId: row.id, error: updErr.message });
 
-  if (result.status !== "sent") {
+  if (result.status !== "sent" && result.status !== "queued") {
     console.error("[clinical-plan-email] not sent", { planId: row.id, status: result.status, error: result.error });
     return {
       ok: false,
@@ -488,6 +522,9 @@ export async function resendClinicalPlanEmail(planToken: string, email: string) 
         ? "هذا البريد مُلغى الاشتراك من رسائلنا."
         : "تعذر إرسال البريد الآن، حاول لاحقًا.",
     };
+  }
+  if (result.status === "queued") {
+    return { ok: true, message: "جاري إرسال خطتك إلى بريدك الإلكتروني، تصلك خلال دقائق." };
   }
   return { ok: true, message: "تم إرسال خطتك إلى بريدك الإلكتروني." };
 }

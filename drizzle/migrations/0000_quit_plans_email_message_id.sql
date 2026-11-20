@@ -1,0 +1,1 @@
+ALTER TABLE public.quit_plans ADD COLUMN IF NOT EXISTS email_message_id text;

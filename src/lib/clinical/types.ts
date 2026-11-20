@@ -54,6 +54,7 @@ export type PlanVariant =
 export type EmailStatus =
   | "not_requested"
   | "consented_pending"
+  | "queued"
   | "sent"
   | "failed"
   | "provider_unavailable"
