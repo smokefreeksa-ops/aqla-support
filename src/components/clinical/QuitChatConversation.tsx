@@ -1,7 +1,8 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Printer, LayoutDashboard } from "lucide-react";
+import { Send, Printer, LayoutDashboard, MessageCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   startClinicalPlan,
   saveClinicalAnswers,
@@ -20,7 +21,7 @@ type Msg = {
   text: string;
   quickReplies?: QuickReply[];
   multi?: QuickReply[];
-  actions?: { label: string; onClick: () => void; variant?: "primary" | "secondary"; icon?: "print" | "dashboard" }[];
+  actions?: { label: string; onClick: () => void; variant?: "primary" | "secondary"; icon?: "print" | "dashboard" | "whatsapp" }[];
   input?: "text" | "email" | "number-row" | "number";
   plan?: ClinicalPlanJSON;
 };
@@ -177,6 +178,19 @@ export function QuitChatConversation({
               label: "تحميل خطتي PDF",
               onClick: () => go(() => navigate({ to: "/quit-plan/$planToken", params: { planToken: res.planToken } })),
               icon: "print",
+            },
+            {
+              label: "أرسل خطتي على واتساب",
+              onClick: () => {
+                const planUrl = `${window.location.origin}/quit-plan/${res.planToken}`;
+                const text = `خطتي السلوكية للإقلاع من منصة أقلع
+
+${planUrl}`;
+                const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                window.open(url, "_blank", "noopener,noreferrer");
+              },
+              variant: "secondary",
+              icon: "whatsapp",
             },
             {
               label: "الذهاب للوحة التحكم",
@@ -507,13 +521,21 @@ export function QuitChatConversation({
         {last?.from === "bot" && last.actions && (
           <div dir="rtl" className="min-w-0 pt-3 grid sm:grid-cols-2 gap-2">
             {last.actions.map((a, i) => {
-              const Icon = a.icon === "print" ? Printer : a.icon === "dashboard" ? LayoutDashboard : null;
+              const Icon = a.icon === "print" ? Printer : a.icon === "dashboard" ? LayoutDashboard : a.icon === "whatsapp" ? MessageCircle : null;
               const base =
                 "min-w-0 whitespace-normal break-words flex items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-bold shadow-md transition-colors";
               const cls =
                 a.variant === "secondary"
                   ? `${base} border-2 border-[#0b3a25] text-[#0b3a25] bg-white hover:bg-[#f2f8f4]`
                   : `${base} bg-[#0b3a25] hover:bg-[#12543a] text-white`;
+              if (a.icon === "whatsapp") {
+                return (
+                  <Button key={i} variant="outline" onClick={a.onClick} className={`h-auto ${cls}`}>
+                    {Icon ? <Icon className="h-5 w-5" /> : null}
+                    {a.label}
+                  </Button>
+                );
+              }
               return (
                 <button key={i} onClick={a.onClick} className={cls}>
                   {Icon ? <Icon className="h-5 w-5" /> : null}

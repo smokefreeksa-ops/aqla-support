@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Download, Loader2, Copy, Mail } from "lucide-react";
+import { Download, Loader2, Copy, Mail, MessageCircle } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { ClinicalPlanView } from "@/components/clinical/ClinicalPlanView";
 import { emailClinicalPlan } from "@/lib/clinical/clinical-plan.functions";
 import type { ClinicalPlanJSON } from "@/lib/clinical/types";
+import { Button } from "@/components/ui/button";
+import { trackEvent } from "@/lib/track-event";
 
 /**
  * Release 1 plan page body. Renders the EXACT stored immutable plan_json and
@@ -96,6 +98,21 @@ export function ClinicalPlanPage({ plan, planToken }: { plan: ClinicalPlanJSON; 
           >
             <Mail className="h-4 w-4" /> أرسل خطتي بالبريد
           </button>
+          <Button
+            variant="outline"
+            onClick={() => {
+              const planUrl = window.location.href;
+              const text = `خطتي السلوكية للإقلاع من منصة أقلع
+
+${planUrl}`;
+              const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+              window.open(url, "_blank", "noopener,noreferrer");
+              trackEvent("plan_whatsapp_share");
+            }}
+            className="inline-flex h-auto min-w-0 items-center gap-2 whitespace-normal rounded-md border border-[#cfe3d7] bg-white px-4 py-2 text-sm font-normal text-inherit shadow-none"
+          >
+            <MessageCircle className="h-4 w-4" /> أرسل خطتي على واتساب
+          </Button>
         </div>
         {showEmail && (
           <div className="flex flex-wrap items-center gap-2 pt-2">
