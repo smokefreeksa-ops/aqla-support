@@ -39,7 +39,7 @@ async def assert_fits(page, buttons):
         assert bounds["y"] >= 0 and bounds["y"] + bounds["height"] <= 844
 
 
-async def main():
+async def main(supporter_answer):
     ARTIFACTS.mkdir(parents=True, exist_ok=True)
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
@@ -48,11 +48,19 @@ async def main():
         await context.route("https://wa.me/**", lambda route: route.fulfill(body="Share URL verified"))
         page = await context.new_page()
         await page.goto(ORIGIN)
-        await page.evaluate("sessionStorage.setItem('aqla_study_overlay_dismissed','1')")
+        await page.evaluate("""() => {
+          sessionStorage.setItem('aqla_study_overlay_dismissed','1');
+          sessionStorage.setItem('aqla_kau_survey_dismissed','1');
+        }""")
         await page.reload()
         await page.wait_for_timeout(2000)
-        await page.get_by_role("button", name="ابدأ خطة الإقلاع السريعة مع د. مالك", exact=True).click()
         dialog = page.get_by_role("dialog", name="مساعد أقلع الذكي")
+        # A server-rendered entry button can appear before its click handler hydrates.
+        for _ in range(5):
+            if await dialog.is_visible():
+                break
+            await page.get_by_role("button", name="ابدأ خطة الإقلاع السريعة مع د. مالك", exact=True).click()
+            await page.wait_for_timeout(1000)
         await dialog.wait_for()
 
         async def choice(label):
@@ -85,14 +93,47 @@ async def main():
         await choice("اليوم")
         await multi("مع القهوة")
         await choice("لا، هذه أول مرة")
-        await text("لا أحد")
+        await text(supporter_answer)
         await choice("لا، تخطَّ")
         await choice("لا، يكفي العرض والتحميل")
         share = dialog.get_by_role("button", name="أرسل خطتي على واتساب", exact=True)
         await share.wait_for(timeout=60000)
         pdf = dialog.get_by_role("button", name="تحميل خطتي PDF", exact=True)
         dashboard = dialog.get_by_role("button", name="الذهاب للوحة التحكم", exact=True)
-        await assert_fits(page, [pdf, share, dashboard])
+        supporter_action = dialog.get_by_role("button", name="أرسل رسالة الدعم إلى " + supporter_answer, exact=True)
+        if supporter_answer == "لا أحد":
+            assert await dialog.get_by_role("button", name="أرسل رسالة الدعم إلى", exact=False).count() == 0
+            await assert_fits(page, [pdf, share, dashboard])
+            print("PASS: no-one answer preserves only the three existing actions.")
+        else:
+            await supporter_action.wait_for()
+            await assert_fits(page, [pdf, share, supporter_action, dashboard])
+            await page.screenshot(path=str(ARTIFACTS / "supporter-actions.png"))
+            await page.evaluate("""() => {
+              window.__supporterCalls = [];
+              const original = window.open.bind(window);
+              window.open = (...args) => { window.__supporterCalls.push(args); return original(...args); };
+            }""")
+            assert await page.evaluate("window.__supporterCalls.length") == 0
+            async with page.expect_popup() as popup_info:
+                await supporter_action.click()
+            popup = await popup_info.value
+            await popup.wait_for_load_state()
+            url = urlparse(popup.url)
+            query = parse_qs(url.query)
+            assert url.scheme == "https" and url.netloc == "wa.me" and url.path == "/"
+            assert list(query) == ["text"]
+            message = query["text"][0]
+            assert len(message.split("\n")) == 4
+            assert not any(c.isascii() and c.isalnum() for c in message)
+            assert "http" not in message and "/quit-plan/" not in message
+            for personal_answer in ["اختبار المشاركة", "جدة", supporter_answer]:
+                assert personal_answer not in message
+            calls = await page.evaluate("window.__supporterCalls")
+            assert len(calls) == 1 and calls[0][1:] == ["_blank", "noopener,noreferrer"]
+            await popup.close()
+            assert await dialog.is_visible() and page.url == ORIGIN + "/"
+            print("PASS: named supporter action fits; four-line message is private, recipient-free, and keeps the drawer open.")
         await page.screenshot(path=str(ARTIFACTS / "chat-actions.png"))
         # Capture the dynamically-created saved-plan URL from the actual click.
         await page.evaluate(r"""() => {
@@ -108,6 +149,8 @@ async def main():
         popup = await popup_info.value
         await popup.close()
         plan_link = await page.evaluate("window.__sharedLink")
+        if supporter_answer != "لا أحد":
+            assert plan_link.split("/")[-1] not in message
         assert plan_link.startswith(ORIGIN + "/quit-plan/")
         await assert_share(page, share, plan_link)
         assert await dialog.is_visible() and page.url == ORIGIN + "/"
@@ -151,4 +194,9 @@ async def main():
         await browser.close()
 
 
-asyncio.run(main())
+async def verify_cases():
+    for supporter_answer in ["خالد", "لا أحد"]:
+        await main(supporter_answer)
+
+
+asyncio.run(verify_cases())

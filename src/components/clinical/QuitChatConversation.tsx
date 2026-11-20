@@ -1,7 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Printer, LayoutDashboard, MessageCircle } from "lucide-react";
+import { Send, Printer, LayoutDashboard, MessageCircle, HeartHandshake } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   startClinicalPlan,
@@ -21,11 +21,21 @@ type Msg = {
   text: string;
   quickReplies?: QuickReply[];
   multi?: QuickReply[];
-  actions?: { label: string; onClick: () => void; variant?: "primary" | "secondary"; icon?: "print" | "dashboard" | "whatsapp" }[];
+  actions?: { label: string; onClick: () => void; variant?: "primary" | "secondary"; icon?: "print" | "dashboard" | "whatsapp" | "supporter" }[];
   input?: "text" | "email" | "number-row" | "number";
   plan?: ClinicalPlanJSON;
 };
 type QuickReply = { label: string; value: string };
+
+const NO_ONE = ["لا أحد", "لا احد", "لااحد", "ولا أحد", "ولا احد", "محد", "no one", "nobody"];
+function supporterName(a: ClinicalAnswers): string | null {
+  const raw = (a.supporter ?? "").trim();
+  if (!raw) return null;
+  const flat = raw.replace(/\s+/g, "").toLowerCase();
+  if (NO_ONE.some((n) => n.replace(/\s+/g, "").toLowerCase() === flat)) return null;
+  if (raw.length > 40) return null;
+  return raw;
+}
 
 /** Server calls can fail on cold starts or flaky mobile networks — retry briefly. */
 async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
@@ -168,6 +178,23 @@ export function QuitChatConversation({
         }
       })();
 
+      const namedSupporter = supporterName(a);
+      const supporterActions: NonNullable<Msg["actions"]> = namedSupporter && !res.plan.safety.suppress_plan
+        ? [{
+            label: `أرسل رسالة الدعم إلى ${namedSupporter}`,
+            onClick: () => {
+              const message = `السلام عليكم
+قررت أبدأ رحلة الإقلاع عن التدخين، واخترتك تكون سندي في هذا القرار
+أحتاج منك شيئين فقط: تسأل عني مرة في الأسبوع، ولا تعرض علي سيجارة مهما قلت لك
+شكراً لك`;
+              const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+              window.open(url, "_blank", "noopener,noreferrer");
+            },
+            variant: "secondary",
+            icon: "supporter",
+          }]
+        : [];
+
       setMessages((m) => [
         ...m,
         {
@@ -192,6 +219,7 @@ ${planUrl}`;
               variant: "secondary",
               icon: "whatsapp",
             },
+            ...supporterActions,
             {
               label: "الذهاب للوحة التحكم",
               onClick: () => go(() => navigate({ to: "/dashboard" })),
@@ -521,18 +549,18 @@ ${planUrl}`;
         {last?.from === "bot" && last.actions && (
           <div dir="rtl" className="min-w-0 pt-3 grid sm:grid-cols-2 gap-2">
             {last.actions.map((a, i) => {
-              const Icon = a.icon === "print" ? Printer : a.icon === "dashboard" ? LayoutDashboard : a.icon === "whatsapp" ? MessageCircle : null;
+              const Icon = a.icon === "print" ? Printer : a.icon === "dashboard" ? LayoutDashboard : a.icon === "whatsapp" ? MessageCircle : a.icon === "supporter" ? HeartHandshake : null;
               const base =
                 "min-w-0 whitespace-normal break-words flex items-center justify-center gap-2 rounded-2xl px-6 py-4 text-base font-bold shadow-md transition-colors";
               const cls =
                 a.variant === "secondary"
                   ? `${base} border-2 border-[#0b3a25] text-[#0b3a25] bg-white hover:bg-[#f2f8f4]`
                   : `${base} bg-[#0b3a25] hover:bg-[#12543a] text-white`;
-              if (a.icon === "whatsapp") {
+              if (a.icon === "whatsapp" || a.icon === "supporter") {
                 return (
                   <Button key={i} variant="outline" onClick={a.onClick} className={`h-auto ${cls}`}>
                     {Icon ? <Icon className="h-5 w-5" /> : null}
-                    {a.label}
+                    {a.icon === "supporter" ? <span className="min-w-0" style={{ unicodeBidi: "plaintext" }}>{a.label}</span> : a.label}
                   </Button>
                 );
               }
