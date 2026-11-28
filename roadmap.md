@@ -1,5 +1,6 @@
 # Mandatory assistant contacts
-- [ ] Required contact/guardian questions, validation and consent records; reuse email at completion.
-- [ ] Additive contact schema, retention trigger, admin-only access; preserve original 176 rows.
-- [ ] Contacts dashboard with search, minors filter and safe Arabic CSV.
-- [ ] Unit and browser acceptance checks, original-row checksum, preview validation; do not publish.
+- [x] Required contact/guardian questions, validation and consent records; reuse email at completion.
+- [x] Additive contact schema, retention trigger, admin-only access; original 176 rows checksum unchanged.
+- [x] Contacts dashboard with search, minors filter and safe Arabic CSV; verified using temporary admin access, removed afterwards.
+- [x] 80 unit tests and real 390×844 browser flows passed; guardian provider log sent; no publishing.
+- [ ] Owner Contacts access: awaiting choice whether to add admin to the existing physician account; current permissions unchanged.

@@ -391,7 +391,7 @@ ${planUrl}`;
   };
 
   const handleSendText = async () => {
-    if (!current || locked) return;
+    if (!current || locked || typing) return;
     const v = input.trim();
     const reject = async (text: string) => {
       await say(text, { input: current.kind === "email" ? "email" : "text" }, 0);
@@ -474,7 +474,7 @@ ${planUrl}`;
                   />
                   <div className="min-w-0 flex-1">
                     <div
-                      className="inline-block rounded-2xl rounded-tr-md bg-[#0b3a25] text-white px-4 py-2.5 text-[14.5px] leading-7 whitespace-pre-wrap"
+                      className="max-w-full break-words inline-block rounded-2xl rounded-tr-md bg-[#0b3a25] text-white px-4 py-2.5 text-[14.5px] leading-7 whitespace-pre-wrap"
                       style={{ unicodeBidi: "plaintext" }}
                     >
                       {m.text}
@@ -487,12 +487,12 @@ ${planUrl}`;
                   </div>
                 </div>
               ) : (
-                <div className="flex items-start gap-2 sm:gap-3 max-w-[80%] sm:max-w-[68%] pe-6 sm:pe-10">
+                <div className="min-w-0 flex items-start gap-2 sm:gap-3 max-w-[80%] sm:max-w-[68%] pe-6 sm:pe-10">
                   <div className="h-8 w-8 shrink-0 rounded-full bg-[#eaf3ed] grid place-content-center text-[#0b3a25] text-[11px] font-bold ring-1 ring-[#0b3a25]/15">
                     أنا
                   </div>
                   <div
-                    className="rounded-2xl rounded-tr-md bg-[#f2f8f4] text-[#12241b] ring-1 ring-[#0b3a25]/10 px-4 py-2.5 text-[14.5px] leading-7 whitespace-pre-wrap"
+                    className="min-w-0 break-words rounded-2xl rounded-tr-md bg-[#f2f8f4] text-[#12241b] ring-1 ring-[#0b3a25]/10 px-4 py-2.5 text-[14.5px] leading-7 whitespace-pre-wrap"
                     style={{ unicodeBidi: "plaintext" }}
                   >
                     {m.text}
