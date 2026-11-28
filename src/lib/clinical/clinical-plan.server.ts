@@ -11,10 +11,11 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { SITE_URL } from "@/lib/site";
 import {
-  ADMIN_RESEARCH_DISCLOSURE_ENABLED,
   CLINICAL_RULE_VERSION,
   PLAN_EMAIL_CONSENT_VERSION,
 } from "./release-flags";
+import { withoutContactDetails } from "../contact/public-plan";
+import { validateContactAnswers, planEmailRecipient } from "../contact/consent";
 import { generatePlan } from "./plan-engine";
 import type { ClinicalAnswers, ClinicalPlanJSON, EmailStatus } from "./types";
 
@@ -90,11 +91,30 @@ export async function createClinicalPlanRow(anonymousSessionId: string) {
   return { planId: row.id as string, planToken: row.plan_token as string };
 }
 
-export async function persistAnswers(planId: string, answers: ClinicalAnswers) {
+function contactColumns(answers: ClinicalAnswers) {
+  return {
+    ...(answers.nickname ? { nickname: answers.nickname } : {}),
+    ...(answers.city ? { city: answers.city } : {}),
+    ...(answers.contact_email ? { email: answers.contact_email } : {}),
+    ...(answers.contact_mobile ? { mobile: answers.contact_mobile } : {}),
+    ...(answers.age_band ? { age_band_captured: answers.age_band, is_minor: answers.age_band === "under_18" } : {}),
+    ...(answers.contact_consent ? { contact_consent: true, contact_consent_at: answers.contact_consent_at, contact_consent_version: answers.contact_consent_version } : {}),
+    ...(answers.guardian_name ? { guardian_name: answers.guardian_name } : {}),
+    ...(answers.guardian_relationship ? { guardian_relationship: answers.guardian_relationship } : {}),
+    ...(answers.guardian_email ? { guardian_email: answers.guardian_email } : {}),
+    ...(answers.guardian_mobile ? { guardian_mobile: answers.guardian_mobile } : {}),
+    ...(answers.guardian_consent ? { guardian_consent: true, guardian_consent_at: answers.guardian_consent_at } : {}),
+  };
+}
+
+export async function persistAnswers(planId: string, planToken: string, input: ClinicalAnswers) {
+  const answers = validateContactAnswers(input);
   const { error } = await supabaseAdmin
     .from("quit_plans")
-    .update({ intake_answers: answers as never })
-    .eq("id", planId);
+    .update({ intake_answers: answers as never, ...contactColumns(answers) })
+    .eq("id", planId)
+    .eq("plan_token", planToken)
+    .eq("status", "in_progress");
   if (error) throw new Error(error.message);
 }
 
@@ -252,12 +272,15 @@ export async function storePlanVersion(planId: string, plan: ClinicalPlanJSON) {
   if (error) throw new Error(`Failed to persist immutable plan version: ${error.message}`);
 }
 
-export async function finalizeClinicalPlanRow(planId: string, answers: ClinicalAnswers) {
+export async function finalizeClinicalPlanRow(planId: string, planTokenInput: string, input: ClinicalAnswers) {
+  const answers = validateContactAnswers(input, true);
   const { data: existing } = await supabaseAdmin
     .from("quit_plans")
     .select("plan_version, plan_token, status")
     .eq("id", planId)
+    .eq("plan_token", planTokenInput)
     .single();
+  if (!existing) throw new Error("Forbidden: invalid plan token");
 
   // Immutability: every regeneration produces a NEW version row; previous versions
   // are never overwritten (enforced additionally by a DB trigger).
@@ -282,14 +305,9 @@ export async function finalizeClinicalPlanRow(planId: string, answers: ClinicalA
   // Persist the immutable version FIRST so the delivered artefact always exists.
   await storePlanVersion(planId, plan);
 
-  const isMinor = answers.age_band === "under_18";
-  const consented = answers.plan_email_consent === true && !!answers.email && !isMinor;
-
-  let emailStatus: EmailStatus = isMinor && answers.plan_email_consent
-    ? "disabled_minor"
-    : consented
-      ? "consented_pending"
-      : "not_requested";
+  const recipient = planEmailRecipient(answers);
+  const consented = !!recipient;
+  let emailStatus: EmailStatus = consented ? "consented_pending" : "not_requested";
   let emailError: string | null = null;
   let emailMessageId: string | null = null;
 
@@ -300,7 +318,7 @@ export async function finalizeClinicalPlanRow(planId: string, answers: ClinicalA
       intake_answers: answers as never,
       nickname: plan.identity.nickname,
       city: plan.identity.city,
-      email: consented ? answers.email : null,
+      ...contactColumns(answers),
       product: (answers.products ?? [])[0] ?? null,
       assessment_tool: plan.dependence.instrument,
       score_total: plan.dependence.total,
@@ -323,6 +341,8 @@ export async function finalizeClinicalPlanRow(planId: string, answers: ClinicalA
       plan_email_consent_at: consented ? new Date().toISOString() : null,
       plan_email_consent_version: consented ? PLAN_EMAIL_CONSENT_VERSION : null,
       email_status: emailStatus,
+      email_sent_at: null,
+      email_message_id: null,
       status: plan.safety.suppress_plan ? "safety_hold" : "finalized",
     })
     .eq("id", planId);
@@ -332,13 +352,16 @@ export async function finalizeClinicalPlanRow(planId: string, answers: ClinicalA
   if (consented && !plan.safety.suppress_plan) {
     const { data: consentRow } = await supabaseAdmin
       .from("quit_plans")
-      .select("plan_email_consent, plan_email_consent_at, plan_email_consent_version, email")
+      .select("plan_email_consent, plan_email_consent_at, plan_email_consent_version, email, is_minor, guardian_email, guardian_consent")
       .eq("id", planId)
       .single();
 
-    if (consentRow?.plan_email_consent && consentRow.plan_email_consent_at && consentRow.email) {
+    const storedRecipient = consentRow?.is_minor
+      ? (consentRow.guardian_consent ? consentRow.guardian_email : null)
+      : consentRow?.email;
+    if (consentRow?.plan_email_consent && consentRow.plan_email_consent_at && storedRecipient) {
       const result = await sendPlanEmailViaQueue(
-        consentRow.email as string,
+        storedRecipient,
         plan,
         planUrl,
         `clinical-plan-${planId}-v${planVersion}`,
@@ -359,11 +382,6 @@ export async function finalizeClinicalPlanRow(planId: string, answers: ClinicalA
         email_message_id: emailMessageId,
       })
       .eq("id", planId);
-  }
-
-  // Governance: identifiable admin/research disclosure stays off in Release 1.
-  if (ADMIN_RESEARCH_DISCLOSURE_ENABLED) {
-    console.warn("Admin disclosure flag enabled without an approved governance path.");
   }
 
   return { plan, planUrl, planToken, planVersion, emailStatus, emailError };
@@ -425,7 +443,7 @@ export async function getClinicalPlanByToken(planToken: string, version?: number
 
   return {
     plan: isRelease1 ? planJson : null,
-    legacyPlan: isRelease1 ? null : planJson,
+    legacyPlan: isRelease1 ? null : withoutContactDetails(planJson),
     planVersion: (versionRow?.plan_version ?? row.plan_version ?? null) as number | null,
     emailStatus: resolvedEmailStatus,
     emailError: resolvedEmailError,
@@ -473,7 +491,7 @@ export async function resendClinicalPlanEmail(planToken: string, email: string) 
   const normalized = email.trim().toLowerCase();
   const { data: row, error } = await supabaseAdmin
     .from("quit_plans")
-    .select("id, plan, plan_version, status")
+    .select("id, plan, plan_version, status, is_minor, guardian_email, guardian_consent, guardian_consent_at, contact_consent, email")
     .eq("plan_token", planToken)
     .maybeSingle();
   if (error) throw new Error(error.message);
@@ -493,8 +511,11 @@ export async function resendClinicalPlanEmail(planToken: string, email: string) 
   const planJson = (versionRow?.plan_json ?? row.plan) as ClinicalPlanJSON | null;
   if (!planJson) return { ok: false, message: "الخطة غير جاهزة للإرسال بعد." };
 
+  const minor = row.is_minor || planJson.plan_variant === "adolescent";
+  const recipient = minor ? (row.guardian_consent && row.guardian_consent_at ? row.guardian_email : null) : row.contact_consent ? row.email : normalized;
+  if (!recipient) return { ok: false, message: "تعذر إرسال البريد الآن، حاول لاحقًا." };
   const result = await sendPlanEmailViaQueue(
-    normalized,
+    recipient,
     planJson,
     clinicalPlanUrl(planToken),
     `clinical-plan-${row.id}-v${planVersion}-resend-${Date.now()}`,
@@ -503,7 +524,7 @@ export async function resendClinicalPlanEmail(planToken: string, email: string) 
   const { error: updErr } = await supabaseAdmin
     .from("quit_plans")
     .update({
-      email: normalized,
+      ...(!row.contact_consent && !minor ? { email: normalized } : {}),
       plan_email_consent: true,
       plan_email_consent_at: new Date().toISOString(),
       plan_email_consent_version: PLAN_EMAIL_CONSENT_VERSION,

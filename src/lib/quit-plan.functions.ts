@@ -7,6 +7,7 @@ import {
   type QuitPlanIntake,
   type QuitPlanJSON,
 } from "./quit-plan-builder";
+import { withoutContactDetails } from "./contact/public-plan";
 import { SITE_URL } from "./site";
 import { ADMIN_RESEARCH_DISCLOSURE_ENABLED } from "./clinical/release-flags";
 
@@ -349,13 +350,13 @@ export const getQuitPlan = createServerFn({ method: "POST" })
     const { data: row, error } = await supabaseAdmin
       .from("quit_plans")
       .select(
-        "id, plan_token, nickname, email, city, product, assessment_tool, score_total, score_band, risk_flag, validated, readiness, quit_goal, quit_date, triggers, plan, status, created_at, email_sent_at, admin_notified_at",
+        "id, plan_token, nickname, city, product, assessment_tool, score_total, score_band, risk_flag, validated, readiness, quit_goal, quit_date, triggers, plan, status, created_at, email_sent_at, admin_notified_at",
       )
       .eq("plan_token", data.planToken)
       .maybeSingle();
     if (error) throw new Error(error.message);
     if (!row) return { plan: null };
-    return { plan: row };
+    return { plan: { ...row, plan: withoutContactDetails(row.plan) } };
   });
 
 // ---------------- scheduleReminder ----------------

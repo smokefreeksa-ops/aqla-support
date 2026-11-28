@@ -25,6 +25,7 @@ import { getAdminChallengeAnalytics } from "@/lib/challenges.functions";
 import { getAdminPosterAnalytics } from "@/lib/poster.functions";
 import { useQuery } from "@tanstack/react-query";
 import aqlaLogo from "@/assets/aqla-logo.png";
+import { ContactsPanel } from "@/components/clinical/ContactsPanel";
 
 function AssistantStatusBanner() {
   const statusFn = useServerFn(getAssistantStatus);
@@ -248,7 +249,14 @@ function PosterStudioAdminPanel() {
 }
 
 export const Route = createFileRoute("/admin")({
-  head: () => ({ meta: [{ title: "Admin Dashboard — Aqla" }] }),
+  head: () => ({ meta: [
+    { title: "Admin Dashboard and Participant Contacts — Aqla" },
+    { name: "description", content: "Aqla administration for cessation support, participants and confidential research contacts." },
+    { property: "og:title", content: "Aqla Admin Dashboard" },
+    { property: "og:description", content: "Authorized administration of Aqla cessation support and participant contacts." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: AdminPage,
 });
 
@@ -301,11 +309,12 @@ function AdminPage() {
         <AdminAnalyticsCard />
         <NotificationsCard />
         <Tabs defaultValue="participants">
-          <TabsList>
+          <TabsList className="h-auto flex-wrap">
             <TabsTrigger value="participants" className="gap-1.5"><HeartPulse className="h-4 w-4" />Quit Support</TabsTrigger>
             <TabsTrigger value="volunteers" className="gap-1.5"><Users className="h-4 w-4" />Volunteers</TabsTrigger>
             <TabsTrigger value="challenges" className="gap-1.5"><Trophy className="h-4 w-4" />Challenges</TabsTrigger>
             <TabsTrigger value="posters" className="gap-1.5"><ImageIcon className="h-4 w-4" />Poster Studio</TabsTrigger>
+            {roles.includes("admin") && <TabsTrigger value="contacts" className="gap-1.5"><Users className="h-4 w-4" />جهات الاتصال / Contacts</TabsTrigger>}
           </TabsList>
           <TabsContent value="participants">
             <ParticipantsPanel onRoles={setRoles} isPhysician={isPhysician} />
@@ -319,6 +328,7 @@ function AdminPage() {
           <TabsContent value="posters">
             <PosterStudioAdminPanel />
           </TabsContent>
+          {roles.includes("admin") && <TabsContent value="contacts"><ContactsPanel /></TabsContent>}
         </Tabs>
       </main>
     </div>

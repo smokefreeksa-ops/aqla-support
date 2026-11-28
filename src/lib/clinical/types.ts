@@ -66,6 +66,17 @@ export interface ClinicalAnswers {
   country_code?: string;
   nickname?: string;
   city?: string;
+  contact_consent?: boolean;
+  contact_consent_at?: string;
+  contact_consent_version?: string;
+  contact_email?: string;
+  contact_mobile?: string;
+  guardian_name?: string;
+  guardian_relationship?: "father" | "mother" | "brother" | "sister" | "legal_guardian";
+  guardian_email?: string;
+  guardian_mobile?: string;
+  guardian_consent?: boolean;
+  guardian_consent_at?: string;
   privacy_ack?: boolean;
 
   age_band?: AgeBand;

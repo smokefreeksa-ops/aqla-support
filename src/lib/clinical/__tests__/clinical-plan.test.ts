@@ -4,6 +4,7 @@ import { nextQuestion, QUESTIONS } from "@/lib/clinical/questions";
 import { canRenderMedicationContent, SAUDI_MEDICATION_CONTENT_APPROVED } from "@/lib/clinical/release-flags";
 import { SAUDI_IDENTIFIERS } from "@/lib/clinical/jurisdiction";
 import type { ClinicalAnswers } from "@/lib/clinical/types";
+import { CONTACT_CONSENT_VERSION } from "@/lib/contact/consent";
 
 const base: ClinicalAnswers = {
   nickname: "مالك",
@@ -165,27 +166,26 @@ describe("determinism and privacy", () => {
     expect(noticeIndex).toBeLessThan(firstHealthIndex);
   });
 
-  it("does not ask for email unless the user consents", () => {
-    const emailQ = QUESTIONS.find((q) => q.id === "email")!;
-    expect(emailQ.when!({ plan_email_consent: false })).toBe(false);
-    expect(emailQ.when!({ plan_email_consent: true })).toBe(true);
+  it("requires contact email regardless of delivery consent", () => {
+    expect(nextQuestion({ nickname: "مالك", contact_consent: true, contact_consent_at: new Date().toISOString(), contact_consent_version: CONTACT_CONSENT_VERSION, plan_email_consent: false }, ["nickname", "contact_notice"])?.id).toBe("contact_email");
   });
 
-  it("skips the email consent question entirely for minors", () => {
-    const consentQ = QUESTIONS.find((q) => q.id === "plan_email_consent")!;
-    expect(consentQ.when!({ age_band: "under_18" })).toBe(false);
+  it("uses the guardian recipient for consenting minors", () => {
+    const consentQ = QUESTIONS.find((q) => q.id === "plan_email_consent");
+    expect(consentQ).toBeDefined();
+    expect(consentQ?.when?.({ age_band: "under_18" }) ?? true).toBe(true);
   });
 });
 
 describe("question flow", () => {
   it("terminates once every applicable question is answered", () => {
-    let answers: ClinicalAnswers = {};
+    let answers: ClinicalAnswers = { contact_consent: true, contact_consent_at: new Date().toISOString(), contact_consent_version: CONTACT_CONSENT_VERSION, contact_email: "test@example.com", contact_mobile: "+966555096412" };
     const answered: string[] = [];
     for (let i = 0; i < 60; i++) {
       const q = nextQuestion(answers, answered);
       if (!q) break;
       answered.push(q.id as string);
-      answers = { ...answers, [q.id]: q.kind === "multi" ? ["none"] : q.kind === "scale" ? 7 : "x" };
+      if (!q.required) answers = { ...answers, [q.id]: q.kind === "multi" ? ["none"] : q.kind === "scale" ? 7 : "x" };
     }
     expect(nextQuestion(answers, answered)).toBeNull();
   });

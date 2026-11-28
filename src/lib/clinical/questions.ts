@@ -3,6 +3,7 @@
 
 import type { ClinicalAnswers, ProductKey } from "./types";
 import { EMERGENCY_RED_FLAGS } from "./safety";
+import { contactAnswersSchema, guardianAnswersSchema } from "../contact/consent";
 
 export type QuestionKind =
   | "text"
@@ -21,13 +22,15 @@ export interface Choice {
 }
 
 export interface Question {
-  id: keyof ClinicalAnswers | "privacy_ack";
+  id: keyof ClinicalAnswers | "privacy_ack" | "contact_notice";
   kind: QuestionKind;
   prompt_ar: (a: ClinicalAnswers) => string;
   prompt_en: string;
   choices?: Choice[];
   /** Health-related items must come after the privacy notice. */
   health: boolean;
+  inputMode?: "tel";
+  required?: boolean;
   when?: (a: ClinicalAnswers) => boolean;
 }
 
@@ -38,10 +41,15 @@ export const PRIVACY_NOTICE_AR = `قبل ما نبدأ الأسئلة الصحي
 
 • بنسألك أسئلة عن استخدامك للنيكوتين وصحتك العامة، وهذا الشيء ضروري عشان نبني لك خطة إقلاع شخصية وآمنة.
 • إجاباتك تُستخدم فقط لتوليد خطتك وحفظها لك، ولمتابعتك داخل المنصة.
-• مشاركة بياناتك بشكل يعرّف بهويتك مع إدارة أقلع أو لأي غرض بحثي معطّلة تمامًا في هذه النسخة.
-• إرسال الخطة على بريدك الإلكتروني اختياري ومنفصل، ويحتاج موافقة صريحة منك في نهاية المحادثة.
+• بياناتك تُستخدم لمتابعتك داخل المنصة، ولأغراض بحثية ضمن موافقة لجنة أخلاقيات البحث العلمي بجامعة الملك عبدالعزيز، وتُحفظ لمدة عشر سنوات ثم تُتلف.
+• إرسال الخطة على بريدك الإلكتروني اختياري ومنفصل، ويحتاج موافقة صريحة منك في نهاية المحادثة.`;
 
-(هذه الصياغة أولية وتخضع للمراجعة القانونية ومراجعة نظام حماية البيانات الشخصية قبل الإطلاق العام.)`;
+export const PRIVACY_NOTICE_EN = `Before the health questions:
+
+• We ask about nicotine use and general health to build a personal, safe quit plan.
+• Your answers are used only to generate and save your plan and follow up within the platform.
+• Your data is used for follow-up within the platform and research under the approval of the Scientific Research Ethics Committee at King Abdulaziz University, retained for ten years, then destroyed.
+• Emailing the plan is optional and separate, and requires your explicit consent at the end of the conversation.`;
 
 export const QUESTIONS: Question[] = [
   {
@@ -50,6 +58,22 @@ export const QUESTIONS: Question[] = [
     health: false,
     prompt_ar: () => "بِسم الله نبدأ.. وش الاسم أو الكنية اللي تحب أناديك فيها؟",
     prompt_en: "What name or nickname should I use for you?",
+  },
+  {
+    id: "contact_notice", kind: "notice", health: false, required: true,
+    prompt_ar: () => `قبل ما نكمل، نحتاج بريدك الإلكتروني ورقم جوالك.
+نستخدمها لإرسال خطتك ومتابعتك، وللتواصل معك عند الحاجة، ولأغراض بحثية ضمن موافقة لجنة أخلاقيات البحث العلمي بجامعة الملك عبدالعزيز.
+بياناتك تُحفظ لمدة عشر سنوات ثم تُتلف، وهي سرية ولا تُشارك مع أي جهة خارجية.`,
+    prompt_en: "Before we continue, we need your email and mobile number. We use them to send your plan, follow up, contact you when needed, and for research under the approval of the Scientific Research Ethics Committee at King Abdulaziz University. Your data is retained for ten years then destroyed, is confidential, and is not shared with any external party.",
+    choices: [{ value: "agree", label_ar: "موافق، نكمل", label_en: "I agree, continue" }],
+  },
+  {
+    id: "contact_email", kind: "email", health: false, required: true,
+    prompt_ar: () => "اكتب بريدك الإلكتروني:", prompt_en: "Enter your email address:",
+  },
+  {
+    id: "contact_mobile", kind: "text", inputMode: "tel", health: false, required: true,
+    prompt_ar: () => "وكم رقم جوالك؟", prompt_en: "What is your mobile number?",
   },
   {
     id: "jurisdiction",
@@ -75,7 +99,7 @@ export const QUESTIONS: Question[] = [
     kind: "notice",
     health: false,
     prompt_ar: () => PRIVACY_NOTICE_AR,
-    prompt_en: "Privacy notice before health questions.",
+    prompt_en: PRIVACY_NOTICE_EN,
     choices: [{ value: "ack", label_ar: "فهمت، نكمل", label_en: "Understood, continue" }],
   },
 
@@ -93,6 +117,40 @@ export const QUESTIONS: Question[] = [
       { value: "40_59", label_ar: "40 – 59", label_en: "40–59" },
       { value: "60_plus", label_ar: "60 فأكثر", label_en: "60+" },
     ],
+  },
+  {
+    id: "guardian_name", kind: "text", health: false, required: true,
+    when: (a) => a.age_band === "under_18",
+    prompt_ar: () => "اسم ولي الأمر؟", prompt_en: "Guardian's name?",
+  },
+  {
+    id: "guardian_relationship", kind: "choice", health: false, required: true,
+    when: (a) => a.age_band === "under_18",
+    prompt_ar: () => "صلة ولي الأمر بالمشارك؟", prompt_en: "Guardian's relationship to the participant?",
+    choices: [
+      { value: "father", label_ar: "أب", label_en: "Father" },
+      { value: "mother", label_ar: "أم", label_en: "Mother" },
+      { value: "brother", label_ar: "أخ", label_en: "Brother" },
+      { value: "sister", label_ar: "أخت", label_en: "Sister" },
+      { value: "legal_guardian", label_ar: "وصي قانوني", label_en: "Legal guardian" },
+    ],
+  },
+  {
+    id: "guardian_email", kind: "email", health: false, required: true,
+    when: (a) => a.age_band === "under_18",
+    prompt_ar: () => "بريد ولي الأمر الإلكتروني؟", prompt_en: "Guardian's email address?",
+  },
+  {
+    id: "guardian_mobile", kind: "text", inputMode: "tel", health: false, required: true,
+    when: (a) => a.age_band === "under_18",
+    prompt_ar: () => "جوال ولي الأمر؟", prompt_en: "Guardian's mobile number?",
+  },
+  {
+    id: "guardian_consent", kind: "notice", health: false, required: true,
+    when: (a) => a.age_band === "under_18",
+    prompt_ar: () => "أنا ولي أمر المشارك وأوافق على مشاركته وعلى استخدام بيانات التواصل الموضحة سابقًا",
+    prompt_en: "I am the participant's guardian and consent to their participation and the use of the contact details described above.",
+    choices: [{ value: "agree", label_ar: "أنا ولي أمر المشارك وأوافق على مشاركته وعلى استخدام بيانات التواصل الموضحة سابقًا", label_en: "I am the participant's guardian and agree to their participation and the use of the contact details described above" }],
   },
   {
     id: "sex",
@@ -435,7 +493,6 @@ export const QUESTIONS: Question[] = [
     id: "plan_email_consent",
     kind: "choice",
     health: false,
-    when: (a) => a.age_band !== "under_18",
     prompt_ar: () =>
       "خطتك بتكون جاهزة للعرض والتحميل مباشرة. تحب كمان نرسل لك نسخة على بريدك الإلكتروني؟ (موافقة اختيارية ومنفصلة)",
     prompt_en: "Would you also like your plan emailed to you?",
@@ -444,14 +501,7 @@ export const QUESTIONS: Question[] = [
       { value: "no", label_ar: "لا، يكفي العرض والتحميل", label_en: "No, screen and download only" },
     ],
   },
-  {
-    id: "email",
-    kind: "email",
-    health: false,
-    when: (a) => a.plan_email_consent === true,
-    prompt_ar: () => "اكتب بريدك الإلكتروني:",
-    prompt_en: "Your email address:",
-  },
+
 ];
 
 /**
@@ -468,8 +518,20 @@ export function nextQuestion(answers: ClinicalAnswers, answeredIds: string[]): Q
   // Emergency hold: no further assessment questions may be asked.
   if (hasEmergencyRedFlag(answers)) return null;
   for (const q of QUESTIONS) {
-    if (answeredIds.includes(q.id as string)) continue;
     if (q.when && !q.when(answers)) continue;
+    if (q.required) {
+      const valid = q.id === "contact_notice"
+        ? contactAnswersSchema.pick({ contact_consent: true, contact_consent_at: true, contact_consent_version: true }).safeParse(answers).success
+        : q.id === "guardian_consent"
+          ? guardianAnswersSchema.pick({ guardian_consent: true, guardian_consent_at: true }).safeParse(answers).success
+        : q.id.startsWith("guardian_")
+          ? guardianAnswersSchema.shape[q.id as keyof typeof guardianAnswersSchema.shape]?.safeParse(answers[q.id as keyof ClinicalAnswers]).success
+          : q.id === "contact_email"
+            ? contactAnswersSchema.shape.contact_email.safeParse(answers.contact_email).success
+            : contactAnswersSchema.shape.contact_mobile.safeParse(answers.contact_mobile).success;
+      if (!valid) return q;
+    }
+    if (answeredIds.includes(q.id as string)) continue;
     return q;
   }
   return null;

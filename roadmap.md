@@ -1,4 +1,5 @@
-# Supporter WhatsApp message
-
-- [x] Add a private user-initiated message action for a named supporter on saved, unsuppressed plans only.
-- [x] Verify named and no-one answers, message privacy, drawer staying open, and 390×844 fit.
+# Mandatory assistant contacts
+- [ ] Required contact/guardian questions, validation and consent records; reuse email at completion.
+- [ ] Additive contact schema, retention trigger, admin-only access; preserve original 176 rows.
+- [ ] Contacts dashboard with search, minors filter and safe Arabic CSV.
+- [ ] Unit and browser acceptance checks, original-row checksum, preview validation; do not publish.

@@ -13,6 +13,8 @@ import {
 import { QUESTIONS, nextQuestion, hasEmergencyRedFlag, type Question } from "@/lib/clinical/questions";
 import { evaluateSafety } from "@/lib/clinical/safety";
 import type { ClinicalAnswers, ClinicalPlanJSON } from "@/lib/clinical/types";
+import { CONTACT_CONSENT_VERSION, contactEmailSchema, suggestEmailCorrection } from "@/lib/contact/consent";
+import { normalizeSaudiMobile } from "@/lib/contact/normalizePhone";
 import aqlaLogo from "@/assets/aqla-logo.png";
 import { ClinicalPlanView } from "@/components/clinical/ClinicalPlanView";
 
@@ -83,6 +85,9 @@ export function QuitChatConversation({
   const [multiSel, setMultiSel] = useState<string[]>([]);
   const [typing, setTyping] = useState(false);
   const [locked, setLocked] = useState(false);
+  const [emailSuggestion, setEmailSuggestion] = useState<{ original: string; corrected: string } | null>(null);
+  const planTokenRef = useRef<string | null>(null);
+  const saveChain = useRef<Promise<unknown>>(Promise.resolve());
   const planIdRef = useRef<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const startedRef = useRef(false);
@@ -143,10 +148,12 @@ export function QuitChatConversation({
       if (!planIdRef.current) {
         const started = await withRetry(() => startClinicalPlan({ data: { anonymousSessionId: anonId() } }));
         planIdRef.current = started.planId;
+        planTokenRef.current = started.planToken;
       }
+      await saveChain.current.catch(() => undefined);
       const res = await withRetry(() =>
         finalizeClinicalPlan({
-          data: { planId: planIdRef.current!, answers: a as Record<string, unknown> },
+          data: { planId: planIdRef.current ?? "", planToken: planTokenRef.current ?? "", answers: a as Record<string, unknown> },
         }),
       );
       setTyping(false);
@@ -300,10 +307,10 @@ ${planUrl}`;
   };
 
   const advance = async (a: ClinicalAnswers, ids: string[]) => {
-    if (planIdRef.current) {
-      void saveClinicalAnswers({
-        data: { planId: planIdRef.current, answers: a as Record<string, unknown> },
-      }).catch(() => undefined);
+    if (planIdRef.current && planTokenRef.current) {
+      const data = { planId: planIdRef.current, planToken: planTokenRef.current, answers: a as Record<string, unknown> };
+      saveChain.current = saveChain.current.catch(() => undefined).then(() => saveClinicalAnswers({ data }));
+      void saveChain.current.catch(() => undefined);
     }
     // Emergency gate fires immediately — no further questions, no plan, no email, no PDF.
     if (hasEmergencyRedFlag(a)) {
@@ -338,22 +345,34 @@ ${planUrl}`;
       try {
         const res = await withRetry(() => startClinicalPlan({ data: { anonymousSessionId: anonId() } }));
         planIdRef.current = res.planId;
+        planTokenRef.current = res.planToken;
       } catch {
         await say("ملاحظة: تعذّر الاتصال بالخادم الآن، فلن تُحفظ خطتك تلقائيًا. تقدر تكمل وتطبعها.", {}, 300);
       }
-      await askQuestion(QUESTIONS[0], {});
+      const firstQuestion = QUESTIONS[0];
+      if (firstQuestion) await askQuestion(firstQuestion, {});
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ---- answer handlers ----
   const handleQuick = async (qr: QuickReply) => {
-    if (!current || locked) return;
+    if (!current || locked || typing) return;
     const q = current;
+    if (emailSuggestion) {
+      const value = qr.value === "correct_email" ? emailSuggestion.corrected : emailSuggestion.original;
+      setEmailSuggestion(null);
+      userSay(value);
+      return commit({ [q.id]: value }, q.id);
+    }
     const choice = (q.choices ?? []).find((c) => c.value === qr.value);
     userSay(qr.label);
 
-    if (q.kind === "notice") return commit({ privacy_ack: true }, q.id as string);
+    if (q.kind === "notice") {
+      if (q.id === "contact_notice") return commit({ contact_consent: true, contact_consent_at: new Date().toISOString(), contact_consent_version: CONTACT_CONSENT_VERSION }, q.id);
+      if (q.id === "guardian_consent") return commit({ guardian_consent: true, guardian_consent_at: new Date().toISOString() }, q.id);
+      return commit({ privacy_ack: true }, q.id);
+    }
 
     const id = q.id as string;
     if (id.startsWith("ftnd_q")) {
@@ -374,8 +393,31 @@ ${planUrl}`;
   const handleSendText = async () => {
     if (!current || locked) return;
     const v = input.trim();
+    const reject = async (text: string) => {
+      await say(text, { input: current.kind === "email" ? "email" : "text" }, 0);
+    };
+    if (current.kind === "email") {
+      if (!contactEmailSchema.safeParse(v).success) return reject("البريد الإلكتروني غير صحيح، تأكد منه من فضلك.");
+      const corrected = suggestEmailCorrection(v);
+      if (corrected) {
+        setEmailSuggestion({ original: v, corrected });
+        setInput("");
+        userSay(v);
+        await say(`هل تقصد ${corrected}؟`, { quickReplies: [
+          { label: "نعم، اعتمد التصحيح", value: "correct_email" },
+          { label: "احتفظ بما كتبت", value: "keep_email" },
+        ] }, 0);
+        return;
+      }
+    }
+    let value = v;
+    if (current.inputMode === "tel") {
+      const normalized = normalizeSaudiMobile(v);
+      if (!normalized) return reject("رقم الجوال غير صحيح. مثال: ٠٥٥١٢٣٤٥٦٧");
+      value = normalized;
+    }
     if (!v) return;
-    if (current.kind === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return;
+    if (current.id === "guardian_name" && v.length > 100) return reject("اسم ولي الأمر غير صحيح، تأكد منه من فضلك.");
     setInput("");
     userSay(v);
     if (current.kind === "number") {
@@ -383,7 +425,7 @@ ${planUrl}`;
       await commit({ [current.id]: Number.isFinite(n) ? n : 0 } as Partial<ClinicalAnswers>, current.id as string);
       return;
     }
-    await commit({ [current.id]: v } as Partial<ClinicalAnswers>, current.id as string);
+    await commit({ [current.id]: value } as Partial<ClinicalAnswers>, current.id as string);
   };
 
   const handleMultiSubmit = async () => {
@@ -403,7 +445,7 @@ ${planUrl}`;
   const showNumberRow = !locked && last?.from === "bot" && last.input === "number-row";
   const showMulti = !locked && last?.from === "bot" && !!last.multi;
   const showQuick = !locked && last?.from === "bot" && !!last.quickReplies;
-  const inputType = last?.input === "email" ? "email" : last?.input === "number" ? "number" : "text";
+  const inputType = current?.inputMode === "tel" ? "tel" : last?.input === "email" ? "email" : last?.input === "number" ? "number" : "text";
 
   return (
     <div
@@ -478,12 +520,12 @@ ${planUrl}`;
 
         {showQuick && (
           <div dir="rtl" className="flex flex-wrap gap-2 justify-start pt-1">
-            {last.quickReplies!.map((qr) => (
+            {last.quickReplies?.map((qr) => (
               <button
                 key={qr.value}
                 onClick={() => handleQuick(qr)}
                 style={{ unicodeBidi: "plaintext" }}
-                className="rounded-full bg-[#0b3a25] hover:bg-[#12543a] text-white px-4 py-1.5 text-sm font-medium shadow-sm transition-colors"
+                className="max-w-full whitespace-normal break-words rounded-full bg-[#0b3a25] hover:bg-[#12543a] text-white px-4 py-1.5 text-sm font-medium shadow-sm transition-colors"
               >
                 {qr.label}
               </button>
@@ -508,7 +550,7 @@ ${planUrl}`;
         {showMulti && (
           <div dir="rtl" className="space-y-2 pt-1">
             <div className="flex flex-wrap gap-2 justify-start">
-              {last.multi!.map((qr) => {
+              {last.multi?.map((qr) => {
                 const active = multiSel.includes(qr.value);
                 return (
                   <button
@@ -591,6 +633,8 @@ ${planUrl}`;
             }}
             placeholder={inputType === "email" ? "example@email.com" : "اكتب هنا..."}
             type={inputType}
+            inputMode={current?.inputMode}
+            maxLength={current?.kind === "email" ? 254 : current?.inputMode === "tel" ? 80 : current?.id === "guardian_name" ? 100 : undefined}
             dir={inputType === "text" ? "rtl" : "ltr"}
             lang="ar"
             className="min-w-0 flex-1 rounded-full bg-[#f2f8f4] ring-1 ring-[#0b3a25]/10 px-4 py-2.5 text-base text-[#0b3a25] placeholder:text-[#66756d] outline-none focus:ring-2 focus:ring-[#0b3a25]/40 text-start"

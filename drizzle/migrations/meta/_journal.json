@@ -8,6 +8,13 @@
       "when": 1795187380565,
       "tag": "0000_quit_plans_email_message_id",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795835185782,
+      "tag": "0001_20261128_mandatory_contact_in_chat",
+      "breakpoints": true
     }
   ]
 }

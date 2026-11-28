@@ -3209,10 +3209,14 @@ export type Database = {
       quit_plans: {
         Row: {
           admin_notified_at: string | null
+          age_band_captured: string | null
           anonymous_session_id: string
           assessment_tool: string | null
           city: string | null
           clinical_rule_version: string | null
+          contact_consent: boolean
+          contact_consent_at: string | null
+          contact_consent_version: string | null
           country_code: string | null
           created_at: string
           dependence_status: string | null
@@ -3221,10 +3225,19 @@ export type Database = {
           email_sent_at: string | null
           email_status: string
           followup_schedule: Json
+          full_name: string | null
           generated_at: string | null
+          guardian_consent: boolean
+          guardian_consent_at: string | null
+          guardian_email: string | null
+          guardian_mobile: string | null
+          guardian_name: string | null
+          guardian_relationship: string | null
           id: string
           intake_answers: Json
+          is_minor: boolean
           jurisdiction: string
+          mobile: string | null
           money_setup: Json
           nickname: string | null
           pdf_url: string | null
@@ -3240,6 +3253,7 @@ export type Database = {
           quit_goal: string | null
           quit_strategy: string | null
           readiness: string | null
+          retention_until: string | null
           risk_flag: boolean | null
           safety_flags: Json
           safety_gate_level: string
@@ -3255,10 +3269,14 @@ export type Database = {
         }
         Insert: {
           admin_notified_at?: string | null
+          age_band_captured?: string | null
           anonymous_session_id: string
           assessment_tool?: string | null
           city?: string | null
           clinical_rule_version?: string | null
+          contact_consent?: boolean
+          contact_consent_at?: string | null
+          contact_consent_version?: string | null
           country_code?: string | null
           created_at?: string
           dependence_status?: string | null
@@ -3267,10 +3285,19 @@ export type Database = {
           email_sent_at?: string | null
           email_status?: string
           followup_schedule?: Json
+          full_name?: string | null
           generated_at?: string | null
+          guardian_consent?: boolean
+          guardian_consent_at?: string | null
+          guardian_email?: string | null
+          guardian_mobile?: string | null
+          guardian_name?: string | null
+          guardian_relationship?: string | null
           id?: string
           intake_answers?: Json
+          is_minor?: boolean
           jurisdiction?: string
+          mobile?: string | null
           money_setup?: Json
           nickname?: string | null
           pdf_url?: string | null
@@ -3286,6 +3313,7 @@ export type Database = {
           quit_goal?: string | null
           quit_strategy?: string | null
           readiness?: string | null
+          retention_until?: string | null
           risk_flag?: boolean | null
           safety_flags?: Json
           safety_gate_level?: string
@@ -3301,10 +3329,14 @@ export type Database = {
         }
         Update: {
           admin_notified_at?: string | null
+          age_band_captured?: string | null
           anonymous_session_id?: string
           assessment_tool?: string | null
           city?: string | null
           clinical_rule_version?: string | null
+          contact_consent?: boolean
+          contact_consent_at?: string | null
+          contact_consent_version?: string | null
           country_code?: string | null
           created_at?: string
           dependence_status?: string | null
@@ -3313,10 +3345,19 @@ export type Database = {
           email_sent_at?: string | null
           email_status?: string
           followup_schedule?: Json
+          full_name?: string | null
           generated_at?: string | null
+          guardian_consent?: boolean
+          guardian_consent_at?: string | null
+          guardian_email?: string | null
+          guardian_mobile?: string | null
+          guardian_name?: string | null
+          guardian_relationship?: string | null
           id?: string
           intake_answers?: Json
+          is_minor?: boolean
           jurisdiction?: string
+          mobile?: string | null
           money_setup?: Json
           nickname?: string | null
           pdf_url?: string | null
@@ -3332,6 +3373,7 @@ export type Database = {
           quit_goal?: string | null
           quit_strategy?: string | null
           readiness?: string | null
+          retention_until?: string | null
           risk_flag?: boolean | null
           safety_flags?: Json
           safety_gate_level?: string
@@ -4421,7 +4463,57 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      v_quit_chat_contacts: {
+        Row: {
+          age_band_captured: string | null
+          city: string | null
+          created_at: string | null
+          email: string | null
+          guardian_email: string | null
+          guardian_mobile: string | null
+          guardian_name: string | null
+          is_minor: boolean | null
+          mobile: string | null
+          nickname: string | null
+          retention_until: string | null
+          risk_flag: boolean | null
+          score_band: string | null
+          status: string | null
+        }
+        Insert: {
+          age_band_captured?: string | null
+          city?: string | null
+          created_at?: string | null
+          email?: string | null
+          guardian_email?: string | null
+          guardian_mobile?: string | null
+          guardian_name?: string | null
+          is_minor?: boolean | null
+          mobile?: string | null
+          nickname?: string | null
+          retention_until?: string | null
+          risk_flag?: boolean | null
+          score_band?: string | null
+          status?: string | null
+        }
+        Update: {
+          age_band_captured?: string | null
+          city?: string | null
+          created_at?: string | null
+          email?: string | null
+          guardian_email?: string | null
+          guardian_mobile?: string | null
+          guardian_name?: string | null
+          is_minor?: boolean | null
+          mobile?: string | null
+          nickname?: string | null
+          retention_until?: string | null
+          risk_flag?: boolean | null
+          score_band?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       admin_list_leaderboard: { Args: { p_status?: string }; Returns: Json }

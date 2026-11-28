@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
-import type { ClinicalAnswers } from "./types";
+import { validateContactAnswers } from "../contact/consent";
 
 export const startClinicalPlan = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) =>
@@ -17,13 +17,14 @@ export const saveClinicalAnswers = createServerFn({ method: "POST" })
     z
       .object({
         planId: z.string().uuid(),
+        planToken: z.string().min(8).max(80),
         answers: z.record(z.string(), z.unknown()),
       })
       .parse(input),
   )
   .handler(async ({ data }) => {
     const { persistAnswers } = await import("./clinical-plan.server");
-    await persistAnswers(data.planId, data.answers as ClinicalAnswers);
+    await persistAnswers(data.planId, data.planToken, validateContactAnswers(data.answers));
     return { ok: true };
   });
 
@@ -32,13 +33,14 @@ export const finalizeClinicalPlan = createServerFn({ method: "POST" })
     z
       .object({
         planId: z.string().uuid(),
+        planToken: z.string().min(8).max(80),
         answers: z.record(z.string(), z.unknown()),
       })
       .parse(input),
   )
   .handler(async ({ data }) => {
     const { finalizeClinicalPlanRow } = await import("./clinical-plan.server");
-    return finalizeClinicalPlanRow(data.planId, data.answers as ClinicalAnswers);
+    return finalizeClinicalPlanRow(data.planId, data.planToken, validateContactAnswers(data.answers, true));
   });
 
 /** Public read of the exact immutable Release 1 plan for a plan token. */

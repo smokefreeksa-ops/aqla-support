@@ -76,6 +76,9 @@ async def main(supporter_answer):
             await choice("إرسال")
 
         await text("اختبار المشاركة")
+        await choice("موافق، نكمل")
+        await text("share-test@example.com")
+        await text("٠٥٥٥٠٩٦٤١٢")
         await choice("داخل السعودية")
         await text("جدة")
         await choice("فهمت، نكمل")
